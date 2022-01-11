@@ -1,4 +1,5 @@
 import { imgLogo } from 'imports/images'
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -13,34 +14,42 @@ import {
   SvgTest,
 } from 'imports/svgs'
 import clsx from 'clsx'
+import { ROUTES } from 'constants/constants'
 
 const arrSidebar = [
-  { link: '/feed', icon: SvgFeed, text: 'Feed', active: true },
-  { link: '/dashboard', icon: SvgDashboard, text: 'Dashboard', active: false },
-  { link: '/test', icon: SvgTest, text: 'Test', active: false },
-  { link: '/programs', icon: SvgPrograms, text: 'Programs', active: false },
+  { link: ROUTES.feed, icon: SvgFeed, text: 'Feed', active: true },
   {
-    link: '/challenges',
+    link: ROUTES.dashboard,
+    icon: SvgDashboard,
+    text: 'Dashboard',
+    active: false,
+  },
+  { link: ROUTES.test, icon: SvgTest, text: 'Test', active: false },
+  { link: ROUTES.programs, icon: SvgPrograms, text: 'Programs', active: false },
+  {
+    link: ROUTES.challenges,
     icon: SvgChallenges,
     text: 'Challenges',
     active: false,
   },
-  { link: '/contact', icon: SvgContact, text: 'Contact', active: false },
+  { link: ROUTES.contact, icon: SvgContact, text: 'Contact', active: false },
   {
-    link: '/account-and-settings',
+    link: ROUTES.accountAndSettings,
     icon: SvgAccount,
     text: 'Account & Settings',
     active: false,
   },
-  { link: '/biography', icon: SvgBiography, text: 'Biography', active: false },
-  { link: '/support', icon: SvgSupport, text: 'Support', active: false },
+  {
+    link: ROUTES.biography,
+    icon: SvgBiography,
+    text: 'Biography',
+    active: false,
+  },
+  { link: ROUTES.support, icon: SvgSupport, text: 'Support', active: false },
 ]
 
 export const Sidebar = () => {
-  let pathname = ''
-  if (typeof window !== undefined) {
-    pathname = window.location.pathname
-  }
+  const router = useRouter()
 
   return (
     <div
@@ -58,7 +67,7 @@ export const Sidebar = () => {
 
         <ul>
           {arrSidebar.map((o, index) => {
-            const isActive = o.link === pathname
+            const isActive = o.link === router.pathname
 
             return (
               <li

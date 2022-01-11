@@ -1,3 +1,7 @@
 export const vercelImg = require('./../public' + '/vercel.svg')
 export const imgLogo = require('./../public' + '/sidebar/logo.svg')
 export const imgHamburgerPurple = require('./../public' + '/header/menu.svg')
+export const imgSearch = require('./../public' + '/header/search.svg')
+export const imgBell = require('./../public' + '/header/bell.svg')
+export const imgMessage = require('./../public' + '/header/message.svg')
+export const imgAvatar = require('./../public' + '/header/Avatar.svg')
