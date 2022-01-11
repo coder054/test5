@@ -1,0 +1,11 @@
+.next
+node_modules
+.vscode
+*.html
+*.txt
+*.lock
+*.svg
+*.ico
+*.png
+*.jpg
+*.gif
