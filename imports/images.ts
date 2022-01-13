@@ -12,3 +12,7 @@ export const imgGooglePlay = require('./../public' +
   '/item-landing/google-play.svg')
 export const imgAppStore = require('./../public' +
   '/item-landing/app-store.svg')
+export const imgAvtItemEventHeadline = require('./../public' +
+  '/event/avatar.svg')
+export const imgBackgroundItemEventHeadline = require('./../public' +
+  '/event/background.svg')

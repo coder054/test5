@@ -22,7 +22,7 @@ const Landing = () => {
   const CarouselProps = {
     Infinity: true,
     autoplay: true,
-    autoplaySpeed: 200000,
+    autoplaySpeed: 2000,
     dots: true,
     dotClass: cls.dot,
     swipeToSlide: true,
