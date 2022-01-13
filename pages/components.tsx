@@ -4,8 +4,11 @@ import { FootballersSlider } from 'components/Feed/FootballersSlider/Footballers
 import { GreenSlider } from 'components/GreenSlider'
 import { RainbowSlider } from 'components/RainbowSlider'
 import { TagCloud } from 'components/TagCloud'
+import { useState } from 'react'
 
 const Components = () => {
+  const [value, setValue] = useState(7)
+
   return (
     <div className=" w-full min-h-screen bg-[#111115] ">
       <FootballersSlider />
@@ -36,7 +39,7 @@ const Components = () => {
       </div>
 
       <div className=" w-[439px] ">
-        <RainbowSlider />
+        <RainbowSlider min={0} max={10} value={value} setValue={setValue} />
       </div>
     </div>
   )
