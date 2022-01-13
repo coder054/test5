@@ -7,24 +7,45 @@ import Image from 'next/image'
 import cls from './landing.module.css'
 import { imgAppStore, imgGooglePlay } from 'imports/images'
 import { Button } from 'components'
-// import styles from './landing.less'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const contentStyle: any = {
   height: '720px',
   color: '#fff',
-  // lineHeight: '160px',
   textAlign: 'center',
   background: '#000000',
 }
 
 const Landing = () => {
+  const router = useRouter()
+  const CarouselProps = {
+    Infinity: true,
+    autoplay: true,
+    autoplaySpeed: 200000,
+    dots: true,
+    dotClass: cls.dot,
+    swipeToSlide: true,
+    draggable: true,
+  }
+
+  const clickSignIn = () => {
+    router.push('/signin')
+  }
+  const clickSignUp = () => {
+    router.push('/signup')
+  }
+
   return (
     <LayoutLanding>
-      <Carousel autoplay className={`h-[720px] bg-slate-200 mt-[170px] `}>
+      <Carousel
+        className={`h-[720px] bg-slate-200 mt-[170px] ${cls.carouse}`}
+        {...CarouselProps}
+      >
         {itemLanding.map((item: itemLandingType) => (
           <div key={item.idItem} className="h-[720px] ">
             <div style={contentStyle} className="flex w-full">
-              <div className={` ${cls.content} z-0 flex-1 right-0`}>
+              <div className={` ${cls.content} flex-1 right-0`}>
                 <div className="float-right pr-6 w-[592px]">
                   <span
                     className={`text-[48px] leading-[66px] font-bold pl-[24px] pr-[24px]  ${cls.title}`}
@@ -37,13 +58,13 @@ const Landing = () => {
 
                   <div className="pt-[64px] flex w-full">
                     <div className="flex m-auto justify-around w-[488px]">
-                      <div className="">
+                      <div className="" onClick={clickSignIn}>
                         <Button
                           className="w-[224px] h-[48px] bg-[#4654EA] text-[15px]"
                           text="Sign In"
                         />
                       </div>
-                      <div className="">
+                      <div className="" onClick={clickSignUp}>
                         <Button
                           className="w-[224px] h-[48px] bg-[#000000] text-[15px] border border-[#09E099] text-[#09E099]"
                           text="Sign up"
@@ -53,16 +74,20 @@ const Landing = () => {
                   </div>
                 </div>
               </div>
-              <div className={`${cls.image} z-10 flex-1`}>
+              <div className={`${cls.image} flex-1`}>
                 <div className="float-left relative">
                   <Image src={item.image} alt="" className="" />
                   <div className="flex w-[336px] m-auto">
-                    <div className="flex-1 cursor-pointer">
-                      <Image src={imgGooglePlay} alt="" />
-                    </div>
-                    <div className="flex-1 cursor-pointer">
-                      <Image src={imgAppStore} alt="" />
-                    </div>
+                    <Link href={'https://webapp.diawi.com/install/QczCSL'}>
+                      <a className="flex-1 cursor-pointer" target={'_blank'}>
+                        <Image src={imgGooglePlay} alt="" />
+                      </a>
+                    </Link>
+                    <Link href={'https://webapp.diawi.com/install/99bGwJ'}>
+                      <a className="flex-1 cursor-pointer" target={'_blank'}>
+                        <Image src={imgAppStore} alt="" />
+                      </a>
+                    </Link>
                   </div>
                   <div className="absolute w-[21px] h-[21px] bg-[#FFFFFF] rounded-full top-[117px] left-[129px]"></div>
                   <div className="absolute w-[43px] h-[43px] bg-[#09E099] rounded-full top-[471px] left-[85px]"></div>
