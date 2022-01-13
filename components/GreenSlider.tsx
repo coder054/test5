@@ -1,6 +1,6 @@
 import { Slider } from 'antd'
 
-export const MySlider = () => {
+export const GreenSlider = () => {
   return (
     <div className="slider-green ">
       <Slider defaultValue={30} />
