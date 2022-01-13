@@ -8,6 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        DividerColor: 'rgba(100, 116, 139, 0.4)',
         Grey: '#818389',
         Green: 'rgba(9, 224, 153, 1)',
         Yellow: 'rgba(255, 150, 7, 1)',
