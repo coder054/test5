@@ -1,3 +1,4 @@
+import { ButtonAdd } from 'components/ButtonAdd'
 import { Comments } from 'components/Comments'
 import { FootballersSlider } from 'components/Feed/FootballersSlider/FootballersSlider'
 import { TagCloud } from 'components/TagCloud'
@@ -25,6 +26,8 @@ const Components = () => {
       <div className="w-[384px]">
         <Comments />
       </div>
+
+      <ButtonAdd />
     </div>
   )
 }
