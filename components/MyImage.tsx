@@ -21,7 +21,7 @@ export const MyImage = ({
         className
       )}
     >
-      <Image src={src} alt="" layout="fill" />
+      <Image src={src} alt="" width={width} height={height} />
     </div>
   )
 }
