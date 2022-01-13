@@ -1,3 +1,4 @@
+import { Comments } from 'components/Comments'
 import { FootballersSlider } from 'components/Feed/FootballersSlider/FootballersSlider'
 import { TagCloud } from 'components/TagCloud'
 
@@ -19,6 +20,10 @@ const Components = () => {
             { label: '5wrw', link: '#' },
           ]}
         />
+      </div>
+
+      <div className="w-[384px]">
+        <Comments />
       </div>
     </div>
   )
