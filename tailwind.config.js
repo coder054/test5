@@ -3,11 +3,12 @@ module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
-    './public/**/*.{html}',
+    './public/**/*.html',
   ],
   theme: {
     extend: {
       colors: {
+        'Dark-1': '#252627',
         DividerColor: 'rgba(100, 116, 139, 0.4)',
         Grey: '#818389',
         Green: 'rgba(9, 224, 153, 1)',
@@ -17,6 +18,10 @@ module.exports = {
           400: 'rgba(156, 163, 175, 1)',
           900: '#111827',
         },
+        Primary: {
+          Main: '#5048E5',
+        },
+
         Red: 'rgba(214, 12, 12, 1)',
         Yellow: 'rgba(255, 150, 7, 1)',
       },
