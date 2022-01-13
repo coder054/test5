@@ -1,8 +1,8 @@
 import { Slider } from 'antd'
 
-export const GreenSlider = () => {
+export const RainbowSlider = () => {
   return (
-    <div className="slider-green ">
+    <div className="slider-rainbow ">
       <Slider defaultValue={30} />
     </div>
   )
