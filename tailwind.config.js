@@ -8,6 +8,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        Grey: '#818389',
+        Green: 'rgba(9, 224, 153, 1)',
+        Yellow: 'rgba(255, 150, 7, 1)',
         Neutral: {
           300: 'rgba(209, 213, 219, 1)',
           400: 'rgba(156, 163, 175, 1)',
@@ -21,6 +24,7 @@ module.exports = {
       spacing: {
         '100vw-280px': 'calc(100vw - 280px)',
         '100vw-290px': 'calc(100vw - 290px)',
+        '100%-32px': 'calc(100% - 32px)',
       },
       screens: {
         '3xl': '1800px',
