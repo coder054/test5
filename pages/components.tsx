@@ -25,7 +25,7 @@ const tabs = [{ text: Tab.Friends }, { text: Tab.News }, { text: Tab.Diary }]
 const Components = () => {
   const [value, setValue] = useState(7)
   const [valueInput, setValueInput] = useState('')
-  const [tab, setTab] = useState()
+  const [tab, setTab] = useState(Tab.Friends)
 
   return (
     <Layout>

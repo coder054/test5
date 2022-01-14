@@ -26,10 +26,11 @@ export const Comments = () => {
             <MyImage
               className="
             rounded-[50%] mr-4
+            w-[40px]
+            h-[40px]
+            flex-shrink-0
             "
               src={o.img}
-              width={40}
-              height={40}
             />
 
             <div
