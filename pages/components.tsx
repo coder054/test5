@@ -12,6 +12,7 @@ import { Layout } from 'components/Layout'
 import { ItemEventHeadlines } from 'constants/item-event-headline'
 import { ItemEventHeadline } from 'components/item-event-headline'
 import { TabPanel, Tabs } from 'components/Tabs'
+import { Card } from 'components/Card'
 
 enum Tab {
   Friends = 'Friends',
@@ -96,7 +97,7 @@ const Components = () => {
           <MyInput
             placeholder={'Username'}
             value={valueInput}
-            handleChange={(e) => {
+            handleChange={(e: any) => {
               setValueInput(e.target.value)
             }}
           />
@@ -105,6 +106,10 @@ const Components = () => {
         <div className="h-[60px] "></div>
 
         <ItemEventHeadline className="w-full" item={ItemEventHeadlines} />
+
+        <div className="h-[60px]"></div>
+
+        <Card></Card>
 
         <div className="h-[60px] "></div>
       </div>

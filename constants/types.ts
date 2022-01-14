@@ -2,7 +2,7 @@ export type itemLandingType = {
   idItem?: number
   title?: string
   content?: string
-  image?: string
+  image: string
 }
 
 export type itemEventHeadlineType = {
