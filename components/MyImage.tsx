@@ -12,13 +12,15 @@ export const MyImage = ({
   src: string
   className: string
 }) => {
+  let classNameWidth = 'w-[' + width + ']px'
+  let classNameHeght = 'h-[' + height + ']px'
   return (
     <div
       className={clsx(
         `relative flex-shrink-0 overflow-hidden`,
-        `w-[${width}px]`,
-        `h-[${height}px]`,
-        className
+        className,
+        classNameWidth,
+        classNameHeght
       )}
     >
       <Image src={src} alt="" width={width} height={height} />
