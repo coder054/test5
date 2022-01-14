@@ -31,3 +31,13 @@ export const Tabs = ({
     </div>
   )
 }
+
+export const TabPanel = ({
+  children,
+  visible,
+}: {
+  children: any
+  visible: boolean
+}) => {
+  return <div className={clsx(``, visible ? '  ' : ' hidden ')}>{children}</div>
+}

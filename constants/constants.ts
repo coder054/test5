@@ -8,4 +8,5 @@ export const ROUTES = {
   accountAndSettings: '/account-and-settings',
   biography: '/biography',
   support: '/support',
+  components: '/components',
 }

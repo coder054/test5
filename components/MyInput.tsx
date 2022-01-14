@@ -15,6 +15,7 @@ export const MyInput = ({
         value={value}
         onChange={handleChange}
         className="peer
+        w-full
         placeholder:text-transparent
         h-[54px] px-[12px] py-[15px] rounded-[8px] border border-Dark-1 
     bg-[#1d1d24]    
@@ -46,7 +47,7 @@ export const MyInput = ({
         peer-placeholder-shown:text-Grey        
          peer-placeholder-shown:text-[16px] 
          peer-placeholder-shown:leading-[24px] 
-         peer-placeholder-shown:top-[13px] 
+         peer-placeholder-shown:top-[15px] 
          peer-placeholder-shown:left-[7px] 
         
         peer-focus:text-Primary-Main
