@@ -17,6 +17,6 @@ export type itemEventHeadlineType = {
 }
 
 export interface OptionType {
-  title?: string
-  value?: string
+  title: string
+  value: string
 }
