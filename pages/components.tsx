@@ -284,9 +284,9 @@ const Components = () => {
                   flex justify-center items-center
                 "
                 >
-                  <Text name="Header6" className="text-Green inline-block ">
+                  <div className="text-Green inline-block text-[14px] leading-[24px] font-semibold  ">
                     BASIC 2
-                  </Text>
+                  </div>
                   <SvgEuro className=" inline-block mb-[3px] " />
                 </button>
 
@@ -296,9 +296,10 @@ const Components = () => {
                   flex-grow
                 "
                 >
-                  <Text name="Header6" className="text-Green ">
-                    Button 1
-                  </Text>
+                  <div className="text-Green inline-block text-[14px] leading-[24px] font-semibold  ">
+                    AMATEUR 20
+                  </div>
+                  <SvgEuro className=" inline-block mb-[3px] " />
                 </button>
 
                 <button
@@ -307,9 +308,10 @@ const Components = () => {
                   flex-grow
                 "
                 >
-                  <Text name="Header6" className="text-Green ">
-                    Button 1
-                  </Text>
+                  <div className="text-Green inline-block text-[14px] leading-[24px] font-semibold ">
+                    PRO 200
+                  </div>
+                  <SvgEuro className=" inline-block mb-[3px] " />
                 </button>
               </div>
             </div>

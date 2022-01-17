@@ -6,7 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Header } from 'components/Header'
 import { Layout } from 'components/Layout'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { Tabs } from 'components/Tabs'
 import { FootballersSlider } from 'components/Feed/FootballersSlider/FootballersSlider'
@@ -21,6 +21,10 @@ const tabs = [{ text: Tab.Friends }, { text: Tab.News }, { text: Tab.Diary }]
 
 const Feed = () => {
   const [tab, setTab] = useState(Tab.Diary)
+
+  useEffect(() => {
+    console.log('process.env.NODE_ENV: ', process.env.NODE_ENV)
+  }, [])
 
   return (
     <Layout>
