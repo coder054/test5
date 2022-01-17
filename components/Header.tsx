@@ -36,6 +36,8 @@ export const Header = () => {
         return 'Biology'
       case ROUTES.support:
         return 'Support'
+      case ROUTES.components:
+        return 'Components'
 
       default:
         return ''
@@ -48,9 +50,10 @@ export const Header = () => {
         filter:
           ' drop-shadow(0px 1px 1px rgba(100, 116, 139, 0.06)) drop-shadow(0px 1px 2px rgba(100, 116, 139, 0.1))',
       }}
-      className="h-[64px] w-100vw-280px left-[280px] top-0 fixed z-[1000 
+      className="h-[64px] w-100vw-280px left-[280px] top-0 fixed z-[1000]
         flex justify-between items-center
         px-[39px]
+        bg-[#111115]
         "
     >
       <div className="mr-[9px] w-[32px] h-[32px] ">

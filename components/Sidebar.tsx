@@ -46,6 +46,12 @@ const arrSidebar = [
     active: false,
   },
   { link: ROUTES.support, icon: SvgSupport, text: 'Support', active: false },
+  {
+    link: ROUTES.components,
+    icon: SvgSupport,
+    text: 'Components',
+    active: false,
+  },
 ]
 
 export const Sidebar = () => {

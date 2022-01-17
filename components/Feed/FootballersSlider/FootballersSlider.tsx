@@ -107,7 +107,7 @@ const arr = [
 
 export const FootballersSlider = () => {
   return (
-    <div className="w-[1220px] h-[60px] mx-auto m-4 bg-[#202128cc] rounded-[8px] ">
+    <div className="w-[1078px] h-[60px] mb-6 bg-[#202128cc] rounded-[8px] ">
       <Slider {...settings}>
         {arr.map((o, index) => (
           <div
