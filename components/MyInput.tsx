@@ -3,14 +3,17 @@ export const MyInput = ({
   placeholder,
   value,
   handleChange,
+  ...rest
 }: {
   placeholder: string
   value: string
   handleChange: any
+  [rest: string]: any
 }) => {
   return (
     <div className="relative">
       <input
+        {...rest}
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
