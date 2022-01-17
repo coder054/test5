@@ -30,6 +30,7 @@ module.exports = {
       },
       fontFamily: {
         SVNGilroy: ['SVN-Gilroy'],
+        Inter: ['Inter'],
       },
       spacing: {
         '100vw-280px': 'calc(100vw - 280px)',

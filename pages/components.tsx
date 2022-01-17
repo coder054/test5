@@ -284,7 +284,7 @@ const Components = () => {
                   flex justify-center items-center
                 "
                 >
-                  <div className="text-Green inline-block text-[14px] leading-[24px] font-semibold  ">
+                  <div className="font-Inter text-Green inline-block text-[14px] leading-[24px] font-semibold  ">
                     BASIC 2
                   </div>
                   <SvgEuro className=" inline-block mb-[3px] " />
@@ -296,7 +296,7 @@ const Components = () => {
                   flex-grow
                 "
                 >
-                  <div className="text-Green inline-block text-[14px] leading-[24px] font-semibold  ">
+                  <div className="font-Inter text-Green inline-block text-[14px] leading-[24px] font-semibold  ">
                     AMATEUR 20
                   </div>
                   <SvgEuro className=" inline-block mb-[3px] " />
@@ -308,7 +308,7 @@ const Components = () => {
                   flex-grow
                 "
                 >
-                  <div className="text-Green inline-block text-[14px] leading-[24px] font-semibold ">
+                  <div className="font-Inter text-Green inline-block text-[14px] leading-[24px] font-semibold ">
                     PRO 200
                   </div>
                   <SvgEuro className=" inline-block mb-[3px] " />
