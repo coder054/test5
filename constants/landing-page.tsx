@@ -19,7 +19,7 @@ export const itemLanding: itemLandingType[] = [
     idItem: 3,
     title: 'Get Global Visibility',
     content:
-      'Zporter will present your Football data in a Dashboard and Biography that you can share and publish to make you visible for the friends, fans scouts, coaches, managers and agents. That could make your Football Career even better!',
+      'Zporter will present your Football data in a Dashboard and Biography that you can share and publish to make you visible for the friends, fans scouts, coaches, managers and agents. That could make your Football Career even better!!!',
     image: require('./../public' + '/item-landing/item3.svg'),
   },
 ]
