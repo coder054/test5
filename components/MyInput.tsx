@@ -37,6 +37,7 @@ const CssTextField = styled(TextField)({
 })
 
 export const MyInput = ({
+  className,
   label,
   value,
   onChange,
@@ -44,6 +45,7 @@ export const MyInput = ({
   password,
   ...rest
 }: {
+  className?: string
   label: string
   value: string
   onChange: any
@@ -53,7 +55,7 @@ export const MyInput = ({
   const [showPassword, setShowPassword] = useState(false)
 
   return (
-    <div className="relative">
+    <div className={clsx('relative', className)}>
       <CssTextField
         fullWidth
         label={label}
