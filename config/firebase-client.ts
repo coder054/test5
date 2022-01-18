@@ -1,34 +1,16 @@
 import { initializeApp } from 'firebase/app'
 
 const initFirebaseClient = () => {
-  const firebaseConfigDev = {
-    apiKey: 'AIzaSyD7JfGqgH_Y4opp0B7zgXEJe9FFa26phtE',
-    authDomain: 'zporter-dev.firebaseapp.com',
-    databaseURL:
-      'https://zporter-dev-default-rtdb.europe-west1.firebasedatabase.app',
-    projectId: 'zporter-dev',
-    storageBucket: 'zporter-dev.appspot.com',
-    messagingSenderId: '357104839495',
-    appId: '1:357104839495:web:924336770c1ea9b606fa62',
-    measurementId: 'G-D7NS1ZG611',
+  const firebaseConfig = {
+    apiKey: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_API_KEY,
+    authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
+    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_MEASUREMENT_ID,
   }
-
-  const firebaseConfigStaging = {
-    apiKey: 'AIzaSyB8Z2bCGsFd5gPkbBwf6Z5rykMAT8tG9kE',
-    authDomain: 'zporter-bd622.firebaseapp.com',
-    databaseURL:
-      'https://zporter-bd622-default-rtdb.europe-west1.firebasedatabase.app',
-    projectId: 'zporter-bd622',
-    storageBucket: 'zporter-bd622.appspot.com',
-    messagingSenderId: '485466133501',
-    appId: '1:485466133501:web:874ad874fd3bdef2553f94',
-    measurementId: 'G-7K2ZDS00D2',
-  }
-
-  const firebaseConfig =
-    process.env.NODE_ENV !== 'production'
-      ? firebaseConfigDev
-      : firebaseConfigStaging
 
   initializeApp(firebaseConfig)
 }
