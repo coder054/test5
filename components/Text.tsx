@@ -5,10 +5,12 @@ export const Text = ({
   className,
   name,
   children,
+  ...rest
 }: {
   className: string
-  name: 'Header6' | 'Body2' | 'body1' | 'Caption' | 'Header5'
+  name: 'Header6' | 'Body2' | 'body1' | 'Caption' | 'Header5' | 'Subtitle2'
   children: ReactChild
+  [rest: string]: any
 }) => {
   let className1 = ''
   switch (name) {
@@ -27,6 +29,13 @@ export const Text = ({
     case 'Header5':
       className1 = 'text-[24px] leading-[33px] font-semibold'
       break
+    case 'Subtitle2':
+      className1 = 'text-[14px] leading-[22px] font-medium'
+      break
   }
-  return <div className={clsx(className1, className)}>{children}</div>
+  return (
+    <div {...rest} className={clsx(className1, className)}>
+      {children}
+    </div>
+  )
 }

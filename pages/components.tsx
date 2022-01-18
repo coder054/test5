@@ -7,7 +7,7 @@ import { GreenSlider } from 'components/GreenSlider'
 import { RainbowSlider } from 'components/RainbowSlider'
 import { TagCloud } from 'components/TagCloud'
 import { useState } from 'react'
-import { TextField } from '@mui/material'
+import { TextField, Alert, AlertTitle } from '@mui/material'
 import { MyInput } from 'components/MyInput'
 import { Layout } from 'components/Layout'
 import { ItemEventHeadlines } from 'constants/item-event-headline'
@@ -18,7 +18,7 @@ import { CardNews } from 'components/CardNews'
 import { CardChallenges } from 'components/CardChallenges'
 import { MyModal } from 'components/MyModal'
 import { Text } from 'components/Text'
-import { SvgEuro } from 'imports/svgs'
+import { SvgEuro, SvgXIcon } from 'imports/svgs'
 
 enum Tab {
   Friends = 'Friends',
@@ -34,6 +34,9 @@ const Components = () => {
   const [tab, setTab] = useState(Tab.Friends)
   const [show1, setShow1] = useState(false)
   const [show2, setShow2] = useState(false)
+  const [showModalChangePass, setShowModalChangePass] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   return (
     <Layout>
@@ -317,6 +320,108 @@ const Components = () => {
             </div>
           </MyModal>
         </>
+
+        <div className="h-[60px] "></div>
+
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          This is an error alert — <strong>check it out!</strong>
+        </Alert>
+        <div className="h-[60px] "></div>
+
+        <Alert severity="warning">
+          <AlertTitle>Warning</AlertTitle>
+          This is a warning alert — <strong>check it out!</strong>
+        </Alert>
+
+        <div className="h-[60px] "></div>
+        <Alert severity="info">
+          <AlertTitle>Info</AlertTitle>
+          This is an info alert — <strong>check it out!</strong>
+        </Alert>
+
+        <div className="h-[60px] "></div>
+
+        <Alert severity="success">
+          <AlertTitle>Success</AlertTitle>
+          This is a success alert — <strong>check it out!</strong>
+        </Alert>
+
+        <div className="h-[60px] "></div>
+
+        {/* /// Modal change password */}
+        <>
+          <button
+            className="cursor-pointer p-4 bg-yellow-200 rounded-[4px] "
+            onClick={() => {
+              setShowModalChangePass(true)
+            }}
+          >
+            Open Modal Change Password
+          </button>
+          <MyModal
+            show={showModalChangePass}
+            setShow={setShowModalChangePass}
+            width={480}
+          >
+            <div
+              style={{
+                boxShadow: '0px 25px 50px rgba(100, 116, 139, 0.25)',
+              }}
+              className=" rounded-[8px] bg-Dark-2 px-[24px] pt-[32px] "
+            >
+              <div className="flex justify-between items-center mb-[24px]">
+                <Text name="Header6" className="text-white ">
+                  Change email address
+                </Text>
+                <SvgXIcon
+                  className={undefined}
+                  onClick={() => {
+                    setShowModalChangePass(false)
+                  }}
+                />
+              </div>
+
+              <MyInput
+                className="mb-[16px] "
+                placeholder={'Email address'}
+                value={email}
+                handleChange={(e) => {
+                  setEmail(e.target.value)
+                }}
+              />
+
+              <MyInput
+                className="mb-[8px] "
+                password={true}
+                placeholder={'Password'}
+                value={password}
+                handleChange={(e) => {
+                  setPassword(e.target.value)
+                }}
+              />
+
+              <div className="h-[70px] flex justify-end items-center ">
+                <div
+                  onClick={() => {
+                    setShowModalChangePass(false)
+                  }}
+                  className="rounded-[8px] px-[16px] py-[8px] cursor-pointer h-[38px] mr-[16px] "
+                >
+                  <Text name="Subtitle2" className="text-white ">
+                    Cancel
+                  </Text>
+                </div>
+                <div className="rounded-[8px] px-[20px] py-[8px] cursor-pointer h-[38px]  bg-Blue ">
+                  <Text name="Subtitle2" className="text-white ">
+                    Authenticate
+                  </Text>
+                </div>
+              </div>
+            </div>
+          </MyModal>
+        </>
+        <div className="h-[60px] "></div>
 
         <div className="h-[60px] "></div>
       </div>
