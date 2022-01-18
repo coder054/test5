@@ -19,6 +19,7 @@ import { CardChallenges } from 'components/CardChallenges'
 import { MyModal } from 'components/MyModal'
 import { Text } from 'components/Text'
 import { SvgEuro, SvgXIcon } from 'imports/svgs'
+import { MySelect } from 'components/MySelect'
 
 enum Tab {
   Friends = 'Friends',
@@ -37,6 +38,7 @@ const Components = () => {
   const [showModalChangePass, setShowModalChangePass] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [country, setCountry] = useState('')
 
   return (
     <Layout>
@@ -424,16 +426,24 @@ const Components = () => {
           </MyModal>
         </>
         <div className="h-[60px] "></div>
-        <TextField
-          id="filled-search"
-          label="Search field"
-          type="search"
-          variant="filled"
-        />
-        <div className="h-[60px] "></div>
+        <div className="w-[439px] ">
+          <MySelect
+            className=""
+            label={'Select Country'}
+            value={country}
+            onChange={(e) => {
+              setCountry(e.target.value)
+            }}
+            arrOption={[
+              { value: 'USA', label: 'USA' },
+              { value: 'Sweden', label: 'Sweden' },
+            ]}
+          />
+        </div>
 
         <div className="h-[60px] "></div>
-
+        <div className="h-[60px] "></div>
+        <div className="h-[60px] "></div>
         <div className="h-[60px] "></div>
       </div>
     </Layout>

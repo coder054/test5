@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { Tabs } from 'components/Tabs'
 import { FootballersSlider } from 'components/Feed/FootballersSlider/FootballersSlider'
+import { ROUTES } from 'constants/constants'
 
 enum Tab {
   Friends = 'Friends',
@@ -24,6 +25,20 @@ const Feed = () => {
 
   useEffect(() => {
     console.log('process.env.NODE_ENV: ', process.env.NODE_ENV)
+    console.log(
+      'process.env.NEXT_PUBLIC_TEST1: ',
+      process.env.NEXT_PUBLIC_TEST1
+    )
+    console.log(
+      `process.env.NEXT_PUBLIC_TEST1  === 'hola111111'`,
+      process.env.NEXT_PUBLIC_TEST1 === 'hola111111'
+    )
+    console.log(
+      `process.env.NEXT_PUBLIC_TEST1  === ' hola111111'`,
+      process.env.NEXT_PUBLIC_TEST1 === ' hola111111'
+    )
+    console.log('process.env.TEST2: ', process.env.TEST2)
+    console.log('ROUTES.aaa: ', ROUTES.aaa)
   }, [])
 
   return (
