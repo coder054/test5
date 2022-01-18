@@ -9,7 +9,7 @@ const OtpCode = () => {
     otp: '',
   })
 
-  const handleChange = (e: any) => {
+  const onChange = (e: any) => {
     const value = e.target.value
     setValues({
       ...values,
@@ -32,10 +32,10 @@ const OtpCode = () => {
           <p className="text-[24px] text-[#FFFFFF]">Otp</p>
           <MyInput
             name={'otp'}
-            placeholder="Otp Code"
+            label="Otp Code"
             value={values.otp}
             className="mt-12"
-            handleChange={handleChange}
+            onChange={onChange}
           />
           {/* <div className="mt-8">
             <Button

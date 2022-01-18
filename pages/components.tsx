@@ -7,7 +7,7 @@ import { GreenSlider } from 'components/GreenSlider'
 import { RainbowSlider } from 'components/RainbowSlider'
 import { TagCloud } from 'components/TagCloud'
 import { useState } from 'react'
-import { TextField, Alert, AlertTitle } from '@mui/material'
+import { TextField, Alert, AlertTitle, styled } from '@mui/material'
 import { MyInput } from 'components/MyInput'
 import { Layout } from 'components/Layout'
 import { ItemEventHeadlines } from 'constants/item-event-headline'
@@ -106,9 +106,10 @@ const Components = () => {
 
         <div className="my-6 w-[439px] ">
           <MyInput
-            placeholder={'Username'}
+            password
+            label={'Username'}
             value={valueInput}
-            handleChange={(e: any) => {
+            onChange={(e: any) => {
               setValueInput(e.target.value)
             }}
           />
@@ -383,26 +384,27 @@ const Components = () => {
               </div>
 
               <MyInput
-                className="mb-[16px] "
-                placeholder={'Email address'}
+                label={'Email address'}
                 value={email}
-                handleChange={(e) => {
+                onChange={(e) => {
                   setEmail(e.target.value)
                 }}
               />
 
+              <div className="h-[16px] "></div>
+
               <MyInput
-                className="mb-[8px] "
                 password={true}
-                placeholder={'Password'}
+                label={'Password'}
                 value={password}
-                handleChange={(e) => {
+                onChange={(e) => {
                   setPassword(e.target.value)
                 }}
               />
+              <div className="mb-[8px] "></div>
 
               <div className="h-[70px] flex justify-end items-center ">
-                <div
+                <button
                   onClick={() => {
                     setShowModalChangePass(false)
                   }}
@@ -411,16 +413,25 @@ const Components = () => {
                   <Text name="Subtitle2" className="text-white ">
                     Cancel
                   </Text>
-                </div>
-                <div className="rounded-[8px] px-[20px] py-[8px] cursor-pointer h-[38px]  bg-Blue ">
+                </button>
+                <button className="rounded-[8px] px-[20px] py-[8px] cursor-pointer h-[38px]  bg-Blue ">
                   <Text name="Subtitle2" className="text-white ">
                     Authenticate
                   </Text>
-                </div>
+                </button>
               </div>
             </div>
           </MyModal>
         </>
+        <div className="h-[60px] "></div>
+        <TextField
+          id="filled-search"
+          label="Search field"
+          type="search"
+          variant="filled"
+        />
+        <div className="h-[60px] "></div>
+
         <div className="h-[60px] "></div>
 
         <div className="h-[60px] "></div>

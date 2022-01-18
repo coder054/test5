@@ -12,7 +12,7 @@ const SignUp = () => {
     confirm_password: '',
   })
 
-  const handleChange = (e: any) => {
+  const onChange = (e: any) => {
     const value = e.target.value
     setValues({
       ...values,
@@ -38,26 +38,26 @@ const SignUp = () => {
           <p className="text-[24px] text-[#FFFFFF]">Sign up</p>
           <MyInput
             name={'email'}
-            placeholder="Email"
+            label="Email"
             value={values.email}
             className="mt-12"
-            handleChange={handleChange}
+            onChange={onChange}
           />
           <MyInput
             name={'password'}
-            placeholder="Password"
+            label="Password"
             value={values.password}
             password
             className="mt-8"
-            handleChange={handleChange}
+            onChange={onChange}
           />
           <MyInput
             name={'confirm_password'}
-            placeholder="Confirm Password"
+            label="Confirm Password"
             value={values.confirm_password}
             password
             className="mt-8"
-            handleChange={handleChange}
+            onChange={onChange}
           />
           {/* <div className="mt-8">
             <Button
