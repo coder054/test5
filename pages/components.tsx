@@ -7,7 +7,7 @@ import { GreenSlider } from 'components/GreenSlider'
 import { RainbowSlider } from 'components/RainbowSlider'
 import { TagCloud } from 'components/TagCloud'
 import { useState } from 'react'
-import { TextField, Alert, AlertTitle } from '@mui/material'
+import { TextField, Alert, AlertTitle, styled } from '@mui/material'
 import { MyInput } from 'components/MyInput'
 import { Layout } from 'components/Layout'
 import { ItemEventHeadlines } from 'constants/item-event-headline'
@@ -19,6 +19,38 @@ import { CardChallenges } from 'components/CardChallenges'
 import { MyModal } from 'components/MyModal'
 import { Text } from 'components/Text'
 import { SvgEuro, SvgXIcon } from 'imports/svgs'
+
+const CssTextField = styled(TextField)({
+  '& label': {
+    color: 'rgba(129, 131, 137, 1)',
+  },
+  '& label.Mui-focused': {
+    color: '#5048E5',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: 'green',
+  },
+  '& .MuiOutlinedInput-root': {
+    '& input': {
+      color: '#ffffff',
+      fontSize: '16px',
+      lineHeight: '24px',
+    },
+
+    '& fieldset': {
+      borderColor: '#484A4D', // border normal
+      borderRadius: '8px', // border normal
+      padding: '17px 12px 15px 12px',
+      color: '#ffffff',
+    },
+    '&:hover fieldset': {
+      borderColor: '#484A4D',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#5048E5',
+    },
+  },
+})
 
 enum Tab {
   Friends = 'Friends',
@@ -106,9 +138,10 @@ const Components = () => {
 
         <div className="my-6 w-[439px] ">
           <MyInput
-            placeholder={'Username'}
+            password
+            label={'Username'}
             value={valueInput}
-            handleChange={(e: any) => {
+            onChange={(e: any) => {
               setValueInput(e.target.value)
             }}
           />
@@ -384,9 +417,9 @@ const Components = () => {
 
               <MyInput
                 className="mb-[16px] "
-                placeholder={'Email address'}
+                label={'Email address'}
                 value={email}
-                handleChange={(e) => {
+                onChange={(e) => {
                   setEmail(e.target.value)
                 }}
               />
@@ -394,15 +427,15 @@ const Components = () => {
               <MyInput
                 className="mb-[8px] "
                 password={true}
-                placeholder={'Password'}
+                label={'Password'}
                 value={password}
-                handleChange={(e) => {
+                onChange={(e) => {
                   setPassword(e.target.value)
                 }}
               />
 
               <div className="h-[70px] flex justify-end items-center ">
-                <div
+                <button
                   onClick={() => {
                     setShowModalChangePass(false)
                   }}
@@ -411,16 +444,26 @@ const Components = () => {
                   <Text name="Subtitle2" className="text-white ">
                     Cancel
                   </Text>
-                </div>
-                <div className="rounded-[8px] px-[20px] py-[8px] cursor-pointer h-[38px]  bg-Blue ">
+                </button>
+                <button className="rounded-[8px] px-[20px] py-[8px] cursor-pointer h-[38px]  bg-Blue ">
                   <Text name="Subtitle2" className="text-white ">
                     Authenticate
                   </Text>
-                </div>
+                </button>
               </div>
             </div>
           </MyModal>
         </>
+        <div className="h-[60px] "></div>
+        <TextField
+          id="filled-search"
+          label="Search field"
+          type="search"
+          variant="filled"
+        />
+        <div className="h-[60px] "></div>
+        <CssTextField label="Custom CSS" id="custom-css-outlined-input" />
+
         <div className="h-[60px] "></div>
 
         <div className="h-[60px] "></div>
