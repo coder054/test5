@@ -12,6 +12,13 @@
 @import './../module/landing/landing.module.css';
 
 @layer base {
+  input:-internal-autofill-selected {
+    appearance: menulist-button;
+    background-image: none !important;
+    background-color: red !important;
+    color: -internal-light-dark(black, white) !important;
+  }
+
   @font-face {
     font-family: 'SVN-Gilroy';
     font-style: normal;
