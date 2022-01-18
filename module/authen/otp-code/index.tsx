@@ -3,11 +3,10 @@ import { MyInput } from 'components/MyInput'
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/router'
 
-const SignIn = () => {
+const OtpCode = () => {
   const router = useRouter()
   const [values, setValues] = useState({
-    email: '',
-    password: '',
+    otp: '',
   })
 
   const handleChange = (e: any) => {
@@ -20,52 +19,34 @@ const SignIn = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('values', values.email, values.password)
   }
 
-  const handleSignup = () => {
-    router.push('/signup')
-  }
-  const handleResetPassword = () => {
-    router.push('/reset-password')
+  const handleSendOtp = () => {
+    router.push('/change-password')
   }
 
   return (
     <div className="w-full mt-28">
       <div className="w-1/4 m-auto border border-stone-500 rounded-[8px] p-10">
         <form className="" onSubmit={handleSubmit}>
-          <p className="text-[24px] text-[#FFFFFF]">Sign in</p>
+          <p className="text-[24px] text-[#FFFFFF]">Otp</p>
           <MyInput
-            name={'email'}
-            placeholder="Email"
-            value={values.email}
+            name={'otp'}
+            placeholder="Otp Code"
+            value={values.otp}
             className="mt-12"
             handleChange={handleChange}
           />
-          <MyInput
-            name={'password'}
-            placeholder="Password"
-            value={values.password}
-            password
-            className="mt-8"
-            handleChange={handleChange}
-          />
-          <div className="mt-8">
+          {/* <div className="mt-8">
             <Button
               submit
               className="h-[48px] bg-[#4654EA] text-[15px]"
               text="Sign In"
             />
-          </div>
-          <div className="mt-2" onClick={handleSignup}>
+          </div> */}
+          <div className="mt-12" onClick={handleSendOtp}>
             <Button
-              text="Sign up"
-              className="h-[48px] text-[#09E099] border border-[#09E099]"
-            />
-          </div>
-          <div className="mt-2" onClick={handleResetPassword}>
-            <Button
-              text="Reset password"
+              text="Send Otp"
               className="h-[48px] text-[#09E099] border border-[#09E099]"
             />
           </div>
@@ -75,4 +56,4 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
+export default OtpCode

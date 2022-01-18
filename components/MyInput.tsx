@@ -1,22 +1,30 @@
 import TextField from '@mui/material/TextField'
+import clsx from 'clsx'
+
 export const MyInput = ({
   placeholder,
   value,
   handleChange,
+  className,
+  password,
   ...rest
 }: {
   placeholder: string
   value: string
   handleChange: any
+  className?: string
+  password?: boolean
   [rest: string]: any
 }) => {
+  const styles = clsx(className && className)
   return (
-    <div className="relative">
+    <div className={`relative ${styles}`}>
       <input
         {...rest}
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
+        type={password ? 'password' : ''}
         className="peer
         w-full
         placeholder:text-transparent
@@ -26,7 +34,6 @@ export const MyInput = ({
       focus:outline-0
       focus:px-[11px]
       duration-200
-
       text-white
       text-[16px]
       leading-[150%]

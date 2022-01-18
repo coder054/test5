@@ -3,7 +3,7 @@ import { MyInput } from 'components/MyInput'
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/router'
 
-const SignIn = () => {
+const ResetPassword = () => {
   const router = useRouter()
   const [values, setValues] = useState({
     email: '',
@@ -23,18 +23,15 @@ const SignIn = () => {
     console.log('values', values.email, values.password)
   }
 
-  const handleSignup = () => {
-    router.push('/signup')
-  }
-  const handleResetPassword = () => {
-    router.push('/reset-password')
+  const handleSendEmail = () => {
+    router.push('/otp-code')
   }
 
   return (
     <div className="w-full mt-28">
       <div className="w-1/4 m-auto border border-stone-500 rounded-[8px] p-10">
         <form className="" onSubmit={handleSubmit}>
-          <p className="text-[24px] text-[#FFFFFF]">Sign in</p>
+          <p className="text-[24px] text-[#FFFFFF]">Reset Password</p>
           <MyInput
             name={'email'}
             placeholder="Email"
@@ -42,30 +39,16 @@ const SignIn = () => {
             className="mt-12"
             handleChange={handleChange}
           />
-          <MyInput
-            name={'password'}
-            placeholder="Password"
-            value={values.password}
-            password
-            className="mt-8"
-            handleChange={handleChange}
-          />
-          <div className="mt-8">
+          {/* <div className="mt-8">
             <Button
               submit
               className="h-[48px] bg-[#4654EA] text-[15px]"
               text="Sign In"
             />
-          </div>
-          <div className="mt-2" onClick={handleSignup}>
+          </div> */}
+          <div className="mt-12" onClick={handleSendEmail}>
             <Button
-              text="Sign up"
-              className="h-[48px] text-[#09E099] border border-[#09E099]"
-            />
-          </div>
-          <div className="mt-2" onClick={handleResetPassword}>
-            <Button
-              text="Reset password"
+              text="Send Email"
               className="h-[48px] text-[#09E099] border border-[#09E099]"
             />
           </div>
@@ -75,4 +58,4 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
+export default ResetPassword
