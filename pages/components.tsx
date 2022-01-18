@@ -20,38 +20,6 @@ import { MyModal } from 'components/MyModal'
 import { Text } from 'components/Text'
 import { SvgEuro, SvgXIcon } from 'imports/svgs'
 
-const CssTextField = styled(TextField)({
-  '& label': {
-    color: 'rgba(129, 131, 137, 1)',
-  },
-  '& label.Mui-focused': {
-    color: '#5048E5',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: 'green',
-  },
-  '& .MuiOutlinedInput-root': {
-    '& input': {
-      color: '#ffffff',
-      fontSize: '16px',
-      lineHeight: '24px',
-    },
-
-    '& fieldset': {
-      borderColor: '#484A4D', // border normal
-      borderRadius: '8px', // border normal
-      padding: '17px 12px 15px 12px',
-      color: '#ffffff',
-    },
-    '&:hover fieldset': {
-      borderColor: '#484A4D',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#5048E5',
-    },
-  },
-})
-
 enum Tab {
   Friends = 'Friends',
   News = 'News',
@@ -416,7 +384,6 @@ const Components = () => {
               </div>
 
               <MyInput
-                className="mb-[16px] "
                 label={'Email address'}
                 value={email}
                 onChange={(e) => {
@@ -424,8 +391,9 @@ const Components = () => {
                 }}
               />
 
+              <div className="h-[16px] "></div>
+
               <MyInput
-                className="mb-[8px] "
                 password={true}
                 label={'Password'}
                 value={password}
@@ -433,6 +401,7 @@ const Components = () => {
                   setPassword(e.target.value)
                 }}
               />
+              <div className="mb-[8px] "></div>
 
               <div className="h-[70px] flex justify-end items-center ">
                 <button
@@ -462,7 +431,6 @@ const Components = () => {
           variant="filled"
         />
         <div className="h-[60px] "></div>
-        <CssTextField label="Custom CSS" id="custom-css-outlined-input" />
 
         <div className="h-[60px] "></div>
 

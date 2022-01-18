@@ -21,13 +21,13 @@
   select:-webkit-autofill,
   select:-webkit-autofill:hover,
   select:-webkit-autofill:focus {
-    /* border: 1px solid green !important; */
-    /* -webkit-text-fill-color: white !important;
+    border: 1px solid transparent !important;
+    -webkit-text-fill-color: white !important;
     font-size: 16px !important;
     line-height: 24px !important;
-    background-color: #1d1d24 !important;
+    background: transparent !important;
     -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
-    transition: background-color 5000s ease-in-out 0s !important; */
+    transition: background-color 5000s ease-in-out 0s !important;
   }
 
   @font-face {
