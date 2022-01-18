@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { atom, useAtom } from 'jotai'
 import axios from 'axios'
 import { Cookies } from 'react-cookie'
+import { MyModal } from 'components/MyModal'
 
 const valuesAtom = atom({
   email: '',
@@ -30,13 +31,11 @@ const SignIn = () => {
   const [status, statusSet] = useAtom(statusAtom)
   const cookies = new Cookies()
   const token = cookies.get('token')
-  console.log('token', token)
 
-  // useEffect(() => {
-  //   if (token) {
-  //     router.push('/')
-  //   }
-  // }, [router, token])
+  useEffect(() => {
+    if (token) {
+    }
+  }, [token])
 
   const handleChange = (e: any) => {
     const value = e.target.value
@@ -63,7 +62,7 @@ const SignIn = () => {
           responseSet(res.data)
           statusSet(res.status)
           cookies.set('token', res.data.idToken)
-          window.location.href = '/'
+          window.location.href = '/feed'
         })
         .catch(() => {
           alert(

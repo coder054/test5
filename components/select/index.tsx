@@ -5,13 +5,24 @@ import { useEffect, useRef, useState } from 'react'
 import cls from './select.module.css'
 import { OptionProps, SelectProps } from './type'
 
-const Option = ({ title }: OptionProps) => {
+const Option = ({ title, value, onSelect }: OptionProps) => {
   const liRef = useRef(null)
+
+  const handleClickgetData = (event: any) => {
+    console.log('on mouse down')
+    const optionValue = event.currentTarget.getAttribute('data-value')
+    const optionTitle = event.currentTarget.textContent
+    if (optionTitle && optionValue) {
+      onSelect(optionTitle, optionValue)
+    }
+  }
 
   return (
     <li
       ref={liRef}
       className="text-base text-[#FFFFFF] pl-[12px] w-full h-[48px] flex items-center cursor-pointer hover:bg-[#4654EA]"
+      data-value={value}
+      onMouseDown={handleClickgetData}
     >
       {title}
     </li>
@@ -50,6 +61,11 @@ export const Select = ({
     setIsOpen(!isOpen)
   }
 
+  const handleClickSelectOption = (title: string, value: string | null) => {
+    console.log(title, value)
+    // value && setVal
+  }
+
   return (
     <div className={`${size ? '' : 'w-[220px] h-[54px]'}`}>
       <div className={clsx(styles, 'relative')}>
@@ -78,7 +94,12 @@ export const Select = ({
         {isOpen && (
           <ul className="w-full">
             {options?.map((item: OptionType) => (
-              <Option key={item.value} title={item.title} value={item.value} />
+              <Option
+                key={item.value}
+                title={item.title}
+                value={item.value}
+                onSelect={handleClickSelectOption}
+              />
             ))}
           </ul>
         )}
