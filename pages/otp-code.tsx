@@ -1,12 +1,12 @@
 import { LayoutLanding } from 'components/layout-landing/layout-landing'
-import SignUp from 'module/authen/signup'
+import OtpCode from 'module/authen/otp-code'
 
-const SignUpPage = () => {
+const OtpCodePage = () => {
   return (
     <LayoutLanding>
-      <SignUp />
+      <OtpCode />
     </LayoutLanding>
   )
 }
 
-export default SignUpPage
+export default OtpCodePage

@@ -9,7 +9,7 @@ export const LayoutLanding = ({ children }: { children: any }) => {
         <Image src={imgLogo} alt="" />
       </div>
       <div className="w-full absolute">{children}</div>
-      <div className={`${cls.vectorTop}`}></div>
+      <div className={`${cls.vectorTop} pointer-events-none`}></div>
       <div className={`${cls.vectorBottom} absolute z-0`}></div>
     </div>
   )
