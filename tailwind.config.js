@@ -9,7 +9,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        Blue: '#4654EA',
         'Dark-1': '#252627',
+        'Dark-2': 'rgba(30, 31, 36, 1)',
         DividerColor: 'rgba(100, 116, 139, 0.4)',
         Grey: '#818389',
         Green: 'rgba(9, 224, 153, 1)',
@@ -28,6 +30,7 @@ module.exports = {
       },
       fontFamily: {
         SVNGilroy: ['SVN-Gilroy'],
+        Inter: ['Inter'],
       },
       spacing: {
         '100vw-280px': 'calc(100vw - 280px)',
