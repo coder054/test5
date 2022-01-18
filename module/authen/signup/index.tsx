@@ -2,6 +2,7 @@ import { Button } from 'components'
 import { MyInput } from 'components/MyInput'
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/router'
+import { useAtom } from 'jotai'
 
 const SignUp = () => {
   const router = useRouter()

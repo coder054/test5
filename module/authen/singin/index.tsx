@@ -1,14 +1,42 @@
 import { Button } from 'components'
 import { MyInput } from 'components/MyInput'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { atom, useAtom } from 'jotai'
+import axios from 'axios'
+import { Cookies } from 'react-cookie'
+
+const valuesAtom = atom({
+  email: '',
+  password: '',
+  returnSecureToken: false,
+})
+const responseSiginin = atom({
+  kind: '',
+  localId: '',
+  email: '',
+  displayName: '',
+  idToken: '',
+  registered: false,
+  refreshToken: '',
+  expiresIn: '',
+})
+const statusAtom = atom(0)
 
 const SignIn = () => {
   const router = useRouter()
-  const [values, setValues] = useState({
-    email: '',
-    password: '',
-  })
+  const [values, setValues] = useAtom(valuesAtom)
+  const [response, responseSet] = useAtom(responseSiginin)
+  const [status, statusSet] = useAtom(statusAtom)
+  const cookies = new Cookies()
+  const token = cookies.get('token')
+  console.log('token', token)
+
+  // useEffect(() => {
+  //   if (token) {
+  //     router.push('/')
+  //   }
+  // }, [router, token])
 
   const handleChange = (e: any) => {
     const value = e.target.value
@@ -20,7 +48,29 @@ const SignIn = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('values', values.email, values.password)
+    const body = {
+      email: values.email,
+      password: values.password,
+      returnSecureToken: values.returnSecureToken,
+    }
+    try {
+      axios
+        .post(
+          'https://asia-northeast1-zporter-dev.cloudfunctions.net/api/log-in',
+          body
+        )
+        .then((res) => {
+          responseSet(res.data)
+          statusSet(res.status)
+          cookies.set('token', res.data.idToken)
+          window.location.href = '/'
+        })
+        .catch(() => {
+          alert(
+            'Your email or password is invalid. Please try again or reset your password'
+          )
+        })
+    } catch (error) {}
   }
 
   const handleSignup = () => {
@@ -53,7 +103,7 @@ const SignIn = () => {
           <div className="mt-8">
             <Button
               submit
-              className="h-[48px] bg-[#4654EA] text-[15px]"
+              className="h-[48px] bg-[#4654EA] text-[15px] hover:bg-[#5b67f3]"
               text="Sign In"
             />
           </div>
