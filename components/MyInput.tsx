@@ -47,8 +47,8 @@ export const MyInput = ({
 }: {
   className?: string
   label: string
-  value: string
-  onChange: any
+  value?: string
+  onChange?: any
   password?: boolean
   [rest: string]: any
 }) => {
@@ -57,6 +57,9 @@ export const MyInput = ({
   return (
     <div className={clsx('relative', className)}>
       <CssTextField
+        {...rest}
+        value={value}
+        onChange={onChange}
         fullWidth
         label={label}
         id="custom-css-outlined-input"

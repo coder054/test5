@@ -16,3 +16,5 @@ export const imgAvtItemEventHeadline = require('./../public' +
   '/event/avatar.svg')
 export const imgBackgroundItemEventHeadline = require('./../public' +
   '/event/background.svg')
+export const imgItemBackgroundLanding = require('./../public' +
+  '/item-landing/item-background.png')

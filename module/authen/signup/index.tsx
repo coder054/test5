@@ -3,14 +3,17 @@ import { MyInput } from 'components/MyInput'
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAtom } from 'jotai'
+import { useAuth } from '../auth/AuthContext'
 
 const SignUp = () => {
   const router = useRouter()
+  const [loading, setLoading] = useState<boolean>(false)
   const [values, setValues] = useState({
     email: '',
     password: '',
     confirm_password: '',
   })
+  const { signup } = useAuth()
 
   const onChange = (e: any) => {
     const value = e.target.value
@@ -20,13 +23,17 @@ const SignUp = () => {
     })
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('valuesd', values.email, values.password)
+    try {
+      await signup(values.email, values.password)
+      router.push('/signin')
+    } catch (error) {
+      console.log('err')
+    }
 
     // router.push('/')
   }
-  console.log(values.email)
 
   const handleSignup = () => {
     // router.push('/')

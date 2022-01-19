@@ -7,12 +7,14 @@ interface ButtonProps {
   placeholder?: string
   text?: string
   submit?: boolean
+  onClick?: () => void
 }
 
-export const Button = ({ className, text, submit }: ButtonProps) => {
+export const Button = ({ className, text, submit, onClick }: ButtonProps) => {
   const styles = clsx(className && className)
   return (
     <div
+      onClick={onClick}
       className={clsx(
         styles,
         cls.button,

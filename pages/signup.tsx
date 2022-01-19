@@ -3,7 +3,7 @@ import SignUp from 'module/authen/signup'
 
 const SignUpPage = () => {
   return (
-    <LayoutLanding>
+    <LayoutLanding authen>
       <SignUp />
     </LayoutLanding>
   )

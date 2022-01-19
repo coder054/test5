@@ -6,6 +6,8 @@ import {
   signInWithEmailAndPassword,
   confirmPasswordReset,
   sendPasswordResetEmail,
+  signOut,
+  onIdTokenChanged,
 } from 'firebase/auth'
 import { createContext, useContext, useEffect, useState } from 'react'
 
@@ -17,6 +19,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState<any>(null)
+  const [token, setToken] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
 
   const signin = (email: string, password: string) => {
@@ -28,7 +31,8 @@ export function AuthProvider({ children }) {
   }
 
   const signout = () => {
-    signout
+    signOut(auth)
+    window.location.href = '/signin'
   }
 
   const resetPassword = (email: string) => {
@@ -36,14 +40,24 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    onAuthStateChanged(auth, (authUser) => {
+    return onAuthStateChanged(auth, (authUser) => {
       setCurrentUser(authUser)
       setLoading(false)
     })
   }, [])
 
+  useEffect(() => {
+    return onIdTokenChanged(auth, async (user) => {
+      if (user) {
+        const token: string = await user.getIdToken()
+        setToken(token)
+      }
+    })
+  }, [])
+
   const value: any = {
     currentUser,
+    token,
     signin,
     signout,
     signup,

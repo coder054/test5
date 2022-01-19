@@ -3,7 +3,7 @@ import ResetPassword from 'module/authen/reset-password'
 
 const ResetPasswordPage = () => {
   return (
-    <LayoutLanding>
+    <LayoutLanding authen>
       <ResetPassword />
     </LayoutLanding>
   )
