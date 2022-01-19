@@ -20,6 +20,8 @@ import { MyModal } from 'components/MyModal'
 import { Text } from 'components/Text'
 import { SvgEuro, SvgXIcon } from 'imports/svgs'
 import { MySelect } from 'components/MySelect'
+import { DropdownUser } from 'components/specific/DropdownUser'
+import { MyCheckbox } from 'components/common/MyCheckbox'
 
 enum Tab {
   Friends = 'Friends',
@@ -39,6 +41,7 @@ const Components = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [country, setCountry] = useState('')
+  const [checked, setChecked] = useState(false)
 
   return (
     <Layout>
@@ -440,6 +443,20 @@ const Components = () => {
             ]}
           />
         </div>
+
+        <div className="h-[60px] "></div>
+
+        <DropdownUser />
+
+        <div className="h-[60px] "></div>
+
+        <MyCheckbox
+          label={'Testttttttttt'}
+          checked={checked}
+          onChange={() => {
+            setChecked(!checked)
+          }}
+        />
 
         <div className="h-[60px] "></div>
         <div className="h-[60px] "></div>

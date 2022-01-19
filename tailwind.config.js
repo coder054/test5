@@ -26,6 +26,7 @@ module.exports = {
         },
 
         Red: 'rgba(214, 12, 12, 1)',
+        Stroke: '#484A4D',
         Yellow: 'rgba(255, 150, 7, 1)',
       },
       fontFamily: {
