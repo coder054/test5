@@ -27,6 +27,7 @@ module.exports = {
 
         Red: 'rgba(214, 12, 12, 1)',
         Stroke: '#484A4D',
+        Scrollbar: '#949494',
         Yellow: 'rgba(255, 150, 7, 1)',
       },
       fontFamily: {
@@ -43,5 +44,8 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwind-scrollbar')],
+  variants: {
+    scrollbar: ['rounded'],
+  },
 }
