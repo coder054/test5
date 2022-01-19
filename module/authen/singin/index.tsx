@@ -43,6 +43,7 @@ const SignIn = () => {
       ...values,
       [e.target.name]: value,
     })
+    console.log('e', e.target.value)
   }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -71,6 +72,7 @@ const SignIn = () => {
         })
     } catch (error) {}
   }
+  console.log('email', values.email)
 
   const handleSignup = () => {
     router.push('/signup')

@@ -37,3 +37,4 @@ yarn-error.log*
 *.tsbuildinfo
 note.txt
 .vscode
+.env

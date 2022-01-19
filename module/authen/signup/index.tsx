@@ -22,13 +22,14 @@ const SignUp = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('values', values.email, values.password)
+    console.log('valuesd', values.email, values.password)
 
-    router.push('/')
+    // router.push('/')
   }
+  console.log(values.email)
 
   const handleSignup = () => {
-    router.push('/')
+    // router.push('/')
   }
 
   return (
@@ -66,8 +67,9 @@ const SignUp = () => {
               text="Sign In"
             />
           </div> */}
-          <div className="mt-12" onClick={handleSignup}>
+          <div className="mt-12">
             <Button
+              submit
               text="Submit"
               className="h-[48px] text-[#09E099] border border-[#09E099]"
             />

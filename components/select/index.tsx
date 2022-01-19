@@ -9,7 +9,6 @@ const Option = ({ title, value, onSelect }: OptionProps) => {
   const liRef = useRef(null)
 
   const handleClickgetData = (event: any) => {
-    console.log('on mouse down')
     const optionValue = event.currentTarget.getAttribute('data-value')
     const optionTitle = event.currentTarget.textContent
     if (optionTitle && optionValue) {
@@ -36,9 +35,12 @@ export const Select = ({
   disable,
   options,
   defaultValue,
+  onChange,
 }: SelectProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [displayText, setDisplayText] = useState<string | null>('')
+  const [value, setValue] = useState<string>('')
+  const selectRef = useRef<HTMLDivElement>(null)
 
   const styles = clsx(className && className)
 
@@ -62,8 +64,10 @@ export const Select = ({
   }
 
   const handleClickSelectOption = (title: string, value: string | null) => {
-    console.log(title, value)
-    // value && setVal
+    value && setValue(value)
+    setDisplayText(title)
+    onChange && onChange(title, value)
+    setIsOpen(!isOpen)
   }
 
   return (
@@ -73,6 +77,7 @@ export const Select = ({
           className={`w-[220px] h-[54px] text-base text-[#818389] cursor-pointer ${cls.select}`}
           role={'button'}
           onClick={handleClickOpenSelect}
+          ref={selectRef}
         >
           <span className="absolute top-[15px]">
             {displayText || placeholder}
