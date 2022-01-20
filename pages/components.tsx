@@ -19,6 +19,10 @@ import { CardChallenges } from 'components/CardChallenges'
 import { MyModal } from 'components/MyModal'
 import { Text } from 'components/Text'
 import { SvgEuro, SvgXIcon } from 'imports/svgs'
+import { MySelect } from 'components/MySelect'
+import { DropdownUser } from 'components/specific/DropdownUser'
+import { MyCheckbox } from 'components/common/MyCheckbox'
+import { Checklist } from 'components/common/Checklist'
 
 enum Tab {
   Friends = 'Friends',
@@ -37,6 +41,10 @@ const Components = () => {
   const [showModalChangePass, setShowModalChangePass] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [country, setCountry] = useState('')
+  const [checked, setChecked] = useState(false)
+
+  const [categories, setCategories] = useState(['Frontend'])
 
   return (
     <Layout>
@@ -424,16 +432,65 @@ const Components = () => {
           </MyModal>
         </>
         <div className="h-[60px] "></div>
-        <TextField
-          id="filled-search"
-          label="Search field"
-          type="search"
-          variant="filled"
+        <div className="w-[439px] ">
+          <MySelect
+            className=""
+            label={'Select Country'}
+            value={country}
+            onChange={(e) => {
+              setCountry(e.target.value)
+            }}
+            arrOption={[
+              { value: 'USA', label: 'USA' },
+              { value: 'Sweden', label: 'Sweden' },
+            ]}
+          />
+        </div>
+
+        <div className="h-[60px] "></div>
+
+        <DropdownUser />
+
+        <div className="h-[60px] "></div>
+
+        <MyCheckbox
+          label={'Testttttttttt'}
+          checked={checked}
+          onChange={() => {
+            setChecked(!checked)
+          }}
         />
-        <div className="h-[60px] "></div>
 
         <div className="h-[60px] "></div>
 
+        <Checklist
+          list={[
+            { label: 'Business', value: 'Business' },
+            { label: 'Planning', value: 'Planning' },
+            { label: 'Frontend', value: 'Frontend' },
+            { label: 'Design', value: 'Design' },
+            { label: 'Backend', value: 'Backend' },
+            { label: 'Android', value: 'Android' },
+            { label: 'Ios', value: 'Ios' },
+          ]}
+          values={categories}
+          onChange={(e, value) => {
+            if (e.target.checked === true) {
+              categories.push(value)
+              setCategories([...categories, value])
+            } else {
+              setCategories(
+                categories.filter((item) => {
+                  return item !== value
+                })
+              )
+            }
+          }}
+        />
+
+        <div className="h-[60px] "></div>
+        <div className="h-[60px] "></div>
+        <div className="h-[60px] "></div>
         <div className="h-[60px] "></div>
       </div>
     </Layout>

@@ -9,4 +9,5 @@ export const ROUTES = {
   biography: '/biography',
   support: '/support',
   components: '/components',
+  aaa: process.env.TEST2,
 }
