@@ -23,6 +23,8 @@ import { MySelect } from 'components/MySelect'
 import { DropdownUser } from 'components/specific/DropdownUser'
 import { MyCheckbox } from 'components/common/MyCheckbox'
 import { Checklist } from 'components/common/Checklist'
+import { ChangePlan } from 'components/specific/ChangePlan'
+import { BillingDetail } from 'components/specific/BillingDetail'
 
 enum Tab {
   Friends = 'Friends',
@@ -158,16 +160,13 @@ const Components = () => {
             >
               <div className="flex items-center  mb-[24px] ">
                 <svg
+                  className="fill-[#09E099] "
                   width="40"
                   height="40"
                   viewBox="0 0 40 40"
-                  fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path
-                    d="M28 16H12V14H28V16ZM26 10H14V12H26V10ZM30 20V28C30 29.1 29.1 30 28 30H12C10.9 30 10 29.1 10 28V20C10 18.9 10.9 18 12 18H28C29.1 18 30 18.9 30 20ZM24 24L18 20.73V27.26L24 24Z"
-                    fill="#09E099"
-                  />
+                  <path d="M28 16H12V14H28V16ZM26 10H14V12H26V10ZM30 20V28C30 29.1 29.1 30 28 30H12C10.9 30 10 29.1 10 28V20C10 18.9 10.9 18 12 18H28C29.1 18 30 18.9 30 20ZM24 24L18 20.73V27.26L24 24Z" />
                 </svg>
 
                 <Text name="Header5" className="text-white ">
@@ -489,6 +488,23 @@ const Components = () => {
         />
 
         <div className="h-[60px] "></div>
+
+        <div
+          style={{
+            background: 'rgba(32, 33, 40, 0.8)',
+            boxShadow:
+              '0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 1px rgba(100, 116, 139, 0.06)',
+            backdropFilter: 'blur(68px)',
+          }}
+          className="px-[24px] py-[32px] rounded-[8px] w-[952px]"
+        >
+          <ChangePlan />
+
+          <div className="h-[1px] bg-Stroke mt-[24px] mb-[24px] "></div>
+
+          <BillingDetail />
+        </div>
+
         <div className="h-[60px] "></div>
         <div className="h-[60px] "></div>
         <div className="h-[60px] "></div>
