@@ -36,22 +36,24 @@ const SignIn = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [form] = Form.useForm()
 
-  const { signin, currentUser, token } = useAuth()
+  const { signin, currentUser, errorSignin } = useAuth()
 
   useEffect(() => {
     if (currentUser?.accessToken) {
       router.push('/feed')
     }
   }, [currentUser?.accessToken])
+  console.log('errorSignin', errorSignin)
+
+  useEffect(() => {
+    setErrorSignIn(errorSignin)
+  }, [errorSignin])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     const submitForm = await form.validateFields()
 
     const res = await signin(submitForm.email, submitForm.password)
-    console.log('resss', res)
-
-    debugger
 
     // try {
     //   setLoading(false)
@@ -138,7 +140,7 @@ const SignIn = () => {
           >
             <MyInput name={'password'} label="Password" password />
           </Form.Item>
-          {/* {errorSignIn && <p className="text-[#FFFFFF]">{errorSignIn}</p>} */}
+          {errorSignIn && <p className="text-[#FFFFFF]">{errorSignIn}</p>}
           <div className="mt-[24px]" onClick={handleSubmit}>
             <Button
               className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
