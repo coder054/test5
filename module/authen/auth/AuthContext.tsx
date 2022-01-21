@@ -21,19 +21,16 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [token, setToken] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
+  const [errorSignin, setErrorSignin] = useState<string>('')
 
   const signin = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user
-        // ...
+        setCurrentUser(userCredential.user)
       })
       .catch((error) => {
-        const errorCode = error.code
-        const errorMessage = error.message
-
-        // ..
+        // console.log('error', error.code)
+        setErrorSignin(error.code)
       })
   }
 
@@ -69,6 +66,7 @@ export function AuthProvider({ children }) {
   const value: any = {
     currentUser,
     token,
+    errorSignin,
     signin,
     signout,
     SignUpWithEmailAndPassword,
