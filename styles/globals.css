@@ -1,7 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
 @import './components/slick_custom.css';
 @import './components/slider_antd_custom.css';
 @import './components/modal_antd_custom.css';
@@ -11,6 +8,10 @@
 
 /* import */
 @import './../module/landing/landing.module.css';
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
 @layer base {
   /* width */
