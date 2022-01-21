@@ -3,7 +3,7 @@ import SignIn from 'module/authen/singin'
 
 const SignInPage = () => {
   return (
-    <LayoutLanding>
+    <LayoutLanding authen>
       <SignIn />
     </LayoutLanding>
   )

@@ -92,3 +92,25 @@
   -ms-transform: rotate(180deg);
   transform: rotate(180deg);
 }
+
+.MuiOutlinedInput-root fieldset {
+  border-color: #818389 !important;
+  border-radius: 8px;
+  padding: 17px 12px 15px 12px;
+  color: #ffffff;
+}
+
+.css-jdflz1-MuiFormControl-root-MuiTextField-root label {
+  color: #818389 !important;
+  margin-left: 4px;
+  margin-top: 4px;
+}
+.css-jdflz1-MuiFormControl-root-MuiTextField-root label.Mui-focused {
+  color: #ffffff !important;
+  margin-left: 4px;
+  margin-top: 4px;
+}
+
+.ant-form-item-explain-error {
+  margin-top: 6px;
+}

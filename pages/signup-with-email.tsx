@@ -1,10 +1,10 @@
 import { LayoutLanding } from 'components/layout-landing/layout-landing'
-import SignUp from 'module/authen/signup'
+import { SignUpWithEmail } from 'module/authen/signup/signup-with-email'
 
 const SignUpPage = () => {
   return (
-    <LayoutLanding>
-      <SignUp />
+    <LayoutLanding authen>
+      <SignUpWithEmail />
     </LayoutLanding>
   )
 }
