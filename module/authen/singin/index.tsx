@@ -1,4 +1,4 @@
-import { Button } from 'components'
+import { Button, LogoBigSize } from 'components'
 import { MyInput } from 'components/MyInput'
 import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
@@ -7,7 +7,7 @@ import { MyModal } from 'components/MyModal'
 import { useAuth } from '../auth/AuthContext'
 import { Form } from 'antd'
 import cls from './signin.module.css'
-import { IconWarning } from 'imports/svgs'
+import { IconWarning, SvgXIcon } from 'imports/svgs'
 import Link from 'next/link'
 
 const valuesAtom = atom({
@@ -33,6 +33,7 @@ const SignIn = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [isAuthen, setIsAuthen] = useState<boolean>(false)
   const [errorSignIn, setErrorSignIn] = useState<string>('')
+  const [openModal, setOpenModal] = useState<boolean>(false)
   const [form] = Form.useForm()
 
   const { signin, currentUser, token } = useAuth()
@@ -43,25 +44,24 @@ const SignIn = () => {
     }
   }, [currentUser?.accessToken])
 
-  useEffect(() => {
-    if (token) {
-    }
-  }, [token])
-  console.log('token', token)
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     const submitForm = await form.validateFields()
-    try {
-      await signin(submitForm.email, submitForm.password)
-      setLoading(false)
-    } catch (error: any) {
-      console.log('err', error.code)
 
-      setErrorSignIn(
-        'your email or password is invalid. Please try again or reset your password.'
-      )
-    }
+    const res = await signin(submitForm.email, submitForm.password)
+    console.log('resss', res)
+
+    debugger
+
+    // try {
+    //   setLoading(false)
+    // } catch (error: any) {
+    //   console.log('err', error)
+
+    //   setErrorSignIn(
+    //     'your email or password is invalid. Please try again or reset your password.'
+    //   )
+    // }
   }
 
   // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -92,16 +92,20 @@ const SignIn = () => {
   // }
 
   const handleSignup = () => {
-    router.push('/signup')
+    setOpenModal(true)
   }
   const handleResetPassword = () => {
     router.push('/reset-password')
   }
 
+  const handleCloseModal = () => {
+    setOpenModal(false)
+  }
+
   return (
-    <div className="w-full mt-28">
+    <div className="w-screen h-screen flex items-center">
       <div
-        className={`${cls.formSignIn} w-[470px] m-auto border border-stone-500 rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px]`}
+        className={`${cls.formSignIn} w-[470px] border rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px] ml-[17%]`}
       >
         <Form className="" form={form}>
           <div className="w-full text-center">
@@ -142,7 +146,7 @@ const SignIn = () => {
             />
           </div>
           <div
-            className={`${cls.div} w-full h-[56px] rounded-[4px] mt-[24px] flex items-center pl-[16px] pr-[16px]`}
+            className={`${cls.divWarning} w-full h-[56px] rounded-[4px] mt-[24px] flex items-center pl-[16px] pr-[16px]`}
           >
             <IconWarning />
             <span className="text-[#FFFFFF] text-[14px] pl-[8px]">
@@ -168,6 +172,46 @@ const SignIn = () => {
           </div>
         </Form>
       </div>
+      <LogoBigSize />
+      <MyModal show={openModal} width={412} setShow={setOpenModal}>
+        <div
+          className={`${cls.modal} bg-[#1E1F24] pt-[42.8px] pr-[44.8px] pl-[44.8px] pb-[44.8px] rounded-[4px] float-left`}
+        >
+          <div className="float-right" onClick={handleCloseModal}>
+            <SvgXIcon className={''} />
+          </div>
+          <p className="float-left text-[18px] font-semibold text-[#FFFFFF] mt-[20.8px] mb-[32px]">
+            By signing up, you agree to Zporters Terms & Conditions and Privacy
+            Rules
+          </p>
+          <Button
+            className={`${cls.signupWith} w-full h-[48px]`}
+            text="SIGN UP with SMS"
+            onClick={() => {
+              router.push('/signup-with-sms')
+            }}
+          />
+          <Button
+            className={`${cls.signupWith} w-full h-[48px]`}
+            text="SIGN UP with Email"
+            onClick={() => {
+              router.push('/signup-with-email')
+            }}
+          />
+          <Button
+            className={`${cls.signupWith} w-full h-[48px]`}
+            text="SIGN UP with Google"
+          />
+          <Button
+            className={`${cls.signupWith} w-full h-[48px]`}
+            text="SIGN UP with Facebook"
+          />
+          <Button
+            className={`${cls.signupWith} w-full h-[48px]`}
+            text="SIGN UP with Apple"
+          />
+        </div>
+      </MyModal>
     </div>
   )
 }

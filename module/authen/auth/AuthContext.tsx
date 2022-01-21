@@ -24,9 +24,20 @@ export function AuthProvider({ children }) {
 
   const signin = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+
+        // ..
+      })
   }
 
-  const signup = (email: string, password: string) => {
+  const SignUpWithEmailAndPassword = (email: string, password: string) => {
     createUserWithEmailAndPassword(auth, email, password)
   }
 
@@ -60,7 +71,7 @@ export function AuthProvider({ children }) {
     token,
     signin,
     signout,
-    signup,
+    SignUpWithEmailAndPassword,
     resetPassword,
   }
 

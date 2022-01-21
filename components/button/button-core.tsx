@@ -21,8 +21,8 @@ export const Button = ({ className, text, submit, onClick }: ButtonProps) => {
         'flex items-center justify-between cursor-pointer text-center'
       )}
     >
-      <button className="w-full" type={submit ? 'submit' : 'button'}>
-        <span className="w-full">{text}</span>
+      <button className="w-full h-full" type={submit ? 'submit' : 'button'}>
+        <span className="w-full h-full">{text}</span>
       </button>
     </div>
   )

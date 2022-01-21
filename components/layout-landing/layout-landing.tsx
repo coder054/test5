@@ -1,4 +1,4 @@
-import { imgItemBackgroundLanding, imgLogo } from 'imports/images'
+import { imgLogo } from 'imports/images'
 import Image from 'next/image'
 import cls from './layout-landing.module.css'
 
@@ -10,13 +10,9 @@ interface LayoutLandingProps {
 export const LayoutLanding = ({ authen, children }: LayoutLandingProps) => {
   return (
     <div className="h-screen w-full bg-[#000000] relative overflow-hidden">
-      {authen ? (
+      {authen && (
         <div
           className={`${cls.backgroundAuthen} w-screen h-screen absolute`}
-        ></div>
-      ) : (
-        <div
-          className={`${cls.backgroundLanding} w-screen h-screen absolute`}
         ></div>
       )}
       {!authen && (
@@ -25,6 +21,12 @@ export const LayoutLanding = ({ authen, children }: LayoutLandingProps) => {
         </div>
       )}
       <div className="w-full absolute">{children}</div>
+      {!authen && (
+        <>
+          <div className={`${cls.vectorTop} pointer-events-none`}></div>
+          <div className={`${cls.vectorBottom} absolute z-0`}></div>
+        </>
+      )}
     </div>
   )
 }
