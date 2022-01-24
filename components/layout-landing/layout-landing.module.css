@@ -26,3 +26,14 @@
   filter: blur(393px);
   transform: rotate(-25.31deg);
 }
+
+.backgroundAuthen {
+  background-image: url('../../public/item-landing/Background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.backgroundLanding {
+  background-image: url('../../public/item-landing/Background.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}

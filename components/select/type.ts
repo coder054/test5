@@ -12,7 +12,7 @@ export interface SelectProps {
   error?: string | number | boolean
   required?: boolean
   scrollIntoView?: boolean
-  onChange?: (value: string | null, title: string) => void
+  onChange?: (title: string, value: string | null) => void
 }
 
 export interface OptionProps {
@@ -20,5 +20,5 @@ export interface OptionProps {
   scrollIntoView?: boolean
   title?: string
   value?: string
-  onSelect?: (title: string, value: number | string | null) => void
+  onSelect: (title: string, value: string | null) => void
 }

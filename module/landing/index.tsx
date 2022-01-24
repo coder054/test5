@@ -1,6 +1,6 @@
 import { LayoutLanding } from 'components/layout-landing/layout-landing'
 import { Carousel } from 'antd'
-import 'antd/dist/antd.css'
+// import 'antd/dist/antd.css'
 import { itemLanding } from 'constants/landing-page'
 import { itemLandingType } from 'constants/types'
 import Image from 'next/image'

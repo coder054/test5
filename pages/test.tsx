@@ -1,9 +1,15 @@
+import { Button } from 'components'
 import { ItemEventHeadline } from 'components/item-event-headline'
 import { Layout } from 'components/Layout'
 import { Select } from 'components/select'
 import { ItemEventHeadlines } from 'constants/item-event-headline'
+import { useAuth } from 'module/authen/auth/AuthContext'
 
 const Test = () => {
+  const { signout } = useAuth()
+  const handleSignOut = async () => {
+    await signout()
+  }
   return (
     <Layout>
       {/* <div className="text-white ">Test</div> */}
@@ -20,6 +26,11 @@ const Test = () => {
           ]}
         />
       </div>
+      <Button
+        text="Logout"
+        onClick={handleSignOut}
+        className="text-[#FFFFFF]"
+      ></Button>
     </Layout>
   )
 }

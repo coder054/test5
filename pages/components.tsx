@@ -7,7 +7,7 @@ import { GreenSlider } from 'components/GreenSlider'
 import { RainbowSlider } from 'components/RainbowSlider'
 import { TagCloud } from 'components/TagCloud'
 import { useState } from 'react'
-import { TextField } from '@mui/material'
+import { TextField, Alert, AlertTitle, styled } from '@mui/material'
 import { MyInput } from 'components/MyInput'
 import { Layout } from 'components/Layout'
 import { ItemEventHeadlines } from 'constants/item-event-headline'
@@ -18,7 +18,14 @@ import { CardNews } from 'components/CardNews'
 import { CardChallenges } from 'components/CardChallenges'
 import { MyModal } from 'components/MyModal'
 import { Text } from 'components/Text'
-import { SvgEuro } from 'imports/svgs'
+import { SvgEuro, SvgXIcon } from 'imports/svgs'
+import { MySelect } from 'components/MySelect'
+import { DropdownUser } from 'components/specific/DropdownUser'
+import { MyCheckbox } from 'components/common/MyCheckbox'
+import { Checklist } from 'components/common/Checklist'
+import { ChangePlan } from 'components/specific/ChangePlan'
+import { BillingDetail } from 'components/specific/BillingDetail'
+import { InvoiceHistory } from 'components/specific/InvoiceHistory'
 
 enum Tab {
   Friends = 'Friends',
@@ -34,6 +41,13 @@ const Components = () => {
   const [tab, setTab] = useState(Tab.Friends)
   const [show1, setShow1] = useState(false)
   const [show2, setShow2] = useState(false)
+  const [showModalChangePass, setShowModalChangePass] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [country, setCountry] = useState('')
+  const [checked, setChecked] = useState(false)
+
+  const [categories, setCategories] = useState(['Frontend'])
 
   return (
     <Layout>
@@ -103,9 +117,10 @@ const Components = () => {
 
         <div className="my-6 w-[439px] ">
           <MyInput
-            placeholder={'Username'}
+            password
+            label={'Username'}
             value={valueInput}
-            handleChange={(e: any) => {
+            onChange={(e: any) => {
               setValueInput(e.target.value)
             }}
           />
@@ -146,16 +161,13 @@ const Components = () => {
             >
               <div className="flex items-center  mb-[24px] ">
                 <svg
+                  className="fill-[#09E099] "
                   width="40"
                   height="40"
                   viewBox="0 0 40 40"
-                  fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path
-                    d="M28 16H12V14H28V16ZM26 10H14V12H26V10ZM30 20V28C30 29.1 29.1 30 28 30H12C10.9 30 10 29.1 10 28V20C10 18.9 10.9 18 12 18H28C29.1 18 30 18.9 30 20ZM24 24L18 20.73V27.26L24 24Z"
-                    fill="#09E099"
-                  />
+                  <path d="M28 16H12V14H28V16ZM26 10H14V12H26V10ZM30 20V28C30 29.1 29.1 30 28 30H12C10.9 30 10 29.1 10 28V20C10 18.9 10.9 18 12 18H28C29.1 18 30 18.9 30 20ZM24 24L18 20.73V27.26L24 24Z" />
                 </svg>
 
                 <Text name="Header5" className="text-white ">
@@ -318,6 +330,190 @@ const Components = () => {
           </MyModal>
         </>
 
+        <div className="h-[60px] "></div>
+
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          This is an error alert — <strong>check it out!</strong>
+        </Alert>
+        <div className="h-[60px] "></div>
+
+        <Alert severity="warning">
+          <AlertTitle>Warning</AlertTitle>
+          This is a warning alert — <strong>check it out!</strong>
+        </Alert>
+
+        <div className="h-[60px] "></div>
+        <Alert severity="info">
+          <AlertTitle>Info</AlertTitle>
+          This is an info alert — <strong>check it out!</strong>
+        </Alert>
+
+        <div className="h-[60px] "></div>
+
+        <Alert severity="success">
+          <AlertTitle>Success</AlertTitle>
+          This is a success alert — <strong>check it out!</strong>
+        </Alert>
+
+        <div className="h-[60px] "></div>
+
+        {/* /// Modal change password */}
+        <>
+          <button
+            className="cursor-pointer p-4 bg-yellow-200 rounded-[4px] "
+            onClick={() => {
+              setShowModalChangePass(true)
+            }}
+          >
+            Open Modal Change Password
+          </button>
+          <MyModal
+            show={showModalChangePass}
+            setShow={setShowModalChangePass}
+            width={480}
+          >
+            <div
+              style={{
+                boxShadow: '0px 25px 50px rgba(100, 116, 139, 0.25)',
+              }}
+              className=" rounded-[8px] bg-Dark-2 px-[24px] pt-[32px] "
+            >
+              <div className="flex justify-between items-center mb-[24px]">
+                <Text name="Header6" className="text-white ">
+                  Change email address
+                </Text>
+                <SvgXIcon
+                  className={undefined}
+                  onClick={() => {
+                    setShowModalChangePass(false)
+                  }}
+                />
+              </div>
+
+              <MyInput
+                label={'Email address'}
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value)
+                }}
+              />
+
+              <div className="h-[16px] "></div>
+
+              <MyInput
+                password={true}
+                label={'Password'}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value)
+                }}
+              />
+              <div className="mb-[8px] "></div>
+
+              <div className="h-[70px] flex justify-end items-center ">
+                <button
+                  onClick={() => {
+                    setShowModalChangePass(false)
+                  }}
+                  className="rounded-[8px] px-[16px] py-[8px] cursor-pointer h-[38px] mr-[16px] "
+                >
+                  <Text name="Subtitle2" className="text-white ">
+                    Cancel
+                  </Text>
+                </button>
+                <button className="rounded-[8px] px-[20px] py-[8px] cursor-pointer h-[38px]  bg-Blue ">
+                  <Text name="Subtitle2" className="text-white ">
+                    Authenticate
+                  </Text>
+                </button>
+              </div>
+            </div>
+          </MyModal>
+        </>
+        <div className="h-[60px] "></div>
+        <div className="w-[439px] ">
+          <MySelect
+            className=""
+            label={'Select Country'}
+            value={country}
+            onChange={(e) => {
+              setCountry(e.target.value)
+            }}
+            arrOption={[
+              { value: 'USA', label: 'USA' },
+              { value: 'Sweden', label: 'Sweden' },
+            ]}
+          />
+        </div>
+
+        <div className="h-[60px] "></div>
+
+        <DropdownUser />
+
+        <div className="h-[60px] "></div>
+
+        <MyCheckbox
+          label={'Testttttttttt'}
+          checked={checked}
+          onChange={() => {
+            setChecked(!checked)
+          }}
+        />
+
+        <div className="h-[60px] "></div>
+
+        <Checklist
+          list={[
+            { label: 'Business', value: 'Business' },
+            { label: 'Planning', value: 'Planning' },
+            { label: 'Frontend', value: 'Frontend' },
+            { label: 'Design', value: 'Design' },
+            { label: 'Backend', value: 'Backend' },
+            { label: 'Android', value: 'Android' },
+            { label: 'Ios', value: 'Ios' },
+          ]}
+          values={categories}
+          onChange={(e, value) => {
+            if (e.target.checked === true) {
+              categories.push(value)
+              setCategories([...categories, value])
+            } else {
+              setCategories(
+                categories.filter((item) => {
+                  return item !== value
+                })
+              )
+            }
+          }}
+        />
+
+        <div className="h-[60px] "></div>
+
+        <div
+          style={{
+            background: 'rgba(32, 33, 40, 0.8)',
+            boxShadow:
+              '0px 4px 4px rgba(0, 0, 0, 0.25), 0px 1px 1px rgba(100, 116, 139, 0.06)',
+            backdropFilter: 'blur(68px)',
+          }}
+          className="px-[24px] py-[32px] rounded-[8px] w-[952px]"
+        >
+          <ChangePlan />
+
+          <div className="h-[1px] bg-Stroke mt-[24px] mb-[24px] "></div>
+
+          <BillingDetail />
+        </div>
+
+        <div className="h-[60px] "></div>
+
+        <div className="w-[952px] ">
+          <InvoiceHistory />
+        </div>
+
+        <div className="h-[60px] "></div>
+        <div className="h-[60px] "></div>
         <div className="h-[60px] "></div>
       </div>
     </Layout>
