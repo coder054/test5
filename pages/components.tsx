@@ -25,6 +25,7 @@ import { MyCheckbox } from 'components/common/MyCheckbox'
 import { Checklist } from 'components/common/Checklist'
 import { ChangePlan } from 'components/specific/ChangePlan'
 import { BillingDetail } from 'components/specific/BillingDetail'
+import { InvoiceHistory } from 'components/specific/InvoiceHistory'
 
 enum Tab {
   Friends = 'Friends',
@@ -503,6 +504,12 @@ const Components = () => {
           <div className="h-[1px] bg-Stroke mt-[24px] mb-[24px] "></div>
 
           <BillingDetail />
+        </div>
+
+        <div className="h-[60px] "></div>
+
+        <div className="w-[952px] ">
+          <InvoiceHistory />
         </div>
 
         <div className="h-[60px] "></div>

@@ -12,9 +12,3 @@
   box-shadow: none;
   pointer-events: auto;
 }
-.aaa111 {
-  color: red;
-}
-.aaa222 {
-  @apply text-red-500;
-}

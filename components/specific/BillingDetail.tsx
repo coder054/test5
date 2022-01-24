@@ -33,7 +33,7 @@ export const BillingDetail = () => {
         style={{
           boxShadow: 'inset 0px 0px 0px 1px #E6E8F0',
         }}
-        className="bg-Dark-3 rounded-[8px] min-h-[100px] "
+        className="bg-Dark-3 rounded-[8px] min-h-[100px] px-[1px] mb-[24px] "
       >
         {[
           { label: 'Billing name', value: 'John Doe' },
@@ -43,11 +43,40 @@ export const BillingDetail = () => {
         ].map((o, index) => (
           <div
             key={index}
-            className="flex border-b border-Stroke  last-border-b-0 "
+            className="flex border-b border-Stroke last:border-b-0 py-[16px] px-[24px]"
           >
-            {o.label}
+            <Text name="Subtitle2" className="text-white w-[180px] mr-[16px] ">
+              {o.label}
+            </Text>
+            <Text name="Subtitle2" className="text-Grey ">
+              {o.value}
+            </Text>
           </div>
         ))}
+      </div>
+
+      <div className="mb-[48px] ">
+        <Text name="Subtitle2" className="text-Grey inline-block ">
+          We cannot refund once you purchased a subscription, but you can always
+        </Text>
+        <Text
+          name="Subtitle2"
+          className="text-Blue cursor-pointer inline-block ml-[4px] "
+        >
+          Cancel
+        </Text>
+      </div>
+
+      <div className="flex ">
+        <div className="flex-grow "></div>
+        <div
+          className="mr-2 rounded-[8px] bg-Blue cursor-pointer h-[38px] w-[130px] 
+        flex justify-center items-center "
+        >
+          <Text name="Subtitle2" className="text-white ">
+            Upgrade plan
+          </Text>
+        </div>
       </div>
     </div>
   )

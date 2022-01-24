@@ -8,7 +8,14 @@ export const Text = ({
   ...rest
 }: {
   className: string
-  name: 'Header6' | 'Body2' | 'body1' | 'Caption' | 'Header5' | 'Subtitle2'
+  name:
+    | 'Header6'
+    | 'Body2'
+    | 'body1'
+    | 'Caption'
+    | 'Header5'
+    | 'Subtitle2'
+    | 'Overline'
   children: ReactChild
   [rest: string]: any
 }) => {
@@ -31,6 +38,9 @@ export const Text = ({
       break
     case 'Subtitle2':
       className1 = 'text-[14px] leading-[22px] font-medium'
+      break
+    case 'Overline':
+      className1 = 'text-[12px] leading-[30px] font-semibold'
       break
   }
   return (
