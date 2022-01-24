@@ -9,9 +9,19 @@ import {
   signOut,
   onIdTokenChanged,
 } from 'firebase/auth'
-import { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 
-const AuthContext = createContext(null)
+interface ValueType {
+  currentUser?: any
+  token?: string
+  errorSignin?: string
+  signin?: (email: string, password: string) => void
+  signout?: () => void
+  SignUpWithEmailAndPassword?: (email: string, password: string) => void
+  resetPassword?: (email: string) => void
+}
+
+const AuthContext = React.createContext<any>(null)
 
 export function useAuth() {
   return useContext(AuthContext)
@@ -36,6 +46,10 @@ export function AuthProvider({ children }) {
 
   const SignUpWithEmailAndPassword = (email: string, password: string) => {
     createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {})
+      .catch((error) => {
+        console.log('err', error)
+      })
   }
 
   const signout = () => {
