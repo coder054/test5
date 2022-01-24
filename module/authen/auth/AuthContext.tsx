@@ -9,7 +9,7 @@ import {
   signOut,
   onIdTokenChanged,
 } from 'firebase/auth'
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 interface ValueType {
   currentUser?: any
@@ -52,6 +52,7 @@ export function AuthProvider({ children }) {
       })
   }
 
+  //logout
   const signout = () => {
     signOut(auth)
     window.location.href = '/signin'

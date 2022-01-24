@@ -4,6 +4,7 @@ import cls from './input.module.css'
 
 interface InputVerifyCodeProps {
   number: number
+  setOtp?: (otp: string) => void
 }
 
 export const InputVerifyCode = ({ number }: InputVerifyCodeProps) => {
@@ -23,7 +24,8 @@ export const InputVerifyCode = ({ number }: InputVerifyCodeProps) => {
   const getOtp = (otp: any): string => {
     let result = ''
     otp.map((item) => (result += item))
-
+    if (otp.lengh() === 6) {
+    }
     return result
   }
   console.log('otp', getOtp(otp))
