@@ -1,4 +1,5 @@
 import { get, truncate } from 'lodash'
+import cookie from 'cookie'
 
 export const truncateStr = (str: string, max: number) => {
   if (!str) {
@@ -35,4 +36,8 @@ export const checkNumber = (number: any) => {
 
 export const equalStr = (str1: string, str2: string) => {
   return str1.trim().toLowerCase() === str2.trim().toLowerCase()
+}
+
+export function parseCookies(req) {
+  return cookie.parse(req ? req.headers.cookie || '' : document.cookie)
 }
