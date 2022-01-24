@@ -24,7 +24,6 @@ export const SignUpWithEmail = () => {
   const handleSignUp = async (e: any) => {
     e.preventDefault()
     const submitForm = await form.validateFields()
-    console.log('submitForm', submitForm)
     if (!checked) {
       return
     }

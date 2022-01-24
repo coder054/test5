@@ -46,9 +46,7 @@ export function AuthProvider({ children }) {
 
   const SignUpWithEmailAndPassword = (email: string, password: string) => {
     createUserWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        debugger
-      })
+      .then(() => {})
       .catch((error) => {
         console.log('err', error)
       })

@@ -1,8 +1,7 @@
 import { Button, LogoBigSize } from 'components'
 import { MyInput } from 'components/MyInput'
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useAtom } from 'jotai'
 import { useAuth } from '../auth/AuthContext'
 import cls from './signup.module.css'
 import { Form } from 'antd'
@@ -23,7 +22,7 @@ export const SignUpWithSMS = () => {
     confirm_password: '',
   })
   const [form] = Form.useForm()
-  const { SignUpWithEmailAndPassword } = useAuth()
+  const {} = useAuth()
 
   const handleSignUp = async (e: any) => {
     e.preventDefault()
@@ -32,12 +31,7 @@ export const SignUpWithSMS = () => {
     if (!checked) {
       return
     }
-    // try {
     //   await SignUpWithEmailAndPassword(values.email, values.password)
-    //   router.push('/signin')
-    // } catch (error) {
-    //   console.log('err')
-    // }
   }
 
   return (
