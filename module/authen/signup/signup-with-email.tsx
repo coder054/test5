@@ -28,12 +28,7 @@ export const SignUpWithEmail = () => {
     if (!checked) {
       return
     }
-    // try {
-    //   await SignUpWithEmailAndPassword(values.email, values.password)
-    //   router.push('/signin')
-    // } catch (error) {
-    //   console.log('err')
-    // }
+    await SignUpWithEmailAndPassword(submitForm.email, submitForm.password)
   }
 
   return (
