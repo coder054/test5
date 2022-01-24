@@ -1,8 +1,7 @@
 import { Button, LogoBigSize } from 'components'
 import { MyInput } from 'components/MyInput'
-import { FormEvent, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useAtom } from 'jotai'
 import { useAuth } from '../auth/AuthContext'
 import cls from './signup.module.css'
 import { Form } from 'antd'
@@ -11,33 +10,54 @@ import { GoBack } from 'components/go-back'
 import { MyModal } from 'components/MyModal'
 import { LogoLargeSize } from 'components/logo/LogoLargeSize'
 import { InputVerifyCode } from 'components/input/input-verify-code'
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
+import { auth } from 'config'
 
 export const SignUpWithSMS = () => {
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
   const [checked, setChecked] = useState<boolean>(false)
-  const [openModal, setOpenModal] = useState<boolean>(true)
-  const [values, setValues] = useState({
-    email: '',
-    password: '',
-    confirm_password: '',
-  })
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [otp, setOtp] = useState<string>('')
   const [form] = Form.useForm()
-  const { SignUpWithEmailAndPassword } = useAuth()
+  const {} = useAuth()
+
+  // const SetUpRecaptcha = () => {
+  //   if(typeof window !== "undefined") {
+  //     (window as any).recaptchaVerifier = new RecaptchaVerifier('sign-in-button', {
+  //       'size': 'invisible',
+  //       'callback': (response) => {
+  //         console.log("ré", response);
+
+  //         // handleSignUp();
+  //       }
+  //     }, auth);
+  //   }
+  // }
 
   const handleSignUp = async (e: any) => {
     e.preventDefault()
-    const submitForm = await form.validateFields()
-    console.log('submitForm', submitForm)
     if (!checked) {
       return
     }
-    // try {
-    //   await SignUpWithEmailAndPassword(values.email, values.password)
-    //   router.push('/signin')
-    // } catch (error) {
-    //   console.log('err')
-    // }
+    const submitForm = await form.validateFields()
+    // SetUpRecaptcha();
+    // if(typeof window !== "undefined") {
+    //   const appVerifier = (window as any).recaptchaVerifier;
+    //   signInWithPhoneNumber(auth, submitForm.phone, appVerifier)
+    //   .then((confirmationResult) => {
+
+    //       (window as any).confirmationResult = confirmationResult;
+    //     confirmationResult.confirm(otp).then((result) => {
+    //       const user = result.user;
+    //       console.log("success");
+
+    //     }).catch((error) => {
+    //     });
+
+    //   }).catch((error) => {
+    //   });
+    //   }
   }
 
   return (
@@ -63,7 +83,6 @@ export const SignUpWithSMS = () => {
                   message: 'Required fields must be filled in.',
                   max: 25,
                 },
-                // { type: 'number' },
               ]}
             >
               <MyInput name={'phone'} label="Mobile phone number" />
@@ -99,7 +118,11 @@ export const SignUpWithSMS = () => {
                 },
               ]}
             >
-              <MyInput name={'password'} label="Password" password />
+              <MyInput
+                name={'password'}
+                label="Choose password (+8 signs)"
+                password
+              />
             </Form.Item>
 
             <Form.Item
@@ -146,8 +169,8 @@ export const SignUpWithSMS = () => {
             <div className="w-full mt-[22px]" onClick={handleSignUp}>
               <Button
                 submit
-                text="Sign up"
-                className="h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3]"
+                text="Register"
+                className="sign-in-button h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3]"
               />
             </div>
             <div className="w-full h-[1px] bg-[#818389] mt-[24px]"></div>
