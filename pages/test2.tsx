@@ -63,7 +63,7 @@ const Test = () => {
   }
 
   return (
-    <Layout>
+    <Layout title="Zporter">
       <div className="" id="capcha-container"></div>
 
       <div className="w-[400px] p-4 ">

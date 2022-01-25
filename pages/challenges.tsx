@@ -2,7 +2,7 @@ import { Layout } from 'components/Layout'
 
 const Challenges = () => {
   return (
-    <Layout>
+    <Layout title="Zporter">
       <div className="text-white ">Challenges</div>
     </Layout>
   )

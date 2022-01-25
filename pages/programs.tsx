@@ -2,7 +2,7 @@ import { Layout } from 'components/Layout'
 
 const Programs = () => {
   return (
-    <Layout>
+    <Layout title="Zporter">
       <div className="text-white ">Programs</div>
     </Layout>
   )

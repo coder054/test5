@@ -10,10 +10,20 @@
 //   return null
 // }
 
+import Head from 'next/head'
+
 import Landing from 'module/landing'
 
 const LandingPage = () => {
-  return <Landing />
+  return (
+    <>
+      <Head>
+        <title>Zporter</title>
+        <link rel="icon" type="image/png" href="/favicon.png" />
+      </Head>
+      <Landing />
+    </>
+  )
 }
 
 export default LandingPage
