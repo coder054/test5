@@ -47,8 +47,8 @@ export const MyInput = ({
 }: {
   className?: string
   label: string
-  value: string
-  onChange: any
+  value?: string
+  onChange?: any
   password?: boolean
   [rest: string]: any
 }) => {
