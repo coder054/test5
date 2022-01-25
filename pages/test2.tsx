@@ -1,71 +1,102 @@
 import { Layout } from 'components/Layout'
+import { MyInput } from 'components/MyInput'
 import {
   getAuth,
   RecaptchaVerifier,
   signInWithPhoneNumber,
 } from 'firebase/auth'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+
+const auth = getAuth()
 
 const Test = () => {
+  const [phone, setPhone] = useState('+84931876194')
+  const [code, setCode] = useState('')
+
   useEffect(() => {
     if (typeof window === 'undefined') {
       return
     }
-    debugger
-    const auth = getAuth()
-    debugger
+
     //@ts-ignore: Unreachable code error
-    window.recaptchaVerifier = new RecaptchaVerifier('aaa', {}, auth)
-    debugger
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      'capcha-container',
+      {},
+      auth
+    )
   }, [])
 
-  const a1 = () => {
+  const sendPhone = async () => {
     if (typeof window === 'undefined') {
       return
     }
 
-    const auth = getAuth()
-    //@ts-ignore: Unreachable code error
-    const appVerifier = window.recaptchaVerifier
-    const phoneNumber = '+84931565194'
+    try {
+      //@ts-ignore: Unreachable code error
+      const appVerifier = window.recaptchaVerifier
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        phone,
+        appVerifier
+      )
 
-    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-      .then((confirmationResult) => {
-        // SMS sent. Prompt user to type the code from the message, then sign the
-        // user in with confirmationResult.confirm(code).
-        debugger
-        //@ts-ignore: Unreachable code error
-        window.confirmationResult = confirmationResult
+      //@ts-ignore: Unreachable code error
+      window.confirmationResult = confirmationResult
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-        const code = '123456'
-        confirmationResult
-          .confirm(code)
-          .then((result) => {
-            // User signed in successfully.
-            debugger
-            const user = result.user
-            // ...
-          })
-          .catch((error) => {
-            debugger
-            // User couldn't sign in (bad verification code?)
-            // ...
-          })
-        // ...
-      })
-      .catch((error) => {
-        debugger
-        // Error; SMS not sent
-        // ...
-      })
+  const sendCode = async () => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    try {
+      //@ts-ignore: Unreachable code error
+      const result = await window.confirmationResult.confirm(code)
+      const user = result.user
+      console.log('user: ', user)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
     <Layout>
-      <div className="w-[500px] h-[300px] border " id="aaa"></div>
-      <button onClick={a1} className="border p-10 bg-red-500 ">
-        click
-      </button>
+      <div className="" id="capcha-container"></div>
+
+      <div className="w-[400px] p-4 ">
+        <MyInput
+          label={'Phone'}
+          value={phone}
+          onChange={(e) => {
+            setPhone(e.target.value)
+          }}
+        />
+        <button
+          onClick={sendPhone}
+          className="bg-green-500 p-4 flex justify-center items-center "
+        >
+          send phone
+        </button>
+      </div>
+
+      <div className="w-[400px] p-4  ">
+        <MyInput
+          label={'Code'}
+          value={code}
+          onChange={(e) => {
+            setCode(e.target.value)
+          }}
+        />
+        <button
+          onClick={sendCode}
+          className="bg-green-500 p-4 flex justify-center items-center "
+        >
+          send code
+        </button>
+      </div>
     </Layout>
   )
 }
