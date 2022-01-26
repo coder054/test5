@@ -36,12 +36,6 @@ const SignIn = () => {
 
   const { signin, currentUser, errorSignin } = useAuth()
 
-  // useEffect(() => {
-  //   if (currentUser?.accessToken) {
-  //     router.push('/feed')
-  //   }
-  // }, [currentUser?.accessToken])
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     const submitForm = await form.validateFields()
@@ -51,6 +45,19 @@ const SignIn = () => {
       setLoading(false)
     }, 1000)
   }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    let el = window.document.querySelector('.ant-form')
+    if (!el) {
+      return
+    }
+
+    el.classList.remove('ant-form')
+  }, [])
 
   // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
   //   e.preventDefault()

@@ -1,6 +1,6 @@
 import { Button, LogoBigSize } from 'components'
 import { MyInput } from 'components/MyInput'
-import { FormEvent, useState } from 'react'
+import React, { FormEvent, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAtom } from 'jotai'
 import { useAuth } from '../auth/AuthContext'
@@ -15,6 +15,19 @@ export const SignUpWithEmail = () => {
   const [checked, setChecked] = useState<boolean>(false)
   const [form] = Form.useForm()
   const { SignUpWithEmailAndPassword } = useAuth()
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    let el = window.document.querySelector('.ant-form')
+    if (!el) {
+      return
+    }
+
+    el.classList.remove('ant-form')
+  }, [])
 
   const handleSignUp = async (e: any) => {
     e.preventDefault()

@@ -4,7 +4,7 @@ import { useAuth } from '../auth/AuthContext'
 import { Form } from 'antd'
 import cls from './reset-password.module.css'
 import { MyModal } from 'components/MyModal'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 
 const ResetPassword = () => {
@@ -13,6 +13,19 @@ const ResetPassword = () => {
   const [openModal, setOpenModal] = useState<boolean>(checkEmail)
   const [email, setEmail] = useState<string>('')
   const router = useRouter()
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    let el = window.document.querySelector('.ant-form')
+    if (!el) {
+      return
+    }
+
+    el.classList.remove('ant-form')
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
