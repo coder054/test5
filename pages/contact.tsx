@@ -2,7 +2,7 @@ import { Layout } from 'components/Layout'
 
 const Contact = () => {
   return (
-    <Layout>
+    <Layout title="Zporter">
       <div className="text-white ">Contact</div>
     </Layout>
   )

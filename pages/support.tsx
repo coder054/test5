@@ -4,7 +4,7 @@ import { GetServerSideProps } from 'next'
 
 const Support = () => {
   return (
-    <Layout>
+    <Layout title="Zporter">
       <div className="text-white ">Support</div>
     </Layout>
   )

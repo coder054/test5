@@ -50,7 +50,7 @@ const Components = () => {
   const [categories, setCategories] = useState(['Frontend'])
 
   return (
-    <Layout>
+    <Layout title="Zporter">
       <div className=" w-full min-h-screen bg-[#111115] ">
         <Tabs tab={tab} setTab={setTab} tabs={tabs} />
         <TabPanel visible={tab === Tab.Friends}>

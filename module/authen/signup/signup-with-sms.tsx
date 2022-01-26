@@ -184,8 +184,8 @@ export const SignUpWithSMS = () => {
             </p>
           </Form>
         </div>
+        <LogoBigSize className="mt-12" />
       </div>
-      <LogoBigSize className="mt-12" />
       <MyModal show={openModal} setShow={setOpenModal} width={412}>
         <div className={`${cls.modalVerifySMS} w-[412px] p-[32px]`}>
           <LogoLargeSize />

@@ -2,7 +2,7 @@ import { Layout } from 'components/Layout'
 
 const AccountAndSettings = () => {
   return (
-    <Layout>
+    <Layout title="Zporter">
       <div className="text-white ">Account & Settings</div>
     </Layout>
   )

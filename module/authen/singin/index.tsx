@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { atom, useAtom } from 'jotai'
 import { MyModal } from 'components/MyModal'
 import { useAuth } from '../auth/AuthContext'
-import { Form } from 'antd'
+import { Form, notification } from 'antd'
 import cls from './signin.module.css'
 import { IconWarning, SvgXIcon } from 'imports/svgs'
 import Link from 'next/link'
@@ -25,46 +25,39 @@ const responseSiginin = atom({
   refreshToken: '',
   expiresIn: '',
 })
-const statusAtom = atom(0)
 
 const SignIn = () => {
   const router = useRouter()
-  const [status, statusSet] = useAtom(statusAtom)
   const [loading, setLoading] = useState<boolean>(false)
   const [isAuthen, setIsAuthen] = useState<boolean>(false)
-  const [errorSignIn, setErrorSignIn] = useState<string>('')
+  // const [errorSignIn, setErrorSignIn] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [form] = Form.useForm()
 
   const { signin, currentUser, errorSignin } = useAuth()
 
-  useEffect(() => {
-    if (currentUser?.accessToken) {
-      router.push('/feed')
-    }
-  }, [currentUser?.accessToken])
-  console.log('errorSignin', errorSignin)
-
-  useEffect(() => {
-    setErrorSignIn(errorSignin)
-  }, [errorSignin])
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     const submitForm = await form.validateFields()
-
-    const res = await signin(submitForm.email, submitForm.password)
-
-    // try {
-    //   setLoading(false)
-    // } catch (error: any) {
-    //   console.log('err', error)
-
-    //   setErrorSignIn(
-    //     'your email or password is invalid. Please try again or reset your password.'
-    //   )
-    // }
+    setLoading(true)
+    await signin(submitForm.email, submitForm.password)
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
   }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    let el = window.document.querySelector('.ant-form')
+    if (!el) {
+      return
+    }
+
+    el.classList.remove('ant-form')
+  }, [])
 
   // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
   //   e.preventDefault()
@@ -107,7 +100,7 @@ const SignIn = () => {
   return (
     <div className="w-screen h-screen flex items-center">
       <div
-        className={`${cls.formSignIn} w-[470px] border rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px] ml-[17%]`}
+        className={`${cls.formSignIn} w-[470px] rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px] ml-[17%]`}
       >
         <Form className="" form={form}>
           <div className="w-full text-center">
@@ -122,11 +115,12 @@ const SignIn = () => {
             rules={[
               {
                 required: true,
-                message: 'Please input your username!',
+                message: 'Input your email address',
               },
+              { type: 'email', message: 'Your email is invalid' },
             ]}
           >
-            <MyInput name={'email'} label="Email" />
+            <MyInput name={'email'} label="Email address" />
           </Form.Item>
           <Form.Item
             className="mt-[24px]"
@@ -134,15 +128,15 @@ const SignIn = () => {
             rules={[
               {
                 required: true,
-                message: 'Please input your username!',
+                message: 'Input your password',
               },
             ]}
           >
             <MyInput name={'password'} label="Password" password />
           </Form.Item>
-          {errorSignIn && <p className="text-[#FFFFFF]">{errorSignIn}</p>}
           <div className="mt-[24px]" onClick={handleSubmit}>
             <Button
+              loading={loading}
               className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
               text="Log In"
             />
