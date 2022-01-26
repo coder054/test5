@@ -12,3 +12,20 @@
   box-shadow: none;
   pointer-events: auto;
 }
+
+.ant-notification-notice {
+}
+
+.ant-notification-notice-content {
+}
+
+.ant-notification-notice-description {
+  font-size: 16px;
+  margin-top: -6px;
+}
+
+.ant-notification-notice-close {
+  color: #ffffff;
+  top: 16px;
+  font-weight: 600;
+}
