@@ -11,6 +11,7 @@ import {
   confirmPasswordReset,
 } from 'firebase/auth'
 import React, { useContext, useEffect, useState } from 'react'
+import { axios } from 'utils/axios'
 
 interface ValueType {
   currentUser?: any
@@ -118,11 +119,67 @@ export function AuthProvider({ children }) {
       })
   }
 
-  useEffect(() => {
-    return onAuthStateChanged(auth, (authUser) => {
-      setCurrentUser(authUser)
-      setLoading(false)
+  const setTokenCookie = (token: string) => {
+    fetch('/api/login', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token }),
     })
+  }
+
+  const removeTokenCookie = () => {
+    fetch('/api/logout', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    })
+  }
+
+  useEffect(() => {
+    // no need
+    // const unsubscribeAuth = onAuthStateChanged(auth, async (authUser) => {
+    //   console.log('aaa onAuthStateChanged', authUser)
+
+    //   if (!authUser) {
+    //     setCurrentUser(null)
+    //     setLoading(false)
+    //     return
+    //   }
+
+    //   setLoading(true)
+    //   setCurrentUser(authUser)
+    //   setLoading(false)
+    // })
+
+    const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
+      console.log('aaa onIdTokenChanged', user)
+
+      if (!user) {
+        removeTokenCookie()
+        setToken('')
+        setCurrentUser(null)
+        setLoading(false)
+      } else {
+        setLoading(true)
+        const token = await user.getIdToken()
+
+        // update axios config
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`
+
+        setToken(token)
+        setTokenCookie(token)
+        setCurrentUser(user)
+        setLoading(false)
+      }
+    })
+
+    return () => {
+      unsubscribeToken()
+    }
   }, [])
 
   useEffect(() => {
