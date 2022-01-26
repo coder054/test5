@@ -11,7 +11,7 @@ const Test = () => {
     await signout()
   }
   return (
-    <Layout>
+    <Layout title="Zporter">
       {/* <div className="text-white ">Test</div> */}
       <ItemEventHeadline className="w-full" item={ItemEventHeadlines} />
       <div className="mt-4">

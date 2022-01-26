@@ -42,7 +42,7 @@ const Feed = () => {
   }, [])
 
   return (
-    <Layout>
+    <Layout title="Zporter">
       {/* /// tabs */}
       <Tabs tab={tab} setTab={setTab} tabs={tabs} />
 

@@ -1,9 +1,20 @@
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
+import Head from 'next/head'
 
-export const Layout = ({ children }: { children: any }) => {
+export const Layout = ({
+  children,
+  title,
+}: {
+  children: any
+  title: string
+}) => {
   return (
     <div className="">
+      <Head>
+        <title>{title}</title>
+        <link rel="icon" type="image/png" href="/favicon.png" />
+      </Head>
       <Header />
       <Sidebar />
 

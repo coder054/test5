@@ -8,7 +8,7 @@ import { Layout } from 'components/Layout'
 
 const Home = () => {
   return (
-    <Layout>
+    <Layout title="Zporter">
       <div className="text-white ">Dashboard</div>
     </Layout>
   )
