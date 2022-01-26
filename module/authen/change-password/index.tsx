@@ -1,58 +1,53 @@
-import { Button } from 'components'
+import { Button, LogoBigSize } from 'components'
 import { MyInput } from 'components/MyInput'
-import { FormEvent, useState } from 'react'
+import { useAuth } from '../auth/AuthContext'
+import { Form } from 'antd'
+import cls from './change-password.module.css'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
 
 const ChangePassword = () => {
+  const [form] = Form.useForm()
   const router = useRouter()
-  const [values, setValues] = useState({
-    newPassword: '',
-    ConfirmPassword: '',
-  })
+  const { ForgotPassword } = useAuth()
+  const [oobCode] = useState<string>(router.query.oobCode as string)
 
-  const onChange = (e: any) => {
-    const value = e.target.value
-    setValues({
-      ...values,
-      [e.target.name]: value,
-    })
-  }
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-  }
-
-  const handleSendOtp = () => {
-    router.push('/')
+    const submitForm = await form.validateFields()
+    await ForgotPassword(oobCode, submitForm.newPassword)
   }
 
   return (
-    <div className="w-full mt-28">
-      <div className="w-1/4 m-auto border border-stone-500 rounded-[8px] p-10">
-        <form className="" onSubmit={handleSubmit}>
-          <p className="text-[24px] text-[#FFFFFF]">Change Password</p>
-          <MyInput
+    <div className="w-screen h-screen flex items-center">
+      {/* <div
+        className={`${cls.formChangePassword} w-[470px] border rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px] ml-[17%]`}
+      >
+        <Form className="" form={form}>
+          <div className="w-full text-center">
+            <p className="text-[24px] text-[#FFFFFF] font-semibold">New Password</p>
+          </div>
+          <Form.Item
+            className="mt-[24px]"
             name={'newPassword'}
-            label="New Password"
-            value={values.newPassword}
-            className="mt-12"
-            onChange={onChange}
-          />
-          <MyInput
-            name={'ConfirmPassword'}
-            label="Confirm Password"
-            value={values.ConfirmPassword}
-            className="mt-12"
-            onChange={onChange}
-          />
-          <div className="mt-12" onClick={handleSendOtp}>
+            rules={[
+              {
+                required: true,
+                message: 'Required fields must be filled in.',
+              },
+            ]}
+          >
+            <MyInput name={'newPassword'} label="New Password" />
+          </Form.Item>
+          <div className="mt-[24px]" onClick={handleSubmit}>
             <Button
-              text="Submit"
-              className="h-[48px] text-[#09E099] border border-[#09E099]"
+              className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+              text="Send Email"
             />
           </div>
-        </form>
-      </div>
+        </Form>
+      </div> */}
+      <LogoBigSize />
     </div>
   )
 }

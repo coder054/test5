@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { useAtom } from 'jotai'
 import { useAuth } from '../auth/AuthContext'
 import cls from './signup.module.css'
-import { Form } from 'antd'
+import { Form, notification } from 'antd'
 import { MyCheckbox } from 'components/common/MyCheckbox'
 import { GoBack } from 'components/go-back'
 
@@ -13,11 +13,6 @@ export const SignUpWithEmail = () => {
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
   const [checked, setChecked] = useState<boolean>(false)
-  const [values, setValues] = useState({
-    email: '',
-    password: '',
-    confirm_password: '',
-  })
   const [form] = Form.useForm()
   const { SignUpWithEmailAndPassword } = useAuth()
 
@@ -25,9 +20,25 @@ export const SignUpWithEmail = () => {
     e.preventDefault()
     const submitForm = await form.validateFields()
     if (!checked) {
+      notification.open({
+        message: '',
+        description:
+          'You have to accept Zporters Temps & Coditions and Privacy to sign up.',
+        className: 'custom-class',
+        style: {
+          width: 600,
+          backgroundColor: '#ff4d4f',
+          color: '#FFFFFF',
+        },
+        duration: 3,
+      })
       return
     }
+    setLoading(true)
     await SignUpWithEmailAndPassword(submitForm.email, submitForm.password)
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
   }
 
   return (
@@ -50,7 +61,7 @@ export const SignUpWithEmail = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Required fields must be filled in.',
+                  message: 'Input your email',
                   max: 255,
                 },
                 { type: 'email', message: 'Email is wrong format.' },
@@ -64,7 +75,7 @@ export const SignUpWithEmail = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Required fields must be filled in.',
+                  message: 'Input your password',
                   max: 255,
                 },
                 {
@@ -81,7 +92,7 @@ export const SignUpWithEmail = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Required fields must be filled in.',
+                  message: 'Input your repeat password',
                 },
                 ({ getFieldValue }) => ({
                   validator(rule, value) {
@@ -119,24 +130,24 @@ export const SignUpWithEmail = () => {
             <div className="w-full mt-[22px]" onClick={handleSignUp}>
               <Button
                 submit
+                loading={loading}
                 text="Sign up"
                 className="h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3]"
               />
             </div>
-            <div className="w-full h-[1px] bg-[#818389] mt-[24px]"></div>
-            <p
-              className="text-[#4654EA] underline mt-[24px] cursor-pointer"
+            <div className="w-full h-[1px] bg-[#818389] mt-[24px] mb-[24px]"></div>
+            <span
+              className="text-[#4654EA] underline cursor-pointer"
               onClick={() => {
                 router.push('/signin')
               }}
             >
               Already have an account?
-            </p>
+            </span>
           </Form>
         </div>
+        <LogoBigSize className="mt-12" />
       </div>
-
-      <LogoBigSize className="mt-12" />
     </div>
   )
 }
