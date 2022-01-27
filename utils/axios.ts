@@ -1,8 +1,7 @@
 import axiosLib from 'axios'
 import { auth } from 'config'
 import { signOut } from 'firebase/auth'
-import _ from 'lodash'
-import { Cookies } from 'react-cookie'
+import { get } from 'lodash'
 
 /**
  * Axios instance for browser,
@@ -18,18 +17,11 @@ export const axios = axiosLib.create({
   },
 })
 
-const cookies = new Cookies()
-const token = cookies.get('token')
-
-if (token) {
-  axios.defaults.headers.common.Authorization = `Bearer ${token}`
-}
-
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
     // const cookies = new Cookies()
-    if (_.get(error, 'response.status') === 401) {
+    if (get(error, 'response.status') === 401) {
       // cookies.remove('token')
       signOut(auth)
       setTimeout(() => {
