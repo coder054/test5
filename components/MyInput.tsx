@@ -18,7 +18,7 @@ const CssTextField = styled(TextField)({
     '& input': {
       color: '#ffffff',
       fontSize: '16px',
-      lineHeight: '24px',
+      lineHeight: '25px',
     },
 
     '& fieldset': {
