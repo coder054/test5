@@ -1,6 +1,9 @@
 import { Text } from 'components/Text'
+import { useAuth } from 'module/authen/auth/AuthContext'
 
 export const DropdownUser = () => {
+  const { currentUser, signout } = useAuth()
+
   return (
     <div
       style={{
@@ -110,7 +113,7 @@ export const DropdownUser = () => {
               fill="#09E099"
             />
           </svg>
-          <Text name="body1" className="text-white ">
+          <Text onClick={signout} name="body1" className="text-white  ">
             Logout
           </Text>
         </div>

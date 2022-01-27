@@ -10,6 +10,7 @@ import {
   onIdTokenChanged,
   confirmPasswordReset,
 } from 'firebase/auth'
+import { get } from 'lodash'
 import React, { useContext, useEffect, useState } from 'react'
 import { axios } from 'utils/axios'
 
@@ -167,8 +168,14 @@ export function AuthProvider({ children }) {
         setLoading(true)
         const token = await user.getIdToken()
 
-        // update axios config
+        // update axios token header
         axios.defaults.headers.common.Authorization = `Bearer ${token}`
+
+        const resp = await axios.get('/users/user-roles')
+        const roleId = get(resp, 'data[0].roleId')
+        // update axios token header
+        //@ts-ignore: Unreachable code error
+        axios.defaults.headers.roleId = roleId
 
         setToken(token)
         setTokenCookie(token)

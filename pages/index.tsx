@@ -13,8 +13,18 @@
 import Head from 'next/head'
 
 import Landing from 'module/landing'
+import { useAuth } from 'module/authen/auth/AuthContext'
+import { useRouter } from 'next/router'
 
 const LandingPage = () => {
+  const router = useRouter()
+  const { currentUser } = useAuth()
+
+  if (!!currentUser) {
+    router.push('/feed')
+    return null
+  }
+
   return (
     <>
       <Head>
