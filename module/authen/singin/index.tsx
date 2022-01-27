@@ -98,7 +98,7 @@ const SignIn = () => {
   }
 
   return (
-    <div className="w-screen h-screen flex items-center">
+    <div className=" autofill2 w-screen h-screen flex items-center">
       <div
         className={`${cls.formSignIn} w-[470px] rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px] ml-[17%]`}
       >
