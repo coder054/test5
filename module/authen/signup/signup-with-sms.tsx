@@ -14,11 +14,19 @@ import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
   updateEmail,
+  updatePassword,
 } from 'firebase/auth'
 import { auth } from 'config'
 import { axios } from 'utils/axios'
 import { get } from 'lodash'
 import Link from 'next/link'
+
+const initialValues = {
+  phone: '+84355832199',
+  password: 'aA&123456',
+  repeat_password: 'aA&123456',
+  email: 'example@zporter.co',
+}
 
 export const SignUpWithSMS = () => {
   const router = useRouter()
@@ -27,6 +35,14 @@ export const SignUpWithSMS = () => {
   const [checked, setChecked] = useState<boolean>(true)
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [otp, setOtp] = useState<string>('')
+
+  const [phone, setPhone] = useState<string>(initialValues.phone)
+  const [email, setEmail] = useState<string>(initialValues.email)
+  const [password, setPassword] = useState<string>(initialValues.password)
+  const [confirmPassword, setConfirmPassword] = useState<string>(
+    initialValues.repeat_password
+  )
+
   const [form] = Form.useForm()
   const {} = useAuth()
 
@@ -51,7 +67,7 @@ export const SignUpWithSMS = () => {
     }
   }
 
-  const sendCode = async (code: string) => {
+  const sendCode = async (code: string, email: string, password: string) => {
     if (typeof window === 'undefined') {
       return
     }
@@ -60,8 +76,9 @@ export const SignUpWithSMS = () => {
       //@ts-ignore: Unreachable code error
       const result = await window.confirmationResult.confirm(code)
       const user = result.user
-      updateEmail(user, 'austin@zporter.co')
-      console.log('user: ', user)
+      debugger
+      updateEmail(user, email)
+      updatePassword(user, password)
     } catch (error) {
       console.log(error)
     }
@@ -74,6 +91,10 @@ export const SignUpWithSMS = () => {
     // }
     // const submitForm = await form.validateFields()
   }
+
+  useEffect(() => {
+    console.log('aaa email: ', email)
+  }, [email])
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -123,12 +144,7 @@ export const SignUpWithSMS = () => {
               autoComplete="none"
               className=""
               form={form}
-              initialValues={{
-                phone: '+84355832199',
-                password: '123456',
-                repeat_password: '123456',
-                email: 'example@zporter.co',
-              }}
+              initialValues={initialValues}
               onFinish={async (values: any) => {
                 if (typeof window === 'undefined') {
                   return
@@ -185,7 +201,14 @@ export const SignUpWithSMS = () => {
                   },
                 ]}
               >
-                <MyInput name={'phone'} label="Mobile phone number" />
+                <MyInput
+                  name={'phone'}
+                  label="Mobile phone number"
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value)
+                  }}
+                />
               </Form.Item>
 
               <Form.Item
@@ -200,7 +223,14 @@ export const SignUpWithSMS = () => {
                   { type: 'email', message: 'Email is wrong format.' },
                 ]}
               >
-                <MyInput name={'email'} label="Email" />
+                <MyInput
+                  name={'email'}
+                  label="Email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                  }}
+                />
               </Form.Item>
 
               <Form.Item
@@ -222,6 +252,10 @@ export const SignUpWithSMS = () => {
                   name={'password'}
                   label="Choose password (+8 signs)"
                   password
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                  }}
                 />
               </Form.Item>
 
@@ -249,6 +283,10 @@ export const SignUpWithSMS = () => {
                   name={'repeat_password'}
                   label="Repeat Password"
                   password
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value)
+                  }}
                 />
               </Form.Item>
               <div className="w-full">
@@ -328,13 +366,6 @@ export const SignUpWithSMS = () => {
             </span>
           </div>
         </MyModal>
-
-        <button
-          id="sign-in-button4"
-          className=" w-[200px] h-[50px] fixed right-0 bottom-0 hidden "
-        >
-          recapcha
-        </button>
       </div>
     )
   }
@@ -386,7 +417,7 @@ export const SignUpWithSMS = () => {
 
         <button
           onClick={() => {
-            sendCode(otp)
+            sendCode(otp, email, password)
           }}
           className="bg-Blue flex justify-center items-center text-[14px] leading-[22px] 
         text-white w-full h-[44px] rounded-[8px] mb-[14px]
@@ -409,6 +440,13 @@ export const SignUpWithSMS = () => {
   return (
     <div className="autofill2 ">
       {step === 1 ? contentFillInfoSignUpWithPhone() : contentFillOtp()}
+
+      <button
+        id="sign-in-button4"
+        className=" w-[200px] h-[50px] fixed right-0 bottom-0 hidden "
+      >
+        recapcha
+      </button>
     </div>
   )
 }

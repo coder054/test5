@@ -123,7 +123,6 @@ const Test = () => {
       //@ts-ignore: Unreachable code error
       const result = await window.confirmationResult.confirm(code)
       const user = result.user
-      updateEmail(user, 'austin@zporter.co')
       console.log('user: ', user)
     } catch (error) {
       console.log(error)
@@ -212,7 +211,6 @@ const Test = () => {
         <button
           onClick={async () => {
             const resp = await axios.delete('/users')
-            debugger
           }}
           className="bg-green-500 p-4 flex justify-center items-center "
         >

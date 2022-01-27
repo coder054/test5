@@ -64,9 +64,7 @@ export const MyInput = ({
         fullWidth
         label={label}
         id="custom-css-outlined-input"
-        inputProps={{
-          autoComplete: 'off',
-        }}
+        autoComplete="current-password"
         type={showPassword || !password ? 'text' : 'password'}
       />
       <div
