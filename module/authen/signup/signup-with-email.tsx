@@ -4,7 +4,6 @@ import React, { FormEvent, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAtom } from 'jotai'
 import { useAuth } from '../auth/AuthContext'
-import cls from './signup.module.css'
 import { Form, notification } from 'antd'
 import { MyCheckbox } from 'components/common/MyCheckbox'
 import { GoBack } from 'components/go-back'
@@ -61,7 +60,7 @@ export const SignUpWithEmail = () => {
       </div>
       <div className="w-full h-full flex items-center">
         <div
-          className={`${cls.formSignUp} w-[470px] rounded-[8px] pl-[32px] pt-[48px] pr-[32px] pb-[48px] ml-[17%] `}
+          className={`w-[470px] rounded-[8px] pl-[32px] pt-[48px] pr-[32px] pb-[48px] ml-[17%] `}
         >
           <Form className="" form={form}>
             <p className="text-[24px] text-[#FFFFFF] text-center">Sign up</p>
