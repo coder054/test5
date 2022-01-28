@@ -136,7 +136,7 @@ const Components = () => {
 
         <div className="h-[60px] "></div>
 
-        <CardNews></CardNews>
+        {/* <CardNews></CardNews> */}
 
         <div className="h-[60px] "></div>
 
