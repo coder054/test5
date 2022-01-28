@@ -1,4 +1,10 @@
 import OtpInput from 'react-otp-input'
+import {
+  useQueryParam,
+  NumberParam,
+  StringParam,
+  withDefault,
+} from 'use-query-params'
 import { Button, LogoBigSize } from 'components'
 import { MyInput } from 'components/MyInput'
 import { useEffect, useState } from 'react'
@@ -54,8 +60,9 @@ const tabs = [
 
 export const SignUpWithSMS = () => {
   const router = useRouter()
-  const [tab, setTab] = useState(Tab.SMS)
+  const [tab, setTab] = useQueryParam('type', withDefault(StringParam, Tab.SMS))
   const [step, setStep] = useState<1 | 2>(1)
+
   const [loading, setLoading] = useState<boolean>(false)
 
   const [openModal, setOpenModal] = useState<boolean>(false)

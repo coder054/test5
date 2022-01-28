@@ -26,8 +26,16 @@ import { useEffect, useState } from 'react'
 import { initializeApp } from 'firebase/app'
 import { useAuth } from 'module/authen/auth/AuthContext'
 import { axios } from 'utils/axios'
+import {
+  useQueryParam,
+  NumberParam,
+  StringParam,
+  withDefault,
+} from 'use-query-params'
 
 const Test = () => {
+  const [foo, setFoo] = useQueryParam('foo', withDefault(StringParam, 'email'))
+
   const [phone, setPhone] = useState('+84355832199')
   const [code, setCode] = useState('')
 
@@ -40,6 +48,10 @@ const Test = () => {
     SignUpWithEmailAndPassword,
     resetPassword,
   } = useAuth()
+
+  useEffect(() => {
+    console.log('aaa foo: ', foo)
+  }, [foo])
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -215,6 +227,16 @@ const Test = () => {
           className="bg-green-500 p-4 flex justify-center items-center "
         >
           delete user
+        </button>
+      </div>
+      <div className="w-[400px] p-4 ">
+        <button
+          onClick={() => {
+            setFoo(String(Math.random()))
+          }}
+          className="bg-green-500 p-4 flex justify-center items-center "
+        >
+          set foo
         </button>
       </div>
     </Layout>

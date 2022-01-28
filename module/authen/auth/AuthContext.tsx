@@ -38,6 +38,7 @@ export function AuthProvider({ children }) {
   const [checkEmail, setCheckEmail] = useState<boolean>(false)
 
   const signin = (email: string, password: string) => {
+    debugger
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setCurrentUser(userCredential.user)

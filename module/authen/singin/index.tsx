@@ -74,13 +74,20 @@ const SignIn = () => {
   const { signin, currentUser, errorSignin } = useAuth()
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    const submitForm = await formEmail.validateFields()
-    setLoading(true)
-    await signin(submitForm.email, submitForm.password)
-    setTimeout(() => {
-      setLoading(false)
-    }, 1000)
+    try {
+      e.preventDefault()
+      const submitForm = await formEmail.validateFields()
+      setLoading(true)
+      await signin(emailFormEmailSignIn, passwordFormEmailSignIn)
+      setTimeout(() => {
+        setLoading(false)
+      }, 1000)
+    } catch (error) {
+      notification['error']({
+        message: 'Login failed',
+        description: '',
+      })
+    }
   }
 
   useEffect(() => {
@@ -336,7 +343,7 @@ const SignIn = () => {
 
           <div className="bg-[#818389] w-full h-[1px] mt-[24px]"></div>
           <div className="mt-[24px]">
-            <Link href="/">
+            <Link href="/signup">
               <a className="text-Blue text-[16px] leading-[175%] hover:text-[#2b3cec] pr-[16px] hover:underline cursor-pointer">
                 Create account
               </a>
