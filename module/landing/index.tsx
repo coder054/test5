@@ -123,6 +123,7 @@ const Landing = () => {
             className={`${cls.signupWith} w-full h-[48px]`}
             text="SIGN UP with SMS"
             onClick={() => {
+              // todo
               router.push('/signup-with-sms')
             }}
           />
