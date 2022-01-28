@@ -111,7 +111,7 @@ export const SignUpWithSMS = () => {
     /// init recapcha
     //@ts-ignore: Unreachable code error
     window.recaptchaVerifier = new RecaptchaVerifier(
-      'sign-in-button4',
+      'capcha_element_signup_with_phone',
       {
         size: 'invisible',
         callback: (response) => {
@@ -442,7 +442,7 @@ export const SignUpWithSMS = () => {
       {step === 1 ? contentFillInfoSignUpWithPhone() : contentFillOtp()}
 
       <button
-        id="sign-in-button4"
+        id="capcha_element_signup_with_phone"
         className=" w-[200px] h-[50px] fixed right-0 bottom-0 hidden "
       >
         recapcha

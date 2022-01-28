@@ -13,6 +13,7 @@ import { TabPanel, Tabs } from 'components/Tabs'
 import { signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth'
 import { auth } from 'config'
 import OtpInput from 'react-otp-input'
+import { get } from 'lodash'
 
 const valuesAtom = atom({
   email: '',
@@ -95,7 +96,7 @@ const SignIn = () => {
     /// init recapcha
     //@ts-ignore: Unreachable code error
     window.recaptchaVerifier = new RecaptchaVerifier(
-      'sign-in-button5',
+      'capcha_element_signin_with_phone',
       {
         size: 'invisible',
         callback: (response) => {
@@ -167,7 +168,7 @@ const SignIn = () => {
     }
   }
 
-  const sendCode = async (code: string, email: string, password: string) => {
+  const sendCode = async (code: string) => {
     if (typeof window === 'undefined') {
       return
     }
@@ -175,8 +176,23 @@ const SignIn = () => {
     try {
       //@ts-ignore: Unreachable code error
       const result = await window.confirmationResult.confirm(code)
+      notification['success']({
+        message: 'Login success',
+        description: '',
+      })
     } catch (error) {
-      console.log(error)
+      console.log('aaa ', error)
+      //@ts-ignore: Unreachable code error
+      console.log('aaa error.message', error.message)
+      console.log('aaa JSON.stringify(error)', JSON.stringify(error))
+      //@ts-ignore: Unreachable code error
+      console.log('aaa error.code', error.code)
+      if (get(error, 'code') === 'auth/invalid-verification-code') {
+        notification['error']({
+          message: 'Invalid verification code',
+          description: '',
+        })
+      }
     }
   }
 
@@ -298,7 +314,7 @@ const SignIn = () => {
                 <Button
                   loading={loading}
                   className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
-                  text="Log In"
+                  text="Log In222"
                 />
               </div>
               <div
@@ -397,7 +413,7 @@ const SignIn = () => {
             sent to&nbsp;
           </span>
 
-          <span className="text-[#00e09d] ">+46 768 030568.&nbsp;</span>
+          <span className="text-[#00e09d] ">{phone}.&nbsp;</span>
           <span className="underline text-white">Wrong number?</span>
         </div>
 
@@ -421,7 +437,7 @@ const SignIn = () => {
 
         <button
           onClick={() => {
-            sendCode(otp, email, password)
+            sendCode(otp)
           }}
           className="bg-Blue flex justify-center items-center text-[14px] leading-[22px] 
         text-white w-full h-[44px] rounded-[8px] mb-[14px]
@@ -444,13 +460,7 @@ const SignIn = () => {
   return (
     <div className="autofill2 ">
       {step === 1 ? contentFillInfoSignInWithPhone() : contentFillOtp()}
-
-      <button
-        id="sign-in-button4"
-        className=" w-[200px] h-[50px] fixed right-0 bottom-0 hidden "
-      >
-        recapcha
-      </button>
+      <div id="capcha_element_signin_with_phone"></div>
     </div>
   )
 }
