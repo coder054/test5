@@ -244,6 +244,7 @@ const SignIn = () => {
                     required: true,
                     message: 'Input your password',
                   },
+                  { whitespace: false },
                 ]}
               >
                 <MyInput
@@ -251,9 +252,6 @@ const SignIn = () => {
                   label="Password"
                   password
                   value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value)
-                  }}
                 />
               </Form.Item>
               <div className="mt-[24px]" onClick={handleSubmit}>
