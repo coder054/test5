@@ -12,6 +12,7 @@ import {
   SvgPrograms,
   SvgSupport,
   SvgTest,
+  SvgNews,
 } from 'imports/svgs'
 import clsx from 'clsx'
 import { ROUTES } from 'constants/constants'
@@ -22,6 +23,12 @@ const arrSidebar = [
     link: ROUTES.dashboard,
     icon: SvgDashboard,
     text: 'Dashboard',
+    active: false,
+  },
+  {
+    link: ROUTES.news,
+    icon: SvgNews,
+    text: 'News',
     active: false,
   },
   { link: ROUTES.test, icon: SvgTest, text: 'Test', active: false },

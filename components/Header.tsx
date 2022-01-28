@@ -24,6 +24,8 @@ export const Header = () => {
         return 'Feed'
       case ROUTES.dashboard:
         return 'Dashboard'
+      case ROUTES.news:
+        return 'News'
       case ROUTES.test:
         return 'Test'
       case ROUTES.programs:

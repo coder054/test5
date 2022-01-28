@@ -7,6 +7,7 @@ import { useAuth } from '../auth/AuthContext'
 import { Form, notification } from 'antd'
 import { MyCheckbox } from 'components/common/MyCheckbox'
 import { GoBack } from 'components/go-back'
+import cls from './signup.module.css'
 
 export const SignUpWithEmail = () => {
   const router = useRouter()
@@ -60,7 +61,7 @@ export const SignUpWithEmail = () => {
       </div>
       <div className="w-full h-full flex items-center">
         <div
-          className={`w-[470px] rounded-[8px] pl-[32px] pt-[48px] pr-[32px] pb-[48px] ml-[17%] `}
+          className={`${cls.formSignUp} w-[470px] rounded-[8px] pl-[32px] pt-[48px] pr-[32px] pb-[48px] ml-[17%] `}
         >
           <Form className="" form={form}>
             <p className="text-[24px] text-[#FFFFFF] text-center">Sign up</p>
@@ -91,8 +92,8 @@ export const SignUpWithEmail = () => {
                   max: 255,
                 },
                 {
-                  min: 6,
-                  message: 'Your password must be more than 6 characters',
+                  min: 8,
+                  message: 'Your password must be more than 8 characters',
                 },
               ]}
             >

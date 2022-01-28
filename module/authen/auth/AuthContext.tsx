@@ -69,7 +69,7 @@ export function AuthProvider({ children }) {
           },
           duration: 3,
         })
-        window.location.href = '/signin'
+        // window.location.href = '/signin'
       })
       .catch((error) => {
         notification.open({

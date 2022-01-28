@@ -11,20 +11,6 @@ const Support = () => {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  // const cookie = req.headers.cookie
-  // const { cookies } = req
-  // let token
-  // if (cookie) {
-  //   token = getCookieFromReq(cookie, 'token') || cookies.token
-  // }
-  // if (!token) {
-  //   return {
-  //     redirect: {
-  //       permanent: true,
-  //       destination: '/signin',
-  //     },
-  //   }
-  // }
   return {
     props: {},
   }

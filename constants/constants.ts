@@ -9,5 +9,6 @@ export const ROUTES = {
   biography: '/biography',
   support: '/support',
   components: '/components',
+  news: '/news',
   aaa: process.env.TEST2,
 }
