@@ -1,5 +1,6 @@
 import { get, truncate } from 'lodash'
 import cookie from 'cookie'
+import { notification } from 'antd'
 
 export const truncateStr = (str: string, max: number) => {
   if (!str) {
@@ -40,4 +41,15 @@ export const equalStr = (str1: string, str2: string) => {
 
 export function parseCookies(req) {
   return cookie.parse(req ? req.headers.cookie || '' : document.cookie)
+}
+
+export function notify(
+  type: 'error' | 'success',
+  message: string,
+  description: string
+) {
+  notification[type]({
+    message,
+    description,
+  })
 }

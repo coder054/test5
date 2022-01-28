@@ -21,6 +21,7 @@ import { axios } from 'utils/axios'
 import { get } from 'lodash'
 import Link from 'next/link'
 import { TabPanel, Tabs } from 'components/Tabs'
+import { notify } from 'utils/utils'
 
 const initialValuesPhoneSignUp = {
   phoneFormPhoneSignUp: '+84355832199',
@@ -87,6 +88,8 @@ export const SignUpWithSMS = () => {
   const [checkedFormEmailSignUp, setCheckedFormEmailSignUp] =
     useState<boolean>(true)
 
+  const { SignUpWithEmailAndPassword } = useAuth()
+
   const [formEmail] = Form.useForm()
   const [formPhone] = Form.useForm()
 
@@ -130,12 +133,34 @@ export const SignUpWithSMS = () => {
     }
   }
 
-  const handleSignUp = async (e: any) => {
-    // e.preventDefault()
-    // if (!checked) {
-    //   return
-    // }
-    // const submitForm = await form.validateFields()
+  const handleSignUpEmail = async (e: any) => {
+    e.preventDefault()
+    const submitForm = await formEmail.validateFields()
+
+    if (!checkedFormEmailSignUp) {
+      notification.open({
+        message: '',
+        description:
+          'You have to accept Zporters Temps & Coditions and Privacy to sign up.',
+        className: 'custom-class',
+        style: {
+          width: 600,
+          backgroundColor: '#ff4d4f',
+          color: '#FFFFFF',
+        },
+        duration: 3,
+      })
+      return
+    }
+    setLoading(true)
+
+    await SignUpWithEmailAndPassword(
+      emailFormEmailSignUp,
+      passwordFormEmailSignUp
+    )
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
   }
 
   useEffect(() => {
@@ -320,7 +345,10 @@ export const SignUpWithSMS = () => {
                     },
                     ({ getFieldValue }) => ({
                       validator(rule, value) {
-                        if (!value || getFieldValue('password') === value) {
+                        if (
+                          !value ||
+                          getFieldValue('passwordFormPhoneSignUp') === value
+                        ) {
                           return Promise.resolve()
                         }
                         return Promise.reject(
@@ -355,7 +383,7 @@ export const SignUpWithSMS = () => {
                     approved
                   </span>
                 </div>
-                <div className="w-full mt-[22px]" onClick={handleSignUp}>
+                <div className="w-full mt-[22px]" onClick={() => {}}>
                   <Button
                     htmlType="submit"
                     submit
@@ -378,38 +406,7 @@ export const SignUpWithSMS = () => {
                   className=""
                   form={formEmail}
                   initialValues={initialValuesEmailSignUp}
-                  onFinish={async (values: any) => {
-                    if (typeof window === 'undefined') {
-                      return
-                    }
-                    try {
-                      console.log('aaa values', values)
-                      const { phone, password, repeat_password, email } = values
-                      const resp = await axios.get('/auth/check-email/' + email)
-                      if (get(resp, 'data.emailExists')) {
-                        notification['error']({
-                          message: 'Failed',
-                          description: 'Email already existed',
-                        })
-                        return
-                      }
-
-                      const respPhone = await axios.get(
-                        '/auth/check-phone/' + phone
-                      )
-                      if (get(respPhone, 'data.phoneExists')) {
-                        notification['error']({
-                          message: 'Failed',
-                          description: 'Phone already existed',
-                        })
-                        return
-                      }
-
-                      await sendPhone(phone)
-                    } catch (error) {
-                      console.log('aaa error', error)
-                    }
-                  }}
+                  onFinish={async (values: any) => {}}
                   onFinishFailed={(errorInfo: any) => {
                     console.log('aaa Failed:', errorInfo)
                     notification['error']({
@@ -434,9 +431,9 @@ export const SignUpWithSMS = () => {
                     <MyInput
                       name={'emailFormEmailSignUp'}
                       label="Email"
-                      value={emailFormPhoneSignUp}
+                      value={emailFormEmailSignUp}
                       onChange={(e) => {
-                        setEmailFormPhoneSignUp(e.target.value)
+                        setEmailFormEmailSignUp(e.target.value)
                       }}
                     />
                   </Form.Item>
@@ -460,9 +457,9 @@ export const SignUpWithSMS = () => {
                       name={'passwordFormEmailSignUp'}
                       label="Choose password (+8 signs)"
                       password
-                      value={passwordFormPhoneSignUp}
+                      value={passwordFormEmailSignUp}
                       onChange={(e) => {
-                        setPasswordFormPhoneSignUp(e.target.value)
+                        setPasswordFormEmailSignUp(e.target.value)
                       }}
                     />
                   </Form.Item>
@@ -477,7 +474,10 @@ export const SignUpWithSMS = () => {
                       },
                       ({ getFieldValue }) => ({
                         validator(rule, value) {
-                          if (!value || getFieldValue('password') === value) {
+                          if (
+                            !value ||
+                            getFieldValue('passwordFormEmailSignUp') === value
+                          ) {
                             return Promise.resolve()
                           }
                           return Promise.reject(
@@ -491,9 +491,9 @@ export const SignUpWithSMS = () => {
                       name={'confirmPasswordFormEmailSignUp'}
                       label="Repeat Password"
                       password
-                      value={confirmPasswordFormPhoneSignUp}
+                      value={confirmPasswordFormEmailSignUp}
                       onChange={(e) => {
-                        setConfirmPasswordFormPhoneSignUp(e.target.value)
+                        setConfirmPasswordFormEmailSignUp(e.target.value)
                       }}
                     />
                   </Form.Item>
@@ -512,7 +512,7 @@ export const SignUpWithSMS = () => {
                       approved
                     </span>
                   </div>
-                  <div className="w-full mt-[22px]" onClick={handleSignUp}>
+                  <div className="w-full mt-[22px]" onClick={handleSignUpEmail}>
                     <Button
                       htmlType="submit"
                       submit
