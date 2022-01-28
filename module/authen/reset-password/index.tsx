@@ -37,7 +37,7 @@ const ResetPassword = () => {
   return (
     <div className="w-screen h-screen flex items-center">
       <div
-        className={`${cls.formResetPassword} w-[470px] border rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px] ml-[17%]`}
+        className={`${cls.formResetPassword} w-[470px] rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px] ml-[17%]`}
       >
         <Form className="" form={form}>
           <div className="w-full text-center">

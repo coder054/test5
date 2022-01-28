@@ -12,7 +12,7 @@ import cls from './signup.module.css'
 export const SignUpWithEmail = () => {
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
-  const [checked, setChecked] = useState<boolean>(false)
+  const [checked, setChecked] = useState<boolean>(true)
   const [form] = Form.useForm()
   const { SignUpWithEmailAndPassword } = useAuth()
 
