@@ -257,6 +257,7 @@ const SignIn = () => {
                     required: true,
                     message: 'Input your password',
                   },
+                  { whitespace: false },
                 ]}
               >
                 <MyInput
