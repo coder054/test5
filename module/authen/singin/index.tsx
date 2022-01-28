@@ -31,11 +31,12 @@ const responseSiginin = atom({
   expiresIn: '',
 })
 
-const initialValues = {
-  phone: '+84355832199',
-  password: 'aA&123456',
-  repeat_password: 'aA&123456',
-  email: 'example@zporter.co',
+const initialValuesFormEmailSignIn = {
+  emailFormEmailSignIn: 'example@zporter.co',
+  passwordFormEmailSignIn: 'aA&123456',
+}
+const initialValuesFormPhoneSignIn = {
+  phoneFormPhoneSignIn: '+84355832199',
 }
 
 enum Tab {
@@ -53,17 +54,22 @@ const SignIn = () => {
   const [isAuthen, setIsAuthen] = useState<boolean>(false)
   // const [errorSignIn, setErrorSignIn] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState<boolean>(false)
-  const [email, setEmail] = useState<string>(initialValues.email)
-  const [password, setPassword] = useState<string>(initialValues.password)
-  const [confirmPassword, setConfirmPassword] = useState<string>(
-    initialValues.repeat_password
-  )
-  const [formEmail] = Form.useForm()
-  const [formPhone] = Form.useForm()
 
+  /// form sign in with email
+  const [emailFormEmailSignIn, setEmailFormEmailSignIn] = useState<string>(
+    initialValuesFormEmailSignIn.emailFormEmailSignIn
+  )
+  const [passwordFormEmailSignIn, setPasswordFormEmailSignIn] =
+    useState<string>(initialValuesFormEmailSignIn.passwordFormEmailSignIn)
+
+  /// form sign in with phone
+  const [phoneFormPhoneSignIn, setPhoneFormPhoneSignIn] = useState<string>(
+    initialValuesFormPhoneSignIn.phoneFormPhoneSignIn
+  )
   const [otp, setOtp] = useState<string>('')
 
-  const [phone, setPhone] = useState<string>(initialValues.phone)
+  const [formEmail] = Form.useForm()
+  const [formPhone] = Form.useForm()
 
   const { signin, currentUser, errorSignin } = useAuth()
 
@@ -214,11 +220,11 @@ const SignIn = () => {
             <Form
               className="h-[312px] "
               form={formEmail}
-              initialValues={initialValues}
+              initialValues={initialValuesFormEmailSignIn}
             >
               <Form.Item
                 className="mt-[24px]"
-                name={'email'}
+                name={'emailFormEmailSignIn'}
                 rules={[
                   {
                     required: true,
@@ -228,17 +234,17 @@ const SignIn = () => {
                 ]}
               >
                 <MyInput
-                  name={'email'}
+                  name={'emailFormEmailSignIn'}
                   label="Email address"
-                  value={email}
+                  value={emailFormEmailSignIn}
                   onChange={(e) => {
-                    setEmail(e.target.value)
+                    setEmailFormEmailSignIn(e.target.value)
                   }}
                 />
               </Form.Item>
               <Form.Item
                 className="mt-[24px]"
-                name={'password'}
+                name={'passwordFormEmailSignIn'}
                 rules={[
                   {
                     required: true,
@@ -248,10 +254,13 @@ const SignIn = () => {
                 ]}
               >
                 <MyInput
-                  name={'password'}
+                  name={'passwordFormEmailSignIn'}
                   label="Password"
                   password
-                  value={password}
+                  value={passwordFormEmailSignIn}
+                  onChange={(e) => {
+                    setPasswordFormEmailSignIn(e.target.value)
+                  }}
                 />
               </Form.Item>
               <div className="mt-[24px]" onClick={handleSubmit}>
@@ -281,11 +290,11 @@ const SignIn = () => {
             <Form
               className="h-[312px] "
               form={formPhone}
-              initialValues={initialValues}
+              initialValues={initialValuesFormPhoneSignIn}
             >
               <Form.Item
                 className="mt-[24px]"
-                name={'phone'}
+                name={'phoneFormPhoneSignIn'}
                 rules={[
                   {
                     required: true,
@@ -295,18 +304,18 @@ const SignIn = () => {
                 ]}
               >
                 <MyInput
-                  name={'phone'}
+                  name={'phoneFormPhoneSignIn'}
                   label="Mobile phone number"
-                  value={phone}
+                  value={phoneFormPhoneSignIn}
                   onChange={(e) => {
-                    setPhone(e.target.value)
+                    setPhoneFormPhoneSignIn(e.target.value)
                   }}
                 />
               </Form.Item>
               <div
                 className="mt-[24px]"
                 onClick={async () => {
-                  await sendPhone(phone)
+                  await sendPhone(phoneFormPhoneSignIn)
                 }}
               >
                 <Button
@@ -411,7 +420,7 @@ const SignIn = () => {
             sent to&nbsp;
           </span>
 
-          <span className="text-[#00e09d] ">{phone}.&nbsp;</span>
+          <span className="text-[#00e09d] ">{phoneFormPhoneSignIn}.&nbsp;</span>
           <span className="underline text-white">Wrong number?</span>
         </div>
 
