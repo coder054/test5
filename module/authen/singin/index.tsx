@@ -336,12 +336,11 @@ const SignIn = () => {
 
           <div className="bg-[#818389] w-full h-[1px] mt-[24px]"></div>
           <div className="mt-[24px]">
-            <span
-              onClick={handleSignup}
-              className="text-base text-[#4654EA] hover:text-[#2b3cec] pr-[16px] hover:underline cursor-pointer"
-            >
-              Create account
-            </span>
+            <Link href="/">
+              <a className="text-Blue text-[16px] leading-[175%] hover:text-[#2b3cec] pr-[16px] hover:underline cursor-pointer">
+                Create account
+              </a>
+            </Link>
             <Link href={'/reset-password'}>
               <a
                 onClick={handleResetPassword}
