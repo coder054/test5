@@ -314,7 +314,7 @@ const SignIn = () => {
                 <Button
                   loading={loading}
                   className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
-                  text="Log In222"
+                  text="Log In"
                 />
               </div>
               <div
@@ -322,7 +322,7 @@ const SignIn = () => {
               >
                 <IconWarning />
                 <span className="text-[#FFFFFF] text-[14px] pl-[8px]">
-                  Use demo@devias.io and password Password123!
+                  Use phone: +84355832199 and otp code: 123456
                 </span>
               </div>
             </Form>
