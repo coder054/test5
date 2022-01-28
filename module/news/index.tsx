@@ -2,8 +2,11 @@ import { Layout } from 'components/Layout'
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { Tabs } from 'components/Tabs'
-import { CardNews } from 'components/CardNews'
+import { CardNews } from 'components/card-news'
 import { axios } from 'utils/axios'
+import { Loading } from 'components/loading/loading'
+import { NewsType } from 'constants/types'
+import { notification } from 'antd'
 
 enum Tab {
   TopStories = 'TopStories',
@@ -23,50 +26,75 @@ const tabs = [
 
 const News = () => {
   const [tab, setTab] = useState(Tab.Latest)
-  const [news, setNews] = useState([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [news, setNews] = useState<NewsType[]>([])
 
   useEffect(() => {
     const getNews = async () => {
       try {
-        const resRole = await axios.get(
-          'https://dev.api.zporter.co/users/user-roles'
-        )
-        console.log('res', resRole.data[0].roleId)
         const resNews = await axios.get(
-          `https://dev.api.zporter.co/feed/get-list-news-post?limit=10&sorted=asc`,
-          { params: { roleId: resRole.data[0].roleId } }
+          '/feed/get-list-news-post?limit=20&sorted=asc'
         )
-        console.log('resNews', resNews)
+        setLoading(false)
+        setNews(resNews.data)
       } catch (error) {}
     }
 
     getNews()
   }, [])
 
+  const handleFavorite = async (
+    postId: string,
+    typeOfPost: string,
+    status: string
+  ) => {
+    const response = await axios.post(
+      `/feed/like-post?postId=${postId}&typeOfPost=${typeOfPost}&query=${status}`
+    )
+    if (response.status === 201) {
+      notification.open({
+        message: '',
+        description: 'Like successfully.',
+        style: {
+          backgroundColor: '#09E099',
+          color: '#FFFFFF',
+        },
+        duration: 3,
+      })
+
+      const newsCopy = JSON.parse(JSON.stringify(news))
+
+      newsCopy.forEach((item: NewsType) => {
+        if (item.postId === postId) {
+          item.isLiked = true
+          item.countLikes = (item.countLikes || 0) + 1
+        }
+      })
+      setNews(newsCopy)
+    }
+  }
+  // console.log('news', news)
+
   return (
-    <>
+    <div className="w-full">
       <Tabs tab={tab} setTab={setTab} tabs={tabs} />
-      <div className="grid grid-cols-4 gap-1">
-        <div className="mt-[32px]">
-          <CardNews />
+      {loading && (
+        <div className="w-[48px] m-auto">
+          <Loading />
         </div>
-        <div className="mt-[32px]">
-          <CardNews />
-        </div>
-        <div className="mt-[32px]">
-          <CardNews />
-        </div>
-        <div className="mt-[32px]">
-          <CardNews />
-        </div>
-        <div className="mt-[32px]">
-          <CardNews />
-        </div>
-        <div className="mt-[32px]">
-          <CardNews />
-        </div>
+      )}
+      <div className="grid grid-cols-4 gap-10 pr-[40px]">
+        {!loading && news ? (
+          news.map((item: NewsType, index) => (
+            <div key={index} className="">
+              <CardNews card={item} handleFavorite={handleFavorite} />
+            </div>
+          ))
+        ) : (
+          <p>No data</p>
+        )}
       </div>
-    </>
+    </div>
   )
 }
 
