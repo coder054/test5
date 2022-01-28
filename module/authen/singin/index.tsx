@@ -205,7 +205,7 @@ const SignIn = () => {
           <div className="w-full text-center">
             <p className="text-[24px] text-[#FFFFFF] font-semibold">Log in</p>
             <p className="mt-[16px] text-[#818389] text-[14px]">
-              Sign in on the internal platform Copy
+              Sign in on the internal platform
             </p>
           </div>
 

@@ -138,12 +138,7 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
                       } w-[347px] h-[195px] object-fill cursor-pointer flex justify-between items-center relative`}
                       onClick={handlePlayVideo}
                     >
-                      {!play && (
-                        <div className="absolute top-1/2 left-[166px]">
-                          <SvgEuro />
-                        </div>
-                      )}
-                      <ReactPlayer url={item.url} playing={play} />
+                      <ReactPlayer url={item.url} controls />
                     </div>
                   ) : null}
                 </div>
@@ -151,11 +146,14 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
             </div>
           ))}
       </Carousel>
-
-      <p
-        className="text-white mb-[25px] px-5 mt-[20px]"
-        dangerouslySetInnerHTML={{ __html: card?.excerptText as string }}
-      ></p>
+      <Link href={card?.link as string}>
+        <a target={'_blank'}>
+          <p
+            className="text-white mb-[25px] px-5 mt-[20px]"
+            dangerouslySetInnerHTML={{ __html: card?.excerptText as string }}
+          ></p>
+        </a>
+      </Link>
 
       <div className="flex px-5 ">
         <div
@@ -174,11 +172,22 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
         </Text>
 
         <div className="spacer flex-grow "></div>
-        <Link href={card?.link as string}>
-          <a target={'_blank'}>
-            <SvgShare />
-          </a>
-        </Link>
+        <div
+          onClick={() => {
+            navigator.clipboard.writeText(card?.link as string)
+            notification.open({
+              message: '',
+              description: 'Copy successfully.',
+              style: {
+                backgroundColor: '#09E099',
+                color: '#FFFFFF',
+              },
+              duration: 3,
+            })
+          }}
+        >
+          <SvgShare />
+        </div>
 
         <div className="spacer flex-grow "></div>
 
