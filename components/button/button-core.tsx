@@ -28,6 +28,7 @@ export const Button = ({
   return (
     <div
       {...rest}
+      id={id}
       onClick={onClick}
       className={clsx(
         styles,
@@ -35,11 +36,7 @@ export const Button = ({
         'flex items-center justify-between cursor-pointer text-center'
       )}
     >
-      <button
-        id={id}
-        className="w-full h-full"
-        type={submit ? 'submit' : 'button'}
-      >
+      <button className="w-full h-full" type={submit ? 'submit' : 'button'}>
         {!loading ? (
           <span className="w-full h-full">{text}</span>
         ) : (
