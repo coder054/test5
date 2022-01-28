@@ -9,6 +9,10 @@ import { Form, notification } from 'antd'
 import cls from './signin.module.css'
 import { IconWarning, SvgXIcon } from 'imports/svgs'
 import Link from 'next/link'
+import { TabPanel, Tabs } from 'components/Tabs'
+import { signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth'
+import { auth } from 'config'
+import OtpInput from 'react-otp-input'
 
 const valuesAtom = atom({
   email: '',
@@ -26,19 +30,45 @@ const responseSiginin = atom({
   expiresIn: '',
 })
 
+const initialValues = {
+  phone: '+84355832199',
+  password: 'aA&123456',
+  repeat_password: 'aA&123456',
+  email: 'example@zporter.co',
+}
+
+enum Tab {
+  Email = 'Email',
+  Phone = 'Phone',
+}
+
+const tabs = [{ text: Tab.Email }, { text: Tab.Phone }]
+
 const SignIn = () => {
   const router = useRouter()
+  const [step, setStep] = useState<1 | 2>(1)
+  const [tab, setTab] = useState(Tab.Email)
   const [loading, setLoading] = useState<boolean>(false)
   const [isAuthen, setIsAuthen] = useState<boolean>(false)
   // const [errorSignIn, setErrorSignIn] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState<boolean>(false)
-  const [form] = Form.useForm()
+  const [email, setEmail] = useState<string>(initialValues.email)
+  const [password, setPassword] = useState<string>(initialValues.password)
+  const [confirmPassword, setConfirmPassword] = useState<string>(
+    initialValues.repeat_password
+  )
+  const [formEmail] = Form.useForm()
+  const [formPhone] = Form.useForm()
+
+  const [otp, setOtp] = useState<string>('')
+
+  const [phone, setPhone] = useState<string>(initialValues.phone)
 
   const { signin, currentUser, errorSignin } = useAuth()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const submitForm = await form.validateFields()
+    const submitForm = await formEmail.validateFields()
     setLoading(true)
     await signin(submitForm.email, submitForm.password)
     setTimeout(() => {
@@ -51,12 +81,31 @@ const SignIn = () => {
       return
     }
 
-    let el = window.document.querySelector('.ant-form')
+    let el = window.document.querySelectorAll('.ant-form')
+
     if (!el) {
       return
     }
 
-    el.classList.remove('ant-form')
+    let arr = Array.from(el)
+    arr.forEach((o) => {
+      o.classList.remove('ant-form')
+    })
+
+    /// init recapcha
+    //@ts-ignore: Unreachable code error
+    window.recaptchaVerifier = new RecaptchaVerifier(
+      'sign-in-button5',
+      {
+        size: 'invisible',
+        callback: (response) => {
+          // reCAPTCHA solved, allow signInWithPhoneNumber.
+          // onSignInSubmit();
+          setStep(2)
+        },
+      },
+      auth
+    )
   }, [])
 
   // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -97,58 +146,172 @@ const SignIn = () => {
     setOpenModal(false)
   }
 
-  return (
-    <div className="w-screen h-screen flex items-center">
-      <div
-        className={`${cls.formSignIn} w-[470px] rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px] ml-[17%]`}
-      >
-        <Form className="" form={form}>
+  const sendPhone = async (phone: string) => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    try {
+      //@ts-ignore: Unreachable code error
+      const appVerifier = window.recaptchaVerifier
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        phone,
+        appVerifier
+      )
+
+      //@ts-ignore: Unreachable code error
+      window.confirmationResult = confirmationResult
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const sendCode = async (code: string, email: string, password: string) => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    try {
+      //@ts-ignore: Unreachable code error
+      const result = await window.confirmationResult.confirm(code)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const contentFillInfoSignInWithPhone = () => {
+    return (
+      <div className=" autofill2 w-screen h-screen flex items-center">
+        <div
+          className={`${cls.formSignIn} w-[470px] rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px] ml-[17%]`}
+        >
           <div className="w-full text-center">
             <p className="text-[24px] text-[#FFFFFF] font-semibold">Log in</p>
             <p className="mt-[16px] text-[#818389] text-[14px]">
               Sign in on the internal platform Copy
             </p>
           </div>
-          <Form.Item
-            className="mt-[24px]"
-            name={'email'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your email address',
-              },
-              { type: 'email', message: 'Your email is invalid' },
-            ]}
-          >
-            <MyInput name={'email'} label="Email address" />
-          </Form.Item>
-          <Form.Item
-            className="mt-[24px]"
-            name={'password'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your password',
-              },
-            ]}
-          >
-            <MyInput name={'password'} label="Password" password />
-          </Form.Item>
-          <div className="mt-[24px]" onClick={handleSubmit}>
-            <Button
-              loading={loading}
-              className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
-              text="Log In"
-            />
-          </div>
-          <div
-            className={`${cls.divWarning} w-full h-[56px] rounded-[4px] mt-[24px] flex items-center pl-[16px] pr-[16px]`}
-          >
-            <IconWarning />
-            <span className="text-[#FFFFFF] text-[14px] pl-[8px]">
-              Use demo@devias.io and password Password123!
-            </span>
-          </div>
+
+          <Tabs tab={tab} setTab={setTab} tabs={tabs} />
+          <TabPanel visible={tab === Tab.Email}>
+            <Form
+              className="h-[312px] "
+              form={formEmail}
+              initialValues={initialValues}
+            >
+              <Form.Item
+                className="mt-[24px]"
+                name={'email'}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Input your email address',
+                  },
+                  { type: 'email', message: 'Your email is invalid' },
+                ]}
+              >
+                <MyInput
+                  name={'email'}
+                  label="Email address"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                className="mt-[24px]"
+                name={'password'}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Input your password',
+                  },
+                ]}
+              >
+                <MyInput
+                  name={'password'}
+                  label="Password"
+                  password
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                  }}
+                />
+              </Form.Item>
+              <div className="mt-[24px]" onClick={handleSubmit}>
+                <Button
+                  loading={loading}
+                  className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+                  text="Log In"
+                />
+              </div>
+              <div
+                className={`${cls.divWarning} w-full h-[56px] rounded-[4px] mt-[24px] flex items-center pl-[16px] pr-[16px]`}
+              >
+                <IconWarning />
+                <span className="text-[#FFFFFF] text-[14px] pl-[8px]">
+                  Use demo@devias.io and password Password123!
+                </span>
+              </div>
+            </Form>
+          </TabPanel>
+          <TabPanel visible={tab === Tab.Phone}>
+            <button
+              id="sign-in-button5"
+              className=" w-[200px] h-[50px] fixed right-0 bottom-0 hidden "
+            >
+              recapcha
+            </button>
+            <Form
+              className="h-[312px] "
+              form={formPhone}
+              initialValues={initialValues}
+            >
+              <Form.Item
+                className="mt-[24px]"
+                name={'phone'}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Required fields must be filled in.',
+                    max: 25,
+                  },
+                ]}
+              >
+                <MyInput
+                  name={'phone'}
+                  label="Mobile phone number"
+                  value={phone}
+                  onChange={(e) => {
+                    setPhone(e.target.value)
+                  }}
+                />
+              </Form.Item>
+              <div
+                className="mt-[24px]"
+                onClick={async () => {
+                  await sendPhone(phone)
+                }}
+              >
+                <Button
+                  loading={loading}
+                  className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+                  text="Log In"
+                />
+              </div>
+              <div
+                className={`${cls.divWarning} w-full h-[56px] rounded-[4px] mt-[24px] flex items-center pl-[16px] pr-[16px]`}
+              >
+                <IconWarning />
+                <span className="text-[#FFFFFF] text-[14px] pl-[8px]">
+                  Use demo@devias.io and password Password123!
+                </span>
+              </div>
+            </Form>
+          </TabPanel>
+
           <div className="bg-[#818389] w-full h-[1px] mt-[24px]"></div>
           <div className="mt-[24px]">
             <span
@@ -166,48 +329,128 @@ const SignIn = () => {
               </a>
             </Link>
           </div>
-        </Form>
-      </div>
-      <LogoBigSize />
-      <MyModal show={openModal} width={412} setShow={setOpenModal}>
-        <div
-          className={`${cls.modal} bg-[#1E1F24] pt-[42.8px] pr-[44.8px] pl-[44.8px] pb-[44.8px] rounded-[4px] float-left`}
-        >
-          <div className="float-right" onClick={handleCloseModal}>
-            <SvgXIcon className={''} />
-          </div>
-          <p className="float-left text-[18px] font-semibold text-[#FFFFFF] mt-[20.8px] mb-[32px]">
-            By signing up, you agree to Zporters Terms & Conditions and Privacy
-            Rules
-          </p>
-          <Button
-            className={`${cls.signupWith} w-full h-[48px]`}
-            text="SIGN UP with SMS"
-            onClick={() => {
-              router.push('/signup-with-sms')
-            }}
-          />
-          <Button
-            className={`${cls.signupWith} w-full h-[48px]`}
-            text="SIGN UP with Email"
-            onClick={() => {
-              router.push('/signup-with-email')
-            }}
-          />
-          <Button
-            className={`${cls.signupWith} w-full h-[48px]`}
-            text="SIGN UP with Google"
-          />
-          <Button
-            className={`${cls.signupWith} w-full h-[48px]`}
-            text="SIGN UP with Facebook"
-          />
-          <Button
-            className={`${cls.signupWith} w-full h-[48px]`}
-            text="SIGN UP with Apple"
-          />
         </div>
-      </MyModal>
+        <LogoBigSize />
+        <MyModal show={openModal} width={412} setShow={setOpenModal}>
+          <div
+            className={`${cls.modal} bg-[#1E1F24] pt-[42.8px] pr-[44.8px] pl-[44.8px] pb-[44.8px] rounded-[4px] float-left`}
+          >
+            <div className="float-right" onClick={handleCloseModal}>
+              <SvgXIcon className={''} />
+            </div>
+            <p className="float-left text-[18px] font-semibold text-[#FFFFFF] mt-[20.8px] mb-[32px]">
+              By signing up, you agree to Zporters Terms & Conditions and
+              Privacy Rules
+            </p>
+            <Button
+              className={`${cls.signupWith} w-full h-[48px]`}
+              text="SIGN UP with SMS"
+              onClick={() => {
+                router.push('/signup-with-sms')
+              }}
+            />
+            <Button
+              className={`${cls.signupWith} w-full h-[48px]`}
+              text="SIGN UP with Email"
+              onClick={() => {
+                router.push('/signup-with-email')
+              }}
+            />
+            <Button
+              className={`${cls.signupWith} w-full h-[48px]`}
+              text="SIGN UP with Google"
+            />
+            <Button
+              className={`${cls.signupWith} w-full h-[48px]`}
+              text="SIGN UP with Facebook"
+            />
+            <Button
+              className={`${cls.signupWith} w-full h-[48px]`}
+              text="SIGN UP with Apple"
+            />
+          </div>
+        </MyModal>
+      </div>
+    )
+  }
+
+  const contentFillOtp = () => {
+    return (
+      <div
+        className="w-[372px] mx-auto
+                  min-h-[412px]
+                  mt-[120px] sm:mt-[120px] md:mt-[120px] lg:mt-[120px] xl:mt-[150px] 2xl:mt-[200px]
+                    
+                  "
+      >
+        <img src={'/sidebar/logo.svg'} className="mx-auto mb-[32px]" alt="" />
+        <div
+          className="text-white text-center font-SVNGilroy text-[24px] leading-[137%] 
+        mb-2"
+        >
+          Verify phone number
+        </div>
+
+        <div className="mb-[32px] font-Roboto text-[14px] leading-[22px] px-[14px] ">
+          <span className="text-white  ">
+            Now verify your mobile phone number by adding the 6 digit code we
+            sent to&nbsp;
+          </span>
+
+          <span className="text-[#00e09d] ">+46 768 030568.&nbsp;</span>
+          <span className="underline text-white">Wrong number?</span>
+        </div>
+
+        <div className="text-white text-[14px] leading-[22px] mb-2 ">
+          Verify code
+        </div>
+
+        <OtpInput
+          value={otp}
+          onChange={(value) => {
+            setOtp(value)
+          }}
+          numInputs={6}
+          separator={<span></span>}
+          containerStyle="flex space-x-[16px] ml-[-2px] "
+          inputStyle="border-[2px] border-[#4654EA]  rounded-[8px] w-[49px] h-[56px] flex justify-center items-center
+             text-[28px] font-SVNGilroy "
+        />
+
+        <div className="h-[24px] "></div>
+
+        <button
+          onClick={() => {
+            sendCode(otp, email, password)
+          }}
+          className="bg-Blue flex justify-center items-center text-[14px] leading-[22px] 
+        text-white w-full h-[44px] rounded-[8px] mb-[14px]
+        "
+        >
+          Verify code
+        </button>
+
+        <div className="h-[1px] bg-Stroke mb-[24px] "></div>
+
+        <Link href="/signin">
+          <a className="text-Blue text-[16px] leading-[175%] border-b-[1px] border-Blue ">
+            Already having an account?
+          </a>
+        </Link>
+      </div>
+    )
+  }
+
+  return (
+    <div className="autofill2 ">
+      {step === 1 ? contentFillInfoSignInWithPhone() : contentFillOtp()}
+
+      <button
+        id="sign-in-button4"
+        className=" w-[200px] h-[50px] fixed right-0 bottom-0 hidden "
+      >
+        recapcha
+      </button>
     </div>
   )
 }

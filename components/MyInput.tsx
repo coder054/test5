@@ -9,7 +9,8 @@ const CssTextField = styled(TextField)({
     marginLeft: '4px',
   },
   '& label.Mui-focused': {
-    color: '#5048E5',
+    // color: '#5048E5',
+    color: '#ffffff',
   },
   '& .MuiInput-underline:after': {
     borderBottomColor: 'green',
@@ -63,9 +64,7 @@ export const MyInput = ({
         fullWidth
         label={label}
         id="custom-css-outlined-input"
-        inputProps={{
-          autoComplete: 'off',
-        }}
+        autoComplete="current-password"
         type={showPassword || !password ? 'text' : 'password'}
       />
       <div

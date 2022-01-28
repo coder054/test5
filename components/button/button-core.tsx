@@ -10,7 +10,9 @@ interface ButtonProps {
   submit?: boolean
   loading?: boolean
   disable?: boolean
+  id?: string
   onClick?: () => void
+  [rest: string]: any
 }
 
 export const Button = ({
@@ -19,10 +21,13 @@ export const Button = ({
   submit,
   loading,
   onClick,
+  id,
+  ...rest
 }: ButtonProps) => {
   const styles = clsx(className && className)
   return (
     <div
+      {...rest}
       onClick={onClick}
       className={clsx(
         styles,
@@ -30,7 +35,11 @@ export const Button = ({
         'flex items-center justify-between cursor-pointer text-center'
       )}
     >
-      <button className="w-full h-full" type={submit ? 'submit' : 'button'}>
+      <button
+        id={id}
+        className="w-full h-full"
+        type={submit ? 'submit' : 'button'}
+      >
         {!loading ? (
           <span className="w-full h-full">{text}</span>
         ) : (
