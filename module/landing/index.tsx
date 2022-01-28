@@ -8,10 +8,6 @@ import cls from './landing.module.css'
 import { imgAppStore, imgGooglePlay } from 'imports/images'
 import { Button } from 'components'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { MyModal } from 'components/MyModal'
-import { SvgXIcon } from 'imports/svgs'
-import { useState } from 'react'
 
 const contentStyle: any = {
   height: '720px',
@@ -21,8 +17,6 @@ const contentStyle: any = {
 }
 
 const Landing = () => {
-  const [openModal, setOpenModal] = useState<boolean>(false)
-  const router = useRouter()
   const CarouselProps = {
     Infinity: true,
     autoplay: true,
@@ -31,18 +25,6 @@ const Landing = () => {
     dotClass: cls.dot,
     swipeToSlide: true,
     draggable: true,
-  }
-
-  const clickSignIn = () => {
-    router.push('/signin')
-  }
-  const clickSignUp = () => {
-    // router.push('/signup-with-email')
-    setOpenModal(true)
-  }
-
-  const handleCloseModal = () => {
-    setOpenModal(false)
   }
 
   return (
@@ -67,18 +49,23 @@ const Landing = () => {
 
                   <div className="pt-[64px] flex w-full">
                     <div className="flex m-auto justify-around w-[488px]">
-                      <div className="" onClick={clickSignIn}>
-                        <Button
-                          className="w-[224px] h-[48px] bg-[#4654EA] text-[15px]"
-                          text="Sign In"
-                        />
-                      </div>
-                      <div className="" onClick={clickSignUp}>
-                        <Button
-                          className="w-[224px] h-[48px] bg-[#000000] text-[15px] border border-[#09E099] text-[#09E099]"
-                          text="Sign up"
-                        />
-                      </div>
+                      <Link href="/signin">
+                        <a className="">
+                          <Button
+                            className="w-[224px] h-[48px] bg-[#4654EA] text-[15px]"
+                            text="Sign In"
+                          />
+                        </a>
+                      </Link>
+
+                      <Link href="/signup">
+                        <a className="">
+                          <Button
+                            className="w-[224px] h-[48px] bg-[#000000] text-[15px] border border-[#09E099] text-[#09E099]"
+                            text="Sign up"
+                          />
+                        </a>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -108,46 +95,6 @@ const Landing = () => {
           </div>
         ))}
       </Carousel>
-      <MyModal show={openModal} width={412} setShow={setOpenModal}>
-        <div
-          className={`${cls.modal} bg-[#1E1F24] pt-[42.8px] pr-[44.8px] pl-[44.8px] pb-[44.8px] rounded-[4px] float-left`}
-        >
-          <div className="float-right" onClick={handleCloseModal}>
-            <SvgXIcon className={''} />
-          </div>
-          <p className="float-left text-[18px] font-semibold text-[#FFFFFF] mt-[20.8px] mb-[32px]">
-            By signing up, you agree to Zporters Terms & Conditions and Privacy
-            Rules
-          </p>
-          <Button
-            className={`${cls.signupWith} w-full h-[48px]`}
-            text="SIGN UP with SMS"
-            onClick={() => {
-              // todo
-              router.push('/signup-with-sms')
-            }}
-          />
-          <Button
-            className={`${cls.signupWith} w-full h-[48px]`}
-            text="SIGN UP with Email"
-            onClick={() => {
-              router.push('/signup-with-email')
-            }}
-          />
-          <Button
-            className={`${cls.signupWith} w-full h-[48px]`}
-            text="SIGN UP with Google"
-          />
-          <Button
-            className={`${cls.signupWith} w-full h-[48px]`}
-            text="SIGN UP with Facebook"
-          />
-          <Button
-            className={`${cls.signupWith} w-full h-[48px]`}
-            text="SIGN UP with Apple"
-          />
-        </div>
-      </MyModal>
     </LayoutLanding>
   )
 }

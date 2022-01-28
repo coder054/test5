@@ -545,54 +545,15 @@ export const SignUpWithSMS = () => {
             </TabPanel>
 
             <div className="w-full h-[1px] bg-[#818389] mt-[24px]"></div>
-            <p
-              className="text-[#4654EA] underline mt-[24px] cursor-pointer"
-              onClick={() => {
-                router.push('/signin')
-              }}
-            >
-              Already have an account?
-            </p>
+
+            <Link href="/signin">
+              <a className="text-[#4654EA] underline mt-[24px] block cursor-pointer">
+                Already have an account?
+              </a>
+            </Link>
           </div>
           <LogoBigSize className="mt-12" />
         </div>
-        <MyModal show={openModal} setShow={setOpenModal} width={412}>
-          <div
-            style={{
-              boxShadow: '0px 25px 50px rgba(38, 38, 38, 0.1)',
-            }}
-            className={`w-[412px] p-[32px] bg-[#1e1f24] rounded-[8px]`}
-          >
-            <LogoLargeSize />
-            <p className="text-[24px] text-[#FFFFFF] mt-[16px] text-center font-semibold">
-              Verify email
-            </p>
-            <p className="text-[14px] text-[#FFFFFF] text-center mt-[16px]">
-              Now verify your mobile phone number by adding the 6 digit code we
-              sent to <span className="text-[#09E099]">+46 768 030568.</span>
-            </p>
-            <p className="text-sm text-[#FFFFFF] text-center underline">
-              Wrong number?
-            </p>
-            <p className="text-sm text-[#FFFFFF] mt-[24px]">Verify code</p>
-            <div className="w-full">
-              <InputVerifyCode number={6} />
-            </div>
-            <Button
-              text="Verify code"
-              className="bg-[#4654EA] w-[348px] h-[44px] mt-[24px] text-[#FFFFFF] mb-[24px]"
-            />
-            <div className="h-[1px] w-full bg-[#484A4D] mb-[24px]"></div>
-            <span
-              className="text-[#4654EA] text-base underline cursor-pointer"
-              onClick={() => {
-                router.push('/signin')
-              }}
-            >
-              Already have an account?
-            </span>
-          </div>
-        </MyModal>
       </div>
     )
   }
@@ -620,7 +581,7 @@ export const SignUpWithSMS = () => {
             sent to&nbsp;
           </span>
 
-          <span className="text-[#00e09d] ">+46 768 030568.&nbsp;</span>
+          <span className="text-[#00e09d] ">{phoneFormPhoneSignUp}.&nbsp;</span>
           <span className="underline text-white">Wrong number?</span>
         </div>
 
