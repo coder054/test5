@@ -1,5 +1,7 @@
 import axiosLib from 'axios'
-import { Cookies } from 'react-cookie'
+import { auth } from 'config'
+import { signOut } from 'firebase/auth'
+import { get } from 'lodash'
 
 /**
  * Axios instance for browser,
@@ -15,12 +17,20 @@ export const axios = axiosLib.create({
   },
 })
 
-const cookies = new Cookies()
-const token = cookies.get('token')
-
-if (token) {
-  axios.defaults.headers.common.Authorization = `Bearer ${token}`
-}
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // const cookies = new Cookies()
+    if (get(error, 'response.status') === 401) {
+      // cookies.remove('token')
+      signOut(auth)
+      setTimeout(() => {
+        window.location.href = '/signin'
+      }, 200)
+    }
+    return Promise.reject(error)
+  }
+)
 
 axios.interceptors.request.use((config) => {
   // First make the config.url URI code, and then replace the special characters in the overall situation, then decode the URI decoding

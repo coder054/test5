@@ -10,7 +10,9 @@ import {
   onIdTokenChanged,
   confirmPasswordReset,
 } from 'firebase/auth'
+import { get } from 'lodash'
 import React, { useContext, useEffect, useState } from 'react'
+import { axios } from 'utils/axios'
 
 interface ValueType {
   currentUser?: any
@@ -118,11 +120,73 @@ export function AuthProvider({ children }) {
       })
   }
 
-  useEffect(() => {
-    return onAuthStateChanged(auth, (authUser) => {
-      setCurrentUser(authUser)
-      setLoading(false)
+  const setTokenCookie = (token: string) => {
+    fetch('/api/login', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token }),
     })
+  }
+
+  const removeTokenCookie = () => {
+    fetch('/api/logout', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    })
+  }
+
+  useEffect(() => {
+    // no need
+    // const unsubscribeAuth = onAuthStateChanged(auth, async (authUser) => {
+    //   console.log('aaa onAuthStateChanged', authUser)
+
+    //   if (!authUser) {
+    //     setCurrentUser(null)
+    //     setLoading(false)
+    //     return
+    //   }
+
+    //   setLoading(true)
+    //   setCurrentUser(authUser)
+    //   setLoading(false)
+    // })
+
+    const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
+      console.log('aaa onIdTokenChanged', user)
+
+      if (!user) {
+        removeTokenCookie()
+        setToken('')
+        setCurrentUser(null)
+        setLoading(false)
+      } else {
+        setLoading(true)
+        const token = await user.getIdToken()
+
+        // update axios token header
+        axios.defaults.headers.common.Authorization = `Bearer ${token}`
+
+        const resp = await axios.get('/users/user-roles')
+        const roleId = get(resp, 'data[0].roleId')
+        // update axios token header
+        //@ts-ignore: Unreachable code error
+        axios.defaults.headers.roleId = roleId
+
+        setToken(token)
+        setTokenCookie(token)
+        setCurrentUser(user)
+        setLoading(false)
+      }
+    })
+
+    return () => {
+      unsubscribeToken()
+    }
   }, [])
 
   useEffect(() => {

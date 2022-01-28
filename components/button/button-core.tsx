@@ -10,7 +10,9 @@ interface ButtonProps {
   submit?: boolean
   loading?: boolean
   disable?: boolean
+  id?: string
   onClick?: () => void
+  [rest: string]: any
 }
 
 export const Button = ({
@@ -19,10 +21,14 @@ export const Button = ({
   submit,
   loading,
   onClick,
+  id,
+  ...rest
 }: ButtonProps) => {
   const styles = clsx(className && className)
   return (
     <div
+      {...rest}
+      id={id}
       onClick={onClick}
       className={clsx(
         styles,

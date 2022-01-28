@@ -11,10 +11,12 @@ import Image from 'next/image'
 
 import clsx from 'clsx'
 import { ROUTES } from 'constants/constants'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { DropdownUser } from './specific/DropdownUser'
 
 export const Header = () => {
   const router = useRouter()
+  const [showDropdownUser, setShowDropdownUser] = useState(false)
 
   const titleHeader = useMemo(() => {
     switch (router.pathname) {
@@ -56,6 +58,14 @@ export const Header = () => {
         bg-[#111115]
         "
     >
+      <div
+        className={clsx(
+          ` absolute w-[100px] h-[25px] right-[200px] bottom-[-25px] `,
+          showDropdownUser ? '  ' : ' hidden '
+        )}
+      >
+        <DropdownUser />
+      </div>
       <div className="mr-[9px] w-[32px] h-[32px] ">
         <Image className="" src={imgHamburgerPurple} alt="" />
       </div>
@@ -68,7 +78,15 @@ export const Header = () => {
       <div className="mr-2 w-10 h-10 ">
         <Image className="" src={imgMessage} alt="" />
       </div>
-      <Image className="" src={imgAvatar} alt="" />
+
+      <img
+        onClick={() => {
+          setShowDropdownUser(!showDropdownUser)
+        }}
+        src={'/header/Avatar.svg'}
+        className="border cursor-pointer "
+        alt=""
+      />
     </div>
   )
 }
