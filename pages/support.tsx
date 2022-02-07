@@ -1,6 +1,7 @@
+import { requireAuth } from 'config/firebase-admin'
+import { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
 import { Layout } from 'components/Layout'
 import { getCookieFromReq } from 'hooks/functionCommon'
-import { GetServerSideProps } from 'next'
 
 const Support = () => {
   return (
@@ -10,10 +11,9 @@ const Support = () => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  return {
-    props: {},
-  }
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  await requireAuth(req as NextApiRequest, res as NextApiResponse)
+  return { props: {} }
 }
 
 export default Support

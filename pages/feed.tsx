@@ -1,6 +1,11 @@
 import { Sidebar } from 'components/Sidebar'
 import { vercelImg } from 'imports/images'
-import type { NextPage } from 'next'
+import type {
+  GetServerSideProps,
+  NextApiRequest,
+  NextApiResponse,
+  NextPage,
+} from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -11,6 +16,7 @@ import clsx from 'clsx'
 import { Tabs } from 'components/Tabs'
 import { FootballersSlider } from 'components/Feed/FootballersSlider/FootballersSlider'
 import { ROUTES } from 'constants/constants'
+import { loadIdToken, requireAuth } from 'config/firebase-admin'
 
 enum Tab {
   Friends = 'Friends',
@@ -61,3 +67,8 @@ const Feed = () => {
 }
 
 export default Feed
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  await requireAuth(req as NextApiRequest, res as NextApiResponse)
+  return { props: {} }
+}

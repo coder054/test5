@@ -14,10 +14,10 @@ export const Layout = ({
   const { currentUser } = useAuth()
   const router = useRouter()
 
-  if (!currentUser && router.pathname !== '/test2') {
-    router.push('/signin')
-    return null
-  }
+  // if (!currentUser && router.pathname !== '/test2') {
+  //   router.push('/signin')
+  //   return null
+  // }
 
   return (
     <div className="">

@@ -1,3 +1,5 @@
+import { requireAuth } from 'config/firebase-admin'
+import { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
 import { Layout } from 'components/Layout'
 
 const Biography = () => {
@@ -9,3 +11,8 @@ const Biography = () => {
 }
 
 export default Biography
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  await requireAuth(req as NextApiRequest, res as NextApiResponse)
+  return { props: {} }
+}

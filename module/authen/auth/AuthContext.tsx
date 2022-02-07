@@ -11,6 +11,7 @@ import {
   confirmPasswordReset,
 } from 'firebase/auth'
 import { get } from 'lodash'
+import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 import { axios } from 'utils/axios'
 
@@ -31,6 +32,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
+  const router = useRouter()
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [token, setToken] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
@@ -190,6 +192,7 @@ export function AuthProvider({ children }) {
         setToken('')
         setCurrentUser(null)
         setLoading(false)
+        router.push('/signin')
       } else {
         setLoading(true)
         const token = await user.getIdToken()
@@ -207,21 +210,13 @@ export function AuthProvider({ children }) {
         setTokenCookie(token)
         setCurrentUser(user)
         setLoading(false)
+        router.push('/feed')
       }
     })
 
     return () => {
       unsubscribeToken()
     }
-  }, [])
-
-  useEffect(() => {
-    return onIdTokenChanged(auth, async (user) => {
-      if (user) {
-        const token: string = await user.getIdToken()
-        setToken(token)
-      }
-    })
   }, [])
 
   const value: any = {
@@ -238,7 +233,8 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {/* {!loading && children} */}
+      {children}
     </AuthContext.Provider>
   )
 }
