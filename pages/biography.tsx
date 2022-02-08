@@ -13,6 +13,5 @@ const Biography = () => {
 export default Biography
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  await requireAuth(req as NextApiRequest, res as NextApiResponse)
   return { props: {} }
 }

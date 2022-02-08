@@ -14,6 +14,7 @@ import { get } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 import { axios } from 'utils/axios'
+import { removeTokenCookie, setTokenCookie } from './tokenCookies'
 
 interface ValueType {
   currentUser?: any
@@ -126,7 +127,10 @@ export function AuthProvider({ children }) {
   //logout
   const signout = () => {
     signOut(auth)
-    window.location.href = '/signin'
+    // window.location.href = '/signin'
+    setTimeout(() => {
+      router.push('/signin')
+    }, 1000)
   }
 
   const ResetPassword = (email: string) => {
@@ -148,25 +152,25 @@ export function AuthProvider({ children }) {
       })
   }
 
-  const setTokenCookie = (token: string) => {
-    fetch('/api/login', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ token }),
-    })
-  }
+  // const setTokenCookie = (token: string) => {
+  //   fetch('/api/login', {
+  //     method: 'post',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ token }),
+  //   })
+  // }
 
-  const removeTokenCookie = () => {
-    fetch('/api/logout', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({}),
-    })
-  }
+  // const removeTokenCookie = () => {
+  //   fetch('/api/logout', {
+  //     method: 'post',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({}),
+  //   })
+  // }
 
   useEffect(() => {
     // no need
@@ -192,11 +196,11 @@ export function AuthProvider({ children }) {
         setToken('')
         setCurrentUser(null)
         setLoading(false)
-        router.push('/signin')
       } else {
         setLoading(true)
         const token = await user.getIdToken()
 
+        setTokenCookie(token)
         // update axios token header
         axios.defaults.headers.common.Authorization = `Bearer ${token}`
 
@@ -205,12 +209,9 @@ export function AuthProvider({ children }) {
         // update axios token header
         //@ts-ignore: Unreachable code error
         axios.defaults.headers.roleId = roleId
-
         setToken(token)
-        setTokenCookie(token)
         setCurrentUser(user)
         setLoading(false)
-        router.push('/feed')
       }
     })
 
