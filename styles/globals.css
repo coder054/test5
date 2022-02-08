@@ -190,3 +190,14 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.CircularProgress.bioprogress span {
+  font-size: 14px;
+  line-height: 22px;
+  position: absolute;
+  top: 98px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  z-index: 1;
+}

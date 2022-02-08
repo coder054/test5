@@ -4673,6 +4673,11 @@ rc-virtual-list@^3.2.0, rc-virtual-list@^3.4.1:
     rc-resize-observer "^1.0.0"
     rc-util "^5.0.7"
 
+react-circular-gradient-progress@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-circular-gradient-progress/-/react-circular-gradient-progress-1.1.1.tgz#624887d693700b772ef94fae292b255cc1e7654f"
+  integrity sha512-r+ZLUpo4RdYe1sv6keCtyPcCK4X4TOQNg1BgoWrLgYHf+RitQmx+2fErRXKK4n+C57vzOKwPnHW4eUw2EvVgUQ==
+
 react-cookie@^4.1.1:
   version "4.1.1"
   resolved "https://registry.npmjs.org/react-cookie/-/react-cookie-4.1.1.tgz"

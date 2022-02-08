@@ -34,6 +34,9 @@ export const Layout = ({
         <div className=" w-100vw-280px min-h-screen bg-[#111115] pt-4 px-[39px] pb-[39px] ">
           {/* below the header */}
           <div className="h-[64px]"></div>
+          {/* <div className="max-w-[1210px] mx-auto ">
+            {children}
+          </div> */}
           {children}
         </div>
       </div>
