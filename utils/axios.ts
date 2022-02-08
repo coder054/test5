@@ -1,6 +1,7 @@
 import axiosLib from 'axios'
 import { auth } from 'config'
 import { signOut } from 'firebase/auth'
+import querystring from 'query-string'
 import { get } from 'lodash'
 
 /**
@@ -15,6 +16,7 @@ export const axios = axiosLib.create({
     'Content-type': 'application/json',
     'XSRF-TOKEN': 'csrfToken',
   },
+  paramsSerializer: (param) => querystring.stringify(param),
 })
 
 axios.interceptors.response.use(

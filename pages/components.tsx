@@ -28,6 +28,7 @@ import { Checklist } from 'components/common/Checklist'
 import { ChangePlan } from 'components/specific/ChangePlan'
 import { BillingDetail } from 'components/specific/BillingDetail'
 import { InvoiceHistory } from 'components/specific/InvoiceHistory'
+import { MyDatePicker } from 'components/MyDatePicker'
 
 enum Tab {
   Friends = 'Friends',
@@ -40,6 +41,7 @@ const tabs = [{ text: Tab.Friends }, { text: Tab.News }, { text: Tab.Diary }]
 const Components = () => {
   const [value, setValue] = useState(7)
   const [valueInput, setValueInput] = useState('')
+  const [date, setDate] = useState(null)
   const [tab, setTab] = useState(Tab.Friends)
   const [show1, setShow1] = useState(false)
   const [show2, setShow2] = useState(false)
@@ -125,6 +127,14 @@ const Components = () => {
             onChange={(e: any) => {
               setValueInput(e.target.value)
             }}
+          />
+        </div>
+
+        <div className="my-6 w-[439px] ">
+          <MyDatePicker
+            label="Birthdate"
+            value={date}
+            onChange={(e) => setDate(e)}
           />
         </div>
 
