@@ -20,8 +20,8 @@ export const QueryParamProviderComponent = (props: {
     [router.asPath]
   )
 
-  const history = useMemo(
-    () => ({
+  const history = useMemo(() => {
+    return {
       push: ({ search }: Location) =>
         router.push(
           { pathname: router.pathname, query: router.query },
@@ -36,9 +36,15 @@ export const QueryParamProviderComponent = (props: {
         )
       },
       location,
-    }),
-    [pathname, router.pathname, router.query, location.pathname]
-  )
+    }
+  }, [
+    pathname,
+    router.pathname,
+    router.query,
+    location.pathname,
+    location,
+    router,
+  ])
 
   return (
     <ContextProvider {...rest} history={history} location={location}>

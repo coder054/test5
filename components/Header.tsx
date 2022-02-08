@@ -13,8 +13,10 @@ import clsx from 'clsx'
 import { ROUTES } from 'constants/constants'
 import { useMemo, useState } from 'react'
 import { DropdownUser } from './specific/DropdownUser'
+import { useAuth } from 'module/authen/auth/AuthContext'
 
 export const Header = () => {
+  const { currentUser } = useAuth()
   const router = useRouter()
   const [showDropdownUser, setShowDropdownUser] = useState(false)
 
@@ -54,11 +56,13 @@ export const Header = () => {
         filter:
           ' drop-shadow(0px 1px 1px rgba(100, 116, 139, 0.06)) drop-shadow(0px 1px 2px rgba(100, 116, 139, 0.1))',
       }}
-      className="h-[64px] w-100vw-280px left-[280px] top-0 fixed z-[1000]
+      className={`${
+        !!currentUser ? 'h-[64px]' : 'h-[80px]'
+      } w-100vw-280px left-[280px] top-0 fixed z-[1000]
         flex justify-between items-center
         px-[39px]
         bg-[#111115]
-        "
+        `}
     >
       <div
         className={clsx(
@@ -75,20 +79,42 @@ export const Header = () => {
         {titleHeader}
       </span>
       <span className=" grow "></span>
-      <Image className="" src={imgSearch} alt="" />
-      <Image className="" src={imgBell} alt="" />
-      <div className="mr-2 w-10 h-10 ">
-        <Image className="" src={imgMessage} alt="" />
-      </div>
+      {!!currentUser ? (
+        <>
+          <Image className="" src={imgSearch} alt="" />
+          <Image className="" src={imgBell} alt="" />
+          <div className="mr-2 w-10 h-10 ">
+            <Image className="" src={imgMessage} alt="" />
+          </div>
 
-      <img
-        onClick={() => {
-          setShowDropdownUser(!showDropdownUser)
-        }}
-        src={'/header/Avatar.svg'}
-        className="border cursor-pointer "
-        alt=""
-      />
+          <img
+            onClick={() => {
+              setShowDropdownUser(!showDropdownUser)
+            }}
+            src={'/header/Avatar.svg'}
+            className="border cursor-pointer "
+            alt=""
+          />
+        </>
+      ) : (
+        <>
+          <Link href="/signin">
+            <a>
+              <button className="w-[224px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue mr-[26px]">
+                Sign In
+              </button>
+            </a>
+          </Link>
+
+          <Link href="/signup">
+            <a>
+              <button className="w-[224px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent text-Green border border-Green ">
+                Sign Up
+              </button>
+            </a>
+          </Link>
+        </>
+      )}
     </div>
   )
 }

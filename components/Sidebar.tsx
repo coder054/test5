@@ -96,8 +96,11 @@ export const Sidebar = () => {
                       <o.icon active={isActive} />
                     </span>
                     <span
-                      className=" text-[14px] leading-[24px] text-Neutral-300
-                  font-semibold "
+                      className={clsx(
+                        ` text-[14px] leading-[24px] text-Neutral-300
+                        font-semibold `,
+                        isActive ? ' text-Yellow ' : '  '
+                      )}
                     >
                       {o.text}
                     </span>

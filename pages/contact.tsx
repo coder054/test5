@@ -1,3 +1,5 @@
+import { requireAuth } from 'config/firebase-admin'
+import { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
 import { Layout } from 'components/Layout'
 
 const Contact = () => {
@@ -9,3 +11,8 @@ const Contact = () => {
 }
 
 export default Contact
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  await requireAuth(req as NextApiRequest, res as NextApiResponse)
+  return { props: {} }
+}
