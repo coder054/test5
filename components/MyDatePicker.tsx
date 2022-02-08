@@ -1,5 +1,9 @@
-import { MenuItem, styled, TextField } from '@mui/material'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import DatePicker from '@mui/lab/DatePicker'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import { TextField, styled } from '@mui/material'
 import clsx from 'clsx'
+import * as React from 'react'
 
 const CssTextField = styled(TextField)({
   '& label': {
@@ -7,7 +11,8 @@ const CssTextField = styled(TextField)({
     marginLeft: '4px',
   },
   '& label.Mui-focused': {
-    color: '#5048E5',
+    // color: '#5048E5',
+    color: '#ffffff',
   },
   '& .MuiInput-underline:after': {
     borderBottomColor: 'green',
@@ -16,7 +21,7 @@ const CssTextField = styled(TextField)({
     '& input': {
       color: '#ffffff',
       fontSize: '16px',
-      lineHeight: '24px',
+      lineHeight: '25px',
     },
 
     '& fieldset': {
@@ -34,43 +39,30 @@ const CssTextField = styled(TextField)({
   },
 })
 
-export const MySelect = ({
+export const MyDatePicker = ({
   className,
   label,
   value,
   onChange,
-  arrOption,
+  type,
   ...rest
 }: {
   className?: string
   label: string
-  value: string
-  onChange: any
-  arrOption: { value: number | string; label: string }[]
+  value?: string | null
+  onChange?: any
   [rest: string]: any
 }) => {
   return (
     <div className={clsx('relative', className)}>
-      <CssTextField
-        value={value}
-        onChange={onChange}
-        fullWidth
-        select
-        label={label}
-        inputProps={{
-          autoComplete: 'off',
-        }}
-      >
-        {arrOption.map((option) => (
-          <MenuItem
-            className="text-white"
-            key={`${option.value}-{option.label}`}
-            value={option.value}
-          >
-            {option.label}
-          </MenuItem>
-        ))}
-      </CssTextField>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DatePicker
+          label={label}
+          value={value}
+          onChange={onChange}
+          renderInput={(params) => <CssTextField fullWidth {...params} />}
+        />
+      </LocalizationProvider>
     </div>
   )
 }
