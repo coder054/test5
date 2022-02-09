@@ -65,7 +65,7 @@ export const Select = ({
         (item: OptionType) => item.value === defaultValue
       )
       if (defaultOption) {
-        setDisplayText(defaultOption?.title)
+        setDisplayText(defaultOption?.label)
       }
     }
   }, [defaultValue, options])
@@ -116,7 +116,7 @@ export const Select = ({
             {options?.map((item: OptionType) => (
               <Option
                 key={item.value}
-                title={item.title}
+                title={item.label}
                 value={item.value}
                 onSelect={handleClickSelectOption}
               />
