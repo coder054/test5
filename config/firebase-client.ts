@@ -1,3 +1,4 @@
+import { getStorage } from 'firebase/storage'
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 
@@ -26,6 +27,8 @@ const firebaseApp = initializeApp({
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_MEASUREMENT_ID,
 })
+
+export const storage = getStorage()
 
 // invoke this as soon as you can in the client app
 // export default initFirebaseClient
