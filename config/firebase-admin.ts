@@ -2,7 +2,9 @@ import * as admin from 'firebase-admin'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 const verifyIdToken = (token: string) => {
-  const firebasePrivateKey: string = process.env.FIREBASE_PRIVATE_KEY ?? ''
+  const firebasePrivateKey: string = process.env.FIREBASE_PRIVATE_KEY
+    ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
+    : ''
 
   if (!admin.apps.length) {
     try {
@@ -10,7 +12,7 @@ const verifyIdToken = (token: string) => {
         credential: admin.credential.cert({
           projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
           clientEmail: process.env.FIREBASE_CLIENT_EMAIL || '',
-          privateKey: firebasePrivateKey.replace(/\\n/g, '\n'),
+          privateKey: firebasePrivateKey,
         }),
       })
     } catch (error) {
