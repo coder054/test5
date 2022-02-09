@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../auth/AuthContext'
 import { Form } from 'antd'
-import cls from './signup-form.module.css'
+// import cls from './signup-form-player.module.css'
 import { GoBack } from 'components/go-back'
 import { UploadImage } from 'components/upload-image'
 import { MySelect } from 'components/MySelect'
@@ -36,6 +36,19 @@ export const SignUpFormPlayer = () => {
     endNumber: 130,
     meanSure: 'kg',
   })
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    let el = window.document.querySelector('.ant-form')
+    if (!el) {
+      return
+    }
+
+    el.classList.remove('ant-form')
+  }, [])
 
   const handleChangeUpload = async (event) => {}
 
