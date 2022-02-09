@@ -5,10 +5,18 @@ import { useAuth } from 'module/authen/auth/AuthContext'
 import SignIn from 'module/authen/singin'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { LOCAL_STORAGE_KEY } from 'constants/constants'
 
 const SignInPage = () => {
   const router = useRouter()
   const { currentUser } = useAuth()
+
+  useEffect(() => {
+    localStorage.removeItem(LOCAL_STORAGE_KEY.currentRoleId)
+    localStorage.removeItem(LOCAL_STORAGE_KEY['user-roles'])
+  }, [])
+
   return (
     <LayoutLanding authen>
       <Head>

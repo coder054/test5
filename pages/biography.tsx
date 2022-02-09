@@ -1,3 +1,4 @@
+import useSWR from 'swr'
 import { Text } from 'components/Text'
 import { requireAuth } from 'config/firebase-admin'
 import { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
@@ -10,8 +11,28 @@ import {
 } from 'react-circular-gradient-progress'
 import { Stars } from 'components/common/Stars'
 import { BioRadarChart } from 'components/specific/BioRadarChart'
+import { fetcher } from 'utils/utils'
+const svgSample = (
+  <svg
+    className=" "
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M16.8375 3.99243C15.89 3.04993 14.645 2.53076 13.33 2.53076C12.0942 2.53076 10.92 2.99076 10 3.8291C9.08003 2.99076 7.90669 2.53076 6.67002 2.53076C5.35502 2.53076 4.11002 3.04993 3.15919 3.99576C1.19836 5.96493 1.19919 9.04493 3.16086 11.0058L10 17.8449L16.8392 11.0058C18.8009 9.04493 18.8017 5.96493 16.8375 3.99243Z"
+      fill="#09E099"
+    />
+  </svg>
+)
 
 const Biography = () => {
+  const { data, error } = useSWR('/biographies/player', fetcher)
+  if (error) return <div>failed to load</div>
+  if (!data) return <div>loading...</div>
+
   return (
     <Layout title="Zporter">
       {/* /// Navigate and filter */}
@@ -429,7 +450,292 @@ const Biography = () => {
             backdropFilter: 'blur(68px)',
           }}
           className="rounded-[8px] p-[32px] "
-        ></div>
+        >
+          <div className="max-w-[466px] mx-auto border">
+            {[
+              {
+                title: 'Trophys',
+                list: [
+                  {
+                    img: (
+                      <img
+                        src={'/biography/trophy/trophy1.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/trophy/trophy2.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/trophy/trophy3.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/trophy/trophy4.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                ],
+              },
+              {
+                title: 'Awards',
+                list: [
+                  {
+                    img: (
+                      <img
+                        src={'/biography/award/award1.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/award/award2.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/award/award3.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/award/award4.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/award/award5.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                ],
+              },
+
+              {
+                title: 'Caps',
+                list: [
+                  {
+                    img: (
+                      <img
+                        src={'/biography/cap/cap1.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/cap/cap2.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/cap/cap3.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/cap/cap4.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/cap/cap5.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                ],
+              },
+              {
+                title: 'Programs',
+                list: [
+                  {
+                    img: (
+                      <img
+                        src={'/biography/program/program1.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/program/program2.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/program/program3.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/program/program4.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                ],
+              },
+
+              {
+                title: 'Challenges',
+                list: [
+                  {
+                    img: (
+                      <img
+                        src={'/biography/challenge/challenge1.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/challenge/challenge2.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/challenge/challenge3.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/challenge/challenge4.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                  {
+                    img: (
+                      <img
+                        src={'/biography/challenge/challenge5.png'}
+                        className=" "
+                        alt=""
+                      />
+                    ),
+                    text: '2x',
+                  },
+                ],
+              },
+            ].map((row, index) => (
+              <div key={row.title} className="mb-[16px] ">
+                <Text name="Subtitle2" className="text-Grey mb-[8px] ">
+                  {row.title}
+                </Text>
+                <div className="flex gap-x-[20px]">
+                  {row.list.map((o, index) => (
+                    <div className=" ">
+                      <div
+                        className="w-[48px] h-[48px] rounded-[8px] bg-Dark-3
+                    flex justify-center items-center mb-1 "
+                      >
+                        {o.img}
+                      </div>
+                      <div className="text-white text-[14px] leading-[22px] text-center ">
+                        {o.text}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <div className="h-[1px] my-[32px] bg-Stroke "></div>
+          </div>
+        </div>
       </div>
 
       {/* /// top videos */}

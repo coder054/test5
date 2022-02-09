@@ -1,6 +1,7 @@
 import { get, truncate } from 'lodash'
 import cookie from 'cookie'
 import { notification } from 'antd'
+import { axios } from './axios'
 
 export const truncateStr = (str: string, max: number) => {
   if (!str) {
@@ -52,4 +53,13 @@ export function notify(
     message,
     description,
   })
+}
+
+export const fetcher = async (url, token) => {
+  if (url === null) return
+  const data = await axios.get(url)
+  if (data.status === 200) {
+    return data.data
+  }
+  return { error: true }
 }
