@@ -9,6 +9,7 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 RUN echo "$FIREBASE_CLIENT" >> /usr/src/app/.env.local
+RUN echo "$FIREBASE_SERVER" >> /usr/src/app/.env.local
 
 # Installing dependencies
 COPY package*.json /usr/src/app/
