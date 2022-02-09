@@ -14,3 +14,102 @@ export interface ResponseSignin {
   refreshToken?: string
   expiresIn?: string
 }
+
+export interface OptionType {
+  value: string
+  label: string
+}
+
+//
+export const OptionCountry: OptionType[] = [
+  { value: 'usa', label: 'USA' },
+  { value: 'sweden', label: 'Sweden' },
+]
+
+export const OptionUserProfile: OptionType[] = [
+  { value: 'player', label: 'Player' },
+  { value: 'coach', label: 'Coach' },
+]
+
+export const OptionShirtNumber: OptionType[] = [
+  { value: 'player', label: 'Player' },
+  { value: 'coach', label: 'Coach' },
+]
+
+export const OptionPlayer: OptionType[] = [
+  {
+    value: 'GK',
+    label: 'GK - Goalkeeper',
+  },
+  {
+    value: 'CB',
+    label: 'CB - Center Back',
+  },
+  {
+    value: 'RB',
+    label: 'RB - Right Back',
+  },
+  {
+    value: 'LB',
+    label: 'LB - Left Back',
+  },
+  {
+    value: 'CDM',
+    label: 'CDM - Central Defending Midfielder',
+  },
+  {
+    value: 'CM',
+    label: 'CM - Central Midfielder',
+  },
+  {
+    value: 'CAM',
+    label: 'CAM - Central Attacking Midfielder',
+  },
+  {
+    value: 'RM',
+    label: 'RM - Right Midfielder',
+  },
+  {
+    value: 'LM',
+    label: 'LM - Left Midfielder',
+  },
+  {
+    value: 'CF',
+    label: 'CF - Center Forward',
+  },
+  {
+    value: 'ST',
+    label: 'ST - Striker',
+  },
+  {
+    value: 'RW',
+    label: 'RW - Right Winger',
+  },
+  {
+    value: 'LW',
+    label: 'LW - Left Winger',
+  },
+]
+
+export const OptionCoach: OptionType[] = [
+  {
+    value: '1',
+    label: 'Coach',
+  },
+  {
+    value: '2',
+    label: 'Ass Coach',
+  },
+  {
+    value: '3',
+    label: 'Head Coach',
+  },
+  {
+    value: '4',
+    label: 'GK Coach',
+  },
+  {
+    value: '5',
+    label: 'Other',
+  },
+]

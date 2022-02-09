@@ -27,10 +27,23 @@ const CssTextField = styled(TextField)({
     },
     '&:hover fieldset': {
       borderColor: '#484A4D',
+      color: '#ffffff',
     },
     '&.Mui-focused fieldset': {
       borderColor: '#5048E5',
+      color: '#ffffff',
     },
+  },
+  '& .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root': {
+    color: '#ffffff',
+    '& .Mui-selected': {
+      backgroundColor: '#FFFFFF',
+      color: '#ff0000',
+    },
+  },
+
+  '.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root': {
+    color: '#ffffff',
   },
 })
 
@@ -38,17 +51,25 @@ export const MySelect = ({
   className,
   label,
   value,
+  addNew,
+  titleAddNew,
+  linkAddNew,
   onChange,
   arrOption,
   ...rest
 }: {
   className?: string
   label: string
-  value: string
-  onChange: any
+  value?: string
+  addNew?: boolean
+  titleAddNew?: string
+  linkAddNew?: string
+  onChange?: any
   arrOption: { value: number | string; label: string }[]
   [rest: string]: any
 }) => {
+  const handleAddNew = () => {}
+
   return (
     <div className={clsx('relative', className)}>
       <CssTextField
@@ -61,6 +82,14 @@ export const MySelect = ({
           autoComplete: 'off',
         }}
       >
+        {addNew ? (
+          <p className="text-base text-[#FFFFFF] pl-[16px] pt-[5px] pb-[5px]">
+            {titleAddNew}{' '}
+            <span className="underline cursor-pointer" onClick={handleAddNew}>
+              {linkAddNew}
+            </span>
+          </p>
+        ) : null}
         {arrOption.map((option) => (
           <MenuItem key={`${option.value}-{option.label}`} value={option.value}>
             {option.label}

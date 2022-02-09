@@ -190,3 +190,7 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root {
+  color: rgb(189, 189, 189) !important;
+}
