@@ -4,14 +4,12 @@ export const Stars = ({
   svgStarFull,
   svgStarHalf,
   svgStarEmpty,
-  gap,
   numberOfStars,
   className,
 }: {
   svgStarFull: any
   svgStarHalf: any
   svgStarEmpty: any
-  gap: number
   numberOfStars: number
   className: string
 }) => {
