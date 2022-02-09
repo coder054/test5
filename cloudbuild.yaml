@@ -4,6 +4,8 @@ steps:
       - build
       - '--build-arg'
       - FIREBASE_CLIENT=$_FIREBASE_CLIENT
+      - '--build-arg'
+      - FIREBASE_SERVER=$_FIREBASE_SERVER
       - '--no-cache'
       - '-t'
       - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
