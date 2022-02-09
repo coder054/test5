@@ -8,6 +8,8 @@ export const imgAvatar = require('./../public' + '/header/Avatar.svg')
 export const imgLanding1 = require('./../public' + '/item-landing/item1.svg')
 export const imgLanding2 = require('./../public' + '/item-landing/item2.svg')
 export const imgLanding3 = require('./../public' + '/item-landing/item3.svg')
+export const imgAvatarSignup = require('./../public' +
+  '/authen/avatar-signup.png')
 export const imgGooglePlay = require('./../public' +
   '/item-landing/google-play.svg')
 export const imgAppStore = require('./../public' +

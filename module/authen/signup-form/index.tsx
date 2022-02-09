@@ -1,0 +1,175 @@
+import { Button } from 'components'
+import { MyInput } from 'components/MyInput'
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
+import { useAuth } from '../auth/AuthContext'
+import { Form } from 'antd'
+import cls from './signup-form.module.css'
+import { GoBack } from 'components/go-back'
+import { UploadImage } from 'components/upload-image'
+import { MySelect } from 'components/MySelect'
+import { OptionCountry, OptionUserProfile } from '../types'
+
+const SignUpForm = () => {
+  const router = useRouter()
+  const [form] = Form.useForm()
+  const [loading, setLoading] = useState<boolean>(false)
+  const [country, setCountry] = useState<string>('')
+  const [userProfile, setUserProfile] = useState<string>('')
+  const { signin } = useAuth()
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    let el = window.document.querySelector('.ant-form')
+    if (!el) {
+      return
+    }
+
+    el.classList.remove('ant-form')
+  }, [])
+
+  const handleChangeUpload = async (event) => {}
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+  }
+
+  return (
+    <div className="autofill2 w-screen h-screen flex items-center">
+      <div className="absolute top-[40px] left-[40px]">
+        <GoBack label="Sign in form" goBack="/signin" />
+      </div>
+      <div
+        className={`w-[470px] rounded-[8px] pt-[48px] pb-[48px] absolute right-[25%]`}
+      >
+        <p className="text-[24px] text-[#FFFFFF] font-semibold">Sign up form</p>
+        <Form className="" form={form}>
+          <div className="w-full flex justify-between mt-[48px]">
+            <Form.Item
+              className=" w-[223px]"
+              name={'firstName'}
+              rules={[
+                {
+                  required: true,
+                  message: 'Input your First name',
+                },
+              ]}
+            >
+              <MyInput name={'firstName'} label="First name" signupForm />
+            </Form.Item>
+            <Form.Item
+              className=" w-[223px]"
+              name={'lastName'}
+              rules={[
+                {
+                  required: true,
+                  message: 'Input your  Last name',
+                },
+              ]}
+            >
+              <MyInput name={'lastName'} label="Last name" signupForm />
+            </Form.Item>
+          </div>
+          <Form.Item
+            className="mt-[0px]"
+            name={'birthDate'}
+            rules={[
+              {
+                required: true,
+                message: 'Input your Birth date',
+              },
+            ]}
+          >
+            <MyInput name={'birthDate'} label="Birth date" signupForm />
+          </Form.Item>
+
+          <Form.Item
+            className="mt-[0px]"
+            name={'birthCountry'}
+            rules={[
+              {
+                required: true,
+                message: 'Input your Birth country',
+              },
+            ]}
+          >
+            <MySelect
+              signupForm
+              className=""
+              label={'Select Country'}
+              value={country}
+              onChange={(e) => {
+                setCountry(e.target.value)
+              }}
+              arrOption={OptionCountry}
+            />
+          </Form.Item>
+
+          <Form.Item
+            className=""
+            name={'city'}
+            rules={[
+              {
+                required: true,
+                message: 'Input your City where you are living in today',
+              },
+            ]}
+          >
+            <MyInput
+              name={'city'}
+              label="City where you are living in today"
+              signupForm
+            />
+          </Form.Item>
+
+          <Form.Item
+            className=""
+            name={'userProfile'}
+            rules={[
+              {
+                required: true,
+                message: 'Input your User profile',
+              },
+            ]}
+          >
+            <MySelect
+              signupForm
+              className=""
+              label={'User profile'}
+              value={userProfile}
+              onChange={(e) => {
+                setUserProfile(e.target.value)
+              }}
+              arrOption={OptionUserProfile}
+            />
+          </Form.Item>
+
+          <div className="flex">
+            <UploadImage
+              title="Face image"
+              text="Add portrait photo of 480*640 pixels or more"
+            />
+            <UploadImage
+              title="Full body image"
+              text="Add portrait photo of 480*640 pixels or more"
+              className="ml-[24px]"
+            />
+          </div>
+
+          <div className="mt-[40px]" onClick={handleSubmit}>
+            <Button
+              loading={loading}
+              className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+              text="Next"
+            />
+          </div>
+        </Form>
+      </div>
+    </div>
+  )
+}
+
+export default SignUpForm

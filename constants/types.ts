@@ -17,8 +17,8 @@ export type itemEventHeadlineType = {
 }
 
 export interface OptionType {
-  title: string
-  value: string
+  label: string
+  value: string | number
 }
 
 export interface mediaLinksTypes {
