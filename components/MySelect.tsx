@@ -91,7 +91,11 @@ export const MySelect = ({
           </p>
         ) : null}
         {arrOption.map((option) => (
-          <MenuItem key={`${option.value}-{option.label}`} value={option.value}>
+          <MenuItem
+            className="text-white"
+            key={`${option.value}-{option.label}`}
+            value={option.value}
+          >
             {option.label}
           </MenuItem>
         ))}

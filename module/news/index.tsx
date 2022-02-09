@@ -1,12 +1,11 @@
-import { Layout } from 'components/Layout'
-import { useEffect, useState } from 'react'
-import clsx from 'clsx'
-import { Tabs } from 'components/Tabs'
 import { CardNews } from 'components/card-news'
-import { axios } from 'utils/axios'
 import { Loading } from 'components/loading/loading'
+import { Tabs } from 'components/Tabs'
+import { API_GET_LIST_NEWS_POST, API_LIKE_POST } from 'constants/api.constants'
 import { NewsType } from 'constants/types'
-import { notification } from 'antd'
+import { useEffect, useState } from 'react'
+import { axios } from 'utils/axios'
+import { toQueryString } from 'utils/common.utils'
 
 enum Tab {
   TopStories = 'TopStories',
@@ -28,52 +27,47 @@ const News = () => {
   const [tab, setTab] = useState(Tab.Latest)
   const [loading, setLoading] = useState<boolean>(true)
   const [news, setNews] = useState<NewsType[]>([])
+  const params = {
+    limit: 12,
+    sorted: 'asc',
+  }
 
   useEffect(() => {
     const getNews = async () => {
       try {
         const resNews = await axios.get(
-          '/feed/get-list-news-post?limit=20&sorted=asc'
+          toQueryString(API_GET_LIST_NEWS_POST, params)
         )
         setLoading(false)
         setNews(resNews.data)
       } catch (error) {}
     }
-
     getNews()
   }, [])
 
-  const handleFavorite = async (
-    postId: string,
-    typeOfPost: string,
-    status: string
-  ) => {
-    const response = await axios.post(
-      `/feed/like-post?postId=${postId}&typeOfPost=${typeOfPost}&query=${status}`
-    )
-    if (response.status === 201) {
-      notification.open({
-        message: '',
-        description: 'Like successfully.',
-        style: {
-          backgroundColor: '#09E099',
-          color: '#FFFFFF',
-        },
-        duration: 3,
+  const handleFavorite = async (id: string, type: string, status: string) => {
+    const res = await axios.post(
+      toQueryString(API_LIKE_POST, {
+        postId: id,
+        typeOfPost: type,
+        query: status,
       })
-
+    )
+    console.log('RES: ', status)
+    if (res.status === 201) {
       const newsCopy = JSON.parse(JSON.stringify(news))
-
       newsCopy.forEach((item: NewsType) => {
-        if (item.postId === postId) {
-          item.isLiked = true
-          item.countLikes = (item.countLikes || 0) + 1
+        if (item.postId === id) {
+          item.isLiked = status === 'unlike' ? false : true
+          item.countLikes =
+            status === 'unlike'
+              ? (item.countLikes || 0) - 1
+              : (item.countLikes || 0) + 1
         }
       })
       setNews(newsCopy)
     }
   }
-  // console.log('news', news)
 
   return (
     <div className="w-full">
@@ -83,9 +77,9 @@ const News = () => {
           <Loading />
         </div>
       )}
-      <div className="grid grid-cols-4 gap-10 pr-[40px]">
+      <div className="grid grid-cols-4 gap-y-6">
         {!loading && news ? (
-          news.map((item: NewsType, index) => (
+          (news || [])?.map((item: NewsType, index) => (
             <div key={index} className="">
               <CardNews card={item} handleFavorite={handleFavorite} />
             </div>

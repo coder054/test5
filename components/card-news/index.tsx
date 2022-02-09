@@ -44,24 +44,9 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
     draggable: true,
   }
 
-  const handleClickFavorite = async (
-    postId: string,
-    typeOfPost: string,
-    status: string
-  ) => {
-    if (card?.isLiked) {
-      notification.open({
-        message: '',
-        description: 'You liked new.',
-        style: {
-          backgroundColor: '#ff4d4f',
-          color: '#FFFFFF',
-        },
-        duration: 3,
-      })
-      return
-    }
-    handleFavorite && handleFavorite(postId, typeOfPost, status)
+  const handleClickFavorite = async (postId: string, typeOfPost: string) => {
+    handleFavorite &&
+      handleFavorite(postId, typeOfPost, card?.isLiked ? 'unlike' : 'like')
   }
 
   const handlePlayVideo = () => {
@@ -157,11 +142,11 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
 
       <div className="flex px-5 ">
         <div
+          className="hover:scale-125 duration-150"
           onClick={() =>
             handleClickFavorite(
               card?.postId as string,
-              card?.typeOfPost as string,
-              'like'
+              card?.typeOfPost as string
             )
           }
         >
@@ -173,6 +158,7 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
 
         <div className="spacer flex-grow "></div>
         <div
+          className="hover:scale-125 duration-150"
           onClick={() => {
             navigator.clipboard.writeText(card?.link as string)
             notification.open({
@@ -190,12 +176,12 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
         </div>
 
         <div className="spacer flex-grow "></div>
-
         <Text name="Body2" className="text-Grey mr-1 ">
           {card?.countComments as number}
         </Text>
-
-        <SvgComment />
+        <div className="hover:scale-125 duration-150">
+          <SvgComment />
+        </div>
       </div>
     </div>
   )

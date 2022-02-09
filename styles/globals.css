@@ -194,3 +194,16 @@ a {
 .css-kk1bwy-MuiButtonBase-root-MuiMenuItem-root {
   color: rgb(189, 189, 189) !important;
 }
+.CircularProgress.bioprogress span {
+  font-size: 14px;
+  line-height: 22px;
+  position: absolute;
+  top: 98px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: white;
+  z-index: 1;
+}
+.css-i4bv87-MuiSvgIcon-root {
+  color: #6b7280;
+}

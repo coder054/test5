@@ -1,3 +1,5 @@
+import { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
+import { requireNotAuth } from 'config/firebase-admin'
 import { LayoutLanding } from 'components/layout-landing/layout-landing'
 import { useAuth } from 'module/authen/auth/AuthContext'
 import { SignUpWithSMS } from 'module/authen/signup/signup'
@@ -7,10 +9,6 @@ import { useRouter } from 'next/router'
 const SignUpPage = () => {
   const router = useRouter()
   const { currentUser } = useAuth()
-  if (!!currentUser) {
-    router.push('/feed')
-    return null
-  }
   return (
     <LayoutLanding authen>
       <Head>
@@ -23,3 +21,8 @@ const SignUpPage = () => {
 }
 
 export default SignUpPage
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  await requireNotAuth(req as NextApiRequest, res as NextApiResponse)
+  return { props: {} }
+}

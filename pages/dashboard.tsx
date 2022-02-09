@@ -1,3 +1,5 @@
+import { requireAuth } from 'config/firebase-admin'
+import { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
 import { Sidebar } from 'components/Sidebar'
 import { vercelImg } from 'imports/images'
 import type { NextPage } from 'next'
@@ -15,3 +17,8 @@ const Home = () => {
 }
 
 export default Home
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  await requireAuth(req as NextApiRequest, res as NextApiResponse)
+  return { props: {} }
+}
