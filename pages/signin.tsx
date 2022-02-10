@@ -14,7 +14,7 @@ const SignInPage = () => {
 
   useEffect(() => {
     localStorage.removeItem(LOCAL_STORAGE_KEY.currentRoleId)
-    localStorage.removeItem(LOCAL_STORAGE_KEY['user-roles'])
+    localStorage.removeItem(LOCAL_STORAGE_KEY.userRoles)
   }, [])
 
   return (

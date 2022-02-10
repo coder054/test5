@@ -160,7 +160,7 @@ export function AuthProvider({ children }) {
   //logout
   const signout = () => {
     signOut(auth)
-    localStorage.removeItem(LOCAL_STORAGE_KEY['user-roles'])
+    localStorage.removeItem(LOCAL_STORAGE_KEY.userRoles)
     localStorage.removeItem(LOCAL_STORAGE_KEY.currentRoleId)
     // window.location.href = '/signin'
     setTimeout(() => {
@@ -239,11 +239,11 @@ export function AuthProvider({ children }) {
         // update axios token header
         axios.defaults.headers.common.Authorization = `Bearer ${token}`
 
-        const userRoles = localStorage.getItem(LOCAL_STORAGE_KEY['user-roles'])
+        const userRoles = localStorage.getItem(LOCAL_STORAGE_KEY.userRoles)
         if (!userRoles) {
           const resp = await axios.get('/users/user-roles')
           localStorage.setItem(
-            LOCAL_STORAGE_KEY['user-roles'],
+            LOCAL_STORAGE_KEY.userRoles,
             JSON.stringify(resp.data)
           )
           setUserRoles(resp.data)

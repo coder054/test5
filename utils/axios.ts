@@ -4,6 +4,7 @@ import { signOut } from 'firebase/auth'
 import querystring from 'query-string'
 import { get } from 'lodash'
 import { LOCAL_STORAGE_KEY } from 'constants/constants'
+import { Cookies } from 'react-cookie'
 
 /**
  * Axios instance for browser,
@@ -49,4 +50,11 @@ if (
   axios.defaults.headers.roleId = window.localStorage.getItem(
     LOCAL_STORAGE_KEY.currentRoleId
   )
+}
+
+const cookies = new Cookies()
+const token = cookies.get(LOCAL_STORAGE_KEY.token)
+
+if (token) {
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`
 }
