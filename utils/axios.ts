@@ -3,6 +3,8 @@ import { auth } from 'config'
 import { signOut } from 'firebase/auth'
 import querystring from 'query-string'
 import { get } from 'lodash'
+import { LOCAL_STORAGE_KEY } from 'constants/constants'
+import { Cookies } from 'react-cookie'
 
 /**
  * Axios instance for browser,
@@ -39,3 +41,20 @@ axios.interceptors.request.use((config) => {
   config.url = decodeURI(encodeURI(config.url || '').replace(/%E2%80%8B/g, ''))
   return config
 })
+
+if (
+  typeof window !== 'undefined' &&
+  window.localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId)
+) {
+  //@ts-ignore: Unreachable code error
+  axios.defaults.headers.roleId = window.localStorage.getItem(
+    LOCAL_STORAGE_KEY.currentRoleId
+  )
+}
+
+const cookies = new Cookies()
+const token = cookies.get(LOCAL_STORAGE_KEY.token)
+
+if (token) {
+  axios.defaults.headers.common.Authorization = `Bearer ${token}`
+}

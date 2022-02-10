@@ -1,66 +1,7 @@
 import { useEffect } from 'react'
 import { Radar, RadarChart, PolarGrid, Legend, PolarAngleAxis } from 'recharts'
 
-const data = [
-  {
-    subject: 'ATTACKING',
-    A: 7,
-    B: 8,
-    C: 6,
-    fullMark: 10,
-  },
-  {
-    subject: 'PACE',
-    A: 6,
-    B: 7,
-    C: 8,
-    fullMark: 10,
-  },
-  {
-    subject: 'SHOOTING',
-    A: 5,
-    B: 2,
-    C: 8,
-    fullMark: 10,
-  },
-  {
-    subject: 'PASSING',
-    A: 4,
-    B: 8,
-    C: 7,
-    fullMark: 10,
-  },
-  {
-    subject: 'DEFENDING',
-    A: 9,
-    B: 9,
-    C: 8,
-    fullMark: 10,
-  },
-  {
-    subject: 'TACKLING',
-    A: 6,
-    B: 8,
-    C: 7,
-    fullMark: 10,
-  },
-  {
-    subject: 'HEADING',
-    A: 6,
-    B: 8,
-    C: 7,
-    fullMark: 10,
-  },
-  {
-    subject: 'DRIBBLING',
-    A: 6,
-    B: 8,
-    C: 7,
-    fullMark: 10,
-  },
-]
-
-export const BioRadarChart = () => {
+export const BioRadarChart = ({ data }) => {
   useEffect(() => {
     let el = document.querySelector('.bioradarchart .recharts-wrapper')
     if (!el) {
@@ -155,15 +96,12 @@ export const BioRadarChart = () => {
         radius={5000}
         axisLineType="polygon"
         orient={'inner'}
-        onClick={() => {
-          alert(1)
-        }}
       />
       {/* <PolarRadiusAxis angle={30} domain={[0, 10]} /> */}
       <Radar
         dot={false}
         name="Average"
-        dataKey="A"
+        dataKey="Average"
         stroke="#ffffff"
         fill="#8884d8"
         fillOpacity={0}
@@ -172,7 +110,7 @@ export const BioRadarChart = () => {
       <Radar
         dot={false}
         name="Coach"
-        dataKey="B"
+        dataKey="Coach"
         stroke="#4654EA"
         fill="#8884d8"
         fillOpacity={0}
@@ -181,7 +119,7 @@ export const BioRadarChart = () => {
       <Radar
         dot={false}
         name="You"
-        dataKey="C"
+        dataKey="You"
         stroke="#09E099"
         fill="#8884d8"
         fillOpacity={0}

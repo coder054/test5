@@ -132,7 +132,6 @@ export const SignUpWithSMS = () => {
       //@ts-ignore: Unreachable code error
       const result = await window.confirmationResult.confirm(code)
       const user = result.user
-      debugger
       updateEmail(user, email)
       updatePassword(user, password)
     } catch (error) {
