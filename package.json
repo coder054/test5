@@ -26,6 +26,7 @@
     "dayjs": "^1.10.7",
     "firebase": "^9.6.3",
     "firebase-admin": "9.4.1",
+    "immer": "^9.0.12",
     "jotai": "^1.5.1",
     "js-cookie": "^3.0.1",
     "lodash": "^4.17.21",
