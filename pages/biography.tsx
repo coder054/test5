@@ -1284,11 +1284,11 @@ const Biography = () => {
                 alt=""
               />
 
-              <Text name="Subtitle2" className="text-white px-[12px]">
+              <Text name="Subtitle2" className="text-white px-[12px] hidden ">
                 Video title
               </Text>
 
-              <Text name="Caption" className="text-Grey px-[12px]">
+              <Text name="Caption" className="text-Grey px-[12px] hidden">
                 3 day ago
               </Text>
             </div>
