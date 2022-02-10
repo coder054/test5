@@ -45,12 +45,27 @@ export const Select = ({
   const styles = clsx(className && className)
 
   useEffect(() => {
+    function handleClickCloseSelect(event: Event) {
+      if (
+        selectRef.current &&
+        !selectRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickCloseSelect)
+
+    return () =>
+      document.removeEventListener('mousedown', handleClickCloseSelect)
+  }, [selectRef])
+
+  useEffect(() => {
     if (defaultValue) {
       const defaultOption = options?.find(
         (item: OptionType) => item.value === defaultValue
       )
       if (defaultOption) {
-        setDisplayText(defaultOption?.title)
+        setDisplayText(defaultOption?.label)
       }
     }
   }, [defaultValue, options])
@@ -97,11 +112,11 @@ export const Select = ({
         </div>
 
         {isOpen && (
-          <ul className="w-full">
+          <ul className="w-full border border-[#252627] rounded-[8px]">
             {options?.map((item: OptionType) => (
               <Option
                 key={item.value}
-                title={item.title}
+                title={item.label}
                 value={item.value}
                 onSelect={handleClickSelectOption}
               />

@@ -165,6 +165,52 @@ export const SvgClock = () => (
   </svg>
 )
 
+export const SvgCamera = () => (
+  <svg
+    width="25"
+    height="24"
+    viewBox="0 0 25 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g clipPath="url(#clip0_918_10881)">
+      <path
+        d="M3.5 4V1H5.5V4H8.5V6H5.5V9H3.5V6H0.5V4H3.5ZM6.5 10V7H9.5V4H16.5L18.33 6H21.5C22.6 6 23.5 6.9 23.5 8V20C23.5 21.1 22.6 22 21.5 22H5.5C4.4 22 3.5 21.1 3.5 20V10H6.5ZM13.5 19C16.26 19 18.5 16.76 18.5 14C18.5 11.24 16.26 9 13.5 9C10.74 9 8.5 11.24 8.5 14C8.5 16.76 10.74 19 13.5 19ZM10.3 14C10.3 15.77 11.73 17.2 13.5 17.2C15.27 17.2 16.7 15.77 16.7 14C16.7 12.23 15.27 10.8 13.5 10.8C11.73 10.8 10.3 12.23 10.3 14Z"
+        fill="#818389"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_918_10881">
+        <rect width="24" height="24" fill="white" transform="translate(0.5)" />
+      </clipPath>
+    </defs>
+  </svg>
+)
+
+export const SvgAddSmall = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z" fill="#6B7280" />
+  </svg>
+)
+
+export const SvgSubSmall = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M19 13H5V11H19V13Z" fill="#6B7280" />
+  </svg>
+)
+
 export const SvgFavorite = ({ active }: { active?: boolean }) => (
   <svg
     className="mr-1 cursor-pointer"

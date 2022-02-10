@@ -19,6 +19,6 @@ export interface OptionProps {
   option?: OptionType
   scrollIntoView?: boolean
   title?: string
-  value?: string
+  value?: string | number
   onSelect: (title: string, value: string | null) => void
 }

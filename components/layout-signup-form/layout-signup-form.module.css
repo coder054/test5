@@ -1,0 +1,13 @@
+.backgroundAuthen {
+  background-image: url('../../public/authen/background_signup_form.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.imageBackground {
+  background-image: url('../../public/authen/image-signup-form.png');
+  background-repeat: no-repeat;
+  background-size: auto;
+  bottom: 0px;
+  left: 0px;
+}

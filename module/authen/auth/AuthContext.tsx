@@ -11,8 +11,10 @@ import {
   confirmPasswordReset,
 } from 'firebase/auth'
 import { get } from 'lodash'
+import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 import { axios } from 'utils/axios'
+import { removeTokenCookie, setTokenCookie } from './tokenCookies'
 
 interface ValueType {
   currentUser?: any
@@ -31,6 +33,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
+  const router = useRouter()
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [token, setToken] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
@@ -38,7 +41,6 @@ export function AuthProvider({ children }) {
   const [checkEmail, setCheckEmail] = useState<boolean>(false)
 
   const signin = (email: string, password: string) => {
-    debugger
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setCurrentUser(userCredential.user)
@@ -125,7 +127,10 @@ export function AuthProvider({ children }) {
   //logout
   const signout = () => {
     signOut(auth)
-    window.location.href = '/signin'
+    // window.location.href = '/signin'
+    setTimeout(() => {
+      router.push('/signin')
+    }, 1000)
   }
 
   const ResetPassword = (email: string) => {
@@ -147,25 +152,25 @@ export function AuthProvider({ children }) {
       })
   }
 
-  const setTokenCookie = (token: string) => {
-    fetch('/api/login', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ token }),
-    })
-  }
+  // const setTokenCookie = (token: string) => {
+  //   fetch('/api/login', {
+  //     method: 'post',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({ token }),
+  //   })
+  // }
 
-  const removeTokenCookie = () => {
-    fetch('/api/logout', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({}),
-    })
-  }
+  // const removeTokenCookie = () => {
+  //   fetch('/api/logout', {
+  //     method: 'post',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify({}),
+  //   })
+  // }
 
   useEffect(() => {
     // no need
@@ -195,6 +200,7 @@ export function AuthProvider({ children }) {
         setLoading(true)
         const token = await user.getIdToken()
 
+        setTokenCookie(token)
         // update axios token header
         axios.defaults.headers.common.Authorization = `Bearer ${token}`
 
@@ -203,9 +209,7 @@ export function AuthProvider({ children }) {
         // update axios token header
         //@ts-ignore: Unreachable code error
         axios.defaults.headers.roleId = roleId
-
         setToken(token)
-        setTokenCookie(token)
         setCurrentUser(user)
         setLoading(false)
       }
@@ -214,15 +218,6 @@ export function AuthProvider({ children }) {
     return () => {
       unsubscribeToken()
     }
-  }, [])
-
-  useEffect(() => {
-    return onIdTokenChanged(auth, async (user) => {
-      if (user) {
-        const token: string = await user.getIdToken()
-        setToken(token)
-      }
-    })
   }, [])
 
   const value: any = {
@@ -239,7 +234,8 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {/* {!loading && children} */}
+      {children}
     </AuthContext.Provider>
   )
 }

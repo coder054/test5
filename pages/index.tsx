@@ -11,7 +11,8 @@
 // }
 
 import Head from 'next/head'
-
+import { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
+import { requireNotAuth } from 'config/firebase-admin'
 import Landing from 'module/landing'
 import { useAuth } from 'module/authen/auth/AuthContext'
 import { useRouter } from 'next/router'
@@ -19,11 +20,6 @@ import { useRouter } from 'next/router'
 const LandingPage = () => {
   const router = useRouter()
   const { currentUser } = useAuth()
-
-  if (!!currentUser) {
-    router.push('/feed')
-    return null
-  }
 
   return (
     <>
@@ -37,3 +33,8 @@ const LandingPage = () => {
 }
 
 export default LandingPage
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  await requireNotAuth(req as NextApiRequest, res as NextApiResponse)
+  return { props: {} }
+}

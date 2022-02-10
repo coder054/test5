@@ -1,9 +1,10 @@
 import { LayoutLanding } from 'components/layout-landing/layout-landing'
 import { useAuth } from 'module/authen/auth/AuthContext'
-import { SignUpWithEmail } from 'module/authen/signup/signup-with-email'
+import SignUpWithInvitation from 'module/authen/signup-with-invitation'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
 
-const SignUpPage = () => {
+const SignUpWithInvitationPage = () => {
   const router = useRouter()
   const { currentUser } = useAuth()
   if (!!currentUser) {
@@ -12,9 +13,13 @@ const SignUpPage = () => {
   }
   return (
     <LayoutLanding authen>
-      <SignUpWithEmail />
+      <Head>
+        <title>Zporter</title>
+        <link rel="icon" type="image/png" href="/favicon.png" />
+      </Head>
+      <SignUpWithInvitation />
     </LayoutLanding>
   )
 }
 
-export default SignUpPage
+export default SignUpWithInvitationPage
