@@ -903,7 +903,7 @@ const Biography = () => {
                 </Text>
                 <div className="flex gap-x-[20px]">
                   {row.list.map((o, index) => (
-                    <div className=" ">
+                    <div key={index} className=" ">
                       <div
                         className="w-[48px] h-[48px] rounded-[8px] bg-Dark-3
                     flex justify-center items-center mb-1 "
