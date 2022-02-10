@@ -4,13 +4,12 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../auth/AuthContext'
 import { Form } from 'antd'
-// import cls from './signup-form-player.module.css'
 import { GoBack } from 'components/go-back'
-import { UploadImage } from 'components/upload-image'
 import { MySelect } from 'components/MySelect'
-import { OptionCountry, OptionUserProfile } from '../types'
+import { OptionCoach, OptionPlayer } from '../types'
 import { DynamicFields } from 'components/dynamic-fields'
 import { useIncrementNumber } from 'hooks/useIncrementNumber'
+import { MyModal } from 'components/MyModal'
 
 export const SignUpFormPlayer = () => {
   const router = useRouter()
@@ -19,6 +18,8 @@ export const SignUpFormPlayer = () => {
   const [yourClub, setYourClub] = useState<string>('')
   const [yourTeam, setYourTeam] = useState<string>('')
   const [role, setRole] = useState<string>('')
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const { profile } = router.query
   const { signin } = useAuth()
   const shirtNumber = useIncrementNumber({
     startNumber: 1,
@@ -50,7 +51,7 @@ export const SignUpFormPlayer = () => {
     el.classList.remove('ant-form')
   }, [])
 
-  const handleChangeUpload = async (event) => {}
+  const handleAddNewClub = async (event) => {}
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -85,7 +86,6 @@ export const SignUpFormPlayer = () => {
             ]}
           >
             <MySelect
-              addNew
               titleAddNew="No club found,"
               linkAddNew="add new club"
               className=""
@@ -98,6 +98,8 @@ export const SignUpFormPlayer = () => {
                 { value: 'Ha Noi', label: 'Hà Nội T&T' },
                 { value: 'HAGL', label: 'HAGL' },
               ]}
+              addNew
+              setOpenModal={setOpenModal}
             />
           </Form.Item>
           <MyInput
@@ -143,10 +145,7 @@ export const SignUpFormPlayer = () => {
             onChange={(e) => {
               // setYourClub(e.target.value)
             }}
-            arrOption={[
-              { value: '1', label: '1' },
-              { value: '2', label: '2' },
-            ]}
+            arrOption={profile === 'player' ? OptionPlayer : OptionCoach}
           />
           <DynamicFields
             maxField={3}
@@ -210,6 +209,33 @@ export const SignUpFormPlayer = () => {
           </div>
         </Form>
       </div>
+      <MyModal show={openModal} setShow={setOpenModal} width={412}>
+        <div className="w-full h-full bg-[#1E1F24] rounded-[8px] p-[32px]">
+          <div>
+            <div
+              onClick={() => {
+                setOpenModal(false)
+              }}
+              className="h-[32px] flex items-center"
+            >
+              <GoBack />
+              <p className="text-[24px] text-[#FFFFFF] ml-[48px]">
+                Add new club
+              </p>
+            </div>
+          </div>
+          <MyInput label="Club name" className="mt-[24px]" />
+          <MyInput label="Team name" className="mt-[24px]" />
+          <MyInput label="Club website url" className="mt-[24px]" />
+          <MyInput label="Favorite Role(s)" className="mt-[24px]" />
+          <MyInput label="Country" className="mt-[24px]" />
+          <MyInput label="City" className="mt-[24px]" />
+          <Button
+            text="Save"
+            className="h-[48px] mt-[40px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+          />
+        </div>
+      </MyModal>
     </div>
   )
 }
