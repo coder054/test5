@@ -47,3 +47,4 @@ tags:
   - gcp-cloud-build-deploy-cloud-run
   - gcp-cloud-build-deploy-cloud-run-managed
   - nextjs-docker-dev
+timeout: 1200s
