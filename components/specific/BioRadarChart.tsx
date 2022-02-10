@@ -96,9 +96,6 @@ export const BioRadarChart = ({ data }) => {
         radius={5000}
         axisLineType="polygon"
         orient={'inner'}
-        onClick={() => {
-          alert(1)
-        }}
       />
       {/* <PolarRadiusAxis angle={30} domain={[0, 10]} /> */}
       <Radar

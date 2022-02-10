@@ -111,9 +111,6 @@ export const FootballersSlider = () => {
       <Slider {...settings}>
         {arr.map((o, index) => (
           <div
-            onClick={() => {
-              alert(o.id)
-            }}
             key={index}
             className=" 
           
