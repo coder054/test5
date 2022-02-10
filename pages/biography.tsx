@@ -264,10 +264,10 @@ const Biography = () => {
         </div>
       </div>
 
-      <div className="h-[32px] "></div>
+      <div className="h-[32px] 2xl:h-[42px] "></div>
 
       {/* /// 2 main column */}
-      <div className="grid grid-cols-2 gap-[20px] min-h-[1263px] ">
+      <div className="grid grid-cols-2 gap-[20px] 2xl:gap-[30px] ">
         <div
           style={{
             background: 'rgba(32, 33, 40, 0.3)',
