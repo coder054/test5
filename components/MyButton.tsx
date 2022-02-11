@@ -28,14 +28,14 @@ export const MyButton = ({
         )}
         {...rest}
       >
-        <p
+        <span
           className={clsx(
             'text-15px font-semibold',
             isLoading ? 'text-[#4654EA]' : 'text-white'
           )}
         >
           {label}
-        </p>
+        </span>
         {(isLoading || isDisabled) && (
           <div className="absolute bg-gray-400 flex items-center justify-center opacity-75 top-0 right-0 left-0 bottom-0 cursor-not-allowed">
             {isLoading && <Loading size={20}></Loading>}
