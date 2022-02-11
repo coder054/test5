@@ -1,3 +1,5 @@
+import { Rule } from 'antd/lib/form'
+
 export const getCookieFromReq = (cookieString: string, cookieKey: string) => {
   const cookie = cookieString
     .split(';')
@@ -6,4 +8,13 @@ export const getCookieFromReq = (cookieString: string, cookieKey: string) => {
   }
   if (!cookie) return undefined
   return cookie.split('=')[1]
+}
+
+export function getRulePassword(message?: string): Rule {
+  return {
+    pattern: new RegExp(
+      /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+    ),
+    message: message ? message : 'Min 8 signs & 1 capital letter',
+  }
 }
