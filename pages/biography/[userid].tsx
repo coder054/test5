@@ -6,12 +6,16 @@ import { Layout } from 'components/Layout'
 import { GradientCircularProgress } from 'react-circular-gradient-progress'
 import { Stars } from 'components/common/Stars'
 import { BioRadarChart } from 'components/specific/BioRadarChart'
-import { fetcher } from 'utils/utils'
+import { fetcher, truncateStr } from 'utils/utils'
 import { useEffect, useMemo, useState } from 'react'
 import { Loading } from 'components/loading/loading'
 import { get, isEmpty } from 'lodash'
 import { TabPanel, Tabs } from 'components/Tabs'
 import { TitleCollapse } from 'components/common/TitleCollapse'
+import clsx from 'clsx'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { useAuth } from 'module/authen/auth/AuthContext'
 
 enum Tab {
   Total = 'Total',
@@ -155,6 +159,10 @@ export interface RadarUpdatedByCoach {
 }
 
 const Biography = () => {
+  const router = useRouter()
+  const { userid } = router.query
+  const { currentRoleId } = useAuth()
+
   const [currentIndexFlip, setCurrentIndexFlip] = useState(0)
   const [tab, setTab] = useState(Tab.Total)
 
@@ -174,6 +182,18 @@ const Biography = () => {
     error: any
   }
 
+  const flipIdExist = useMemo(() => {
+    let arr = get(dataFlip, 'data')
+    if (isEmpty(arr)) {
+      return false
+    }
+
+    let find = arr.find((o) => {
+      return o.userId === currentRoleId
+    })
+    return !!find
+  }, [userid, get(dataFlip, 'data')])
+
   const currentFlipId: string = useMemo(() => {
     const arr = get(dataFlip, 'data')
     if (isEmpty(arr)) {
@@ -182,8 +202,25 @@ const Biography = () => {
     return arr[currentIndexFlip].userId
   }, [get(dataFlip, 'data'), currentIndexFlip])
 
+  const nextFlipId: string = useMemo(() => {
+    const arr = get(dataFlip, 'data')
+    if (isEmpty(arr)) {
+      return ''
+    }
+
+    return get(arr, `[${currentIndexFlip + 1}].userId`)
+  }, [get(dataFlip, 'data'), currentIndexFlip])
+  const prevFlipId: string = useMemo(() => {
+    const arr = get(dataFlip, 'data')
+    if (isEmpty(arr)) {
+      return ''
+    }
+
+    return get(arr, `[${currentIndexFlip - 1}].userId`)
+  }, [get(dataFlip, 'data'), currentIndexFlip])
+
   const { data: dataBio, error: errorBio } = useSWR(
-    `/biographies/player?userIdQuery=${currentFlipId}`,
+    `/biographies/player?userIdQuery=${userid}`,
     fetcher
   ) as {
     data: IBiographyPlayer
@@ -292,45 +329,80 @@ const Biography = () => {
       {/* /// Navigate and filter */}
       <div className=" h-[33px] mt-[24px] flex items-center justify-center relative">
         <div className=" flex items-center justify-between pr-[40px]">
-          <svg
-            onClick={() => {
-              // setCnt(cnt - 1)
-              if (currentIndexFlip <= 0) {
-                return
-              }
-              setCurrentIndexFlip(currentIndexFlip - 1)
-            }}
-            className="cursor-pointer mr-[32px] fill-Grey "
-            width="24"
-            height="25"
-            viewBox="0 0 24 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M15.41 17.09L10.83 12.5L15.41 7.91L14 6.5L8 12.5L14 18.5L15.41 17.09Z" />
-          </svg>
+          <Link href={`/biography/${prevFlipId}`}>
+            <a
+              className={clsx(
+                ` inline-block px-4 py-2 `,
+                currentIndexFlip <= 0 || !prevFlipId
+                  ? ' pointer-events-none '
+                  : '  '
+              )}
+            >
+              <svg
+                onClick={() => {
+                  // setCnt(cnt - 1)
+                  if (currentIndexFlip <= 0 || !prevFlipId) {
+                    return
+                  }
+                  setCurrentIndexFlip(currentIndexFlip - 1)
+                }}
+                className={clsx(
+                  ``,
+                  currentIndexFlip <= 0 || !prevFlipId
+                    ? ' fill-Grey '
+                    : ' fill-Green cursor-pointer'
+                )}
+                width="24"
+                height="25"
+                viewBox="0 0 24 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M15.41 17.09L10.83 12.5L15.41 7.91L14 6.5L8 12.5L14 18.5L15.41 17.09Z" />
+              </svg>
+            </a>
+          </Link>
 
-          <Text name="Header5" className="text-white ">
-            {`#${dataBio.username}`}
+          <Text name="Header5" className="text-white w-[274px] text-center ">
+            {`#${truncateStr(dataBio.username, 22)}`}
           </Text>
 
-          <svg
-            onClick={() => {
-              // setCnt(cnt + 1)
-              if (currentIndexFlip >= dataFlip.data.length - 1) {
-                return
-              }
-              setCurrentIndexFlip(currentIndexFlip + 1)
-            }}
-            className="cursor-pointer ml-[32px] fill-Green"
-            width="24"
-            height="25"
-            viewBox="0 0 24 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M8.59003 17.09L13.17 12.5L8.59003 7.91L10 6.5L16 12.5L10 18.5L8.59003 17.09Z" />
-          </svg>
+          <Link href={`/biography/${nextFlipId}`}>
+            <a
+              className={clsx(
+                ` inline-block px-4 py-2`,
+                currentIndexFlip >= dataFlip.data.length - 1 || !nextFlipId
+                  ? ' pointer-events-none '
+                  : '  '
+              )}
+            >
+              <svg
+                onClick={() => {
+                  // setCnt(cnt + 1)
+                  if (
+                    currentIndexFlip >= dataFlip.data.length - 1 ||
+                    !nextFlipId
+                  ) {
+                    return
+                  }
+                  setCurrentIndexFlip(currentIndexFlip + 1)
+                }}
+                className={clsx(
+                  ``,
+                  currentIndexFlip >= dataFlip.data.length - 1 || !nextFlipId
+                    ? ' fill-Grey '
+                    : ' fill-Green cursor-pointer'
+                )}
+                width="24"
+                height="25"
+                viewBox="0 0 24 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M8.59003 17.09L13.17 12.5L8.59003 7.91L10 6.5L16 12.5L10 18.5L8.59003 17.09Z" />
+              </svg>
+            </a>
+          </Link>
         </div>
         <div className=" flex absolute right-0 top-[4px] items-center ">
           <Text name="Body2" className="text-white mr-[16px] ">
@@ -479,27 +551,33 @@ const Biography = () => {
                 />
               </div>
 
-              <div
-                style={{
-                  background: '#c4c4c4',
-                }}
-                className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
+              {!!dataBio.faceImageUrl && (
+                <>
+                  <div
+                    style={
+                      {
+                        // background: '#c4c4c4',
+                      }
+                    }
+                    className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
               -translate-x-1/2 -translate-y-1/2  "
-              ></div>
-              <img
-                src={dataBio.faceImageUrl}
-                className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
-              -translate-x-1/2 -translate-y-1/2 "
-                alt=""
-              />
-              <div
-                style={{
-                  background:
-                    'linear-gradient(180deg, rgba(19, 19, 27, 0) 18.23%, #13141E 100%)',
-                }}
-                className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
+                  ></div>
+                  <img
+                    src={dataBio.faceImageUrl}
+                    className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
+              -translate-x-1/2 -translate-y-1/2 object-cover "
+                    alt=""
+                  />
+                  <div
+                    style={{
+                      background:
+                        'linear-gradient(180deg, rgba(19, 19, 27, 0) 18.23%, #13141E 100%)',
+                    }}
+                    className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
               -translate-x-1/2 -translate-y-1/2  "
-              ></div>
+                  ></div>
+                </>
+              )}
             </div>
             <div className=" flex flex-col justify-between">
               <div className="h-[45px] ">
@@ -604,14 +682,16 @@ const Biography = () => {
             {/*  */}
           </div>
 
-          <div className="w-[466px] mx-auto mb-[24px] ">
-            <button className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue mr-[26px] font-medium ">
-              Add
-            </button>
-            <button className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent text-Green border border-Green font-medium ">
-              Follow
-            </button>
-          </div>
+          {userid !== currentRoleId && (
+            <div className="w-[466px] mx-auto mb-[24px] ">
+              <button className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue mr-[26px] font-medium ">
+                Add
+              </button>
+              <button className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent text-Green border border-Green font-medium ">
+                Follow
+              </button>
+            </div>
+          )}
 
           <div className="mx-auto max-w-[466px] text-white text-[14px] leading-[22px] ">
             {dataBio.summary}
