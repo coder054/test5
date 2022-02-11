@@ -71,7 +71,10 @@ export function AuthProvider({ children }) {
   }, [userRoles, currentRoleName])
 
   useEffect(() => {
-    console.log('aaa currentRoleId: ', currentRoleId)
+    console.log('aaa2 userRoles: ', userRoles)
+  }, [userRoles])
+  useEffect(() => {
+    console.log('aaa2 currentRoleId: ', currentRoleId)
   }, [currentRoleId])
 
   useEffect(() => {

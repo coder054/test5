@@ -15,17 +15,23 @@ import {
   SvgNews,
 } from 'imports/svgs'
 import clsx from 'clsx'
-import { ROUTES } from 'constants/constants'
+import { LOCAL_STORAGE_KEY, ROUTES } from 'constants/constants'
 import { useAuth } from 'module/authen/auth/AuthContext'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 export const Sidebar = () => {
   const router = useRouter()
 
-  const { currentRoleId } = useAuth()
+  const [arrSidebar, setArrSidebar] = useState<any>([])
 
-  const arrSidebar = useMemo(() => {
-    return [
+  useEffect(() => {
+    let currentRoleLocalStorage = ''
+    if (typeof window !== 'undefined') {
+      currentRoleLocalStorage =
+        window.localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId) || ''
+    }
+
+    setArrSidebar([
       { link: ROUTES.feed, icon: SvgFeed, text: 'Feed', active: true },
       {
         link: ROUTES.dashboard,
@@ -65,7 +71,7 @@ export const Sidebar = () => {
         active: false,
       },
       {
-        link: '/biography/' + currentRoleId,
+        link: `/biography/${currentRoleLocalStorage}`,
         icon: SvgBiography,
         text: 'Biography',
         active: false,
@@ -82,8 +88,8 @@ export const Sidebar = () => {
         text: 'Components',
         active: false,
       },
-    ]
-  }, [currentRoleId])
+    ])
+  }, [])
 
   return (
     <div
@@ -101,7 +107,12 @@ export const Sidebar = () => {
 
         <ul>
           {arrSidebar.map((o, index) => {
-            const isActive = o.link === router.pathname
+            const isActive = o.link === router.asPath
+            // console.log('aaa o.link', o.link)
+            // console.log('aaa router.pathname', router.pathname)
+            // if (router.pathname === '/biography/[userid]') {
+            //   debugger
+            // }
 
             return (
               <li
@@ -123,7 +134,7 @@ export const Sidebar = () => {
                         isActive ? ' text-Yellow ' : '  '
                       )}
                     >
-                      {o.text}
+                      {o.text}{' '}
                     </span>
                   </a>
                 </Link>
