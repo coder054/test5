@@ -81,9 +81,6 @@ export const Notifications = () => {
 
   return (
     <>
-      <button className="text-white " onClick={handleChangeNotifications}>
-        Send
-      </button>
       <BackGround
         label="Notifications in general"
         form={
