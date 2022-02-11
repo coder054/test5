@@ -77,7 +77,7 @@ export const BioRadarChart = ({ data }) => {
     arr5.forEach((li) => {
       li.style.marginRight = '32px'
     })
-  }, [])
+  }, [data])
 
   return (
     <RadarChart
