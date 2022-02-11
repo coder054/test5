@@ -9,6 +9,8 @@ import { GoBack } from 'components/go-back'
 import { UploadImage } from 'components/upload-image'
 import { MySelect } from 'components/MySelect'
 import { OptionCountry, OptionUserProfile } from '../types'
+import { MyDatePicker } from 'components/MyDatePicker'
+import { ROUTES } from 'constants/constants'
 
 const SignUpForm = () => {
   const router = useRouter()
@@ -16,6 +18,9 @@ const SignUpForm = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [country, setCountry] = useState<string>('')
   const [userProfile, setUserProfile] = useState<string>('')
+  const [faceImage, setFaceImage] = useState<string>('')
+  const [fullBodyImage, setFullBodyImage] = useState<string>('')
+  const [date, setDate] = useState(null)
   const { signin } = useAuth()
 
   React.useEffect(() => {
@@ -31,10 +36,13 @@ const SignUpForm = () => {
     el.classList.remove('ant-form')
   }, [])
 
-  const handleChangeUpload = async (event) => {}
-
   const handleSubmit = async (event) => {
     event.preventDefault()
+    const submitForm = await form.validateFields()
+    router.push({
+      pathname: ROUTES.SIGNUP_FORM_PLAYER,
+      query: { profile: userProfile },
+    })
   }
 
   return (
@@ -83,7 +91,11 @@ const SignUpForm = () => {
               },
             ]}
           >
-            <MyInput name={'birthDate'} label="Birth date" signupForm />
+            <MyDatePicker
+              label="Birthdate"
+              value={date}
+              onChange={(e) => setDate(e)}
+            />
           </Form.Item>
 
           <Form.Item
@@ -151,11 +163,13 @@ const SignUpForm = () => {
             <UploadImage
               title="Face image"
               text="Add portrait photo of 480*640 pixels or more"
+              setImage={setFaceImage}
             />
             <UploadImage
               title="Full body image"
               text="Add portrait photo of 480*640 pixels or more"
               className="ml-[24px]"
+              setImage={setFullBodyImage}
             />
           </div>
 

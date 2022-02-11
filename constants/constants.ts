@@ -10,6 +10,9 @@ export const ROUTES = {
   support: '/support',
   components: '/components',
   news: '/news',
+  SIGNUP_FORM: '/signup-form',
+  SIGNIN: 'signin',
+  SIGNUP_FORM_PLAYER: 'signup-form-player',
   aaa: process.env.TEST2,
 }
 

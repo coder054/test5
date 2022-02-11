@@ -56,6 +56,7 @@ export const MySelect = ({
   linkAddNew,
   onChange,
   arrOption,
+  setOpenModal,
   ...rest
 }: {
   className?: string
@@ -67,8 +68,11 @@ export const MySelect = ({
   onChange?: any
   arrOption: { value: number | string; label: string }[]
   [rest: string]: any
+  setOpenModal?: Function
 }) => {
-  const handleAddNew = () => {}
+  const handleAddNew = () => {
+    setOpenModal && setOpenModal(true)
+  }
 
   return (
     <div className={clsx('relative', className)}>

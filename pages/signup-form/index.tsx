@@ -7,10 +7,10 @@ import { useRouter } from 'next/router'
 const SignUpWithInvitationPage = () => {
   const router = useRouter()
   const { currentUser } = useAuth()
-  if (!!currentUser) {
-    router.push('/feed')
-    return null
-  }
+  // if (!!currentUser) {
+  //   router.push('/feed')
+  //   return null
+  // }
   return (
     <LayoutSignupForm authen>
       <Head>
