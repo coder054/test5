@@ -31,7 +31,7 @@ const Feed = () => {
 
   useEffect(() => {
     console.log('process.env.NODE_ENV: ', process.env.NODE_ENV)
-    console.log('version 1.1')
+    console.log('version 1.2')
   }, [])
 
   return (
