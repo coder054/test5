@@ -10,8 +10,10 @@ import { OptionCoach, OptionPlayer } from '../types'
 import { DynamicFields } from 'components/dynamic-fields'
 import { useIncrementNumber } from 'hooks/useIncrementNumber'
 import { MyModal } from 'components/MyModal'
+import { ROUTES } from 'constants/constants'
 
 export const SignUpFormPlayer = () => {
+  const [value, setValue] = useState('')
   const router = useRouter()
   const [form] = Form.useForm()
   const [loading, setLoading] = useState<boolean>(false)
@@ -66,17 +68,17 @@ export const SignUpFormPlayer = () => {
   return (
     <div className="autofill2 w-screen h-screen flex items-center">
       <div className="absolute top-[40px] left-[40px]">
-        <GoBack label="Sign in form" goBack="/signin" />
+        <GoBack label="Sign up form" goBack={ROUTES.SIGNUP_FORM} />
       </div>
       <div
-        className={`w-[470px] rounded-[8px] pt-[48px] pb-[48px] absolute right-[25%] float-left`}
+        className={`w-[490px] h-[880px] rounded-[8px] pt-[48px] pb-[48px] absolute right-[25%] float-left overflow-y-auto pl-[5px] pr-[5px]`}
       >
         <p className="text-[24px] text-[#FFFFFF] font-semibold">
           Sign up form - player
         </p>
         <Form className="" form={form} onFinish={handleFinish}>
           <Form.Item
-            className="mt-[48px]"
+            className="w-[470px] mt-[48px]"
             name={'yourClub'}
             rules={[
               {
@@ -102,19 +104,34 @@ export const SignUpFormPlayer = () => {
               setOpenModal={setOpenModal}
             />
           </Form.Item>
-          <MyInput
-            label="Your Team(s)"
-            message="Input your Team"
-            name="yourTeam"
-            className="w-[430px] float-left mb-[24px]"
-          />
+          <Form.Item
+            className="w-[470px] float-left"
+            name={'yourTeam'}
+            rules={[
+              {
+                required: true,
+                message: 'Input your Your Team',
+              },
+            ]}
+          >
+            <MyInput
+              label="Your Team(s)"
+              message="Input your Team"
+              name="yourTeam"
+              className="w-[430px]"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+            />
+          </Form.Item>
 
-          <DynamicFields
-            label="Your Team(s)"
-            message="Input your Team"
-            name="yourTeam"
-            maxField={3}
-          />
+          <div className="-mt-[48px]">
+            <DynamicFields
+              label="Your Team(s)"
+              message="Input your Team"
+              name="yourTeams"
+              maxField={3}
+            />
+          </div>
 
           <Form.Item
             className="w-[470px]"
@@ -138,24 +155,38 @@ export const SignUpFormPlayer = () => {
             />
           </Form.Item>
 
-          <MySelect
-            className="w-[430px] float-left mb-[24px]"
-            label={'Favorite Role(s)'}
-            // value={yourClub}
-            onChange={(e) => {
-              // setYourClub(e.target.value)
-            }}
-            arrOption={profile === 'player' ? OptionPlayer : OptionCoach}
-          />
-          <DynamicFields
-            maxField={3}
+          <Form.Item
+            className="float-left"
             name={'favoriteRole'}
-            label="Favorite Role(s)"
-            type="select"
-          />
+            rules={[
+              {
+                required: true,
+                message: 'Input your Favorite Role(s)',
+              },
+            ]}
+          >
+            <MySelect
+              className="w-[430px]"
+              label={'Favorite Role(s)'}
+              // value={yourClub}
+              onChange={(e) => {
+                // setYourClub(e.target.value)
+              }}
+              arrOption={profile === 'player' ? OptionPlayer : OptionCoach}
+            />
+          </Form.Item>
+          <div className="-mt-[48px]">
+            <DynamicFields
+              maxField={3}
+              name={'favoriteRoles'}
+              label="Favorite Role(s)"
+              type="select"
+              profile={profile as string}
+            />
+          </div>
 
           <Form.Item
-            className=" w-[470px]"
+            className="w-[470px]"
             name={'length'}
             rules={[
               {
@@ -179,7 +210,7 @@ export const SignUpFormPlayer = () => {
           </Form.Item>
 
           <Form.Item
-            className="mt-[24px]"
+            className=" w-[470px]"
             name={'weight'}
             rules={[
               {
