@@ -6,12 +6,13 @@ import { Layout } from 'components/Layout'
 import { GradientCircularProgress } from 'react-circular-gradient-progress'
 import { Stars } from 'components/common/Stars'
 import { BioRadarChart } from 'components/specific/BioRadarChart'
-import { fetcher } from 'utils/utils'
+import { fetcher, truncateStr } from 'utils/utils'
 import { useEffect, useMemo, useState } from 'react'
 import { Loading } from 'components/loading/loading'
 import { get, isEmpty } from 'lodash'
 import { TabPanel, Tabs } from 'components/Tabs'
 import { TitleCollapse } from 'components/common/TitleCollapse'
+import clsx from 'clsx'
 
 enum Tab {
   Total = 'Total',
@@ -300,7 +301,12 @@ const Biography = () => {
               }
               setCurrentIndexFlip(currentIndexFlip - 1)
             }}
-            className="cursor-pointer mr-[32px] fill-Grey "
+            className={clsx(
+              `  mr-[32px] `,
+              currentIndexFlip <= 0
+                ? ' fill-Grey '
+                : ' fill-Green cursor-pointer'
+            )}
             width="24"
             height="25"
             viewBox="0 0 24 25"
@@ -310,8 +316,8 @@ const Biography = () => {
             <path d="M15.41 17.09L10.83 12.5L15.41 7.91L14 6.5L8 12.5L14 18.5L15.41 17.09Z" />
           </svg>
 
-          <Text name="Header5" className="text-white ">
-            {`#${dataBio.username}`}
+          <Text name="Header5" className="text-white w-[274px] text-center ">
+            {`#${truncateStr(dataBio.username, 22)}`}
           </Text>
 
           <svg
@@ -322,7 +328,12 @@ const Biography = () => {
               }
               setCurrentIndexFlip(currentIndexFlip + 1)
             }}
-            className="cursor-pointer ml-[32px] fill-Green"
+            className={clsx(
+              `  ml-[32px] `,
+              currentIndexFlip >= dataFlip.data.length - 1
+                ? ' fill-Grey '
+                : ' fill-Green cursor-pointer'
+            )}
             width="24"
             height="25"
             viewBox="0 0 24 25"
@@ -479,27 +490,33 @@ const Biography = () => {
                 />
               </div>
 
-              <div
-                style={{
-                  background: '#c4c4c4',
-                }}
-                className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
+              {!!dataBio.faceImageUrl && (
+                <>
+                  <div
+                    style={
+                      {
+                        // background: '#c4c4c4',
+                      }
+                    }
+                    className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
               -translate-x-1/2 -translate-y-1/2  "
-              ></div>
-              <img
-                src={dataBio.faceImageUrl}
-                className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
-              -translate-x-1/2 -translate-y-1/2 "
-                alt=""
-              />
-              <div
-                style={{
-                  background:
-                    'linear-gradient(180deg, rgba(19, 19, 27, 0) 18.23%, #13141E 100%)',
-                }}
-                className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
+                  ></div>
+                  <img
+                    src={dataBio.faceImageUrl}
+                    className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
+              -translate-x-1/2 -translate-y-1/2 object-cover "
+                    alt=""
+                  />
+                  <div
+                    style={{
+                      background:
+                        'linear-gradient(180deg, rgba(19, 19, 27, 0) 18.23%, #13141E 100%)',
+                    }}
+                    className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
               -translate-x-1/2 -translate-y-1/2  "
-              ></div>
+                  ></div>
+                </>
+              )}
             </div>
             <div className=" flex flex-col justify-between">
               <div className="h-[45px] ">
