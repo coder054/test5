@@ -50,7 +50,13 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState<boolean>(true)
   const [errorSignin, setErrorSignin] = useState<string>('')
   const [checkEmail, setCheckEmail] = useState<boolean>(false)
-  const [userRoles, setUserRoles] = useState<IUserRoles[]>([])
+  const [userRoles, setUserRoles] = useState<IUserRoles[]>(
+    typeof window !== 'undefined'
+      ? //@ts-ignore: Unreachable code error
+        JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_KEY.userRoles)) ||
+          []
+      : []
+  )
   const [currentRoleName, setCurrentRoleName] = useState<'COACH' | 'PLAYER'>(
     'PLAYER'
   )
@@ -63,6 +69,13 @@ export function AuthProvider({ children }) {
 
     return a1
   }, [userRoles, currentRoleName])
+
+  useEffect(() => {
+    console.log('aaa2 userRoles: ', userRoles)
+  }, [userRoles])
+  useEffect(() => {
+    console.log('aaa2 currentRoleId: ', currentRoleId)
+  }, [currentRoleId])
 
   useEffect(() => {
     if (!currentRoleId) {

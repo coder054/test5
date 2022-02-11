@@ -15,54 +15,81 @@ import {
   SvgNews,
 } from 'imports/svgs'
 import clsx from 'clsx'
-import { ROUTES } from 'constants/constants'
-
-const arrSidebar = [
-  { link: ROUTES.feed, icon: SvgFeed, text: 'Feed', active: true },
-  {
-    link: ROUTES.dashboard,
-    icon: SvgDashboard,
-    text: 'Dashboard',
-    active: false,
-  },
-  {
-    link: ROUTES.news,
-    icon: SvgNews,
-    text: 'News',
-    active: false,
-  },
-  { link: ROUTES.test, icon: SvgTest, text: 'Test', active: false },
-  { link: ROUTES.programs, icon: SvgPrograms, text: 'Programs', active: false },
-  {
-    link: ROUTES.challenges,
-    icon: SvgChallenges,
-    text: 'Challenges',
-    active: false,
-  },
-  { link: ROUTES.contact, icon: SvgContact, text: 'Contact', active: false },
-  {
-    link: ROUTES.accountAndSettings,
-    icon: SvgAccount,
-    text: 'Account & Settings',
-    active: false,
-  },
-  {
-    link: ROUTES.biography,
-    icon: SvgBiography,
-    text: 'Biography',
-    active: false,
-  },
-  { link: ROUTES.support, icon: SvgSupport, text: 'Support', active: false },
-  {
-    link: ROUTES.components,
-    icon: SvgSupport,
-    text: 'Components',
-    active: false,
-  },
-]
+import { LOCAL_STORAGE_KEY, ROUTES } from 'constants/constants'
+import { useAuth } from 'module/authen/auth/AuthContext'
+import { useEffect, useMemo, useState } from 'react'
 
 export const Sidebar = () => {
   const router = useRouter()
+
+  const [arrSidebar, setArrSidebar] = useState<any>([])
+
+  useEffect(() => {
+    let currentRoleLocalStorage = ''
+    if (typeof window !== 'undefined') {
+      currentRoleLocalStorage =
+        window.localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId) || ''
+    }
+
+    setArrSidebar([
+      { link: ROUTES.feed, icon: SvgFeed, text: 'Feed', active: true },
+      {
+        link: ROUTES.dashboard,
+        icon: SvgDashboard,
+        text: 'Dashboard',
+        active: false,
+      },
+      {
+        link: ROUTES.news,
+        icon: SvgNews,
+        text: 'News',
+        active: false,
+      },
+      { link: ROUTES.test, icon: SvgTest, text: 'Test', active: false },
+      {
+        link: ROUTES.programs,
+        icon: SvgPrograms,
+        text: 'Programs',
+        active: false,
+      },
+      {
+        link: ROUTES.challenges,
+        icon: SvgChallenges,
+        text: 'Challenges',
+        active: false,
+      },
+      {
+        link: ROUTES.contact,
+        icon: SvgContact,
+        text: 'Contact',
+        active: false,
+      },
+      {
+        link: ROUTES.accountAndSettings,
+        icon: SvgAccount,
+        text: 'Account & Settings',
+        active: false,
+      },
+      {
+        link: `/biography/${currentRoleLocalStorage}`,
+        icon: SvgBiography,
+        text: 'Biography',
+        active: false,
+      },
+      {
+        link: ROUTES.support,
+        icon: SvgSupport,
+        text: 'Support',
+        active: false,
+      },
+      {
+        link: ROUTES.components,
+        icon: SvgSupport,
+        text: 'Components',
+        active: false,
+      },
+    ])
+  }, [])
 
   return (
     <div
@@ -80,12 +107,17 @@ export const Sidebar = () => {
 
         <ul>
           {arrSidebar.map((o, index) => {
-            const isActive = o.link === router.pathname
+            const isActive = o.link === router.asPath
+            // console.log('aaa o.link', o.link)
+            // console.log('aaa router.pathname', router.pathname)
+            // if (router.pathname === '/biography/[userid]') {
+            //   debugger
+            // }
 
             return (
               <li
                 className={clsx(
-                  `h-[40px] rounded-[8px] mb-1 `,
+                  `h-[40px] rounded-[8px] mb-1 hover:bg-lightestGray duration-200`,
                   isActive ? ' bg-lightestGray ' : ''
                 )}
                 key={index}
@@ -102,7 +134,7 @@ export const Sidebar = () => {
                         isActive ? ' text-Yellow ' : '  '
                       )}
                     >
-                      {o.text}
+                      {o.text}{' '}
                     </span>
                   </a>
                 </Link>
