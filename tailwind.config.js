@@ -8,6 +8,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        appear: 'appear 2s ease-in-out',
+      },
       colors: {
         Blue: '#4654EA',
         'Dark-1': '#252627',
@@ -37,6 +40,14 @@ module.exports = {
         SVNGilroy: ['SVN-Gilroy'],
         Inter: ['Inter'],
         Roboto: ['Roboto'],
+      },
+
+      keyframes: {
+        appear: {
+          '0%': { opacity: '0' },
+          '70%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
       },
       spacing: {
         '100vw-280px': 'calc(100vw - 280px)',
