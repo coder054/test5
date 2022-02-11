@@ -58,9 +58,10 @@ export const MyDatePicker = ({
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           label={label}
-          value={value}
+          value={value ? value : null}
           onChange={onChange}
           renderInput={(params) => <CssTextField fullWidth {...params} />}
+          {...rest}
         />
       </LocalizationProvider>
     </div>

@@ -3,6 +3,7 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import { AuthProvider } from 'module/authen/auth/AuthContext'
 import { CookiesProvider } from 'react-cookie'
+import { Provider } from 'jotai'
 import { QueryParamProvider } from 'components/QueryParamsProvider'
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -10,7 +11,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     <QueryParamProvider>
       <AuthProvider>
         <CookiesProvider>
-          <Component {...pageProps} />
+          <Provider>
+            <Component {...pageProps} />
+          </Provider>
         </CookiesProvider>
       </AuthProvider>
     </QueryParamProvider>

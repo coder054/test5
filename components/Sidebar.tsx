@@ -85,7 +85,7 @@ export const Sidebar = () => {
             return (
               <li
                 className={clsx(
-                  `h-[40px] rounded-[8px] mb-1 `,
+                  `h-[40px] rounded-[8px] mb-1 hover:bg-lightestGray duration-200`,
                   isActive ? ' bg-lightestGray ' : ''
                 )}
                 key={index}
