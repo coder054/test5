@@ -17,7 +17,7 @@ export const MySwitchButton = ({
       onChange={onChange}
       name={name}
       sx={{
-        '& > .css-1yjjitx-MuiSwitch-track': { backgroundColor: '#fff' },
+        '& > .MuiSwitch-track': { backgroundColor: '#fff' },
       }}
     />
   )
