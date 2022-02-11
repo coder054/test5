@@ -3,13 +3,14 @@ import { SvgCamera } from 'imports/svgs'
 import cls from './upload-image.module.css'
 import { storage } from 'config/firebase-client'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import clsx from 'clsx'
 
 interface UploadImageProps {
   title?: string
   text?: string
   className?: string
-  width: number
-  height: number
+  width?: number
+  height?: number
   ChangeUpload?: () => void
   setImage?: Function
 }
@@ -17,13 +18,14 @@ interface UploadImageProps {
 export const UploadImage = ({
   title,
   text,
-  width,
-  height,
+  // width,
+  // height,
   className,
   setImage,
 }: UploadImageProps) => {
   const [progress, setProgress] = useState<number>(0)
   const [url, setUrl] = useState<string>('')
+  const classUploadImage = clsx()
   const handleChangeUpload = (event) => {
     const file = event.target.files[0]
     // console.log('file', file)
@@ -54,16 +56,14 @@ export const UploadImage = ({
     <div className={`${className} `}>
       <p className="text-base text-[#FFFFFF]">{title}</p>
       <div
-        className={`${cls.uploadImage} w-[${width}px] h-[${height}px] cursor-pointer rounded-[8px] mt-[12px] text-center  border relative`}
+        className={`${cls.uploadImage} w-[223px] h-[130px] cursor-pointer rounded-[8px] mt-[12px] text-center  border relative`}
       >
         {url && url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={url}
             alt=""
-            className={`w-[${width}] h-[${
-              height - 2
-            }px] rounded-[8px] object-cover`}
+            className={`w-[223px] h-[128px] rounded-[8px] object-cover`}
           />
         ) : (
           <>

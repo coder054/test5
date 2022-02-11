@@ -163,15 +163,15 @@ const SignUpForm = () => {
 
           <div className="flex mt-[24px]">
             <UploadImage
-              width={223}
-              height={130}
+              // width={223}
+              // height={130}
               title="Face image"
               text="Add portrait photo of 480*640 pixels or more"
               setImage={setFaceImage}
             />
             <UploadImage
-              width={223}
-              height={130}
+              // width={223}
+              // height={130}
               title="Full body image"
               text="Add portrait photo of 480*640 pixels or more"
               className="ml-[24px]"
