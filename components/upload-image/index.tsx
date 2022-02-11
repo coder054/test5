@@ -3,11 +3,14 @@ import { SvgCamera } from 'imports/svgs'
 import cls from './upload-image.module.css'
 import { storage } from 'config/firebase-client'
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import clsx from 'clsx'
 
 interface UploadImageProps {
   title?: string
   text?: string
   className?: string
+  width?: number
+  height?: number
   ChangeUpload?: () => void
   setImage?: Function
 }
@@ -15,11 +18,14 @@ interface UploadImageProps {
 export const UploadImage = ({
   title,
   text,
+  // width,
+  // height,
   className,
   setImage,
 }: UploadImageProps) => {
   const [progress, setProgress] = useState<number>(0)
   const [url, setUrl] = useState<string>('')
+  const classUploadImage = clsx()
   const handleChangeUpload = (event) => {
     const file = event.target.files[0]
     // console.log('file', file)
@@ -57,7 +63,7 @@ export const UploadImage = ({
           <img
             src={url}
             alt=""
-            className="w-[223px] h-[130px] object-scale-down"
+            className={`w-[223px] h-[128px] rounded-[8px] object-cover`}
           />
         ) : (
           <>

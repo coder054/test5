@@ -28,6 +28,7 @@ import { get } from 'lodash'
 import Link from 'next/link'
 import { TabPanel, Tabs } from 'components/Tabs'
 import { notify } from 'utils/utils'
+import { ROUTES } from 'constants/constants'
 
 const initialValuesPhoneSignUp = {
   phoneFormPhoneSignUp: '+84355832199',
@@ -100,7 +101,13 @@ export const SignUpWithSMS = () => {
   const [formEmail] = Form.useForm()
   const [formPhone] = Form.useForm()
 
-  const {} = useAuth()
+  const { token } = useAuth()
+
+  useEffect(() => {
+    if (token) {
+      router.push(ROUTES.SIGNUP_FORM)
+    }
+  }, [router, token])
 
   const sendPhone = async (phone: string) => {
     if (typeof window === 'undefined') {

@@ -51,13 +51,15 @@ const SignUpForm = () => {
         <GoBack label="Sign in form" goBack="/signin" />
       </div>
       <div
-        className={`w-[470px] rounded-[8px] pt-[48px] pb-[48px] absolute right-[25%]`}
+        className={`w-[490px] h-[880px] rounded-[8px] pt-[48px] pb-[48px] absolute right-[25%] overflow-y-auto pl-[5px] pr-[5px]`}
       >
-        <p className="text-[24px] text-[#FFFFFF] font-semibold">Sign up form</p>
+        <p className="text-[24px] text-[#FFFFFF] font-semibold mb-[48px]">
+          Sign up form
+        </p>
         <Form className="" form={form}>
           <div className="w-full flex justify-between mt-[48px]">
             <Form.Item
-              className=" w-[223px]"
+              className="w-[235px] pr-[12px] mb-[24px]"
               name={'firstName'}
               rules={[
                 {
@@ -69,7 +71,7 @@ const SignUpForm = () => {
               <MyInput name={'firstName'} label="First name" signupForm />
             </Form.Item>
             <Form.Item
-              className=" w-[223px]"
+              className="w-[235px] pl-[12px] mb-[24px]"
               name={'lastName'}
               rules={[
                 {
@@ -82,7 +84,7 @@ const SignUpForm = () => {
             </Form.Item>
           </div>
           <Form.Item
-            className="mt-[0px]"
+            className=""
             name={'birthDate'}
             rules={[
               {
@@ -99,12 +101,12 @@ const SignUpForm = () => {
           </Form.Item>
 
           <Form.Item
-            className="mt-[0px]"
-            name={'birthCountry'}
+            className="mt-[24px]"
+            name={'selectCountry'}
             rules={[
               {
                 required: true,
-                message: 'Input your Birth country',
+                message: 'Input your Select country',
               },
             ]}
           >
@@ -121,7 +123,7 @@ const SignUpForm = () => {
           </Form.Item>
 
           <Form.Item
-            className=""
+            className="mt-[24px]"
             name={'city'}
             rules={[
               {
@@ -138,7 +140,7 @@ const SignUpForm = () => {
           </Form.Item>
 
           <Form.Item
-            className=""
+            className="mt-[24px]"
             name={'userProfile'}
             rules={[
               {
@@ -159,13 +161,17 @@ const SignUpForm = () => {
             />
           </Form.Item>
 
-          <div className="flex">
+          <div className="flex mt-[24px]">
             <UploadImage
+              // width={223}
+              // height={130}
               title="Face image"
               text="Add portrait photo of 480*640 pixels or more"
               setImage={setFaceImage}
             />
             <UploadImage
+              // width={223}
+              // height={130}
               title="Full body image"
               text="Add portrait photo of 480*640 pixels or more"
               className="ml-[24px]"
