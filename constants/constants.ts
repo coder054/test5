@@ -19,5 +19,4 @@ export const ROUTES = {
 export const LOCAL_STORAGE_KEY = {
   userRoles: 'userRoles',
   currentRoleId: 'currentRoleId',
-  token: 'token',
 }

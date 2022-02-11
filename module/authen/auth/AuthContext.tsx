@@ -63,11 +63,16 @@ export function AuthProvider({ children }) {
 
   const currentRoleId = useMemo(() => {
     if (isEmpty(userRoles)) return ''
-    const a1 = userRoles.filter((role) => {
+    const filter = userRoles.filter((role) => {
       return role.role === currentRoleName
-    })[0]['roleId']
+    })
+    if (isEmpty(filter)) {
+      return ''
+    }
 
-    return a1
+    return get(filter, '[0].roleId') || ''
+
+    return filter
   }, [userRoles, currentRoleName])
 
   useEffect(() => {
@@ -243,6 +248,8 @@ export function AuthProvider({ children }) {
         removeTokenCookie()
         setToken('')
         setCurrentUser(null)
+        localStorage.removeItem(LOCAL_STORAGE_KEY.currentRoleId)
+        localStorage.removeItem(LOCAL_STORAGE_KEY.userRoles)
         setLoading(false)
       } else {
         setLoading(true)
