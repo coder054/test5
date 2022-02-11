@@ -14,7 +14,9 @@ import {
 import { get, isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
+import { useCookies } from 'react-cookie'
 import { axios } from 'utils/axios'
+import { dataFromToken, ITokenData } from 'utils/utils'
 import { removeTokenCookie, setTokenCookie } from './tokenCookies'
 
 interface ValueType {
@@ -44,13 +46,15 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
+  const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const router = useRouter()
   const [currentUser, setCurrentUser] = useState<any>(null)
+  const [tokenData, setTokenData] = useState<any>(dataFromToken(cookies.token))
   const [token, setToken] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
   const [errorSignin, setErrorSignin] = useState<string>('')
   const [checkEmail, setCheckEmail] = useState<boolean>(false)
-  const [userRoles, setUserRoles] = useState<IUserRoles[]>(
+  const [userRoles, setUserRoles] = useState<any>(
     typeof window !== 'undefined'
       ? //@ts-ignore: Unreachable code error
         JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_KEY.userRoles)) ||
@@ -241,6 +245,10 @@ export function AuthProvider({ children }) {
     //   setLoading(false)
     // })
 
+    // if (!!cookies.token) {
+    //   setTokenData(dataFromToken(cookies.token))
+    // }
+
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
       console.log('aaa onIdTokenChanged', user)
 
@@ -296,6 +304,7 @@ export function AuthProvider({ children }) {
     ResetPassword,
     currentRoleId,
     userRoles,
+    tokenData,
   }
 
   return (
