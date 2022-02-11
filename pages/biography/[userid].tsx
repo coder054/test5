@@ -456,7 +456,7 @@ const Biography = () => {
 
               <img
                 src={dataBio.currentClubIconUrl}
-                className="w-[24px] ml-auto "
+                className="w-[24px] ml-auto rounded-full "
                 alt=""
               />
               <div className="h-[45px] ">
@@ -591,7 +591,7 @@ const Biography = () => {
 
               <img
                 src={dataBio.countryFlagUrl}
-                className="w-[24px] mr-auto "
+                className="w-[24px] mr-auto rounded-full"
                 alt=""
               />
               <div className="h-[45px] ">
