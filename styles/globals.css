@@ -22,6 +22,10 @@
     font-family: SVN-Gilroy, sans-serif !important;
   }
 
+  img {
+    user-select: none;
+  }
+
   a {
     color: inherit;
     text-decoration: none;

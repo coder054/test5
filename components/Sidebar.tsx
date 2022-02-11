@@ -16,53 +16,74 @@ import {
 } from 'imports/svgs'
 import clsx from 'clsx'
 import { ROUTES } from 'constants/constants'
-
-const arrSidebar = [
-  { link: ROUTES.feed, icon: SvgFeed, text: 'Feed', active: true },
-  {
-    link: ROUTES.dashboard,
-    icon: SvgDashboard,
-    text: 'Dashboard',
-    active: false,
-  },
-  {
-    link: ROUTES.news,
-    icon: SvgNews,
-    text: 'News',
-    active: false,
-  },
-  { link: ROUTES.test, icon: SvgTest, text: 'Test', active: false },
-  { link: ROUTES.programs, icon: SvgPrograms, text: 'Programs', active: false },
-  {
-    link: ROUTES.challenges,
-    icon: SvgChallenges,
-    text: 'Challenges',
-    active: false,
-  },
-  { link: ROUTES.contact, icon: SvgContact, text: 'Contact', active: false },
-  {
-    link: ROUTES.accountAndSettings,
-    icon: SvgAccount,
-    text: 'Account & Settings',
-    active: false,
-  },
-  {
-    link: ROUTES.biography,
-    icon: SvgBiography,
-    text: 'Biography',
-    active: false,
-  },
-  { link: ROUTES.support, icon: SvgSupport, text: 'Support', active: false },
-  {
-    link: ROUTES.components,
-    icon: SvgSupport,
-    text: 'Components',
-    active: false,
-  },
-]
+import { useAuth } from 'module/authen/auth/AuthContext'
+import { useMemo } from 'react'
 
 export const Sidebar = () => {
   const router = useRouter()
+
+  const { currentRoleId } = useAuth()
+
+  const arrSidebar = useMemo(() => {
+    return [
+      { link: ROUTES.feed, icon: SvgFeed, text: 'Feed', active: true },
+      {
+        link: ROUTES.dashboard,
+        icon: SvgDashboard,
+        text: 'Dashboard',
+        active: false,
+      },
+      {
+        link: ROUTES.news,
+        icon: SvgNews,
+        text: 'News',
+        active: false,
+      },
+      { link: ROUTES.test, icon: SvgTest, text: 'Test', active: false },
+      {
+        link: ROUTES.programs,
+        icon: SvgPrograms,
+        text: 'Programs',
+        active: false,
+      },
+      {
+        link: ROUTES.challenges,
+        icon: SvgChallenges,
+        text: 'Challenges',
+        active: false,
+      },
+      {
+        link: ROUTES.contact,
+        icon: SvgContact,
+        text: 'Contact',
+        active: false,
+      },
+      {
+        link: ROUTES.accountAndSettings,
+        icon: SvgAccount,
+        text: 'Account & Settings',
+        active: false,
+      },
+      {
+        link: '/biography/' + currentRoleId,
+        icon: SvgBiography,
+        text: 'Biography',
+        active: false,
+      },
+      {
+        link: ROUTES.support,
+        icon: SvgSupport,
+        text: 'Support',
+        active: false,
+      },
+      {
+        link: ROUTES.components,
+        icon: SvgSupport,
+        text: 'Components',
+        active: false,
+      },
+    ]
+  }, [currentRoleId])
 
   return (
     <div
