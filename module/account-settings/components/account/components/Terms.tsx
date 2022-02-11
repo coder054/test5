@@ -5,6 +5,21 @@ import { useAuth } from 'module/authen/auth/AuthContext'
 import { ComponentPropsWithRef } from 'react'
 import { BackGround } from '../../common-components/Background'
 
+const icon = (
+  <svg
+    width="25"
+    height="24"
+    viewBox="0 0 25 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M9.09 16.59L13.67 12L9.09 7.41L10.5 6L16.5 12L10.5 18L9.09 16.59Z"
+      fill="#818389"
+    />
+  </svg>
+)
+
 type ItemProps = {
   icon: React.ReactElement
   label: string
@@ -31,10 +46,10 @@ export const Terms = () => {
       label="Terms"
       form={
         <div className="space-y-4">
-          <Item label="Support" icon={<ArrowForwardIosIcon />} />
-          <Item label="Terms & Conditions" icon={<ArrowForwardIosIcon />} />
-          <Item label="Privacy rules" icon={<ArrowForwardIosIcon />} />
-          <Item label="Delete user profile" icon={<ArrowForwardIosIcon />} />
+          <Item label="Support" icon={icon} />
+          <Item label="Terms & Conditions" icon={icon} />
+          <Item label="Privacy rules" icon={icon} />
+          <Item label="Delete user profile" icon={icon} />
           <Item onClick={signout} label="Log out" icon={<LogoutIcon />} />
         </div>
       }
