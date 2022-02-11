@@ -53,7 +53,7 @@ if (
 }
 
 const cookies = new Cookies()
-const token = cookies.get(LOCAL_STORAGE_KEY.token)
+const token = cookies.get('token')
 
 if (token) {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`
