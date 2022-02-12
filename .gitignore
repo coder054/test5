@@ -38,4 +38,3 @@ yarn-error.log*
 note.txt
 .vscode
 .env
-yarn.lock
