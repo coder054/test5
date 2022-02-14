@@ -70,18 +70,18 @@ export type CountryType = {
 }
 
 export type ProfileType = {
-  birthCountry: CountryType
-  birthDay: string
-  city: string
-  email: string
-  firstName: string
-  fullName: string[]
-  gender: string
-  homeAddress: string
-  lastName: string
-  phone: string
-  postNumber: string
-  region: string
+  birthCountry?: CountryType
+  birthDay?: Date | string | null
+  city?: string
+  email?: string
+  firstName?: string
+  fullName?: string[]
+  gender?: string
+  homeAddress?: string
+  lastName?: string
+  phone?: string
+  postNumber?: string
+  region?: string
 }
 
 export type NotificationsType = {

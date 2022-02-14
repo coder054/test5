@@ -1,4 +1,5 @@
 import { Autocomplete, TextField, styled } from '@mui/material'
+import clsx from 'clsx'
 
 const CssTextField = styled(TextField)({
   '& label': {
@@ -6,7 +7,7 @@ const CssTextField = styled(TextField)({
     marginLeft: '4px',
   },
   '& label.Mui-focused': {
-    color: '#5048E5',
+    color: '#ffffff',
   },
   '& .MuiInput-underline:after': {
     borderBottomColor: 'green',
@@ -35,32 +36,39 @@ const CssTextField = styled(TextField)({
 
 export const MyCustomSelect = ({
   label,
+  className,
   arrOptions,
   onChange,
   val,
 }: {
   label: string
+  className?: string
   arrOptions?: any
   onChange?: any
   val?: any
 }) => {
   return (
-    <Autocomplete
-      fullWidth
-      disablePortal
-      onChange={onChange}
-      options={arrOptions}
-      value={val ? val : null}
-      sx={{
-        '& .MuiAutocomplete-clearIndicator': {
-          ':hover': {
-            backgroundColor: '#ffffff',
-            color: 'black',
+    <div className={clsx(className)}>
+      <Autocomplete
+        fullWidth
+        disablePortal
+        onChange={onChange}
+        options={arrOptions}
+        value={val ? val : null}
+        sx={{
+          '& .MuiAutocomplete-clearIndicator': {
+            ':hover': {
+              backgroundColor: '#ffffff',
+              color: 'black',
+            },
+            color: '#ffffff',
           },
-          color: '#ffffff',
-        },
-      }}
-      renderInput={(params) => <CssTextField {...params} label={label} />}
-    />
+          '& label.Mui-focused': {
+            color: '#ffffff',
+          },
+        }}
+        renderInput={(params) => <CssTextField {...params} label={label} />}
+      />
+    </div>
   )
 }

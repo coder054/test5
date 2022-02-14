@@ -1,4 +1,4 @@
-import { Form, notification } from 'antd'
+import { notification } from 'antd'
 import { settingsAtom } from 'atoms/accountAndSettings'
 import { MyCustomSelect } from 'components/MyCustomSelect'
 import { MySelectCountry } from 'components/MySelectCountry'
@@ -20,7 +20,6 @@ export const Language = () => {
   const roleId = cookies.get('roleId')
   const role = cookies.get('roleName')
   const [account] = useAtom(settingsAtom)
-  console.log(account)
 
   const [formValues, setFormValues] = useState<FormValuesType>({
     country: {
@@ -75,36 +74,30 @@ export const Language = () => {
         language: account.settings?.language,
         privacy: account.settings?.public ? 'Public' : 'Private',
       }))
-  }, [JSON.stringify(account)])
+  }, [account])
 
   return (
     <BackGround
       label="Language"
       form={
         <div className="space-y-7">
-          <Form.Item name="language">
-            <MyCustomSelect
-              label="Language"
-              val={formValues.language}
-              onChange={(_, value) => handleChangeForm('language', value)}
-              arrOptions={['English']}
-            />
-          </Form.Item>
-          <Form.Item name="country">
-            <MySelectCountry
-              label="Country"
-              val={formValues.country}
-              onChange={(_, value) => handleChangeForm('country', value)}
-            />
-          </Form.Item>
-          <Form.Item name="privacy">
-            <MyCustomSelect
-              label="Privacy"
-              val={formValues.privacy}
-              onChange={(_, value) => handleChangeForm('privacy', value)}
-              arrOptions={['Public', 'Private']}
-            />
-          </Form.Item>
+          <MyCustomSelect
+            label="Language"
+            val={formValues.language}
+            onChange={(_, value) => handleChangeForm('language', value)}
+            arrOptions={['English']}
+          />
+          <MySelectCountry
+            label="Country"
+            val={formValues.country}
+            onChange={(_, value) => handleChangeForm('country', value)}
+          />
+          <MyCustomSelect
+            label="Privacy"
+            val={formValues.privacy}
+            onChange={(_, value) => handleChangeForm('privacy', value)}
+            arrOptions={['Public', 'Private']}
+          />
         </div>
       }
     />
