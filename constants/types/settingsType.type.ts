@@ -63,6 +63,7 @@ export type MediaType = {
 export type CountryType = {
   alpha2Code: string
   alpha3Code: string
+  phoneCode?: string
   flag: string
   name: string
   region: string

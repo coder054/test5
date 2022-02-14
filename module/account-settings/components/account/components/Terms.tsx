@@ -36,7 +36,9 @@ export const Terms = () => {
         )}
         {...rest}
       >
-        <h1 className="text-[#818389] text-[16px] font-semibold">{label}</h1>
+        <span className="text-[#818389] text-[16px] font-semibold">
+          {label}
+        </span>
         <span>{icon}</span>
       </div>
     )

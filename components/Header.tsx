@@ -1,25 +1,33 @@
+import { IconButton, Menu } from '@mui/material'
+import { ROUTES } from 'constants/constants'
 import {
-  imgAvatar,
   imgBell,
   imgHamburgerPurple,
   imgMessage,
   imgSearch,
 } from 'imports/images'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import Image from 'next/image'
-
-import clsx from 'clsx'
-import { ROUTES } from 'constants/constants'
-import { useEffect, useMemo, useState } from 'react'
-import { DropdownUser } from './specific/DropdownUser'
-import { useAuth } from 'module/authen/auth/AuthContext'
 import { isEmpty } from 'lodash'
+import { useAuth } from 'module/authen/auth/AuthContext'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useMemo, useState } from 'react'
+import { DropdownUser } from './specific/DropdownUser'
 
 export const Header = () => {
   const { tokenData } = useAuth()
   const router = useRouter()
-  const [showDropdownUser, setShowDropdownUser] = useState(false)
+  // const [showDropdownUser, setShowDropdownUser] = useState(false)
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const open = Boolean(anchorEl)
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
   const titleHeader = useMemo(() => {
     switch (router.pathname) {
@@ -45,7 +53,6 @@ export const Header = () => {
         return 'Support'
       case ROUTES.components:
         return 'Components'
-
       default:
         return ''
     }
@@ -65,14 +72,19 @@ export const Header = () => {
         bg-[#111115]
         `}
     >
-      <div
-        className={clsx(
-          ` absolute w-[100px] h-[25px] right-[200px] bottom-[-25px] `,
-          showDropdownUser ? '  ' : ' hidden '
-        )}
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={open}
+        onClose={handleClose}
+        sx={{
+          '& .MuiList-padding': {
+            padding: 0,
+          },
+        }}
       >
         <DropdownUser />
-      </div>
+      </Menu>
       <div className="mr-[9px] w-[32px] h-[32px] ">
         <Image className="" src={imgHamburgerPurple} alt="" />
       </div>
@@ -88,17 +100,19 @@ export const Header = () => {
             <Image className="" src={imgMessage} alt="" />
           </div>
 
-          <img
-            onClick={() => {
-              setShowDropdownUser(!showDropdownUser)
-            }}
-            src={'/header/Avatar.svg'}
-            className="border cursor-pointer "
-            alt=""
-          />
+          <IconButton
+            onClick={handleClick}
+            size="small"
+            aria-controls={open ? 'account-menu' : undefined}
+            // aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+          >
+            {/* eslint-disable-next-line */}
+            <img src={'/header/Avatar.svg'} className="border" alt="" />
+          </IconButton>
         </>
       ) : (
-        <div className=" animate-appear  " >
+        <div className=" animate-appear  ">
           <Link href="/signin">
             <a>
               <button className="w-[224px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue mr-[26px]">

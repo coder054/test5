@@ -1,8 +1,8 @@
 import { Form, notification } from 'antd'
 import { settingsAtom } from 'atoms/accountAndSettings'
 import { MyButton } from 'components/MyButton'
+import { MyCustomSelect } from 'components/MyCustomSelect'
 import { MyInput } from 'components/MyInput'
-import { MySelect } from 'components/MySelect'
 import { auth } from 'config'
 import * as firebase from 'firebase/auth'
 import { signInWithEmailAndPassword, User } from 'firebase/auth'
@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react'
 import { BackGround } from '../../common-components/Background'
 
 type FormValuesType = {
-  username: string
+  userName?: string
   newPassword: string
   confirmPassword: string
   verifyPassword: string
@@ -21,12 +21,13 @@ type FormValuesType = {
 
 export const BasicDetail = () => {
   const [form] = Form.useForm()
-  const [account] = useAtom(settingsAtom)
   const { currentUser } = useAuth()
+  const [account] = useAtom(settingsAtom)
 
+  const [email, setEmail] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [formValues, setFormValues] = useState<FormValuesType>({
-    username: '',
+    userName: '',
     newPassword: '',
     confirmPassword: '',
     verifyPassword: '',
@@ -38,17 +39,23 @@ export const BasicDetail = () => {
 
   const handleSubmit = async () => {
     setIsLoading(true)
-    await signInWithEmailAndPassword(
-      auth,
-      formValues.username,
-      formValues.verifyPassword
-    )
+    await signInWithEmailAndPassword(auth, email, formValues.verifyPassword)
       .then(() => {
-        setIsLoading(false)
-        notification['success']({
-          message: 'Change password successfully',
-        })
-        firebase.updatePassword(currentUser as User, formValues.newPassword)
+        firebase
+          .updatePassword(currentUser as User, formValues.newPassword)
+          .then(() => {
+            setIsLoading(false)
+            notification['success']({
+              message: 'Change password successfully',
+            })
+            form.resetFields()
+          })
+          .catch(() => {
+            setIsLoading(false)
+            notification['error']({
+              message: 'Wrong password',
+            })
+          })
       })
       .catch(() => {
         setIsLoading(false)
@@ -59,31 +66,22 @@ export const BasicDetail = () => {
   }
 
   useEffect(() => {
-    account.account?.email &&
-      setFormValues((prev) => ({
-        ...prev,
-        username: account.account ? account.account.email : '',
-      }))
-  }, [account])
+    currentUser !== null ? setEmail(currentUser.email) : setEmail('')
+    account &&
+      setFormValues((prev) => ({ ...prev, userName: account?.username }))
+  }, [currentUser])
 
   return (
     <BackGround
       label="Basic detail"
       form={
         <Form form={form} className="space-y-7">
-          <MySelect
-            value={'Coach'}
-            label={'Select Role'}
-            arrOption={[
-              { value: 'Coach', label: 'Coach' },
-              { value: 'Player', label: 'Player' },
-            ]}
+          <MyCustomSelect
+            label="User profile"
+            val="Coach"
+            arrOptions={['Coach', 'Player']}
           />
-          <MyInput
-            label="Username"
-            value={formValues.username}
-            onChange={(e) => handleChangeForm('username', e.target.value)}
-          />
+          <MyInput label="Username" value={formValues.userName} />
           <Form.Item name="newPassword" rules={[getRulePassword()]}>
             <MyInput
               password
@@ -120,12 +118,16 @@ export const BasicDetail = () => {
               }
             />
           </Form.Item>
-          <MyInput
-            password
-            label="Verify with old password"
-            value={formValues.verifyPassword}
-            onChange={(e) => handleChangeForm('verifyPassword', e.target.value)}
-          />
+          <Form.Item name="oldPassword">
+            <MyInput
+              password
+              label="Verify with old password"
+              value={formValues.verifyPassword}
+              onChange={(e) =>
+                handleChangeForm('verifyPassword', e.target.value)
+              }
+            />
+          </Form.Item>
           <MyButton
             isLoading={isLoading}
             type="submit"

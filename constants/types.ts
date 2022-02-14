@@ -51,3 +51,12 @@ export interface NewsType {
   typeOfPost?: string
   updatedAt?: number
 }
+
+export type CountryType = {
+  alpha2Code: string
+  alpha3Code: string
+  flag: string
+  name: string
+  phoneCode: string
+  region: string
+}

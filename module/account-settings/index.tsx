@@ -1,10 +1,6 @@
 import { settingsAtom } from 'atoms/accountAndSettings'
 import { TabPanel, Tabs } from 'components/Tabs'
-import {
-  API_COACH_PROFILE,
-  API_GET_CONTRY_LIST,
-  API_GET_USER_ROLES,
-} from 'constants/api.constants'
+import { API_GET_USER_ROLES } from 'constants/api.constants'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { Cookies } from 'react-cookie'
@@ -40,38 +36,28 @@ export const AccountSettings = () => {
 
   const getUserRole = async () => {
     const res = await axios.get(API_GET_USER_ROLES)
-    cookies.set('roleId', res.data[0].roleId)
-    cookies.set('roleName', res.data[0].role)
+    if (res.status === 200) {
+      cookies.set('roleId', res.data[0].roleId)
+      cookies.set('roleName', res.data[0].role)
+    }
   }
 
   const getSettings = async () => {
     const roleId = cookies.get('roleId')
-    const res = await axios.get(API_COACH_PROFILE, {
+    const role = cookies.get('roleName')
+    const res = await axios.get(`users/${role.toLowerCase()}-profile`, {
       headers: {
         roleId: roleId,
       },
     })
+    console.log('RES: ', res)
     if (res.status === 200) {
       setSettings(res.data)
     }
   }
 
-  const getListCountry = async () => {
-    const res = await axios.get(API_GET_CONTRY_LIST)
-    localStorage.setItem(
-      'countries',
-      JSON.stringify(
-        res.data.map((it: any) => ({
-          name: it.name,
-          code: it.alpha2Code,
-        }))
-      )
-    )
-  }
-
   useEffect(() => {
     getUserRole()
-    getListCountry()
     getSettings()
   }, [])
 
