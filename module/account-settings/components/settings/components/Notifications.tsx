@@ -13,6 +13,7 @@ import { Item } from '../../common-components/ItemSwitch'
 export const Notifications = () => {
   const cookies = new Cookies()
   const roleId = cookies.get('roleId')
+  const role = cookies.get('roleName')
   const [account] = useAtom(settingsAtom)
 
   const [switchAll, setSwitchAll] = useState<boolean | undefined>(false)
@@ -47,7 +48,7 @@ export const Notifications = () => {
       ...data,
     })
     const res = await axios.patch(
-      API_COACH_SETTINGS,
+      `users/${role.toLowerCase()}/settings`,
       {
         settings: {
           ...account.settings,

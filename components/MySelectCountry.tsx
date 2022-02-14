@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Autocomplete, Box, styled, TextField } from '@mui/material'
 import clsx from 'clsx'
+import { COUNTRY_LIST } from 'constants/mocks/countries.constants'
 import { useEffect } from 'react'
 
 const CssTextField = styled(TextField)({
@@ -39,38 +40,43 @@ const CssTextField = styled(TextField)({
 export const MySelectCountry = ({
   className,
   label,
-  value,
+  val,
   onChange,
-  arrOption,
   ...rest
 }: {
   className?: string
   label: string
-  value?: any
+  val?: any
   onChange?: any
-  arrOption?: any
   [rest: string]: any
 }) => {
   useEffect(() => {
     if (typeof window === 'undefined') {
       return
     }
-
     let el = window.document.querySelector('.ant-form')
     if (!el) {
       return
     }
-
     el.classList.remove('ant-form')
   }, [])
 
   return (
     <div className={clsx('relative', className)} {...rest}>
       <Autocomplete
+        sx={{
+          '& .MuiAutocomplete-clearIndicator': {
+            ':hover': {
+              backgroundColor: '#ffffff',
+              color: 'black',
+            },
+            color: '#ffffff',
+          },
+        }}
         disablePortal
-        options={arrOption}
+        options={COUNTRY_LIST}
         onChange={onChange}
-        value={value}
+        value={val ? val : null}
         fullWidth
         renderInput={(params) => (
           <CssTextField
@@ -93,8 +99,8 @@ export const MySelectCountry = ({
               style={{ border: '1px solid white' }}
               loading="lazy"
               width="20"
-              src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-              srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+              src={`https://flagcdn.com/w20/${option.alpha2Code.toLowerCase()}.png`}
+              srcSet={`https://flagcdn.com/w40/${option.alpha2Code.toLowerCase()}.png 2x`}
               alt=""
             />
             {option.name}
