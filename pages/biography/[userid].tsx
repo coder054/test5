@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import useSWR from 'swr'
 import { Text } from 'components/Text'
 import { requireAuth } from 'config/firebase-admin'
@@ -7,7 +8,7 @@ import { GradientCircularProgress } from 'react-circular-gradient-progress'
 import { Stars } from 'components/common/Stars'
 import { BioRadarChart } from 'components/specific/BioRadarChart'
 import { fetcher, truncateStr } from 'utils/utils'
-import { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Loading } from 'components/loading/loading'
 import { get, isEmpty } from 'lodash'
 import { TabPanel, Tabs } from 'components/Tabs'
@@ -16,6 +17,10 @@ import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useAuth } from 'module/authen/auth/AuthContext'
+import { axios } from 'utils/axios'
+import { toQueryString } from 'utils/common.utils'
+import { API_FRIENDS } from 'constants/api.constants'
+import { Button } from 'components'
 
 enum Tab {
   Total = 'Total',
@@ -38,6 +43,9 @@ const tabs = [
 export interface IBiographyPlayer {
   friendCount: number
   followCount: number
+  followStatus: string
+  isConfirmBox: boolean
+  isFollowed: boolean
   fanCount: number
   userId: string
   lastUpdatedDate: string
@@ -164,6 +172,12 @@ const Biography = () => {
   const { currentRoleId } = useAuth()
 
   const [currentIndexFlip, setCurrentIndexFlip] = useState(0)
+  const [elmButtonFollow, setElmButtonFollow] = useState<string>('')
+  // const [followStatus, setFollowStatus] = useState<string>('')
+  // const [isConfirmBox, setIsConfirmBox] = useState<boolean>(false)
+  // const [isFollowed, setIsFollowed] = useState<boolean>(false)
+  // const [isPublic, setIsPublic] = useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false)
   const [tab, setTab] = useState(Tab.Total)
 
   const { data: dataAvgPlayer, error: errorAvgPlayer } = useSWR(
@@ -234,6 +248,16 @@ const Biography = () => {
   useEffect(() => {
     console.log('aaa dataFlip: ', dataFlip)
   }, [dataFlip])
+
+  useEffect(() => {
+    console.log('aaa dataBio: ', dataBio)
+    // if (dataBio) {
+    //   setFollowStatus(dataBio.followStatus)
+    //   setIsConfirmBox(dataBio.isConfirmBox)
+    //   setIsPublic(dataBio.isPublic)
+    //   setIsFollowed(dataBio.isFollowed)
+    // }
+  }, [dataBio])
 
   const dataBioRadarChart = useMemo(() => {
     const coach = get(dataBio, 'radarUpdatedByCoach')
@@ -323,6 +347,38 @@ const Biography = () => {
         </div>
       </Layout>
     )
+
+  console.log('followStatus', dataBio.followStatus)
+  console.log('isPublic', dataBio.isPublic)
+  console.log('isFollowed', dataBio.isFollowed)
+  console.log('isConfirmBox', dataBio.isConfirmBox)
+
+  // useEffect(() => {
+  //   if (!dataBio.isFollowed) {
+  //     setElmButtonFollow('Follow')
+  //   } else if (dataBio.isFollowed) {
+  //     setElmButtonFollow('Following')
+  //   }
+  // }, [])
+
+  const handleFollow = async () => {
+    if (!dataBio.isFollowed) {
+      const res = await axios.post(
+        `${API_FRIENDS}/${userid}/request-relationship?type=follows`
+      )
+      console.log('res', res)
+      if (res.status === 201) {
+        // elmButtonFollow = 'Following'
+      }
+    } else {
+      const res = await axios.delete(
+        `${API_FRIENDS}/${userid}/remove-relationship?type=follows`
+      )
+      if (res.status === 200) {
+        // elmButtonFollow = 'Follow'
+      }
+    }
+  }
 
   return (
     <Layout title="Zporter">
@@ -683,13 +739,19 @@ const Biography = () => {
           </div>
 
           {userid !== currentRoleId && (
-            <div className="w-[466px] mx-auto mb-[24px] ">
-              <button className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue mr-[26px] font-medium ">
-                Add
-              </button>
-              <button className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent text-Green border border-Green font-medium ">
-                Follow
-              </button>
+            <div className="w-[466px] mx-auto mb-[24px] flex">
+              <Button
+                text="Add"
+                className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue mr-[26px] font-medium "
+              ></Button>
+              <Button
+                loading={loading}
+                text={elmButtonFollow}
+                onClick={handleFollow}
+                className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent text-Green border border-Green font-medium "
+              >
+                {/* {elmButtonFollow} */}
+              </Button>
             </div>
           )}
 

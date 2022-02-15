@@ -16,6 +16,7 @@ export const LocationSearchInput = () => {
     const gmapScriptEl = document.createElement(`script`)
     // gmapScriptEl.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyB8Z2bCGsFd5gPkbBwf6Z5rykMAT8tG9kE&libraries=places&callback=initMap`
     gmapScriptEl.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyACsPMTFY8RREvrQ5hHfZNrrh5KdYbRWiM&libraries=places&callback=initMap`
+    // gmapScriptEl.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCHYCMrx7vUSIKrI4NAy3w-JIInILtJnps&libraries=places&callback=initMap`
     try {
       document
         ?.querySelector(`body`)
