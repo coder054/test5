@@ -1,7 +1,7 @@
+import { DesktopDatePicker } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import DatePicker from '@mui/lab/DatePicker'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
-import { TextField, styled } from '@mui/material'
+import { styled, TextField } from '@mui/material'
 import clsx from 'clsx'
 import * as React from 'react'
 
@@ -42,23 +42,24 @@ const CssTextField = styled(TextField)({
 export const MyDatePicker = ({
   className,
   label,
-  value,
+  val,
   onChange,
   type,
   ...rest
 }: {
   className?: string
   label: string
-  value?: string | null
+  val?: Date | string | null
   onChange?: any
   [rest: string]: any
 }) => {
   return (
     <div className={clsx('relative', className)}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <DatePicker
+        <DesktopDatePicker
           label={label}
-          value={value ? value : null}
+          value={val ? val : null}
+          inputFormat="dd/MM/yyyy"
           onChange={onChange}
           renderInput={(params) => <CssTextField fullWidth {...params} />}
           {...rest}

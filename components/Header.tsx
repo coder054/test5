@@ -81,6 +81,9 @@ export const Header = () => {
           '& .MuiList-padding': {
             padding: 0,
           },
+          '& .MuiPaper-root': {
+            backgroundColor: '#111115',
+          },
         }}
       >
         <DropdownUser />
