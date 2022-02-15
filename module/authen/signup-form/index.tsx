@@ -11,6 +11,7 @@ import { MySelect } from 'components/MySelect'
 import { OptionCountry, OptionUserProfile } from '../types'
 import { MyDatePicker } from 'components/MyDatePicker'
 import { ROUTES } from 'constants/constants'
+import { LocationSearchInput } from 'components/location-search-input'
 
 const SignUpForm = () => {
   const router = useRouter()
@@ -39,6 +40,8 @@ const SignUpForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     const submitForm = await form.validateFields()
+    console.log('submitForm', submitForm)
+
     router.push({
       pathname: ROUTES.SIGNUP_FORM_PLAYER,
       query: { profile: userProfile },
@@ -122,7 +125,7 @@ const SignUpForm = () => {
             />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             className="mt-[24px]"
             name={'city'}
             rules={[
@@ -132,12 +135,9 @@ const SignUpForm = () => {
               },
             ]}
           >
-            <MyInput
-              name={'city'}
-              label="City where you are living in today"
-              signupForm
-            />
-          </Form.Item>
+            <MyInput name={'city'} label="City where you are living in today" />
+          </Form.Item> */}
+          <LocationSearchInput />
 
           <Form.Item
             className="mt-[24px]"
