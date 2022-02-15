@@ -53,7 +53,6 @@ const News = () => {
         query: status,
       })
     )
-    console.log('RES: ', status)
     if (res.status === 201) {
       const newsCopy = JSON.parse(JSON.stringify(news))
       newsCopy.forEach((item: NewsType) => {

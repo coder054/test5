@@ -69,7 +69,7 @@ export const BasicDetail = () => {
     currentUser !== null ? setEmail(currentUser.email) : setEmail('')
     account &&
       setFormValues((prev) => ({ ...prev, userName: account?.username }))
-  }, [currentUser])
+  }, [currentUser, account])
 
   return (
     <BackGround
