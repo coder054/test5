@@ -1,4 +1,5 @@
 import { IconButton, Menu } from '@mui/material'
+import { showSidebarAtom } from 'atoms/UIatoms'
 import { ROUTES } from 'constants/constants'
 import {
   imgBell,
@@ -6,6 +7,7 @@ import {
   imgMessage,
   imgSearch,
 } from 'imports/images'
+import { useAtom } from 'jotai'
 import { isEmpty } from 'lodash'
 import { useAuth } from 'module/authen/auth/AuthContext'
 import Image from 'next/image'
@@ -15,6 +17,7 @@ import { useMemo, useState } from 'react'
 import { DropdownUser } from './specific/DropdownUser'
 
 export const Header = () => {
+  const [showSidebar, setShowSidebar] = useAtom(showSidebarAtom)
   const { tokenData } = useAuth()
   const router = useRouter()
   // const [showDropdownUser, setShowDropdownUser] = useState(false)
@@ -66,10 +69,12 @@ export const Header = () => {
       }}
       className={`${
         !!tokenData ? 'h-[64px]' : 'h-[80px]'
-      } w-100vw-280px left-[280px] top-0 fixed z-[1000]
+      } w-full left-0 top-0 fixed z-40
         flex justify-between items-center
-        px-[39px]
+        pl-[16px] xl:pl-[319px]
+        pr-[16px] xl:pr-[39px]
         bg-[#111115]
+         
         `}
     >
       <Menu
@@ -88,7 +93,21 @@ export const Header = () => {
       >
         <DropdownUser />
       </Menu>
-      <div className="mr-[9px] w-[32px] h-[32px] ">
+      <div
+        onClick={() => {
+          // if (typeof window === 'undefined') {
+          //   return
+          // }
+          // let sidebar = window.document.getElementById('sidebar')
+          // if (!sidebar) {
+          //   return
+          // }
+
+          // sidebar.classList.add('show')
+          setShowSidebar(true)
+        }}
+        className="mr-[9px] w-[32px] h-[32px] block xl:hidden cursor-pointer "
+      >
         <Image className="" src={imgHamburgerPurple} alt="" />
       </div>
       <span className="font-semibold text-white text-[24px] leading-[33px] ">

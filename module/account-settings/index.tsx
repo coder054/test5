@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { Cookies } from 'react-cookie'
 import { axios } from 'utils/axios'
 import { Account } from './components/account/Account'
+import { Media } from './components/media/Media'
 import { Profile } from './components/profile/Profiile'
 import { Settings } from './components/settings/Settings'
 
@@ -50,7 +51,6 @@ export const AccountSettings = () => {
         roleId: roleId,
       },
     })
-    console.log('RES: ', res)
     if (res.status === 200) {
       setSettings(res.data)
     }
@@ -73,6 +73,9 @@ export const AccountSettings = () => {
         </TabPanel>
         <TabPanel visible={tab === Tab.Profile}>
           <Profile />
+        </TabPanel>
+        <TabPanel visible={tab === Tab.Media}>
+          <Media />
         </TabPanel>
       </article>
     </div>

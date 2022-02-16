@@ -1,5 +1,6 @@
 import { get, truncate } from 'lodash'
 import cookie from 'cookie'
+import createCache from '@emotion/cache'
 import { notification } from 'antd'
 import { axios } from './axios'
 import jwtDecode from 'jwt-decode'
@@ -103,4 +104,52 @@ export const dataFromToken = (token: string) => {
     return tokenData
   }
   return {}
+}
+
+export const detectURLName = (host?: string) => {
+  const url = new URL(host ? host : '')
+  return url.host.split('.')[url.host.split('.').length - 2].toUpperCase()
+}
+
+export const detectValidURL = (url?: string) => {
+  const expression =
+    /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi
+  const regex = new RegExp(expression)
+  return url?.match(regex)
+}
+
+export const getYoutubeThumbnail = (
+  url?: string,
+  quality?: 'low' | 'medium' | 'high' | 'max'
+) => {
+  if (url) {
+    let video_id, thumbnail, result
+    if ((result = url.match(/youtube\.com.*(\?v=|\/embed\/)(.{11})/))) {
+      video_id = result.pop()
+    } else if ((result = url.match(/youtu.be\/(.{11})/))) {
+      video_id = result.pop()
+    }
+    if (video_id) {
+      if (typeof quality == 'undefined') {
+        quality = 'high'
+      }
+      var quality_key = 'maxresdefault'
+      if (quality == 'low') {
+        quality_key = 'sddefault'
+      } else if (quality == 'medium') {
+        quality_key = 'mqdefault'
+      } else if (quality == 'high') {
+        quality_key = 'hqdefault'
+      }
+
+      thumbnail =
+        'http://img.youtube.com/vi/' + video_id + '/' + quality_key + '.jpg'
+      return thumbnail
+    }
+  }
+  return false
+}
+
+export const createEmotionCache = () => {
+  return createCache({ key: 'css' })
 }
