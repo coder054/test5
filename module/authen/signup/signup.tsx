@@ -211,10 +211,11 @@ export const SignUpWithSMS = () => {
 
   const contentFillInfoSignUpWithPhone = () => {
     return (
-      <div className="w-screen h-screen relative">
-        <div className="absolute top-[40px] left-[40px]">
+      <div className="autofill2 w-screen h-screen md:flex md:items-center float-left">
+        <div className="absolute top-[10px] md:top-[18px] lg:top-[24px] left-[32px] md:left-[40px]">
           <GoBack label="Sign up with SMS" goBack="/signin" />
         </div>
+        <LogoBigSize className="absolute left-[18%] md:left-[68%] lg:left-[56%] mt-[42px]" />
         <div className="w-full h-full flex items-center">
           <div
             style={{
@@ -222,7 +223,7 @@ export const SignUpWithSMS = () => {
   0px 4px 6px -2px rgba(27, 28, 30, 0.05)`,
               backdropFilter: 'blur(68px)',
             }}
-            className={`w-[470px] rounded-[8px] pl-[32px] pt-[48px] pr-[32px] pb-[48px] ml-[17%] bg-[#ffffff19] `}
+            className={`w-[320px] md:w-[470px] lg:w-[470px] rounded-[8px] mt-[78px] md:mt-[0px] pt-[16px] md:pt-[48px] pl-[12px] md:pl-[24px] lg:pl-[32px] pr-[12px] md:pr-[24px] lg:pr-[32px] pb-[16px] md:pb-[48px] ml-[10%] md:ml-[5%] lg:ml-[8%] xl:ml-[17%] bg-[#ffffff19]`}
           >
             <p className="text-[24px] text-[#FFFFFF] text-center">Sign up</p>
             <p className="text-[14px] text-[#818389] mt-[16px] text-center">
@@ -332,8 +333,8 @@ export const SignUpWithSMS = () => {
                       max: 255,
                     },
                     {
-                      min: 6,
-                      message: 'Your password must be more than 6 characters',
+                      min: 8,
+                      message: 'Your password must be more than 8 characters',
                     },
                   ]}
                 >
@@ -461,8 +462,8 @@ export const SignUpWithSMS = () => {
                         max: 255,
                       },
                       {
-                        min: 6,
-                        message: 'Your password must be more than 6 characters',
+                        min: 8,
+                        message: 'Your password must be more than 8 characters',
                       },
                     ]}
                   >
@@ -558,7 +559,6 @@ export const SignUpWithSMS = () => {
               </a>
             </Link>
           </div>
-          <LogoBigSize className="mt-12" />
         </div>
       </div>
     )

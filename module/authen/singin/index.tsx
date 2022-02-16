@@ -121,34 +121,6 @@ const SignIn = () => {
       auth
     )
   }, [])
-
-  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-  //   const body = {
-  //     email: values.email,
-  //     password: values.password,
-  //     returnSecureToken: values.returnSecureToken,
-  //   }
-  //   try {
-  //     axios
-  //       .post(
-  //         'https://asia-northeast1-zporter-dev.cloudfunctions.net/api/log-in',
-  //         body
-  //       )
-  //       .then((res) => {
-  //         responseSet(res.data)
-  //         statusSet(res.status)
-  //         cookies.set('token', res.data.idToken)
-  //         window.location.href = '/feed'
-  //       })
-  //       .catch(() => {
-  //         alert(
-  //           'Your email or password is invalid. Please try again or reset your password'
-  //         )
-  //       })
-  //   } catch (error) {}
-  // }
-
   const handleSignup = () => {
     setOpenModal(true)
   }
@@ -214,9 +186,11 @@ const SignIn = () => {
 
   const contentFillInfoSignInWithPhone = () => {
     return (
-      <div className=" autofill2 w-screen h-screen flex items-center">
+      <div className="autofill2 w-screen min-h-screen md:flex md:items-center float-left">
+        <LogoBigSize className="absolute left-[18%] md:left-2/3 lg:left-[56%] mt-[32px]" />
+
         <div
-          className={`${cls.formSignIn} w-[470px] rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px] ml-[17%]`}
+          className={`${cls.formSignIn} w-[320px] md:w-[420px] lg:w-[470px] rounded-[8px] mt-[118px] md:mt-[0px] pt-[16px] md:pt-[48px] pl-[12px] md:pl-[24px] lg:pl-[32px] pr-[12px] md:pr-[24px] lg:pr-[32px] pb-[16px] md:pb-[48px] ml-[10%] lg:ml-[8%] xl:ml-[17%]`}
         >
           <div className="w-full text-center">
             <p className="text-[24px] text-[#FFFFFF] font-semibold">Log in</p>
@@ -362,7 +336,6 @@ const SignIn = () => {
             </Link>
           </div>
         </div>
-        <LogoBigSize />
         <MyModal show={openModal} width={412} setShow={setOpenModal}>
           <div
             className={`${cls.modal} bg-[#1E1F24] pt-[42.8px] pr-[44.8px] pl-[44.8px] pb-[44.8px] rounded-[4px] float-left`}
