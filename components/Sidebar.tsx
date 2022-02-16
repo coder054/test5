@@ -17,10 +17,25 @@ import {
 import clsx from 'clsx'
 import { LOCAL_STORAGE_KEY, ROUTES } from 'constants/constants'
 import { useAuth } from 'module/authen/auth/AuthContext'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useScreenWidth } from 'hooks/useScreenWidth'
+import { useOnClickOutside } from 'hooks/useOnClickOutside'
+import { useAtom } from 'jotai'
+import { showSidebarAtom } from 'atoms/UIatoms'
 
 export const Sidebar = () => {
+  const [showSidebar, setShowSidebar] = useAtom(showSidebarAtom)
+  const sidebarRef = useRef<HTMLDivElement | null>(null)
+  const { screenWidth } = useScreenWidth()
   const router = useRouter()
+  useOnClickOutside(sidebarRef, () => {
+    if (screenWidth < 1280) {
+      if (showSidebar) {
+        setShowSidebar(false)
+      }
+    } else {
+    }
+  })
 
   const [arrSidebar, setArrSidebar] = useState<any>([])
 
@@ -89,60 +104,92 @@ export const Sidebar = () => {
         active: false,
       },
     ])
+
+    if (window.innerWidth < 1280) {
+      setShowSidebar(false)
+      // sidebarRef.current?.classList.remove('show')
+    } else {
+      setShowSidebar(true)
+      // sidebarRef.current?.classList.add('show')
+    }
   }, [])
 
-  return (
-    <div
-      className=" bg-Neutral-900 w-[280px] h-screen fixed overflow-auto
-    z-50 "
-    >
-      <div className="ml-[24px] mt-[33px] mb-[33px] ">
-        <Image src={imgLogo} alt="" />
-      </div>
+  useEffect(() => {
+    if (screenWidth < 1280) {
+      setShowSidebar(false)
+      // sidebarRef.current?.classList.remove('show')
+    } else {
+      setShowSidebar(true)
+      // sidebarRef.current?.classList.add('show')
+    }
+  }, [screenWidth])
 
-      <div className="px-[16px] ">
-        <div className=" font-semibold text-Neutral-400 text-[12px] leading-[30px] uppercase mb-1 ">
-          General
+  return (
+    <>
+      <div
+        id="sidebar"
+        ref={sidebarRef}
+        className={clsx(
+          ` bg-Neutral-900 w-[280px] h-screen fixed overflow-auto
+        sidebar top-0 duration-200 z-[5000]`,
+          showSidebar ? ' show ' : '  '
+        )}
+      >
+        <div className="ml-[24px] mt-[33px] mb-[33px] ">
+          <Image src={imgLogo} alt="" />
         </div>
 
-        <ul>
-          {arrSidebar.map((o, index) => {
-            const isActive = o.link === router.asPath
-            // console.log('aaa o.link', o.link)
-            // console.log('aaa router.pathname', router.pathname)
-            // if (router.pathname === '/biography/[userid]') {
-            //   debugger
-            // }
+        <div className="px-[16px] ">
+          <div className=" font-semibold text-Neutral-400 text-[12px] leading-[30px] uppercase mb-1 ">
+            General
+          </div>
 
-            return (
-              <li
-                className={clsx(
-                  `h-[40px] rounded-[8px] mb-1 hover:bg-lightestGray duration-200`,
-                  isActive ? ' bg-lightestGray ' : ''
-                )}
-                key={index}
-              >
-                <Link href={o.link}>
-                  <a className=" w-full h-full px-[24px] flex items-center">
-                    <span className=" mr-[8px] inline-block ">
-                      <o.icon active={isActive} />
-                    </span>
-                    <span
-                      className={clsx(
-                        ` text-[14px] leading-[24px] text-Neutral-300
+          <ul>
+            {arrSidebar.map((o, index) => {
+              const isActive = o.link === router.asPath
+              // console.log('aaa o.link', o.link)
+              // console.log('aaa router.pathname', router.pathname)
+              // if (router.pathname === '/biography/[userid]') {
+              //   debugger
+              // }
+
+              return (
+                <li
+                  className={clsx(
+                    `h-[40px] rounded-[8px] mb-1 hover:bg-lightestGray duration-200`,
+                    isActive ? ' bg-lightestGray ' : ''
+                  )}
+                  key={index}
+                >
+                  <Link href={o.link}>
+                    <a className=" w-full h-full px-[24px] flex items-center">
+                      <span className=" mr-[8px] inline-block ">
+                        <o.icon active={isActive} />
+                      </span>
+                      <span
+                        className={clsx(
+                          ` text-[14px] leading-[24px] text-Neutral-300
                         font-semibold `,
-                        isActive ? ' text-Yellow ' : '  '
-                      )}
-                    >
-                      {o.text}{' '}
-                    </span>
-                  </a>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
+                          isActive ? ' text-Yellow ' : '  '
+                        )}
+                      >
+                        {o.text}{' '}
+                      </span>
+                    </a>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
       </div>
-    </div>
+      {/* mask */}
+      <div
+        className={clsx(
+          ` bg-[#0000007f] z-50 fixed inset-0 pointer-events-none duration-200 `,
+          showSidebar && screenWidth < 1280 ? ' opacity-1 ' : ' opacity-0 '
+        )}
+      ></div>
+    </>
   )
 }

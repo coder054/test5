@@ -30,12 +30,14 @@ export const Layout = ({
 
       <div className="flex">
         {/* below the sidebar */}
-        <div className=" w-[280px] h-screen border bg-red-500 "></div>
+        {/* <div className=" w-[280px] h-screen border bg-red-500 "></div> */}
         <div
-          className=" w-100vw-280px min-h-screen bg-[#111115] 
-        pt-4 2xl:pt-5
-        px-[39px] 2xl:px-[50px]
-        pb-[39px] 2xl:pb-[50px]"
+          className=" w-full min-h-screen bg-[#111115] 
+        pt-4 2xl:pt-5                
+        pl-[16px] xl:pl-[319px]
+        pr-[16px] xl:pr-[39px]
+        "
+          
         >
           {/* below the header */}
           <div className="h-[64px]"></div>

@@ -200,3 +200,11 @@
 .css-i4bv87-MuiSvgIcon-root {
   color: #6b7280;
 }
+
+.sidebar {
+  left: -500px;
+}
+
+.sidebar.show {
+  left: 0;
+}
