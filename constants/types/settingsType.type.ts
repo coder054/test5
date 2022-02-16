@@ -53,11 +53,18 @@ export type HealthType = {
   }
 }
 
+export type VideoLinksType = {
+  source?: string
+  thumbnailUrl?: string
+  url?: string
+  id?: string
+}
+
 export type MediaType = {
-  bodyImage: string
-  faceImage: string
-  teamImage: string
-  videoLinks: string[]
+  bodyImage?: string
+  faceImage?: string
+  teamImage?: string
+  videoLinks?: VideoLinksType[]
 }
 
 export type CountryType = {
@@ -100,12 +107,12 @@ export type SettingsType = {
 }
 
 export type SocialLinksType = {
-  facebook: string
-  instagram: string
-  tiktok: string
-  twitter: string
-  veoHighlites: string
-  youtube: string
+  facebook?: string
+  instagram?: string
+  tiktok?: string
+  twitter?: string
+  veoHighlites?: string
+  youtube?: string
 }
 
 export type CoachSkillsType = {

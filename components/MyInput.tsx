@@ -75,7 +75,7 @@ export const MyInput = ({
   }, [])
 
   return (
-    <div>
+    <div className="w-full">
       <div className={clsx('relative', className)}>
         <CssTextField
           {...rest}
