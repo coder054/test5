@@ -1,5 +1,6 @@
 import { get, truncate } from 'lodash'
 import cookie from 'cookie'
+import createCache from '@emotion/cache'
 import { notification } from 'antd'
 import { axios } from './axios'
 import jwtDecode from 'jwt-decode'
@@ -147,4 +148,8 @@ export const getYoutubeThumbnail = (
     }
   }
   return false
+}
+
+export const createEmotionCache = () => {
+  return createCache({ key: 'css' })
 }
