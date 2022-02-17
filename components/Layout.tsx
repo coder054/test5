@@ -37,7 +37,6 @@ export const Layout = ({
         pl-[16px] xl:pl-[319px]
         pr-[16px] xl:pr-[39px]
         "
-          
         >
           {/* below the header */}
           <div className="h-[64px]"></div>

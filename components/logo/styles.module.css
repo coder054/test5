@@ -1,5 +1,6 @@
 .bigLogo {
   background-image: url('../../public/authen/Logo_BigSize.png');
+  background-size: cover;
 }
 .largeLogo {
   background-image: url('../../public/authen/Logo_LargeSize.png');

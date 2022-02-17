@@ -251,7 +251,7 @@ export function AuthProvider({ children }) {
     // }
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      console.log('aaa onIdTokenChanged', user)
+      // console.log('aaa onIdTokenChanged', user)
       setIsInitialized(true)
 
       if (!user) {

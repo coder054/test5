@@ -3,6 +3,8 @@ import { useAuth } from 'module/authen/auth/AuthContext'
 import SignUpForm from 'module/authen/signup-form'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { GetServerSideProps, NextApiRequest, NextApiResponse } from 'next'
+import { requireAuth } from 'config/firebase-admin'
 
 const SignUpWithInvitationPage = () => {
   const router = useRouter()
@@ -23,3 +25,8 @@ const SignUpWithInvitationPage = () => {
 }
 
 export default SignUpWithInvitationPage
+
+// export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+//   await requireAuth(req as NextApiRequest, res as NextApiResponse)
+//   return { props: {} }
+// }

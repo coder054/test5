@@ -2,10 +2,6 @@
   margin-top: -54px;
 }
 
-.content {
-  margin-top: 81px;
-}
-
 .ant-carousel .slick-dots li.slick-active button {
   background: #ffffff !important;
   opacity: 1;
@@ -43,4 +39,42 @@
 
 .signupWith :hover {
   background: #252627;
+}
+
+@media screen and (max-width: 375px) {
+  .image {
+    width: 300px;
+    height: 300px;
+    margin-left: 5px;
+  }
+}
+
+@media screen and (max-width: 768px) and (min-width: 375px) {
+  .image {
+    width: 340px;
+    height: 340px;
+    margin-left: 20px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .image {
+    width: 420px;
+    height: 420px;
+    margin-left: 150px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  .urlDownload {
+    width: 140px;
+    height: 45px;
+  }
+}
+
+@media screen and (min-width: 375px) {
+  .urlDownload {
+    width: 160px;
+    height: 47px;
+  }
 }

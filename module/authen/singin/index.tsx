@@ -3,7 +3,6 @@ import { MyInput } from 'components/MyInput'
 import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { atom, useAtom } from 'jotai'
-import { MyModal } from 'components/MyModal'
 import { useAuth } from '../auth/AuthContext'
 import { Form, notification } from 'antd'
 import cls from './signin.module.css'
@@ -121,34 +120,6 @@ const SignIn = () => {
       auth
     )
   }, [])
-
-  // const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-  //   const body = {
-  //     email: values.email,
-  //     password: values.password,
-  //     returnSecureToken: values.returnSecureToken,
-  //   }
-  //   try {
-  //     axios
-  //       .post(
-  //         'https://asia-northeast1-zporter-dev.cloudfunctions.net/api/log-in',
-  //         body
-  //       )
-  //       .then((res) => {
-  //         responseSet(res.data)
-  //         statusSet(res.status)
-  //         cookies.set('token', res.data.idToken)
-  //         window.location.href = '/feed'
-  //       })
-  //       .catch(() => {
-  //         alert(
-  //           'Your email or password is invalid. Please try again or reset your password'
-  //         )
-  //       })
-  //   } catch (error) {}
-  // }
-
   const handleSignup = () => {
     setOpenModal(true)
   }
@@ -214,9 +185,13 @@ const SignIn = () => {
 
   const contentFillInfoSignInWithPhone = () => {
     return (
-      <div className=" autofill2 w-screen h-screen flex items-center">
+      <div className="autofill2 w-screen min-h-screen md:flex md:items-center float-left">
+        <LogoBigSize className="absolute left-[18%] md:left-2/3 lg:left-[56%] mt-[32px]" />
+
         <div
-          className={`${cls.formSignIn} w-[470px] rounded-[8px] pt-[48px] pl-[32px] pr-[32px] pb-[48px] ml-[17%]`}
+          className={`${cls.formSignIn} w-[320px] md:w-[450px] lg:w-[470px] rounded-[8px] mt-[118px] md:mt-[0px] 
+            pt-[16px] md:pt-[48px] pl-[12px] md:pl-[24px] lg:pl-[32px] pr-[12px] md:pr-[24px] lg:pr-[32px] pb-[16px] 
+            md:pb-[48px] mobileM:ml-[10%] lg:ml-[8%] xl:ml-[17%]`}
         >
           <div className="w-full text-center">
             <p className="text-[24px] text-[#FFFFFF] font-semibold">Log in</p>
@@ -362,46 +337,6 @@ const SignIn = () => {
             </Link>
           </div>
         </div>
-        <LogoBigSize />
-        <MyModal show={openModal} width={412} setShow={setOpenModal}>
-          <div
-            className={`${cls.modal} bg-[#1E1F24] pt-[42.8px] pr-[44.8px] pl-[44.8px] pb-[44.8px] rounded-[4px] float-left`}
-          >
-            <div className="float-right" onClick={handleCloseModal}>
-              <SvgXIcon className={''} />
-            </div>
-            <p className="float-left text-[18px] font-semibold text-[#FFFFFF] mt-[20.8px] mb-[32px]">
-              By signing up, you agree to Zporters Terms & Conditions and
-              Privacy Rules
-            </p>
-            <Button
-              className={`${cls.signupWith} w-full h-[48px]`}
-              text="SIGN UP with SMS"
-              onClick={() => {
-                router.push('/signup-with-sms')
-              }}
-            />
-            <Button
-              className={`${cls.signupWith} w-full h-[48px]`}
-              text="SIGN UP with Email"
-              onClick={() => {
-                router.push('/signup-with-email')
-              }}
-            />
-            <Button
-              className={`${cls.signupWith} w-full h-[48px]`}
-              text="SIGN UP with Google"
-            />
-            <Button
-              className={`${cls.signupWith} w-full h-[48px]`}
-              text="SIGN UP with Facebook"
-            />
-            <Button
-              className={`${cls.signupWith} w-full h-[48px]`}
-              text="SIGN UP with Apple"
-            />
-          </div>
-        </MyModal>
       </div>
     )
   }
