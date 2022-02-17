@@ -53,11 +53,11 @@ const Landing = () => {
                   </span>
 
                   <div className="pt-[24px] lg:pt-[64px] flex w-full">
-                    <div className="flex m-auto justify-around w-[488px]">
+                    <div className="flex m-auto justify-around w-full md:w-[488px]">
                       <Link href="/signin">
                         <a className="">
                           <Button
-                            className="w-[172px] md:w-[224px] h-[48px] bg-[#4654EA] text-[15px]"
+                            className="w-[154px] mobileM:w-[176px] md:w-[224px] h-[48px] bg-[#4654EA] text-[14px] md:text-[15px]"
                             text="Sign In"
                           />
                         </a>
@@ -66,7 +66,7 @@ const Landing = () => {
                       <Link href="/signup">
                         <a className="">
                           <Button
-                            className="w-[172px] md:w-[224px] h-[48px] bg-[#000000] text-[15px] border border-[#09E099] text-[#09E099]"
+                            className="w-[154px] mobileM:w-[176px] md:w-[224px] h-[48px] bg-[#000000] text-[14px] md:text-[15px] border border-[#09E099] text-[#09E099]"
                             text="Sign up"
                           />
                         </a>
@@ -76,26 +76,36 @@ const Landing = () => {
                 </div>
               </div>
               <div
-                className={`${cls.image} lg:flex-1 pt-[56px] lg:pt-[0px] h-[580px] lg:h-[780px]`}
+                className={` lg:flex-1 pt-[56px] lg:pt-[0px] h-[520px] mobileM:h-[570px] lg:h-[780px]`}
               >
                 <div className="float-left relative">
-                  <Image src={item.image} alt="" />
-                  <div className="flex w-[336px] m-auto">
+                  <div
+                    className={`${cls.image} float-left h-[432px] mobileM:h-[464px]`}
+                  >
+                    <Image src={item.image} alt="" />
+                  </div>
+                  <div className="flex w-[320px] mobileM:w-[336px] m-auto">
                     <Link href={'https://webapp.diawi.com/install/QczCSL'}>
                       <a className="flex-1 cursor-pointer" target={'_blank'}>
-                        <Image src={imgGooglePlay} alt="" />
+                        <div
+                          className={`${cls.urlDownload} ml-[12px] mobileM:ml-0`}
+                        >
+                          <Image src={imgGooglePlay} alt="" />
+                        </div>
                       </a>
                     </Link>
                     <Link href={'https://webapp.diawi.com/install/99bGwJ'}>
                       <a className="flex-1 cursor-pointer" target={'_blank'}>
-                        <Image src={imgAppStore} alt="" />
+                        <div className={`${cls.urlDownload}`}>
+                          <Image src={imgAppStore} alt="" />
+                        </div>
                       </a>
                     </Link>
                   </div>
-                  <div className="absolute w-[21px] h-[21px] bg-[#FFFFFF] rounded-full top-[82px] lg:top-[117px] left-[25px] lg:left-[66px]"></div>
-                  <div className="absolute w-[43px] h-[43px] bg-[#09E099] rounded-full top-[308px] lg:top-[471px] left-[-15px] lg:left-[-15px]"></div>
-                  <div className="absolute w-[59px] h-[59px] bg-[#FF9607] rounded-full top-[122px] lg:top-[161px] left-[305px] lg:left-[368px]"></div>
-                  <div className="absolute w-[32px] h-[32px] bg-[#4654EA] rounded-full top-[272px] lg:top-[422px] left-[254px] lg:left-[345px]"></div>
+                  <div className="absolute w-[21px] h-[21px] bg-[#FFFFFF] rounded-full top-[20px] mobileM:top-[42px] lg:top-[117px] left-[25px] lg:left-[66px]"></div>
+                  <div className="absolute w-[43px] h-[43px] bg-[#09E099] rounded-full top-[214px] mobileM:top-[272px] lg:top-[471px] left-[-0px] lg:left-[-15px]"></div>
+                  <div className="absolute w-[59px] h-[59px] bg-[#FF9607] rounded-full top-[52px] mobileM:top-[122px] lg:top-[161px] left-[242px] mobileM:left-[305px] lg:left-[368px]"></div>
+                  <div className="absolute w-[32px] h-[32px] bg-[#4654EA] rounded-full top-[182px] mobileM:top-[262px] lg:top-[422px] left-[224px] mobileM:left-[254px] lg:left-[345px]"></div>
                 </div>
               </div>
             </div>

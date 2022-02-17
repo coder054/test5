@@ -223,7 +223,9 @@ export const SignUpWithSMS = () => {
   0px 4px 6px -2px rgba(27, 28, 30, 0.05)`,
               backdropFilter: 'blur(68px)',
             }}
-            className={`w-[320px] md:w-[470px] lg:w-[470px] rounded-[8px] mt-[78px] md:mt-[0px] pt-[16px] md:pt-[48px] pl-[12px] md:pl-[24px] lg:pl-[32px] pr-[12px] md:pr-[24px] lg:pr-[32px] pb-[16px] md:pb-[48px] ml-[10%] md:ml-[5%] lg:ml-[8%] xl:ml-[17%] bg-[#ffffff19]`}
+            className={`w-[320px] md:w-[450px] lg:w-[470px] rounded-[8px] mt-[78px] md:mt-[0px] pt-[16px] md:pt-[48px] pl-[12px] 
+              md:pl-[24px] lg:pl-[32px] pr-[12px] md:pr-[24px] lg:pr-[32px] pb-[16px] md:pb-[48px] ml-0 mobileM:ml-[10%] md:ml-[5%] lg:ml-[8%] 
+              xl:ml-[17%] bg-[#ffffff19]`}
           >
             <p className="text-[24px] text-[#FFFFFF] text-center">Sign up</p>
             <p className="text-[14px] text-[#818389] mt-[16px] text-center">
@@ -566,67 +568,71 @@ export const SignUpWithSMS = () => {
 
   const contentFillOtp = () => {
     return (
-      <div
-        className="w-[372px] mx-auto
+      <div className="absolute w-full">
+        <div
+          className="w-[320px] md:w-[372px] mx-auto
                   min-h-[412px]
                   mt-[120px] sm:mt-[120px] md:mt-[120px] lg:mt-[120px] xl:mt-[150px] 2xl:mt-[200px]
-                    
                   "
-      >
-        <img src={'/sidebar/logo.svg'} className="mx-auto mb-[32px]" alt="" />
-        <div
-          className="text-white text-center font-SVNGilroy text-[24px] leading-[137%] 
-        mb-2"
         >
-          Verify phone number
-        </div>
+          <img src={'/sidebar/logo.svg'} className="mx-auto mb-[32px]" alt="" />
+          <div
+            className="text-white text-center font-SVNGilroy text-[18px] md:text-[24px] leading-[137%] 
+        mb-2"
+          >
+            Verify phone number
+          </div>
 
-        <div className="mb-[32px] font-Roboto text-[14px] leading-[22px] px-[14px] ">
-          <span className="text-white  ">
-            Now verify your mobile phone number by adding the 6 digit code we
-            sent to&nbsp;
-          </span>
+          <div className="mb-[32px] font-Roboto text-[12px] md:text-[14px] leading-[22px] px-[14px] ">
+            <span className="text-white  ">
+              Now verify your mobile phone number by adding the 6 digit code we
+              sent to&nbsp;
+            </span>
 
-          <span className="text-[#00e09d] ">{phoneFormPhoneSignUp}.&nbsp;</span>
-          <span className="underline text-white">Wrong number?</span>
-        </div>
+            <span className="text-[#00e09d] ">
+              {phoneFormPhoneSignUp}.&nbsp;
+            </span>
+            <span className="underline text-white">Wrong number?</span>
+          </div>
 
-        <div className="text-white text-[14px] leading-[22px] mb-2 ">
-          Verify code
-        </div>
+          <div className="w-[300px] md:w-[372px] mx-auto">
+            <div className="text-white text-[12px] md:text-[14px] leading-[18px] md:leading-[22px] mb-1.5 md:mb-2 ">
+              Verify code
+            </div>
+            <OtpInput
+              value={otp}
+              onChange={(value) => {
+                setOtp(value)
+              }}
+              numInputs={6}
+              separator={<span></span>}
+              containerStyle="flex space-x-[6px] md:space-x-[16px] ml-[-2px] "
+              inputStyle="border-[1px] md:border-[2px] border-[#4654EA] rounded-[8px] w-[45px] md:w-[49px] h-[51px] md:h-[56px] flex justify-center items-center
+              text-[24px] md:text-[28px] font-SVNGilroy"
+              isInputNum
+            />
 
-        <OtpInput
-          value={otp}
-          onChange={(value) => {
-            setOtp(value)
-          }}
-          numInputs={6}
-          separator={<span></span>}
-          containerStyle="flex space-x-[16px] ml-[-2px] "
-          inputStyle="border-[2px] border-[#4654EA]  rounded-[8px] w-[49px] h-[56px] flex justify-center items-center
-             text-[28px] font-SVNGilroy "
-        />
+            <div className="h-[24px] "></div>
 
-        <div className="h-[24px] "></div>
-
-        <button
-          onClick={() => {
-            sendCode(otp, emailFormPhoneSignUp, passwordFormPhoneSignUp)
-          }}
-          className="bg-Blue flex justify-center items-center text-[14px] leading-[22px] 
+            <button
+              onClick={() => {
+                sendCode(otp, emailFormPhoneSignUp, passwordFormPhoneSignUp)
+              }}
+              className="bg-Blue flex justify-center items-center text-[13px] md:text-[14px] leading-[22px] 
         text-white w-full h-[44px] rounded-[8px] mb-[14px]
         "
-        >
-          Verify code
-        </button>
+            >
+              Verify code
+            </button>
 
-        <div className="h-[1px] bg-Stroke mb-[24px] "></div>
-
-        <Link href="/signin">
-          <a className="text-Blue text-[16px] leading-[175%] border-b-[1px] border-Blue ">
-            Already having an account?
-          </a>
-        </Link>
+            <div className="h-[1px] bg-Stroke mb-[24px] "></div>
+            <Link href="/signin">
+              <a className="text-Blue text-[14px] md:text-[16px] leading-[175%] border-b-[1px] border-Blue ">
+                Already having an account?
+              </a>
+            </Link>
+          </div>
+        </div>
       </div>
     )
   }

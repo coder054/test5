@@ -56,7 +56,7 @@ module.exports = {
         '100%-16px': 'calc(100% - 16px)',
       },
       screens: {
-        // mobile: '320px',
+        mobileM: '375px',
         sm: '640px',
         md: '768px',
         lg: '1024px',
