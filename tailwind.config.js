@@ -1,3 +1,5 @@
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   important: true,
   content: [
@@ -56,15 +58,11 @@ module.exports = {
         '100%-32px': 'calc(100% - 32px)',
         '100%-16px': 'calc(100% - 16px)',
       },
-      screens: {
-        mobileM: '375px',
-        sm: '640px',
-        md: '768px',
-        lg: '1024px',
-        xl: '1280px',
-        '2xl': '1536px',
-        '3xl': '1800px',
-      },
+    },
+
+    screens: {
+      mobileM: '375px',
+      ...defaultTheme.screens,
     },
   },
   plugins: [require('tailwind-scrollbar')],
