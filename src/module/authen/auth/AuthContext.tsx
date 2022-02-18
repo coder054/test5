@@ -232,7 +232,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
       console.log('aaa onIdTokenChanged', user)
-      setInitialized(true)
+
       if (!user) {
         removeTokenCookie()
         setToken('')
@@ -263,6 +263,9 @@ export function AuthProvider({ children }) {
         setToken(token)
         setCurrentUser(user)
       }
+      setTimeout(() => {
+        setInitialized(true)
+      }, 50)
     })
 
     return () => {
