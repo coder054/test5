@@ -1,6 +1,7 @@
 module.exports = {
   important: true,
   content: [
+    './src/**/*.{js,ts,jsx,tsx}',
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
     './module/**/*.{js,ts,jsx,tsx}',
