@@ -66,19 +66,20 @@ export const SignUpFormPlayer = () => {
   }
 
   return (
-    <div className="autofill2 w-screen h-screen flex items-center">
-      <div className="absolute top-[40px] left-[40px]">
+    <div className="autofill2 w-screen min-h-screen lg:flex md:items-center">
+      <div className="absolute top-[16px] lg:top-[40px] md:left-[40px]]">
         <GoBack label="Sign up form" goBack={ROUTES.SIGNUP_FORM} />
       </div>
       <div
-        className={`w-[490px] h-[880px] rounded-[8px] pt-[48px] pb-[48px] absolute right-[25%] float-left overflow-y-auto pl-[5px] pr-[5px]`}
+        className={`w-[320px] md:w-[490px] md:h-[880px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 2xl:right-[25%] overflow-y-auto 
+        pl-[5px] pr-[5px] mx-auto lg:mr-0 lg:absolute`}
       >
-        <p className="text-[24px] text-[#FFFFFF] font-semibold">
+        <p className="text-[24px] text-[#FFFFFF] font-semibold text-center md:text-left">
           Sign up form - player
         </p>
         <Form className="" form={form} onFinish={handleFinish}>
           <Form.Item
-            className="w-[470px] mt-[48px]"
+            className="w-[310px] md:w-[470px] mt-[48px]"
             name={'yourClub'}
             rules={[
               {
@@ -105,7 +106,7 @@ export const SignUpFormPlayer = () => {
             />
           </Form.Item>
           <Form.Item
-            className="w-[470px] float-left"
+            className="w-[310px] md:w-[470px] float-left"
             name={'yourTeam'}
             rules={[
               {
@@ -118,7 +119,7 @@ export const SignUpFormPlayer = () => {
               label="Your Team(s)"
               message="Input your Team"
               name="yourTeam"
-              className="w-[430px]"
+              className="w-[270px] md:w-[430px]"
               value={value}
               onChange={(e) => setValue(e.target.value)}
             />
@@ -134,7 +135,7 @@ export const SignUpFormPlayer = () => {
           </div>
 
           <Form.Item
-            className="w-[470px]"
+            className="w-[310px] md:w-[470px]"
             name={'shirtNumber'}
             rules={[
               {
@@ -166,7 +167,7 @@ export const SignUpFormPlayer = () => {
             ]}
           >
             <MySelect
-              className="w-[430px]"
+              className="w-[270px] md:w-[430px]"
               label={'Favorite Role(s)'}
               // value={yourClub}
               onChange={(e) => {
@@ -186,7 +187,7 @@ export const SignUpFormPlayer = () => {
           </div>
 
           <Form.Item
-            className="w-[470px]"
+            className="w-[310px] md:w-[470px]"
             name={'length'}
             rules={[
               {
@@ -210,7 +211,7 @@ export const SignUpFormPlayer = () => {
           </Form.Item>
 
           <Form.Item
-            className=" w-[470px]"
+            className="w-[310px] md:w-[470px]"
             name={'weight'}
             rules={[
               {
@@ -231,7 +232,7 @@ export const SignUpFormPlayer = () => {
             />
           </Form.Item>
 
-          <div className="mt-[40px]" onClick={handleSubmit}>
+          <div className="mt-[40px] " onClick={handleSubmit}>
             <Button
               loading={loading}
               className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
@@ -241,7 +242,7 @@ export const SignUpFormPlayer = () => {
         </Form>
       </div>
       <MyModal show={openModal} setShow={setOpenModal} width={412}>
-        <div className="w-full h-full bg-[#1E1F24] rounded-[8px] p-[32px]">
+        <div className="w-[300px] md:w-[412px] mx-auto h-full bg-[#1E1F24] rounded-[8px] p-[16px] md:p-[32px]">
           <div>
             <div
               onClick={() => {

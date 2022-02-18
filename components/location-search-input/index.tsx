@@ -3,6 +3,9 @@ import { MyInput } from 'components/MyInput'
 import { useEffect, useState } from 'react'
 import PlacesAutocomplete, { geocodeByAddress } from 'react-places-autocomplete'
 import { Loading } from 'components/loading/loading'
+import cls from './location-search-input.module.css'
+import { SvgPlace } from 'imports/svgs'
+
 declare const window: any
 
 interface LocationSearchInputProps {}
@@ -70,25 +73,32 @@ export const LocationSearchInput = () => {
                   <input className="hidden" />
                 </Form.Item>
                 <div>{loading && <Loading />}</div>
-                {suggestions.map((suggestion, index) => {
-                  const className = suggestion.active
-                    ? 'suggestion-item--active'
-                    : 'suggestion-item'
-                  const style = suggestion.active
-                    ? { backgroundColor: '#fafafa', cursor: 'pointer' }
-                    : { backgroundColor: '#ffffff', cursor: 'pointer' }
-                  return (
-                    <div
-                      key={index}
-                      {...getSuggestionItemProps(suggestion, {
-                        className,
-                        style,
-                      })}
-                    >
-                      <span>{suggestion.description}</span>
-                    </div>
-                  )
-                })}
+                <div className="">
+                  {suggestions.map((suggestion, index) => {
+                    const className = suggestion.active
+                      ? `${cls.placeAutoActive} flex`
+                      : `${cls.placeAuto} flex`
+                    return (
+                      <div
+                        className="cursor-pointer -mt-[20px]"
+                        key={index}
+                        {...getSuggestionItemProps(suggestion, {
+                          className,
+                        })}
+                      >
+                        <div className="flex items-center ml-[4px]">
+                          <SvgPlace />
+                        </div>
+                        <div
+                          className={`${cls.textPlace} items-center flex ml-[2px] justify-between text-[14px] 
+                          text-[#ffffff]`}
+                        >
+                          <span>{suggestion.description}</span>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
             )
           }}

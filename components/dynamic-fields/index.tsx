@@ -37,7 +37,7 @@ export const DynamicFields = ({
                   if (fields.length >= maxField - 1) return
                   add()
                 }}
-                className="w-[24px] absolute right-[12px] top-[-36px] cursor-pointer ml-[12px]"
+                className="w-[24px] absolute right-[4px] top-[-36px] cursor-pointer ml-[12px]"
               >
                 <SvgAddSmall />
               </div>
@@ -50,7 +50,7 @@ export const DynamicFields = ({
                     {type === 'select' ? (
                       <MySelect
                         signupForm
-                        className="w-[430px]"
+                        className="w-[270px] md:w-[430px]"
                         label={'Favorite Role(s)'}
                         // value={yourClub}
                         onChange={(e) => {
@@ -71,7 +71,7 @@ export const DynamicFields = ({
                       <MyInput
                         label={label}
                         name={name}
-                        className="w-[430px]"
+                        className="w-[270px] md:w-[430px]"
                       />
                     )}
                   </Form.Item>

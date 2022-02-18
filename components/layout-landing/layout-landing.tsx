@@ -12,7 +12,7 @@ export const LayoutLanding = ({ authen, children }: LayoutLandingProps) => {
     <div className="w-full min-h-screen bg-[#000000] relative overflow-hidden">
       {authen && (
         <div
-          className={`${cls.backgroundAuthen} w-screen h-screen absolute`}
+          className={`${cls.backgroundAuthen} w-screen min-h-screen absolute`}
         ></div>
       )}
       {!authen && (

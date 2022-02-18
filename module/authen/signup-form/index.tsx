@@ -12,6 +12,7 @@ import { OptionCountry, OptionUserProfile } from '../types'
 import { MyDatePicker } from 'components/MyDatePicker'
 import { ROUTES } from 'constants/constants'
 import { LocationSearchInput } from 'components/location-search-input'
+import { MySelectCountry } from 'components/MySelectCountry'
 
 const SignUpForm = () => {
   const router = useRouter()
@@ -49,18 +50,19 @@ const SignUpForm = () => {
   }
 
   return (
-    <div className="autofill2 w-screen h-screen flex items-center">
-      <div className="absolute top-[40px] left-[40px]">
+    <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
+      <div className="absolute top-[16px] lg:top-[40px] md:left-[40px]">
         <GoBack label="Sign in form" goBack="/signin" />
       </div>
       <div
-        className={`w-[490px] h-[880px] rounded-[8px] pt-[48px] pb-[48px] absolute right-[25%] overflow-y-auto pl-[5px] pr-[5px]`}
+        className={`w-[320px] md:w-[490px] md:h-[880px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 2xl:right-[25%] overflow-y-auto 
+          pl-[5px] pr-[5px] mx-auto lg:mr-0 lg:absolute`}
       >
-        <p className="text-[24px] text-[#FFFFFF] font-semibold mb-[48px]">
+        <p className="text-[24px] text-[#FFFFFF] font-semibold md:mb-[48px] text-center md:text-left">
           Sign up form
         </p>
         <Form className="" form={form}>
-          <div className="w-full flex justify-between mt-[48px]">
+          <div className="w-full flex justify-between mt-[24px] md:mt-[48px]">
             <Form.Item
               className="w-[235px] pr-[12px] mb-[24px]"
               name={'firstName'}
@@ -113,7 +115,7 @@ const SignUpForm = () => {
               },
             ]}
           >
-            <MySelect
+            {/* <MySelect
               signupForm
               className=""
               label={'Select Country'}
@@ -122,21 +124,16 @@ const SignUpForm = () => {
                 setCountry(e.target.value)
               }}
               arrOption={OptionCountry}
+            /> */}
+            <MySelectCountry
+              label="Select Country"
+              onChange={(_, value) => {
+                setCountry(value)
+              }}
+              val={country}
             />
           </Form.Item>
 
-          {/* <Form.Item
-            className="mt-[24px]"
-            name={'city'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your City where you are living in today',
-              },
-            ]}
-          >
-            <MyInput name={'city'} label="City where you are living in today" />
-          </Form.Item> */}
           <LocationSearchInput />
 
           <Form.Item
@@ -161,28 +158,25 @@ const SignUpForm = () => {
             />
           </Form.Item>
 
-          <div className="flex mt-[24px]">
+          <div className="float-left md:flex mt-[4px] md:mt-[24px]">
             <UploadImage
-              // width={223}
-              // height={130}
               title="Face image"
               text="Add portrait photo of 480*640 pixels or more"
+              className="float-left"
               setImage={setFaceImage}
             />
             <UploadImage
-              // width={223}
-              // height={130}
               title="Full body image"
               text="Add portrait photo of 480*640 pixels or more"
-              className="ml-[24px]"
+              className="md:ml-[24px] float-left mt-[18px] md:mt-0"
               setImage={setFullBodyImage}
             />
           </div>
 
-          <div className="mt-[40px]" onClick={handleSubmit}>
+          <div className="mt-[40px] float-left md:flex" onClick={handleSubmit}>
             <Button
               loading={loading}
-              className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+              className="h-[48px] w-[300px] md:w-[480px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
               text="Next"
             />
           </div>

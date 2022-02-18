@@ -1,0 +1,21 @@
+.placeAuto {
+  height: 48px;
+  width: 100%;
+  background-color: rgba(32, 33, 40, 0.8);
+}
+
+.placeAutoActive {
+  width: 100%;
+  height: 48px;
+  background: #13161a;
+}
+
+.textPlace {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-height: 21px;
+  max-height: 48px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}

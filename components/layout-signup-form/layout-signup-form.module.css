@@ -11,3 +11,27 @@
   bottom: 0px;
   left: 0px;
 }
+
+.vectorTop {
+  position: absolute;
+  width: 1011.83px;
+  height: 753.66px;
+  left: -235px;
+  top: -120.62px;
+  background: #4654ea;
+  opacity: 0.6;
+  filter: blur(393px);
+  transform: rotate(-22.1deg);
+}
+
+.vectorBottom {
+  position: absolute;
+  width: 1030.01px;
+  height: 588.94px;
+  left: 1334px;
+  top: 697.33px;
+  background: #4654ea;
+  opacity: 0.6;
+  filter: blur(393px);
+  transform: rotate(-25.31deg);
+}
