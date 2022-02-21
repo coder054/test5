@@ -32,7 +32,7 @@ steps:
       - '--quiet'
     id: Deploy
     entrypoint: gcloud
-    - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     id: Delete
     args:
       - container
