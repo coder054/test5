@@ -6,9 +6,12 @@ import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
 import { BasicProfile } from './components/BasicProfile'
 import { DetailProfile } from './components/DetailProfile'
+import { useAtom } from 'jotai'
+import { settingsAtom } from 'src/atoms/accountAndSettings'
 
 export const Profile = () => {
   const { currentRoleName, currentRoleId } = useAuth()
+  const [account, setAccount] = useAtom(settingsAtom)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitForm, setSubmitForm] = useState<ProfileType>({
     birthCountry: {
@@ -52,6 +55,7 @@ export const Profile = () => {
         }
       )
       .then(() => {
+        setAccount({ ...account, profile: { ...submitForm } })
         setIsLoading(false)
         notification['success']({
           message: 'Update successfully',
