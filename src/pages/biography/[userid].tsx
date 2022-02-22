@@ -7,7 +7,7 @@ import { GradientCircularProgress } from 'react-circular-gradient-progress'
 import { Stars } from 'src/components/common/Stars'
 import { BioRadarChart } from 'src/components/specific/BioRadarChart'
 import { fetcher, truncateStr } from 'src/utils/utils'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { Loading } from 'src/components/loading/loading'
 import { get, isEmpty } from 'lodash'
 import { TabPanel, Tabs } from 'src/components/Tabs'
@@ -31,9 +31,54 @@ import {
   ButtonBack,
   ButtonNext,
   WithStore,
+  CarouselContext,
 } from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 import { createPortal } from 'react-dom'
+
+const data = [
+  {
+    thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+    url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+    source: 'YOUTUBE',
+  },
+  {
+    url: 'https://youtube.com/j4GzBM83TJQ',
+    thumbnailUrl:
+      'https://img.youtube.com/vi/https://youtube.com/j4GzBM83TJQ/sddefault.jpg',
+    source: 'YOUTUBE',
+  },
+  {
+    url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+    source: 'YOUTUBE',
+    thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+  },
+  {
+    url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+    source: 'YOUTUBE',
+    thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+  },
+  {
+    url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+    source: 'YOUTUBE',
+    thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+  },
+  {
+    url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+    source: 'YOUTUBE',
+    thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+  },
+  {
+    url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+    source: 'YOUTUBE',
+    thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+  },
+  {
+    url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+    source: 'YOUTUBE',
+    thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+  },
+]
 
 enum Tab {
   Total = 'Total',
@@ -348,7 +393,7 @@ const Biography = () => {
 
       <div className="xl:px-[23px] ">
         {/* /// Navigate and filter */}
-        <div className="h-[33px] mt-[24px] xl:flex items-center justify-center relative">
+        <div className="h-[33px] mt-[24px] xl:flex items-center justify-center relative mb-[30px] xl:mb-0 ">
           <div className=" flex items-center  xl:pr-[40px] w-[300px] sm:w-[358px] mx-auto ">
             <Link href={`/biography/${prevFlipId}`}>
               <a
@@ -425,7 +470,7 @@ const Biography = () => {
               </a>
             </Link>
           </div>
-          <div className=" flex xl:absolute xl:right-0 xl:top-[4px] items-center mx-auto text-center justify-center ">
+          <div className=" flex xl:absolute xl:right-0 xl:top-[4px] items-center mx-auto text-center justify-center">
             <Text name="Body2" className="text-white mr-[16px] ">
               4 Filters selected
             </Text>
@@ -1449,57 +1494,11 @@ const InfoWithCircleImage = ({
 }
 
 const TopVideos = ({ dataBio }: { dataBio: IBiographyPlayer }) => {
-  const [show, setShow] = useState(false)
   const { screenWidth } = useScreenWidth()
-  useEffect(() => {
-    setShow(true)
-  }, [])
 
-  const data = [
-    {
-      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
-      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
-      source: 'YOUTUBE',
-    },
-    {
-      url: 'https://youtube.com/j4GzBM83TJQ',
-      thumbnailUrl:
-        'https://img.youtube.com/vi/https://youtube.com/j4GzBM83TJQ/sddefault.jpg',
-      source: 'YOUTUBE',
-    },
-    {
-      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
-      source: 'YOUTUBE',
-      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
-    },
-    {
-      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
-      source: 'YOUTUBE',
-      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
-    },
-    {
-      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
-      source: 'YOUTUBE',
-      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
-    },
-    {
-      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
-      source: 'YOUTUBE',
-      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
-    },
-    {
-      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
-      source: 'YOUTUBE',
-      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
-    },
-    {
-      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
-      source: 'YOUTUBE',
-      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
-    },
-  ]
-
-  console.log('aaa dataBio.topVideoLinks', dataBio.topVideoLinks)
+  const data = useMemo(() => {
+    return dataBio.topVideoLinks
+  }, [dataBio])
 
   const visibleSlides = useMemo(() => {
     if (screenWidth < 640) {
@@ -1515,7 +1514,7 @@ const TopVideos = ({ dataBio }: { dataBio: IBiographyPlayer }) => {
 
   return (
     <>
-      <div className="flex items-center ">
+      <div className="flex items-center mt-[50px] ">
         <Text name="Header5" className="text-white mb-[16px] ">
           Top videos
         </Text>
@@ -1530,61 +1529,103 @@ const TopVideos = ({ dataBio }: { dataBio: IBiographyPlayer }) => {
         totalSlides={data.length}
         visibleSlides={visibleSlides}
       >
-        <Slider>
-          {data.map((video, index) => {
-            return (
-              <Slide index={index} className="">
-                <a
-                  className="block sm:mr-4"
-                  key={index}
-                  href={video.url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <div key={index} className="cursor-pointer">
-                    <img
-                      src={video.thumbnailUrl}
-                      className="rounded-[8px] w-full aspect-[1.78] object-cover mb-[12px] "
-                      alt=""
-                    />
-                  </div>
-                </a>
-              </Slide>
-            )
-          })}
-        </Slider>
-
-        {show &&
-          createPortal(
-            <>
-              <ButtonBack className="cursor-pointer ">
-                <svg
-                  className="cursor-pointer mr-[20px] fill-Grey "
-                  width="24"
-                  height="25"
-                  viewBox="0 0 24 25"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M15.41 17.09L10.83 12.5L15.41 7.91L14 6.5L8 12.5L14 18.5L15.41 17.09Z" />
-                </svg>
-              </ButtonBack>
-              <ButtonNext className="cursor-pointer  ">
-                <svg
-                  className="cursor-pointer fill-Green"
-                  width="24"
-                  height="25"
-                  viewBox="0 0 24 25"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M8.59 17.09L13.17 12.5L8.59 7.91L10 6.5L16 12.5L10 18.5L8.59 17.09Z" />
-                </svg>
-              </ButtonNext>
-            </>,
-            window.document.getElementById('btn-videos')
-          )}
+        <A1 visibleSlides={visibleSlides} data={data} />
       </CarouselProvider>
+    </>
+  )
+}
+
+const A1 = ({
+  visibleSlides,
+  data,
+}: {
+  visibleSlides: number
+  data: any[]
+}) => {
+  const [show, setShow] = useState(false)
+
+  const carouselContext = useContext(CarouselContext)
+  const [currentSlide, setCurrentSlide] = useState(
+    get(carouselContext, 'state.currentSlide')
+  )
+
+  useEffect(() => {
+    function onChange() {
+      setCurrentSlide(carouselContext.state.currentSlide)
+    }
+    carouselContext.subscribe(onChange)
+    return () => carouselContext.unsubscribe(onChange)
+  }, [carouselContext])
+
+  useEffect(() => {
+    setShow(true)
+  }, [])
+
+  return (
+    <>
+      <Slider>
+        {data.map((video, index) => {
+          return (
+            <Slide index={index} className="">
+              <a
+                className="block sm:mr-4"
+                key={index}
+                href={video.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <div key={index} className="cursor-pointer">
+                  <img
+                    src={video.thumbnailUrl}
+                    className="rounded-[8px] w-full aspect-[1.78] object-cover mb-[12px] "
+                    alt=""
+                  />
+                </div>
+              </a>
+            </Slide>
+          )
+        })}
+      </Slider>
+      {show &&
+        createPortal(
+          <>
+            <ButtonBack className="cursor-auto">
+              <svg
+                className={clsx(
+                  ` mr-[20px] `,
+                  currentSlide <= 0
+                    ? ' pointer-events-none fill-Grey '
+                    : ' cursor-pointer fill-Green '
+                )}
+                width="24"
+                height="25"
+                viewBox="0 0 24 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M15.41 17.09L10.83 12.5L15.41 7.91L14 6.5L8 12.5L14 18.5L15.41 17.09Z" />
+              </svg>
+            </ButtonBack>
+            <ButtonNext className="cursor-auto">
+              <svg
+                className={clsx(
+                  ` mr-[20px] `,
+                  currentSlide >= data.length - visibleSlides
+                    ? ' pointer-events-none fill-Grey '
+                    : ' cursor-pointer fill-Green '
+                )}
+                width="24"
+                height="25"
+                viewBox="0 0 24 25"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M8.59 17.09L13.17 12.5L8.59 7.91L10 6.5L16 12.5L10 18.5L8.59 17.09Z" />
+              </svg>
+            </ButtonNext>
+          </>,
+          window.document.getElementById('btn-videos')
+        )}
     </>
   )
 }
