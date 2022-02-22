@@ -46,30 +46,30 @@ export const Notifications = () => {
       ...notifications,
       ...data,
     })
-    setAccount({
-      ...account,
-      settings: { ...account.settings, notificationOptions: { ...data } },
-    })
-    const res = await axios.patch(
-      `users/${currentRoleName.toLowerCase()}/settings`,
-      {
-        settings: {
-          ...account.settings,
-          notificationOptions: { ...data },
+    await axios
+      .patch(
+        `users/${currentRoleName.toLowerCase()}/settings`,
+        {
+          settings: { ...account.settings, notificationOptions: { ...data } },
         },
-      },
-      {
-        headers: {
-          roleId: currentRoleId,
-        },
-      }
-    )
-    if (res.status !== 200) {
-      notification['error']({
-        message: res.data,
-        description: '',
+        {
+          headers: {
+            roleId: currentRoleId,
+          },
+        }
+      )
+      .then(() => {
+        setAccount({
+          ...account,
+          settings: { ...account.settings, notificationOptions: { ...data } },
+        })
       })
-    }
+      .catch(() => {
+        notification['error']({
+          message: 'Error',
+          description: '',
+        })
+      })
   }
 
   useEffect(() => {
