@@ -50,6 +50,8 @@ export const DetailProfile = ({ onFormChange }: DetailProfileProps) => {
     onFormChange && onFormChange(formValues)
   }, [formValues])
 
+  console.log(account.profile.email)
+
   useEffect(() => {
     account &&
       setFormValues((prev) => ({
