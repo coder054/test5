@@ -123,7 +123,6 @@ export const Media = () => {
   )
 
   useEffect(() => {
-    console.log(account)
     if (account) {
       setSocialForm({
         ...account.socialLinks,

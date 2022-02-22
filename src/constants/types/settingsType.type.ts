@@ -43,14 +43,10 @@ export type RadarType = {
 }
 
 export type HealthType = {
-  height: {
-    value: number
-  }
+  height: { value: number; updateAt: string | Date }
   leftFootLength: number
   rightFootLength: number
-  weight: {
-    value: number
-  }
+  weight: { value: number; updateAt: string | Date }
 }
 
 export type VideoLinksType = {
