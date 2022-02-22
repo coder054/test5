@@ -24,6 +24,16 @@ import { API_FRIENDS } from 'src/constants/api.constants'
 import { Button } from 'src/components'
 import Head from 'next/head'
 import { HeadTags } from 'src/components/HeadTags'
+import {
+  CarouselProvider,
+  Slider,
+  Slide,
+  ButtonBack,
+  ButtonNext,
+  WithStore,
+} from 'pure-react-carousel'
+import 'pure-react-carousel/dist/react-carousel.es.css'
+import { createPortal } from 'react-dom'
 
 enum Tab {
   Total = 'Total',
@@ -336,180 +346,150 @@ const Biography = () => {
         keywords={`Zporter, biography, ${dataBio.firstName}, ${dataBio.lastName}`}
       />
 
-      {/* /// Navigate and filter */}
-      <div className="h-[33px] mt-[24px] xl:flex items-center justify-center relative">
-        <div className=" flex items-center  xl:pr-[40px] w-[300px] sm:w-[358px] mx-auto ">
-          <Link href={`/biography/${prevFlipId}`}>
-            <a
-              className={clsx(
-                ` inline-block px-4 py-2 `,
-                currentIndexFlip <= 0 || !prevFlipId
-                  ? ' pointer-events-none '
-                  : '  '
-              )}
-            >
-              <svg
-                onClick={() => {
-                  // setCnt(cnt - 1)
-                  if (currentIndexFlip <= 0 || !prevFlipId) {
-                    return
-                  }
-                  setCurrentIndexFlip(currentIndexFlip - 1)
-                }}
+      <div className="xl:px-[23px] ">
+        {/* /// Navigate and filter */}
+        <div className="h-[33px] mt-[24px] xl:flex items-center justify-center relative">
+          <div className=" flex items-center  xl:pr-[40px] w-[300px] sm:w-[358px] mx-auto ">
+            <Link href={`/biography/${prevFlipId}`}>
+              <a
                 className={clsx(
-                  ``,
+                  ` inline-block px-4 py-2 `,
                   currentIndexFlip <= 0 || !prevFlipId
-                    ? ' fill-Grey '
-                    : ' fill-Green cursor-pointer'
+                    ? ' pointer-events-none '
+                    : '  '
                 )}
-                width="24"
-                height="25"
-                viewBox="0 0 24 25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
               >
-                <path d="M15.41 17.09L10.83 12.5L15.41 7.91L14 6.5L8 12.5L14 18.5L15.41 17.09Z" />
-              </svg>
-            </a>
-          </Link>
-          <div className="grow "></div>
-          <Text name="Header5" className="text-white w-[274px] text-center ">
-            {`#${truncateStr(dataBio.username, 22)}`}
-          </Text>
-          <div className="grow "></div>
-          <Link href={`/biography/${nextFlipId}`}>
-            <a
-              className={clsx(
-                ` inline-block px-4 py-2`,
-                currentIndexFlip >= dataFlip.data.length - 1 || !nextFlipId
-                  ? ' pointer-events-none '
-                  : '  '
-              )}
-            >
-              <svg
-                onClick={() => {
-                  // setCnt(cnt + 1)
-                  if (
-                    currentIndexFlip >= dataFlip.data.length - 1 ||
-                    !nextFlipId
-                  ) {
-                    return
-                  }
-                  setCurrentIndexFlip(currentIndexFlip + 1)
-                }}
+                <svg
+                  onClick={() => {
+                    // setCnt(cnt - 1)
+                    if (currentIndexFlip <= 0 || !prevFlipId) {
+                      return
+                    }
+                    setCurrentIndexFlip(currentIndexFlip - 1)
+                  }}
+                  className={clsx(
+                    ``,
+                    currentIndexFlip <= 0 || !prevFlipId
+                      ? ' fill-Grey '
+                      : ' fill-Green cursor-pointer'
+                  )}
+                  width="24"
+                  height="25"
+                  viewBox="0 0 24 25"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M15.41 17.09L10.83 12.5L15.41 7.91L14 6.5L8 12.5L14 18.5L15.41 17.09Z" />
+                </svg>
+              </a>
+            </Link>
+            <div className="grow "></div>
+            <Text name="Header5" className="text-white w-[274px] text-center ">
+              {`#${truncateStr(dataBio.username, 22)}`}
+            </Text>
+            <div className="grow "></div>
+            <Link href={`/biography/${nextFlipId}`}>
+              <a
                 className={clsx(
-                  ``,
+                  ` inline-block px-4 py-2`,
                   currentIndexFlip >= dataFlip.data.length - 1 || !nextFlipId
-                    ? ' fill-Grey '
-                    : ' fill-Green cursor-pointer'
+                    ? ' pointer-events-none '
+                    : '  '
                 )}
-                width="24"
-                height="25"
-                viewBox="0 0 24 25"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
               >
-                <path d="M8.59003 17.09L13.17 12.5L8.59003 7.91L10 6.5L16 12.5L10 18.5L8.59003 17.09Z" />
-              </svg>
-            </a>
-          </Link>
+                <svg
+                  onClick={() => {
+                    // setCnt(cnt + 1)
+                    if (
+                      currentIndexFlip >= dataFlip.data.length - 1 ||
+                      !nextFlipId
+                    ) {
+                      return
+                    }
+                    setCurrentIndexFlip(currentIndexFlip + 1)
+                  }}
+                  className={clsx(
+                    ``,
+                    currentIndexFlip >= dataFlip.data.length - 1 || !nextFlipId
+                      ? ' fill-Grey '
+                      : ' fill-Green cursor-pointer'
+                  )}
+                  width="24"
+                  height="25"
+                  viewBox="0 0 24 25"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M8.59003 17.09L13.17 12.5L8.59003 7.91L10 6.5L16 12.5L10 18.5L8.59003 17.09Z" />
+                </svg>
+              </a>
+            </Link>
+          </div>
+          <div className=" flex xl:absolute xl:right-0 xl:top-[4px] items-center mx-auto text-center justify-center ">
+            <Text name="Body2" className="text-white mr-[16px] ">
+              4 Filters selected
+            </Text>
+            <svg
+              width="24"
+              height="25"
+              viewBox="0 0 24 25"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M4 11.5H16V13.5H4V11.5ZM4 6.5H20V8.5H4V6.5ZM4 18.5H11H11.235V16.5H11H4V18.5Z"
+                fill="#09E099"
+              />
+            </svg>
+          </div>
         </div>
-        <div className=" flex xl:absolute xl:right-0 xl:top-[4px] items-center mx-auto text-center justify-center ">
-          <Text name="Body2" className="text-white mr-[16px] ">
-            4 Filters selected
-          </Text>
-          <svg
-            width="24"
-            height="25"
-            viewBox="0 0 24 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+
+        <div className="h-[32px] 2xl:h-[42px] "></div>
+
+        {/* /// 2 main column */}
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-[24px] 2xl:gap-[24px] ">
+          <div
+            style={{
+              background: 'rgba(32, 33, 40, 0.3)',
+              backdropFilter: 'blur(68px)',
+            }}
+            className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
           >
-            <path
-              d="M4 11.5H16V13.5H4V11.5ZM4 6.5H20V8.5H4V6.5ZM4 18.5H11H11.235V16.5H11H4V18.5Z"
-              fill="#09E099"
-            />
-          </svg>
-        </div>
-      </div>
-
-      <div className="h-[32px] 2xl:h-[42px] "></div>
-
-      {/* /// 2 main column */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-[24px] 2xl:gap-[24px] ">
-        <div
-          style={{
-            background: 'rgba(32, 33, 40, 0.3)',
-            backdropFilter: 'blur(68px)',
-          }}
-          className="rounded-[8px] p-[16px] sm:p-[32px] "
-        >
-          <div className="max-w-[466px] mx-auto ">
-            <InfoWithCircleImage
-              dataBio={dataBio}
-              userid={userid}
-              currentRoleId={currentRoleId}
-            />
-
-            <div className="h-[1px] my-[40px] bg-Stroke "></div>
-            <InfoWithImages />
-          </div>
-        </div>
-
-        <div
-          style={{
-            background: 'rgba(32, 33, 40, 0.3)',
-            backdropFilter: 'blur(68px)',
-          }}
-          className="rounded-[8px] p-[16px] sm:p-[32px] "
-        >
-          <div className="max-w-[466px] mx-auto">
-            <InforWithAChart
-              dataBio={dataBio}
-              dataBioRadarChart={dataBioRadarChart}
-            ></InforWithAChart>
-
-            <div className="h-[1px] my-[32px] bg-Stroke "></div>
-
-            <InforWithNumbers />
-          </div>
-        </div>
-      </div>
-
-      <div className="h-[32px] "></div>
-
-      {/* /// top videos */}
-      <Text name="Header5" className="text-white mb-[16px] ">
-        Top videos
-      </Text>
-
-      <div
-        className="grid 
-      grid-cols-1
-      mobileM:grid-cols-2
-      md:grid-cols-3
-      md:border md:border-red-400
-       gap-[20px] "
-      >
-        {dataBio.topVideoLinks.map((video, index) => (
-          <a key={index} href={video.url} target="_blank" rel="noreferrer">
-            <div key={index} className="cursor-pointer">
-              <img
-                src={video.thumbnailUrl}
-                className="rounded-[8px] w-full aspect-[1.78] object-cover mb-[12px] "
-                alt=""
+            <div className="max-w-[466px] mx-auto ">
+              <InfoWithCircleImage
+                dataBio={dataBio}
+                userid={userid}
+                currentRoleId={currentRoleId}
               />
 
-              <Text name="Subtitle2" className="text-white px-[12px] hidden ">
-                Video title
-              </Text>
-
-              <Text name="Caption" className="text-Grey px-[12px] hidden">
-                3 day ago
-              </Text>
+              <div className="h-[1px] my-[40px] bg-Stroke "></div>
+              <InfoWithImages />
             </div>
-          </a>
-        ))}
+          </div>
+
+          <div
+            style={{
+              background: 'rgba(32, 33, 40, 0.3)',
+              backdropFilter: 'blur(68px)',
+            }}
+            className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
+          >
+            <div className="max-w-[466px] mx-auto">
+              <InforWithAChart
+                dataBio={dataBio}
+                dataBioRadarChart={dataBioRadarChart}
+              ></InforWithAChart>
+
+              <div className="h-[1px] my-[32px] bg-Stroke "></div>
+
+              <InforWithNumbers />
+            </div>
+          </div>
+        </div>
+
+        <div className="h-[32px] "></div>
+
+        <TopVideos dataBio={dataBio} />
       </div>
     </DashboardLayout>
   )
@@ -1464,6 +1444,147 @@ const InfoWithCircleImage = ({
       <div className="mx-auto max-w-[466px] text-white text-[14px] leading-[22px] ">
         {dataBio.summary}
       </div>
+    </>
+  )
+}
+
+const TopVideos = ({ dataBio }: { dataBio: IBiographyPlayer }) => {
+  const [show, setShow] = useState(false)
+  const { screenWidth } = useScreenWidth()
+  useEffect(() => {
+    setShow(true)
+  }, [])
+
+  const data = [
+    {
+      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+      source: 'YOUTUBE',
+    },
+    {
+      url: 'https://youtube.com/j4GzBM83TJQ',
+      thumbnailUrl:
+        'https://img.youtube.com/vi/https://youtube.com/j4GzBM83TJQ/sddefault.jpg',
+      source: 'YOUTUBE',
+    },
+    {
+      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+      source: 'YOUTUBE',
+      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+    },
+    {
+      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+      source: 'YOUTUBE',
+      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+    },
+    {
+      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+      source: 'YOUTUBE',
+      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+    },
+    {
+      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+      source: 'YOUTUBE',
+      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+    },
+    {
+      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+      source: 'YOUTUBE',
+      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+    },
+    {
+      url: 'https://www.youtube.com/watch?v=z0W4c_G3suI',
+      source: 'YOUTUBE',
+      thumbnailUrl: 'http://img.youtube.com/vi/z0W4c_G3suI/maxresdefault.jpg',
+    },
+  ]
+
+  console.log('aaa dataBio.topVideoLinks', dataBio.topVideoLinks)
+
+  const visibleSlides = useMemo(() => {
+    if (screenWidth < 640) {
+      return 1
+    } else if (screenWidth < 768) {
+      return 2
+    } else if (screenWidth < 1024) {
+      return 3
+    } else {
+      return 4
+    }
+  }, [screenWidth])
+
+  return (
+    <>
+      <div className="flex items-center ">
+        <Text name="Header5" className="text-white mb-[16px] ">
+          Top videos
+        </Text>
+
+        <div className="grow "></div>
+        <div className="" id="btn-videos"></div>
+      </div>
+
+      <CarouselProvider
+        naturalSlideWidth={100}
+        naturalSlideHeight={60}
+        totalSlides={data.length}
+        visibleSlides={visibleSlides}
+      >
+        <Slider>
+          {data.map((video, index) => {
+            return (
+              <Slide index={index} className="">
+                <a
+                  className="block sm:mr-4"
+                  key={index}
+                  href={video.url}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <div key={index} className="cursor-pointer">
+                    <img
+                      src={video.thumbnailUrl}
+                      className="rounded-[8px] w-full aspect-[1.78] object-cover mb-[12px] "
+                      alt=""
+                    />
+                  </div>
+                </a>
+              </Slide>
+            )
+          })}
+        </Slider>
+
+        {show &&
+          createPortal(
+            <>
+              <ButtonBack className="cursor-pointer ">
+                <svg
+                  className="cursor-pointer mr-[20px] fill-Grey "
+                  width="24"
+                  height="25"
+                  viewBox="0 0 24 25"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M15.41 17.09L10.83 12.5L15.41 7.91L14 6.5L8 12.5L14 18.5L15.41 17.09Z" />
+                </svg>
+              </ButtonBack>
+              <ButtonNext className="cursor-pointer  ">
+                <svg
+                  className="cursor-pointer fill-Green"
+                  width="24"
+                  height="25"
+                  viewBox="0 0 24 25"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M8.59 17.09L13.17 12.5L8.59 7.91L10 6.5L16 12.5L10 18.5L8.59 17.09Z" />
+                </svg>
+              </ButtonNext>
+            </>,
+            window.document.getElementById('btn-videos')
+          )}
+      </CarouselProvider>
     </>
   )
 }
