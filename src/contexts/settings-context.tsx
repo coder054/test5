@@ -20,7 +20,7 @@ interface SettingsProviderProps {
 const initialSettings: Settings = {
   direction: 'ltr',
   responsiveFontSizes: true,
-  theme: 'light',
+  theme: 'dark',
 }
 
 export const restoreSettings = (): Settings | null => {
@@ -35,9 +35,10 @@ export const restoreSettings = (): Settings | null => {
       settings = {
         direction: 'ltr',
         responsiveFontSizes: true,
-        theme: window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light',
+        // theme: window.matchMedia('(prefers-color-scheme: dark)').matches
+        //   ? 'dark'
+        //   : 'light',
+        theme: 'dark',
       }
     }
   } catch (err) {
