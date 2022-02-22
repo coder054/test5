@@ -10,7 +10,7 @@ export const LayoutSignupForm = ({ authen, children }: LayoutLandingProps) => {
     <div className="min-h-screen w-full bg-[#000000] relative overflow-hidden">
       {authen && (
         <div
-          className={`${cls.backgroundAuthen} w-screen lg:h-screen absolute lg:left-0 lg:bottom-0`}
+          className={`${cls.backgroundAuthen} w-screen min-h-screen lg:h-screen absolute lg:left-0 lg:bottom-0`}
         ></div>
       )}
       <div

@@ -224,8 +224,8 @@ export const SignUpWithSMS = () => {
   0px 4px 6px -2px rgba(27, 28, 30, 0.05)`,
               backdropFilter: 'blur(68px)',
             }}
-            className={`w-[320px] md:w-[450px] lg:w-[470px] rounded-[8px] mt-[78px] md:mt-[0px] pt-[16px] md:pt-[48px] pl-[12px] mx-auto 
-              md:pl-[24px] lg:pl-[32px] pr-[12px] md:pr-[24px] lg:pr-[32px] pb-[16px] md:pb-[48px] mobileM:ml-[10%] md:ml-[5%] 
+            className={`w-[310px] mobileM:w-[365px] md:w-[450px] lg:w-[470px] rounded-[8px] mt-[78px] md:mt-[0px] pt-[16px] md:pt-[48px] pl-[12px] mx-auto 
+              md:pl-[24px] lg:pl-[32px] pr-[12px] md:pr-[24px] lg:pr-[32px] pb-[16px] md:pb-[48px] md:ml-[5%] 
               lg:ml-[8%] xl:ml-[17%] bg-[#ffffff19]`}
           >
             <p className="text-[24px] text-[#FFFFFF] text-center">Sign up</p>
