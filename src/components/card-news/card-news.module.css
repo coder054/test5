@@ -19,3 +19,10 @@
 .ant-carousel .slick-dots li {
   width: 14px !important;
 }
+
+.lineClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}

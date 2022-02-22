@@ -1,7 +1,10 @@
 import { CardNews } from 'src/components/card-news'
 import { Loading } from 'src/components/loading/loading'
 import { Tabs } from 'src/components/Tabs'
-import { API_GET_LIST_NEWS_POST, API_LIKE_POST } from 'src/constants/api.constants'
+import {
+  API_GET_LIST_NEWS_POST,
+  API_LIKE_POST,
+} from 'src/constants/api.constants'
 import { NewsType } from 'src/constants/types'
 import { useEffect, useState } from 'react'
 import { axios } from 'src/utils/axios'
@@ -76,7 +79,7 @@ const News = () => {
           <Loading />
         </div>
       )}
-      <div className="grid grid-cols-4 gap-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-y-6 gap-x-2 mobileM:gap-x-10 2xl:gap-x-2">
         {!loading && news ? (
           (news || [])?.map((item: NewsType, index) => (
             <div key={index} className="">

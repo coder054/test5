@@ -35,7 +35,7 @@ export const DashboardLayout: FC<DashboardLayoutProps> = (props) => {
             width: '100%',
           }}
         >
-          <div className="px-4 xl:px-[24px] pb-4 xl:pb-[24px] pt-4">
+          <div className="px-[12px] md:px-4 xl:px-[24px] pb-4 xl:pb-[24px] pt-4">
             {children}
           </div>
         </Box>

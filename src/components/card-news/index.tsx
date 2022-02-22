@@ -59,7 +59,7 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
         padding: '24px 0px 32px',
         backdropFilter: 'blur(68px)',
       }}
-      className="rounded-[8px] bg-[#202128cc] w-[347px] relative"
+      className="rounded-[8px] bg-[#202128cc] w-[310px] md:w-[347px] relative"
     >
       <div className=" flex px-5 items-center mb-5 ">
         {card?.providerInfo?.logo && (
@@ -134,7 +134,7 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
       <Link href={card?.link as string}>
         <a target={'_blank'}>
           <p
-            className="text-white mb-[25px] px-5 mt-[20px]"
+            className={`${cls.lineClamp} text-white mb-[25px] px-5 mt-[20px]`}
             dangerouslySetInnerHTML={{ __html: card?.excerptText as string }}
           ></p>
         </a>
