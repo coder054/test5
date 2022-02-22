@@ -167,7 +167,7 @@ const SignIn = () => {
       })
       setTimeout(() => {
         router.push('/feed')
-      }, 1000)
+      }, 500)
     } catch (error) {
       console.log('aaa ', error)
       //@ts-ignore: Unreachable code error

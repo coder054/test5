@@ -18,6 +18,7 @@ import { useCookies } from 'react-cookie'
 import { axios } from 'src/utils/axios'
 import { dataFromToken, ITokenData } from 'src/utils/utils'
 import { removeTokenCookie, setTokenCookie } from './tokenCookies'
+import { API_PLAYER_PROFILE } from 'src/constants/api.constants'
 
 interface ValueType {
   currentUser?: any
@@ -184,10 +185,11 @@ export function AuthProvider({ children }) {
     signOut(auth)
     localStorage.removeItem(LOCAL_STORAGE_KEY.userRoles)
     localStorage.removeItem(LOCAL_STORAGE_KEY.currentRoleId)
+    localStorage.removeItem(LOCAL_STORAGE_KEY.playerProfile)
     // window.location.href = '/signin'
     setTimeout(() => {
       router.push('/signin')
-    }, 1000)
+    }, 500)
   }
 
   const ResetPassword = (email: string) => {
@@ -262,6 +264,16 @@ export function AuthProvider({ children }) {
 
         setToken(token)
         setCurrentUser(user)
+
+        if (!localStorage.getItem(LOCAL_STORAGE_KEY.playerProfile)) {
+          try {
+            const { data: userinfo } = await axios.get(API_PLAYER_PROFILE)
+            localStorage.setItem(
+              LOCAL_STORAGE_KEY.playerProfile,
+              JSON.stringify(userinfo)
+            )
+          } catch (error) {}
+        }
       }
       setTimeout(() => {
         setInitialized(true)
