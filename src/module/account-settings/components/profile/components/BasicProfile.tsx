@@ -27,6 +27,8 @@ export const BasicProfile = ({ onFormChange }: BasicProfileProps) => {
     birthDay: '',
   })
 
+  console.log(formValues)
+
   const handleChangeForm = (type: keyof FormValuesType, value: any) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
