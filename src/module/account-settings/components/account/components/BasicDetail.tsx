@@ -20,10 +20,10 @@ type FormValuesType = {
 }
 
 export const BasicDetail = () => {
-  const [form] = Form.useForm()
   const { currentUser } = useAuth()
-  const [account, setAccount] = useAtom(settingsAtom)
 
+  const [form] = Form.useForm()
+  const [account] = useAtom(settingsAtom)
   const [email, setEmail] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [formValues, setFormValues] = useState<FormValuesType>({
@@ -38,10 +38,11 @@ export const BasicDetail = () => {
   }
 
   const handleSubmit = async () => {
+    console.log(email, formValues.verifyPassword)
     setIsLoading(true)
     await signInWithEmailAndPassword(auth, email, formValues.verifyPassword)
-      .then(() => {
-        firebase
+      .then(async () => {
+        await firebase
           .updatePassword(currentUser as User, formValues.newPassword)
           .then(() => {
             setIsLoading(false)
@@ -54,7 +55,7 @@ export const BasicDetail = () => {
           .catch(() => {
             setIsLoading(false)
             notification['error']({
-              message: 'Wrong password',
+              message: 'Change password failed!',
             })
           })
       })
@@ -97,7 +98,6 @@ export const BasicDetail = () => {
             rules={[
               ({ getFieldValue }) => ({
                 validator(_, val) {
-                  console.log(val)
                   if (!val || getFieldValue('newPassword') === val) {
                     return Promise.resolve()
                   }

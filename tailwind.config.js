@@ -68,6 +68,12 @@ module.exports = {
       xl: '1280px',
       '2xl': '1536px',
       ...defaultTheme.screens,
+
+      max_sm: { max: '640px' },
+      max_md: { max: '768px' },
+      max_lg: { max: '1024px' },
+      max_xl: { max: '1280px' },
+      max_2xl: { max: '1536px' },
     },
   },
   plugins: [require('tailwind-scrollbar')],

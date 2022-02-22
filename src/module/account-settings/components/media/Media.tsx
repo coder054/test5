@@ -1,6 +1,7 @@
 import { notification } from 'antd'
 import { useAtom } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { CustomUploadImage } from 'src/components/custom-upload-image'
 import { MinusIcon, PlusIcon } from 'src/components/icons'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { settingsAtom } from '../../../../atoms/accountAndSettings'
@@ -44,10 +45,20 @@ export const Media = () => {
     videoLinks: [],
   })
 
+  // Upload Img
+  const handleChangeImage = (value: string, type: keyof MediaType) => {
+    setMediaForm((prev) => ({ ...prev, [type]: value }))
+  }
+
+  // Social link
+  const handleChangeSocialForm = (type: keyof SocialLinksType, value: any) => {
+    setSocialForm((prev) => ({ ...prev, [type]: value }))
+  }
+
   const handleAddForm = () => {
     if (mediaForm.videoLinks && mediaForm.videoLinks.length <= 9) {
       let test = [...mediaForm.videoLinks]
-      test.push({ ...addNewForm })
+      test.push(addNewForm)
       setMediaForm((prev) => ({ ...prev, videoLinks: test }))
     }
   }
@@ -61,20 +72,6 @@ export const Media = () => {
     setMediaForm((prev) => ({ ...prev, videoLinks: newArr }))
   }
 
-  const handleChangeMediaForm = (
-    type: keyof MediaType,
-    value: any,
-    index: string
-  ) => {
-    let newArr = [...(mediaForm.videoLinks || [])]
-    newArr[+index].url = value
-    setMediaForm((prev) => ({ ...prev, [type]: newArr }))
-  }
-
-  const handleChangeSocialForm = (type: keyof SocialLinksType, value: any) => {
-    setSocialForm((prev) => ({ ...prev, [type]: value }))
-  }
-
   const handleSubmit = async () => {
     const reformMediaForm = mediaForm.videoLinks?.map((link) => ({
       source: detectValidURL(link.url) ? detectURLName(link.url) : '',
@@ -84,19 +81,15 @@ export const Media = () => {
         : link.url,
     }))
     const data = {
-      ...mediaForm,
-      videoLinks: reformMediaForm,
+      media: { ...mediaForm, videoLinks: reformMediaForm },
+      socialLinks: { ...socialForm },
     }
-    setAccount({ ...account, media: data })
     setIsLoading(true)
     await axios
       .patch(
         `users/${currentRoleName.toLowerCase()}/settings`,
         {
-          media: data,
-          socialLinks: {
-            ...socialForm,
-          },
+          ...data,
         },
         {
           headers: {
@@ -105,6 +98,7 @@ export const Media = () => {
         }
       )
       .then(() => {
+        setAccount({ ...account, ...data })
         notification['success']({
           message: 'Upload successfully',
         })
@@ -118,37 +112,36 @@ export const Media = () => {
       })
   }
 
+  const handleChangeMediaForm = useCallback(
+    (value: any, index: number) => {
+      let newArr = [...(mediaForm.videoLinks || [])]
+      newArr[index].url = value
+      console.log('Form:', mediaForm.videoLinks)
+      setMediaForm((prev) => ({ ...prev, videoLinks: newArr }))
+    },
+    [mediaForm.videoLinks]
+  )
+
   useEffect(() => {
+    console.log(account)
     if (account) {
-      setSocialForm((prev) => ({
-        ...prev,
-        facebook: account.socialLinks?.facebook,
-        instagram: account.socialLinks?.instagram,
-        tiktok: account.socialLinks?.tiktok,
-        twitter: account.socialLinks?.twitter,
-        veoHighlites: account.socialLinks?.veoHighlites,
-        youtube: account.socialLinks?.youtube,
-      }))
+      setSocialForm({
+        ...account.socialLinks,
+      })
       if (account.media?.videoLinks && account.media?.videoLinks.length < 3) {
-        const addArr = new Array(3 - account.media?.videoLinks.length).fill(
-          addNewForm
-        )
-        const newArr = [...account.media?.videoLinks].concat(addArr)
-        setMediaForm((prev) => ({
-          ...prev,
-          bodyImage: account.media?.bodyImage,
-          faceImage: account.media?.faceImage,
-          teamImage: account.media?.teamImage,
+        const addArr = Array(3 - account.media?.videoLinks.length)
+          .fill(0)
+          .map(() => ({ source: '', thumbnailUrl: '', url: '' }))
+        const newArr = account.media?.videoLinks.concat(addArr)
+        setMediaForm({
+          ...account.media,
           videoLinks: newArr,
-        }))
+        })
       } else {
-        setMediaForm((prev) => ({
-          ...prev,
-          bodyImage: account.media?.bodyImage,
-          faceImage: account.media?.faceImage,
-          teamImage: account.media?.teamImage,
+        setMediaForm({
+          ...account.media,
           videoLinks: account.media?.videoLinks,
-        }))
+        })
       }
     }
   }, [account])
@@ -159,17 +152,35 @@ export const Media = () => {
         label="Media"
         form={
           <div className="space-y-7">
+            <div className="sm:flex sm:justify-between sm:pb-2 ">
+              <CustomUploadImage
+                title="Face image"
+                text="Add portrait photo of 480*640 pixels or more"
+                width={185}
+                height={140}
+                className="border-[2px] border-gray-700 hover:border-white  duration-150"
+                textClass="pt-8 px-9 font-medium"
+                iconClass="pt-[18px]"
+                value={mediaForm.faceImage}
+                setImage={(value) => handleChangeImage(value, 'faceImage')}
+              />
+              <CustomUploadImage
+                title="Body image"
+                text="Add portrait photo of 480*640 pixels or more"
+                width={185}
+                height={140}
+                className="border-[2px] border-gray-700 hover:border-white  duration-150"
+                textClass="pt-8 px-9 font-medium"
+                iconClass="pt-[18px]"
+                value={mediaForm.bodyImage}
+                setImage={(value) => handleChangeImage(value, 'bodyImage')}
+              />
+            </div>
             {(mediaForm.videoLinks || []).map((form, index) => (
               <div key={index} className="flex items-center space-x-3">
                 <MyInput
                   value={form.url}
-                  onChange={(e) =>
-                    handleChangeMediaForm(
-                      'videoLinks',
-                      e.target.value,
-                      index.toString()
-                    )
-                  }
+                  onChange={(e) => handleChangeMediaForm(e.target.value, index)}
                   label={`Video link ${index + 1}`}
                 />
                 {index === 2 && (
@@ -229,6 +240,17 @@ export const Media = () => {
               onChange={(e) => handleChangeSocialForm('tiktok', e.target.value)}
               value={socialForm.tiktok}
               label="Tiktok link"
+            />
+            <CustomUploadImage
+              title="Existing Team Image"
+              text="Add photo"
+              width={'100%'}
+              height={160}
+              className="border-[2px] border-gray-700 hover:border-white  duration-150"
+              textClass="pt-8 px-9 font-medium"
+              iconClass="pt-[45px]"
+              setImage={(value) => handleChangeImage(value, 'teamImage')}
+              value={mediaForm.teamImage}
             />
           </div>
         }
