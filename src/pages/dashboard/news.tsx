@@ -4,7 +4,7 @@ import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
 
 const NewsPage: NextPage = () => {
   return (
-    <div className="p-7">
+    <div className="lg:p-7">
       <News />
     </div>
   )

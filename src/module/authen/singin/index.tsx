@@ -192,7 +192,7 @@ const SignIn = () => {
         <div
           className={`${cls.formSignIn} w-[310px] mobileM:w-[365px] md:w-[450px] lg:w-[470px] rounded-[8px] mx-auto mt-[118px] md:mt-[0px] 
             pt-[16px] md:pt-[48px] pl-[12px] md:pl-[24px] lg:pl-[32px] pr-[12px] md:pr-[24px] lg:pr-[32px] pb-[16px] 
-            md:pb-[48px] mobileM:ml-[10%] lg:ml-[8%] xl:ml-[17%]`}
+            md:pb-[48px] md:ml-[10%] lg:ml-[8%] xl:ml-[17%]`}
         >
           <div className="w-full text-center">
             <p className="text-[24px] text-[#FFFFFF] font-semibold">Log in</p>
