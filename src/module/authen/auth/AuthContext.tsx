@@ -301,6 +301,7 @@ export function AuthProvider({ children }) {
     userRoles,
     tokenData,
     initialized,
+    authenticated: !!currentUser,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
