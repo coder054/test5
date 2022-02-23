@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import type { FC } from 'react'
+import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { useTranslation } from 'react-i18next'
 import {
@@ -25,6 +26,7 @@ import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
 import { Search as SearchIcon } from '../../icons/search'
 import { Users as UsersIcon } from '../../icons/users'
 import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
 
 interface DashboardNavbarProps extends AppBarProps {
   onOpenSidebar?: () => void
@@ -411,6 +413,8 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
     JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.playerProfile))
   )
 
+  const { authenticated } = useAuth()
+
   useEffect(() => {
     console.log('aaa playerProfile: ', playerProfile)
   }, [playerProfile])
@@ -448,11 +452,33 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
             <MenuIcon fontSize="small" />
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
-          <LanguageButton />
-          <ContentSearchButton />
-          <ContactsButton />
-          <NotificationsButton />
-          <AccountButton playerProfile={playerProfile} />
+          {!authenticated ? (
+            <div className=" animate-appear  ">
+              <Link href="/signin">
+                <a>
+                  <button className="w-[224px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue mr-[26px]">
+                    Sign In
+                  </button>
+                </a>
+              </Link>
+
+              <Link href="/signup">
+                <a>
+                  <button className="w-[224px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent text-Green border border-Green ">
+                    Sign Up
+                  </button>
+                </a>
+              </Link>
+            </div>
+          ) : (
+            <>
+              <LanguageButton />
+              <ContentSearchButton />
+              <ContactsButton />
+              <NotificationsButton />
+              <AccountButton playerProfile={playerProfile} />
+            </>
+          )}
         </Toolbar>
       </DashboardNavbarRoot>
     </>

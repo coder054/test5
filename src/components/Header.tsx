@@ -16,7 +16,7 @@ import { DropdownUser } from './specific/DropdownUser'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 
 export const Header = () => {
-  const { tokenData } = useAuth()
+  const { authenticated } = useAuth()
   const router = useRouter()
   // const [showDropdownUser, setShowDropdownUser] = useState(false)
 
@@ -66,7 +66,7 @@ export const Header = () => {
           ' drop-shadow(0px 1px 1px rgba(100, 116, 139, 0.06)) drop-shadow(0px 1px 2px rgba(100, 116, 139, 0.1))',
       }}
       className={`${
-        !!tokenData ? 'h-[64px]' : 'h-[80px]'
+        authenticated ? 'h-[64px]' : 'h-[80px]'
       } w-100vw-280px left-[280px] top-0 fixed z-[1000]
         flex justify-between items-center
         px-[39px]
@@ -96,7 +96,7 @@ export const Header = () => {
         {titleHeader}
       </span>
       <span className=" grow "></span>
-      {!isEmpty(tokenData) ? (
+      {authenticated ? (
         <>
           <Image className="" src={imgSearch} alt="" />
           <Image className="" src={imgBell} alt="" />
