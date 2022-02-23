@@ -299,6 +299,7 @@ const Biography = () => {
         description={`${dataBio.firstName} ${dataBio.lastName} is ${dataBio.height} cm tall 
         and weighs ${dataBio.weight} kg. ${dataBio.firstName}'s unique url on Zporter are ...`}
         keywords={`Zporter, biography, ${dataBio.firstName}, ${dataBio.lastName}`}
+        image={dataBio.faceImageUrl}
       />
 
       <div className="xl:px-[23px] ">
