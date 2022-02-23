@@ -19,6 +19,7 @@ import { axios } from 'src/utils/axios'
 import { dataFromToken, ITokenData } from 'src/utils/utils'
 import { removeTokenCookie, setTokenCookie } from './tokenCookies'
 import { API_PLAYER_PROFILE } from 'src/constants/api.constants'
+import { IPlayerProfile } from 'src/components/dashboard/dashboard-navbar'
 
 interface ValueType {
   currentUser?: any
@@ -51,10 +52,10 @@ export function AuthProvider({ children }) {
   const router = useRouter()
   const [initialized, setInitialized] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
-  const [tokenData, setTokenData] = useState<any>(dataFromToken(cookies.token))
   const [token, setToken] = useState<string>('')
   const [errorSignin, setErrorSignin] = useState<string>('')
   const [checkEmail, setCheckEmail] = useState<boolean>(false)
+  const [playerProfile, setPlayerProfile] = useState<IPlayerProfile | {}>({}) // all info about logged in user
   const [userRoles, setUserRoles] = useState<any>(
     typeof window !== 'undefined'
       ? //@ts-ignore: Unreachable code error
@@ -232,6 +233,9 @@ export function AuthProvider({ children }) {
   // }
 
   useEffect(() => {
+    let initT = +new Date()
+    console.log('aaa initT', initT)
+
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
       console.log('aaa onIdTokenChanged', user)
 
@@ -268,13 +272,21 @@ export function AuthProvider({ children }) {
         if (!localStorage.getItem(LOCAL_STORAGE_KEY.playerProfile)) {
           try {
             const { data: userinfo } = await axios.get(API_PLAYER_PROFILE)
+            setPlayerProfile(userinfo)
             localStorage.setItem(
               LOCAL_STORAGE_KEY.playerProfile,
               JSON.stringify(userinfo)
             )
           } catch (error) {}
+        } else {
+          setPlayerProfile(
+            JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.playerProfile))
+          )
         }
       }
+      const doneT = +new Date()
+      console.log('aaa doneT', doneT)
+      console.log('aaa doneT - initT', doneT - initT)
       setTimeout(() => {
         setInitialized(true)
       }, 50)
@@ -299,8 +311,8 @@ export function AuthProvider({ children }) {
     currentRoleName,
     setCurrentRoleName,
     userRoles,
-    tokenData,
     initialized,
+    playerProfile, // all info about logged in user
     authenticated: !!currentUser,
   }
 
