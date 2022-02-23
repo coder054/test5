@@ -35,6 +35,7 @@ import {
 } from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
 import { createPortal } from 'react-dom'
+import { IPlayerProfile } from 'src/components/dashboard/dashboard-navbar'
 
 export const fetcherForEndpointFlip = async (url) => {
   if (url === null) return
@@ -188,8 +189,6 @@ const Biography = () => {
   const { userid } = router.query
   const { currentRoleId } = useAuth()
 
-  const [currentIndexFlip, setCurrentIndexFlip] = useState(0)
-
   const { data: dataAvgPlayer, error: errorAvgPlayer } = useSWR(
     '/biographies/players/avg-radar'
   ) as {
@@ -197,59 +196,12 @@ const Biography = () => {
     error: any
   }
 
-  const { data: dataFlipRaw, error: errorFlip } = useSWR(
-    `/biographies/list-player-for-flipping?pageNumber=1&pageSize=2000`,
-    fetcherForEndpointFlip
-  ) as {
-    data: string[]
-    error: any
-  }
-
-  const dataFlip = useMemo(() => {
-    if (isEmpty(dataFlipRaw)) {
-      return []
-    }
-    return dataFlipRaw.filter((o) => {
-      return o !== 'SnD6lQ3tLGSDcwaKZWyklLooher1'
-    })
-  }, [dataFlipRaw])
-
-  const currentFlipId: string = useMemo(() => {
-    if (isEmpty(dataFlip)) {
-      return ''
-    }
-    return dataFlip[currentIndexFlip]
-  }, [dataFlip, currentIndexFlip])
-
-  const nextFlipId: string = useMemo(() => {
-    if (isEmpty(dataFlip)) {
-      return ''
-    }
-
-    return get(dataFlip, `[${currentIndexFlip + 1}]`)
-  }, [dataFlip, currentIndexFlip])
-  const prevFlipId: string = useMemo(() => {
-    if (isEmpty(dataFlip)) {
-      return ''
-    }
-
-    return get(dataFlip, `[${currentIndexFlip - 1}]`)
-  }, [dataFlip, currentIndexFlip])
-
   const { data: dataBio, error: errorBio } = useSWR(
     `/biographies/player?userIdQuery=${userid}`
   ) as {
     data: IBiographyPlayer
     error: any
   }
-
-  useEffect(() => {
-    console.log('aaa currentFlipId: ', currentFlipId)
-  }, [currentFlipId])
-
-  useEffect(() => {
-    console.log('aaa dataFlip: ', dataFlip)
-  }, [dataFlip])
 
   const dataBioRadarChart = useMemo(() => {
     const coach = get(dataBio, 'radarUpdatedByCoach')
@@ -323,13 +275,13 @@ const Biography = () => {
     get(dataBio, 'playerRadarSkills'),
   ])
 
-  if (errorBio || errorAvgPlayer || errorFlip)
+  if (errorBio || errorAvgPlayer)
     return (
       <div className=" p-[40px] text-center">
         <div className="text-white ">Failed to load</div>
       </div>
     )
-  if (!dataBio || !dataAvgPlayer || !dataFlip)
+  if (!dataBio || !dataAvgPlayer)
     return (
       <div className=" p-[40px] text-center">
         <Loading size={40}></Loading>
@@ -347,101 +299,7 @@ const Biography = () => {
 
       <div className="xl:px-[23px] ">
         {/* /// Navigate and filter */}
-        <div className="h-[33px] mt-[24px] xl:flex items-center justify-center relative mb-[30px] xl:mb-0 ">
-          <div className=" flex items-center  xl:pr-[40px] w-[300px] sm:w-[358px] mx-auto ">
-            <Link href={`/biography/${prevFlipId}`}>
-              <a
-                className={clsx(
-                  ` inline-block px-4 py-2 `,
-                  currentIndexFlip <= 0 || !prevFlipId
-                    ? ' pointer-events-none '
-                    : '  '
-                )}
-              >
-                <svg
-                  onClick={() => {
-                    // setCnt(cnt - 1)
-                    if (currentIndexFlip <= 0 || !prevFlipId) {
-                      return
-                    }
-                    setCurrentIndexFlip(currentIndexFlip - 1)
-                  }}
-                  className={clsx(
-                    ``,
-                    currentIndexFlip <= 0 || !prevFlipId
-                      ? ' fill-Grey '
-                      : ' fill-Green cursor-pointer'
-                  )}
-                  width="24"
-                  height="25"
-                  viewBox="0 0 24 25"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M15.41 17.09L10.83 12.5L15.41 7.91L14 6.5L8 12.5L14 18.5L15.41 17.09Z" />
-                </svg>
-              </a>
-            </Link>
-            <div className="grow "></div>
-            <Text name="Header5" className="text-white w-[274px] text-center ">
-              {`#${truncateStr(dataBio.username, 22)}`}
-            </Text>
-            <div className="grow "></div>
-            <Link href={`/biography/${nextFlipId}`}>
-              <a
-                className={clsx(
-                  ` inline-block px-4 py-2`,
-                  currentIndexFlip >= dataFlip.length - 1 || !nextFlipId
-                    ? ' pointer-events-none '
-                    : '  '
-                )}
-              >
-                <svg
-                  onClick={() => {
-                    // setCnt(cnt + 1)
-                    if (
-                      currentIndexFlip >= dataFlip.length - 1 ||
-                      !nextFlipId
-                    ) {
-                      return
-                    }
-                    setCurrentIndexFlip(currentIndexFlip + 1)
-                  }}
-                  className={clsx(
-                    ``,
-                    currentIndexFlip >= dataFlip.length - 1 || !nextFlipId
-                      ? ' fill-Grey '
-                      : ' fill-Green cursor-pointer'
-                  )}
-                  width="24"
-                  height="25"
-                  viewBox="0 0 24 25"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M8.59003 17.09L13.17 12.5L8.59003 7.91L10 6.5L16 12.5L10 18.5L8.59003 17.09Z" />
-                </svg>
-              </a>
-            </Link>
-          </div>
-          <div className=" flex xl:absolute xl:right-0 xl:top-[4px] items-center mx-auto text-center justify-center">
-            <Text name="Body2" className="text-white mr-[16px] ">
-              4 Filters selected
-            </Text>
-            <svg
-              width="24"
-              height="25"
-              viewBox="0 0 24 25"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M4 11.5H16V13.5H4V11.5ZM4 6.5H20V8.5H4V6.5ZM4 18.5H11H11.235V16.5H11H4V18.5Z"
-                fill="#09E099"
-              />
-            </svg>
-          </div>
-        </div>
+        <NavigationAndFilter username={dataBio.username}></NavigationAndFilter>
 
         <div className="h-[32px] 2xl:h-[42px] "></div>
 
@@ -1581,5 +1439,198 @@ const A1 = ({
           window.document.getElementById('btn-videos')
         )}
     </>
+  )
+}
+
+const SocialIcons = () => {
+  return (
+    <div
+      style={{
+        background: 'rgba(32, 33, 40, 0.3)',
+        backdropFilter: 'blur(68px)',
+      }}
+      className="rounded-[8px] "
+    ></div>
+  )
+}
+
+const NavigationAndFilter = ({ username }, { username: string }) => {
+  const { authenticated, playerProfile } = useAuth() as {
+    playerProfile: IPlayerProfile
+    authenticated: boolean
+  }
+  const [loadingDataFlip, setLoadingDataFlip] = useState(true)
+  const [dataFlipRaw, setDataFlipRaw] = useState([])
+
+  useEffect(() => {
+    const getFlipData = async () => {
+      try {
+        if (authenticated) {
+          const { data } = await axios.get(
+            `/biographies/list-player-for-flipping?pageNumber=1&pageSize=2000`
+          )
+
+          setDataFlipRaw(
+            data.data.map((o) => {
+              return o.userId
+            })
+          )
+        }
+      } catch (error) {
+      } finally {
+        setLoadingDataFlip(false)
+      }
+    }
+
+    getFlipData()
+  }, [])
+
+  const [currentIndexFlip, setCurrentIndexFlip] = useState(0)
+
+  const dataFlip = useMemo(() => {
+    if (isEmpty(dataFlipRaw)) {
+      return []
+    }
+
+    let idLoggedUser = playerProfile.uid
+
+    return dataFlipRaw.filter((o) => {
+      return o !== idLoggedUser
+    })
+  }, [dataFlipRaw, playerProfile])
+
+  const nextFlipId: string = useMemo(() => {
+    if (isEmpty(dataFlip)) {
+      return ''
+    }
+
+    return get(dataFlip, `[${currentIndexFlip + 1}]`)
+  }, [dataFlip, currentIndexFlip])
+  const prevFlipId: string = useMemo(() => {
+    if (isEmpty(dataFlip)) {
+      return ''
+    }
+
+    return get(dataFlip, `[${currentIndexFlip - 1}]`)
+  }, [dataFlip, currentIndexFlip])
+
+  // if (loadingDataFlip) {
+  //   return (
+  //     <div className=" p-[40px] text-center">
+  //       <Loading size={40}></Loading>
+  //     </div>
+  //   )
+  // }
+
+  const renderBtnPrev = () => {
+    if (!authenticated) {
+      return null
+    }
+    return (
+      <Link href={`/biography/${prevFlipId}`}>
+        <a
+          className={clsx(
+            ` inline-block px-4 py-2 `,
+            currentIndexFlip <= 0 || !prevFlipId
+              ? ' pointer-events-none '
+              : '  '
+          )}
+        >
+          <svg
+            onClick={() => {
+              // setCnt(cnt - 1)
+              if (currentIndexFlip <= 0 || !prevFlipId) {
+                return
+              }
+              setCurrentIndexFlip(currentIndexFlip - 1)
+            }}
+            className={clsx(
+              ``,
+              currentIndexFlip <= 0 || !prevFlipId
+                ? ' fill-Grey '
+                : ' fill-Green cursor-pointer'
+            )}
+            width="24"
+            height="25"
+            viewBox="0 0 24 25"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M15.41 17.09L10.83 12.5L15.41 7.91L14 6.5L8 12.5L14 18.5L15.41 17.09Z" />
+          </svg>
+        </a>
+      </Link>
+    )
+  }
+  const renderBtnNext = () => {
+    if (!authenticated) {
+      return null
+    }
+    return (
+      <Link href={`/biography/${nextFlipId}`}>
+        <a
+          className={clsx(
+            ` inline-block px-4 py-2`,
+            currentIndexFlip >= dataFlip.length - 1 || !nextFlipId
+              ? ' pointer-events-none '
+              : '  '
+          )}
+        >
+          <svg
+            onClick={() => {
+              // setCnt(cnt + 1)
+              if (currentIndexFlip >= dataFlip.length - 1 || !nextFlipId) {
+                return
+              }
+              setCurrentIndexFlip(currentIndexFlip + 1)
+            }}
+            className={clsx(
+              ``,
+              currentIndexFlip >= dataFlip.length - 1 || !nextFlipId
+                ? ' fill-Grey '
+                : ' fill-Green cursor-pointer'
+            )}
+            width="24"
+            height="25"
+            viewBox="0 0 24 25"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M8.59003 17.09L13.17 12.5L8.59003 7.91L10 6.5L16 12.5L10 18.5L8.59003 17.09Z" />
+          </svg>
+        </a>
+      </Link>
+    )
+  }
+
+  return (
+    <div className="h-[33px] mt-[24px] xl:flex items-center justify-center relative mb-[30px] xl:mb-0 ">
+      <div className=" flex items-center  xl:pr-[40px] w-[300px] sm:w-[358px] mx-auto ">
+        {renderBtnPrev()}
+        <div className="grow "></div>
+        <Text name="Header5" className="text-white w-[274px] text-center ">
+          {`#${truncateStr(username, 22)}`}
+        </Text>
+        <div className="grow "></div>
+        {renderBtnNext()}
+      </div>
+      <div className=" flex xl:absolute xl:right-0 xl:top-[4px] items-center mx-auto text-center justify-center">
+        <Text name="Body2" className="text-white mr-[16px] ">
+          4 Filters selected
+        </Text>
+        <svg
+          width="24"
+          height="25"
+          viewBox="0 0 24 25"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 11.5H16V13.5H4V11.5ZM4 6.5H20V8.5H4V6.5ZM4 18.5H11H11.235V16.5H11H4V18.5Z"
+            fill="#09E099"
+          />
+        </svg>
+      </div>
+    </div>
   )
 }
