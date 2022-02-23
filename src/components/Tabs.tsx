@@ -12,7 +12,7 @@ export const Tabs = ({
   className?: string
 }) => {
   return (
-    <div className={clsx('flex space-x-0 md:space-x-2 mb-6', className)}>
+    <div className={clsx('flex space-x-0 md:space-x-2 mb-6 overflow-x-auto', className)}>
       {tabs.map((o, index) => (
         <div
           onClick={() => {
