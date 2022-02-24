@@ -306,7 +306,7 @@ const Biography = () => {
         url={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`}
       />
 
-      <div className="xl:px-[23px] ">
+      <div className="px-[16px] xl:px-[39px] py-[39px] ">
         {/* /// Navigate and filter */}
         <NavigationAndFilter username={dataBio.username}></NavigationAndFilter>
 
