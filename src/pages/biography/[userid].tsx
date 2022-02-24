@@ -190,6 +190,9 @@ export interface RadarUpdatedByCoach {
 const Biography = () => {
   const { screenWidth } = useScreenWidth()
   const router = useRouter()
+
+  console.log('aaa router', router)
+
   const { userid } = router.query
   const { currentRoleId } = useAuth()
 
@@ -300,6 +303,7 @@ const Biography = () => {
         and weighs ${dataBio.weight} kg. ${dataBio.firstName}'s unique url on Zporter are ...`}
         keywords={`Zporter, biography, ${dataBio.firstName}, ${dataBio.lastName}`}
         image={dataBio.faceImageUrl}
+        url={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`}
       />
 
       <div className="xl:px-[23px] ">

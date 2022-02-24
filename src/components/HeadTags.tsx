@@ -1,16 +1,47 @@
 import Head from 'next/head'
+import { NextSeo } from 'next-seo'
 
 export const HeadTags = ({
   title,
   description,
   keywords,
   image,
+  url,
 }: {
   title: string
   description: string
   keywords: string
   image: string
+  url: string
 }) => {
+  return (
+    <NextSeo
+      title={title}
+      description={description}
+      // canonical="https://www.canonical.ie/"
+      openGraph={{
+        type: 'website',
+        url: url,
+        title: 'Open Graph Title',
+        description: 'Open Graph Description',
+        images: [
+          {
+            url: image,
+            width: 1200,
+            height: 675,
+            alt: title,
+            // type: 'image/jpeg',
+          },
+        ],
+        site_name: 'SiteName',
+      }}
+      twitter={{
+        handle: '@handle',
+        site: '@site',
+        cardType: 'summary_large_image',
+      }}
+    />
+  )
   return (
     <Head>
       <title>{title}</title>
