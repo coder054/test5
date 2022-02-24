@@ -9,6 +9,7 @@ import type { TFunction } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
 import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import { Cog } from 'src/icons/cog'
+import { MessagesIcon } from 'src/icons/messagesIcon'
 import { Newspaper } from 'src/icons/newspaper'
 import {
   UserCircle,
@@ -61,6 +62,11 @@ const getSections = (t: TFunction): Section[] => {
           title: t('Biography'),
           path: `/biography/${currentRoleLocalStorage}`, // current
           icon: <UserCircle fontSize="small" />,
+        },
+        {
+          title: t('Messages'),
+          path: `/dashboard/messages`,
+          icon: <MessagesIcon fontSize="small" />,
         },
       ],
     },
