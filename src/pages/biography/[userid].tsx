@@ -1653,6 +1653,12 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
 const SocialShare = ({ fullName }) => {
   const router = useRouter()
   const fullUrl = useMemo(() => {
+    console.log('aaa router.domainLocales', router.domainLocales)
+    console.log('aaa window.location.origin', window.location.origin)
+    console.log(
+      'aaa process.env.NEXT_PUBLIC_DOMAIN_NAME',
+      process.env.NEXT_PUBLIC_DOMAIN_NAME
+    )
     return `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`
   }, [router.asPath])
 
