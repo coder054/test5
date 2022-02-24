@@ -1651,6 +1651,7 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
 }
 
 const SocialShare = ({ fullName }) => {
+  const [show, setShow] = useState(false)
   const router = useRouter()
   const fullUrl = useMemo(() => {
     console.log('aaa router.domainLocales', router.domainLocales)
@@ -1660,7 +1661,29 @@ const SocialShare = ({ fullName }) => {
       process.env.NEXT_PUBLIC_DOMAIN_NAME
     )
     return `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`
-  }, [router.asPath])
+  }, [router.asPath, show])
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShow(true)
+    }, 10)
+  }, [])
+
+  useEffect(() => {
+    console.log('aaa fullUrl: ', fullUrl)
+  }, [fullUrl])
+
+  if (!fullUrl || !show) {
+    return (
+      <div
+        style={{
+          background: 'rgba(32, 33, 40, 0.3)',
+          backdropFilter: 'blur(68px)',
+        }}
+        className=" rounded-[8px] p-[20px]  text-center h-[88px]"
+      ></div>
+    )
+  }
 
   return (
     <div
