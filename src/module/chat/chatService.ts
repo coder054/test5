@@ -67,29 +67,29 @@ export interface IMessage {
 }
 
 export enum EChatMessageType {
-  custom,
-  file,
-  image,
-  text,
-  developmentLink,
-  skillUpdateLink,
-  unsupported,
+  custom = 'custom',
+  file = 'file',
+  image = 'image',
+  text = 'text',
+  developmentLink = 'developmentLink',
+  skillUpdateLink = 'skillUpdateLink',
+  unsupported = 'unsupported',
 }
 
 enum EMessageType {
-  custom,
-  file,
-  image,
-  text,
-  unsupported,
+  custom = 'custom',
+  file = 'file',
+  image = 'image',
+  text = 'text',
+  unsupported = 'unsupported',
 }
 
 export enum EStatus {
-  delivered,
-  error,
-  seen,
-  sending,
-  sent,
+  delivered = 'delivered',
+  error = 'error',
+  seen = 'seen',
+  sending = 'sending',
+  sent = 'sent',
 }
 
 export interface ICustomMessage extends IMessage {
@@ -327,11 +327,7 @@ export const messageStatusConverter = (
   }
 }
 
-export const getChatUser = async ({
-  userId,
-}: {
-  userId: string
-}): Promise<IChatUser> => {
+export const getChatUser = async (userId: string): Promise<IChatUser> => {
   try {
     const snapshot = await get(child(dbRef, `users/${userId}`))
     const chatUser = snapshot.val()
@@ -350,8 +346,8 @@ export const getChatUser = async ({
 }
 
 export const getMessageContent = async (
-  messageId: string,
-  chatRoomId: string
+  chatRoomId: string,
+  messageId: string
 ): Promise<string> => {
   if (!messageId) {
     return ''
