@@ -1,4 +1,4 @@
-import { Form } from 'antd'
+import { Form, Spin } from 'antd'
 import { MyInput } from 'src/components/MyInput'
 import { useEffect, useState } from 'react'
 import PlacesAutocomplete, { geocodeByAddress } from 'react-places-autocomplete'
@@ -57,12 +57,12 @@ export const LocationSearchInput = () => {
                 <Form.Item
                   className="mt-[24px]"
                   name={'city'}
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Input your City where you are living in today',
-                    },
-                  ]}
+                  // rules={[
+                  //   {
+                  //     required: true,
+                  //     message: 'Input your City where you are living in today',
+                  //   },
+                  // ]}
                 >
                   <MyInput
                     {...getInputProps({})}
@@ -72,8 +72,8 @@ export const LocationSearchInput = () => {
 
                   <input className="hidden" />
                 </Form.Item>
-                <div>{loading && <Loading />}</div>
-                <div className="">
+
+                <Spin spinning={loading}>
                   {suggestions.map((suggestion, index) => {
                     const className = suggestion.active
                       ? `${cls.placeAutoActive} flex`
@@ -98,7 +98,7 @@ export const LocationSearchInput = () => {
                       </div>
                     )
                   })}
-                </div>
+                </Spin>
               </div>
             )
           }}

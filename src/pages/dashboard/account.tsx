@@ -19,7 +19,7 @@ const tabs = [
   { label: 'Profile', value: 'profile' },
   { label: 'Media', value: 'media' },
   { label: 'Health', value: 'health' },
-  // { label: 'Football', value: 'football' },
+  { label: 'Football', value: 'football' },
   // { label: 'Family', value: 'family' },
 ]
 
@@ -76,7 +76,7 @@ const AccountPage: NextPage = () => {
           {currentTab === 'profile' && <Profile />}
           {currentTab === 'media' && <Media />}
           {currentTab === 'health' && <Health />}
-          {/* {currentTab === 'football' && <Football />} */}
+          {currentTab === 'football' && <Football />}
         </Container>
       </Box>
     </>
