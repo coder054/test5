@@ -96,6 +96,7 @@
     "react-dropzone": "^11.2.4",
     "react-hot-toast": "^1.0.2",
     "react-i18next": "^11.8.5",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-markdown": "^5.0.3",
     "react-otp-input": "^2.4.0",
     "react-places-autocomplete": "^7.3.0",

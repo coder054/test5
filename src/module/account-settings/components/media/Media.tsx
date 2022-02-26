@@ -116,7 +116,6 @@ export const Media = () => {
     (value: any, index: number) => {
       let newArr = [...(mediaForm.videoLinks || [])]
       newArr[index].url = value
-      console.log('Form:', mediaForm.videoLinks)
       setMediaForm((prev) => ({ ...prev, videoLinks: newArr }))
     },
     [mediaForm.videoLinks]

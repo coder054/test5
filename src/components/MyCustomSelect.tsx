@@ -34,22 +34,34 @@ const CssTextField = styled(TextField)({
   },
 })
 
-export const MyCustomSelect = ({
-  label,
-  className,
-  arrOptions,
-  onChange,
-  val,
-}: {
+type MyCustomSelectProps = {
   label: string
+  renderOption?: any
+  getOptionLabel?: any
+  onInputChange?: any
   className?: string
   arrOptions?: any
   onChange?: any
   val?: any
-}) => {
+}
+
+export const MyCustomSelect = ({
+  label,
+  className,
+  getOptionLabel,
+  renderOption,
+  onInputChange,
+  arrOptions,
+  onChange,
+  val,
+  ...rest
+}: MyCustomSelectProps) => {
   return (
     <div className={clsx(className)}>
       <Autocomplete
+        onInputChange={onInputChange}
+        getOptionLabel={getOptionLabel}
+        renderOption={renderOption}
         fullWidth
         disablePortal
         onChange={onChange}
@@ -68,6 +80,7 @@ export const MyCustomSelect = ({
           },
         }}
         renderInput={(params) => <CssTextField {...params} label={label} />}
+        {...rest}
       />
     </div>
   )
