@@ -302,11 +302,7 @@ const Biography = () => {
         description={`${dataBio.firstName} ${dataBio.lastName} is ${dataBio.height} cm tall 
         and weighs ${dataBio.weight} kg. ${dataBio.firstName}'s unique url on Zporter are ...`}
         keywords={`Zporter, biography, ${dataBio.firstName}, ${dataBio.lastName}`}
-        image={
-          dataBio.faceImageUrl ||
-          'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
-        }
-        url={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`}
+        image={dataBio.faceImageUrl}
       />
 
       <div className="px-[16px] xl:px-[39px] py-[39px] ">
