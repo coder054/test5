@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import useSWR, { SWRConfig } from 'swr'
 import { Text } from 'src/components/Text'
-import { requireAuth } from 'src/config/firebase-admin'
+import { loadIdToken, requireAuth } from 'src/config/firebase-admin'
 
 import { GradientCircularProgress } from 'react-circular-gradient-progress'
 import { Stars } from 'src/components/common/Stars'
@@ -373,6 +373,8 @@ const Biography = () => {
 export const getServerSideProps: any = async ({ req, res, query }) => {
   // for NOW, require logged in
 
+  const uid = await loadIdToken(req as any)
+
   const fullname = query.fullname // not use
   const username = query.username
 
@@ -383,6 +385,10 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 
     //@ts-ignore: Unreachable code error
     axios.defaults.headers.username = username
+    if (uid) {
+      //@ts-ignore: Unreachable code error
+      axios.defaults.headers.roleId = uid
+    }
     const data = await axios.get(url)
     if (data.status === 200) {
       return data.data
@@ -1046,6 +1052,9 @@ const InfoWithCircleImage = ({
 }) => {
   const [elmButtonFollow, setElmButtonFollow] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
+  const { authenticated } = useAuth() as {
+    authenticated: boolean
+  }
 
   const handleFollow = async () => {
     if (!dataBio.isFollowed) {
@@ -1314,7 +1323,7 @@ const InfoWithCircleImage = ({
         {/*  */}
       </div>
 
-      {dataBio.userId !== currentRoleId && (
+      {dataBio.userId !== currentRoleId && authenticated && (
         <div className="w-[466px] mx-auto mb-[24px] flex">
           <Button
             text="Add"
@@ -1527,11 +1536,26 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
     }
 
     let idLoggedUser = playerProfile.uid
-
-    return dataFlipRaw.filter((o) => {
-      return o.userId !== idLoggedUser
+    let index = dataFlipRaw.findIndex((o) => {
+      return o.userId === idLoggedUser
     })
+
+    if (index !== -1) {
+      console.log('aaa1 index', index)
+      setCurrentIndexFlip(index)
+    }
+    return dataFlipRaw
+    // return dataFlipRaw.filter((o) => {
+    //   return o.userId !== idLoggedUser
+    // })
   }, [dataFlipRaw, playerProfile])
+
+  // useEffect(() => {
+  //   console.log('aaa1 dataFlip: ', dataFlip)
+  // }, [dataFlip])
+  // useEffect(() => {
+  //   console.log('aaa1 currentIndexFlip: ', currentIndexFlip)
+  // }, [currentIndexFlip])
 
   const nextFlipUrl: string = useMemo(() => {
     if (isEmpty(dataFlip)) {
