@@ -26,7 +26,7 @@ export const HeadTags = ({
         description: 'Open Graph Description',
         images: [
           {
-            url: image,
+            url: image || 'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60' ,
             width: 1200,
             height: 675,
             alt: title,
@@ -45,6 +45,13 @@ export const HeadTags = ({
   return (
     <Head>
       <title>{title}</title>
+      <meta name="viewport" content="initial-scale=1, width=device-width" />
+      <meta name="keywords" content="zporter" />
+      <meta name="robots" content="index, follow" />
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="language" content="English" />
+      <meta name="revisit-after" content="1 days" />
+      <meta name="author" content="Zporter" />
       <meta name="title" content={title} />
       <meta name="description" content="description" />
       <meta name="keywords" content="tech, javascript, reactjs" />
