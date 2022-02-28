@@ -297,13 +297,64 @@ const Biography = () => {
 
   return (
     <DashboardLayout>
-      <HeadTags
-        title={`${dataBio.firstName} ${dataBio.lastName}`}
-        description={`${dataBio.firstName} ${dataBio.lastName} is ${dataBio.height} cm tall 
+      <Head>
+        <title>{`${dataBio.firstName} ${dataBio.lastName}`}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta name="robots" content="index, follow" />
+        <meta name="revisit-after" content="1 days" />
+        <meta
+          name="title"
+          content={`${dataBio.firstName} ${dataBio.lastName}`}
+        />
+        <meta
+          name="description"
+          content={`${dataBio.firstName} ${dataBio.lastName} is ${dataBio.height} cm tall 
         and weighs ${dataBio.weight} kg. ${dataBio.firstName}'s unique url on Zporter are ...`}
-        keywords={`Zporter, biography, ${dataBio.firstName}, ${dataBio.lastName}`}
-        image={dataBio.faceImageUrl}
-      />
+        />
+        <meta name="keywords" content="zporter" />
+        <meta name="language" content="English" />
+        <meta name="author" content="Zporter" />
+        <meta property="og:image" content={dataBio.faceImageUrl} />
+        <meta
+          property="og:title"
+          content={`${dataBio.firstName} ${dataBio.lastName}`}
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:description"
+          content={`${dataBio.firstName} ${dataBio.lastName} is ${dataBio.height} cm tall 
+        and weighs ${dataBio.weight} kg. ${dataBio.firstName}'s unique url on Zporter are ...`}
+        />
+        <meta
+          property="og:url"
+          content={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`}
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="675" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          property="twitter:domain"
+          content={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`}
+        />
+        <meta
+          property="twitter:url"
+          content={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`}
+        />
+        <meta
+          name="twitter:title"
+          content={`${dataBio.firstName} ${dataBio.lastName}`}
+        />
+        <meta
+          name="twitter:description"
+          content={`${dataBio.firstName} ${dataBio.lastName} is ${dataBio.height} cm tall 
+        and weighs ${dataBio.weight} kg. ${dataBio.firstName}'s unique url on Zporter are ...`}
+        />
+        <meta
+          name="twitter:image"
+          content={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/zporter-og.png`}
+        />
+      </Head>
 
       <div className="px-[16px] xl:px-[39px] py-[39px] ">
         {/* /// Navigate and filter */}
