@@ -231,7 +231,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      console.log('aaa onIdTokenChanged', user)
+      // console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
         removeTokenCookie()

@@ -243,13 +243,14 @@ const Biography = () => {
     data: IBiographyPlayer
     error: any
   }
+  console.log('dataBio', dataBio)
 
   useEffect(() => {
-    console.log('aaa currentFlipId: ', currentFlipId)
+    // console.log('aaa currentFlipId: ', currentFlipId)
   }, [currentFlipId])
 
   useEffect(() => {
-    console.log('aaa dataFlip: ', dataFlip)
+    // console.log('aaa dataFlip: ', dataFlip)
   }, [dataFlip])
 
   const dataBioRadarChart = useMemo(() => {
@@ -1157,7 +1158,7 @@ const InfoWithCircleImage = ({
   userid: string | string[]
   currentRoleId: string
 }) => {
-  const [elmButtonFollow, setElmButtonFollow] = useState<string>('')
+  const [elmButtonFollow, setElmButtonFollow] = useState<string>('Follow')
   const [loading, setLoading] = useState<boolean>(false)
 
   const handleFollow = async () => {
@@ -1165,9 +1166,9 @@ const InfoWithCircleImage = ({
       const res = await axios.post(
         `${API_FRIENDS}/${userid}/request-relationship?type=follows`
       )
-      console.log('res', res)
+      // console.log('res', res)
       if (res.status === 201) {
-        // elmButtonFollow = 'Following'
+        setElmButtonFollow('Following')
       }
     } else {
       const res = await axios.delete(
@@ -1432,11 +1433,11 @@ const InfoWithCircleImage = ({
           <Button
             loading={loading}
             // text={elmButtonFollow}
-            text={'Follow'}
+            // text={'Follow'}
             onClick={handleFollow}
             className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent border border-Green font-medium text-Green"
           >
-            {/* {elmButtonFollow} */}
+            {elmButtonFollow}
           </Button>
         </div>
       )}
@@ -1499,7 +1500,7 @@ const TopVideos = ({ dataBio }: { dataBio: IBiographyPlayer }) => {
     },
   ]
 
-  console.log('aaa dataBio.topVideoLinks', dataBio.topVideoLinks)
+  // console.log('aaa dataBio.topVideoLinks', dataBio.topVideoLinks)
 
   const visibleSlides = useMemo(() => {
     if (screenWidth < 640) {
