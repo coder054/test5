@@ -22,11 +22,13 @@ export const HeadTags = ({
       openGraph={{
         type: 'website',
         url: url,
-        title: 'Open Graph Title',
-        description: 'Open Graph Description',
+        title: title,
+        description,
         images: [
           {
-            url: image || 'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60' ,
+            url:
+              image ||
+              'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60',
             width: 1200,
             height: 675,
             alt: title,
