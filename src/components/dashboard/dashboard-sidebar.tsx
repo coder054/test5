@@ -1,5 +1,6 @@
 import type { Theme } from '@mui/material'
 import { Box, Divider, Drawer, useMediaQuery } from '@mui/material'
+import { get } from 'lodash'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
@@ -11,6 +12,7 @@ import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import { Cog } from 'src/icons/cog'
 import { MessagesIcon } from 'src/icons/messagesIcon'
 import { Newspaper } from 'src/icons/newspaper'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
 import {
   UserCircle,
   UserCircle as UserCircleIcon,
@@ -44,6 +46,16 @@ const getSections = (t: TFunction): Section[] => {
       window.localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId) || ''
   }
 
+  const { playerProfile } = useAuth()
+
+  const firstname = (get(playerProfile, 'profile.firstName') || '')
+    .toLowerCase()
+    .replaceAll(' ', '')
+  const lastname = (get(playerProfile, 'profile.lastName') || '')
+    .toLowerCase()
+    .replaceAll(' ', '')
+  const fullname = `${firstname}.${lastname}`
+
   return [
     {
       title: t('General'),
@@ -60,7 +72,7 @@ const getSections = (t: TFunction): Section[] => {
         },
         {
           title: t('Biography'),
-          path: `/biography/${currentRoleLocalStorage}`, // current
+          path: `/${playerProfile.username}/${fullname}`, // current
           icon: <UserCircle fontSize="small" />,
         },
         {
