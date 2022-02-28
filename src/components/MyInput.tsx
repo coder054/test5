@@ -51,7 +51,7 @@ export const MyInput = ({
 }: {
   className?: string
   label: string
-  value?: string
+  value?: string | number
   onChange?: any
   password?: boolean
   [rest: string]: any

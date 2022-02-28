@@ -5,16 +5,19 @@ export type AccountType = {
   verifyCode: string
 }
 
-export type ContractedClub = {
+export type ContractedClubType = {
   city: string
   clubId: string
   clubName: string
   logoUrl: string
+  arena: string
+  country: CountryType | string
+  websiteUrl: string | null
 }
 
 export type CoachCareerType = {
   clubId: string
-  contractedClub: ContractedClub
+  contractedClub: ContractedClubType
   contractedFrom: string
   contractedUntil: string
   currentTeams: string[]
@@ -25,6 +28,29 @@ export type CoachCareerType = {
   role: string
   summary: string
 }
+
+export type CurrentTeamType = {
+  clubId: string
+  status?: string
+  teamId: string
+  teamImage: string
+  teamName: string
+}
+
+export type PlayerCareerType = Partial<{
+  clubId: string
+  contractedClub: ContractedClubType
+  contractedFrom: string
+  contractedUntil: string
+  currentTeams: CurrentTeamType[]
+  estMarketValue: number
+  favoriteRoles: string[]
+  seasonEndDate: string
+  seasonStartDate: string
+  shirtNumber: number
+  summary: string
+  teamCalendarLinks: string[]
+}>
 
 export type OverallType = {
   mental: number
@@ -43,14 +69,10 @@ export type RadarType = {
 }
 
 export type HealthType = {
-  height: {
-    value: number
-  }
+  height: { value: number; updateAt: string | Date }
   leftFootLength: number
   rightFootLength: number
-  weight: {
-    value: number
-  }
+  weight: { value: number; updateAt: string | Date }
 }
 
 export type VideoLinksType = {
@@ -115,6 +137,29 @@ export type SocialLinksType = {
   youtube: string
 }
 
+export type ClubType = {
+  arena: string
+  city: string
+  clubId: string
+  clubName: string
+  country: CountryType | string
+  logoUrl: string
+  nickName: string
+  websiteUrl: string
+}
+
+export type TeamType = {
+  teamId: string
+  isPrivate: boolean
+  updatedAt: number
+  synced: boolean
+  clubId: string
+  teamImage: string
+  teamName: string
+  teamNameAsArray: string[]
+  createdAt: number
+}
+
 export type CoachSkillsType = {
   overall: OverallType
   radar: RadarType
@@ -125,6 +170,7 @@ export type AccountSettingsType = Partial<{
   account: AccountType
   circleCompleted: number
   coachCareer: CoachCareerType
+  playerCareer: PlayerCareerType
   coachSkills: CoachSkillsType
   fcmToken: string[]
   health: HealthType

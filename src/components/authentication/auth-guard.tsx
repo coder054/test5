@@ -2,7 +2,7 @@ import type { FC, ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import { useAuth } from '../../hooks/use-auth'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
 
 interface AuthGuardProps {
   children: ReactNode
@@ -10,7 +10,8 @@ interface AuthGuardProps {
 
 export const AuthGuard: FC<AuthGuardProps> = (props) => {
   const { children } = props
-  const auth = useAuth()
+  const { authenticated } = useAuth()
+
   const router = useRouter()
   const [checked, setChecked] = useState(false)
 
@@ -20,10 +21,11 @@ export const AuthGuard: FC<AuthGuardProps> = (props) => {
         return
       }
 
-      if (!auth.isAuthenticated) {
+      if (!authenticated) {
         router.push({
-          pathname: '/authentication/login',
-          query: { returnUrl: router.asPath },
+          // pathname: '/authentication/login',
+          pathname: '/signin',
+          // query: { returnUrl: router.asPath },
         })
       } else {
         setChecked(true)
