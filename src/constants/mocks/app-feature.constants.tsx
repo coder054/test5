@@ -5,9 +5,36 @@ import {
   DiaryAppIcon,
   EventsAppIcon,
   FeedAppIcon,
+  PlayerOfTheMonthIcon,
   ProgramsAppIcon,
+  TeamOfTheWeekIcon,
   TestsAppIcon,
+  VRGameIcon,
+  ZStarIcon,
 } from 'src/components/icons'
+
+export const APP_FEATURE_2 = [
+  {
+    icon: <ZStarIcon />,
+    title: 'ZTAR OF THE MACTCH',
+    content: 'Coaches, team mates and opponents votes for Ztar of the match',
+  },
+  {
+    icon: <TeamOfTheWeekIcon />,
+    title: 'TEAM OF THE WEEK',
+    content: 'This weekends best 11 players is presented in team of the week',
+  },
+  {
+    icon: <PlayerOfTheMonthIcon />,
+    title: 'PLAYER OF THE MONTH',
+    content: 'Every month a specific player of the month is presented',
+  },
+  {
+    icon: <VRGameIcon />,
+    title: 'VR MANAGER GAME',
+    content: 'Compete with your friends who’s the best manager (Q3 2022)',
+  },
+]
 
 export const APP_FEATURE = [
   {

@@ -14,9 +14,12 @@ module.exports = {
       backgroundImage: {
         'landing-one': "url('../../public/assets/landing-page/Landing-1.png')",
         'landing-two': "url('../../public/assets/landing-page/Landing-2.png')",
+        'landing-three':
+          "url('../../public/assets/landing-page/Landing-3.png')",
+        'landing-four': "url('../../public/assets/landing-page/Landing-4.png')",
       },
       animation: {
-        appear: 'appear 2s ease-in-out',
+        appear: 'appear 0.2s ease-in-out',
       },
       colors: {
         Blue: '#4654EA',
