@@ -191,7 +191,7 @@ const Biography = () => {
   const { screenWidth } = useScreenWidth()
   const router = useRouter()
 
-  console.log('aaa router', router)
+  // console.log('aaa router', router)
 
   const { username } = router.query
   const { currentRoleId } = useAuth()
@@ -209,7 +209,7 @@ const Biography = () => {
     data: IBiographyPlayer
     error: any
   }
-  console.log('dataBio', dataBio)
+  // console.log('dataBio', dataBio)
 
   const dataBioRadarChart = useMemo(() => {
     const coach = get(dataBio, 'radarUpdatedByCoach')
@@ -444,7 +444,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   try {
     // dataBio = await fetcher(`/biographies/player?userIdQuery=${userid}`)
     dataBio = await fetcher1(`/biographies/player?username=${username}`)
-    console.log('aaa dataBio', dataBio)
+    // console.log('aaa dataBio', dataBio)
   } catch (error) {
     dataBio = {}
   }
@@ -469,7 +469,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 
 export default function BiographyWithSWR({ fallback }) {
   useEffect(() => {
-    console.log('aaa fallback: ', fallback)
+    // console.log('aaa fallback: ', fallback)
   }, [fallback])
 
   //@ts-ignore: Unreachable code error
@@ -1122,7 +1122,7 @@ const InfoWithCircleImage = ({
         const res = await axios.post(
           `${API_FRIENDS}/${dataBio.userId}/request-relationship?type=follows`
         )
-        console.log('res', res)
+        // console.log('res', res)
         if (res.status === 201) {
           // elmButtonFollow = 'Following'
         }
@@ -1594,18 +1594,18 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
     let index = dataFlip.findIndex((o) => {
       return o.username === username
     })
-    console.log('aaa1 index', index)
+    // console.log('aaa1 index', index)
     setCurrentIndexFlip(index)
   }, [dataFlip, username])
   useEffect(() => {
-    console.log('aaa currentIndexFlip: ', currentIndexFlip)
+    // console.log('aaa currentIndexFlip: ', currentIndexFlip)
   }, [currentIndexFlip])
 
   // useEffect(() => {
-  //   console.log('aaa1 dataFlip: ', dataFlip)
+  //   // console.log('aaa1 dataFlip: ', dataFlip)
   // }, [dataFlip])
   // useEffect(() => {
-  //   console.log('aaa1 currentIndexFlip: ', currentIndexFlip)
+  //   // console.log('aaa1 currentIndexFlip: ', currentIndexFlip)
   // }, [currentIndexFlip])
 
   const nextFlipUrl: string = useMemo(() => {
@@ -1768,9 +1768,9 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
 //   const [show, setShow] = useState(false)
 //   const router = useRouter()
 //   const fullUrl = useMemo(() => {
-//     console.log('aaa router.domainLocales', router.domainLocales)
-//     console.log('aaa window.location.origin', window.location.origin)
-//     console.log(
+//     // console.log('aaa router.domainLocales', router.domainLocales)
+//     // console.log('aaa window.location.origin', window.location.origin)
+//     // console.log(
 //       'aaa process.env.NEXT_PUBLIC_DOMAIN_NAME',
 //       process.env.NEXT_PUBLIC_DOMAIN_NAME
 //     )
@@ -1784,7 +1784,7 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
 //   }, [])
 
 //   useEffect(() => {
-//     console.log('aaa fullUrl: ', fullUrl)
+//     // console.log('aaa fullUrl: ', fullUrl)
 //   }, [fullUrl])
 
 //   if (!fullUrl || !show) {
@@ -1869,7 +1869,7 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
 
 const SocialLinks = ({ socialLinks }) => {
   useEffect(() => {
-    console.log('aaa socialLinks: ', socialLinks)
+    // console.log('aaa socialLinks: ', socialLinks)
   }, [socialLinks])
   return (
     <div
