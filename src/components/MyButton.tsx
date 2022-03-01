@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { LoadingOutlined } from '@ant-design/icons'
 import { Loading } from './loading/loading'
 import { ComponentPropsWithoutRef } from 'react'
+import { isMobile } from 'react-device-detect'
 
 type MyButtonProps = ComponentPropsWithoutRef<'button'> & {
   label: string
@@ -24,6 +25,7 @@ export const MyButton = ({
         disabled={isLoading ? true : isDisabled}
         className={clsx(
           'bg-[#4654EA] px-[61px] py-[11px] rounded-[8px] hover:opacity-70 duration-200 relative',
+          isMobile && 'w-full',
           className
         )}
         {...rest}

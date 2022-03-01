@@ -1,6 +1,6 @@
-
 import { requireNotAuth } from 'src/config/firebase-admin'
-import Landing from 'src/module/landing'
+import Landing from '../module/landing'
+// import { Landing } from 'src/module/landing-page/LandingPage'
 
 const LandingPage = () => {
   return <Landing />
