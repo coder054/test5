@@ -33,6 +33,7 @@ const News = () => {
   const params = {
     limit: 12,
     sorted: 'asc',
+    startAfter: 1,
   }
 
   useEffect(() => {

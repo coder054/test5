@@ -609,7 +609,7 @@ export const SignUpWithSMS = () => {
               separator={<span></span>}
               containerStyle="flex space-x-[6px] md:space-x-[16px] ml-[-2px] "
               inputStyle="border-[1px] md:border-[2px] border-[#4654EA] rounded-[8px] w-[45px] md:w-[49px] h-[51px] md:h-[56px] flex justify-center items-center
-              text-[24px] md:text-[28px] font-SVNGilroy"
+              text-[24px] md:text-[28px] font-SVNGilroy text-black"
               isInputNum
             />
 
@@ -620,18 +620,22 @@ export const SignUpWithSMS = () => {
                 sendCode(otp, emailFormPhoneSignUp, passwordFormPhoneSignUp)
               }}
               className="bg-Blue flex justify-center items-center text-[13px] md:text-[14px] leading-[22px] 
-        text-white w-full h-[44px] rounded-[8px] mb-[14px]
-        "
+              text-white w-full h-[44px] rounded-[8px] mb-[14px]"
             >
               Verify code
             </button>
 
             <div className="h-[1px] bg-Stroke mb-[24px] "></div>
-            <Link href="/signin">
-              <a className="text-Blue text-[14px] md:text-[16px] leading-[175%] border-b-[1px] border-Blue ">
-                Already having an account?
-              </a>
-            </Link>
+            {/* <Link href="/signin"> */}
+            <a
+              className="text-Blue text-[14px] md:text-[16px] leading-[175%] border-b-[1px] border-Blue"
+              onClick={() => {
+                setStep(1)
+              }}
+            >
+              Already having an account?
+            </a>
+            {/* </Link> */}
           </div>
         </div>
       </div>
