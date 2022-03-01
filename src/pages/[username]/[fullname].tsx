@@ -485,15 +485,17 @@ export default function BiographyWithSWR({ fallback }) {
   return (
     <>
       <Head>
-        <title> {get(dataBio, 'lastName') || 'testtt'} </title>
-        <meta name="description" content="desc"></meta>
+        <title>
+          {get(dataBio, 'firstName') + ' ' + get(dataBio, 'lastName')}
+        </title>
+        <meta name="description" content="Zporter"></meta>
         <meta property="og:url" content="https://www.byeindonesia.com/" />
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content={get(dataBio, 'lastName') || 'testtt2'}
+          content={get(dataBio, 'firstName') + ' ' + get(dataBio, 'lastName')}
         />
-        <meta property="og:description" content="desccc" />
+        <meta property="og:description" content="Zporter" />
         <meta
           property="og:image"
           content={
