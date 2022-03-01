@@ -297,27 +297,8 @@ const Biography = () => {
     )
 
   return (
-    <>
-      <Head>
-        <title>test: {`test ${dataBio.firstName} ${dataBio.lastName}`}</title>
-        <meta name="description" content="description"></meta>
-        <meta property="og:url" content="https://www.byeindonesia.com/" />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:title"
-          content={`test ${dataBio.firstName} ${dataBio.lastName}`}
-        />
-        <meta
-          property="og:description"
-          content="Renunciation of Indonesian citizenship process changed in 2020. This site aims to answer all your questions on the new process."
-        />
-        <meta
-          property="og:image"
-          content="https://www.byeindonesia.com/og-bye-indonesia.png"
-        />
-      </Head>
-      <DashboardLayout>
-        {/* <Head>
+    <DashboardLayout>
+      {/* <Head>
         <title>{`${dataBio.firstName} ${dataBio.lastName}`}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -376,64 +357,61 @@ const Biography = () => {
         />
       </Head> */}
 
-        <div className="px-[16px] xl:px-[39px] py-[39px] ">
-          {/* /// Navigate and filter */}
-          <NavigationAndFilter
-            username={dataBio.username}
-          ></NavigationAndFilter>
+      <div className="px-[16px] xl:px-[39px] py-[39px] ">
+        {/* /// Navigate and filter */}
+        <NavigationAndFilter username={dataBio.username}></NavigationAndFilter>
 
-          <div className="h-[32px] 2xl:h-[42px] "></div>
+        <div className="h-[32px] 2xl:h-[42px] "></div>
 
-          {/* /// 2 main column */}
-          <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-[24px] 2xl:gap-[24px] ">
-            <div
-              style={{
-                background: 'rgba(32, 33, 40, 0.3)',
-                backdropFilter: 'blur(68px)',
-              }}
-              className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
-            >
-              <div className="max-w-[466px] mx-auto ">
-                <InfoWithCircleImage
-                  dataBio={dataBio}
-                  currentRoleId={currentRoleId}
-                />
+        {/* /// 2 main column */}
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-[24px] 2xl:gap-[24px] ">
+          <div
+            style={{
+              background: 'rgba(32, 33, 40, 0.3)',
+              backdropFilter: 'blur(68px)',
+            }}
+            className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
+          >
+            <div className="max-w-[466px] mx-auto ">
+              <InfoWithCircleImage
+                dataBio={dataBio}
+                currentRoleId={currentRoleId}
+              />
 
-                <div className="h-[1px] my-[40px] bg-Stroke "></div>
-                <InfoWithImages />
-              </div>
-            </div>
-
-            <div
-              style={{
-                background: 'rgba(32, 33, 40, 0.3)',
-                backdropFilter: 'blur(68px)',
-              }}
-              className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
-            >
-              <div className="max-w-[466px] mx-auto">
-                <InforWithAChart
-                  dataBio={dataBio}
-                  dataBioRadarChart={dataBioRadarChart}
-                ></InforWithAChart>
-
-                <div className="h-[1px] my-[32px] bg-Stroke "></div>
-
-                <InforWithNumbers />
-              </div>
+              <div className="h-[1px] my-[40px] bg-Stroke "></div>
+              <InfoWithImages />
             </div>
           </div>
 
-          <div className="mt-[30px] ">
-            <SocialLinks socialLinks={dataBio.socialLinks} />
+          <div
+            style={{
+              background: 'rgba(32, 33, 40, 0.3)',
+              backdropFilter: 'blur(68px)',
+            }}
+            className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
+          >
+            <div className="max-w-[466px] mx-auto">
+              <InforWithAChart
+                dataBio={dataBio}
+                dataBioRadarChart={dataBioRadarChart}
+              ></InforWithAChart>
+
+              <div className="h-[1px] my-[32px] bg-Stroke "></div>
+
+              <InforWithNumbers />
+            </div>
           </div>
-
-          <div className="h-[32px] "></div>
-
-          <TopVideos dataBio={dataBio} />
         </div>
-      </DashboardLayout>
-    </>
+
+        <div className="mt-[30px] ">
+          <SocialLinks socialLinks={dataBio.socialLinks} />
+        </div>
+
+        <div className="h-[32px] "></div>
+
+        <TopVideos dataBio={dataBio} />
+      </div>
+    </DashboardLayout>
   )
 }
 
@@ -491,14 +469,39 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 
 export default function BiographyWithSWR({ fallback }) {
   useEffect(() => {
-    // console.log('aaa fallback: ', fallback)
+    console.log('aaa fallback: ', fallback)
   }, [fallback])
 
-  //@ts-ignore: Unreachable code error
-  BiographyWithSWR.description = 'BiographyWithSWR description'
+  const dataBio = useMemo(() => {
+    if (isEmpty(fallback)) {
+      return {}
+    }
+    return (
+      Object.values(fallback).filter((o) => o.hasOwnProperty('username'))[0] ||
+      {}
+    )
+  }, [fallback])
 
   return (
     <>
+      <Head>
+        <title> {get(dataBio, 'lastName') || 'testtt'} </title>
+        <meta name="description" content="desc"></meta>
+        <meta property="og:url" content="https://www.byeindonesia.com/" />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content={get(dataBio, 'lastName') || 'testtt2'}
+        />
+        <meta property="og:description" content="desccc" />
+        <meta
+          property="og:image"
+          content={
+            get(dataBio, 'faceImageUrl') ||
+            'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
+          }
+        />
+      </Head>
       <SWRConfig value={{ fallback }}>
         <Biography />
       </SWRConfig>
