@@ -1066,7 +1066,7 @@ const InforWithNumbers = () => {
           Matches
         </Text>
 
-        <div className="flex gap-x-[12px] xl:gap-x-[30px] ">
+        <div className="flex gap-x-[12px] xl:gap-x-[30px] overflow-x-auto pb-1 ">
           {[
             { label: 'Matches', value: '10' },
             { label: 'Hours', value: '13,3' },
@@ -1078,7 +1078,7 @@ const InforWithNumbers = () => {
           ].map((o, index) => (
             <div
               key={index}
-              className="flex flex-col justify-center items-center "
+              className="flex flex-col justify-center items-center"
             >
               <span className=" text-[13px] xl:text-[16px] leading-[150%] text-Grey mb-2 ">
                 {o.label}
@@ -1095,7 +1095,7 @@ const InforWithNumbers = () => {
           Trainings in total
         </Text>
 
-        <div className="flex gap-x-[12px] xl:gap-x-[30px] ">
+        <div className="flex gap-x-[12px] xl:gap-x-[30px] overflow-x-auto pb-1">
           {[
             { label: 'Sessions', value: '40' },
             { label: 'Hours', value: '60' },
@@ -1403,17 +1403,17 @@ const InfoWithCircleImage = ({
       </div>
 
       {dataBio.userId !== currentRoleId && authenticated && (
-        <div className="w-[466px] mx-auto mb-[24px] flex">
+        <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px] ">
           <Button
             text="Add"
-            className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue mr-[26px] font-medium "
+            className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue font-medium "
           ></Button>
           <Button
             loading={loading}
             // text={elmButtonFollow}
             // text={'Follow'}
             onClick={handleFollow}
-            className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent border border-Green font-medium text-Green"
+            className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent border border-Green font-medium text-Green"
           >
             {elmButtonFollow}
           </Button>
