@@ -52,7 +52,7 @@ const App: FC<EnhancedAppProps> = (props) => {
 
   return (
     <>
-      <Head>
+      {/* <Head>
         <title>{get(Component, 'title') || 'Zporter default title'}</title>
         <meta
           name="description"
@@ -72,7 +72,7 @@ const App: FC<EnhancedAppProps> = (props) => {
           property="og:image"
           content="https://www.byeindonesia.com/og-bye-indonesia.png"
         />
-      </Head>
+      </Head> */}
       <CacheProvider value={emotionCache}>
         <ReduxProvider store={store}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
