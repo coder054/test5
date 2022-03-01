@@ -409,15 +409,10 @@ export interface SocialLinks {
 export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
   const { onOpenSidebar, ...other } = props
 
-  const [playerProfile, setPlayerProfile] = useState<IPlayerProfile>(
-    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.playerProfile))
-  )
-
-  const { authenticated } = useAuth()
-
-  useEffect(() => {
-    console.log('aaa playerProfile: ', playerProfile)
-  }, [playerProfile])
+  const { authenticated, playerProfile } = useAuth() as {
+    authenticated: boolean
+    playerProfile: IPlayerProfile
+  }
 
   return (
     <>

@@ -101,7 +101,6 @@ export function AuthProvider({ children }) {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setCurrentUser(userCredential.user)
-        window.location.href = '/dashboard'
       })
       .catch((error) => {
         console.log('err', error.message)
@@ -155,7 +154,6 @@ export function AuthProvider({ children }) {
           },
           duration: 3,
         })
-        // window.location.href = '/signin'
       })
       .catch((error) => {
         notification.open({
@@ -187,10 +185,6 @@ export function AuthProvider({ children }) {
     localStorage.removeItem(LOCAL_STORAGE_KEY.userRoles)
     localStorage.removeItem(LOCAL_STORAGE_KEY.currentRoleId)
     localStorage.removeItem(LOCAL_STORAGE_KEY.playerProfile)
-    // window.location.href = '/signin'
-    setTimeout(() => {
-      router.push('/signin')
-    }, 500)
   }
 
   const ResetPassword = (email: string) => {
@@ -237,7 +231,7 @@ export function AuthProvider({ children }) {
     console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      // console.log('aaa onIdTokenChanged', user)
+      console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
         removeTokenCookie()
@@ -260,7 +254,11 @@ export function AuthProvider({ children }) {
             JSON.stringify(resp.data)
           )
           setUserRoles(resp.data)
-          const roleId = get(resp, 'data[0].roleId')
+          const roleId =
+            get(
+              resp.data.find((o) => o.role === 'PLAYER'),
+              'roleId'
+            ) || ''
           // update axios token header
           //@ts-ignore: Unreachable code error
           axios.defaults.headers.roleId = roleId
