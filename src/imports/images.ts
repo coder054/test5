@@ -15,3 +15,13 @@ export const imgAvtItemEventHeadline = require('./../../public' +
   '/event/avatar.svg')
 export const imgBackgroundItemEventHeadline = require('./../../public' +
   '/event/background.svg')
+export const LANDING_TABLET = require('./../../public' +
+  '/assets/landing-page/Tablet.png')
+export const BALL = require('./../../public' + '/assets/landing-page/Ball.png')
+export const GROUP_ITEMS = require('./../../public' +
+  '/assets/landing-page/GroupItems.png')
+export const GRAPH = require('./../../public' +
+  '/assets/landing-page/Graph.png')
+export const APP = require('./../../public' + '/assets/landing-page/App.png')
+export const APP_SHADOW = require('./../../public' +
+  '/assets/landing-page/AppShadow.png')

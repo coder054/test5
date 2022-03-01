@@ -11,6 +11,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      backgroundImage: {
+        'landing-one': "url('../../public/assets/landing-page/Landing-1.png')",
+        'landing-two': "url('../../public/assets/landing-page/Landing-2.png')",
+      },
       animation: {
         appear: 'appear 2s ease-in-out',
       },

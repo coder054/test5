@@ -39,16 +39,16 @@ export const DropdownUser = () => {
       </div>
       <div className="h-[1px] bg-Stroke "></div>
       <div className="py-[8px] ">
-        <div className={MENU_CLASS}>
+        {/* <div className={MENU_CLASS}>
           <ProfileIcon />
           <Text name="body1" className="text-white ">
             Profile
           </Text>
-        </div>
+        </div> */}
         <div className={MENU_CLASS}>
           <SettingsIcon />
           <Text name="body1" className="text-white ">
-            Settings
+            Account & Settings
           </Text>
         </div>
         <div className={MENU_CLASS}>
