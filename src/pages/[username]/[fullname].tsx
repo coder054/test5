@@ -404,9 +404,7 @@ const Biography = () => {
         </div>
 
         <div className="mt-[30px] ">
-          <SocialShare
-            fullName={`${dataBio.firstName} ${dataBio.lastName}`}
-          ></SocialShare>
+          <SocialLinks socialLinks={dataBio.socialLinks} />
         </div>
 
         <div className="h-[32px] "></div>
@@ -1165,7 +1163,7 @@ const InfoWithCircleImage = ({
 
           <img
             src={dataBio.currentClubIconUrl}
-            className="w-[24px] ml-auto rounded-full "
+            className="w-[24px] h-[24px] ml-auto rounded-full"
             alt=""
           />
           <div className="h-[45px] ">
@@ -1237,7 +1235,7 @@ const InfoWithCircleImage = ({
               svgStarHalf={
                 <img
                   src={'/biography/starhalf.png'}
-                  className="w-[12px] h-[12px] "
+                  className="w-[12px] h-[12px]"
                   alt=""
                 />
               }
@@ -1300,7 +1298,7 @@ const InfoWithCircleImage = ({
 
           <img
             src={dataBio.countryFlagUrl}
-            className="w-[24px] mr-auto rounded-full"
+            className="w-[24px] h-[24px] mr-auto rounded-full"
             alt=""
           />
           <div className="h-[45px] ">
@@ -1766,41 +1764,113 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
   )
 }
 
-const SocialShare = ({ fullName }) => {
-  const [show, setShow] = useState(false)
-  const router = useRouter()
-  const fullUrl = useMemo(() => {
-    console.log('aaa router.domainLocales', router.domainLocales)
-    console.log('aaa window.location.origin', window.location.origin)
-    console.log(
-      'aaa process.env.NEXT_PUBLIC_DOMAIN_NAME',
-      process.env.NEXT_PUBLIC_DOMAIN_NAME
-    )
-    return `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`
-  }, [router.asPath, show])
+// const SocialShare = ({ fullName }) => {
+//   const [show, setShow] = useState(false)
+//   const router = useRouter()
+//   const fullUrl = useMemo(() => {
+//     console.log('aaa router.domainLocales', router.domainLocales)
+//     console.log('aaa window.location.origin', window.location.origin)
+//     console.log(
+//       'aaa process.env.NEXT_PUBLIC_DOMAIN_NAME',
+//       process.env.NEXT_PUBLIC_DOMAIN_NAME
+//     )
+//     return `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`
+//   }, [router.asPath, show])
 
+//   useEffect(() => {
+//     setTimeout(() => {
+//       setShow(true)
+//     }, 10)
+//   }, [])
+
+//   useEffect(() => {
+//     console.log('aaa fullUrl: ', fullUrl)
+//   }, [fullUrl])
+
+//   if (!fullUrl || !show) {
+//     return (
+//       <div
+//         style={{
+//           background: 'rgba(32, 33, 40, 0.3)',
+//           backdropFilter: 'blur(68px)',
+//         }}
+//         className=" rounded-[8px] p-[20px]  text-center h-[88px]"
+//       ></div>
+//     )
+//   }
+
+//   return (
+//     <div
+//       style={{
+//         background: 'rgba(32, 33, 40, 0.3)',
+//         backdropFilter: 'blur(68px)',
+//       }}
+//       className=" rounded-[8px] p-[20px]  text-center"
+//     >
+//       <div className="inline-grid grid-cols-7 mx-auto gap-x-[16px] ">
+//         <img
+//           src={'/biography/social-icons/Instagram.png'}
+//           className="w-[40px] h-[40px]"
+//           alt=""
+//         />
+
+//         <FacebookShareButton
+//           url={fullUrl}
+//           quote={`${fullName} on Zporter`}
+//           hashtag={'#zporter'}
+//           className=""
+//         >
+//           <img
+//             src={'/biography/social-icons/facebook.png'}
+//             className="w-[40px] h-[40px] "
+//             alt=""
+//           />
+//         </FacebookShareButton>
+
+//         <TwitterShareButton url={fullUrl} className="">
+//           <img
+//             src={'/biography/social-icons/twitter.png'}
+//             className="w-[40px] h-[40px] "
+//             alt=""
+//           />
+//         </TwitterShareButton>
+
+//         <TelegramShareButton url={fullUrl}>
+//           <img
+//             src={'/biography/social-icons/telegram.png'}
+//             className="w-[40px] h-[40px] "
+//             alt=""
+//           />
+//         </TelegramShareButton>
+
+//         {/* youtube */}
+//         <img
+//           src={'/biography//social-icons/youtube.png'}
+//           className="w-[40px] h-[40px] "
+//           alt=""
+//         />
+
+//         {/* veo */}
+//         <img
+//           src={'/biography/social-icons/veo.png'}
+//           className="w-[40px] h-[40px] "
+//           alt=""
+//         />
+//         {/* node music */}
+//         <img
+//           src={'/biography/social-icons/node.png'}
+//           className="w-[40px] h-[40px] "
+//           alt=""
+//         />
+//       </div>
+//     </div>
+//   )
+// }
+
+const SocialLinks = ({ socialLinks }) => {
   useEffect(() => {
-    setTimeout(() => {
-      setShow(true)
-    }, 10)
-  }, [])
-
-  useEffect(() => {
-    console.log('aaa fullUrl: ', fullUrl)
-  }, [fullUrl])
-
-  if (!fullUrl || !show) {
-    return (
-      <div
-        style={{
-          background: 'rgba(32, 33, 40, 0.3)',
-          backdropFilter: 'blur(68px)',
-        }}
-        className=" rounded-[8px] p-[20px]  text-center h-[88px]"
-      ></div>
-    )
-  }
-
+    console.log('aaa socialLinks: ', socialLinks)
+  }, [socialLinks])
   return (
     <div
       style={{
@@ -1810,60 +1880,75 @@ const SocialShare = ({ fullName }) => {
       className=" rounded-[8px] p-[20px]  text-center"
     >
       <div className="inline-grid grid-cols-7 mx-auto gap-x-[16px] ">
-        <img
-          src={'/biography/social-icons/Instagram.png'}
-          className="w-[40px] h-[40px]"
-          alt=""
-        />
+        <Link href={socialLinks?.instagram || 'https://www.instagram.com/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/Instagram.png'}
+              className="w-[40px] h-[40px]"
+              alt=""
+            />
+          </a>
+        </Link>
 
-        <FacebookShareButton
-          url={fullUrl}
-          quote={`${fullName} on Zporter`}
-          hashtag={'#zporter'}
-          className=""
-        >
-          <img
-            src={'/biography/social-icons/facebook.png'}
-            className="w-[40px] h-[40px] "
-            alt=""
-          />
-        </FacebookShareButton>
+        <Link href={socialLinks?.facebook || 'https://www.facebook.com/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/facebook.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link>
 
-        <TwitterShareButton url={fullUrl} className="">
-          <img
-            src={'/biography/social-icons/twitter.png'}
-            className="w-[40px] h-[40px] "
-            alt=""
-          />
-        </TwitterShareButton>
+        <Link href={socialLinks?.twitter || 'https://twitter.com/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/twitter.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link>
 
-        <TelegramShareButton url={fullUrl}>
-          <img
-            src={'/biography/social-icons/telegram.png'}
-            className="w-[40px] h-[40px] "
-            alt=""
-          />
-        </TelegramShareButton>
+        {/* <Link href={socialLinks?.twitter || 'https://twitter.com/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/telegram.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link> */}
 
-        {/* youtube */}
-        <img
-          src={'/biography//social-icons/youtube.png'}
-          className="w-[40px] h-[40px] "
-          alt=""
-        />
+        <Link href={socialLinks?.youtube || 'https://www.youtube.com/'}>
+          <a className="">
+            <img
+              src={'/biography//social-icons/youtube.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link>
 
-        {/* veo */}
-        <img
-          src={'/biography/social-icons/veo.png'}
-          className="w-[40px] h-[40px] "
-          alt=""
-        />
-        {/* node music */}
-        <img
-          src={'/biography/social-icons/node.png'}
-          className="w-[40px] h-[40px] "
-          alt=""
-        />
+        <Link href={socialLinks?.veoHighlites || 'https://app.veo.co/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/veo.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link>
+
+        <Link href={socialLinks?.tiktok || 'https://www.tiktok.com/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/node.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link>
       </div>
     </div>
   )
