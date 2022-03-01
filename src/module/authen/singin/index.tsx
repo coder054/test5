@@ -42,9 +42,10 @@ const initialValuesFormPhoneSignIn = {
 enum Tab {
   Email = 'Email',
   Phone = 'Phone',
+  UserName = 'UserName',
 }
 
-const tabs = [{ text: Tab.Email }, { text: Tab.Phone }]
+const tabs = [{ text: Tab.Email }, { text: Tab.Phone }, { text: Tab.UserName }]
 
 const SignIn = () => {
   const router = useRouter()
@@ -66,6 +67,15 @@ const SignIn = () => {
   const [phoneFormPhoneSignIn, setPhoneFormPhoneSignIn] = useState<string>(
     initialValuesFormPhoneSignIn.phoneFormPhoneSignIn
   )
+
+  const [userFormUserNameSignIn, setUserFormUserNameSignIn] = useState<string>(
+    initialValuesFormEmailSignIn.emailFormEmailSignIn
+  )
+
+  const [passFormUserNameSignIn, setPassFormUserNameSignIn] = useState<string>(
+    initialValuesFormEmailSignIn.emailFormEmailSignIn
+  )
+
   const [otp, setOtp] = useState<string>('')
 
   const [formEmail] = Form.useForm()
@@ -320,6 +330,69 @@ const SignIn = () => {
               </div>
             </Form>
           </TabPanel>
+          <TabPanel visible={tab === Tab.UserName}>
+            <Form
+              className="h-[312px] "
+              form={formEmail}
+              initialValues={initialValuesFormEmailSignIn}
+            >
+              <Form.Item
+                className="mt-[24px]"
+                name={'userFormUserNameSignIn'}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Input your user name',
+                  },
+                ]}
+              >
+                <MyInput
+                  name={'userFormUserNameSignIn'}
+                  label="Email address"
+                  value={userFormUserNameSignIn}
+                  onChange={(e) => {
+                    setUserFormUserNameSignIn(e.target.value)
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                className="mt-[24px]"
+                name={'passFormUserNameSignIn'}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Input your password',
+                  },
+                  { whitespace: false },
+                ]}
+              >
+                <MyInput
+                  name={'passFormUserNameSignIn'}
+                  label="Password"
+                  password
+                  value={passFormUserNameSignIn}
+                  onChange={(e) => {
+                    setPassFormUserNameSignIn(e.target.value)
+                  }}
+                />
+              </Form.Item>
+              <div className="mt-[24px]" onClick={handleSubmit}>
+                <Button
+                  loading={loading}
+                  className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+                  text="Log In"
+                />
+              </div>
+              <div
+                className={`${cls.divWarning} w-full h-[56px] rounded-[4px] mt-[24px] flex items-center pl-[16px] pr-[16px]`}
+              >
+                <IconWarning />
+                <span className="text-[#FFFFFF] text-[14px] pl-[8px]">
+                  Use demo@devias.io and password Password123!
+                </span>
+              </div>
+            </Form>
+          </TabPanel>
 
           <div className="bg-[#818389] w-full h-[1px] mt-[24px]"></div>
           <div className="mt-[24px]">
@@ -344,73 +417,83 @@ const SignIn = () => {
 
   const contentFillOtp = () => {
     return (
-      <div
-        className="w-[372px] mx-auto
-                  min-h-[412px]
-                  mt-[120px] sm:mt-[120px] md:mt-[120px] lg:mt-[120px] xl:mt-[150px] 2xl:mt-[200px]
-                    
-                  "
-      >
-        <img src={'/sidebar/logo.svg'} className="mx-auto mb-[32px]" alt="" />
+      <div className="w-full absolute">
         <div
-          className="text-white text-center font-SVNGilroy text-[24px] leading-[137%] 
-        mb-2"
+          className="w-[320px] md:w-[372px] mx-auto
+                  min-h-[412px]
+                  mt-[120px] sm:mt-[120px] md:mt-[120px] lg:mt-[120px] xl:mt-[150px] 2xl:mt-[200px]"
         >
-          Verify phone number
-        </div>
+          <img src={'/sidebar/logo.svg'} className="mx-auto mb-[32px]" alt="" />
+          <div
+            className="text-white text-center font-SVNGilroy text-[24px] leading-[137%] 
+              mb-2"
+          >
+            Verify phone number
+          </div>
 
-        <div className="mb-[32px] font-Roboto text-[14px] leading-[22px] px-[14px] ">
-          <span className="text-white  ">
-            Now verify your mobile phone number by adding the 6 digit code we
-            sent to&nbsp;
-          </span>
+          <div className="mb-[32px] font-Roboto text-[14px] leading-[22px] px-[14px] ">
+            <span className="text-white  ">
+              Now verify your mobile phone number by adding the 6 digit code we
+              sent to&nbsp;
+            </span>
 
-          <span className="text-[#00e09d] ">{phoneFormPhoneSignIn}.&nbsp;</span>
-          <span className="underline text-white">Wrong number?</span>
-        </div>
+            <span className="text-[#00e09d] ">
+              {phoneFormPhoneSignIn}.&nbsp;
+            </span>
+            <span className="underline text-white">Wrong number?</span>
+          </div>
 
-        <div className="text-white text-[14px] leading-[22px] mb-2 ">
-          Verify code
-        </div>
+          <div className="w-[300px] md:w-[372px] mx-auto">
+            <div className="text-white text-[12px] md:text-[14px] leading-[18px] md:leading-[22px] mb-1.5 md:mb-2 ">
+              Verify code
+            </div>
 
-        <OtpInput
-          value={otp}
-          onChange={(value) => {
-            setOtp(value)
-          }}
-          numInputs={6}
-          separator={<span></span>}
-          containerStyle="flex space-x-[16px] ml-[-2px] "
-          inputStyle="border-[2px] border-[#4654EA]  rounded-[8px] w-[49px] h-[56px] flex justify-center items-center
-             text-[28px] font-SVNGilroy "
-        />
+            <OtpInput
+              value={otp}
+              onChange={(value) => {
+                setOtp(value)
+              }}
+              numInputs={6}
+              separator={<span></span>}
+              containerStyle="flex space-x-[6px] md:space-x-[16px] ml-[-2px] "
+              inputStyle="border-[1px] md:border-[2px] border-[#4654EA] rounded-[8px] w-[45px] md:w-[49px] h-[51px] md:h-[56px] flex justify-center items-center
+              text-[24px] md:text-[28px] font-SVNGilroy text-black"
+              isInputNum
+            />
 
-        <div className="h-[24px] "></div>
+            <div className="h-[24px] "></div>
 
-        <button
-          onClick={() => {
-            sendCode(otp)
-          }}
-          className="bg-Blue flex justify-center items-center text-[14px] leading-[22px] 
+            <button
+              onClick={() => {
+                sendCode(otp)
+              }}
+              className="bg-Blue flex justify-center items-center text-[14px] leading-[22px] 
         text-white w-full h-[44px] rounded-[8px] mb-[14px]
         "
-        >
-          Verify code
-        </button>
+            >
+              Verify code
+            </button>
 
-        <div className="h-[1px] bg-Stroke mb-[24px] "></div>
+            <div className="h-[1px] bg-Stroke mb-[24px] "></div>
 
-        <Link href="/signin">
-          <a className="text-Blue text-[16px] leading-[175%] border-b-[1px] border-Blue ">
-            Already having an account?
-          </a>
-        </Link>
+            {/* <Link href="/signin"> */}
+            <a
+              className="text-Blue text-[16px] leading-[175%] border-b-[1px] border-Blue "
+              onClick={() => {
+                setStep(1)
+              }}
+            >
+              Already having an account?
+            </a>
+            {/* </Link> */}
+          </div>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="autofill2 ">
+    <div className="autofill2">
       {step === 1 ? contentFillInfoSignInWithPhone() : contentFillOtp()}
       <div id="capcha_element_signin_with_phone"></div>
     </div>
