@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import useSWR, { SWRConfig } from 'swr'
 import { Text } from 'src/components/Text'
-import { requireAuth } from 'src/config/firebase-admin'
+import { loadIdToken, requireAuth } from 'src/config/firebase-admin'
 
 import { GradientCircularProgress } from 'react-circular-gradient-progress'
 import { Stars } from 'src/components/common/Stars'
@@ -193,7 +193,7 @@ const Biography = () => {
 
   console.log('aaa router', router)
 
-  const { userid } = router.query
+  const { username } = router.query
   const { currentRoleId } = useAuth()
 
   const { data: dataAvgPlayer, error: errorAvgPlayer } = useSWR(
@@ -204,7 +204,7 @@ const Biography = () => {
   }
 
   const { data: dataBio, error: errorBio } = useSWR(
-    `/biographies/player?userIdQuery=${userid}`
+    `/biographies/player?username=${username}`
   ) as {
     data: IBiographyPlayer
     error: any
@@ -298,14 +298,64 @@ const Biography = () => {
 
   return (
     <DashboardLayout>
-      <HeadTags
-        title={`${dataBio.firstName} ${dataBio.lastName}`}
-        description={`${dataBio.firstName} ${dataBio.lastName} is ${dataBio.height} cm tall 
+      <Head>
+        <title>{`${dataBio.firstName} ${dataBio.lastName}`}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <meta name="robots" content="index, follow" />
+        <meta name="revisit-after" content="1 days" />
+        <meta
+          name="title"
+          content={`${dataBio.firstName} ${dataBio.lastName}`}
+        />
+        <meta
+          name="description"
+          content={`${dataBio.firstName} ${dataBio.lastName} is ${dataBio.height} cm tall 
         and weighs ${dataBio.weight} kg. ${dataBio.firstName}'s unique url on Zporter are ...`}
-        keywords={`Zporter, biography, ${dataBio.firstName}, ${dataBio.lastName}`}
-        image={dataBio.faceImageUrl}
-        url={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`}
-      />
+        />
+        <meta name="keywords" content="zporter" />
+        <meta name="language" content="English" />
+        <meta name="author" content="Zporter" />
+        <meta property="og:image" content={dataBio.faceImageUrl} />
+        <meta
+          property="og:title"
+          content={`${dataBio.firstName} ${dataBio.lastName}`}
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:description"
+          content={`${dataBio.firstName} ${dataBio.lastName} is ${dataBio.height} cm tall 
+        and weighs ${dataBio.weight} kg. ${dataBio.firstName}'s unique url on Zporter are ...`}
+        />
+        <meta
+          property="og:url"
+          content={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`}
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="675" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          property="twitter:domain"
+          content={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`}
+        />
+        <meta
+          property="twitter:url"
+          content={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`}
+        />
+        <meta
+          name="twitter:title"
+          content={`${dataBio.firstName} ${dataBio.lastName}`}
+        />
+        <meta
+          name="twitter:description"
+          content={`${dataBio.firstName} ${dataBio.lastName} is ${dataBio.height} cm tall 
+        and weighs ${dataBio.weight} kg. ${dataBio.firstName}'s unique url on Zporter are ...`}
+        />
+        <meta
+          name="twitter:image"
+          content={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/zporter-og.png`}
+        />
+      </Head>
 
       <div className="px-[16px] xl:px-[39px] py-[39px] ">
         {/* /// Navigate and filter */}
@@ -325,7 +375,6 @@ const Biography = () => {
             <div className="max-w-[466px] mx-auto ">
               <InfoWithCircleImage
                 dataBio={dataBio}
-                userid={userid}
                 currentRoleId={currentRoleId}
               />
 
@@ -372,11 +421,32 @@ const Biography = () => {
 export const getServerSideProps: any = async ({ req, res, query }) => {
   // for NOW, require logged in
 
-  const userid = query.userid
+  const uid = await loadIdToken(req as any)
+
+  const fullname = query.fullname // not use
+  const username = query.username
 
   let dataBio: IBiographyPlayer | {}
+
+  const fetcher1 = async (url) => {
+    if (url === null) return
+
+    //@ts-ignore: Unreachable code error
+    axios.defaults.headers.username = username
+    if (uid) {
+      //@ts-ignore: Unreachable code error
+      axios.defaults.headers.roleId = uid
+    }
+    const data = await axios.get(url)
+    if (data.status === 200) {
+      return data.data
+    }
+    return { error: true }
+  }
   try {
-    dataBio = await fetcher(`/biographies/player?userIdQuery=${userid}`)
+    // dataBio = await fetcher(`/biographies/player?userIdQuery=${userid}`)
+    dataBio = await fetcher1(`/biographies/player?username=${username}`)
+    console.log('aaa dataBio', dataBio)
   } catch (error) {
     dataBio = {}
   }
@@ -384,7 +454,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   let dataAvgPlayer: IAvgPlayerScore | {}
 
   try {
-    dataAvgPlayer = await fetcher('/biographies/players/avg-radar')
+    dataAvgPlayer = await fetcher1('/biographies/players/avg-radar')
   } catch (error) {
     dataAvgPlayer = {}
   }
@@ -392,7 +462,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   return {
     props: {
       fallback: {
-        [`/biographies/player?userIdQuery=${userid}`]: dataBio,
+        [`/biographies/player?username=${username}`]: dataBio,
         [`/biographies/players/avg-radar`]: dataAvgPlayer,
       },
     },
@@ -1023,32 +1093,37 @@ const InforWithNumbers = () => {
 
 const InfoWithCircleImage = ({
   dataBio,
-  userid,
   currentRoleId,
 }: {
   dataBio: IBiographyPlayer
-  userid: string | string[]
   currentRoleId: string
 }) => {
   const [elmButtonFollow, setElmButtonFollow] = useState<string>('Follow')
   const [loading, setLoading] = useState<boolean>(false)
+  const { authenticated } = useAuth() as {
+    authenticated: boolean
+  }
 
   const handleFollow = async () => {
     if (!dataBio.isFollowed) {
-      const res = await axios.post(
-        `${API_FRIENDS}/${userid}/request-relationship?type=follows`
-      )
-      // console.log('res', res)
-      if (res.status === 201) {
-        setElmButtonFollow('Following')
-      }
+      try {
+        const res = await axios.post(
+          `${API_FRIENDS}/${dataBio.userId}/request-relationship?type=follows`
+        )
+        console.log('res', res)
+        if (res.status === 201) {
+          // elmButtonFollow = 'Following'
+        }
+      } catch (error) {}
     } else {
-      const res = await axios.delete(
-        `${API_FRIENDS}/${userid}/remove-relationship?type=follows`
-      )
-      if (res.status === 200) {
-        // elmButtonFollow = 'Follow'
-      }
+      try {
+        const res = await axios.delete(
+          `${API_FRIENDS}/${dataBio.userId}/remove-relationship?type=follows`
+        )
+        if (res.status === 200) {
+          // elmButtonFollow = 'Follow'
+        }
+      } catch (error) {}
     }
   }
 
@@ -1296,7 +1371,7 @@ const InfoWithCircleImage = ({
         {/*  */}
       </div>
 
-      {userid !== currentRoleId && (
+      {dataBio.userId !== currentRoleId && authenticated && (
         <div className="w-[466px] mx-auto mb-[24px] flex">
           <Button
             text="Add"
@@ -1490,11 +1565,7 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
             `/biographies/list-player-for-flipping?pageNumber=1&pageSize=2000`
           )
 
-          setDataFlipRaw(
-            data.data.map((o) => {
-              return o.userId
-            })
-          )
+          setDataFlipRaw(data.data)
         }
       } catch (error) {
       } finally {
@@ -1513,25 +1584,61 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
     }
 
     let idLoggedUser = playerProfile.uid
-
-    return dataFlipRaw.filter((o) => {
-      return o !== idLoggedUser
+    let index = dataFlipRaw.findIndex((o) => {
+      return o.userId === idLoggedUser
     })
+
+    if (index !== -1) {
+      console.log('aaa1 index', index)
+      setCurrentIndexFlip(index)
+    }
+    return dataFlipRaw
+    // return dataFlipRaw.filter((o) => {
+    //   return o.userId !== idLoggedUser
+    // })
   }, [dataFlipRaw, playerProfile])
 
-  const nextFlipId: string = useMemo(() => {
+  // useEffect(() => {
+  //   console.log('aaa1 dataFlip: ', dataFlip)
+  // }, [dataFlip])
+  // useEffect(() => {
+  //   console.log('aaa1 currentIndexFlip: ', currentIndexFlip)
+  // }, [currentIndexFlip])
+
+  const nextFlipUrl: string = useMemo(() => {
     if (isEmpty(dataFlip)) {
       return ''
     }
 
-    return get(dataFlip, `[${currentIndexFlip + 1}]`)
+    const nextUser = get(dataFlip, `[${currentIndexFlip + 1}]`) || {}
+
+    const firstname = (get(nextUser, 'firstName') || '')
+      .toLowerCase()
+      .replaceAll(' ', '')
+    const lastname = (get(nextUser, 'lastName') || '')
+      .toLowerCase()
+      .replaceAll(' ', '')
+    const fullname = `${firstname}.${lastname}`
+
+    return `/${nextUser.username}/${fullname}`
   }, [dataFlip, currentIndexFlip])
-  const prevFlipId: string = useMemo(() => {
+
+  const prevFlipUrl: string = useMemo(() => {
     if (isEmpty(dataFlip)) {
       return ''
     }
 
-    return get(dataFlip, `[${currentIndexFlip - 1}]`)
+    const prevUser = get(dataFlip, `[${currentIndexFlip - 1}]`) || {}
+
+    const firstname = (get(prevUser, 'firstName') || '')
+      .toLowerCase()
+      .replaceAll(' ', '')
+    const lastname = (get(prevUser, 'lastName') || '')
+      .toLowerCase()
+      .replaceAll(' ', '')
+    const fullname = `${firstname}.${lastname}`
+
+    return `/${prevUser.username}/${fullname}`
   }, [dataFlip, currentIndexFlip])
 
   // if (loadingDataFlip) {
@@ -1547,11 +1654,11 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
       return null
     }
     return (
-      <Link href={`/biography/${prevFlipId}`}>
+      <Link href={prevFlipUrl}>
         <a
           className={clsx(
             ` inline-block px-4 py-2 `,
-            currentIndexFlip <= 0 || !prevFlipId
+            currentIndexFlip <= 0 || !prevFlipUrl
               ? ' pointer-events-none '
               : '  '
           )}
@@ -1559,14 +1666,14 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
           <svg
             onClick={() => {
               // setCnt(cnt - 1)
-              if (currentIndexFlip <= 0 || !prevFlipId) {
+              if (currentIndexFlip <= 0 || !prevFlipUrl) {
                 return
               }
               setCurrentIndexFlip(currentIndexFlip - 1)
             }}
             className={clsx(
               ``,
-              currentIndexFlip <= 0 || !prevFlipId
+              currentIndexFlip <= 0 || !prevFlipUrl
                 ? ' fill-Grey '
                 : ' fill-Green cursor-pointer'
             )}
@@ -1587,11 +1694,11 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
       return null
     }
     return (
-      <Link href={`/biography/${nextFlipId}`}>
+      <Link href={nextFlipUrl}>
         <a
           className={clsx(
             ` inline-block px-4 py-2`,
-            currentIndexFlip >= dataFlip.length - 1 || !nextFlipId
+            currentIndexFlip >= dataFlip.length - 1 || !nextFlipUrl
               ? ' pointer-events-none '
               : '  '
           )}
@@ -1599,14 +1706,14 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
           <svg
             onClick={() => {
               // setCnt(cnt + 1)
-              if (currentIndexFlip >= dataFlip.length - 1 || !nextFlipId) {
+              if (currentIndexFlip >= dataFlip.length - 1 || !nextFlipUrl) {
                 return
               }
               setCurrentIndexFlip(currentIndexFlip + 1)
             }}
             className={clsx(
               ``,
-              currentIndexFlip >= dataFlip.length - 1 || !nextFlipId
+              currentIndexFlip >= dataFlip.length - 1 || !nextFlipUrl
                 ? ' fill-Grey '
                 : ' fill-Green cursor-pointer'
             )}

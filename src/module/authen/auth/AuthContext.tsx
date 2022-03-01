@@ -297,6 +297,21 @@ export function AuthProvider({ children }) {
     }
   }, [])
 
+  // force refresh the token every 4 minutes
+  useEffect(() => {
+    if (!get(currentUser, 'uid')) {
+      return
+    }
+    const handle = setInterval(async () => {
+      const token = await currentUser.getIdToken(true)
+      setTokenCookie(token)
+      // update axios token header
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      setToken(token)
+    }, 4 * 60 * 1000)
+    return () => clearInterval(handle)
+  }, [get(currentUser, 'uid')])
+
   const value: any = {
     currentUser,
     token,

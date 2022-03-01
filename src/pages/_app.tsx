@@ -1,6 +1,4 @@
 import type { EmotionCache } from '@emotion/cache'
-import { DefaultSeo } from 'next-seo'
-import SEO from './../../next-seo.config'
 import { CacheProvider } from '@emotion/react'
 import { LocalizationProvider } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
@@ -53,18 +51,6 @@ const App: FC<EnhancedAppProps> = (props) => {
 
   return (
     <CacheProvider value={emotionCache}>
-      <Head>
-        <title>Zporter</title>
-        <meta name="title" content="Zporter" />
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-        <meta name="description" content="Zporter" />
-        <meta name="keywords" content="zporter" />
-        <meta name="robots" content="index, follow" />
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="language" content="English" />
-        <meta name="revisit-after" content="1 days" />
-        <meta name="author" content="Zporter" />
-      </Head>
       <ReduxProvider store={store}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <AuthProvider>
@@ -84,7 +70,6 @@ const App: FC<EnhancedAppProps> = (props) => {
                         <Toaster position="top-center" />
                         {/* <SettingsButton /> */}
                         {/* {getLayout(<Component {...pageProps} />)} */}
-                        <DefaultSeo {...SEO} />
                         <AuthConsumer>
                           {(auth) => {
                             return !auth.initialized ? (
