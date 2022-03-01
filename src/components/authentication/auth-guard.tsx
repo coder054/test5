@@ -32,7 +32,7 @@ export const AuthGuard: FC<AuthGuardProps> = (props) => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.isReady]
+    [router.isReady, authenticated]
   )
 
   if (!checked) {
