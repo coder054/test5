@@ -297,7 +297,7 @@ const Biography = () => {
 
   return (
     <DashboardLayout>
-      <Head>
+      {/* <Head>
         <title>{`${dataBio.firstName} ${dataBio.lastName}`}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -354,7 +354,7 @@ const Biography = () => {
           name="twitter:image"
           content={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/zporter-og.png`}
         />
-      </Head>
+      </Head> */}
 
       <div className="px-[16px] xl:px-[39px] py-[39px] ">
         {/* /// Navigate and filter */}
@@ -469,12 +469,26 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 }
 
 export default function BiographyWithSWR({ fallback }) {
+  useEffect(() => {
+    console.log('aaa fallback: ', fallback)
+  }, [fallback])
+  
+  //@ts-ignore: Unreachable code error
+  BiographyWithSWR.description = 'BiographyWithSWR description'
+
   return (
-    <SWRConfig value={{ fallback }}>
-      <Biography />
-    </SWRConfig>
+    <>
+      {/* <Head>
+        <title>{}</title>
+      </Head> */}
+      <SWRConfig value={{ fallback }}>
+        <Biography />
+      </SWRConfig>
+    </>
   )
 }
+
+BiographyWithSWR.title = 'BiographyWithSWR title'
 
 const InforWithAChart = ({
   dataBio,
