@@ -6,6 +6,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
+import { GuestGuard } from 'src/components/authentication/guest-guard'
 
 const SignInPage = () => {
   const router = useRouter()
@@ -17,19 +18,16 @@ const SignInPage = () => {
   }, [])
 
   return (
-    <LayoutLanding authen>
-      <Head>
-        <title>Zporter Signin</title>
-        <link rel="icon" type="image/png" href="/favicon.png" />
-      </Head>
-      <SignIn />
-    </LayoutLanding>
+    <GuestGuard>
+      <LayoutLanding authen>
+        <Head>
+          <title>Zporter Signin</title>
+          <link rel="icon" type="image/png" href="/favicon.png" />
+        </Head>
+        <SignIn />
+      </LayoutLanding>
+    </GuestGuard>
   )
 }
 
 export default SignInPage
-
-export const getServerSideProps: any = async ({ req, res }) => {
-  await requireNotAuth(req as any, res as any)
-  return { props: {} }
-}
