@@ -58,18 +58,18 @@ const getSections = (t: TFunction): Section[] => {
 
   return [
     {
-      title: t('General'),
+      title: t(''),
       items: [
         {
-          title: t('News'),
+          title: t('Feed'),
           path: '/dashboard/news',
           icon: <Newspaper fontSize="small" />,
         },
-        {
-          title: t('Account and Settings'),
-          path: '/dashboard/account',
-          icon: <Cog fontSize="small" />,
-        },
+        // {
+        //   title: t('Account and Settings'),
+        //   path: '/dashboard/account',
+        //   icon: <Cog fontSize="small" />,
+        // },
         {
           title: t('Biography'),
           path: `/${playerProfile.username}/${fullname}`, // current
@@ -137,12 +137,12 @@ export const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
               </NextLink>
             </Box>
           </div>
-          <Divider
+          {/* <Divider
             sx={{
               borderColor: '#2D3748', // dark divider
               my: 3,
             }}
-          />
+          /> */}
           <Box sx={{ flexGrow: 1 }}>
             {sections.map((section) => (
               <DashboardSidebarSection

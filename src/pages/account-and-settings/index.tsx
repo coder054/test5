@@ -60,10 +60,10 @@ const AccountPage: NextPage = () => {
           <Tabs
             indicatorColor="secondary"
             onChange={handleTabsChange}
+            variant="scrollable"
             scrollButtons="auto"
             textColor="secondary"
             value={currentTab}
-            variant="scrollable"
             sx={{ mt: 3 }}
           >
             {tabs.map((tab) => (
