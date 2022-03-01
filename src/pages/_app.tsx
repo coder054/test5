@@ -28,6 +28,7 @@ import '../styles/globals_compiled.css'
 import { createTheme } from '../theme'
 import { createEmotionCache } from '../utils/create-emotion-cache'
 import { QueryParamProvider } from 'src/components/QueryParamsProvider'
+import { get } from 'lodash'
 
 type EnhancedAppProps = AppProps & {
   Component: NextPage
@@ -50,45 +51,68 @@ const App: FC<EnhancedAppProps> = (props) => {
   }, [])
 
   return (
-    <CacheProvider value={emotionCache}>
-      <ReduxProvider store={store}>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <AuthProvider>
-            <QueryParamProvider>
-              <SettingsProvider>
-                <SettingsConsumer>
-                  {({ settings }) => (
-                    <ThemeProvider
-                      theme={createTheme({
-                        direction: settings.direction,
-                        responsiveFontSizes: settings.responsiveFontSizes,
-                        mode: settings.theme,
-                      })}
-                    >
-                      <RTL direction={settings.direction}>
-                        <CssBaseline />
-                        <Toaster position="top-center" />
-                        {/* <SettingsButton /> */}
-                        {/* {getLayout(<Component {...pageProps} />)} */}
-                        <AuthConsumer>
-                          {(auth) => {
-                            return !auth.initialized ? (
-                              <SplashScreen />
-                            ) : (
-                              getLayout(<Component {...pageProps} />)
-                            )
-                          }}
-                        </AuthConsumer>
-                      </RTL>
-                    </ThemeProvider>
-                  )}
-                </SettingsConsumer>
-              </SettingsProvider>
-            </QueryParamProvider>
-          </AuthProvider>
-        </LocalizationProvider>
-      </ReduxProvider>
-    </CacheProvider>
+    <>
+      {/* <Head>
+        <title>{get(Component, 'title') || 'Zporter default title'}</title>
+        <meta
+          name="description"
+          content={get(Component, 'description') || 'Zporter default desc'}
+        ></meta>
+        <meta property="og:url" content="https://www.byeindonesia.com/" />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content="Bye Indonesia - Renunciation of Indonesian Citizenship Guide 2021"
+        />
+        <meta
+          property="og:description"
+          content="Renunciation of Indonesian citizenship process changed in 2020. This site aims to answer all your questions on the new process."
+        />
+        <meta
+          property="og:image"
+          content="https://www.byeindonesia.com/og-bye-indonesia.png"
+        />
+      </Head> */}
+      <CacheProvider value={emotionCache}>
+        <ReduxProvider store={store}>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <AuthProvider>
+              <QueryParamProvider>
+                <SettingsProvider>
+                  <SettingsConsumer>
+                    {({ settings }) => (
+                      <ThemeProvider
+                        theme={createTheme({
+                          direction: settings.direction,
+                          responsiveFontSizes: settings.responsiveFontSizes,
+                          mode: settings.theme,
+                        })}
+                      >
+                        <RTL direction={settings.direction}>
+                          <CssBaseline />
+                          <Toaster position="top-center" />
+                          {/* <SettingsButton /> */}
+                          {/* {getLayout(<Component {...pageProps} />)} */}
+                          <AuthConsumer>
+                            {(auth) => {
+                              return !auth.initialized ? (
+                                <SplashScreen />
+                              ) : (
+                                getLayout(<Component {...pageProps} />)
+                              )
+                            }}
+                          </AuthConsumer>
+                        </RTL>
+                      </ThemeProvider>
+                    )}
+                  </SettingsConsumer>
+                </SettingsProvider>
+              </QueryParamProvider>
+            </AuthProvider>
+          </LocalizationProvider>
+        </ReduxProvider>
+      </CacheProvider>
+    </>
   )
 }
 

@@ -18,6 +18,8 @@ import {
   getYoutubeThumbnail,
 } from '../../../../utils/utils'
 import { BackGround } from '../common-components/Background'
+import { isMobile } from 'react-device-detect'
+import clsx from 'clsx'
 
 const addNewForm = {
   source: '',
@@ -27,6 +29,8 @@ const addNewForm = {
 
 export const Media = () => {
   const { currentRoleName, currentRoleId } = useAuth()
+
+  console.log('Is Mobile: ', isMobile)
 
   const [account, setAccount] = useAtom(settingsAtom)
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -150,26 +154,31 @@ export const Media = () => {
         label="Media"
         form={
           <div className="space-y-7">
-            <div className="sm:flex sm:justify-between sm:pb-2 ">
+            <div
+              className={clsx(
+                'sm:flex sm:justify-between sm:pb-2',
+                isMobile && 'space-y-4'
+              )}
+            >
               <CustomUploadImage
                 title="Face image"
                 text="Add portrait photo of 480*640 pixels or more"
-                width={185}
-                height={140}
+                width={isMobile ? '100%' : 185}
+                height={isMobile ? 160 : 140}
                 className="border-[2px] border-gray-700 hover:border-white  duration-150"
                 textClass="pt-8 px-9 font-medium"
-                iconClass="pt-[18px]"
+                iconClass={clsx(isMobile ? 'pt-[38px]' : 'pt-[18px]')}
                 value={mediaForm.faceImage}
                 setImage={(value) => handleChangeImage(value, 'faceImage')}
               />
               <CustomUploadImage
                 title="Body image"
                 text="Add portrait photo of 480*640 pixels or more"
-                width={185}
-                height={140}
+                width={isMobile ? '100%' : 185}
+                height={isMobile ? 160 : 140}
                 className="border-[2px] border-gray-700 hover:border-white  duration-150"
                 textClass="pt-8 px-9 font-medium"
-                iconClass="pt-[18px]"
+                iconClass={clsx(isMobile ? 'pt-[38px]' : 'pt-[18px]')}
                 value={mediaForm.bodyImage}
                 setImage={(value) => handleChangeImage(value, 'bodyImage')}
               />

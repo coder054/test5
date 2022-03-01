@@ -533,8 +533,3 @@ const Components = () => {
 }
 
 export default Components
-
-export const getServerSideProps: any = async ({ req, res }) => {
-  await requireAuth(req as any, res as any)
-  return { props: {} }
-}

@@ -191,7 +191,7 @@ const Biography = () => {
   const { screenWidth } = useScreenWidth()
   const router = useRouter()
 
-  console.log('aaa router', router)
+  // console.log('aaa router', router)
 
   const { username } = router.query
   const { currentRoleId } = useAuth()
@@ -209,7 +209,7 @@ const Biography = () => {
     data: IBiographyPlayer
     error: any
   }
-  console.log('dataBio', dataBio)
+  // console.log('dataBio', dataBio)
 
   const dataBioRadarChart = useMemo(() => {
     const coach = get(dataBio, 'radarUpdatedByCoach')
@@ -298,7 +298,7 @@ const Biography = () => {
 
   return (
     <DashboardLayout>
-      <Head>
+      {/* <Head>
         <title>{`${dataBio.firstName} ${dataBio.lastName}`}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="initial-scale=1, width=device-width" />
@@ -355,7 +355,7 @@ const Biography = () => {
           name="twitter:image"
           content={`${process.env.NEXT_PUBLIC_DOMAIN_NAME}/zporter-og.png`}
         />
-      </Head>
+      </Head> */}
 
       <div className="px-[16px] xl:px-[39px] py-[39px] ">
         {/* /// Navigate and filter */}
@@ -404,9 +404,7 @@ const Biography = () => {
         </div>
 
         <div className="mt-[30px] ">
-          <SocialShare
-            fullName={`${dataBio.firstName} ${dataBio.lastName}`}
-          ></SocialShare>
+          <SocialLinks socialLinks={dataBio.socialLinks} />
         </div>
 
         <div className="h-[32px] "></div>
@@ -446,7 +444,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   try {
     // dataBio = await fetcher(`/biographies/player?userIdQuery=${userid}`)
     dataBio = await fetcher1(`/biographies/player?username=${username}`)
-    console.log('aaa dataBio', dataBio)
+    // console.log('aaa dataBio', dataBio)
   } catch (error) {
     dataBio = {}
   }
@@ -470,12 +468,48 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 }
 
 export default function BiographyWithSWR({ fallback }) {
+  useEffect(() => {
+    console.log('aaa fallback: ', fallback)
+  }, [fallback])
+
+  const dataBio = useMemo(() => {
+    if (isEmpty(fallback)) {
+      return {}
+    }
+    return (
+      Object.values(fallback).filter((o) => o.hasOwnProperty('username'))[0] ||
+      {}
+    )
+  }, [fallback])
+
   return (
-    <SWRConfig value={{ fallback }}>
-      <Biography />
-    </SWRConfig>
+    <>
+      <Head>
+        <title> {get(dataBio, 'lastName') || 'testtt'} </title>
+        <meta name="description" content="desc"></meta>
+        <meta property="og:url" content="https://www.byeindonesia.com/" />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content={get(dataBio, 'lastName') || 'testtt2'}
+        />
+        <meta property="og:description" content="desccc" />
+        <meta
+          property="og:image"
+          content={
+            get(dataBio, 'faceImageUrl') ||
+            'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
+          }
+        />
+      </Head>
+      <SWRConfig value={{ fallback }}>
+        <Biography />
+      </SWRConfig>
+    </>
   )
 }
+
+BiographyWithSWR.title = 'BiographyWithSWR title'
 
 const InforWithAChart = ({
   dataBio,
@@ -1035,7 +1069,7 @@ const InforWithNumbers = () => {
           Matches
         </Text>
 
-        <div className="flex gap-x-[12px] xl:gap-x-[30px] ">
+        <div className="flex gap-x-[12px] xl:gap-x-[30px] overflow-x-auto pb-1 ">
           {[
             { label: 'Matches', value: '10' },
             { label: 'Hours', value: '13,3' },
@@ -1047,7 +1081,7 @@ const InforWithNumbers = () => {
           ].map((o, index) => (
             <div
               key={index}
-              className="flex flex-col justify-center items-center "
+              className="flex flex-col justify-center items-center"
             >
               <span className=" text-[13px] xl:text-[16px] leading-[150%] text-Grey mb-2 ">
                 {o.label}
@@ -1064,7 +1098,7 @@ const InforWithNumbers = () => {
           Trainings in total
         </Text>
 
-        <div className="flex gap-x-[12px] xl:gap-x-[30px] ">
+        <div className="flex gap-x-[12px] xl:gap-x-[30px] overflow-x-auto pb-1">
           {[
             { label: 'Sessions', value: '40' },
             { label: 'Hours', value: '60' },
@@ -1110,7 +1144,7 @@ const InfoWithCircleImage = ({
         const res = await axios.post(
           `${API_FRIENDS}/${dataBio.userId}/request-relationship?type=follows`
         )
-        console.log('res', res)
+        // console.log('res', res)
         if (res.status === 201) {
           // elmButtonFollow = 'Following'
         }
@@ -1151,7 +1185,7 @@ const InfoWithCircleImage = ({
 
           <img
             src={dataBio.currentClubIconUrl}
-            className="w-[24px] ml-auto rounded-full "
+            className="w-[24px] h-[24px] ml-auto rounded-full"
             alt=""
           />
           <div className="h-[45px] ">
@@ -1223,7 +1257,7 @@ const InfoWithCircleImage = ({
               svgStarHalf={
                 <img
                   src={'/biography/starhalf.png'}
-                  className="w-[12px] h-[12px] "
+                  className="w-[12px] h-[12px]"
                   alt=""
                 />
               }
@@ -1286,7 +1320,7 @@ const InfoWithCircleImage = ({
 
           <img
             src={dataBio.countryFlagUrl}
-            className="w-[24px] mr-auto rounded-full"
+            className="w-[24px] h-[24px] mr-auto rounded-full"
             alt=""
           />
           <div className="h-[45px] ">
@@ -1372,17 +1406,17 @@ const InfoWithCircleImage = ({
       </div>
 
       {dataBio.userId !== currentRoleId && authenticated && (
-        <div className="w-[466px] mx-auto mb-[24px] flex">
+        <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px] ">
           <Button
             text="Add"
-            className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue mr-[26px] font-medium "
+            className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue font-medium "
           ></Button>
           <Button
             loading={loading}
             // text={elmButtonFollow}
             // text={'Follow'}
             onClick={handleFollow}
-            className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent border border-Green font-medium text-Green"
+            className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent border border-Green font-medium text-Green"
           >
             {elmButtonFollow}
           </Button>
@@ -1555,18 +1589,16 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
     authenticated: boolean
   }
   const [loadingDataFlip, setLoadingDataFlip] = useState(true)
-  const [dataFlipRaw, setDataFlipRaw] = useState([])
+  const [dataFlip, setDataFlip] = useState([])
+  const [currentIndexFlip, setCurrentIndexFlip] = useState(0)
 
   useEffect(() => {
     const getFlipData = async () => {
       try {
-        if (authenticated) {
-          const { data } = await axios.get(
-            `/biographies/list-player-for-flipping?pageNumber=1&pageSize=2000`
-          )
-
-          setDataFlipRaw(data.data)
-        }
+        const { data } = await axios.get(
+          `/biographies/list-player-for-flipping?username=${username}&pageNumber=1&pageSize=2000`
+        )
+        setDataFlip(data.data)
       } catch (error) {
       } finally {
         setLoadingDataFlip(false)
@@ -1576,33 +1608,26 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
     getFlipData()
   }, [])
 
-  const [currentIndexFlip, setCurrentIndexFlip] = useState(0)
-
-  const dataFlip = useMemo(() => {
-    if (isEmpty(dataFlipRaw)) {
-      return []
+  useEffect(() => {
+    if (isEmpty(dataFlip)) {
+      setCurrentIndexFlip(-1)
     }
 
-    let idLoggedUser = playerProfile.uid
-    let index = dataFlipRaw.findIndex((o) => {
-      return o.userId === idLoggedUser
+    let index = dataFlip.findIndex((o) => {
+      return o.username === username
     })
-
-    if (index !== -1) {
-      console.log('aaa1 index', index)
-      setCurrentIndexFlip(index)
-    }
-    return dataFlipRaw
-    // return dataFlipRaw.filter((o) => {
-    //   return o.userId !== idLoggedUser
-    // })
-  }, [dataFlipRaw, playerProfile])
+    // console.log('aaa1 index', index)
+    setCurrentIndexFlip(index)
+  }, [dataFlip, username])
+  useEffect(() => {
+    // console.log('aaa currentIndexFlip: ', currentIndexFlip)
+  }, [currentIndexFlip])
 
   // useEffect(() => {
-  //   console.log('aaa1 dataFlip: ', dataFlip)
+  //   // console.log('aaa1 dataFlip: ', dataFlip)
   // }, [dataFlip])
   // useEffect(() => {
-  //   console.log('aaa1 currentIndexFlip: ', currentIndexFlip)
+  //   // console.log('aaa1 currentIndexFlip: ', currentIndexFlip)
   // }, [currentIndexFlip])
 
   const nextFlipUrl: string = useMemo(() => {
@@ -1611,7 +1636,6 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
     }
 
     const nextUser = get(dataFlip, `[${currentIndexFlip + 1}]`) || {}
-
     const firstname = (get(nextUser, 'firstName') || '')
       .toLowerCase()
       .replaceAll(' ', '')
@@ -1650,7 +1674,7 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
   // }
 
   const renderBtnPrev = () => {
-    if (!authenticated) {
+    if (isEmpty(dataFlip)) {
       return null
     }
     return (
@@ -1690,7 +1714,7 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
     )
   }
   const renderBtnNext = () => {
-    if (!authenticated) {
+    if (isEmpty(dataFlip)) {
       return null
     }
     return (
@@ -1762,41 +1786,113 @@ const NavigationAndFilter = ({ username }, { username: string }) => {
   )
 }
 
-const SocialShare = ({ fullName }) => {
-  const [show, setShow] = useState(false)
-  const router = useRouter()
-  const fullUrl = useMemo(() => {
-    console.log('aaa router.domainLocales', router.domainLocales)
-    console.log('aaa window.location.origin', window.location.origin)
-    console.log(
-      'aaa process.env.NEXT_PUBLIC_DOMAIN_NAME',
-      process.env.NEXT_PUBLIC_DOMAIN_NAME
-    )
-    return `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`
-  }, [router.asPath, show])
+// const SocialShare = ({ fullName }) => {
+//   const [show, setShow] = useState(false)
+//   const router = useRouter()
+//   const fullUrl = useMemo(() => {
+//     // console.log('aaa router.domainLocales', router.domainLocales)
+//     // console.log('aaa window.location.origin', window.location.origin)
+//     // console.log(
+//       'aaa process.env.NEXT_PUBLIC_DOMAIN_NAME',
+//       process.env.NEXT_PUBLIC_DOMAIN_NAME
+//     )
+//     return `${process.env.NEXT_PUBLIC_DOMAIN_NAME}/${router.asPath}`
+//   }, [router.asPath, show])
 
+//   useEffect(() => {
+//     setTimeout(() => {
+//       setShow(true)
+//     }, 10)
+//   }, [])
+
+//   useEffect(() => {
+//     // console.log('aaa fullUrl: ', fullUrl)
+//   }, [fullUrl])
+
+//   if (!fullUrl || !show) {
+//     return (
+//       <div
+//         style={{
+//           background: 'rgba(32, 33, 40, 0.3)',
+//           backdropFilter: 'blur(68px)',
+//         }}
+//         className=" rounded-[8px] p-[20px]  text-center h-[88px]"
+//       ></div>
+//     )
+//   }
+
+//   return (
+//     <div
+//       style={{
+//         background: 'rgba(32, 33, 40, 0.3)',
+//         backdropFilter: 'blur(68px)',
+//       }}
+//       className=" rounded-[8px] p-[20px]  text-center"
+//     >
+//       <div className="inline-grid grid-cols-7 mx-auto gap-x-[16px] ">
+//         <img
+//           src={'/biography/social-icons/Instagram.png'}
+//           className="w-[40px] h-[40px]"
+//           alt=""
+//         />
+
+//         <FacebookShareButton
+//           url={fullUrl}
+//           quote={`${fullName} on Zporter`}
+//           hashtag={'#zporter'}
+//           className=""
+//         >
+//           <img
+//             src={'/biography/social-icons/facebook.png'}
+//             className="w-[40px] h-[40px] "
+//             alt=""
+//           />
+//         </FacebookShareButton>
+
+//         <TwitterShareButton url={fullUrl} className="">
+//           <img
+//             src={'/biography/social-icons/twitter.png'}
+//             className="w-[40px] h-[40px] "
+//             alt=""
+//           />
+//         </TwitterShareButton>
+
+//         <TelegramShareButton url={fullUrl}>
+//           <img
+//             src={'/biography/social-icons/telegram.png'}
+//             className="w-[40px] h-[40px] "
+//             alt=""
+//           />
+//         </TelegramShareButton>
+
+//         {/* youtube */}
+//         <img
+//           src={'/biography//social-icons/youtube.png'}
+//           className="w-[40px] h-[40px] "
+//           alt=""
+//         />
+
+//         {/* veo */}
+//         <img
+//           src={'/biography/social-icons/veo.png'}
+//           className="w-[40px] h-[40px] "
+//           alt=""
+//         />
+//         {/* node music */}
+//         <img
+//           src={'/biography/social-icons/node.png'}
+//           className="w-[40px] h-[40px] "
+//           alt=""
+//         />
+//       </div>
+//     </div>
+//   )
+// }
+
+const SocialLinks = ({ socialLinks }) => {
   useEffect(() => {
-    setTimeout(() => {
-      setShow(true)
-    }, 10)
-  }, [])
-
-  useEffect(() => {
-    console.log('aaa fullUrl: ', fullUrl)
-  }, [fullUrl])
-
-  if (!fullUrl || !show) {
-    return (
-      <div
-        style={{
-          background: 'rgba(32, 33, 40, 0.3)',
-          backdropFilter: 'blur(68px)',
-        }}
-        className=" rounded-[8px] p-[20px]  text-center h-[88px]"
-      ></div>
-    )
-  }
-
+    // console.log('aaa socialLinks: ', socialLinks)
+  }, [socialLinks])
   return (
     <div
       style={{
@@ -1806,60 +1902,75 @@ const SocialShare = ({ fullName }) => {
       className=" rounded-[8px] p-[20px]  text-center"
     >
       <div className="inline-grid grid-cols-7 mx-auto gap-x-[16px] ">
-        <img
-          src={'/biography/social-icons/Instagram.png'}
-          className="w-[40px] h-[40px]"
-          alt=""
-        />
+        <Link href={socialLinks?.instagram || 'https://www.instagram.com/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/Instagram.png'}
+              className="w-[40px] h-[40px]"
+              alt=""
+            />
+          </a>
+        </Link>
 
-        <FacebookShareButton
-          url={fullUrl}
-          quote={`${fullName} on Zporter`}
-          hashtag={'#zporter'}
-          className=""
-        >
-          <img
-            src={'/biography/social-icons/facebook.png'}
-            className="w-[40px] h-[40px] "
-            alt=""
-          />
-        </FacebookShareButton>
+        <Link href={socialLinks?.facebook || 'https://www.facebook.com/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/facebook.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link>
 
-        <TwitterShareButton url={fullUrl} className="">
-          <img
-            src={'/biography/social-icons/twitter.png'}
-            className="w-[40px] h-[40px] "
-            alt=""
-          />
-        </TwitterShareButton>
+        <Link href={socialLinks?.twitter || 'https://twitter.com/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/twitter.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link>
 
-        <TelegramShareButton url={fullUrl}>
-          <img
-            src={'/biography/social-icons/telegram.png'}
-            className="w-[40px] h-[40px] "
-            alt=""
-          />
-        </TelegramShareButton>
+        {/* <Link href={socialLinks?.twitter || 'https://twitter.com/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/telegram.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link> */}
 
-        {/* youtube */}
-        <img
-          src={'/biography//social-icons/youtube.png'}
-          className="w-[40px] h-[40px] "
-          alt=""
-        />
+        <Link href={socialLinks?.youtube || 'https://www.youtube.com/'}>
+          <a className="">
+            <img
+              src={'/biography//social-icons/youtube.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link>
 
-        {/* veo */}
-        <img
-          src={'/biography/social-icons/veo.png'}
-          className="w-[40px] h-[40px] "
-          alt=""
-        />
-        {/* node music */}
-        <img
-          src={'/biography/social-icons/node.png'}
-          className="w-[40px] h-[40px] "
-          alt=""
-        />
+        <Link href={socialLinks?.veoHighlites || 'https://app.veo.co/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/veo.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link>
+
+        <Link href={socialLinks?.tiktok || 'https://www.tiktok.com/'}>
+          <a className="">
+            <img
+              src={'/biography/social-icons/node.png'}
+              className="w-[40px] h-[40px] "
+              alt=""
+            />
+          </a>
+        </Link>
       </div>
     </div>
   )

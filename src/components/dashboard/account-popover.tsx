@@ -74,32 +74,32 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
       <Divider />
       <Box sx={{ my: 1 }}>
         {/* <NextLink href="/dashboard/social/profile" passHref> */}
-        <MenuItem component="a">
+        {/* <MenuItem component="a">
           <ListItemIcon>
             <UserCircleIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText
             primary={<Typography variant="body1">Profile</Typography>}
           />
-        </MenuItem>
+        </MenuItem> */}
         {/* </NextLink> */}
-        {/* <NextLink href="/dashboard/account" passHref> */}
-        <MenuItem component="a">
-          <ListItemIcon>
-            <CogIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText
-            primary={
-              <Typography variant="body1">
-                <Link href="/dashboard/account">
-                  <a className="">Settings</a>
-                </Link>
-              </Typography>
-            }
-          />
-        </MenuItem>
-        {/* </NextLink> */}
-        <NextLink href="/dashboard" passHref>
+        <NextLink href="/account-and-settings" passHref>
+          <MenuItem component="a">
+            <ListItemIcon>
+              <CogIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                <Typography variant="body1">
+                  <Link href="/account-and-settings">
+                    <a className="">Account & Settings</a>
+                  </Link>
+                </Typography>
+              }
+            />
+          </MenuItem>
+        </NextLink>
+        {/* <NextLink href="/dashboard" passHref>
           <MenuItem component="a">
             <ListItemIcon>
               <SwitchHorizontalOutlinedIcon fontSize="small" />
@@ -110,7 +110,7 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
               }
             />
           </MenuItem>
-        </NextLink>
+        </NextLink> */}
         <Divider />
         <MenuItem onClick={signout}>
           <ListItemIcon>

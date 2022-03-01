@@ -13,6 +13,7 @@ import { axios } from 'src/utils/axios'
 import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
 import { Football } from 'src/module/account-settings/components/football/Football'
 import { requireAuth } from 'src/config/firebase-admin'
+import { AuthGuard } from 'src/components/authentication/auth-guard'
 const tabs = [
   { label: 'Account', value: 'account' },
   { label: 'Settings', value: 'settings' },
@@ -60,10 +61,10 @@ const AccountPage: NextPage = () => {
           <Tabs
             indicatorColor="secondary"
             onChange={handleTabsChange}
+            variant="scrollable"
             scrollButtons="auto"
             textColor="secondary"
             value={currentTab}
-            variant="scrollable"
             sx={{ mt: 3 }}
           >
             {tabs.map((tab) => (
@@ -83,11 +84,10 @@ const AccountPage: NextPage = () => {
   )
 }
 
-AccountPage.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>
-
-export const getServerSideProps: any = async ({ req, res }) => {
-  await requireAuth(req as any, res as any)
-  return { props: {} }
-}
+AccountPage.getLayout = (page) => (
+  <AuthGuard>
+    <DashboardLayout>{page}</DashboardLayout>
+  </AuthGuard>
+)
 
 export default AccountPage

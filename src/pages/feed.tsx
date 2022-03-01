@@ -12,6 +12,7 @@ import { Tabs } from 'src/components/Tabs'
 import { FootballersSlider } from 'src/components/Feed/FootballersSlider/FootballersSlider'
 import { ROUTES } from 'src/constants/constants'
 import { loadIdToken, requireAuth } from 'src/config/firebase-admin'
+import { AuthGuard } from 'src/components/authentication/auth-guard'
 
 enum Tab {
   Friends = 'Friends',
@@ -30,27 +31,24 @@ const Feed = () => {
   }, [])
 
   return (
-    <Layout title="Zporter">
-      {/* /// tabs */}
-      <Tabs tab={tab} setTab={setTab} tabs={tabs} />
+    <AuthGuard>
+      <Layout title="Zporter">
+        {/* /// tabs */}
+        <Tabs tab={tab} setTab={setTab} tabs={tabs} />
 
-      <FootballersSlider />
+        <FootballersSlider />
 
-      <div className="flex space-x-3 items-end ">
-        <span className="font-semibold text-Green text-[24px] leading-[138%] ">
-          Positive list
-        </span>
-        <span className="text-Grey font-medium text-[16px] leading-[175%] ">
-          65 Results
-        </span>
-      </div>
-    </Layout>
+        <div className="flex space-x-3 items-end ">
+          <span className="font-semibold text-Green text-[24px] leading-[138%] ">
+            Positive list
+          </span>
+          <span className="text-Grey font-medium text-[16px] leading-[175%] ">
+            65 Results
+          </span>
+        </div>
+      </Layout>
+    </AuthGuard>
   )
 }
 
 export default Feed
-
-export const getServerSideProps: any = async ({ req, res }) => {
-  await requireAuth(req as any, res as any)
-  return { props: {} }
-}
