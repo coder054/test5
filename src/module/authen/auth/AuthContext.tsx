@@ -237,7 +237,7 @@ export function AuthProvider({ children }) {
     console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      console.log('aaa onIdTokenChanged', user)
+      // console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
         removeTokenCookie()

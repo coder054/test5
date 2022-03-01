@@ -209,6 +209,7 @@ const Biography = () => {
     data: IBiographyPlayer
     error: any
   }
+  console.log('dataBio', dataBio)
 
   const dataBioRadarChart = useMemo(() => {
     const coach = get(dataBio, 'radarUpdatedByCoach')
@@ -1097,7 +1098,7 @@ const InfoWithCircleImage = ({
   dataBio: IBiographyPlayer
   currentRoleId: string
 }) => {
-  const [elmButtonFollow, setElmButtonFollow] = useState<string>('')
+  const [elmButtonFollow, setElmButtonFollow] = useState<string>('Follow')
   const [loading, setLoading] = useState<boolean>(false)
   const { authenticated } = useAuth() as {
     authenticated: boolean
@@ -1379,11 +1380,11 @@ const InfoWithCircleImage = ({
           <Button
             loading={loading}
             // text={elmButtonFollow}
-            text={'Follow'}
+            // text={'Follow'}
             onClick={handleFollow}
             className="w-[220px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent border border-Green font-medium text-Green"
           >
-            {/* {elmButtonFollow} */}
+            {elmButtonFollow}
           </Button>
         </div>
       )}

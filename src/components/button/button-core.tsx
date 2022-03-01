@@ -11,6 +11,7 @@ interface ButtonProps {
   loading?: boolean
   disable?: boolean
   id?: string
+  children?: any
   onClick?: () => void
   [rest: string]: any
 }
@@ -20,6 +21,7 @@ export const Button = ({
   text,
   submit,
   loading,
+  children,
   onClick,
   id,
   ...rest
@@ -38,7 +40,7 @@ export const Button = ({
     >
       <button className="w-full h-full" type={submit ? 'submit' : 'button'}>
         {!loading ? (
-          <span className="w-full h-full">{text}</span>
+          <span className="w-full h-full">{text || children}</span>
         ) : (
           <Loading size={20}></Loading>
         )}
