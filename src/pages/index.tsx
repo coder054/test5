@@ -16,25 +16,21 @@ import { useRouter } from 'next/router'
 import { requireNotAuth } from 'src/config/firebase-admin'
 import Landing from 'src/module/landing'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { GuestGuard } from 'src/components/authentication/guest-guard'
 
 const LandingPage = () => {
   const router = useRouter()
   const { currentUser } = useAuth()
 
   return (
-    <>
+    <GuestGuard>
       <Head>
         <title>Zporter</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
       <Landing />
-    </>
+    </GuestGuard>
   )
 }
 
 export default LandingPage
-
-export const getServerSideProps: any = async ({ req, res }) => {
-  await requireNotAuth(req as any, res as any)
-  return { props: {} }
-}
