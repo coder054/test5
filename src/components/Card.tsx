@@ -1,9 +1,6 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import Image from 'next/image'
+import { imgAvatar } from 'src/imports/images'
 import { MyImage } from './MyImage'
 import { Text } from './Text'
-import { imgAvatar } from 'src/imports/images'
 
 export const Card = () => {
   return (
@@ -29,9 +26,7 @@ export const Card = () => {
       <Text name="body1" className="text-white mr-[80px] ">
         SE/Stockholm
       </Text>
-
       <div className="flex-grow "></div>
-
       <div className="flex items-start space-x-[20px] mr-[20px] ">
         <MyImage src={'/phone.svg'} className="w-[24px] h-[24px] " />
         <MyImage

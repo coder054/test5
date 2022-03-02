@@ -25,3 +25,5 @@ export const GRAPH = require('./../../public' +
 export const APP = require('./../../public' + '/assets/landing-page/App.png')
 export const APP_SHADOW = require('./../../public' +
   '/assets/landing-page/AppShadow.png')
+export const DEFAULT_IMG = require('./../../public' +
+  '/assets/landing-page/ShieldIcon.png')

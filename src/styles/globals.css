@@ -178,3 +178,14 @@
 .ant-notification {
   z-index: 1300 !important;
 }
+
+.test {
+  width: 0;
+  display: none;
+  transition: 0.5s all;
+}
+
+.test.test-after {
+  width: 210px;
+  display: block;
+}

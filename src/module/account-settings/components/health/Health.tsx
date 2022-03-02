@@ -2,6 +2,7 @@ import { InputAdornment } from '@mui/material'
 import { notification } from 'antd'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
 import { MyButton } from 'src/components/MyButton'
 import { MyInput } from 'src/components/MyInput'
@@ -41,29 +42,17 @@ export const Health = () => {
       },
     }
     await axios
-      .patch(
-        `users/${currentRoleName}/settings`,
-        {
-          health: submitForm,
-        },
-        {
-          headers: {
-            roleId: currentRoleId,
-          },
-        }
-      )
+      .patch(`users/${currentRoleName}/settings`, {
+        health: submitForm,
+      })
       .then(() => {
         setAccount({ ...account, health: submitForm })
         setIsLoading(false)
-        notification['success']({
-          message: 'Update successfully',
-        })
+        toast.success('Successfully updated')
       })
       .catch(() => {
         setIsLoading(false)
-        notification['error']({
-          message: 'Error',
-        })
+        toast.error('An error has occurred')
       })
   }
 

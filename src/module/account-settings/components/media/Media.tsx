@@ -20,6 +20,7 @@ import {
 import { BackGround } from '../common-components/Background'
 import { isMobile } from 'react-device-detect'
 import clsx from 'clsx'
+import toast from 'react-hot-toast'
 
 const addNewForm = {
   source: '',
@@ -90,29 +91,17 @@ export const Media = () => {
     }
     setIsLoading(true)
     await axios
-      .patch(
-        `users/${currentRoleName.toLowerCase()}/settings`,
-        {
-          ...data,
-        },
-        {
-          headers: {
-            roleId: currentRoleId,
-          },
-        }
-      )
+      .patch(`users/${currentRoleName.toLowerCase()}/settings`, {
+        ...data,
+      })
       .then(() => {
         setAccount({ ...account, ...data })
-        notification['success']({
-          message: 'Upload successfully',
-        })
+        toast.success('Successfully updated')
         setIsLoading(false)
       })
       .catch(() => {
         setIsLoading(false)
-        notification['error']({
-          message: 'Link is not valid',
-        })
+        toast.error('An error has occurred')
       })
   }
 
