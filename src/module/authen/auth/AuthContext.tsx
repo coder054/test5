@@ -144,9 +144,7 @@ export function AuthProvider({ children }) {
 
   const SignInCustomToken = (token: string) => {
     signInWithCustomToken(auth, token)
-      .then((userCredential) => {
-        setCurrentUser(userCredential.user)
-      })
+      .then((userCredential) => {})
       .catch((error) => {
         notification['error']({
           message: 'Login failed',

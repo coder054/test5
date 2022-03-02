@@ -77,7 +77,7 @@ const SignIn = () => {
       setLoading(true)
       if (tab === 'Email') {
         await signin(emailFormEmailSignIn, passwordFormEmailSignIn)
-      } else {
+      } else if (tab === 'UserName') {
         const response = await axios.post(API_SIGNIN_WITH_USERNAME, {
           username: userFormUserNameSignIn,
           password: passFormUserNameSignIn,
