@@ -45,19 +45,6 @@ export const InforWithNumbers = ({ dataClub }) => {
                       value: (
                         <div className="flex justify-center items-center ">
                           <span className="inline-block ">1,6</span>
-                          <svg
-                            className="inline-block ml-2"
-                            width="17"
-                            height="16"
-                            viewBox="0 0 17 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M16.5 8L15.09 6.59L9.5 12.17V0H7.5V12.17L1.92 6.58L0.5 8L8.5 16L16.5 8Z"
-                              fill="#D60C0C"
-                            />
-                          </svg>
                         </div>
                       ),
                     },
@@ -66,19 +53,6 @@ export const InforWithNumbers = ({ dataClub }) => {
                       value: (
                         <div className="flex justify-center items-center ">
                           <span className="inline-block ">+20</span>
-                          <svg
-                            className="inline-block ml-2"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M0 8L1.41 9.41L7 3.83V16H9V3.83L14.58 9.42L16 8L8 0L0 8Z"
-                              fill="#09E099"
-                            />
-                          </svg>
                         </div>
                       ),
                     },
@@ -87,19 +61,6 @@ export const InforWithNumbers = ({ dataClub }) => {
                       value: (
                         <div className="flex justify-center items-center ">
                           <span className="inline-block ">CAM</span>
-                          <svg
-                            className="inline-block ml-2"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M0 8L1.41 9.41L7 3.83V16H9V3.83L14.58 9.42L16 8L8 0L0 8Z"
-                              fill="#09E099"
-                            />
-                          </svg>
                         </div>
                       ),
                     },
@@ -112,19 +73,6 @@ export const InforWithNumbers = ({ dataClub }) => {
                       value: (
                         <div className="flex justify-center items-center ">
                           <span className="inline-block ">89%</span>
-                          <svg
-                            className="inline-block ml-2"
-                            width="17"
-                            height="16"
-                            viewBox="0 0 17 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M16.5 8L15.09 6.59L9.5 12.17V0H7.5V12.17L1.92 6.58L0.5 8L8.5 16L16.5 8Z"
-                              fill="#D60C0C"
-                            />
-                          </svg>
                         </div>
                       ),
                     },
@@ -133,19 +81,6 @@ export const InforWithNumbers = ({ dataClub }) => {
                       value: (
                         <div className="flex justify-center items-center ">
                           <span className="inline-block ">0,5</span>
-                          <svg
-                            className="inline-block ml-2"
-                            width="17"
-                            height="16"
-                            viewBox="0 0 17 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M16.5 8L15.09 6.59L9.5 12.17V0H7.5V12.17L1.92 6.58L0.5 8L8.5 16L16.5 8Z"
-                              fill="#D60C0C"
-                            />
-                          </svg>
                         </div>
                       ),
                     },
@@ -154,19 +89,6 @@ export const InforWithNumbers = ({ dataClub }) => {
                       value: (
                         <div className="flex justify-center items-center ">
                           <span className="inline-block ">0,5</span>
-                          <svg
-                            className="inline-block ml-2"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M0 8L1.41 9.41L7 3.83V16H9V3.83L14.58 9.42L16 8L8 0L0 8Z"
-                              fill="#09E099"
-                            />
-                          </svg>
                         </div>
                       ),
                     },
@@ -175,19 +97,6 @@ export const InforWithNumbers = ({ dataClub }) => {
                       value: (
                         <div className="flex justify-center items-center ">
                           <span className="inline-block ">0,1</span>
-                          <svg
-                            className="inline-block ml-2"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M0 8L1.41 9.41L7 3.83V16H9V3.83L14.58 9.42L16 8L8 0L0 8Z"
-                              fill="#09E099"
-                            />
-                          </svg>
                         </div>
                       ),
                     },
@@ -196,22 +105,10 @@ export const InforWithNumbers = ({ dataClub }) => {
               ].map((row, index) => (
                 <div
                   key={index}
-                  className="flex mb-2  gap-x-[8px] justify-center "
+                  className="flex mb-2 gap-x-[8px] justify-center "
                 >
                   {row.itemsOfRow.map((o, index) => (
-                    <div
-                      key={index}
-                      className="
-                        p-[6px] sm:p-[8px] xl:p-[12px]
-                      bg-Dark-3 rounded-[8px] flex flex-col justify-center items-center "
-                    >
-                      <Text name="Subtitle2" className="text-Grey mb-[4px] ">
-                        {o.label}
-                      </Text>
-                      <Text name="Header6" className="text-white ">
-                        {o.value}
-                      </Text>
-                    </div>
+                    <OneRowStat key={index} title={o.label} value={o.value} />
                   ))}
                 </div>
               ))}
@@ -233,17 +130,7 @@ export const InforWithNumbers = ({ dataClub }) => {
                 { label: 'Yel', value: '1' },
                 { label: 'Red', value: '0' },
               ].map((o, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col justify-center items-center"
-                >
-                  <span className=" text-[13px] xl:text-[16px] leading-[150%] text-Grey mb-2 ">
-                    {o.label}
-                  </span>
-                  <span className="text-white text-[15px] xl:text-[24px] leading-[138%] font-semibold">
-                    {o.value}
-                  </span>
-                </div>
+                <Match key={index} title={o.label} value={o.value} />
               ))}
             </div>
 
@@ -264,22 +151,42 @@ export const InforWithNumbers = ({ dataClub }) => {
                 { label: 'Physic', value: '11%' },
                 { label: 'Mental', value: '9%' },
               ].map((o, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col justify-center items-center "
-                >
-                  <span className=" text-[13px] xl:text-[16px] leading-[150%] text-Grey mb-2 ">
-                    {o.label}
-                  </span>
-                  <span className="text-white text-[15px] xl:text-[24px] leading-[138%] font-semibold">
-                    {o.value}
-                  </span>
-                </div>
+                <Match key={index} title={o.label} value={o.value} />
               ))}
             </div>
           </>
         </TitleCollapse>
       </TabPanel>
     </>
+  )
+}
+
+export const OneRowStat = ({ title, value }: { title: any; value: any }) => {
+  return (
+    <div
+      className="
+                p-[6px] sm:p-[8px] xl:p-[12px]
+              bg-[#1f1f1f] rounded-[8px] flex flex-col justify-center items-center "
+    >
+      <Text name="Subtitle2" className="text-Grey mb-[4px] ">
+        {title}
+      </Text>
+      <Text name="Header6" className="text-white ">
+        {value}
+      </Text>
+    </div>
+  )
+}
+
+const Match = ({ title, value }) => {
+  return (
+    <div className="flex flex-col justify-center items-center">
+      <span className=" text-[13px] xl:text-[16px] leading-[150%] text-Grey mb-2 ">
+        {title}
+      </span>
+      <span className="text-white text-[15px] xl:text-[24px] leading-[138%] font-semibold">
+        {value}
+      </span>
+    </div>
   )
 }
