@@ -77,12 +77,13 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
           </Text>
           <div className=" ">
             <SvgClock />
-
-            <Text name="Caption" className="text-Grey inline-block ">
-              {`${formatDistanceToNowStrict(card?.createdAt as number)} ${
-                card?.providerInfo?.region ? '-' : ''
-              } ${card?.providerInfo?.region || ''}`}
-            </Text>
+            {card?.createdAt && (
+              <Text name="Caption" className="text-Grey inline-block ">
+                {`${formatDistanceToNowStrict(card?.createdAt as number)} ${
+                  card?.providerInfo?.region ? '-' : ''
+                } ${card?.providerInfo?.region || ''}`}
+              </Text>
+            )}
           </div>
         </div>
 
