@@ -1,7 +1,5 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { AuthGuard } from 'src/components/authentication/auth-guard'
-import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
 
 const Overview: NextPage = () => {
   return <h1 className="text-white">aaa</h1>
@@ -9,7 +7,7 @@ const Overview: NextPage = () => {
 
 Overview.getLayout = (page) => {
   return (
-    <AuthGuard>
+    <>
       <Head>
         {/* <!-- HTML Meta Tags --> */}
         <title>
@@ -55,8 +53,8 @@ Overview.getLayout = (page) => {
 
         {/* <!-- Meta Tags Generated via https://www.opengraph.xyz --> */}
       </Head>
-      <DashboardLayout>{page}</DashboardLayout>
-    </AuthGuard>
+      <div className="text-red-400 ">aaa1</div>
+    </>
   )
 }
 

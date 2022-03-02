@@ -2,9 +2,7 @@ import axiosLib from 'axios'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useMemo } from 'react'
-import { AuthGuard } from 'src/components/authentication/auth-guard'
 import { getStr } from 'src/utils/utils'
-import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
 
 //@ts-ignore: Unreachable code error
 const Overview: NextPage = ({ data }) => {
@@ -20,7 +18,7 @@ const Overview: NextPage = ({ data }) => {
   }, [data])
 
   return (
-    <AuthGuard>
+    <>
       <Head>
         {/* <!-- HTML Meta Tags --> */}
         <title>{title}</title>
@@ -58,10 +56,9 @@ const Overview: NextPage = ({ data }) => {
 
         {/* <!-- Meta Tags Generated via https://www.opengraph.xyz --> */}
       </Head>
-      <DashboardLayout>
-        <h1 className="text-white">aaa</h1>
-      </DashboardLayout>
-    </AuthGuard>
+
+      <h1 className="text-red-500">aaa2</h1>
+    </>
   )
 }
 
