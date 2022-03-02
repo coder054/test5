@@ -70,7 +70,7 @@ export const NavigationAndFilter = ({ username }, { username: string }) => {
       .replaceAll(' ', '')
     const fullname = `${firstname}.${lastname}`
 
-    return `/${nextUser.username}/${fullname}`
+    return `/biography/${nextUser.username}/${fullname}`
   }, [dataFlip, currentIndexFlip])
 
   const prevFlipUrl: string = useMemo(() => {
@@ -88,7 +88,7 @@ export const NavigationAndFilter = ({ username }, { username: string }) => {
       .replaceAll(' ', '')
     const fullname = `${firstname}.${lastname}`
 
-    return `/${prevUser.username}/${fullname}`
+    return `/biography/${prevUser.username}/${fullname}`
   }, [dataFlip, currentIndexFlip])
 
   // if (loadingDataFlip) {
