@@ -17,6 +17,7 @@ interface DashboardSidebarItemProps extends ListItemProps {
   open?: boolean
   path?: string
   title: string
+  disabled?: boolean
 }
 
 export const DashboardSidebarItem: FC<DashboardSidebarItemProps> = (props) => {
@@ -30,6 +31,7 @@ export const DashboardSidebarItem: FC<DashboardSidebarItemProps> = (props) => {
     open: openProp,
     path,
     title,
+    disabled,
     ...other
   } = props
   const [open, setOpen] = useState<boolean>(openProp)
@@ -58,6 +60,7 @@ export const DashboardSidebarItem: FC<DashboardSidebarItemProps> = (props) => {
         {...other}
       >
         <Button
+          disabled={disabled}
           endIcon={
             !open ? (
               <ChevronRightIcon fontSize="small" />
@@ -110,6 +113,7 @@ export const DashboardSidebarItem: FC<DashboardSidebarItemProps> = (props) => {
     >
       <NextLink href={path} passHref>
         <Button
+          disabled={disabled}
           component="a"
           startIcon={icon}
           endIcon={chip}

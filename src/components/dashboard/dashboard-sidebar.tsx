@@ -1,6 +1,6 @@
 import type { Theme } from '@mui/material'
 import { Box, Divider, Drawer, useMediaQuery } from '@mui/material'
-import { get } from 'lodash'
+import { get, isEmpty } from 'lodash'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
@@ -13,6 +13,7 @@ import { Cog } from 'src/icons/cog'
 import { MessagesIcon } from 'src/icons/messagesIcon'
 import { Newspaper } from 'src/icons/newspaper'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { getStr } from 'src/utils/utils'
 import {
   UserCircle,
   UserCircle as UserCircleIcon,
@@ -32,6 +33,7 @@ interface Item {
   chip?: ReactNode
   icon?: ReactNode
   path?: string
+  disabled?: boolean
 }
 
 interface Section {
@@ -39,19 +41,17 @@ interface Section {
   items: Item[]
 }
 
-const getSections = (t: TFunction): Section[] => {
+const getSections = (t: TFunction, playerProfile): Section[] => {
   let currentRoleLocalStorage = ''
   if (typeof window !== 'undefined') {
     currentRoleLocalStorage =
       window.localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId) || ''
   }
 
-  const { playerProfile } = useAuth()
-
-  const firstname = (get(playerProfile, 'profile.firstName') || '')
+  const firstname = getStr(playerProfile, 'profile.firstName')
     .toLowerCase()
     .replaceAll(' ', '')
-  const lastname = (get(playerProfile, 'profile.lastName') || '')
+  const lastname = getStr(playerProfile, 'profile.lastName')
     .toLowerCase()
     .replaceAll(' ', '')
   const fullname = `${firstname}.${lastname}`
@@ -72,8 +72,9 @@ const getSections = (t: TFunction): Section[] => {
         // },
         {
           title: t('Biography'),
-          path: `/${playerProfile.username}/${fullname}`, // current
+          path: `/biography/${playerProfile.username}/${fullname}`, // current
           icon: <UserCircle fontSize="small" />,
+          disabled: isEmpty(playerProfile),
         },
         {
           title: t('Messages'),
@@ -86,6 +87,7 @@ const getSections = (t: TFunction): Section[] => {
 }
 
 export const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
+  const { playerProfile } = useAuth()
   const { onClose, open } = props
   const router = useRouter()
   const { t } = useTranslation()
@@ -93,8 +95,8 @@ export const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
     noSsr: true,
   })
   const sections = useMemo(() => {
-    return getSections(t)
-  }, [t])
+    return getSections(t, playerProfile)
+  }, [t, playerProfile])
   const handlePathChange = () => {
     if (!router.isReady) {
       return

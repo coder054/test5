@@ -11,6 +11,7 @@ interface Item {
   info?: ReactNode
   children?: Item[]
   title: string
+  disabled?: boolean
 }
 
 interface DashboardSidebarSectionProps extends ListProps {
@@ -27,20 +28,22 @@ const renderNavItems = ({
   depth?: number
   items: Item[]
   path: string
-}): JSX.Element => (
-  <List disablePadding>
-    {items.reduce(
-      (acc, item) =>
-        reduceChildRoutes({
-          acc,
-          item,
-          depth,
-          path,
-        }),
-      []
-    )}
-  </List>
-)
+}): JSX.Element => {
+  return (
+    <List disablePadding>
+      {items.reduce(
+        (acc, item) =>
+          reduceChildRoutes({
+            acc,
+            item,
+            depth,
+            path,
+          }),
+        []
+      )}
+    </List>
+  )
+}
 
 const reduceChildRoutes = ({
   acc,
@@ -69,6 +72,7 @@ const reduceChildRoutes = ({
         open={partialMatch}
         path={item.path}
         title={item.title}
+        disabled={item.disabled}
       >
         {renderNavItems({
           depth: depth + 1,
@@ -88,6 +92,7 @@ const reduceChildRoutes = ({
         key={key}
         path={item.path}
         title={item.title}
+        disabled={item.disabled}
       />
     )
   }
