@@ -10,6 +10,7 @@ import {
   signOut,
   onIdTokenChanged,
   confirmPasswordReset,
+  signInWithCustomToken,
 } from 'firebase/auth'
 import { get, isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
@@ -103,7 +104,6 @@ export function AuthProvider({ children }) {
         setCurrentUser(userCredential.user)
       })
       .catch((error) => {
-        console.log('err', error.message)
         if (error.message === 'Firebase: Error (auth/wrong-password).') {
           notification.open({
             message: '',
@@ -139,6 +139,19 @@ export function AuthProvider({ children }) {
             duration: 3,
           })
         }
+      })
+  }
+
+  const SignInCustomToken = (token: string) => {
+    signInWithCustomToken(auth, token)
+      .then((userCredential) => {
+        setCurrentUser(userCredential.user)
+      })
+      .catch((error) => {
+        notification['error']({
+          message: 'Login failed',
+          description: '',
+        })
       })
   }
 
@@ -319,6 +332,7 @@ export function AuthProvider({ children }) {
     signin,
     signout,
     SignUpWithEmailAndPassword,
+    SignInCustomToken,
     ResetPassword,
     currentRoleId,
     currentRoleName,
