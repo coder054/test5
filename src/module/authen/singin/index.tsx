@@ -2,7 +2,7 @@ import { Button, LogoBigSize } from 'src/components'
 import { MyInput } from 'src/components/MyInput'
 import { FormEvent, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { atom, useAtom } from 'jotai'
+import { useAtom } from 'jotai'
 import { useAuth } from '../auth/AuthContext'
 import { Form, notification } from 'antd'
 const cls = require('./signin.module.css')
@@ -14,22 +14,10 @@ import { signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth'
 import OtpInput from 'react-otp-input'
 import { get } from 'lodash'
 import { auth } from 'src/config/firebase-client'
-
-const valuesAtom = atom({
-  email: '',
-  password: '',
-  returnSecureToken: false,
-})
-const responseSiginin = atom({
-  kind: '',
-  localId: '',
-  email: '',
-  displayName: '',
-  idToken: '',
-  registered: false,
-  refreshToken: '',
-  expiresIn: '',
-})
+import { async } from '@firebase/util'
+import { axios } from 'src/utils/axios'
+import { API_SIGNIN_WITH_USERNAME } from 'src/constants/api.constants'
+// import { getCustomToken } from 'src/atoms/signin'
 
 const initialValuesFormEmailSignIn = {
   emailFormEmailSignIn: 'example@zporter.co',
@@ -81,18 +69,28 @@ const SignIn = () => {
   const [formEmail] = Form.useForm()
   const [formPhone] = Form.useForm()
 
-  const { signin, currentUser, errorSignin } = useAuth()
+  const { signin, currentUser, errorSignin, SignInCustomToken } = useAuth()
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault()
-      const submitForm = await formEmail.validateFields()
       setLoading(true)
-      await signin(emailFormEmailSignIn, passwordFormEmailSignIn)
+      if (tab === 'Email') {
+        await signin(emailFormEmailSignIn, passwordFormEmailSignIn)
+      } else if (tab === 'UserName') {
+        const response = await axios.post(API_SIGNIN_WITH_USERNAME, {
+          username: userFormUserNameSignIn,
+          password: passFormUserNameSignIn,
+        })
+        await SignInCustomToken(response.data.customToken)
+      }
       setTimeout(() => {
         setLoading(false)
       }, 1000)
     } catch (error) {
+      setTimeout(() => {
+        setLoading(false)
+      }, 1000)
       notification['error']({
         message: 'Login failed',
         description: '',
@@ -176,10 +174,10 @@ const SignIn = () => {
         description: '',
       })
     } catch (error) {
-      console.log('aaa ', error)
+      // console.log('aaa ', error)
       //@ts-ignore: Unreachable code error
-      console.log('aaa error.message', error.message)
-      console.log('aaa JSON.stringify(error)', JSON.stringify(error))
+      // console.log('aaa error.message', error.message)
+      // console.log('aaa JSON.stringify(error)', JSON.stringify(error))
       //@ts-ignore: Unreachable code error
       console.log('aaa error.code', error.code)
       if (get(error, 'code') === 'auth/invalid-verification-code') {

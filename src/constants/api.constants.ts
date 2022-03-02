@@ -1,3 +1,6 @@
+// API Authen
+export const API_SIGNIN_WITH_USERNAME = 'auth/log-in-username'
+
 // API News
 export const API_GET_LIST_NEWS_POST = 'feed/get-list-news-post'
 export const API_LIKE_POST = 'feed/like-post'
