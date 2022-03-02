@@ -9,6 +9,7 @@ import { Cookies } from 'react-cookie'
 import { axios } from 'src/utils/axios'
 import { BackGround } from '../../common-components/Background'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
+import toast from 'react-hot-toast'
 
 type FormValuesType = {
   country?: CountryType
@@ -67,15 +68,10 @@ export const Language = () => {
           },
         })
         setFormValues((prev) => ({ ...prev, [type]: value }))
-        notification['success']({
-          message: 'Change successfully',
-        })
+        toast.success('Notification changed')
       })
       .catch(() => {
-        notification['error']({
-          message: 'Error',
-          description: '',
-        })
+        toast.error('Error')
       })
   }
 

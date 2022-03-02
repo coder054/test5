@@ -12,12 +12,14 @@ import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import { Cog } from 'src/icons/cog'
 import { MessagesIcon } from 'src/icons/messagesIcon'
 import { Newspaper } from 'src/icons/newspaper'
+import { Users } from 'src/icons/users'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { getStr } from 'src/utils/utils'
 import {
   UserCircle,
   UserCircle as UserCircleIcon,
 } from '../../icons/user-circle'
+import { ContactsIcon } from '../icons'
 import { Logo } from '../logo'
 import { Scrollbar } from '../scrollbar'
 import { DashboardSidebarSection } from './dashboard-sidebar-section'
@@ -75,6 +77,11 @@ const getSections = (t: TFunction, playerProfile): Section[] => {
           path: `/biography/${playerProfile.username}/${fullname}`, // current
           icon: <UserCircle fontSize="small" />,
           disabled: isEmpty(playerProfile),
+        },
+        {
+          title: t('Contacts'),
+          path: '/contacts',
+          icon: <Users fontSize="small" />,
         },
         {
           title: t('Messages'),

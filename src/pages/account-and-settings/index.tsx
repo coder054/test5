@@ -71,7 +71,7 @@ const AccountPage: NextPage = () => {
               <Tab key={tab.value} label={tab.label} value={tab.value} />
             ))}
           </Tabs>
-          <Divider sx={{ mb: 3 }} />
+          <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />
           {currentTab === 'account' && <Account />}
           {currentTab === 'settings' && <Settings />}
           {currentTab === 'profile' && <Profile />}

@@ -4,6 +4,7 @@ import * as firebase from 'firebase/auth'
 import { signInWithEmailAndPassword, User } from 'firebase/auth'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
 import { MyButton } from 'src/components/MyButton'
 import { MyCustomSelect } from 'src/components/MyCustomSelect'
@@ -39,7 +40,7 @@ export const BasicDetail = () => {
   }
 
   const handleSubmit = async () => {
-    console.log(email, formValues.verifyPassword)
+    await form.validateFields()
     setIsLoading(true)
     await signInWithEmailAndPassword(auth, email, formValues.verifyPassword)
       .then(async () => {
@@ -47,24 +48,17 @@ export const BasicDetail = () => {
           .updatePassword(currentUser as User, formValues.newPassword)
           .then(() => {
             setIsLoading(false)
-            notification['success']({
-              message: 'Change password successfully',
-              placement: 'bottomLeft',
-            })
+            toast.success('Password changed')
             form.resetFields()
           })
           .catch(() => {
             setIsLoading(false)
-            notification['error']({
-              message: 'Change password failed!',
-            })
+            toast.error('An error has occurred')
           })
       })
       .catch(() => {
         setIsLoading(false)
-        notification['error']({
-          message: 'Wrong password',
-        })
+        toast.error('Wrong password')
       })
   }
 
