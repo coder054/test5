@@ -6,10 +6,6 @@ import { getStr } from 'src/utils/utils'
 
 //@ts-ignore: Unreachable code error
 const Overview: NextPage = ({ data }) => {
-  const title = useMemo(() => {
-    return getStr(data, 'title')
-  }, [data])
-
   const img = useMemo(() => {
     if (!data) {
       return ''
@@ -21,7 +17,7 @@ const Overview: NextPage = ({ data }) => {
     <>
       <Head>
         {/* <!-- HTML Meta Tags --> */}
-        <title>{title}</title>
+        <title>{getStr(data, 'title')}</title>
         <meta
           name="description"
           content="Renunciation of Indonesian citizenship process changed in 2020. This site aims to answer all your questions on the new process."
@@ -30,7 +26,7 @@ const Overview: NextPage = ({ data }) => {
         {/* <!-- Facebook Meta Tags --> */}
         <meta property="og:url" content="https://www.byeindonesia.com/" />
         <meta property="og:type" content="website" />
-        <meta property="og:title" content={title} />
+        <meta property="og:title" content={getStr(data, 'title')} />
         <meta
           property="og:description"
           content="Renunciation of Indonesian citizenship process changed in 2020. This site aims to answer all your questions on the new process."
@@ -44,7 +40,7 @@ const Overview: NextPage = ({ data }) => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content="byeindonesia.com" />
         <meta property="twitter:url" content="https://www.byeindonesia.com/" />
-        <meta name="twitter:title" content={title} />
+        <meta name="twitter:title" content={getStr(data, 'title')} />
         <meta
           name="twitter:description"
           content="Renunciation of Indonesian citizenship process changed in 2020. This site aims to answer all your questions on the new process."

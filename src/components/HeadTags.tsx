@@ -19,9 +19,7 @@ export const HeadTags = ({
 
   return (
     <Head>
-      <title>{title}</title>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <meta name="viewport" content="initial-scale=1, width=device-width" />
+      <title>{title}</title>      
       <meta name="robots" content="index, follow" />
       <meta name="revisit-after" content="1 days" />
       <meta name="title" content={title} />
