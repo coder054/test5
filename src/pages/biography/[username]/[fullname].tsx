@@ -310,7 +310,10 @@ const Biography = () => {
 
               <div className="h-[1px] my-[32px] bg-Stroke "></div>
 
-              <InforWithNumbers dataClub={dataClub} />
+              <InforWithNumbers
+                dataClub={dataClub}
+                activeSeasons={dataBio.activeSeasons}
+              />
             </div>
           </div>
         </div>
