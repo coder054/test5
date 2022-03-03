@@ -338,6 +338,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 
   let dataBio: IBiographyPlayer | {}
   let dataClub: IInfoClub | {}
+  let dataAvgPlayer: IAvgPlayerScore | {}
 
   const fetcher1 = async (url) => {
     if (url === null) return
@@ -354,29 +355,22 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     }
     return { error: true }
   }
-  try {
-    // dataBio = await fetcher(`/biographies/player?userIdQuery=${userid}`)
-    dataBio = await fetcher1(`/biographies/player?username=${username}`)
-    // console.log('aaa dataBio', dataBio)
-  } catch (error) {
-    dataBio = {}
-  }
+
+  ///////////////////////////////////////////////
 
   try {
-    dataClub = await fetcher(
-      `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`
-    )
+    ;[dataBio, dataClub, dataAvgPlayer] = await Promise.all([
+      fetcher1(`/biographies/player?username=${username}`),
+      fetcher(
+        `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`
+      ),
+      fetcher1('/biographies/players/avg-radar'),
+    ])
   } catch (error) {
-    dataClub = {}
+    ;[dataBio, dataClub, dataAvgPlayer] = [{}, {}, {}]
   }
 
-  let dataAvgPlayer: IAvgPlayerScore | {}
-
-  try {
-    dataAvgPlayer = await fetcher1('/biographies/players/avg-radar')
-  } catch (error) {
-    dataAvgPlayer = {}
-  }
+  ///////////////////////////////////////////////
 
   return {
     props: {
