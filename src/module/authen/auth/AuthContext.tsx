@@ -267,7 +267,7 @@ export function AuthProvider({ children }) {
           setUserRoles(resp.data)
           const roleId =
             get(
-              resp.data.find((o) => o.role === 'PLAYER'),
+              resp.data.find((o) => o.role === 'PLAYER') || resp.data[0],
               'roleId'
             ) || ''
           // update axios token header
