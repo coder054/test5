@@ -87,18 +87,22 @@ export const InfoClub = ({ dataClub }: { dataClub: IInfoClub }) => {
   }, [dataClub])
   return (
     <div className="">
-      <div className="text-Grey text-[15px] font-medium mb-[8px] ">Historic</div>
+      <div className="text-Grey text-[15px] font-medium mb-[8px] ">
+        Historic
+      </div>
       {dataClub.historicClubs.map((data) => {
-        return <ItemClub data={data}></ItemClub>
+        return <ItemClub key={data.careerId} data={data}></ItemClub>
       })}
 
-      <div className="text-Grey text-[15px] font-medium mb-[8px] ">Existing</div>
+      <div className="text-Grey text-[15px] font-medium mb-[8px] ">
+        Existing
+      </div>
 
       <ItemClub data={dataClub.existingClub}></ItemClub>
 
       <div className="text-Grey text-[15px] font-medium mb-[8px] ">Future</div>
-      {dataClub.futureClubs.map((data) => {
-        return <ItemClub data={data}></ItemClub>
+      {dataClub.futureClubs.map((data, index) => {
+        return <ItemClub key={data.careerId || index} data={data}></ItemClub>
       })}
     </div>
   )
@@ -206,7 +210,7 @@ const ItemClub = ({ data }: { data: ExistingClub | HistoricClub }) => {
               { label: 'Cup', value: trophies.cupTrophyCount + 'x' },
               { label: 'Other', value: trophies.otherTrophyCount + 'x' },
             ].map((o, index) => (
-              <div>
+              <div key={'trophy' + index}>
                 <div className="rounded-[8px] bg-[#1f1f1f] px-[8px] py-[5px] mb-1 ">
                   <div className="text-white text-[12px] text-center mb-1">
                     {o.label}

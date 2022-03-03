@@ -92,7 +92,7 @@ const VideosWrapper = ({
       <Slider>
         {data.map((video, index) => {
           return (
-            <Slide index={index} className="">
+            <Slide key={'video' + index} index={index} className="">
               <a
                 className="block sm:mr-4"
                 key={index}
