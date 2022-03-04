@@ -24,7 +24,11 @@ import {
   setCookieUtil,
 } from 'src/utils/utils'
 import { removeTokenCookieHttp, setTokenCookieHttp } from './tokenCookies'
-import { API_PLAYER_PROFILE } from 'src/constants/api.constants'
+import {
+  API_COACH_PROFILE,
+  API_PLAYER_PROFILE,
+} from 'src/constants/api.constants'
+
 import { IPlayerProfile } from 'src/components/dashboard/dashboard-navbar'
 
 interface ValueType {
@@ -62,6 +66,7 @@ export function AuthProvider({ children }) {
   const [errorSignin, setErrorSignin] = useState<string>('')
   const [checkEmail, setCheckEmail] = useState<boolean>(false)
   const [playerProfile, setPlayerProfile] = useState<IPlayerProfile | {}>({}) // all info about logged in user
+  const [coachProfile, setCoachProfile] = useState<IPlayerProfile | {}>({}) // all info about logged in user
   const [userRoles, setUserRoles] = useState<any>(
     typeof window !== 'undefined'
       ? //@ts-ignore: Unreachable code error
@@ -88,10 +93,10 @@ export function AuthProvider({ children }) {
   }, [userRoles, currentRoleName])
 
   useEffect(() => {
-    console.log('aaa2 userRoles: ', userRoles)
+    // console.log('aaa2 userRoles: ', userRoles)
   }, [userRoles])
   useEffect(() => {
-    console.log('aaa2 currentRoleId: ', currentRoleId)
+    // console.log('aaa2 currentRoleId: ', currentRoleId)
   }, [currentRoleId])
 
   useEffect(() => {
@@ -247,7 +252,7 @@ export function AuthProvider({ children }) {
     console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      console.log('aaa onIdTokenChanged', user)
+      // console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
         removeTokenCookieHttp()
@@ -300,10 +305,26 @@ export function AuthProvider({ children }) {
             JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.playerProfile))
           )
         }
+
+        // Coach profile
+        if (!localStorage.getItem(LOCAL_STORAGE_KEY.coachProfile)) {
+          try {
+            const { data: userinfo } = await axios.get(API_COACH_PROFILE)
+            setCoachProfile(userinfo)
+            localStorage.setItem(
+              LOCAL_STORAGE_KEY.coachProfile,
+              JSON.stringify(userinfo)
+            )
+          } catch (error) {}
+        } else {
+          setCoachProfile(
+            JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY.coachProfile))
+          )
+        }
       }
       const doneT = +new Date()
-      console.log('aaa doneT', doneT)
-      console.log('aaa doneT - initT', doneT - initT)
+      // console.log('aaa doneT', doneT)
+      // console.log('aaa doneT - initT', doneT - initT)
       setTimeout(() => {
         setInitialized(true)
       }, 50)
@@ -346,6 +367,7 @@ export function AuthProvider({ children }) {
     userRoles,
     initialized,
     playerProfile, // all info about logged in user
+    coachProfile, // all info about logged in user
     authenticated: !!currentUser,
   }
 

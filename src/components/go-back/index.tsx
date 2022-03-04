@@ -6,9 +6,15 @@ interface GoBackProps {
   label?: string
   className?: string
   goBack?: string
+  textBlack?: boolean
 }
 
-export const GoBack = ({ label, className, goBack }: GoBackProps) => {
+export const GoBack = ({
+  label,
+  className,
+  goBack,
+  textBlack,
+}: GoBackProps) => {
   const router = useRouter()
   const styles = clsx(className && className)
 
@@ -20,9 +26,13 @@ export const GoBack = ({ label, className, goBack }: GoBackProps) => {
           goBack && router.push(goBack)
         }}
       >
-        <IconArrowBack />
+        <IconArrowBack textBlack />
       </div>
-      <span className="ml-[13px] text-[#FFFFFF] text-base float-left">
+      <span
+        className={`ml-[13px] ${
+          textBlack ? 'text-[#1E1F24]' : 'text-[#FFFFFF]'
+        } text-base float-left`}
+      >
         {label}
       </span>
     </div>

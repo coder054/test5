@@ -19,7 +19,7 @@ export const HeadTags = ({
 
   return (
     <Head>
-      <title>{title}</title>      
+      <title>{title}</title>
       <meta name="robots" content="index, follow" />
       <meta name="revisit-after" content="1 days" />
       <meta name="title" content={title} />
