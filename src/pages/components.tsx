@@ -101,7 +101,14 @@ const Components = () => {
 
         <div className="h-[60px] "></div>
         <div className="w-[384px]">
-          <Comments />
+          <Comments
+            listComment={[
+              {
+                img: '/Ellipse 16.svg',
+                text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod t ',
+              },
+            ]}
+          />
         </div>
 
         <div className="h-[60px] "></div>

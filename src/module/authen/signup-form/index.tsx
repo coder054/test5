@@ -23,7 +23,7 @@ const SignUpForm = () => {
   const [faceImage, setFaceImage] = useState<string>('')
   const [fullBodyImage, setFullBodyImage] = useState<string>('')
   const [date, setDate] = useState(null)
-  const { signin } = useAuth()
+  const { signout } = useAuth()
 
   React.useEffect(() => {
     if (typeof window === 'undefined') {
@@ -51,7 +51,12 @@ const SignUpForm = () => {
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
-      <div className="absolute top-[16px] lg:top-[40px] md:left-[40px]">
+      <div
+        className="absolute top-[16px] lg:top-[40px] md:left-[40px]"
+        onClick={async () => {
+          await signout()
+        }}
+      >
         <GoBack label="Sign in form" goBack="/signin" />
       </div>
       <div

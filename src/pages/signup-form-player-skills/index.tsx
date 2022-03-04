@@ -1,24 +1,22 @@
 import { LayoutSignupForm } from 'src/components/layout-signup-form'
-import SignUpForm from 'src/module/authen/signup-form'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { requireAuth } from 'src/config/firebase-admin'
-import { GuestGuard } from 'src/components/authentication/guest-guard'
 import { AuthGuard } from 'src/components/authentication/auth-guard'
+import { SignUpFormPlayerSkills } from 'src/module/authen/signup-form-player-skills'
 
-const SignUpFormPage = () => {
+const SignUpFormPlayerSkillsPage = () => {
   const router = useRouter()
   return (
     <AuthGuard>
-      <LayoutSignupForm authen>
+      <LayoutSignupForm playerSkill>
         <Head>
-          <title>Zporter</title>
+          <title>Zporter signup form player skills</title>
           <link rel="icon" type="image/png" href="/favicon.png" />
         </Head>
-        <SignUpForm />
+        <SignUpFormPlayerSkills />
       </LayoutSignupForm>
     </AuthGuard>
   )
 }
 
-export default SignUpFormPage
+export default SignUpFormPlayerSkillsPage
