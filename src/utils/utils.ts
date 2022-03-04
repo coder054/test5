@@ -159,3 +159,7 @@ export const setCookieUtil = (key: string, value: string) => {
 export const removeCookieUtil = (key: string) => {
   cookies.remove(key)
 }
+
+export const getErrorMessage = (err) => {
+  return get(err, 'response.data.messages', get(err, 'message')) || ''
+}

@@ -1,8 +1,10 @@
-import { child, get, getDatabase, ref } from 'firebase/database'
+import { child, get, getDatabase, query, ref } from 'firebase/database'
 import { isEmpty } from 'lodash'
+import { firebaseApp } from 'src/config/firebase-client'
 import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
 
-export const dbRef = ref(getDatabase())
+export const database = getDatabase(firebaseApp)
+export const dbRef = ref(database)
 
 export const Constants = {
   DEVELOPMENT_LINK: 'DEVELOPMENT_LINK',
@@ -27,6 +29,26 @@ export const blockedByUIDsNode = 'blockedByUIDs'
 export const deletedAtNode = 'deletedAt'
 export const chattingUIDsNode = 'chattingUIDs'
 export const previewDataNode = 'previewData'
+
+export interface IChatRoom {
+  chatRoomId: string
+  memberIds: string[]
+  updatedAt: number
+  requested?: boolean // defaul false
+  chatRoomName?: string
+  lastMessageId?: string
+  chatRoomImage?: string
+  lastMessageContent?: string
+  unReadMessageNumber?: number
+  userFaceImages?: string[]
+  userName?: string
+  isGroup?: boolean // default false
+  requestedUID?: string
+  blockedByUIDs?: string[]
+  chattingUIDs?: string[]
+  deletedDate?: number
+  isShowChatRoom?: boolean // defauld true
+}
 
 export interface IUser {
   createdAt: number
@@ -173,13 +195,10 @@ export interface IChatUser {
   presence: boolean
 }
 
-export const fromChatMessageToTypesMessage = ({
-  author,
-  chatMessage,
-}: {
-  author: IUser
+export const fromChatMessageToTypesMessage = (
+  author: IUser,
   chatMessage: IChatMessage
-}): IMessage => {
+): IMessage => {
   switch (chatMessage.type) {
     case EChatMessageType.custom: // basically a video message
       let customMessage: ICustomMessage = {
@@ -349,21 +368,34 @@ export const getMessageContent = async (
   chatRoomId: string,
   messageId: string
 ): Promise<string> => {
+  console.log('aaa', { chatRoomId });
+  // if (chatRoomId !== 'ie9IaY34EpcpCrDXl5wc') {
+  //   return ''
+  // }
+
   if (!messageId) {
     return ''
   }
-
+  debugger
   let content: string = ''
 
+  ////////////////////
   const snapshot = await get(
-    child(dbRef, `chatMessages/${chatRoomId}/${messageId}`)
+    query(ref(database, `chatMessages/${chatRoomId}/${messageId}`))
   )
+  ////////////////////
+
+  debugger
   const chatMessage = snapshot.val()
+  debugger
   if (!chatMessage) {
+    debugger
     return ''
   }
+  debugger
 
   const currentRoleId = localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId)
+  debugger
   switch (chatMessage.type) {
     case EChatMessageType.text:
       content = chatMessage.text ?? ''
