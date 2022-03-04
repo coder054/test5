@@ -11,8 +11,13 @@ import { Cookies } from 'react-cookie'
  * with `access-token` header injected
  */
 
+let baseURL = process.env.NEXT_PUBLIC_API_BASE_URL
+if (typeof window !== 'undefined') {
+  baseURL = localStorage.getItem('baseurl') || baseURL
+}
+
 export const axios = axiosLib.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL: baseURL,
   headers: {
     'X-Frame-Options': 'SAMEORIGIN',
     'Content-type': 'application/json',
