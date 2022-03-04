@@ -1,11 +1,6 @@
-import type { NextPage } from 'next'
 import Head from 'next/head'
 
-const Overview: NextPage = () => {
-  return <h1 className="text-white">aaa</h1>
-}
-
-Overview.getLayout = (page) => {
+export default function () {
   return (
     <>
       <Head>
@@ -53,9 +48,8 @@ Overview.getLayout = (page) => {
 
         {/* <!-- Meta Tags Generated via https://www.opengraph.xyz --> */}
       </Head>
-      <div className="text-red-400 ">aaa1</div>
+
+      <div className="text-red-600 ">aaa1</div>
     </>
   )
 }
-
-export default Overview

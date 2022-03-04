@@ -8,6 +8,7 @@ import { BasicProfile } from './components/BasicProfile'
 import { DetailProfile } from './components/DetailProfile'
 import { useAtom } from 'jotai'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
+import toast from 'react-hot-toast'
 
 export const Profile = () => {
   const { currentRoleName, currentRoleId } = useAuth()
@@ -41,31 +42,19 @@ export const Profile = () => {
   const handleSubmit = async () => {
     setIsLoading(true)
     await axios
-      .patch(
-        `users/${currentRoleName}/settings`,
-        {
-          profile: {
-            ...submitForm,
-          },
+      .patch(`users/${currentRoleName}/settings`, {
+        profile: {
+          ...submitForm,
         },
-        {
-          headers: {
-            roleId: currentRoleId,
-          },
-        }
-      )
+      })
       .then(() => {
         setAccount({ ...account, profile: { ...submitForm } })
         setIsLoading(false)
-        notification['success']({
-          message: 'Update successfully',
-        })
+        toast.success('Successfully updated')
       })
       .catch(() => {
         setIsLoading(false)
-        notification['error']({
-          message: 'Error',
-        })
+        toast.error('An error has occurred')
       })
   }
 

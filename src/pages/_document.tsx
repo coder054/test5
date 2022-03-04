@@ -8,6 +8,8 @@ class CustomDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+          <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link

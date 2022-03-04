@@ -5,17 +5,24 @@ import { ReactChild, useState } from 'react'
 export const TitleCollapse = ({
   title,
   children,
+  alwayShowContent,
 }: {
   title: string
   children: ReactChild
+  alwayShowContent: any
 }) => {
   const [show, setShow] = useState(true)
   return (
     <>
       <div className="flex items-center justify-between ">
-        <Text name="Subtitle1" className="text-white ">
-          {title}
-        </Text>
+        {alwayShowContent ? (
+          alwayShowContent
+        ) : (
+          <Text name="Subtitle1" className="text-white">
+            {title}
+          </Text>
+        )}
+
         <svg
           className={clsx(
             ` cursor-pointer duration-200 transform`,

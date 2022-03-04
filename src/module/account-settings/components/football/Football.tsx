@@ -19,6 +19,7 @@ import { InfiniteScrollTeam } from './components/InfiniteScrollTeam'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
 import { notification } from 'antd'
+import toast from 'react-hot-toast'
 
 type FormArrayType = {
   currentTeams?: CurrentTeamType[]
@@ -104,29 +105,17 @@ export const Football = () => {
   const handleSubmit = async () => {
     setIsLoading(true)
     await axios
-      .patch(
-        `users/${currentRoleName}/settings`,
-        {
-          playerCareer: formValues,
-        },
-        {
-          headers: {
-            roleId: currentRoleId,
-          },
-        }
-      )
+      .patch(`users/${currentRoleName}/settings`, {
+        playerCareer: formValues,
+      })
       .then(() => {
         setAccount({ ...account, playerCareer: formValues })
         setIsLoading(false)
-        notification['success']({
-          message: 'Update successfully',
-        })
+        toast.success('Successfully updated')
       })
       .catch(() => {
         setIsLoading(false)
-        notification['error']({
-          message: 'Error',
-        })
+        toast.error('An error has occurred')
       })
   }
 
