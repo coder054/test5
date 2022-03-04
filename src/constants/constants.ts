@@ -21,3 +21,8 @@ export const LOCAL_STORAGE_KEY = {
   currentRoleId: 'currentRoleId',
   playerProfile: 'playerProfile',
 }
+
+export const COOKIE_KEY = {
+  roleid: 'roleid',
+  token: 'token',
+}

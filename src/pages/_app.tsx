@@ -52,27 +52,28 @@ const App: FC<EnhancedAppProps> = (props) => {
 
   return (
     <>
-      {/* <Head>
-        <title>{get(Component, 'title') || 'Zporter default title'}</title>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <title>Zporter</title>
         <meta
           name="description"
-          content={get(Component, 'description') || 'Zporter default desc'}
+          content="Zporter"
         ></meta>
-        <meta property="og:url" content="https://www.byeindonesia.com/" />
+        <meta property="og:url" content={process.env.NEXT_PUBLIC_DOMAIN_NAME} />
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content="Bye Indonesia - Renunciation of Indonesian Citizenship Guide 2021"
+          content="Zporter"
         />
         <meta
           property="og:description"
-          content="Renunciation of Indonesian citizenship process changed in 2020. This site aims to answer all your questions on the new process."
+          content="Zporter"
         />
-        <meta
+        {/* <meta
           property="og:image"
           content="https://www.byeindonesia.com/og-bye-indonesia.png"
-        />
-      </Head> */}
+        /> */}
+      </Head>
       <CacheProvider value={emotionCache}>
         <ReduxProvider store={store}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>

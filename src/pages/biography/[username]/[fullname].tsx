@@ -2,7 +2,7 @@
 import useSWR, { SWRConfig } from 'swr'
 import { Text } from 'src/components/Text'
 import { loadIdToken, requireAuth } from 'src/config/firebase-admin'
-import { fetcher, getStr, truncateStr } from 'src/utils/utils'
+import { fetcher, getStr, parseCookies, truncateStr } from 'src/utils/utils'
 import React, { useEffect, useMemo } from 'react'
 import { Loading } from 'src/components/loading/loading'
 import { get, isEmpty } from 'lodash'
@@ -22,6 +22,7 @@ import { InfoWithCircleImage } from 'src/module/bio/InfoWithCircleImage'
 import { InforWithNumbers } from 'src/module/bio/InfoWithNumbers'
 import { InfoWithImages } from 'src/module/bio/InfoWithImages'
 import { InforWithAChart } from 'src/module/bio/InfoWithAChart'
+import { COOKIE_KEY } from 'src/constants/constants'
 
 export const fetcherForEndpointFlip = async (url) => {
   if (url === null) return
@@ -46,7 +47,7 @@ export enum EStatusRelationShip {
 
 ///////////////////////////////
 export interface IBiographyPlayer {
-  friendStatus: string
+  friendStatus: EStatusRelationShip
   followStatus: string
   isConfirmBox: boolean
   isFollowed: boolean
@@ -204,7 +205,7 @@ const Biography = () => {
       isPublic,
       userId,
     } = dataBio
-    console.log('aaa dataBio: ', {
+    console.log('aaa dataBio: ', dataBio, {
       friendStatus,
       followStatus,
       isConfirmBox,
@@ -364,8 +365,7 @@ const Biography = () => {
 
 // Biography.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>
 export const getServerSideProps: any = async ({ req, res, query }) => {
-  // for NOW, require logged in
-
+  // const roleId =
   const uid = await loadIdToken(req as any)
 
   const fullname = query.fullname // not use
@@ -377,12 +377,12 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 
   const fetcher1 = async (url) => {
     if (url === null) return
-
     //@ts-ignore: Unreachable code error
     axios.defaults.headers.username = username
-    if (uid) {
+    const roleId = parseCookies(req)[COOKIE_KEY.roleid]
+    if (!isEmpty(roleId)) {
       //@ts-ignore: Unreachable code error
-      axios.defaults.headers.roleId = uid
+      axios.defaults.headers.roleId = roleId
     }
     const data = await axios.get(url)
     if (data.status === 200) {
@@ -402,7 +402,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
       fetcher1('/biographies/players/avg-radar'),
     ])
   } catch (error) {
-    console.log('aaa error', error );
+    console.log('aaa error', error)
     ;[dataBio, dataClub, dataAvgPlayer] = [{}, {}, {}]
   }
 
