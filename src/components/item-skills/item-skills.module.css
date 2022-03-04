@@ -1,0 +1,5 @@
+.item {
+  padding: 24px 24px 40px;
+  background: rgba(6, 7, 34, 0.59);
+  backdrop-filter: blur(68px);
+}

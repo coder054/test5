@@ -1,27 +1,31 @@
-import Image from 'next/image'
 import { MyImage } from './MyImage'
+import clsx from 'clsx'
 
-export const Comments = () => {
+// const listComment = [
+//   {
+//     img: '/Ellipse 16.svg',
+//     text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod t ',
+//   },
+// ]
+type ListComment = {
+  img: string
+  text: string
+}
+
+interface CommentProps {
+  listComment?: ListComment[]
+  className?: string
+}
+
+export const Comments = ({ listComment, className }: CommentProps) => {
+  const classNames = clsx(className && className)
   return (
-    <div className="">
-      <div className="text-white font-semibold text-[24px] leading-[137%] mb-[25px] ">
+    <div className={`${classNames}`}>
+      {/* <div className="text-white font-semibold text-[24px] leading-[137%] mb-[25px] ">
         Comments
-      </div>
+      </div> */}
       <div className=" ">
-        {[
-          {
-            img: '/Ellipse 16.svg',
-            text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod t ',
-          },
-          {
-            img: '/Ellipse 16.svg',
-            text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod t ',
-          },
-          {
-            img: '/Ellipse 16.svg',
-            text: '"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod t ',
-          },
-        ].map((o, index) => (
+        {listComment.map((o, index) => (
           <div key={index} className=" mb-4 flex items-end  ">
             <MyImage
               className="

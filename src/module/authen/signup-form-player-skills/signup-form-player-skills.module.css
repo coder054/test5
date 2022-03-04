@@ -1,0 +1,5 @@
+.note {
+  border: 1px solid #484a4d;
+  background: rgba(6, 7, 34, 0.59);
+  backdrop-filter: blur(68px);
+}

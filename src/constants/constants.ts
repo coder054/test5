@@ -20,4 +20,5 @@ export const LOCAL_STORAGE_KEY = {
   userRoles: 'userRoles',
   currentRoleId: 'currentRoleId',
   playerProfile: 'playerProfile',
+  coachProfile: 'coachProfile',
 }
