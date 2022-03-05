@@ -24,3 +24,8 @@ export const LOCAL_STORAGE_KEY = {
   playerProfile: 'playerProfile',
   coachProfile: 'coachProfile',
 }
+
+export const COOKIE_KEY = {
+  roleid: 'roleid',
+  token: 'token',
+}

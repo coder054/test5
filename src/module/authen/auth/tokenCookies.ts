@@ -2,12 +2,7 @@ import cookies from 'js-cookie'
 
 export const getTokenCookie = () => cookies.get('token')
 
-export const setTokenCookie = (token: string) => {
-  // cookies.set('token', token, {
-  //   // expires: 1 / 24, // 1 hour
-  //   expires: 1,
-  // })
-
+export const setTokenCookieHttp = (token: string) => {
   fetch('/api/login', {
     method: 'post',
     headers: {
@@ -17,9 +12,7 @@ export const setTokenCookie = (token: string) => {
   })
 }
 
-// export const removeTokenCookie = () => cookies.remove('token')
-
-export const removeTokenCookie = () => {
+export const removeTokenCookieHttp = () => {
   fetch('/api/logout', {
     method: 'post',
     headers: {

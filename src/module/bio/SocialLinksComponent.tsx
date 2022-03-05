@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 
-export const SocialLinks = ({ socialLinks }) => {
+export const SocialLinksComponent = ({ socialLinks }) => {
   useEffect(() => {
     // console.log('aaa socialLinks: ', socialLinks)
   }, [socialLinks])

@@ -32,6 +32,7 @@ export const loadIdToken = async (req: any): Promise<string | null> => {
   if (!req.cookies.token) return null
   const decoded = await verifyIdToken(req.cookies.token)
   if (!decoded) return null
+  console.log('aaa decoded: ', decoded)
   return decoded.uid
 }
 

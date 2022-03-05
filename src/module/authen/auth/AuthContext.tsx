@@ -1,7 +1,7 @@
 // import { auth } from 'src/config/firebase-client'
 import { notification } from 'antd'
 import { auth } from 'src/config/firebase-client'
-import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
+import { COOKIE_KEY, LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -17,12 +17,18 @@ import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { axios } from 'src/utils/axios'
-import { dataFromToken, ITokenData } from 'src/utils/utils'
-import { removeTokenCookie, setTokenCookie } from './tokenCookies'
+import {
+  dataFromToken,
+  ITokenData,
+  removeCookieUtil,
+  setCookieUtil,
+} from 'src/utils/utils'
+import { removeTokenCookieHttp, setTokenCookieHttp } from './tokenCookies'
 import {
   API_COACH_PROFILE,
   API_PLAYER_PROFILE,
 } from 'src/constants/api.constants'
+
 import { IPlayerProfile } from 'src/components/dashboard/dashboard-navbar'
 
 interface ValueType {
@@ -221,7 +227,7 @@ export function AuthProvider({ children }) {
       })
   }
 
-  // const setTokenCookie = (token: string) => {
+  // const setTokenCookieHttp = (token: string) => {
   //   fetch('/api/login', {
   //     method: 'post',
   //     headers: {
@@ -231,7 +237,7 @@ export function AuthProvider({ children }) {
   //   })
   // }
 
-  // const removeTokenCookie = () => {
+  // const removeTokenCookieHttp = () => {
   //   fetch('/api/logout', {
   //     method: 'post',
   //     headers: {
@@ -249,7 +255,8 @@ export function AuthProvider({ children }) {
       // console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
-        removeTokenCookie()
+        removeTokenCookieHttp()
+        removeCookieUtil(COOKIE_KEY.roleid)
         setToken('')
         setCurrentUser(null)
         localStorage.removeItem(LOCAL_STORAGE_KEY.currentRoleId)
@@ -257,7 +264,7 @@ export function AuthProvider({ children }) {
       } else {
         const token = await user.getIdToken()
 
-        setTokenCookie(token)
+        setTokenCookieHttp(token)
         // update axios token header
         axios.defaults.headers.common.Authorization = `Bearer ${token}`
 
@@ -274,6 +281,8 @@ export function AuthProvider({ children }) {
               resp.data.find((o) => o.role === 'PLAYER') || resp.data[0],
               'roleId'
             ) || ''
+
+          setCookieUtil(COOKIE_KEY.roleid, roleId)
           // update axios token header
           //@ts-ignore: Unreachable code error
           axios.defaults.headers.roleId = roleId
@@ -333,7 +342,7 @@ export function AuthProvider({ children }) {
     }
     const handle = setInterval(async () => {
       const token = await currentUser.getIdToken(true)
-      setTokenCookie(token)
+      setTokenCookieHttp(token)
       // update axios token header
       axios.defaults.headers.common.Authorization = `Bearer ${token}`
       setToken(token)

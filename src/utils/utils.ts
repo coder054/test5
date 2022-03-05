@@ -1,4 +1,5 @@
 import { get, truncate } from 'lodash'
+import cookies from 'js-cookie'
 import cookie from 'cookie'
 import { notification } from 'antd'
 import { axios } from './axios'
@@ -147,4 +148,14 @@ export const getYoutubeThumbnail = (
     }
   }
   return ''
+}
+
+export const setCookieUtil = (key: string, value: string) => {
+  cookies.set(key, value, {
+    expires: 100000000,
+  })
+}
+
+export const removeCookieUtil = (key: string) => {
+  cookies.remove(key)
 }
