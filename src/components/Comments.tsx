@@ -8,8 +8,8 @@ import clsx from 'clsx'
 //   },
 // ]
 type ListComment = {
-  img: string
-  text: string
+  img?: string
+  text?: string
 }
 
 interface CommentProps {

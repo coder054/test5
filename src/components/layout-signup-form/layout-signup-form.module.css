@@ -5,7 +5,23 @@
 }
 
 .imageBackground {
-  background-image: url('../../../public/authen/image-signup-form.png');
+  background-image: url('../../../public/authen/image-signup-form-player.png');
+  background-repeat: no-repeat;
+  background-size: auto;
+  bottom: 0px;
+  left: 0px;
+}
+
+.imageBackgroundPlayer {
+  background-image: url('../../../public/authen/image-signup-form-player.png');
+  background-repeat: no-repeat;
+  background-size: auto;
+  bottom: 0px;
+  left: 0px;
+}
+
+.imageBackgroundCoach {
+  background-image: url('../../../public/authen/image-signup-form-coach.png');
   background-repeat: no-repeat;
   background-size: auto;
   bottom: 0px;
@@ -14,6 +30,18 @@
 
 .backgroundPlayerSkill {
   background-image: url('../../../public/authen/signup-form-player-skills.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.backgroundCoachSkill {
+  background-image: url('../../../public/authen/signup-form-coach-skills.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.backgroundBiography {
+  background-image: url('../../../public/authen/signup-form-biography.png');
   background-repeat: no-repeat;
   background-size: cover;
 }

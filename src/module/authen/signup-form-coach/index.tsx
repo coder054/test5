@@ -11,8 +11,14 @@ import { DynamicFields } from 'src/components/dynamic-fields'
 import { useIncrementNumber } from 'src/hooks/useIncrementNumber'
 import { MyModal } from 'src/components/MyModal'
 import { ROUTES } from 'src/constants/constants'
+import {
+  CoachingStyle,
+  CoachingType,
+  ExperienceLevel,
+  HighestCoachingEducation,
+} from 'src/constants/options'
 
-export const SignUpFormPlayer = () => {
+export const SignUpFormCoach = () => {
   const [value, setValue] = useState('')
   const router = useRouter()
   const [form] = Form.useForm()
@@ -53,8 +59,6 @@ export const SignUpFormPlayer = () => {
     el.classList.remove('ant-form')
   }, [])
 
-  const handleAddNewClub = async (event) => {}
-
   const handleSubmit = async (event) => {
     event.preventDefault()
     const submitForm = await form.validateFields()
@@ -75,7 +79,7 @@ export const SignUpFormPlayer = () => {
         pl-[5px] pr-[5px] mx-auto lg:mr-0 lg:absolute`}
       >
         <p className="text-[24px] text-[#FFFFFF] font-semibold text-center md:text-left">
-          Sign up form - player
+          Sign up form - coach
         </p>
         <Form className="" form={form} onFinish={handleFinish}>
           <Form.Item
@@ -135,100 +139,110 @@ export const SignUpFormPlayer = () => {
           </div>
 
           <Form.Item
-            className="w-[310px] md:w-[470px]"
-            name={'shirtNumber'}
+            className="w-full"
+            name={'role'}
             rules={[
               {
                 required: true,
-                message: 'Input your Shirt Number',
+                message: 'Input your Role',
               },
             ]}
           >
             <MySelect
-              signupForm
               className=""
-              label={'Shirtnumber'}
-              value={yourClub}
-              onChange={(e) => {
-                setYourClub(e.target.value)
-              }}
-              arrOption={shirtNumber}
-            />
-          </Form.Item>
-
-          <Form.Item
-            className="float-left"
-            name={'favoriteRole'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your Favorite Role(s)',
-              },
-            ]}
-          >
-            <MySelect
-              className="w-[270px] md:w-[430px]"
-              label={'Favorite Role(s)'}
-              // value={yourClub}
+              label={'Role'}
               onChange={(e) => {
                 // setYourClub(e.target.value)
               }}
-              arrOption={profile === 'player' ? OptionPlayer : OptionCoach}
+              arrOption={OptionCoach}
             />
-          </Form.Item>
-          <div className="-mt-[48px]">
-            <DynamicFields
-              maxField={3}
-              name={'favoriteRoles'}
-              label="Favorite Role(s)"
-              type="select"
-              profile={profile as string}
-            />
-          </div>
-
-          <Form.Item
-            className="w-[310px] md:w-[470px]"
-            name={'length'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your Length',
-              },
-            ]}
-          >
-            {shirtNumber && (
-              <MySelect
-                signupForm
-                className=""
-                label={'length'}
-                value={yourClub}
-                onChange={(e) => {
-                  setYourClub(e.target.value)
-                }}
-                arrOption={lengthNumber}
-              />
-            )}
           </Form.Item>
 
           <Form.Item
             className="w-[310px] md:w-[470px]"
-            name={'weight'}
+            name={'highestCoachingEducation'}
             rules={[
               {
                 required: true,
-                message: 'Input your Weight',
+                message: 'Input your Highest Coaching Education',
               },
             ]}
           >
             <MySelect
               signupForm
               className=""
-              label={'weight'}
-              value={yourClub}
+              label={'Highest Coaching Education'}
+              // value={yourClub}
               onChange={(e) => {
                 setYourClub(e.target.value)
               }}
-              arrOption={weightNumber}
+              arrOption={HighestCoachingEducation}
+            />
+          </Form.Item>
+
+          <Form.Item
+            className="w-[310px] md:w-[470px]"
+            name={'experienceLevel'}
+            rules={[
+              {
+                required: true,
+                message: 'Input your Experience Level',
+              },
+            ]}
+          >
+            <MySelect
+              signupForm
+              className=""
+              label={'Experience Level'}
+              // value={yourClub}
+              onChange={(e) => {
+                setYourClub(e.target.value)
+              }}
+              arrOption={ExperienceLevel}
+            />
+          </Form.Item>
+
+          <Form.Item
+            className="w-[310px] md:w-[470px]"
+            name={'coachingStyle'}
+            rules={[
+              {
+                required: true,
+                message: 'Input your Coaching Style',
+              },
+            ]}
+          >
+            <MySelect
+              signupForm
+              className=""
+              label={'Coaching Style'}
+              // value={yourClub}
+              onChange={(e) => {
+                setYourClub(e.target.value)
+              }}
+              arrOption={CoachingStyle}
+            />
+          </Form.Item>
+
+          <Form.Item
+            className="w-[310px] md:w-[470px]"
+            name={'coachingType'}
+            rules={[
+              {
+                required: true,
+                message: 'Input your Coaching Type',
+              },
+            ]}
+          >
+            <MySelect
+              signupForm
+              className=""
+              label={'Coaching Type'}
+              // value={yourClub}
+              onChange={(e) => {
+                setYourClub(e.target.value)
+              }}
+              arrOption={CoachingType}
             />
           </Form.Item>
 

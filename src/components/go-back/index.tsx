@@ -26,7 +26,7 @@ export const GoBack = ({
           goBack && router.push(goBack)
         }}
       >
-        <IconArrowBack textBlack />
+        <IconArrowBack textBlack={textBlack} />
       </div>
       <span
         className={`ml-[13px] ${

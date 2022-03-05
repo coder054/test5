@@ -6,13 +6,16 @@ import { useAuth } from '../authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
 import { API_FRIENDS } from 'src/constants/api.constants'
 import { Stars } from 'src/components/common/Stars'
+import { Comments } from 'src/components/Comments'
 
 export const InfoWithCircleImage = ({
   dataBio,
   currentRoleId,
+  signupForm,
 }: {
   dataBio: IBiographyPlayer
   currentRoleId: string
+  signupForm?: boolean
 }) => {
   const [elmButtonFollow, setElmButtonFollow] = useState<string>('Follow')
   const [loading, setLoading] = useState<boolean>(false)
@@ -45,12 +48,26 @@ export const InfoWithCircleImage = ({
 
   return (
     <>
+      {signupForm && (
+        <div>
+          <p className="text-[24px] text-[#ffffff]">Sing up form - biography</p>
+          <Comments
+            listComment={[
+              {
+                img: '/avt-nick.svg',
+                text: 'This is how your Biography and profile looks like now. The more updates and content you will add, the more attractive you will be',
+              },
+            ]}
+            className="w-full mt-[48px]"
+          />
+        </div>
+      )}
       <div className="text-center text-[24px] leading-[33px]">
-        <span className="text-Green mr-[4px] "> {dataBio.firstName} </span>
-        <span className="text-white "> {dataBio.lastName} </span>
+        <span className="text-Green mr-[4px] "> {dataBio?.firstName} </span>
+        <span className="text-white "> {dataBio?.lastName} </span>
       </div>
       <div className="text-Grey text-[14px] leading-[22px] text-center">
-        #{dataBio.username}
+        #{dataBio?.username}
       </div>
       <div className="h-[24px] "></div>
 
@@ -58,7 +75,7 @@ export const InfoWithCircleImage = ({
         <div className=" flex flex-col justify-between">
           <div className="h-[45px] ">
             <div className="text-white text-[18px] leading-[24px] text-right">
-              {dataBio.position}
+              {dataBio?.position}
             </div>
             <div className="text-Grey text-[12px] leading-[20px] font-bold text-right ">
               POSITION
@@ -66,14 +83,14 @@ export const InfoWithCircleImage = ({
           </div>
 
           <img
-            src={dataBio.currentClubIconUrl}
+            src={dataBio?.currentClubIconUrl}
             className="w-[24px] h-[24px] ml-auto rounded-full"
             alt=""
           />
           <div className="h-[45px] ">
             <div className="text-white text-[18px] leading-[24px] text-right whitespace-nowrap ">
               <span className="inline-block mr-[2px] ">
-                {dataBio.estMarketValue}M
+                {dataBio?.estMarketValue}M
               </span>
               <svg
                 className="inline-block "
@@ -100,7 +117,7 @@ export const InfoWithCircleImage = ({
             middleColor="#a35ef6"
             endColor="#8a56f0"
             size={164}
-            progress={dataBio.circleCompleted}
+            progress={dataBio?.circleCompleted}
             strokeWidth={1}
             classes={{
               indicator: {
@@ -157,12 +174,12 @@ export const InfoWithCircleImage = ({
                   />
                 </svg>
               }
-              numberOfStars={dataBio.starRating}
+              numberOfStars={dataBio?.starRating}
               className={'gap-x-[2px] '}
             />
           </div>
 
-          {!!dataBio.faceImageUrl && (
+          {!!dataBio?.faceImageUrl && (
             <>
               <div
                 style={
@@ -174,7 +191,7 @@ export const InfoWithCircleImage = ({
               -translate-x-1/2 -translate-y-1/2  "
               ></div>
               <img
-                src={dataBio.faceImageUrl}
+                src={dataBio?.faceImageUrl}
                 className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
               -translate-x-1/2 -translate-y-1/2 object-cover "
                 alt=""
@@ -193,7 +210,7 @@ export const InfoWithCircleImage = ({
         <div className=" flex flex-col justify-between">
           <div className="h-[45px] ">
             <div className="text-white text-[18px] leading-[24px] text-left h-[24px] ">
-              {dataBio.age}
+              {dataBio?.age}
             </div>
             <div className="text-Grey text-[12px] leading-[20px] font-bold text-left ">
               AGE
@@ -201,13 +218,13 @@ export const InfoWithCircleImage = ({
           </div>
 
           <img
-            src={dataBio.countryFlagUrl}
+            src={dataBio?.countryFlagUrl}
             className="w-[24px] h-[24px] mr-auto rounded-full"
             alt=""
           />
           <div className="h-[45px] ">
             <div className="text-white text-[18px] leading-[24px] text-left">
-              {dataBio.height}cm
+              {dataBio?.height}cm
             </div>
             <div className="text-Grey text-[12px] leading-[20px] font-bold text-left ">
               HEIGHT
@@ -235,7 +252,7 @@ export const InfoWithCircleImage = ({
           <div className=" ">
             <div className="text-[14px] leading-[22px] text-white ">
               {' '}
-              {dataBio.friendCount}{' '}
+              {dataBio?.friendCount}{' '}
             </div>
             <div className="text-Grey text-[12px] leading-[20px] ">Friends</div>
           </div>
@@ -257,7 +274,7 @@ export const InfoWithCircleImage = ({
 
           <div className=" ">
             <div className="text-[14px] leading-[22px] text-white ">
-              {dataBio.fanCount}
+              {dataBio?.fanCount}
             </div>
             <div className="text-Grey text-[12px] leading-[20px] ">Fans</div>
           </div>
@@ -279,7 +296,7 @@ export const InfoWithCircleImage = ({
 
           <div className=" ">
             <div className="text-[14px] leading-[22px] text-white ">
-              {dataBio.followCount}
+              {dataBio?.followCount}
             </div>
             <div className="text-Grey text-[12px] leading-[20px] ">Follows</div>
           </div>
@@ -287,7 +304,7 @@ export const InfoWithCircleImage = ({
         {/*  */}
       </div>
 
-      {dataBio.userId !== currentRoleId && authenticated && (
+      {!signupForm && dataBio?.userId !== currentRoleId && authenticated && (
         <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px] ">
           <Button
             text="Add"
@@ -305,8 +322,17 @@ export const InfoWithCircleImage = ({
         </div>
       )}
 
+      {signupForm && (
+        <p className="text-[14px] text-white">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute
+          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+          fugiat nulla pariatur.
+        </p>
+      )}
+
       <div className="mx-auto max-w-[466px] text-white text-[14px] leading-[22px] ">
-        {dataBio.summary}
+        {dataBio?.summary}
       </div>
     </>
   )
