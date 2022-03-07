@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import { FC, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceStrict } from 'date-fns'
 import locale from 'date-fns/locale/en-US'
@@ -11,6 +11,8 @@ import {
   Typography,
 } from '@mui/material'
 import type { Thread } from '../../../types/chat'
+import { IChatRoom } from 'src/module/chat/chatService'
+import { isEmpty } from 'lodash'
 
 const formatDistanceLocale = {
   lessThanXSeconds: '{{count}}s',
@@ -50,33 +52,34 @@ const formatDistance = (token, count, options) => {
 interface ChatThreadItemProps {
   active?: boolean
   onSelect: () => void
-  thread: Thread
+  chatRoom: IChatRoom
 }
 
 export const ChatThreadItem: FC<ChatThreadItemProps> = (props) => {
-  const { active, thread, onSelect, ...other } = props
+  const { active, chatRoom, onSelect, ...other } = props
   // To get the user from the authContext, you can use
   // `const { user } = useAuth();`
   const user = {
     id: '5e86809283e28b96d2d38537',
   }
 
-  const recipients = thread.participants.filter(
-    (participant) => participant.id !== user.id
-  )
-  const lastMessage = thread.messages[thread.messages.length - 1]
-  const name = recipients
-    .reduce((names, participant) => [...names, participant.name], [])
-    .join(', ')
-  let content = ''
+  const imagesChatRoom = useMemo(() => {
+    if (isEmpty(chatRoom)) {
+      return []
+    }
+    if (!!chatRoom.chatRoomImage) {
+      return [chatRoom.chatRoomImage]
+    }
+    return chatRoom.userFaceImages
+  }, [chatRoom])
 
-  if (lastMessage) {
-    const author = lastMessage.authorId === user.id ? 'Me: ' : ''
-    const message =
-      lastMessage.contentType === 'image' ? 'Sent a photo' : lastMessage.body
+  // if (lastMessage) {
+  //   const author = lastMessage.authorId === user.id ? 'Me: ' : ''
+  //   const message =
+  //     lastMessage.contentType === 'image' ? 'Sent a photo' : lastMessage.body
 
-    content = `${author}${message}`
-  }
+  //   content = `${author}${message}`
+  // }
 
   return (
     <ListItem
@@ -106,7 +109,7 @@ export const ChatThreadItem: FC<ChatThreadItemProps> = (props) => {
           max={2}
           sx={{
             '& .MuiAvatar-root':
-              recipients.length > 1
+              imagesChatRoom.length > 1
                 ? {
                     height: 26,
                     width: 26,
@@ -120,8 +123,8 @@ export const ChatThreadItem: FC<ChatThreadItemProps> = (props) => {
                   },
           }}
         >
-          {recipients.map((recipient) => (
-            <Avatar key={recipient.id} src={recipient.avatar} />
+          {imagesChatRoom.map((imgUrl) => (
+            <Avatar key={imgUrl} src={imgUrl} />
           ))}
         </AvatarGroup>
       </ListItemAvatar>
@@ -133,7 +136,7 @@ export const ChatThreadItem: FC<ChatThreadItemProps> = (props) => {
         }}
       >
         <Typography noWrap variant="subtitle2">
-          {name}
+          {chatRoom.chatRoomName}
         </Typography>
         <Box
           sx={{
@@ -141,7 +144,7 @@ export const ChatThreadItem: FC<ChatThreadItemProps> = (props) => {
             display: 'flex',
           }}
         >
-          {thread.unreadCount > 0 && (
+          {chatRoom.unReadMessageNumber > 0 && (
             <Box
               sx={{
                 backgroundColor: 'primary.main',
@@ -158,7 +161,7 @@ export const ChatThreadItem: FC<ChatThreadItemProps> = (props) => {
             sx={{ flexGrow: 1 }}
             variant="subtitle2"
           >
-            {content}
+            {chatRoom.lastMessageContent}
           </Typography>
         </Box>
       </Box>
@@ -167,7 +170,7 @@ export const ChatThreadItem: FC<ChatThreadItemProps> = (props) => {
         sx={{ whiteSpace: 'nowrap' }}
         variant="caption"
       >
-        {formatDistanceStrict(lastMessage.createdAt, new Date(), {
+        {formatDistanceStrict(1646637547331, new Date(), {
           addSuffix: false,
           locale: {
             ...locale,
@@ -183,7 +186,7 @@ ChatThreadItem.propTypes = {
   active: PropTypes.bool,
   onSelect: PropTypes.func,
   // @ts-ignore
-  thread: PropTypes.object.isRequired,
+  chatRoom: PropTypes.object.isRequired,
 }
 
 ChatThreadItem.defaultProps = {
