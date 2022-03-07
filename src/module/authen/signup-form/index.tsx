@@ -63,11 +63,11 @@ const SignUpForm = () => {
         className={`w-[320px] mobileM:w-[365px] md:w-[490px] md:h-[880px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 
           2xl:right-[25%] overflow-y-auto pl-[5px] pr-[5px] mx-auto lg:mr-0 lg:absolute`}
       >
-        <p className="text-[24px] text-[#FFFFFF] font-semibold md:mb-[48px] text-center md:text-left absolute ">
+        <p className="text-[24px] text-[#FFFFFF] font-semibold md:mb-[48px] text-center md:text-left absolute">
           Sign up form
         </p>
         <Form className="" form={form}>
-          <div className="w-full flex justify-between mt-[24px] md:mt-[48px]">
+          <div className="w-full flex justify-between mt-[34px] md:mt-[48px]">
             <Form.Item
               className="w-[235px] pr-[12px] mb-[24px]"
               name={'firstName'}
@@ -120,16 +120,6 @@ const SignUpForm = () => {
               },
             ]}
           >
-            {/* <MySelect
-              signupForm
-              className=""
-              label={'Select Country'}
-              value={country}
-              onChange={(e) => {
-                setCountry(e.target.value)
-              }}
-              arrOption={OptionCountry}
-            /> */}
             <MySelectCountry
               label="Select Country"
               onChange={(_, value) => {
@@ -163,7 +153,7 @@ const SignUpForm = () => {
             />
           </Form.Item>
 
-          <div className="float-left md:flex mt-[4px] md:mt-[24px]">
+          <div className="absolute md:flex mt-[4px] md:mt-[24px] w-full">
             <UploadImage
               title="Face image"
               text="Add portrait photo of 480*640 pixels or more"
@@ -178,10 +168,13 @@ const SignUpForm = () => {
             />
           </div>
 
-          <div className="mt-[40px] float-left md:flex" onClick={handleSubmit}>
+          <div
+            className="absolute mt-[368px] md:mt-[230px]"
+            onClick={handleSubmit}
+          >
             <Button
               loading={loading}
-              className="float-left h-[48px] w-[300px] md:w-[480px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+              className=" h-[48px] w-[300px] md:w-[480px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
               text="Next"
             />
           </div>

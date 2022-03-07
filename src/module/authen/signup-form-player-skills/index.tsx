@@ -51,7 +51,7 @@ export const SignUpFormPlayerSkills = () => {
       </div>
 
       <div className="absolute z-20 w-full bottom-12">
-        <div className="mx-auto w-2/3 grid grid-cols-3 gap-2">
+        <div className="mx-auto w-11/12 md:w-5/6 lg:w-2/3 grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-2">
           <ItemSkills className="w-[372px] h-[513px]">
             <>
               <p className="text-[24px] text-[#FFFFFF] mb-[48px]">

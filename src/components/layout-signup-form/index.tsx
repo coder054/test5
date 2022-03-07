@@ -20,7 +20,7 @@ export const LayoutSignupForm = ({
   biography,
 }: LayoutLandingProps) => {
   return (
-    <div className="min-h-screen w-full bg-[#000000] relative overflow-hidden">
+    <div className=" w-full bg-[#000000] relative overflow-hidden">
       {authen && (
         <div
           className={`${cls.backgroundAuthen} w-screen min-h-screen lg:h-screen absolute lg:left-0 lg:bottom-0`}
@@ -47,7 +47,7 @@ export const LayoutSignupForm = ({
       {playerSkill && (
         <>
           <div
-            className={`${cls.backgroundPlayerSkill} w-screen min-h-screen lg:h-screen absolute lg:left-0 lg:bottom-0 z-10`}
+            className={`${cls.backgroundPlayerSkill} w-0 md:w-screen min-h-screen lg:h-screen absolute lg:left-0 lg:bottom-0 z-10`}
           ></div>
           <div
             className={`${cls.rectangle} w-screen absolute min-h-screen z-10`}

@@ -18,17 +18,13 @@ interface UploadImageProps {
 export const UploadImage = ({
   title,
   text,
-  // width,
-  // height,
   className,
   setImage,
 }: UploadImageProps) => {
   const [progress, setProgress] = useState<number>(0)
   const [url, setUrl] = useState<string>('')
-  const classUploadImage = clsx()
   const handleChangeUpload = (event) => {
     const file = event.target.files[0]
-    // console.log('file', file)
 
     if (!file) return
     const storageRef = ref(storage, `/files/${file.name}`)
@@ -53,7 +49,7 @@ export const UploadImage = ({
   }
 
   return (
-    <div className={`${className} `}>
+    <div className={`${className}`}>
       <p className="text-base text-[#FFFFFF]">{title}</p>
       <div
         className={`${cls.uploadImage} w-[223px] h-[130px] cursor-pointer rounded-[8px] mt-[12px] text-center  border relative`}
