@@ -2,7 +2,13 @@
 import useSWR, { SWRConfig } from 'swr'
 import { Text } from 'src/components/Text'
 import { loadIdToken, requireAuth } from 'src/config/firebase-admin'
-import { fetcher, getStr, parseCookies, truncateStr } from 'src/utils/utils'
+import {
+  fetcher,
+  getErrorMessage,
+  getStr,
+  parseCookies,
+  truncateStr,
+} from 'src/utils/utils'
 import React, { useEffect, useMemo } from 'react'
 import { Loading } from 'src/components/loading/loading'
 import { get, isEmpty } from 'lodash'
@@ -402,7 +408,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
       fetcher1('/biographies/players/avg-radar'),
     ])
   } catch (error) {
-    console.log('aaa error', error)
+    console.log('aaa error', getErrorMessage(error))
     ;[dataBio, dataClub, dataAvgPlayer] = [{}, {}, {}]
   }
 

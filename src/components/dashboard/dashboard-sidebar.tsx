@@ -85,7 +85,7 @@ const getSections = (t: TFunction, playerProfile): Section[] => {
         },
         {
           title: t('Messages'),
-          path: `/dashboard/messages`,
+          path: `/dashboard/chat`,
           icon: <MessagesIcon fontSize="small" />,
         },
       ],

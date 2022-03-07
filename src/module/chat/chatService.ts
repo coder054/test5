@@ -1,8 +1,25 @@
-import { child, get, getDatabase, ref } from 'firebase/database'
+import {
+  ref,
+  getDatabase,
+  query,
+  orderByChild,
+  equalTo,
+  get,
+  child,
+  startAt,
+  onValue,
+  limitToFirst,
+  limitToLast,
+  orderByKey,
+  orderByValue,
+  startAfter,
+} from 'firebase/database'
 import { isEmpty } from 'lodash'
+import { firebaseApp } from 'src/config/firebase-client'
 import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
 
-export const dbRef = ref(getDatabase())
+export const database = getDatabase(firebaseApp)
+export const dbRef = ref(database)
 
 export const Constants = {
   DEVELOPMENT_LINK: 'DEVELOPMENT_LINK',
@@ -27,6 +44,26 @@ export const blockedByUIDsNode = 'blockedByUIDs'
 export const deletedAtNode = 'deletedAt'
 export const chattingUIDsNode = 'chattingUIDs'
 export const previewDataNode = 'previewData'
+
+export interface IChatRoom {
+  chatRoomId: string
+  memberIds: string[]
+  updatedAt: number
+  requested?: boolean // defaul false
+  chatRoomName?: string
+  lastMessageId?: string
+  chatRoomImage?: string
+  lastMessageContent?: string
+  unReadMessageNumber?: number
+  userFaceImages?: string[]
+  userName?: string
+  isGroup?: boolean // default false
+  requestedUID?: string
+  blockedByUIDs?: string[]
+  chattingUIDs?: string[]
+  deletedDate?: number
+  isShowChatRoom?: boolean // defauld true
+}
 
 export interface IUser {
   createdAt: number
@@ -173,13 +210,10 @@ export interface IChatUser {
   presence: boolean
 }
 
-export const fromChatMessageToTypesMessage = ({
-  author,
-  chatMessage,
-}: {
-  author: IUser
+export const fromChatMessageToTypesMessage = (
+  author: IUser,
   chatMessage: IChatMessage
-}): IMessage => {
+): IMessage => {
   switch (chatMessage.type) {
     case EChatMessageType.custom: // basically a video message
       let customMessage: ICustomMessage = {
@@ -349,21 +383,31 @@ export const getMessageContent = async (
   chatRoomId: string,
   messageId: string
 ): Promise<string> => {
+  console.log('aaa', { chatRoomId })
+  // if (chatRoomId !== 'ie9IaY34EpcpCrDXl5wc') {
+  //   return ''
+  // }
+
   if (!messageId) {
     return ''
   }
 
   let content: string = ''
 
+  ////////////////////
   const snapshot = await get(
-    child(dbRef, `chatMessages/${chatRoomId}/${messageId}`)
+    query(ref(database, `chatMessages/${chatRoomId}/${messageId}`))
   )
+  ////////////////////
+
   const chatMessage = snapshot.val()
+
   if (!chatMessage) {
     return ''
   }
 
   const currentRoleId = localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId)
+
   switch (chatMessage.type) {
     case EChatMessageType.text:
       content = chatMessage.text ?? ''
@@ -408,4 +452,82 @@ export const getMessageContent = async (
   }
 
   return content
+}
+
+export const queryTabAll = (chatRoom: IChatRoom): boolean => {
+  let userId: string = '11bee3f3-d7b1-4b2c-94bf-84e70f45f238'
+
+  if ((chatRoom.blockedByUIDs || []).includes(userId)) {
+    return false
+  }
+
+  /// Filter group chat having last message
+  /// And user's in group
+  /// Display chat room that this user request to send message
+  return (
+    (chatRoom.memberIds || []).includes(userId) &&
+    !!chatRoom.lastMessageId &&
+    (!chatRoom.requestedUID || chatRoom.requestedUID === userId)
+  )
+}
+
+export const getDeleteChatRoomDate = (value: any): number => {
+  let deletedDate: number = 0
+
+  if (!!value['deletedAt']) {
+    const arr = Object.entries(value['deletedAt'])
+
+    arr.forEach(([key, v]: [key: string, v: number]) => {
+      if (key === '11bee3f3-d7b1-4b2c-94bf-84e70f45f238') {
+        deletedDate = v
+      }
+    })
+  }
+
+  return deletedDate
+}
+
+export const getMessageNumber = async (
+  chatRoomId: string,
+  startAt?: number
+): Promise<number> => {
+  let number = 0
+  let dataSnapshot = await get(
+    query(
+      ref(database, `chatMessages/${chatRoomId}`),
+      orderByChild('createdAt'),
+      startAfter(startAt - 1)
+    )
+  )
+
+  if (dataSnapshot.exists) {
+    let messageMap = dataSnapshot.val()
+    if (isEmpty(messageMap)) {
+      return 0
+    }
+    for (let i = 0; i < messageMap.length; i++) {
+      number++
+      if (number >= 1) {
+        return number
+      }
+    }
+  }
+
+  return number
+}
+
+export const _queryUnreadMessage = (chatRoom: IChatRoom): boolean => {
+  // let userId: string = localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId)
+  let userId: string = '11bee3f3-d7b1-4b2c-94bf-84e70f45f238'
+
+  /// Filter group chat having last message
+  /// And user's in group
+  if ((chatRoom.blockedByUIDs || []).includes(userId)) {
+    return false
+  }
+
+  return (
+    (chatRoom.memberIds || []).includes(userId) &&
+    chatRoom.lastMessageId != null
+  )
 }

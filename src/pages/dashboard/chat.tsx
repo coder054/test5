@@ -1,4 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
+import {
+  useQueryParam,
+  NumberParam,
+  StringParam,
+  withDefault,
+} from 'use-query-params'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -21,6 +27,20 @@ import { MenuAlt4 as MenuAlt4Icon } from '../../icons/menu-alt-4'
 import { gtm } from '../../lib/gtm'
 import { getThreads } from '../../slices/chat'
 import { useDispatch } from '../../store'
+import { useAtom } from 'jotai'
+import { chatRoomsAtom } from 'src/atoms/chatAtom'
+
+export enum ETabChat {
+  All = 'All',
+  Unread = 'Unread',
+  Requests = 'Requests',
+}
+
+export const tabsChat = [
+  { text: ETabChat.All },
+  { text: ETabChat.Unread },
+  { text: ETabChat.Requests },
+]
 
 const ChatInner = styled('div', {
   shouldForwardProp: (prop) => prop !== 'open',
@@ -52,10 +72,15 @@ const ChatInner = styled('div', {
 // if threadKey does not exist, it means that the chat is in compose mode
 
 const Chat: NextPage = () => {
+  const [tab, setTab] = useQueryParam(
+    'tab',
+    withDefault(StringParam, ETabChat.All)
+  )
   const router = useRouter()
   const dispatch = useDispatch()
   const rootRef = useRef<HTMLDivElement | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
   const compose = (router.query.compose as string) === 'true'
   const threadKey = router.query.threadKey as string
   const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'), {
@@ -82,6 +107,10 @@ const Chat: NextPage = () => {
     }
   }, [mdUp])
 
+  useEffect(() => {
+    setChatRooms([])
+  }, [tab])
+
   const handleCloseSidebar = () => {
     setIsSidebarOpen(false)
   }
@@ -101,6 +130,7 @@ const Chat: NextPage = () => {
       <Head>
         <title>Dashboard: Chat | Material Kit Pro</title>
       </Head>
+
       <Box
         component="main"
         sx={{
@@ -122,6 +152,8 @@ const Chat: NextPage = () => {
           }}
         >
           <ChatSidebar
+            tab={tab}
+            setTab={setTab}
             containerRef={rootRef}
             onClose={handleCloseSidebar}
             open={isSidebarOpen}
