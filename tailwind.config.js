@@ -12,11 +12,10 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'landing-one': "url('../../public/assets/landing-page/Landing-1.png')",
-        'landing-two': "url('../../public/assets/landing-page/Landing-2.png')",
-        'landing-three':
-          "url('../../public/assets/landing-page/Landing-3.png')",
-        'landing-four': "url('../../public/assets/landing-page/Landing-4.png')",
+        'landing-one': "url('/assets/landing-page/Landing-1.png')",
+        'landing-two': "url('/assets/landing-page/Landing-2.png')",
+        'landing-three': "url('/assets/landing-page/Landing-3.png')",
+        'landing-four': "url('/assets/landing-page/Landing-4.png')",
       },
       animation: {
         appear: 'appear 0.2s ease-in-out',
