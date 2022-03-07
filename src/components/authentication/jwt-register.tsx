@@ -45,7 +45,6 @@ export const JWTRegister: FC = (props) => {
         }
       } catch (err) {
         console.error(err)
-
         if (isMounted()) {
           helpers.setStatus({ success: false })
           helpers.setErrors({ submit: err.message })

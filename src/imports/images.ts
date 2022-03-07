@@ -15,9 +15,14 @@ export const imgAvtItemEventHeadline = require('./../../public' +
   '/event/avatar.svg')
 export const imgBackgroundItemEventHeadline = require('./../../public' +
   '/event/background.svg')
+
+export const GROUP_DEVICES = require('./../../public' +
+  '/assets/landing-page/GroupDevices.png')
 export const LANDING_TABLET = require('./../../public' +
   '/assets/landing-page/Tablet.png')
 export const BALL = require('./../../public' + '/assets/landing-page/Ball.png')
+export const BALL_2 = require('./../../public' +
+  '/assets/landing-page/Ball-2.png')
 export const GROUP_ITEMS = require('./../../public' +
   '/assets/landing-page/GroupItems.png')
 export const GRAPH = require('./../../public' +
@@ -27,3 +32,32 @@ export const APP_SHADOW = require('./../../public' +
   '/assets/landing-page/AppShadow.png')
 export const DEFAULT_IMG = require('./../../public' +
   '/assets/landing-page/ShieldIcon.png')
+export const COMMENT_AVATAR = require('./../../public' +
+  '/assets/landing-page/Comment.png')
+export const COMMENT_NICK = require('./../../public' +
+  '/assets/landing-page/Nick.png')
+export const COMMENT_AVATAR_3 = require('./../../public' +
+  '/assets/landing-page/Comment-3.png')
+export const NEO = require('./../../public' + '/assets/landing-page/Neo.png')
+export const NEO_MIRROR = require('./../../public' +
+  '/assets/landing-page/NeoMirror.png')
+export const TEAM = require('./../../public' + '/assets/landing-page/Team.png')
+export const IT_FREE = require('./../../public' +
+  '/assets/landing-page/ItFree.png')
+export const ARROW = require('./../../public' +
+  '/assets/landing-page/Arrow.png')
+export const PLAYER = require('./../../public' +
+  '/assets/landing-page/Player.png')
+export const APP_STORE_WHITE = require('./../../public' +
+  '/assets/landing-page/AppStoreWhite.png')
+export const GOOGLE_PLAY_WHITE = require('./../../public' +
+  '/assets/landing-page/GGPlayWhite.png')
+export const GOAL = require('./../../public' + '/assets/landing-page/Goal.png')
+export const APP_2 = require('./../../public' +
+  '/assets/landing-page/App-2.png')
+export const LANDING_4 = require('./../../public' +
+  '/assets/landing-page/Landing-4.png')
+export const GOAL_KEERPER = require('./../../public' +
+  '/assets/landing-page/GoalKeeper.png')
+export const APP_4 = require('./../../public' +
+  '/assets/landing-page/App-4.png')
