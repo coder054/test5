@@ -27,8 +27,8 @@ import { ETabChat, tabsChat } from 'src/pages/dashboard/chat'
 import { useAtom } from 'jotai'
 import {
   activeChatRoomAtom,
-  activeChatRoomIdAtom,
   chatRoomsAtom,
+  useActiveRoomId,
 } from 'src/atoms/chatAtom'
 import { AllTab } from './AllTab'
 import { UnreadTab } from './UnreadTab'
@@ -65,7 +65,7 @@ const ChatSidebarMobile = styled(Drawer)({
 export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
   const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
   const [activeChatRoom] = useAtom(activeChatRoomAtom)
-  const [activeChatRoomId, setActiveChatRoomId] = useAtom(activeChatRoomIdAtom)
+  const { activeChatRoomId, setActiveChatRoomId } = useActiveRoomId()
   const { containerRef, onClose, open, tab, setTab, ...other } = props
   const router = useRouter()
   const { threads, activeThreadId } = useSelector((state) => state.chat)

@@ -25,6 +25,7 @@ import {
   getDeleteChatRoomDate,
   getMessageContent,
   getMessageNumber,
+  getUnreadMessageIdsInRoom,
   IChatMessage,
   IChatRoom,
   IChatUser,
@@ -32,10 +33,7 @@ import {
   _queryUnreadMessage,
 } from 'src/module/chat/chatService'
 import { AVATAR_DEFAULT, LOCAL_STORAGE_KEY } from 'src/constants/constants'
-import {
-  getUnreadMessageIdsInRoom,
-  IUnReadMessage,
-} from 'src/module/chat/chatMessageService'
+
 import { chain, isEmpty, shuffle } from 'lodash'
 import React from 'react'
 import { getErrorMessage } from 'src/utils/utils'
