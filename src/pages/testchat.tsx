@@ -22,10 +22,14 @@ import { useAuth } from 'src/module/authen/auth/AuthContext'
 import {
   fromChatMessageToTypesMessage,
   getChatUser,
+  getDeleteChatRoomDate,
   getMessageContent,
+  getMessageNumber,
   IChatMessage,
   IChatRoom,
   IChatUser,
+  queryTabAll,
+  _queryUnreadMessage,
 } from 'src/module/chat/chatService'
 import { AVATAR_DEFAULT, LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import {
@@ -146,12 +150,11 @@ const TestGetChatRooms = () => {
           /// Get last message content
 
           let lastMessageContent: string = ''
-          if (chatRoom.chatRoomId === 'ie9IaY34EpcpCrDXl5wc') {
-            lastMessageContent = await getMessageContent(
-              chatRoom.chatRoomId,
-              chatRoom.lastMessageId || ''
-            )
-          }
+
+          lastMessageContent = await getMessageContent(
+            chatRoom.chatRoomId,
+            chatRoom.lastMessageId || ''
+          )
 
           if (!!chatRoom.chatRoomImage) {
             return Object.assign({}, chatRoom, {
@@ -265,7 +268,9 @@ const TestGetChatRooms = () => {
                   <div className="border h-[50px] w-full mb-1 flex gap-x-[20px] ">
                     <div className="text-red-400 ">{v.chatRoomName}</div>
 
-                    <div className="text-white text-green-400 ">{v.lastMessageContent}</div>
+                    <div className="text-green-400 ">
+                      {v.lastMessageContent}
+                    </div>
 
                     <div className="text-white ">{v.updatedAt}</div>
                     <div className="text-white ">
@@ -318,94 +323,3 @@ const TestGetUnreadChatRooms = () => {
 }
 
 export default TestChat
-
-const _queryUnreadMessage = (chatRoom: IChatRoom): boolean => {
-  // let userId: string = localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId)
-  let userId: string = '11bee3f3-d7b1-4b2c-94bf-84e70f45f238'
-
-  /// Filter group chat having last message
-  /// And user's in group
-  if ((chatRoom.blockedByUIDs || []).includes(userId)) {
-    return false
-  }
-
-  return (
-    (chatRoom.memberIds || []).includes(userId) &&
-    chatRoom.lastMessageId != null
-  )
-}
-
-const queryTabAll = (chatRoom: IChatRoom): boolean => {
-  let userId: string = '11bee3f3-d7b1-4b2c-94bf-84e70f45f238'
-
-  if ((chatRoom.blockedByUIDs || []).includes(userId)) {
-    return false
-  }
-
-  /// Filter group chat having last message
-  /// And user's in group
-  /// Display chat room that this user request to send message
-  return (
-    (chatRoom.memberIds || []).includes(userId) &&
-    !!chatRoom.lastMessageId &&
-    (!chatRoom.requestedUID || chatRoom.requestedUID === userId)
-  )
-}
-
-const getDeleteChatRoomDate = (value: any): number => {
-  let deletedDate: number = 0
-
-  if (!!value['deletedAt']) {
-    const arr = Object.entries(value['deletedAt'])
-
-    arr.forEach(([key, v]: [key: string, v: number]) => {
-      if (key === '11bee3f3-d7b1-4b2c-94bf-84e70f45f238') {
-        deletedDate = v
-      }
-    })
-  }
-
-  return deletedDate
-}
-
-const getMessageNumber = async (
-  chatRoomId: string,
-  startAt?: number
-): Promise<number> => {
-  let number = 0
-  let dataSnapshot = await get(
-    query(
-      ref(database, `chatMessages/${chatRoomId}`),
-      orderByChild('createdAt'),
-      startAfter(startAt - 1)
-    )
-  )
-
-  if (dataSnapshot.exists) {
-    let messageMap = dataSnapshot.val()
-    if (isEmpty(messageMap)) {
-      return 0
-    }
-    for (let i = 0; i < messageMap.length; i++) {
-      number++
-      if (number >= 1) {
-        return number
-      }
-    }
-  }
-
-  return number
-}
-
-// const getMessageContent = async (messageId, chatRoomId): Promise<string> => {
-//   let content = ''
-//   if (messageId !== '') {
-//     const snapshot = await get(
-//       query(ref(database, `chatMessages/${chatRoomId}/${messageId}`))
-//     )
-//     if (snapshot.exists()) {
-//       let chatMessage :IChatMessage  = snapshot.val()
-//       }
-
-//   }
-// }
