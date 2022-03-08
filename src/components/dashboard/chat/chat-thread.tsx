@@ -86,7 +86,10 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
     const object = snapshot.val()
     const arr = Object.entries(object)
 
-    let arrMessages = arr.map(([key, value]) => {
+    let arrMessages: IChatMessage[]
+
+    //@ts-ignore: Unreachable code error
+    arrMessages = arr.map(([key, value]) => {
       return value
     })
 
