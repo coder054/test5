@@ -3,16 +3,19 @@ import PropTypes from 'prop-types'
 import { Box } from '@mui/material'
 import type { Message, Participant } from '../../../types/chat'
 import { ChatMessage } from './chat-message'
+import { IChatMessage } from 'src/module/chat/chatService'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
 
 interface ChatMessagesProps {
-  messages: Message[]
+  messages: IChatMessage[]
   participants: Participant[]
 }
 
 export const ChatMessages: FC<ChatMessagesProps> = (props) => {
+  const { currentRoleId } = useAuth()
+
   const { messages, participants, ...other } = props
-  // To get the user from the authContext, you can use
-  // `const { user } = useAuth();`
+
   const user = {
     avatar: '/static/mock-images/avatars/avatar-anika_visser.png',
     name: 'Anika Visser',
@@ -20,23 +23,26 @@ export const ChatMessages: FC<ChatMessagesProps> = (props) => {
 
   return (
     <Box sx={{ p: 2 }} {...other}>
-      {messages.map((message) => {
-        const participant = participants.find(
-          (_participant) => _participant.id === message.authorId
-        )
+      {messages.map((message, index) => {
         let authorAvatar
         let authorName
         let authorType
 
-        // Since chat mock db is not synced with external auth providers
-        // we set the user details from user auth state instead of thread participants
-        if (message.authorId === '5e86809283e28b96d2d38537') {
+        // authorAvatar = user.avatar
+        // authorName = 'Me'
+        // authorType = 'user'
+
+        authorAvatar = user.avatar
+        authorName = 'Someone'
+        authorType = 'contact'
+
+        if (message.createdBy === currentRoleId) {
           authorAvatar = user.avatar
           authorName = 'Me'
           authorType = 'user'
         } else {
-          authorAvatar = participant.avatar
-          authorName = participant.name
+          authorAvatar = ''
+          authorName = 'atiserae eiwtsriatr'
           authorType = 'contact'
         }
 
@@ -44,11 +50,26 @@ export const ChatMessages: FC<ChatMessagesProps> = (props) => {
           <ChatMessage
             authorAvatar={authorAvatar}
             authorName={authorName}
-            authorType={authorType}
-            body={message.body}
-            contentType={message.contentType}
+            authorType={authorType} // 'contact' | 'user'  ,contact will display on the left, current user's messages display on the right
+            body={message.text}
+            contentType={message.type} // text, image
             createdAt={message.createdAt}
-            key={message.id}
+            imageUrl={message.type === 'image' ? message.uri : ''}
+            videoUrl={
+              message.type === 'custom' && !!message.thumbVideo
+                ? message.uri
+                : ''
+            }
+            fileMeta={
+              message.type === 'file' && !!message.uri
+                ? {
+                    fileUrl: message.uri,
+                    attachmentName: message.attachmentName,
+                    size: message.size,
+                  }
+                : null
+            }
+            key={index}
           />
         )
       })}

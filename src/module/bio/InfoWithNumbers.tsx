@@ -182,7 +182,7 @@ export const InforWithNumbers = ({
           <>
             <div className="mt-[12px] mb-[36px]  ">
               <div className="flex mb-2 gap-x-[8px] justify-center ">
-                {statsItems.slice(0, 4).map((o, index) => (
+                {(statsItems || []).slice(0, 4).map((o, index) => (
                   <OneRowStat
                     key={index}
                     title={o.title}
@@ -192,7 +192,7 @@ export const InforWithNumbers = ({
               </div>
 
               <div className="flex mb-2 gap-x-[8px] justify-center ">
-                {statsItems.slice(4, 8).map((o, index) => (
+                {(statsItems || []).slice(4, 8).map((o, index) => (
                   <OneRowStat
                     key={index}
                     title={o.title}
@@ -212,13 +212,19 @@ export const InforWithNumbers = ({
 
             <div className="flex gap-x-[12px] xl:gap-x-[30px] overflow-x-auto pb-1 justify-center">
               {[
-                { label: 'Matches', value: matchInTotalStatistic.matches },
-                { label: 'Hours', value: matchInTotalStatistic.hours },
-                { label: 'Point', value: matchInTotalStatistic.points },
-                { label: 'Goals', value: matchInTotalStatistic.goals },
-                { label: 'Assists', value: matchInTotalStatistic.assists },
-                { label: 'Yel', value: matchInTotalStatistic.yel },
-                { label: 'Red', value: matchInTotalStatistic.red },
+                {
+                  label: 'Matches',
+                  value: matchInTotalStatistic?.matches || '',
+                },
+                { label: 'Hours', value: matchInTotalStatistic?.hours || '' },
+                { label: 'Point', value: matchInTotalStatistic?.points || '' },
+                { label: 'Goals', value: matchInTotalStatistic?.goals || '' },
+                {
+                  label: 'Assists',
+                  value: matchInTotalStatistic?.assists || '',
+                },
+                { label: 'Yel', value: matchInTotalStatistic?.yel || '' },
+                { label: 'Red', value: matchInTotalStatistic?.red || '' },
               ].map((o, index) => (
                 <Match key={index} title={o.label} value={o.value} />
               ))}
