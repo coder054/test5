@@ -377,9 +377,9 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   const fullname = query.fullname // not use
   const username = query.username
 
-  let dataBio: IBiographyPlayer | {}
-  let dataClub: IInfoClub | {}
-  let dataAvgPlayer: IAvgPlayerScore | {}
+  let dataBio: IBiographyPlayer
+  let dataClub: IInfoClub
+  let dataAvgPlayer: IAvgPlayerScore
 
   const fetcher1 = async (url) => {
     if (url === null) return
@@ -409,6 +409,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     ])
   } catch (error) {
     console.log('aaa error', getErrorMessage(error))
+    //@ts-ignore: Unreachable code error
     ;[dataBio, dataClub, dataAvgPlayer] = [{}, {}, {}]
   }
 

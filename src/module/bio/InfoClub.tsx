@@ -168,13 +168,13 @@ const ItemClub = ({ data }: { data: ExistingClub | HistoricClub }) => {
         <>
           <div className="mt-[12px] mb-[36px]  ">
             <div className="flex mb-2 gap-x-[8px] justify-center ">
-              {statsItems.slice(0, 4).map((o, index) => (
+              {(statsItems || []).slice(0, 4).map((o, index) => (
                 <OneRowStat key={index} title={o.title} value={o.value} />
               ))}
             </div>
 
             <div className="flex mb-2 gap-x-[8px] justify-center ">
-              {statsItems.slice(4, 8).map((o, index) => (
+              {(statsItems || []).slice(4, 8).map((o, index) => (
                 <OneRowStat key={index} title={o.title} value={o.value} />
               ))}
             </div>
@@ -186,13 +186,13 @@ const ItemClub = ({ data }: { data: ExistingClub | HistoricClub }) => {
 
           <div className="flex gap-x-[8px] xl:gap-x-[12px] overflow-x-auto pb-1 justify-center">
             {[
-              { label: 'Matches', value: matchInTotalStatistic.matches },
-              { label: 'Hours', value: matchInTotalStatistic.hours },
-              { label: 'Point', value: matchInTotalStatistic.points },
-              { label: 'Goals', value: matchInTotalStatistic.goals },
-              { label: 'Assists', value: matchInTotalStatistic.assists },
-              { label: 'Yel', value: matchInTotalStatistic.yel },
-              { label: 'Red', value: matchInTotalStatistic.red },
+              { label: 'Matches', value: matchInTotalStatistic?.matches || '' },
+              { label: 'Hours', value: matchInTotalStatistic?.hours || '' },
+              { label: 'Point', value: matchInTotalStatistic?.points || '' },
+              { label: 'Goals', value: matchInTotalStatistic?.goals || '' },
+              { label: 'Assists', value: matchInTotalStatistic?.assists || '' },
+              { label: 'Yel', value: matchInTotalStatistic?.yel || '' },
+              { label: 'Red', value: matchInTotalStatistic?.red || '' },
             ].map((o, index) => (
               <Match key={index} title={o.label} value={o.value} />
             ))}
@@ -206,9 +206,18 @@ const ItemClub = ({ data }: { data: ExistingClub | HistoricClub }) => {
 
           <div className="flex gap-x-[12px] mb-[20px] ">
             {[
-              { label: 'Serie', value: trophies.serieTrophyCount + 'x' },
-              { label: 'Cup', value: trophies.cupTrophyCount + 'x' },
-              { label: 'Other', value: trophies.otherTrophyCount + 'x' },
+              {
+                label: 'Serie',
+                value: !trophies ? '' : trophies.serieTrophyCount + 'x',
+              },
+              {
+                label: 'Cup',
+                value: !trophies ? '' : trophies.cupTrophyCount + 'x',
+              },
+              {
+                label: 'Other',
+                value: !trophies ? '' : trophies.otherTrophyCount + 'x',
+              },
             ].map((o, index) => (
               <div key={'trophy' + index}>
                 <div className="rounded-[8px] bg-[#1f1f1f] px-[8px] py-[5px] mb-1 ">
