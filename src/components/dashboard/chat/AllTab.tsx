@@ -42,6 +42,8 @@ const database = getDatabase(firebaseApp)
 const dbRef = ref(getDatabase())
 
 export const AllTab = () => {
+  const { currentRoleId } = useAuth()
+
   const [results, setResults] = useState<any>(null)
   const [snapshots, loading, error] = useList(
     query(ref(database, 'chatRooms'), orderByChild('updatedAt'))
@@ -49,7 +51,7 @@ export const AllTab = () => {
   const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
 
   useEffect(() => {
-    if (isEmpty(snapshots)) {
+    if (isEmpty(snapshots) || isEmpty(currentRoleId)) {
       return
     }
 
@@ -58,12 +60,17 @@ export const AllTab = () => {
         let a1 = snapshots
           .filter((o) => {
             const chatRoom = o.val()
-            return queryTabAll(chatRoom)
+            return queryTabAll(chatRoom, currentRoleId)
           })
           .reverse()
         const promises = a1.map(async (o) => {
           let chatRoom: IChatRoom = o.val()
-          let deletedDate: number = getDeleteChatRoomDate(chatRoom)
+          console.log('aaa chatRoom1', chatRoom)
+
+          let deletedDate: number = getDeleteChatRoomDate(
+            chatRoom,
+            currentRoleId
+          )
           let isShowChatRoom = true
 
           if (!!deletedDate) {
@@ -105,9 +112,7 @@ export const AllTab = () => {
             let memberIdsList: string[] = chatRoom.memberIds || []
 
             let userId: string =
-              memberIdsList[
-                memberIdsList.indexOf('11bee3f3-d7b1-4b2c-94bf-84e70f45f238')
-              ]
+              memberIdsList[memberIdsList.indexOf(currentRoleId)]
 
             let chatUser: IChatUser = await getChatUser(userId)
 
@@ -163,7 +168,7 @@ export const AllTab = () => {
         console.log('aaa error', getErrorMessage(error))
       }
     })()
-  }, [snapshots])
+  }, [snapshots, currentRoleId])
 
   const onlyShow = useMemo(() => {
     if (isEmpty(results)) {

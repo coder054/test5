@@ -108,6 +108,7 @@ const TestGetUnreadMessageIdsInRoom = () => {
 }
 
 const TestGetChatRooms = () => {
+  const { currentRoleId } = useAuth()
   const [results, setResults] = useState<any>(null)
   const [snapshots, loading, error] = useList(
     query(ref(database, 'chatRooms'), orderByChild('updatedAt'))
@@ -123,12 +124,16 @@ const TestGetChatRooms = () => {
         let a1 = snapshots
           .filter((o) => {
             const chatRoom = o.val()
-            return queryTabAll(chatRoom)
+
+            return queryTabAll(chatRoom, currentRoleId)
           })
           .reverse()
         const promises = a1.map(async (o) => {
           let chatRoom: IChatRoom = o.val()
-          let deletedDate: number = getDeleteChatRoomDate(chatRoom)
+          let deletedDate: number = getDeleteChatRoomDate(
+            chatRoom,
+            currentRoleId
+          )
           let isShowChatRoom = true
 
           if (!!deletedDate) {
@@ -274,6 +279,7 @@ const TestGetChatRooms = () => {
   )
 }
 const TestGetUnreadChatRooms = () => {
+  const { currentRoleId } = useAuth()
   const [snapshots, loading, error] = useList(
     query(ref(database, 'chatRooms'), orderByChild('updatedAt'))
   )
@@ -287,9 +293,8 @@ const TestGetUnreadChatRooms = () => {
     let a1 = snapshots.filter((o) => {
       const chatRoom = o.val()
       console.log('aaa chatRoom11', chatRoom)
-      return _queryUnreadMessage(chatRoom)
+      return _queryUnreadMessage(chatRoom, currentRoleId)
     })
-    debugger
 
     // let a1 = snapshots.values()
 

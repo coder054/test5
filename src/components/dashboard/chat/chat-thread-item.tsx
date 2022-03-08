@@ -68,9 +68,9 @@ export const ChatThreadItem: FC<ChatThreadItemProps> = (props) => {
       return []
     }
     if (!!chatRoom.chatRoomImage) {
-      return [chatRoom.chatRoomImage]
+      return [chatRoom.chatRoomImage] || []
     }
-    return chatRoom.userFaceImages
+    return chatRoom.userFaceImages || []
   }, [chatRoom])
 
   // if (lastMessage) {

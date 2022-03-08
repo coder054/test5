@@ -28,7 +28,12 @@ import { gtm } from '../../lib/gtm'
 import { getThreads } from '../../slices/chat'
 import { useDispatch } from '../../store'
 import { useAtom } from 'jotai'
-import { chatRoomsAtom, useActiveRoomId } from 'src/atoms/chatAtom'
+import {
+  activeChatRoomAtom,
+  chatRoomsAtom,
+  useActiveRoomId,
+} from 'src/atoms/chatAtom'
+import { isEmpty } from 'lodash'
 
 export enum ETabChat {
   All = 'All',
@@ -82,6 +87,7 @@ const Chat: NextPage = () => {
   const rootRef = useRef<HTMLDivElement | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [, setChatRooms] = useAtom(chatRoomsAtom)
+  const [activeChatRoom] = useAtom(activeChatRoomAtom)
   const compose = (router.query.compose as string) === 'true'
   const threadKey = router.query.threadKey as string
   const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'), {
@@ -175,9 +181,8 @@ const Chat: NextPage = () => {
                 <MenuAlt4Icon fontSize="small" />
               </IconButton>
             </Box>
-            {view === 'thread' && <ChatThread threadKey={threadKey} />}
-            {view === 'compose' && <ChatComposer />}
-            {view === 'blank' && (
+
+            {isEmpty(activeChatRoom) ? (
               <Box
                 sx={{
                   alignItems: 'center',
@@ -206,6 +211,8 @@ const Chat: NextPage = () => {
                   Start meaningful conversations!
                 </Typography>
               </Box>
+            ) : (
+              <ChatThread />
             )}
           </ChatInner>
         </Box>

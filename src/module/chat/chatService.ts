@@ -456,8 +456,8 @@ export const getMessageContent = async (
   return content
 }
 
-export const queryTabAll = (chatRoom: IChatRoom): boolean => {
-  let userId: string = '11bee3f3-d7b1-4b2c-94bf-84e70f45f238'
+export const queryTabAll = (chatRoom: IChatRoom, userId: string): boolean => {
+  // userId: roleId
 
   if ((chatRoom.blockedByUIDs || []).includes(userId)) {
     return false
@@ -473,14 +473,15 @@ export const queryTabAll = (chatRoom: IChatRoom): boolean => {
   )
 }
 
-export const getDeleteChatRoomDate = (value: any): number => {
+export const getDeleteChatRoomDate = (value: any, userId: string): number => {
+  debugger
   let deletedDate: number = 0
 
   if (!!value['deletedAt']) {
     const arr = Object.entries(value['deletedAt'])
 
     arr.forEach(([key, v]: [key: string, v: number]) => {
-      if (key === '11bee3f3-d7b1-4b2c-94bf-84e70f45f238') {
+      if (key === userId) {
         deletedDate = v
       }
     })
@@ -518,10 +519,10 @@ export const getMessageNumber = async (
   return number
 }
 
-export const _queryUnreadMessage = (chatRoom: IChatRoom): boolean => {
-  // let userId: string = localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId)
-  let userId: string = '11bee3f3-d7b1-4b2c-94bf-84e70f45f238'
-
+export const _queryUnreadMessage = (
+  chatRoom: IChatRoom,
+  userId: string
+): boolean => {
   /// Filter group chat having last message
   /// And user's in group
   if ((chatRoom.blockedByUIDs || []).includes(userId)) {
