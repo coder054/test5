@@ -44,7 +44,6 @@ const threadSelector = (state: RootState): Thread | undefined => {
 }
 
 export const ChatThread: FC<ChatThreadProps> = (props) => {
-  const threadKey = ''
   const [activeChatRoom] = useAtom(activeChatRoomAtom) as unknown as [
     activeChatRoom: IChatRoom
   ]
@@ -95,14 +94,19 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
     console.log('aaa error: ', error)
   }, [error])
 
-  // useEffect(() => {
-  //   // Scroll to bottom of the messages after loading the thread
-  //   if (thread?.messages && messagesRef?.current) {
-  //     const scrollElement = messagesRef.current.getScrollElement()
+  useEffect(() => {
+    // Scroll to bottom of the messages after loading the thread
+    if (!isEmpty(messages) && messagesRef?.current) {
+      const scrollElement = messagesRef.current.getScrollElement()
 
-  //     scrollElement.scrollTop = messagesRef.current.el.scrollHeight
-  //   }
-  // }, [thread])
+      // scrollElement.scrollTop = messagesRef.current.el.scrollHeight
+
+      scrollElement.scrollTo({
+        top: messagesRef.current.el.scrollHeight,
+        behavior: 'smooth',
+      })
+    }
+  }, [messages])
 
   // If we have the thread, we use its ID to add a new message
   // Otherwise we use the recipients IDs. When using participant IDs, it means that we have to
