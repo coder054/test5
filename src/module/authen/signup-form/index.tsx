@@ -1,28 +1,77 @@
 import { Button } from 'src/components'
 import { MyInput } from 'src/components/MyInput'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../auth/AuthContext'
-import { Form } from 'antd'
 const cls = require('./signup-form.module.css')
 import { GoBack } from 'src/components/go-back'
 import { UploadImage } from 'src/components/upload-image'
 import { MySelect } from 'src/components/MySelect'
-import { OptionCountry, OptionUserProfile } from '../types'
+import { OptionUserProfile } from '../types'
 import { MyDatePicker } from 'src/components/MyDatePicker'
 import { ROUTES } from 'src/constants/constants'
 import { LocationSearchInput } from 'src/components/location-search-input'
 import { MySelectCountry } from 'src/components/MySelectCountry'
+import { MyCustomSelect } from 'src/components/MyCustomSelect'
+import { useAtom } from 'jotai'
+import { profileAtom } from 'src/atoms/profileAtom'
+
+type FormValues = {
+  firstName?: string
+  lastName?: string
+  birthDay?: string
+  country?: any
+  city?: string
+  userProfile?: string
+  faceImage?: string
+  bodyImage?: string
+}
+
+interface valueSignupType {
+  media: {
+    faceImage: string
+    bodyImage: string
+    teamImage?: string
+    videoLinks?: string[]
+  }
+  profile: {
+    firstName: string
+    lastName: string
+    birthDay: string
+    birthCountry: any
+    city: string
+    phone?: string
+    gender?: string
+    homeAddress?: string
+    postNumber?: string
+    region?: string
+  }
+}
 
 const SignUpForm = () => {
+  const [profileForm, setProfileForm] = useAtom(profileAtom)
   const router = useRouter()
-  const [form] = Form.useForm()
   const [loading, setLoading] = useState<boolean>(false)
-  const [country, setCountry] = useState<string>('')
-  const [userProfile, setUserProfile] = useState<string>('')
-  const [faceImage, setFaceImage] = useState<string>('')
+  const [formValues, setFormValues] = useState<FormValues>({
+    firstName: '',
+    lastName: '',
+    birthDay: '',
+    country: '',
+    city: '',
+    userProfile: '',
+  })
+  const [formErrors, setFormErrors] = useState<FormValues>({
+    firstName: '',
+    lastName: '',
+    birthDay: '',
+    country: '',
+    city: '',
+    userProfile: '',
+    faceImage: '',
+    bodyImage: '',
+  })
+  const [faceImages, setFaceImage] = useState<string>('')
   const [fullBodyImage, setFullBodyImage] = useState<string>('')
-  const [date, setDate] = useState(null)
   const { signout } = useAuth()
 
   React.useEffect(() => {
@@ -38,16 +87,109 @@ const SignUpForm = () => {
     el.classList.remove('ant-form')
   }, [])
 
+  const handleChangeForm = (type: keyof FormValues, value: string) => {
+    setFormValues((prev) => ({ ...prev, [type]: value }))
+    setFormErrors((prev) => ({ ...prev, [type]: '' }))
+  }
+  // console.log('formValues', formValues)
+
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const submitForm = await form.validateFields()
-    console.log('submitForm', submitForm)
+    console.log('form', formValues)
 
-    router.push({
-      pathname: ROUTES.SIGNUP_FORM_PLAYER,
-      query: { profile: userProfile },
-    })
+    const valueSignup: valueSignupType = {
+      media: {
+        faceImage: faceImages,
+        bodyImage: fullBodyImage,
+        teamImage: '',
+        videoLinks: [],
+      },
+      profile: {
+        firstName: formValues.firstName,
+        lastName: formValues.lastName,
+        birthDay: formValues.birthDay,
+        birthCountry: formValues.country,
+        city: formValues.city,
+        phone: '',
+        gender: '',
+        homeAddress: '',
+        postNumber: '',
+        region: '',
+      },
+    }
+    //validate
+    if (!formValues.firstName) {
+      setFormErrors((prev) => ({ ...prev, firstName: 'Input your First Name' }))
+    } else if (!formValues.lastName) {
+      setFormErrors((prev) => ({ ...prev, lastName: 'Input your Last Name' }))
+    } else if (!formValues.birthDay) {
+      setFormErrors((prev) => ({ ...prev, birthDay: 'Input your Birthdate' }))
+    } else if (!formValues.country) {
+      setFormErrors((prev) => ({ ...prev, country: 'Input your Country' }))
+    } else if (!formValues.city) {
+      setFormErrors((prev) => ({ ...prev, city: 'Input your City' }))
+    } else if (!formValues.userProfile) {
+      setFormErrors((prev) => ({
+        ...prev,
+        userProfile: 'Input your User profile',
+      }))
+    }
+
+    if (
+      formValues.firstName &&
+      formValues.lastName &&
+      formValues.birthDay &&
+      formValues.country &&
+      formValues.city &&
+      formValues.userProfile
+      // && formValues.faceImage &&
+      // formValues.bodyImage
+    ) {
+      setProfileForm({
+        ...profileAtom,
+        media: {
+          faceImage: faceImages,
+          bodyImage: fullBodyImage,
+          teamImage: '',
+          videoLinks: [],
+        },
+        profile: {
+          firstName: formValues.firstName,
+          lastName: formValues.lastName,
+          birthDay: formValues.birthDay,
+          birthCountry: formValues.country,
+          city: formValues.city,
+          phone: '',
+          gender: '',
+          homeAddress: '',
+          postNumber: '',
+          region: '',
+        },
+      })
+      router.push({
+        pathname:
+          /* @ts-ignore */
+          formValues.userProfile.label === 'Player'
+            ? ROUTES.SIGNUP_FORM_PLAYER
+            : ROUTES.SIGNUP_FORM_COACH,
+        query: {
+          // profile: formValues.userProfile,
+          // values: JSON.stringify(valueSignup),
+        },
+      })
+    }
   }
+
+  const form = useMemo(() => {
+    return {
+      firstName: profileForm.profile?.firstName,
+      lastName: profileForm.profile?.lastName,
+      birthDay: profileForm.profile?.birthDay,
+      country: profileForm.profile?.birthCountry?.name,
+      city: profileForm.profile?.city,
+    }
+  }, [profileForm])
+  console.log('profileForm', profileForm)
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
@@ -60,125 +202,92 @@ const SignUpForm = () => {
         <GoBack label="Sign in form" goBack="/signin" />
       </div>
       <div
-        className={`w-[320px] mobileM:w-[365px] md:w-[490px] md:h-[880px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 
-          2xl:right-[25%] overflow-y-auto pl-[5px] pr-[5px] mx-auto lg:mr-0 lg:absolute`}
+        className={`w-[320px] mobileM:w-[365px] md:w-[480px] md:h-[880px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 
+          2xl:right-[25%] pl-[5px] pr-[5px] mx-auto lg:mr-0 lg:absolute`}
       >
         <p className="text-[24px] text-[#FFFFFF] font-semibold md:mb-[48px] text-center md:text-left absolute">
           Sign up form
         </p>
-        <Form className="" form={form}>
-          <div className="w-full flex justify-between mt-[34px] md:mt-[48px]">
-            <Form.Item
-              className="w-[235px] pr-[12px] mb-[24px]"
-              name={'firstName'}
-              rules={[
-                {
-                  required: true,
-                  message: 'Input your First name',
-                },
-              ]}
-            >
-              <MyInput name={'firstName'} label="First name" signupForm />
-            </Form.Item>
-            <Form.Item
-              className="w-[235px] pl-[12px] mb-[24px]"
-              name={'lastName'}
-              rules={[
-                {
-                  required: true,
-                  message: 'Input your  Last name',
-                },
-              ]}
-            >
-              <MyInput name={'lastName'} label="Last name" signupForm />
-            </Form.Item>
-          </div>
-          <Form.Item
-            className=""
-            name={'birthDate'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your Birth date',
-              },
-            ]}
-          >
-            <MyDatePicker
-              label="Birthdate"
-              value={date}
-              onChange={(e) => setDate(e)}
-            />
-          </Form.Item>
 
-          <Form.Item
-            className="mt-[24px]"
-            name={'selectCountry'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your Select country',
-              },
-            ]}
-          >
-            <MySelectCountry
-              label="Select Country"
-              onChange={(_, value) => {
-                setCountry(value)
-              }}
-              val={country}
-            />
-          </Form.Item>
+        <div className="w-full flex justify-between mt-[34px] md:mt-[48px]">
+          <MyInput
+            signupForm
+            name={'firstName'}
+            label="First name"
+            onChange={(e) => handleChangeForm('firstName', e.target.value)}
+            className="w-[235px] pr-[12px]"
+            errorMessage={formErrors.firstName}
+            // value={formValues.firstName || form.firstName}
+          />
+          <MyInput
+            signupForm
+            name={'lastName'}
+            label="Last name"
+            onChange={(e) => handleChangeForm('lastName', e.target.value)}
+            className="w-[235px] pl-[12px]"
+            errorMessage={formErrors.lastName}
+            // value={form.lastName}
+          />
+        </div>
 
-          <LocationSearchInput />
+        <MyDatePicker
+          label="Birthdate"
+          onChange={(e) => handleChangeForm('birthDay', e)}
+          val={formValues.birthDay}
+          className="mt-[24px]"
+          errorMessage={formErrors.birthDay}
+        />
 
-          <Form.Item
-            className="mt-[24px]"
-            name={'userProfile'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your User profile',
-              },
-            ]}
-          >
-            <MySelect
-              signupForm
-              className=""
-              label={'User profile'}
-              value={userProfile}
-              onChange={(e) => {
-                setUserProfile(e.target.value)
-              }}
-              arrOption={OptionUserProfile}
-            />
-          </Form.Item>
+        <MySelectCountry
+          label="Select Country"
+          onChange={(_, value) => handleChangeForm('country', value)}
+          val={formValues.country}
+          className="mt-[24px]"
+          errorMessage={formErrors.country}
+        />
 
-          <div className="absolute md:flex mt-[4px] md:mt-[24px] w-full">
-            <UploadImage
-              title="Face image"
-              text="Add portrait photo of 480*640 pixels or more"
-              className="float-left"
-              setImage={setFaceImage}
-            />
-            <UploadImage
-              title="Full body image"
-              text="Add portrait photo of 480*640 pixels or more"
-              className="md:ml-[24px] float-left mt-[18px] md:mt-0"
-              setImage={setFullBodyImage}
-            />
-          </div>
+        <LocationSearchInput
+          setCity={(value) => {
+            setFormValues((prev) => ({ ...prev, city: value }))
+            setFormErrors((prev) => ({ ...prev, city: '' }))
+          }}
+          errorMessage={formErrors.city}
+        />
 
-          <div
-            className="absolute mt-[368px] md:mt-[230px]"
-            onClick={handleSubmit}
-          >
-            <Button
-              loading={loading}
-              className=" h-[48px] w-[300px] md:w-[480px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
-              text="Next"
-            />
-          </div>
-        </Form>
+        <MyCustomSelect
+          className="mt-[24px]"
+          label={'User profile'}
+          onChange={(_, value) => handleChangeForm('userProfile', value)}
+          arrOptions={OptionUserProfile}
+          val={formValues.userProfile}
+          errorMessage={formErrors.userProfile}
+        />
+
+        <div className="absolute md:flex mt-[4px] md:mt-[24px] w-full">
+          <UploadImage
+            title="Face image"
+            text="Add portrait photo of 480*640 pixels or more"
+            className="float-left"
+            setImage={setFaceImage}
+          />
+          <UploadImage
+            title="Full body image"
+            text="Add portrait photo of 480*640 pixels or more"
+            className="md:ml-[24px] float-left mt-[18px] md:mt-0"
+            setImage={setFullBodyImage}
+          />
+        </div>
+
+        <div
+          className="absolute mt-[368px] md:mt-[230px]"
+          onClick={handleSubmit}
+        >
+          <Button
+            loading={loading}
+            className=" h-[48px] w-[300px] md:w-[470px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+            text="Next"
+          />
+        </div>
       </div>
     </div>
   )

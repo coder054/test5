@@ -9,6 +9,7 @@ interface UploadImageProps {
   title?: string
   text?: string
   className?: string
+  errorMessage?: string
   width?: number
   height?: number
   ChangeUpload?: () => void
@@ -19,6 +20,7 @@ export const UploadImage = ({
   title,
   text,
   className,
+  errorMessage,
   setImage,
 }: UploadImageProps) => {
   const [progress, setProgress] = useState<number>(0)
@@ -79,6 +81,9 @@ export const UploadImage = ({
           accept=".jpg,.jpeg,.png"
         />
       </div>
+      {errorMessage && (
+        <p className="text-[#D60C0C] text-[14px]">{errorMessage}</p>
+      )}
     </div>
   )
 }

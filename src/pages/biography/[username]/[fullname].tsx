@@ -53,44 +53,44 @@ export enum EStatusRelationShip {
 
 ///////////////////////////////
 export interface IBiographyPlayer {
-  friendStatus: EStatusRelationShip
-  followStatus: string
-  isConfirmBox: boolean
-  isFollowed: boolean
-  friendCount: number
-  followCount: number
-  fanCount: number
+  friendStatus?: EStatusRelationShip
+  followStatus?: string
+  isConfirmBox?: boolean
+  isFollowed?: boolean
+  friendCount?: number
+  followCount?: number
+  fanCount?: number
   userId: string
-  lastUpdatedDate: string
+  lastUpdatedDate?: string
   username: string
   firstName: string
   lastName: string
   faceImageUrl: string
   bodyImageUrl: string
-  starRating: number
-  circleCompleted: number
-  position: string
-  currentClubIconUrl: string
+  starRating?: number
+  circleCompleted?: number
+  position?: string
+  currentClubIconUrl?: string
   contractedUntil: string
-  estMarketValue: number
+  estMarketValue?: number
   leftFoot: number
   rightFoot: number
-  bestFoot: string
+  bestFoot?: string
   height: number
   weight: number
-  countryFlagUrl: string
+  countryFlagUrl?: string
   birthDay: string
-  age: number
-  summary: null
-  socialLinks: SocialLinks
-  topVideoLinks: TopVideoLink[]
-  playerRadarSkills: PlayerRadarSkills
-  radarUpdatedByCoach: PlayerRadarSkills
+  age?: number
+  summary: string
+  socialLinks?: SocialLinks
+  topVideoLinks?: TopVideoLink[]
+  playerRadarSkills?: PlayerRadarSkills
+  radarUpdatedByCoach?: PlayerRadarSkills
   specialities: any[]
-  isPublic: boolean
-  userRole: string
-  bioUrl: string
-  activeSeasons: string[]
+  isPublic?: boolean
+  userRole?: string
+  bioUrl?: string
+  activeSeasons?: string[]
 }
 
 export interface PlayerRadarSkills {

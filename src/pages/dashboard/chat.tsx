@@ -28,7 +28,7 @@ import { gtm } from '../../lib/gtm'
 import { getThreads } from '../../slices/chat'
 import { useDispatch } from '../../store'
 import { useAtom } from 'jotai'
-import { chatRoomsAtom } from 'src/atoms/chatAtom'
+import { chatRoomsAtom, useActiveRoomId } from 'src/atoms/chatAtom'
 
 export enum ETabChat {
   All = 'All',
@@ -76,11 +76,12 @@ const Chat: NextPage = () => {
     'tab',
     withDefault(StringParam, ETabChat.All)
   )
+
   const router = useRouter()
   const dispatch = useDispatch()
   const rootRef = useRef<HTMLDivElement | null>(null)
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
-  const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
+  const [, setChatRooms] = useAtom(chatRoomsAtom)
   const compose = (router.query.compose as string) === 'true'
   const threadKey = router.query.threadKey as string
   const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'), {

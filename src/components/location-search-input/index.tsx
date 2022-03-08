@@ -8,9 +8,15 @@ import { SvgPlace } from 'src/imports/svgs'
 
 declare const window: any
 
-interface LocationSearchInputProps {}
+interface LocationSearchInputProps {
+  errorMessage?: string
+  setCity?: Function
+}
 
-export const LocationSearchInput = () => {
+export const LocationSearchInput = ({
+  setCity,
+  errorMessage,
+}: LocationSearchInputProps) => {
   const [address, setAddress] = useState('')
   const [gmapsLoaded, setGmapsLoaded] = useState<boolean>(false)
 
@@ -31,10 +37,7 @@ export const LocationSearchInput = () => {
 
   const handleSelect = async (value) => {
     const results = await geocodeByAddress(value)
-    // console.log('results', results[0].formatted_address)
-    console.log('results[0].formatted_address', results[0].formatted_address)
-
-    // setAddress(results[0].formatted_address)
+    setCity && setCity(results[0].formatted_address)
     setAddress(value)
   }
 
@@ -54,24 +57,14 @@ export const LocationSearchInput = () => {
           }) => {
             return (
               <div className="w-full">
-                <Form.Item
-                  className="mt-[24px]"
+                <MyInput
+                  {...getInputProps({})}
                   name={'city'}
-                  // rules={[
-                  //   {
-                  //     required: true,
-                  //     message: 'Input your City where you are living in today',
-                  //   },
-                  // ]}
-                >
-                  <MyInput
-                    {...getInputProps({})}
-                    name={'city'}
-                    label="City where you are living in today"
-                  />
+                  label="City where you are living in today"
+                  className="mt-[24px]"
+                />
 
-                  <input className="hidden" />
-                </Form.Item>
+                <input className="hidden" />
 
                 <Spin spinning={loading}>
                   {suggestions.map((suggestion, index) => {
@@ -99,6 +92,9 @@ export const LocationSearchInput = () => {
                     )
                   })}
                 </Spin>
+                {errorMessage && (
+                  <p className="text-[#D60C0C] text-[14px]">{errorMessage}</p>
+                )}
               </div>
             )
           }}

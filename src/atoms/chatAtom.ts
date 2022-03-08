@@ -1,8 +1,10 @@
-import { atom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 import { isEmpty } from 'lodash'
+import { useEffect } from 'react'
+import { useQueryParam, StringParam } from 'use-query-params'
 
 export const chatRoomsAtom = atom([])
-export const activeChatRoomIdAtom = atom('')
+const activeChatRoomIdAtom = atom('')
 
 export const activeChatRoomAtom = atom((get) => {
   const chatRooms = get(chatRoomsAtom)
@@ -17,6 +19,17 @@ export const activeChatRoomAtom = atom((get) => {
   )
 })
 
+export const useActiveRoomId = () => {
+  const [activeChatRoomId, setActiveChatRoomId] = useAtom(activeChatRoomIdAtom)
+  const [roomId, setRoomId] = useQueryParam('roomId', StringParam)
+
+  useEffect(() => {
+    setActiveChatRoomId(roomId)
+  }, [roomId])
+
+  return { activeChatRoomId, setActiveChatRoomId: setRoomId }
+}
+
 // const [activeChatRoom] = useAtom(activeChatRoomAtom)
-// const [activeChatRoomId, setActiveChatRoomId] = useAtom(activeChatRoomIdAtom)
+// const { activeChatRoomId, setActiveChatRoomId } = useActiveRoomId()
 // const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)

@@ -6,9 +6,30 @@ import { GoBack } from 'src/components/go-back'
 import { ItemSkills } from 'src/components/item-skills'
 import { Input } from 'antd'
 import { SpecialityTags } from 'src/components/speciality-tags'
+import { useAtom } from 'jotai'
+import { profileAtom } from 'src/atoms/profileAtom'
+import { ROUTES } from 'src/constants/constants'
+import { useRouter } from 'next/router'
+
+interface FormValuesType {
+  technics: number
+  tactics: number
+  physics: number
+  mental: number
+  attacking: number
+  dribbling: number
+  passing: number
+  defending: number
+  pace: number
+  shooting: number
+  note: string
+  specialTags: string[]
+}
 
 export const SignUpFormPlayerSkills = () => {
+  const [profileForm, setProfileForm] = useAtom(profileAtom)
   const { TextArea } = Input
+  const router = useRouter()
 
   const [technics, setTechnics] = useState<number>(0)
   const [tactics, setTactics] = useState<number>(0)
@@ -23,6 +44,22 @@ export const SignUpFormPlayerSkills = () => {
   const [shooting, setShooting] = useState<number>(0)
 
   const [note, setNote] = useState<string>('')
+  const [tags, setTags] = useState<string[]>([])
+
+  const [errorFormValues, setErrorFormValues] = useState<FormValuesType>({
+    technics: 0,
+    tactics: 0,
+    physics: 0,
+    mental: 0,
+    attacking: 0,
+    dribbling: 0,
+    passing: 0,
+    defending: 0,
+    pace: 0,
+    shooting: 0,
+    note: '',
+    specialTags: [],
+  })
 
   React.useEffect(() => {
     if (typeof window === 'undefined') {
@@ -36,9 +73,49 @@ export const SignUpFormPlayerSkills = () => {
 
     el.classList.remove('ant-form')
   }, [])
+
+  React.useEffect(() => {
+    if (!profileForm.profile?.firstName) {
+      router.push(ROUTES.SIGNUP_FORM)
+    }
+  }, [profileForm])
+
   console.log(technics, tactics, physics, mental)
   console.log(attacking, dribbling, passing, defending, pace, shooting)
-  console.log(note)
+  console.log(note, tags)
+  console.log('profileForm', profileForm)
+
+  const handleNext = (e: any) => {
+    e.preventDefault()
+
+    setProfileForm({
+      ...profileForm,
+      playerSkills: {
+        specialityTags: tags,
+        overall: {
+          mental: mental,
+          physics: physics,
+          tactics: tactics,
+          technics: technics,
+          leftFoot: 0,
+          rightFoot: 0,
+        },
+        radar: {
+          attacking: attacking,
+          defending: defending,
+          dribbling: dribbling,
+          passing: passing,
+          shooting: shooting,
+          pace: pace,
+          tackling: 0,
+          heading: 0,
+        },
+      },
+      playerCareer: { ...profileForm.playerCareer, summary: note },
+    })
+
+    router.push(ROUTES.SIGNUP_FORM_BIOGRAPHY)
+  }
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
@@ -46,7 +123,7 @@ export const SignUpFormPlayerSkills = () => {
         <GoBack
           textBlack
           label="Sign up form"
-          goBack="/signup-form-player?profile=player"
+          goBack={ROUTES.SIGNUP_FORM_PLAYER}
         />
       </div>
 
@@ -159,11 +236,14 @@ export const SignUpFormPlayerSkills = () => {
               autoSize={{ minRows: 5, maxRows: 5 }}
               rows={5}
             />
-            <SpecialityTags label="Speciality tags" />
-            <Button
-              text="Next"
-              className="bg-[#4654EA] rounded-[8px] text-[15px] w-full h-[48px] mt-[24px]"
-            />
+            <SpecialityTags label="Speciality tags" setTags={setTags} />
+
+            <div onClick={handleNext}>
+              <Button
+                text="Next"
+                className="bg-[#4654EA] rounded-[8px] text-[15px] w-full h-[48px] mt-[24px]"
+              />
+            </div>
           </ItemSkills>
         </div>
       </div>
