@@ -3,6 +3,7 @@ import type { FC } from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { Avatar, Box, Card, CardMedia, Link, Typography } from '@mui/material'
+import { isEmpty } from 'lodash'
 
 interface ChatMessageProps {
   authorAvatar: string
@@ -10,6 +11,13 @@ interface ChatMessageProps {
   authorType: 'contact' | 'user'
   body: string
   contentType: string
+  imageUrl: string
+  videoUrl: string
+  fileMeta: {
+    fileUrl: string
+    attachmentName: string
+    size: number
+  }
   createdAt: number
 }
 
@@ -21,9 +29,77 @@ export const ChatMessage: FC<ChatMessageProps> = (props) => {
     authorAvatar,
     authorName,
     authorType,
+    imageUrl,
+    videoUrl,
+    fileMeta,
     ...other
   } = props
   const [expandMedia, setExpandMedia] = useState<boolean>(false)
+
+  const renderContent = () => {
+    if (contentType === 'image') {
+      return (
+        <CardMedia
+          onClick={(): void => setExpandMedia(true)}
+          image={imageUrl}
+          sx={{ height: 200 }}
+        />
+      )
+    }
+
+    if (contentType === 'custom' && !!videoUrl) {
+      return (
+        <CardMedia
+          component="video"
+          onClick={(): void => setExpandMedia(true)}
+          src={videoUrl}
+          sx={{ height: 200 }}
+          controls
+        />
+      )
+    }
+
+    if (contentType === 'file' && !isEmpty(fileMeta)) {
+      return (
+        <div className="flex ">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6 mr-[12px] "
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+            />
+          </svg>
+
+          <div className=" ">
+            <a
+              className="block hover:[color:#006699] "
+              href={fileMeta.fileUrl}
+              download
+              target={'_blank'}
+            >
+              {fileMeta.attachmentName}
+            </a>
+            <div className="text-[14px] ">
+              {(fileMeta.size / (1024 * 1024)).toFixed(2)} MB
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    return (
+      <Typography color="inherit" variant="body1">
+        {body}
+      </Typography>
+    )
+  }
 
   return (
     <Box
@@ -65,17 +141,7 @@ export const ChatMessage: FC<ChatMessageProps> = (props) => {
               {authorName}
             </Link>
           </Box>
-          {contentType === 'image' ? (
-            <CardMedia
-              onClick={(): void => setExpandMedia(true)}
-              image={body}
-              sx={{ height: 200 }}
-            />
-          ) : (
-            <Typography color="inherit" variant="body1">
-              {body}
-            </Typography>
-          )}
+          {renderContent()}
         </Card>
         <Box
           sx={{

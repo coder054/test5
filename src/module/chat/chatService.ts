@@ -474,7 +474,6 @@ export const queryTabAll = (chatRoom: IChatRoom, userId: string): boolean => {
 }
 
 export const getDeleteChatRoomDate = (value: any, userId: string): number => {
-  debugger
   let deletedDate: number = 0
 
   if (!!value['deletedAt']) {

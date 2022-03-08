@@ -33,7 +33,7 @@ import {
   startAfter,
 } from 'firebase/database'
 import { useObject } from 'react-firebase-hooks/database'
-import { database } from 'src/module/chat/chatService'
+import { database, IChatRoom } from 'src/module/chat/chatService'
 
 interface ChatThreadProps {}
 
@@ -45,16 +45,17 @@ const threadSelector = (state: RootState): Thread | undefined => {
 
 export const ChatThread: FC<ChatThreadProps> = (props) => {
   const threadKey = ''
-  const [activeChatRoom] = useAtom(activeChatRoomAtom)
+  const [activeChatRoom] = useAtom(activeChatRoomAtom) as unknown as [
+    activeChatRoom: IChatRoom
+  ]
 
   const [snapshot, loading, error] = useObject(
     // ref(database, `chatMessages/${activeChatRoom.chatRoomId}`)
     query(
       ref(database, `chatMessages/${activeChatRoom.chatRoomId}`),
       orderByChild('createdAt'),
-      startAt(0)
-      // limitToLast(2)
-      // startAt: _bloc.chatRoom?.deletedDate,
+      startAt(activeChatRoom.deletedDate),
+      limitToLast(50)
     )
   )
   // useList(
@@ -65,11 +66,6 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
 
   const messagesRef = useRef<any>(null)
   const [participants, setParticipants] = useState<Participant[]>([])
-  // To get the user from the authContext, you can use
-  // `const { user } = useAuth();`
-  const user = {
-    id: '5e86809283e28b96d2d38537',
-  }
 
   const messages = useMemo(() => {
     if (isEmpty(snapshot)) {
@@ -80,7 +76,15 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
       return []
     }
 
-    console.log('aaa snapshot2: ', snapshot.val())
+    const object = snapshot.val()
+    const arr = Object.entries(object)
+
+    let arrMessages = arr.map(([key, value]) => {
+      return value
+    })
+
+    console.log('aaa arrMessages', arrMessages)
+    return arrMessages
   }, [snapshot])
 
   useEffect(() => {
@@ -137,7 +141,8 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
         }}
       >
         <Scrollbar ref={messagesRef} sx={{ maxHeight: '100%' }}>
-          <ChatMessages messages={[]} participants={[]} />
+          {/* @ts-ignore: Unreachable code error */}
+          <ChatMessages messages={messages} participants={[]} />
         </Scrollbar>
       </Box>
       <Divider />
