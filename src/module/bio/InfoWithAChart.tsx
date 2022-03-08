@@ -110,7 +110,7 @@ export const InforWithAChart = ({
         <Text name="Subtitle1" className="text-Grey mb-[12px]">
           SPECIALITIES
         </Text>
-        {dataBio?.specialities.map((speciality) => (
+        {(dataBio.specialities || []).map((speciality) => (
           <span
             key={speciality}
             className="rounded-[16px] bg-Blue h-[30px] px-[12px] py-[4px] inline-flex items-center justify-center

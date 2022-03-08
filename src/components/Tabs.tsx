@@ -12,7 +12,12 @@ export const Tabs = ({
   className?: string
 }) => {
   return (
-    <div className={clsx('flex space-x-0 md:space-x-2 mb-6 overflow-x-auto', className)}>
+    <div
+      className={clsx(
+        'flex space-x-0 md:space-x-2 mb-6 overflow-x-auto',
+        className
+      )}
+    >
       {tabs.map((o, index) => (
         <div
           onClick={() => {
@@ -36,9 +41,21 @@ export const Tabs = ({
 export const TabPanel = ({
   children,
   visible,
+  unmount = false,
 }: {
   children: any
   visible: boolean
+  unmount?: boolean
 }) => {
-  return <div className={clsx(``, visible ? '  ' : ' hidden ')}>{children}</div>
+  if (unmount === true) {
+    if (visible) {
+      return <div>{children}</div>
+    } else {
+      return null
+    }
+  } else {
+    return (
+      <div className={clsx(``, visible ? '  ' : ' hidden ')}>{children}</div>
+    )
+  }
 }

@@ -22,8 +22,21 @@ import type { Contact } from '../../../types/chat'
 import { Scrollbar } from '../../scrollbar'
 import { ChatContactSearch } from './chat-contact-search'
 import { ChatThreadItem } from './chat-thread-item'
+import { TabPanel, Tabs } from 'src/components/Tabs'
+import { ETabChat, tabsChat } from 'src/pages/dashboard/chat'
+import { useAtom } from 'jotai'
+import {
+  activeChatRoomAtom,
+  activeChatRoomIdAtom,
+  chatRoomsAtom,
+} from 'src/atoms/chatAtom'
+import { AllTab } from './AllTab'
+import { UnreadTab } from './UnreadTab'
+import { RequestsTab } from './RequestsTab'
 
 interface ChatSidebarProps {
+  tab: any
+  setTab: any
   containerRef?: MutableRefObject<HTMLDivElement>
   onClose?: () => void
   open?: boolean
@@ -50,7 +63,10 @@ const ChatSidebarMobile = styled(Drawer)({
 })
 
 export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
-  const { containerRef, onClose, open, ...other } = props
+  const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
+  const [activeChatRoom] = useAtom(activeChatRoomAtom)
+  const [activeChatRoomId, setActiveChatRoomId] = useAtom(activeChatRoomIdAtom)
+  const { containerRef, onClose, open, tab, setTab, ...other } = props
   const router = useRouter()
   const { threads, activeThreadId } = useSelector((state) => state.chat)
   const [isSearchFocused, setIsSearchFocused] = useState(false)
@@ -127,6 +143,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
     router.push(`/dashboard/chat?threadKey=${threadKey}`)
   }
 
+  // content of sidebar chat
   const content = (
     <div>
       <Box
@@ -160,7 +177,19 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
           <XIcon fontSize="small" />
         </IconButton>
       </Box>
-      <ChatContactSearch
+      {/* Tabs All Unread Requested */}
+      <Tabs tab={tab} setTab={setTab} tabs={tabsChat} />
+      <TabPanel unmount={true} visible={tab === ETabChat.All}>
+        <AllTab />
+      </TabPanel>
+      <TabPanel unmount={true} visible={tab === ETabChat.Unread}>
+        <UnreadTab />
+      </TabPanel>
+      <TabPanel unmount={true} visible={tab === ETabChat.Requests}>
+        <RequestsTab />
+      </TabPanel>
+
+      {/* <ChatContactSearch
         isFocused={isSearchFocused}
         onChange={handleSearchChange}
         onClickAway={handleSearchClickAway}
@@ -168,7 +197,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
         onSelect={handleSearchSelect}
         query={searchQuery}
         results={searchResults}
-      />
+      /> */}
       <Box
         sx={{
           borderTopColor: 'divider',
@@ -179,12 +208,23 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
       >
         <Scrollbar>
           <List disablePadding>
-            {threads.allIds.map((threadId) => (
+            {/* map all chatRooms */}
+            {/* {threads.allIds.map((threadId) => (
               <ChatThreadItem
                 active={activeThreadId === threadId}
                 key={threadId}
                 onSelect={(): void => handleSelectThread(threadId)}
                 thread={threads.byId[threadId]}
+              />
+            ))} */}
+            {chatRooms.map((chatRoom) => (
+              <ChatThreadItem
+                active={activeChatRoomId === chatRoom.chatRoomId}
+                key={'chatRoom-' + chatRoom.chatRoomId}
+                onSelect={() => {
+                  setActiveChatRoomId(chatRoom.chatRoomId)
+                }}
+                chatRoom={chatRoom}
               />
             ))}
           </List>
