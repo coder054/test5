@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { isEmpty } from 'lodash'
+import { chain, isEmpty } from 'lodash'
 import { useAtom } from 'jotai'
 import {
   activeChatRoomAtom,
@@ -33,7 +33,13 @@ import {
   startAfter,
 } from 'firebase/database'
 import { useObject } from 'react-firebase-hooks/database'
-import { database, IChatRoom } from 'src/module/chat/chatService'
+import {
+  database,
+  getChatUser,
+  IChatMessage,
+  IChatRoom,
+  IChatUser,
+} from 'src/module/chat/chatService'
 
 interface ChatThreadProps {}
 
@@ -44,10 +50,11 @@ const threadSelector = (state: RootState): Thread | undefined => {
 }
 
 export const ChatThread: FC<ChatThreadProps> = (props) => {
-  const threadKey = ''
   const [activeChatRoom] = useAtom(activeChatRoomAtom) as unknown as [
     activeChatRoom: IChatRoom
   ]
+
+  const [arrUsers, setArrUsers] = useState([])
 
   const [snapshot, loading, error] = useObject(
     // ref(database, `chatMessages/${activeChatRoom.chatRoomId}`)
@@ -79,13 +86,53 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
     const object = snapshot.val()
     const arr = Object.entries(object)
 
-    let arrMessages = arr.map(([key, value]) => {
+    let arrMessages: IChatMessage[]
+
+    //@ts-ignore: Unreachable code error
+    arrMessages = arr.map(([key, value]) => {
       return value
     })
 
     console.log('aaa arrMessages', arrMessages)
     return arrMessages
   }, [snapshot])
+
+  useEffect(() => {
+    let active = true
+    load()
+    return () => {
+      active = false
+    }
+
+    async function load() {
+      if (isEmpty(messages)) {
+        return
+      }
+
+      setArrUsers([]) // this is optional
+      /////////////////////////
+      let listcreatedById = messages.map((message) => {
+        //@ts-ignore: Unreachable code error
+        return message.createdBy
+      })
+
+      listcreatedById = chain(listcreatedById).compact().uniq().value()
+
+      const promises = listcreatedById.map(async (createdBy) => {
+        let chatUser: IChatUser
+        chatUser = await getChatUser(createdBy)
+        return chatUser
+      })
+
+      const values = await Promise.all(promises)
+
+      /////////////////////////
+      if (!active) {
+        return
+      }
+      setArrUsers(values)
+    }
+  }, [messages])
 
   useEffect(() => {
     console.log('aaa activeChatRoom.deletedDate: ', activeChatRoom.deletedDate)
@@ -95,14 +142,19 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
     console.log('aaa error: ', error)
   }, [error])
 
-  // useEffect(() => {
-  //   // Scroll to bottom of the messages after loading the thread
-  //   if (thread?.messages && messagesRef?.current) {
-  //     const scrollElement = messagesRef.current.getScrollElement()
+  useEffect(() => {
+    // Scroll to bottom of the messages after loading the thread
+    if (!isEmpty(messages) && messagesRef?.current) {
+      const scrollElement = messagesRef.current.getScrollElement()
 
-  //     scrollElement.scrollTop = messagesRef.current.el.scrollHeight
-  //   }
-  // }, [thread])
+      // scrollElement.scrollTop = messagesRef.current.el.scrollHeight
+
+      scrollElement.scrollTo({
+        top: messagesRef.current.el.scrollHeight,
+        behavior: 'smooth',
+      })
+    }
+  }, [messages])
 
   // If we have the thread, we use its ID to add a new message
   // Otherwise we use the recipients IDs. When using participant IDs, it means that we have to
@@ -142,7 +194,11 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
       >
         <Scrollbar ref={messagesRef} sx={{ maxHeight: '100%' }}>
           {/* @ts-ignore: Unreachable code error */}
-          <ChatMessages messages={messages} participants={[]} />
+          <ChatMessages
+            arrUsers={arrUsers}
+            messages={messages}
+            participants={[]}
+          />
         </Scrollbar>
       </Box>
       <Divider />

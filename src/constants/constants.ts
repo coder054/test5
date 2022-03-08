@@ -29,4 +29,4 @@ export const COOKIE_KEY = {
 }
 
 export const AVATAR_DEFAULT =
-      'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2Fface_image_default.png?alt=media&token=65eb03b0-4021-441d-9a4f-d43b47d72c40';
+  'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2Fface_image_default.png?alt=media&token=65eb03b0-4021-441d-9a4f-d43b47d72c40'
