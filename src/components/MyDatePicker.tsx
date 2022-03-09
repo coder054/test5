@@ -43,12 +43,14 @@ export const MyDatePicker = ({
   className,
   label,
   val,
+  errorMessage,
   onChange,
   type,
   ...rest
 }: {
   className?: string
   label: string
+  errorMessage?: string
   val?: Date | string | null
   onChange?: any
   [rest: string]: any
@@ -65,6 +67,10 @@ export const MyDatePicker = ({
           {...rest}
         />
       </LocalizationProvider>
+
+      {errorMessage && (
+        <p className="text-[#D60C0C] text-[14px]">{errorMessage}</p>
+      )}
     </div>
   )
 }

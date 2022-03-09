@@ -2,13 +2,16 @@ import { IBiographyPlayer } from 'src/pages/biography/[username]/[fullname]'
 import { BioRadarChart } from 'src/components/specific/BioRadarChart'
 import { Text } from 'src/components/Text'
 import { Stars } from 'src/components/common/Stars'
+import { Button } from 'src/components'
 
 export const InforWithAChart = ({
   dataBio,
   dataBioRadarChart,
+  signupForm,
 }: {
   dataBio: IBiographyPlayer
   dataBioRadarChart: any
+  signupForm?: boolean
 }) => {
   return (
     <>
@@ -47,11 +50,11 @@ export const InforWithAChart = ({
           {[
             {
               title: 'LEFT FOOT',
-              rate: dataBio.leftFoot,
+              rate: dataBio?.leftFoot,
             },
             {
               title: 'RIGHT FOOT',
-              rate: dataBio.rightFoot,
+              rate: dataBio?.rightFoot,
             },
           ].map((o, index) => (
             <div key={o.title} className="">
@@ -116,6 +119,13 @@ export const InforWithAChart = ({
             {`#${speciality}`}
           </span>
         ))}
+
+        {signupForm && (
+          <Button
+            text="Next"
+            className="text-[15px] bg-[#4654EA] rounded-[8px] h-[48px]"
+          />
+        )}
       </div>
     </>
   )

@@ -5,9 +5,14 @@ const cls = require('./speciality-tags.module.css')
 interface SpecialityTagsProps {
   label?: string
   listSpecial?: string[]
+  setTags?: Function
 }
 
-export const SpecialityTags = ({ label, listSpecial }: SpecialityTagsProps) => {
+export const SpecialityTags = ({
+  label,
+  listSpecial,
+  setTags,
+}: SpecialityTagsProps) => {
   const [chips, setChips] = useState<string[]>([])
 
   const handleAddChip = (chip: string) => {
@@ -15,10 +20,12 @@ export const SpecialityTags = ({ label, listSpecial }: SpecialityTagsProps) => {
       return
     }
     setChips((prev) => [...prev, chip])
+    setTags && setTags((prev) => [...prev, chip])
   }
 
   const handleDeleteChip = (chip: string, index: number) => {
     setChips((prev) => prev.filter((item) => item !== chip))
+    setTags && setTags((prev) => prev.filter((item) => item !== chip))
   }
 
   return (
