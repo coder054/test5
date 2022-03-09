@@ -14,6 +14,7 @@ import {
   orderByValue,
   startAfter,
   update,
+  serverTimestamp,
 } from 'firebase/database'
 import { firebaseApp } from 'src/config/firebase-client'
 
@@ -456,8 +457,8 @@ export const getMessageContent = async (
   return content
 }
 
-export const queryTabAll = (chatRoom: IChatRoom): boolean => {
-  let userId: string = '11bee3f3-d7b1-4b2c-94bf-84e70f45f238'
+export const queryTabAll = (chatRoom: IChatRoom, userId: string): boolean => {
+  // userId: roleId
 
   if ((chatRoom.blockedByUIDs || []).includes(userId)) {
     return false
@@ -473,14 +474,14 @@ export const queryTabAll = (chatRoom: IChatRoom): boolean => {
   )
 }
 
-export const getDeleteChatRoomDate = (value: any): number => {
+export const getDeleteChatRoomDate = (value: any, userId: string): number => {
   let deletedDate: number = 0
 
   if (!!value['deletedAt']) {
     const arr = Object.entries(value['deletedAt'])
 
     arr.forEach(([key, v]: [key: string, v: number]) => {
-      if (key === '11bee3f3-d7b1-4b2c-94bf-84e70f45f238') {
+      if (key === userId) {
         deletedDate = v
       }
     })
@@ -518,10 +519,10 @@ export const getMessageNumber = async (
   return number
 }
 
-export const _queryUnreadMessage = (chatRoom: IChatRoom): boolean => {
-  // let userId: string = localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId)
-  let userId: string = '11bee3f3-d7b1-4b2c-94bf-84e70f45f238'
-
+export const _queryUnreadMessage = (
+  chatRoom: IChatRoom,
+  userId: string
+): boolean => {
   /// Filter group chat having last message
   /// And user's in group
   if ((chatRoom.blockedByUIDs || []).includes(userId)) {
@@ -542,7 +543,7 @@ export interface IUnReadMessage {
 export const createMessage = async (
   message: IChatMessage,
   chatRoomId: string
-): Promise<void> => {
+): Promise<{ error: boolean }> => {
   // try {
   //   let listReadMessages: IUnReadMessage
   //   listReadMessages = await getUnreadMessageIdsInRoom(chatRoomId)
@@ -565,7 +566,10 @@ export const createMessage = async (
     const updates = {}
     updates[`/chatMessages/${chatRoomId}/${message.messageId}`] = message
     await update(dbRef, updates)
-  } catch (error) {}
+    return { error: false }
+  } catch (error) {
+    return { error: true }
+  }
 }
 
 export const updateMessageStatus = async (chatRoomId: string) => {
@@ -640,4 +644,54 @@ export const getUnreadMessageIdsInRoom = async (
     throw error
   }
   ////////////////////
+}
+
+/// ==========================================================================
+/// Update last message id and updatedAt field on chat room
+export const updateLastMessageTime = async (
+  chatRoomId: string,
+  lastMessageId?: string,
+  updatedAt?: number
+): Promise<{ error: boolean }> => {
+  try {
+    /////////////////// update in chatRooms table
+
+    const snapshot = await get(query(ref(database, `/chatRooms/${chatRoomId}`)))
+    if (!snapshot.exists()) {
+      return
+    }
+
+    const updatesChatRoom = {}
+    updatesChatRoom[`/chatRooms/${chatRoomId}`] = Object.assign(
+      {},
+      snapshot.val(),
+      {
+        lastMessageId,
+        updatedAt: updatedAt || serverTimestamp(),
+      }
+    )
+    await update(dbRef, updatesChatRoom)
+    /////////////////// update in chatRooms table end
+
+    /////////////////// update in requestedChatRooms table
+    const snapshot2 = await get(
+      query(ref(database, `/requestedChatRooms/${chatRoomId}`))
+    )
+    if (!snapshot2.exists()) {
+      return
+    }
+    const updatesRequestedChatRoom = {}
+    updatesRequestedChatRoom[`/requestedChatRooms/${chatRoomId}`] =
+      Object.assign({}, snapshot2.val(), {
+        lastMessageId,
+        updatedAt: updatedAt || serverTimestamp(),
+      })
+    await update(dbRef, updatesRequestedChatRoom)
+    /////////////////// update in requestedChatRooms table end
+
+    return { error: false }
+  } catch (error) {
+    alert(error)
+    return { error: true }
+  }
 }

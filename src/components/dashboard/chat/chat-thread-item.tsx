@@ -68,9 +68,9 @@ export const ChatThreadItem: FC<ChatThreadItemProps> = (props) => {
       return []
     }
     if (!!chatRoom.chatRoomImage) {
-      return [chatRoom.chatRoomImage]
+      return [chatRoom.chatRoomImage] || []
     }
-    return chatRoom.userFaceImages
+    return chatRoom.userFaceImages || []
   }, [chatRoom])
 
   // if (lastMessage) {
@@ -170,7 +170,7 @@ export const ChatThreadItem: FC<ChatThreadItemProps> = (props) => {
         sx={{ whiteSpace: 'nowrap' }}
         variant="caption"
       >
-        {formatDistanceStrict(1646637547331, new Date(), {
+        {formatDistanceStrict(chatRoom.updatedAt, new Date(), {
           addSuffix: false,
           locale: {
             ...locale,

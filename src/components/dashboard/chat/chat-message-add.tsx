@@ -71,7 +71,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
         fullWidth
         onChange={handleChange}
         onKeyUp={handleKeyUp}
-        placeholder="Leave a message"
+        placeholder="Leave a message2"
         value={body}
         size="small"
       />
