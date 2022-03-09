@@ -47,10 +47,12 @@ export const MyInput = ({
   isDisabled,
   isNeedValidate,
   isValidating,
+  errorMessage,
   ...rest
 }: {
   className?: string
   label: string
+  errorMessage?: string
   value?: string | number
   onChange?: any
   password?: boolean
@@ -140,6 +142,15 @@ export const MyInput = ({
           )}
         >
           Min 8 signs & 1 capital letter
+        </p>
+      )}
+      {errorMessage && (
+        <p
+          className={`text-[#D60C0C] text-[14px] ${
+            label === 'Last name' ? 'ml-[12px]' : ''
+          }`}
+        >
+          {errorMessage}
         </p>
       )}
     </div>

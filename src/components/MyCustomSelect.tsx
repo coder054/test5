@@ -43,6 +43,7 @@ type MyCustomSelectProps = {
   arrOptions?: any
   onChange?: any
   val?: any
+  errorMessage?: string
 }
 
 export const MyCustomSelect = ({
@@ -54,6 +55,7 @@ export const MyCustomSelect = ({
   arrOptions,
   onChange,
   val,
+  errorMessage,
   ...rest
 }: MyCustomSelectProps) => {
   return (
@@ -82,6 +84,10 @@ export const MyCustomSelect = ({
         renderInput={(params) => <CssTextField {...params} label={label} />}
         {...rest}
       />
+
+      {errorMessage && (
+        <p className="text-[#D60C0C] text-[14px]">{errorMessage}</p>
+      )}
     </div>
   )
 }

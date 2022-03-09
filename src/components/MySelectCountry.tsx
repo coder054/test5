@@ -41,12 +41,14 @@ export const MySelectCountry = ({
   className,
   label,
   val,
+  errorMessage,
   onChange,
   ...rest
 }: {
   className?: string
   label: string
   val?: any
+  errorMessage?: string
   onChange?: any
   [rest: string]: any
 }) => {
@@ -107,6 +109,10 @@ export const MySelectCountry = ({
           </Box>
         )}
       />
+
+      {errorMessage && (
+        <p className="text-[#D60C0C] text-[14px]">{errorMessage}</p>
+      )}
     </div>
   )
 }
