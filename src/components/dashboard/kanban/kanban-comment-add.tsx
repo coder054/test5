@@ -28,7 +28,7 @@ export const KanbanCommentAdd: FC<KanbanCommentAddProps> = (props) => {
     event: KeyboardEvent<HTMLInputElement>
   ): Promise<void> => {
     try {
-      if (event.code === 'Enter' && message) {
+      if ((event.code === 'Enter' || event.code === 'NumpadEnter') && message) {
         await dispatch(addComment(cardId, message))
         setMessage('')
         toast.success('Comment added!')
