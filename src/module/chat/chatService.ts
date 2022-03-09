@@ -14,6 +14,7 @@ import {
   orderByValue,
   startAfter,
   update,
+  serverTimestamp,
 } from 'firebase/database'
 import { firebaseApp } from 'src/config/firebase-client'
 
@@ -542,7 +543,7 @@ export interface IUnReadMessage {
 export const createMessage = async (
   message: IChatMessage,
   chatRoomId: string
-): Promise<void> => {
+): Promise<{ error: boolean }> => {
   // try {
   //   let listReadMessages: IUnReadMessage
   //   listReadMessages = await getUnreadMessageIdsInRoom(chatRoomId)
@@ -565,7 +566,10 @@ export const createMessage = async (
     const updates = {}
     updates[`/chatMessages/${chatRoomId}/${message.messageId}`] = message
     await update(dbRef, updates)
-  } catch (error) {}
+    return { error: false }
+  } catch (error) {
+    return { error: true }
+  }
 }
 
 export const updateMessageStatus = async (chatRoomId: string) => {
@@ -640,4 +644,54 @@ export const getUnreadMessageIdsInRoom = async (
     throw error
   }
   ////////////////////
+}
+
+/// ==========================================================================
+/// Update last message id and updatedAt field on chat room
+export const updateLastMessageTime = async (
+  chatRoomId: string,
+  lastMessageId?: string,
+  updatedAt?: number
+): Promise<{ error: boolean }> => {
+  try {
+    /////////////////// update in chatRooms table
+
+    const snapshot = await get(query(ref(database, `/chatRooms/${chatRoomId}`)))
+    if (!snapshot.exists()) {
+      return
+    }
+
+    const updatesChatRoom = {}
+    updatesChatRoom[`/chatRooms/${chatRoomId}`] = Object.assign(
+      {},
+      snapshot.val(),
+      {
+        lastMessageId,
+        updatedAt: updatedAt || serverTimestamp(),
+      }
+    )
+    await update(dbRef, updatesChatRoom)
+    /////////////////// update in chatRooms table end
+
+    /////////////////// update in requestedChatRooms table
+    const snapshot2 = await get(
+      query(ref(database, `/requestedChatRooms/${chatRoomId}`))
+    )
+    if (!snapshot2.exists()) {
+      return
+    }
+    const updatesRequestedChatRoom = {}
+    updatesRequestedChatRoom[`/requestedChatRooms/${chatRoomId}`] =
+      Object.assign({}, snapshot2.val(), {
+        lastMessageId,
+        updatedAt: updatedAt || serverTimestamp(),
+      })
+    await update(dbRef, updatesRequestedChatRoom)
+    /////////////////// update in requestedChatRooms table end
+
+    return { error: false }
+  } catch (error) {
+    alert(error)
+    return { error: true }
+  }
 }

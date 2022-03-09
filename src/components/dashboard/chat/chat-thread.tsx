@@ -31,6 +31,9 @@ import {
   startAt,
   limitToLast,
   startAfter,
+  serverTimestamp,
+  push,
+  child,
 } from 'firebase/database'
 import { useObject } from 'react-firebase-hooks/database'
 import {
@@ -39,7 +42,10 @@ import {
   IChatMessage,
   IChatRoom,
   IChatUser,
+  createMessage,
+  updateLastMessageTime,
 } from 'src/module/chat/chatService'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
 
 interface ChatThreadProps {}
 
@@ -50,6 +56,8 @@ const threadSelector = (state: RootState): Thread | undefined => {
 }
 
 export const ChatThread: FC<ChatThreadProps> = (props) => {
+  const { currentRoleId } = useAuth()
+
   const [activeChatRoom] = useAtom(activeChatRoomAtom) as unknown as [
     activeChatRoom: IChatRoom
   ]
@@ -161,6 +169,31 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
   // get the thread.
   const handleSendMessage = async (body: string): Promise<void> => {
     try {
+      // let refKey = ChatService.instance.databaseReference
+      //   .child(ChatService.instance.chatRoomsNode)
+      //   .push();
+
+      // Get a key for a new Post.
+      const newMessageKey = push(child(ref(database), 'posts')).key
+
+      let message: IChatMessage = {
+        createdAt: serverTimestamp(), // 1646731132428,
+        createdBy: currentRoleId,
+        messageId: newMessageKey,
+        text: body,
+        type: 'text',
+      }
+      let chatRoomId: string = activeChatRoom.chatRoomId
+
+      const { error } = await createMessage(message, chatRoomId)
+
+      if (error) {
+        alert('error happen')
+        return
+      }
+
+      updateLastMessageTime(chatRoomId, newMessageKey)
+
       // Scroll to bottom of the messages after adding the new message
       // if (messagesRef?.current) {
       //   const scrollElement = messagesRef.current.getScrollElement()
