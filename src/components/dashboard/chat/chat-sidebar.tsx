@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useDebounce } from 'use-debounce'
 import type { ChangeEvent, FC, MutableRefObject } from 'react'
 import { useRouter } from 'next/router'
@@ -18,6 +18,7 @@ import {
   TextField,
   Modal,
   Switch,
+  Checkbox,
 } from '@mui/material'
 
 import { Search as SearchIcon } from '../../../icons/search'
@@ -45,6 +46,8 @@ import { UnreadTab } from './UnreadTab'
 import { RequestsTab } from './RequestsTab'
 import { UploadImage } from 'src/components/upload-image'
 import { axios } from 'src/utils/axios'
+import { Loading } from 'src/components/loading/loading'
+import { getStr, truncateStr } from 'src/utils/utils'
 
 interface ChatSidebarProps {
   tab: any
@@ -316,17 +319,33 @@ const ModalCreateGroup = ({ open, setOpen }) => {
   const [keywordDebounce] = useDebounce(keyword, 300)
   const [membersResult, setMembersResult] = useState([])
 
+  const [selectedMembers, setSelectedMembers] = useState([])
+  const [loadingMembers, setLoadingMembers] = useState(false)
+
   useEffect(() => {
     const searchMembers = async () => {
+      setLoadingMembers(true)
       const { data } = await axios.get(
         `https://dev.api.zporter.co/contact-groups/get-list-contacts?limit=10&sorted=asc&startAfter=0&search=${keywordDebounce}&tab=ALL`
       )
+      setMembersResult(data.data)
+      setLoadingMembers(false)
     }
     if (!keywordDebounce) {
       return
     }
     searchMembers()
   }, [keywordDebounce])
+
+  useEffect(() => {
+    console.log('aaa membersResult: ', membersResult)
+  }, [membersResult])
+
+  const selectedIdMembers = useMemo(() => {
+    return selectedMembers.map((member) => {
+      return member.userId
+    })
+  }, [selectedMembers])
 
   return (
     <Modal
@@ -357,6 +376,28 @@ const ModalCreateGroup = ({ open, setOpen }) => {
 
         <div className="h-[32px] "></div>
 
+        <div className="flex gap-x-[20px] ">
+          {selectedMembers.map((member, index) => (
+            <div
+              key={index}
+              onClick={() => {}}
+              className="w-[40px] h-[40px] relative cursor-pointer  "
+            >
+              <img
+                src={member.faceImage}
+                className="rounded-[8px] w-[35px] h-[35px] "
+                alt=""
+              />
+
+              <div className="absolute z-10 right-[-8px] top-[-8px] rounded-full w-[16px] h-[16px] bg-white text-black flex items-center justify-center ">
+                x
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="h-[32px] "></div>
+
         <TextField
           fullWidth
           placeholder="Add members"
@@ -373,6 +414,13 @@ const ModalCreateGroup = ({ open, setOpen }) => {
             //@ts-ignore: Unreachable code error
             setKeyword(e.target.value)
           }}
+        />
+        <div className="h-[12px] "></div>
+        <ResultMembers
+          loading={loadingMembers}
+          members={membersResult}
+          selectedMembers={selectedMembers}
+          setSelectedMembers={setSelectedMembers}
         />
 
         <div className="h-[32px] "></div>
@@ -400,4 +448,128 @@ const ModalCreateGroup = ({ open, setOpen }) => {
       </div>
     </Modal>
   )
+}
+
+const ResultMembers = ({
+  loading,
+  members,
+  selectedMembers,
+  setSelectedMembers,
+}: {
+  loading: boolean
+  members: IMember[]
+  selectedMembers: IMember[]
+  setSelectedMembers: (list: IMember[]) => void
+}) => {
+  return (
+    <div className="">
+      <div className=" flex ">
+        <div className="w-[20px] ">
+          {loading ? (
+            <Loading size={10}></Loading>
+          ) : (
+            <span className="text-Green mr-[8px] ">{members.length}</span>
+          )}
+        </div>
+        <span className="text-Grey ">members found</span>
+      </div>
+      <div className="h-[12px] "></div>
+
+      {members.map((member, index) => (
+        <div key={index} className="mb-[30px] flex w-full items-center ">
+          <img
+            src={member.faceImage}
+            className="w-[65px] h-[65px] object-cover rounded-[8px] mr-3"
+            alt=""
+          />
+          <div className=" w-[200px] ">
+            <div className="text-white font-semibold ">
+              {member.firstName} {member.lastName}{' '}
+            </div>
+            <div className="flex justify-between ">
+              <span className="text-Grey ">#{member.username}</span>
+              <span className="text-Grey ">
+                {getStr(member, 'favoriteRoles[0]')}
+              </span>
+            </div>
+
+            <div className="flex justify-between ">
+              <span className="text-white ">
+                {truncateStr(member.city || '', 11)}
+              </span>
+              <span className="text-white ">{getStr(member, 'clubName')} </span>
+            </div>
+          </div>
+          <div className="grow "></div>
+          <Checkbox
+            checked={selectedMembers
+              .map((o) => o.userId)
+              .includes(member.userId)}
+            onChange={(event) => {
+              // if currently checked
+              if (
+                selectedMembers.map((o) => o.userId).includes(member.userId)
+              ) {
+                let findIndex = selectedMembers.findIndex((o) => {
+                  return o.userId === member.userId
+                })
+                const selectedMembersClone = [...selectedMembers]
+                selectedMembersClone.splice(findIndex, 1)
+                setSelectedMembers(selectedMembersClone)
+              } else {
+                // if currently unchecked
+                setSelectedMembers([...selectedMembers, member])
+              }
+            }}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+// Generated by https://quicktype.io
+
+export interface IMember {
+  isActive: boolean
+  birthCountry: BirthCountry
+  clubId: string
+  firstName: string
+  fcmToken: any[]
+  city: string
+  favoriteRoles: string[]
+  currentTeams: string[]
+  lastName: string
+  faceImage: string
+  username: string
+  type: string
+  userId: string
+  isOnline: boolean
+  clubName: string
+  timezone: string
+  lastActive: number
+  birthDay: string
+  createdAt: number
+  updatedAt: number
+  shirtNumber: number
+  isRelationship: boolean
+  isPublic: boolean
+  notificationOn: boolean
+  notificationOptions: NotificationOptions
+}
+
+export interface BirthCountry {
+  region: string
+  alpha2Code: string
+  flag: string
+  alpha3Code: string
+  name: string
+}
+
+export interface NotificationOptions {
+  inviteUpdates: boolean
+  feedUpdates: boolean
+  messageUpdates: boolean
+  profileAndDiaryUpdates: boolean
 }
