@@ -9,7 +9,8 @@ interface UploadImageProps {
   title?: string
   text?: string
   className?: string
-
+  classNameInner?: string
+  errorMessage?: string
   ChangeUpload?: () => void
   setImage?: Function
 }
@@ -18,7 +19,8 @@ export const UploadImage = ({
   title,
   text,
   className,
-
+  classNameInner,
+  errorMessage,
   setImage,
 }: UploadImageProps) => {
   const [progress, setProgress] = useState<number>(0)
