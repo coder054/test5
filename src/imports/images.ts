@@ -36,8 +36,12 @@ export const COMMENT_AVATAR = require('./../../public' +
   '/assets/landing-page/Comment.png')
 export const COMMENT_NICK = require('./../../public' +
   '/assets/landing-page/Nick.png')
+export const COMMENT_AVATAR_2 = require('./../../public' +
+  '/assets/landing-page/Comment-2.png')
 export const COMMENT_AVATAR_3 = require('./../../public' +
   '/assets/landing-page/Comment-3.png')
+export const COMMENT_AVATAR_4 = require('./../../public' +
+  '/assets/landing-page/Comment-4.png')
 export const NEO = require('./../../public' + '/assets/landing-page/Neo.png')
 export const NEO_MIRROR = require('./../../public' +
   '/assets/landing-page/NeoMirror.png')
@@ -61,3 +65,15 @@ export const GOAL_KEERPER = require('./../../public' +
   '/assets/landing-page/GoalKeeper.png')
 export const APP_4 = require('./../../public' +
   '/assets/landing-page/App-4.png')
+export const PLAYER_2 = require('./../../public' +
+  '/assets/landing-page/Player-2.png')
+export const PLAYER_3 = require('./../../public' +
+  '/assets/landing-page/Player-3.png')
+export const GROUP = require('./../../public' +
+  '/assets/landing-page/Group.png')
+export const DEVICES = require('./../../public' +
+  '/assets/landing-page/Devices.png')
+export const APPSTORE_BLACK = require('./../../public' +
+  '/assets/landing-page/Appstore.png')
+export const GG_PLAY_BLACK = require('./../../public' +
+  '/assets/landing-page/GGPlay.png')
