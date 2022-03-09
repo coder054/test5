@@ -1,17 +1,27 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useDebounce } from 'use-debounce'
 import type { ChangeEvent, FC, MutableRefObject } from 'react'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 import PropTypes from 'prop-types'
 import {
-  Box,
-  Button,
   Drawer,
-  IconButton,
   List,
   Typography,
   useMediaQuery,
+  Box,
+  Button,
+  Container,
+  IconButton,
+  InputAdornment,
+  Paper,
+  TextField,
+  Modal,
+  Switch,
 } from '@mui/material'
+
+import { Search as SearchIcon } from '../../../icons/search'
+
 import type { Theme } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { chatApi } from '../../../__fake-api__/chat-api'
@@ -33,6 +43,8 @@ import {
 import { AllTab } from './AllTab'
 import { UnreadTab } from './UnreadTab'
 import { RequestsTab } from './RequestsTab'
+import { UploadImage } from 'src/components/upload-image'
+import { axios } from 'src/utils/axios'
 
 interface ChatSidebarProps {
   tab: any
@@ -69,15 +81,30 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
   const { containerRef, onClose, open, tab, setTab, ...other } = props
   const router = useRouter()
   const { threads, activeThreadId } = useSelector((state) => state.chat)
+  const [openModalCreateGroup, setOpenModalCreateGroup] = useState(false)
   const [isSearchFocused, setIsSearchFocused] = useState(false)
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [searchResults, setSearchResults] = useState<Contact[]>([])
   const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
   const handleGroupClick = (): void => {
+    // <TextField
+    //     autoFocus
+    //     error={Boolean(formik.touched.email && formik.errors.email)}
+    //     fullWidth
+    //     helperText={formik.touched.email && formik.errors.email}
+    //     label="Email Address"
+    //     margin="normal"
+    //     name="email"
+    //     onBlur={formik.handleBlur}
+    //     onChange={formik.handleChange}
+    //     type="email"
+    //     value={formik.values.email}
+    //   />
     if (!mdUp) {
       onClose?.()
     }
+    setOpenModalCreateGroup(true)
   }
 
   const handleSearchClickAway = (): void => {
@@ -162,7 +189,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
             startIcon={<PlusIcon />}
             variant="contained"
           >
-            Group
+            Group1
           </Button>
         </NextLink>
         <IconButton
@@ -235,30 +262,42 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
 
   if (mdUp) {
     return (
-      <ChatSidebarDesktop
-        anchor="left"
-        open={open}
-        SlideProps={{ container: containerRef?.current }}
-        variant="persistent"
-        {...other}
-      >
-        {content}
-      </ChatSidebarDesktop>
+      <>
+        <ModalCreateGroup
+          open={openModalCreateGroup}
+          setOpen={setOpenModalCreateGroup}
+        />
+        <ChatSidebarDesktop
+          anchor="left"
+          open={open}
+          SlideProps={{ container: containerRef?.current }}
+          variant="persistent"
+          {...other}
+        >
+          {content}
+        </ChatSidebarDesktop>
+      </>
     )
   }
 
   return (
-    <ChatSidebarMobile
-      anchor="left"
-      ModalProps={{ container: containerRef?.current }}
-      onClose={onClose}
-      open={open}
-      SlideProps={{ container: containerRef?.current }}
-      variant="temporary"
-      {...other}
-    >
-      {content}
-    </ChatSidebarMobile>
+    <>
+      <ModalCreateGroup
+        open={openModalCreateGroup}
+        setOpen={setOpenModalCreateGroup}
+      />
+      <ChatSidebarMobile
+        anchor="left"
+        ModalProps={{ container: containerRef?.current }}
+        onClose={onClose}
+        open={open}
+        SlideProps={{ container: containerRef?.current }}
+        variant="temporary"
+        {...other}
+      >
+        {content}
+      </ChatSidebarMobile>
+    </>
   )
 }
 
@@ -266,4 +305,99 @@ ChatSidebar.propTypes = {
   containerRef: PropTypes.any,
   onClose: PropTypes.func,
   open: PropTypes.bool,
+}
+
+const ModalCreateGroup = ({ open, setOpen }) => {
+  const [name, setName] = useState('')
+  const [keyword, setKeyword] = useState('')
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const [checked, setChecked] = useState(true)
+  const [privateGroup, setPrivateGroup] = useState(true)
+  const [keywordDebounce] = useDebounce(keyword, 300)
+  const [membersResult, setMembersResult] = useState([])
+
+  useEffect(() => {
+    const searchMembers = async () => {
+      const { data } = await axios.get(
+        `https://dev.api.zporter.co/contact-groups/get-list-contacts?limit=10&sorted=asc&startAfter=0&search=${keywordDebounce}&tab=ALL`
+      )
+    }
+    if (!keywordDebounce) {
+      return
+    }
+    searchMembers()
+  }, [keywordDebounce])
+
+  return (
+    <Modal
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <div
+        style={{
+          boxShadow:
+            '0px 4px 4px rgba(0, 0, 0, 0.25), 0px 2px 4px rgba(31, 41, 55, 0.06)',
+          backdropFilter: 'blur(68px)',
+          background: 'rgba(32, 33, 40, 0.8)',
+        }}
+        className="p-[32px] border border-Stroke rounded-[8px] min-h-[400px] overflow-y-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-[700px] "
+      >
+        <TextField
+          fullWidth
+          label="Group name"
+          name="groupName"
+          value={name}
+          onChange={(e) => {
+            //@ts-ignore: Unreachable code error
+            setName(e.target.value)
+          }}
+        />
+
+        <div className="h-[32px] "></div>
+
+        <TextField
+          fullWidth
+          placeholder="Add members"
+          name="searchmembers"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon fontSize="small" />
+              </InputAdornment>
+            ),
+          }}
+          value={keyword}
+          onChange={(e) => {
+            //@ts-ignore: Unreachable code error
+            setKeyword(e.target.value)
+          }}
+        />
+
+        <div className="h-[32px] "></div>
+
+        <div className=" ">Group Image</div>
+        <UploadImage
+          text="Add photo"
+          className="text-center w-full max-w-[300px] "
+          classNameInner="border-[#00000000] "
+          setImage={setImageUrl}
+        />
+        <div className="h-[32px] "></div>
+        <div className="flex w-full justify-between items-center ">
+          <Typography variant="body1">Private group</Typography>
+          <Switch
+            defaultChecked
+            edge="start"
+            name="isVerified"
+            checked={privateGroup}
+            onChange={(event) => {
+              setPrivateGroup(event.target.checked)
+            }}
+          />
+        </div>
+      </div>
+    </Modal>
+  )
 }
