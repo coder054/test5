@@ -16,6 +16,7 @@ module.exports = {
         'landing-two': "url('/assets/landing-page/Landing-2.png')",
         'landing-three': "url('/assets/landing-page/Landing-3.png')",
         'landing-four': "url('/assets/landing-page/Landing-4.png')",
+        'landing-five': "url('/assets/landing-page/Landing-5.png')",
       },
       animation: {
         appear: 'appear 0.2s ease-in-out',
@@ -68,8 +69,9 @@ module.exports = {
 
     screens: {
       mobileM: '375px',
+      mobileL: '414px',
+      laptopM: '1440px',
       ...defaultTheme.screens,
-
       max_sm: { max: '640px' },
       max_md: { max: '768px' },
       max_lg: { max: '1024px' },
