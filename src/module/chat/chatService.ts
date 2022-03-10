@@ -774,8 +774,8 @@ export const uploadFile = async (
   }
 }
 
-export const prepareDataForSendMessage = () => {
-  const prepareDataForSendTextMessage = (
+export const newChatMessage = () => {
+  const newTextMessage = (
     messageId: string,
     text: string,
     createdBy: string,
@@ -793,7 +793,7 @@ export const prepareDataForSendMessage = () => {
     return message
   }
 
-  const prepareDataForSendImageMessage = (
+  const newImageMessage = (
     messageId,
     createdBy,
     createdAt,
@@ -813,8 +813,27 @@ export const prepareDataForSendMessage = () => {
     return target
   }
 
+  const newVideoOrFileMessage = (
+    attachmentName: string,
+    createdAt: any,
+    createdBy: string,
+    messageId: string,
+    thumbVideo: string,
+    uri: string
+  ) => {
+    return {
+      attachmentName,
+      createdAt,
+      createdBy,
+      messageId,
+      thumbVideo,
+      type: 'custom',
+      uri,
+    }
+  }
   return {
-    prepareDataForSendTextMessage,
-    prepareDataForSendImageMessage,
+    newTextMessage,
+    newImageMessage,
+    newVideoOrFileMessage,
   }
 }

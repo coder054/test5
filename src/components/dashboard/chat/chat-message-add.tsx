@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import VideoThumbnail from 'react-video-thumbnail'
 import type { ChangeEvent, FC, KeyboardEvent } from 'react'
 import PropTypes from 'prop-types'
 import { Avatar, Box, IconButton, TextField, Tooltip } from '@mui/material'
@@ -6,7 +7,7 @@ import { PaperAirplane as PaperAirplaneIcon } from '../../../icons/paper-airplan
 import { Photograph as PhotographIcon } from '../../../icons/photograph'
 import { PaperClip as PaperClipIcon } from '../../../icons/paper-clip'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
-import { getStr } from 'src/utils/utils'
+import { getStr, resizeFile } from 'src/utils/utils'
 import { get } from 'lodash'
 import {
   createMessage,
@@ -15,6 +16,7 @@ import {
   EMessageType,
   database,
   IChatMessage,
+  newChatMessage,
 } from 'src/module/chat/chatService'
 import { child, push, ref, serverTimestamp } from 'firebase/database'
 import { useAtom } from 'jotai'
@@ -32,6 +34,9 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
   const { disabled, onSend, ...other } = props
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [body, setBody] = useState<string>('')
+  const [videoThumbnail, setVideoThumbnail] = useState<any>('')
+  const [videoUrl, setVideoUrl] = useState('')
+  const [urlState, setUrlState] = useState('')
 
   const handleAttach = (): void => {
     fileInputRef.current.click()
@@ -55,6 +60,10 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
       handleSend()
     }
   }
+
+  useEffect(() => {
+    console.log('aaa videoThumbnail: ', videoThumbnail)
+  }, [videoThumbnail])
 
   return (
     <Box
@@ -145,8 +154,58 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
           </Box>
         </Tooltip>
       </Box>
+      {videoUrl && !!urlState && (
+        <div className="hidden ">
+          <VideoThumbnail
+            renderThumbnail={false}
+            videoUrl={videoUrl}
+            thumbnailHandler={async (thumbnail) => {
+              console.log('aaa thumbnail', thumbnail)
+              fetch(thumbnail)
+                .then((res) => res.blob())
+                .then(async (aaa) => {
+                  //@ts-ignore: Unreachable code error
+                  const image: string = await resizeFile(aaa)
+
+                  let chatRoomId: string = activeChatRoom.chatRoomId
+
+                  const newMessageKey = await push(
+                    child(ref(database), `/chatMessages/${chatRoomId}`)
+                  ).key
+
+                  let message: IChatMessage
+
+                  message = newChatMessage().newVideoOrFileMessage(
+                    fileInputRef.current.name,
+                    serverTimestamp(),
+                    currentRoleId,
+                    newMessageKey,
+                    image,
+                    urlState
+                  )
+
+                  const { error: errorCreateMessage } = await createMessage(
+                    message,
+                    chatRoomId
+                  )
+
+                  if (errorCreateMessage) {
+                    alert('error happen')
+                    return
+                  }
+                  updateLastMessageTime(chatRoomId, newMessageKey)
+
+                  setUrlState('')
+                  fileInputRef.current.value = ''
+                })
+            }}
+            snapshotAtTime={1}
+          />
+        </div>
+      )}
+
       <input
-        accept="image/png, image/gif, image/jpeg"
+        // accept="image/png, image/gif, image/jpeg, image/jpg"
         onChange={async (e) => {
           try {
             const file: File = get(e, 'target.files[0]')
@@ -159,19 +218,43 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
             if (error) {
               return
             }
+            setUrlState(url)
+
+            // accept="image/png, image/gif, image/jpeg, image/jpg"
+            let type
+
+            if (file.type.indexOf('image/') === 0) {
+              type = 'image'
+            } else if (file.type.indexOf('video/') === 0) {
+              type = 'video'
+            } else {
+              type = 'custom'
+            }
+
+            if (type === 'video') {
+              setVideoUrl(URL.createObjectURL(file))
+              // will upload in <VideoThumbnail>
+
+              return
+            }
+
             let chatRoomId: string = activeChatRoom.chatRoomId
             const newMessageKey = await push(
               child(ref(database), `/chatMessages/${chatRoomId}`)
             ).key
 
-            let message: IChatMessage = {
-              createdAt: serverTimestamp(), // 1646731132428,
-              createdBy: currentRoleId,
-              messageId: newMessageKey,
-              attachmentName: file.name,
-              size: file.size,
-              type: EMessageType.image,
-              uri: url,
+            let message: IChatMessage
+            if (type === 'image') {
+              message = {
+                createdAt: serverTimestamp(), // 1646731132428,
+                createdBy: currentRoleId,
+                messageId: newMessageKey,
+                attachmentName: file.name,
+                size: file.size,
+                type: EMessageType.image,
+                uri: url,
+              }
+            } else {
             }
 
             const { error: errorCreateMessage } = await createMessage(
@@ -184,6 +267,8 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               return
             }
             updateLastMessageTime(chatRoomId, newMessageKey)
+            fileInputRef.current.value = ''
+            setUrlState('')
           } catch (err) {
             console.error(err)
           }
