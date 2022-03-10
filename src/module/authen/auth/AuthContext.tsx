@@ -252,7 +252,7 @@ export function AuthProvider({ children }) {
     console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      // console.log('aaa onIdTokenChanged', user)
+      console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
         removeTokenCookieHttp()
@@ -263,33 +263,43 @@ export function AuthProvider({ children }) {
         localStorage.removeItem(LOCAL_STORAGE_KEY.userRoles)
       } else {
         const token = await user.getIdToken()
-
+        // debugger
         setTokenCookieHttp(token)
         // update axios token header
         axios.defaults.headers.common.Authorization = `Bearer ${token}`
+        // debugger
 
         const userRoles = localStorage.getItem(LOCAL_STORAGE_KEY.userRoles)
+        // debugger
         if (!userRoles) {
+          // debugger
+
           const resp = await axios.get('/users/user-roles')
-          localStorage.setItem(
-            LOCAL_STORAGE_KEY.userRoles,
-            JSON.stringify(resp.data)
-          )
-          setUserRoles(resp.data)
-          const roleId =
-            get(
-              resp.data.find((o) => o.role === 'PLAYER') || resp.data[0],
-              'roleId'
-            ) || ''
 
-          setCookieUtil(COOKIE_KEY.roleid, roleId)
-          // update axios token header
-          //@ts-ignore: Unreachable code error
-          axios.defaults.headers.roleId = roleId
+          if (isEmpty(resp.data)) {
+            setTimeout(async () => {
+              window.location.href = '/dashboard'
+            }, 200)
+          } else {
+            localStorage.setItem(
+              LOCAL_STORAGE_KEY.userRoles,
+              JSON.stringify(resp.data)
+            )
+            setUserRoles(resp.data)
+            const roleId =
+              get(
+                resp.data.find((o) => o.role === 'PLAYER') || resp.data[0],
+                'roleId'
+              ) || ''
+
+            setCookieUtil(COOKIE_KEY.roleid, roleId)
+            // update axios token header
+            //@ts-ignore: Unreachable code error
+            axios.defaults.headers.roleId = roleId
+            setToken(token)
+            setCurrentUser(user)
+          }
         }
-
-        setToken(token)
-        setCurrentUser(user)
 
         if (!localStorage.getItem(LOCAL_STORAGE_KEY.playerProfile)) {
           try {

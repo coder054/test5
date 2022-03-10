@@ -8,17 +8,18 @@ import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
 
 const Dashboard: NextPage = () => {
-  const { playerProfile, coachProfile } = useAuth()
+  const { playerProfile, coachProfile, userRoles } = useAuth()
   const router = useRouter()
 
   // console.log('playerProfile', playerProfile.playerSkills.overall.technics)
   // console.log('coachProfile', coachProfile)
+  console.log('userRoles', userRoles)
 
-  // useEffect(() => {
-  // if (!playerProfile.playerSkills.overall.technics) {
-  // router.push(ROUTES.SIGNUP_FORM)
-  // }
-  // }, [playerProfile.playerSkills.overall.technics])
+  useEffect(() => {
+    if (!userRoles[0].role) {
+      router.push(ROUTES.SIGNUP_FORM)
+    }
+  }, [userRoles[0].role])
 
   return <h1 className="text-white">Dashboard</h1>
 }

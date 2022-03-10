@@ -46,7 +46,7 @@ export const SignUpFormPlayer = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState<boolean>(false)
   const { profile, values } = router.query
-  console.log('profileForm', profileForm)
+  // console.log('profileForm', profileForm)
 
   const [formValues, setFormValues] = useState<FormValueType>({
     yourClub: '',
@@ -148,7 +148,7 @@ export const SignUpFormPlayer = () => {
       let newArr = [...(formValues[type] || [])]
       /* @ts-ignore */
 
-      console.log('value', value.teamName)
+      // console.log('value', value.teamName)
       if (type === 'favoriteRoles') {
         /* @ts-ignore */
         newArr[+index] = value.key
@@ -265,7 +265,6 @@ export const SignUpFormPlayer = () => {
               className="w-[270px] md:w-[430px] mt-[24px]"
               label={'Favorite Role(s)'}
               onChange={(_, value) => {
-                console.log('value', value)
                 handleChangeForm('favoriteRoles', value, index + '')
               }}
               val={item}

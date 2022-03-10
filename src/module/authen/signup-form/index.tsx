@@ -173,7 +173,7 @@ const SignUpForm = () => {
             ? ROUTES.SIGNUP_FORM_PLAYER
             : ROUTES.SIGNUP_FORM_COACH,
         query: {
-          // profile: formValues.userProfile,
+          profile: formValues.userProfile,
           // values: JSON.stringify(valueSignup),
         },
       })
@@ -189,7 +189,7 @@ const SignUpForm = () => {
       city: profileForm.profile?.city,
     }
   }, [profileForm])
-  console.log('profileForm', profileForm)
+  // console.log('profileForm', profileForm)
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">

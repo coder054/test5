@@ -1,9 +1,8 @@
 import { Button } from 'src/components'
 import { MyInput } from 'src/components/MyInput'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../auth/AuthContext'
-import { Form } from 'antd'
 import { GoBack } from 'src/components/go-back'
 import { MySelect } from 'src/components/MySelect'
 import { OptionCoach, OptionPlayer } from '../types'
@@ -17,11 +16,41 @@ import {
   ExperienceLevel,
   HighestCoachingEducation,
 } from 'src/constants/options'
+import {
+  ClubType,
+  CurrentTeamType,
+} from 'src/constants/types/settingsType.type'
+import { useAtom } from 'jotai'
+import { profileAtom, profileCoachAtom } from 'src/atoms/profileAtom'
+import { InfiniteScrollClub } from 'src/module/account-settings/components/football/components/InfiniteScrollClub'
+import { InfiniteScrollTeam } from 'src/module/account-settings/components/football/components/InfiniteScrollTeam'
+import { MinusIcon, PlusIcon } from 'src/components/icons'
+
+type FormArrayType = Partial<{
+  favoriteRoles: string[]
+  yourTeams: CurrentTeamType[]
+}>
+
+type FormValueType = Partial<{
+  yourClub: string
+  // currentTeams: CurrentTeamType[]
+  yourTeams: string[]
+  favoriteRole: string
+  highestCoachingEducation: string
+  experienceLevel: string
+  coachingStyle: string
+  coachingType: string
+  contractedClub: ClubType
+}>
+
+const COMMON_CLASS =
+  'active:border-2 active:border-[#6B7280] border-2 border-[#202128cc] rounded-full duration-150 cursor-pointer'
 
 export const SignUpFormCoach = () => {
+  const [profileForm, setProfileForm] = useAtom(profileCoachAtom)
+
   const [value, setValue] = useState('')
   const router = useRouter()
-  const [form] = Form.useForm()
   const [loading, setLoading] = useState<boolean>(false)
   const [yourClub, setYourClub] = useState<string>('')
   const [yourTeam, setYourTeam] = useState<string>('')
@@ -29,21 +58,25 @@ export const SignUpFormCoach = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const { profile } = router.query
   const { signin } = useAuth()
-  const shirtNumber = useIncrementNumber({
-    startNumber: 1,
-    endNumber: 99,
-  })
 
-  const lengthNumber = useIncrementNumber({
-    startNumber: 120,
-    endNumber: 220,
-    meanSure: 'cm',
-  })
-
-  const weightNumber = useIncrementNumber({
-    startNumber: 30,
-    endNumber: 130,
-    meanSure: 'kg',
+  const [formValues, setFormValues] = useState<FormValueType>({
+    yourClub: '',
+    yourTeams: [''],
+    favoriteRole: '',
+    highestCoachingEducation: '',
+    experienceLevel: '',
+    coachingStyle: '',
+    coachingType: '',
+    contractedClub: {
+      arena: '',
+      city: '',
+      clubId: '',
+      clubName: '',
+      country: '',
+      logoUrl: '',
+      nickName: '',
+      websiteUrl: null,
+    },
   })
 
   React.useEffect(() => {
@@ -59,14 +92,73 @@ export const SignUpFormCoach = () => {
     el.classList.remove('ant-form')
   }, [])
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    const submitForm = await form.validateFields()
-    console.log('submitForm', submitForm)
+  const setSelectedClub = (value: ClubType) => {
+    setFormValues((prev) => ({
+      ...prev,
+      contractedClub: value,
+      clubId: value.clubId,
+      yourClub: value.clubName,
+    }))
   }
 
-  function handleFinish(values) {
-    console.log('VALUES', values)
+  const handleAddForm = useCallback(
+    (type: keyof FormArrayType, initialValue: any) => {
+      if (formValues[type].length < 3) {
+        let arr = [...formValues[type]]
+        arr.push(initialValue)
+        setFormValues((prev) => ({ ...prev, [type]: arr }))
+      }
+    },
+    [formValues]
+  )
+
+  const handleRemoveForm = useCallback(
+    (type: keyof FormArrayType, i: number) => {
+      /* @ts-ignore */
+      const arr = formValues[type].filter((_, index) => {
+        return [i].indexOf(index) == -1
+      })
+      setFormValues((prev) => ({ ...prev, [type]: arr }))
+    },
+    [formValues]
+  )
+
+  const handleChangeForm = useCallback(
+    (type: keyof FormValueType, value: string, index?: string) => {
+      /* @ts-ignore */
+      let newArr = [...(formValues[type] || [])]
+      if (type === 'yourTeams') {
+        /* @ts-ignore */
+        newArr[+index] = value.teamName
+      } else {
+        newArr[+index] = value
+      }
+
+      setFormValues((prev) => ({ ...prev, [type]: index ? newArr : value }))
+    },
+    [formValues]
+  )
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+
+    setProfileForm({
+      ...profileForm,
+      coachCareer: {
+        clubId: formValues.contractedClub.clubId,
+        contractedFrom: '',
+        contractedUntil: '',
+        seasonStartDate: '',
+        seasonEndDate: '',
+        acceptedTeamIds: formValues.yourTeams,
+        pendingTeamIds: [],
+        role: formValues.favoriteRole,
+        highestCoachingEducation: formValues.highestCoachingEducation,
+        expLevel: formValues.experienceLevel,
+        managementStyle: formValues.coachingStyle,
+        managementType: formValues.coachingType,
+        summary: '',
+      },
+    })
   }
 
   return (
@@ -75,185 +167,105 @@ export const SignUpFormCoach = () => {
         <GoBack label="Sign up form" goBack={ROUTES.SIGNUP_FORM} />
       </div>
       <div
-        className={`w-[320px] md:w-[490px] md:h-[880px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 2xl:right-[25%] overflow-y-auto 
+        className={`w-[320px] md:w-[500px] md:h-[880px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 2xl:right-[25%] overflow-y-auto 
         pl-[5px] pr-[5px] mx-auto lg:mr-0 lg:absolute`}
       >
         <p className="text-[24px] text-[#FFFFFF] font-semibold text-center md:text-left">
           Sign up form - coach
         </p>
-        <Form className="" form={form} onFinish={handleFinish}>
-          <Form.Item
-            className="w-[310px] md:w-[470px] mt-[48px]"
-            name={'yourClub'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your Your Club',
-              },
-            ]}
-          >
-            <MySelect
-              titleAddNew="No club found,"
-              linkAddNew="add new club"
-              className=""
-              label={'Your Club'}
-              value={yourClub}
-              onChange={(e) => {
-                setYourClub(e.target.value)
-              }}
-              arrOption={[
-                { value: 'Ha Noi', label: 'Hà Nội T&T' },
-                { value: 'HAGL', label: 'HAGL' },
-              ]}
-              addNew
-              setOpenModal={setOpenModal}
-            />
-          </Form.Item>
-          <Form.Item
-            className="w-[310px] md:w-[470px] float-left"
-            name={'yourTeam'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your Your Team',
-              },
-            ]}
-          >
-            <MyInput
-              label="Your Team(s)"
-              message="Input your Team"
-              name="yourTeam"
-              className="w-[270px] md:w-[430px]"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-            />
-          </Form.Item>
+        <div className="w-[470px] mt-[48px]">
+          <InfiniteScrollClub
+            initialValue={formValues.contractedClub}
+            handleSetClub={setSelectedClub}
+          />
+        </div>
 
-          <div className="-mt-[48px]">
-            <DynamicFields
-              label="Your Team(s)"
-              message="Input your Team"
-              name="yourTeams"
-              maxField={3}
-            />
+        {(formValues.yourTeams || []).map((item, index) => (
+          <div key={index} className="flex items-center mt-[24px] w-[470px]">
+            <div className="w-[430px]">
+              <InfiniteScrollTeam
+                idClub={formValues.contractedClub.clubId}
+                /* @ts-ignore */
+                handleSetTeam={(value) => setSelectedTeam(value, index + '')}
+                /* @ts-ignore */
+                item={item}
+              />
+            </div>
+            {index === 0 && (
+              <span
+                onClick={() => handleAddForm('yourTeams', '')}
+                className={`${COMMON_CLASS} ml-[12px]`}
+              >
+                <PlusIcon />
+              </span>
+            )}
+            {index !== 0 && (
+              <span
+                onClick={() => handleRemoveForm('yourTeams', index)}
+                className={`${COMMON_CLASS} ml-[12px]`}
+              >
+                <MinusIcon />
+              </span>
+            )}
           </div>
+        ))}
 
-          <Form.Item
-            className="w-full"
-            name={'role'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your Role',
-              },
-            ]}
-          >
-            <MySelect
-              className=""
-              label={'Role'}
-              onChange={(e) => {
-                // setYourClub(e.target.value)
-              }}
-              arrOption={OptionCoach}
-            />
-          </Form.Item>
+        <MySelect
+          className=" w-[470px] mt-[24px]"
+          label={'Role'}
+          onChange={(e) => {
+            handleChangeForm('favoriteRole', e.target.value)
+          }}
+          arrOption={OptionCoach}
+        />
 
-          <Form.Item
-            className="w-[310px] md:w-[470px]"
-            name={'highestCoachingEducation'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your Highest Coaching Education',
-              },
-            ]}
-          >
-            <MySelect
-              signupForm
-              className=""
-              label={'Highest Coaching Education'}
-              // value={yourClub}
-              onChange={(e) => {
-                setYourClub(e.target.value)
-              }}
-              arrOption={HighestCoachingEducation}
-            />
-          </Form.Item>
+        <MySelect
+          signupForm
+          className=" w-[470px] mt-[24px]"
+          label={'Highest Coaching Education'}
+          onChange={(e) => {
+            handleChangeForm('highestCoachingEducation', e.target.value)
+          }}
+          arrOption={HighestCoachingEducation}
+        />
 
-          <Form.Item
-            className="w-[310px] md:w-[470px]"
-            name={'experienceLevel'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your Experience Level',
-              },
-            ]}
-          >
-            <MySelect
-              signupForm
-              className=""
-              label={'Experience Level'}
-              // value={yourClub}
-              onChange={(e) => {
-                setYourClub(e.target.value)
-              }}
-              arrOption={ExperienceLevel}
-            />
-          </Form.Item>
+        <MySelect
+          signupForm
+          className=" w-[470px] mt-[24px]"
+          label={'Experience Level'}
+          onChange={(e) => {
+            handleChangeForm('experienceLevel', e.target.value)
+          }}
+          arrOption={ExperienceLevel}
+        />
 
-          <Form.Item
-            className="w-[310px] md:w-[470px]"
-            name={'coachingStyle'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your Coaching Style',
-              },
-            ]}
-          >
-            <MySelect
-              signupForm
-              className=""
-              label={'Coaching Style'}
-              // value={yourClub}
-              onChange={(e) => {
-                setYourClub(e.target.value)
-              }}
-              arrOption={CoachingStyle}
-            />
-          </Form.Item>
+        <MySelect
+          signupForm
+          className=" w-[470px] mt-[24px]"
+          label={'Coaching Style'}
+          onChange={(e) => {
+            handleChangeForm('coachingStyle', e.target.value)
+          }}
+          arrOption={CoachingStyle}
+        />
 
-          <Form.Item
-            className="w-[310px] md:w-[470px]"
-            name={'coachingType'}
-            rules={[
-              {
-                required: true,
-                message: 'Input your Coaching Type',
-              },
-            ]}
-          >
-            <MySelect
-              signupForm
-              className=""
-              label={'Coaching Type'}
-              // value={yourClub}
-              onChange={(e) => {
-                setYourClub(e.target.value)
-              }}
-              arrOption={CoachingType}
-            />
-          </Form.Item>
+        <MySelect
+          signupForm
+          className=" w-[470px] mt-[24px]"
+          label={'Coaching Type'}
+          onChange={(e) => {
+            handleChangeForm('coachingType', e.target.value)
+          }}
+          arrOption={CoachingType}
+        />
 
-          <div className="mt-[40px] " onClick={handleSubmit}>
-            <Button
-              loading={loading}
-              className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
-              text="Next"
-            />
-          </div>
-        </Form>
+        <div className="mt-[40px]" onClick={handleSubmit}>
+          <Button
+            loading={loading}
+            className="h-[48px] w-[310px] md:w-[470px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3] absolute"
+            text="Next"
+          />
+        </div>
       </div>
       <MyModal show={openModal} setShow={setOpenModal} width={412}>
         <div className="w-[300px] md:w-[412px] mx-auto h-full bg-[#1E1F24] rounded-[8px] p-[16px] md:p-[32px]">
