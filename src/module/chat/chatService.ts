@@ -17,6 +17,13 @@ import {
   serverTimestamp,
   push,
 } from 'firebase/database'
+import {
+  ref as storageLibRef,
+  uploadBytes,
+  getDownloadURL,
+} from 'firebase/storage'
+import { storage } from 'src/config/firebase-client'
+
 import { firebaseApp } from 'src/config/firebase-client'
 
 import { chain, isEmpty } from 'lodash'
@@ -117,7 +124,7 @@ export enum EChatMessageType {
   unsupported = 'unsupported',
 }
 
-enum EMessageType {
+export enum EMessageType {
   custom = 'custom',
   file = 'file',
   image = 'image',
@@ -145,6 +152,9 @@ export interface ICustomMessage extends IMessage {
   updatedAt?: number
 }
 export interface IImageMessage extends IMessage {
+  messageId?: string
+  createdBy?: string
+  attachmentName?: string
   author: IUser
   createdAt?: number
   height?: any
@@ -734,5 +744,77 @@ export const createGroupChatRoom = async (
     // return newChatRoomKey
   } catch (error) {
     console.log('aaa', { error })
+  }
+}
+
+export const uploadFile = async (
+  file: File,
+  storageFolder: string // no need slash
+): Promise<{ error: boolean; url: string }> => {
+  try {
+    if (!file) {
+      return {
+        error: true,
+        url: '',
+      }
+    }
+    const storageRef = storageLibRef(storage, `/${storageFolder}/${file.name}`)
+    const snapshot = await uploadBytes(storageRef, file)
+    const url = await getDownloadURL(snapshot.ref)
+
+    return {
+      error: false,
+      url,
+    }
+  } catch (error) {
+    return {
+      error: true,
+      url: '',
+    }
+  }
+}
+
+export const prepareDataForSendMessage = () => {
+  const prepareDataForSendTextMessage = (
+    messageId: string,
+    text: string,
+    createdBy: string,
+    createdAt: string
+  ) => {
+    let message: ITextMessage = {
+      //@ts-ignore: Unreachable code error
+      createdAt,
+      createdBy,
+      messageId,
+      text,
+      type: EMessageType.text,
+    }
+
+    return message
+  }
+
+  const prepareDataForSendImageMessage = (
+    messageId,
+    createdBy,
+    createdAt,
+    uri,
+    size: number,
+    attachmentName: string
+  ): IChatMessage => {
+    const target: IChatMessage = {
+      attachmentName,
+      createdAt,
+      createdBy,
+      messageId,
+      size,
+      type: EMessageType.image,
+      uri,
+    }
+    return target
+  }
+
+  return {
+    prepareDataForSendTextMessage,
+    prepareDataForSendImageMessage,
   }
 }

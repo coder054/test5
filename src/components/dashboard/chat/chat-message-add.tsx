@@ -7,6 +7,18 @@ import { Photograph as PhotographIcon } from '../../../icons/photograph'
 import { PaperClip as PaperClipIcon } from '../../../icons/paper-clip'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { getStr } from 'src/utils/utils'
+import { get } from 'lodash'
+import {
+  createMessage,
+  updateLastMessageTime,
+  uploadFile,
+  EMessageType,
+  database,
+  IChatMessage,
+} from 'src/module/chat/chatService'
+import { child, push, ref, serverTimestamp } from 'firebase/database'
+import { useAtom } from 'jotai'
+import { activeChatRoomAtom } from 'src/atoms/chatAtom'
 
 interface ChatMessageAddProps {
   disabled?: boolean
@@ -14,7 +26,8 @@ interface ChatMessageAddProps {
 }
 
 export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
-  const { playerProfile } = useAuth()
+  const { playerProfile, currentRoleId } = useAuth()
+  const [activeChatRoom] = useAtom(activeChatRoomAtom)
 
   const { disabled, onSend, ...other } = props
   const fileInputRef = useRef<HTMLInputElement | null>(null)
@@ -132,7 +145,53 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
           </Box>
         </Tooltip>
       </Box>
-      <input hidden ref={fileInputRef} type="file" />
+      <input
+        accept="image/png, image/gif, image/jpeg"
+        onChange={async (e) => {
+          try {
+            const file: File = get(e, 'target.files[0]')
+            if (!file) {
+              return
+            }
+
+            const { error, url } = await uploadFile(file, 'message')
+
+            if (error) {
+              return
+            }
+            let chatRoomId: string = activeChatRoom.chatRoomId
+            const newMessageKey = await push(
+              child(ref(database), `/chatMessages/${chatRoomId}`)
+            ).key
+
+            let message: IChatMessage = {
+              createdAt: serverTimestamp(), // 1646731132428,
+              createdBy: currentRoleId,
+              messageId: newMessageKey,
+              attachmentName: file.name,
+              size: file.size,
+              type: EMessageType.image,
+              uri: url,
+            }
+
+            const { error: errorCreateMessage } = await createMessage(
+              message,
+              chatRoomId
+            )
+
+            if (errorCreateMessage) {
+              alert('error happen')
+              return
+            }
+            updateLastMessageTime(chatRoomId, newMessageKey)
+          } catch (err) {
+            console.error(err)
+          }
+        }}
+        hidden
+        ref={fileInputRef}
+        type="file"
+      />
     </Box>
   )
 }
