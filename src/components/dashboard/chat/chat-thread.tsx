@@ -143,7 +143,7 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
   }, [messages])
 
   useEffect(() => {
-    console.log('aaa activeChatRoom.deletedDate: ', activeChatRoom.deletedDate)
+    console.log('aaa activeChatRoom: ', activeChatRoom)
   }, [activeChatRoom])
 
   useEffect(() => {
@@ -169,12 +169,15 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
   // get the thread.
   const handleSendMessage = async (body: string): Promise<void> => {
     try {
+      let chatRoomId: string = activeChatRoom.chatRoomId
       // let refKey = ChatService.instance.databaseReference
       //   .child(ChatService.instance.chatRoomsNode)
       //   .push();
 
       // Get a key for a new Post.
-      const newMessageKey = push(child(ref(database), 'posts')).key
+      const newMessageKey = push(
+        child(ref(database), `/chatMessages/${chatRoomId}`)
+      ).key
 
       let message: IChatMessage = {
         createdAt: serverTimestamp(), // 1646731132428,
@@ -183,7 +186,6 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
         text: body,
         type: 'text',
       }
-      let chatRoomId: string = activeChatRoom.chatRoomId
 
       const { error } = await createMessage(message, chatRoomId)
 
