@@ -83,12 +83,6 @@ export const SignUpFormPlayerSkills = () => {
     }
   }, [profileForm])
 
-  // console.log(technics, tactics, physics, mental)
-  // console.log(attacking, dribbling, passing, defending, pace, shooting)
-  // console.log(note, tags)
-  // console.log('profileForm', profileForm)
-  // console.log('date', new Date())
-
   const handleNext = async (e: any) => {
     e.preventDefault()
 

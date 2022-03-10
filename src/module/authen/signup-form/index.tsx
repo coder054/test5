@@ -15,6 +15,7 @@ import { MySelectCountry } from 'src/components/MySelectCountry'
 import { MyCustomSelect } from 'src/components/MyCustomSelect'
 import { useAtom } from 'jotai'
 import { profileAtom } from 'src/atoms/profileAtom'
+import { profileCoachAtom } from 'src/atoms/profileCoachAtom'
 
 type FormValues = {
   firstName?: string
@@ -50,6 +51,7 @@ interface valueSignupType {
 
 const SignUpForm = () => {
   const [profileForm, setProfileForm] = useAtom(profileAtom)
+  const [profileCoachForm, setProfileCoachForm] = useAtom(profileCoachAtom)
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
   const [formValues, setFormValues] = useState<FormValues>({
@@ -72,7 +74,7 @@ const SignUpForm = () => {
   })
   const [faceImages, setFaceImage] = useState<string>('')
   const [fullBodyImage, setFullBodyImage] = useState<string>('')
-  const { signout } = useAuth()
+  const { signout, playerProfile } = useAuth()
 
   React.useEffect(() => {
     if (typeof window === 'undefined') {
@@ -145,51 +147,64 @@ const SignUpForm = () => {
       // && formValues.faceImage &&
       // formValues.bodyImage
     ) {
-      setProfileForm({
-        ...profileAtom,
-        media: {
-          faceImage: faceImages,
-          bodyImage: fullBodyImage,
-          teamImage: '',
-          videoLinks: [],
-        },
-        profile: {
-          firstName: formValues.firstName,
-          lastName: formValues.lastName,
-          birthDay: formValues.birthDay,
-          birthCountry: formValues.country,
-          city: formValues.city,
-          phone: '',
-          gender: '',
-          homeAddress: '',
-          postNumber: '',
-          region: '',
-        },
-      })
+      /* @ts-ignore */
+      if (formValues.userProfile.label === 'Player') {
+        setProfileForm({
+          ...profileAtom,
+          media: {
+            faceImage: faceImages,
+            bodyImage: fullBodyImage,
+            teamImage: '',
+            videoLinks: [],
+          },
+          profile: {
+            firstName: formValues.firstName,
+            lastName: formValues.lastName,
+            birthDay: formValues.birthDay,
+            birthCountry: formValues.country,
+            city: formValues.city,
+            phone: '',
+            gender: '',
+            homeAddress: '',
+            postNumber: '',
+            region: '',
+          },
+        })
+        /* @ts-ignore */
+      } else if (formValues.userProfile.label === 'Coach') {
+        setProfileCoachForm({
+          ...profileCoachAtom,
+          media: {
+            faceImage: faceImages,
+            bodyImage: fullBodyImage,
+            teamImage: '',
+            videoLinks: [],
+          },
+          profile: {
+            firstName: formValues.firstName,
+            lastName: formValues.lastName,
+            birthDay: formValues.birthDay,
+            birthCountry: formValues.country,
+            city: formValues.city,
+            phone: '',
+            gender: '',
+            homeAddress: '',
+            postNumber: '',
+            region: '',
+          },
+        })
+      }
+
       router.push({
         pathname:
           /* @ts-ignore */
           formValues.userProfile.label === 'Player'
             ? ROUTES.SIGNUP_FORM_PLAYER
             : ROUTES.SIGNUP_FORM_COACH,
-        query: {
-          profile: formValues.userProfile,
-          // values: JSON.stringify(valueSignup),
-        },
       })
     }
   }
-
-  const form = useMemo(() => {
-    return {
-      firstName: profileForm.profile?.firstName,
-      lastName: profileForm.profile?.lastName,
-      birthDay: profileForm.profile?.birthDay,
-      country: profileForm.profile?.birthCountry?.name,
-      city: profileForm.profile?.city,
-    }
-  }, [profileForm])
-  // console.log('profileForm', profileForm)
+  console.log('profileCoachForm', profileCoachForm)
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">

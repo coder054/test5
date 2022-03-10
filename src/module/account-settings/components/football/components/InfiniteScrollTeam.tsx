@@ -93,9 +93,6 @@ export const InfiniteScrollTeam = ({
 
   const getListTeam = async () => {
     const res = await axios.get(API_GET_LIST_TEAM, {
-      headers: {
-        roleId: currentRoleId,
-      },
       params: {
         ...param,
         startAfter: items.length,

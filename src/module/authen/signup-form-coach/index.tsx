@@ -21,10 +21,10 @@ import {
   CurrentTeamType,
 } from 'src/constants/types/settingsType.type'
 import { useAtom } from 'jotai'
-import { profileAtom, profileCoachAtom } from 'src/atoms/profileAtom'
 import { InfiniteScrollClub } from 'src/module/account-settings/components/football/components/InfiniteScrollClub'
 import { InfiniteScrollTeam } from 'src/module/account-settings/components/football/components/InfiniteScrollTeam'
 import { MinusIcon, PlusIcon } from 'src/components/icons'
+import { profileCoachAtom } from 'src/atoms/profileCoachAtom'
 
 type FormArrayType = Partial<{
   favoriteRoles: string[]
@@ -47,17 +47,13 @@ const COMMON_CLASS =
   'active:border-2 active:border-[#6B7280] border-2 border-[#202128cc] rounded-full duration-150 cursor-pointer'
 
 export const SignUpFormCoach = () => {
-  const [profileForm, setProfileForm] = useAtom(profileCoachAtom)
+  const [profileCoachForm, setProfileCoachForm] = useAtom(profileCoachAtom)
 
-  const [value, setValue] = useState('')
   const router = useRouter()
-  const [loading, setLoading] = useState<boolean>(false)
-  const [yourClub, setYourClub] = useState<string>('')
-  const [yourTeam, setYourTeam] = useState<string>('')
-  const [role, setRole] = useState<string>('')
   const [openModal, setOpenModal] = useState<boolean>(false)
-  const { profile } = router.query
   const { signin } = useAuth()
+
+  console.log('profileCoachForm', profileCoachForm)
 
   const [formValues, setFormValues] = useState<FormValueType>({
     yourClub: '',
@@ -78,6 +74,12 @@ export const SignUpFormCoach = () => {
       websiteUrl: null,
     },
   })
+
+  // React.useEffect(() => {
+  //   if (!profileCoachForm.profile?.firstName) {
+  //     router.push(ROUTES.SIGNUP_FORM)
+  //   }
+  // }, [profileCoachForm])
 
   React.useEffect(() => {
     if (typeof window === 'undefined') {
@@ -141,21 +143,21 @@ export const SignUpFormCoach = () => {
   const handleSubmit = async (event) => {
     event.preventDefault()
 
-    setProfileForm({
-      ...profileForm,
+    setProfileCoachForm({
+      ...profileCoachForm,
       coachCareer: {
-        clubId: formValues.contractedClub.clubId,
+        clubId: '',
         contractedFrom: '',
         contractedUntil: '',
         seasonStartDate: '',
         seasonEndDate: '',
-        acceptedTeamIds: formValues.yourTeams,
+        acceptedTeamIds: [],
         pendingTeamIds: [],
-        role: formValues.favoriteRole,
-        highestCoachingEducation: formValues.highestCoachingEducation,
-        expLevel: formValues.experienceLevel,
-        managementStyle: formValues.coachingStyle,
-        managementType: formValues.coachingType,
+        role: '',
+        highestCoachingEducation: '',
+        expLevel: '',
+        managementStyle: '',
+        managementType: '',
         summary: '',
       },
     })
@@ -261,7 +263,7 @@ export const SignUpFormCoach = () => {
 
         <div className="mt-[40px]" onClick={handleSubmit}>
           <Button
-            loading={loading}
+            // loading={loading}
             className="h-[48px] w-[310px] md:w-[470px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3] absolute"
             text="Next"
           />

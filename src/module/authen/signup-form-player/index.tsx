@@ -46,7 +46,7 @@ export const SignUpFormPlayer = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState<boolean>(false)
   const { profile, values } = router.query
-  // console.log('profileForm', profileForm)
+  console.log('profileForm', profileForm)
 
   const [formValues, setFormValues] = useState<FormValueType>({
     yourClub: '',
