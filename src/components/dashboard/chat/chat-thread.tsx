@@ -170,11 +170,6 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
   const handleSendMessage = async (body: string): Promise<void> => {
     try {
       let chatRoomId: string = activeChatRoom.chatRoomId
-      // let refKey = ChatService.instance.databaseReference
-      //   .child(ChatService.instance.chatRoomsNode)
-      //   .push();
-
-      // Get a key for a new Post.
       const newMessageKey = await push(
         child(ref(database), `/chatMessages/${chatRoomId}`)
       ).key
@@ -193,17 +188,7 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
         alert('error happen')
         return
       }
-
       updateLastMessageTime(chatRoomId, newMessageKey)
-
-      // Scroll to bottom of the messages after adding the new message
-      // if (messagesRef?.current) {
-      //   const scrollElement = messagesRef.current.getScrollElement()
-      //   scrollElement.scrollTo({
-      //     top: messagesRef.current.el.scrollHeight,
-      //     behavior: 'smooth',
-      //   })
-      // }
     } catch (err) {
       console.error(err)
     }

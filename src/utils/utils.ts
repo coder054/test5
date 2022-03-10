@@ -1,4 +1,5 @@
 import { get, truncate } from 'lodash'
+import Resizer from 'react-image-file-resizer'
 import cookies from 'js-cookie'
 import cookie from 'cookie'
 import { notification } from 'antd'
@@ -163,3 +164,19 @@ export const removeCookieUtil = (key: string) => {
 export const getErrorMessage = (err) => {
   return get(err, 'response.data.messages', get(err, 'message')) || ''
 }
+
+export const resizeFile = (file) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      300,
+      300,
+      'JPEG',
+      100,
+      0,
+      (uri) => {
+        resolve(uri)
+      },
+      'base64'
+    )
+  })
