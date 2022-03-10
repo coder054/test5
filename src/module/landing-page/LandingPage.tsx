@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { isDesktop, isMobile } from 'react-device-detect'
 import { Button } from 'src/components'
@@ -59,11 +60,13 @@ export const Landing = () => {
         >
           <Logo />
           <div className="flex">
-            <Button
-              text="Sign in"
-              type="button"
-              className="text-[14px] px-[17px] py-[7px]"
-            />
+            <Link href="signin">
+              <Button
+                text="Sign in"
+                type="button"
+                className="text-[14px] px-[17px] py-[7px]"
+              />
+            </Link>
             <MyButton
               onClick={handleNavigate}
               label="Sign up"

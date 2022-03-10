@@ -92,7 +92,7 @@ export const APP_FEATURE = [
   {
     icon: <ChallengesAppIcon />,
     title: 'CHALLENGES',
-    content: 'Challenge And Compete With Friends And Peers (q2 2022)',
+    content: 'Challenge And Compete With Friends And Peers (Q2 2022)',
   },
   {
     icon: <ProgramsAppIcon />,
@@ -103,6 +103,6 @@ export const APP_FEATURE = [
     icon: <EventsAppIcon />,
     title: 'EVENTS',
     content:
-      'Join Digital & Real Life Events From The Best Coaches & Personal Trainers (q4 2022)',
+      'Join Digital & Real Life Events From The Best Coaches & Personal Trainers (Q4 2022)',
   },
 ]
