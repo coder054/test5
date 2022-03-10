@@ -13,7 +13,7 @@ export const getCookieFromReq = (cookieString: string, cookieKey: string) => {
 export function getRulePassword(message?: string): Rule {
   return {
     pattern: new RegExp(
-      /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
     ),
     message: message ? message : 'Min 8 signs & 1 capital letter',
   }

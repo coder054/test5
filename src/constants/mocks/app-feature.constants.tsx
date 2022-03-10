@@ -1,10 +1,14 @@
 import {
   BiographyAppIcon,
   ChallengesAppIcon,
+  Contacts2Icon,
   DashboardAppIcon,
   DiaryAppIcon,
   EventsAppIcon,
   FeedAppIcon,
+  HealthIcon,
+  MessagesIcon,
+  PainsIcon,
   PlayerOfTheMonthIcon,
   ProgramsAppIcon,
   TeamOfTheWeekIcon,
@@ -33,6 +37,29 @@ export const APP_FEATURE_2 = [
     icon: <VRGameIcon />,
     title: 'VR MANAGER GAME',
     content: 'Compete with your friends who’s the best manager (Q3 2022)',
+  },
+]
+
+export const APP_FEATURE_3 = [
+  {
+    icon: <MessagesIcon />,
+    title: 'MESSAGES',
+    content: 'Chat with teammates, Friends, Coaches & Family members',
+  },
+  {
+    icon: <Contacts2Icon />,
+    title: 'CONTACTS',
+    content: 'Find new friends,Teams & groups to grow with',
+  },
+  {
+    icon: <HealthIcon />,
+    title: 'HEALTH',
+    content: 'Track and Benchmark wellness & health',
+  },
+  {
+    icon: <PainsIcon />,
+    title: 'PAINS',
+    content: 'Log and get help to rehab injuries',
   },
 ]
 
@@ -65,7 +92,7 @@ export const APP_FEATURE = [
   {
     icon: <ChallengesAppIcon />,
     title: 'CHALLENGES',
-    content: 'Challenge And Compete With Friends And Peers (q2 2022)',
+    content: 'Challenge And Compete With Friends And Peers (Q2 2022)',
   },
   {
     icon: <ProgramsAppIcon />,
@@ -76,6 +103,6 @@ export const APP_FEATURE = [
     icon: <EventsAppIcon />,
     title: 'EVENTS',
     content:
-      'Join Digital & Real Life Events From The Best Coaches & Personal Trainers (q4 2022)',
+      'Join Digital & Real Life Events From The Best Coaches & Personal Trainers (Q4 2022)',
   },
 ]

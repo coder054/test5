@@ -40,7 +40,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
   }
 
   const handleKeyUp = (event: KeyboardEvent<HTMLInputElement>): void => {
-    if (event.code === 'Enter') {
+    if (event.code === 'Enter' || event.code === 'NumpadEnter') {
       handleSend()
     }
   }

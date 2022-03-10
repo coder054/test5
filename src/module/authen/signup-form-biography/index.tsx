@@ -8,12 +8,12 @@ import { InforWithAChart } from 'src/module/bio/InfoWithAChart'
 import { InfoWithCircleImage } from 'src/module/bio/InfoWithCircleImage'
 import { IBiographyPlayer } from 'src/pages/biography/[username]/[fullname]'
 import { axios } from 'src/utils/axios'
+import { fetcher } from 'src/utils/utils'
 import useSWR from 'swr'
 import { useAuth } from '../auth/AuthContext'
 const cls = require('./signup-form-biography.module.css')
 
 export const SignupFormBiography = () => {
-  // const [dataPlayer, setDataPlayer] = useState<IBiographyPlayer>({})
   const { currentRoleId, playerProfile, coachProfile, currentUser } = useAuth()
 
   // useEffect(() => {
@@ -29,6 +29,17 @@ export const SignupFormBiography = () => {
 
   // console.log('dataPlayer', dataPlayer)
 
+  const { data: dataBio, error: errorBio } = useSWR(
+    `/biographies/player?userIdQuery=${playerProfile.userId}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  ) as {
+    data: IBiographyPlayer
+    error: any
+  }
+
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
       <div className="absolute top-[16px] lg:top-[40px] md:left-[40px] z-20">
@@ -42,20 +53,20 @@ export const SignupFormBiography = () => {
         <div
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 max-h-[626px]`}
         >
-          {/* <InfoWithCircleImage
-            dataBio={dataPlayer}
+          <InfoWithCircleImage
+            dataBio={dataBio}
             currentRoleId={currentRoleId}
             signupForm
-          /> */}
+          />
         </div>
         <div
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 `}
         >
-          {/* <InforWithAChart
-            dataBio={dataPlayer}
+          <InforWithAChart
+            dataBio={dataBio}
             dataBioRadarChart={{}}
             signupForm
-          /> */}
+          />
         </div>
       </div>
     </div>

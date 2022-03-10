@@ -157,7 +157,10 @@ export const ProjectListFilters: FC<ProjectListFiltersProps> = (props) => {
   }
 
   const handleQueryKeyup = (event: KeyboardEvent<HTMLInputElement>): void => {
-    if (event.code === 'Enter' && queryValue) {
+    if (
+      (event.code === 'Enter' || event.code === 'NumpadEnter') &&
+      queryValue
+    ) {
       // We only allow one chip for the name field
 
       const filterItem = filterItems.find(

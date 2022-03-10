@@ -122,7 +122,7 @@ export const AmplifyPasswordReset: FC = (props) => {
             name={`code[${i}]`}
             onBlur={formik.handleBlur}
             onKeyDown={(event) => {
-              if (event.code === 'Enter') {
+              if (event.code === 'Enter' || event.code === 'NumpadEnter') {
                 if (formik.values.code[i]) {
                   formik.setFieldValue(`code[${i}]`, '')
                   return
