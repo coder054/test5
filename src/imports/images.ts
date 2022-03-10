@@ -74,6 +74,6 @@ export const GROUP = require('./../../public' +
 export const DEVICES = require('./../../public' +
   '/assets/landing-page/Devices.png')
 export const APPSTORE_BLACK = require('./../../public' +
-  '/assets/landing-page/Appstore.png')
+  '/assets/landing-page/AppStore.png')
 export const GG_PLAY_BLACK = require('./../../public' +
   '/assets/landing-page/GGPlay.png')

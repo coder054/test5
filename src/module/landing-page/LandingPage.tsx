@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import { isDesktop, isMobile } from 'react-device-detect'
 import { Button } from 'src/components'
 import {
@@ -13,11 +14,9 @@ import {
 } from 'src/components/icons'
 import { Logo } from 'src/components/logo'
 import { MyButton } from 'src/components/MyButton'
-import { SectionFour } from './components/SectionFour'
 import {
   APP_FEATURE,
   APP_FEATURE_2,
-  APP_FEATURE_3,
 } from 'src/constants/mocks/app-feature.constants'
 import {
   APP_4,
@@ -37,10 +36,10 @@ import {
   TEAM,
 } from 'src/imports/images'
 import { AppFeature } from './components/AppFeature'
-import { SectionFive } from './components/SectionFive'
 import { Footer } from './components/Footer'
+import { SectionFive } from './components/SectionFive'
+import { SectionFour } from './components/SectionFour'
 import { SectionThree } from './components/SectionThree'
-import { useRouter } from 'next/router'
 
 export const Landing = () => {
   const router = useRouter()
