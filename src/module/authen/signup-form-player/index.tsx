@@ -45,8 +45,8 @@ export const SignUpFormPlayer = () => {
   const router = useRouter()
   const [loading, setLoading] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState<boolean>(false)
-  const { profile, values } = router.query
-  console.log('profileForm', profileForm)
+  const { profile } = router.query
+  // console.log('profileForm', profileForm)
 
   const [formValues, setFormValues] = useState<FormValueType>({
     yourClub: '',
@@ -194,7 +194,10 @@ export const SignUpFormPlayer = () => {
       },
     })
 
-    router.push(ROUTES.SIGNUP_FORM_PLAYER_SKILLS)
+    router.push({
+      pathname: ROUTES.SIGNUP_FORM_PLAYER_SKILLS,
+      query: { profile: profile },
+    })
   }
 
   // console.log('values', JSON.parse(values as any))

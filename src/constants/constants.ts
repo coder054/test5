@@ -15,7 +15,7 @@ export const ROUTES = {
   SIGNUP_FORM_PLAYER: 'signup-form-player',
   SIGNUP_FORM_PLAYER_SKILLS: '/signup-form-player-skills',
   SIGNUP_FORM_COACH: 'signup-form-coach',
-  SIGNUP_FORM_COACH_SKILLS: '/signup-form-player-skills',
+  SIGNUP_FORM_COACH_SKILLS: '/signup-form-coach-skills',
   SIGNUP_FORM_BIOGRAPHY: '/signup-form-biography',
   aaa: process.env.TEST2,
 }

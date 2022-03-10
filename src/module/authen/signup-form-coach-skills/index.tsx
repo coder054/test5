@@ -6,9 +6,21 @@ import { GoBack } from 'src/components/go-back'
 import { ItemSkills } from 'src/components/item-skills'
 import { Input } from 'antd'
 import { SpecialityTags } from 'src/components/speciality-tags'
+import { useAtom } from 'jotai'
+import { profileCoachAtom } from 'src/atoms/profileCoachAtom'
+import { axios } from 'src/utils/axios'
+import { API_SIGNUP_FORM_COACH } from 'src/constants/api.constants'
+import { useRouter } from 'next/router'
+import { ROUTES } from 'src/constants/constants'
 
 export const SignUpFormCoachSkills = () => {
+  const [profileCoachForm, setProfileCoachForm] = useAtom(profileCoachAtom)
+  console.log('profileCoachFormSkill', profileCoachForm)
+
   const { TextArea } = Input
+  const date = new Date()
+  const router = useRouter()
+  const { profile } = router.query
 
   const [technics, setTechnics] = useState<number>(0)
   const [tactics, setTactics] = useState<number>(0)
@@ -23,6 +35,7 @@ export const SignUpFormCoachSkills = () => {
   const [playerDevelopment, setPlayerDevelopment] = useState<number>(0)
 
   const [note, setNote] = useState<string>('')
+  const [tags, setTags] = useState<string[]>([])
 
   React.useEffect(() => {
     if (typeof window === 'undefined') {
@@ -36,16 +49,110 @@ export const SignUpFormCoachSkills = () => {
 
     el.classList.remove('ant-form')
   }, [])
-  console.log(technics, tactics, physics, mental)
-  console.log(
-    attacking,
-    defending,
-    turnovers,
-    pieces,
-    analytics,
-    playerDevelopment
-  )
-  console.log(note)
+
+  const handleNext = async (e) => {
+    e.preventDefault()
+
+    const profileCoach = {
+      health: {
+        height: {
+          value: 0,
+          updatedAt: date.toISOString(),
+        },
+        weight: {
+          value: 0,
+          updatedAt: date.toISOString(),
+        },
+        leftFootLength: 0,
+        rightFootLength: 0,
+      },
+      media: {
+        faceImage: profileCoachForm?.media?.faceImage,
+        bodyImage: profileCoachForm?.media?.bodyImage,
+        teamImage: '',
+        videoLinks: [],
+      },
+      profile: {
+        phone: '',
+        firstName: profileCoachForm?.profile?.firstName,
+        lastName: profileCoachForm?.profile?.lastName,
+        gender: 'MALE',
+        birthCountry: profileCoachForm?.profile?.birthCountry,
+        birthDay: profileCoachForm?.profile?.birthDay,
+        homeAddress: '',
+        postNumber: '',
+        region: '',
+        city: profileCoachForm?.profile?.city,
+      },
+      settings: {
+        country: profileCoachForm?.profile?.birthCountry,
+        language: '',
+        public: true,
+        notificationOn: true,
+        notificationOptions: {
+          profileAndDiaryUpdates: true,
+          feedUpdates: true,
+          messageUpdates: true,
+          inviteUpdates: true,
+        },
+      },
+      socialLinks: {
+        instagram: '',
+        facebook: '',
+        twitter: '',
+        youtube: '',
+        veoHighlites: '',
+        tiktok: '',
+      },
+      coachCareer: {
+        clubId: profileCoachForm?.coachCareer?.clubId,
+        contractedFrom: date.toISOString(),
+        contractedUntil: date.toISOString(),
+        seasonStartDate: date.toISOString(),
+        seasonEndDate: date.toISOString(),
+        acceptedTeamIds: profileCoachForm?.coachCareer?.acceptedTeamIds,
+        pendingTeamIds: [],
+        role: profileCoachForm?.coachCareer?.role,
+        highestCoachingEducation:
+          profileCoachForm?.coachCareer?.highestCoachingEducation,
+        expLevel: profileCoachForm?.coachCareer?.expLevel,
+        managementStyle: profileCoachForm?.coachCareer?.managementStyle,
+        managementType: profileCoachForm?.coachCareer?.managementType,
+        summary: note,
+      },
+      coachSkills: {
+        specialityTags: tags,
+        overall: {
+          mental: mental / 20,
+          physics: physics / 20,
+          tactics: tactics / 20,
+          technics: technics / 20,
+        },
+        radar: {
+          attacking: attacking,
+          defending: defending,
+          turnovers: turnovers,
+          setPieces: pieces,
+          analytics: analytics,
+          playerDevelopment: playerDevelopment,
+        },
+      },
+    }
+    // console.log('submit', profileCoach)
+
+    try {
+      const response = await axios.put(API_SIGNUP_FORM_COACH, {
+        ...profileCoach,
+      })
+
+      if (response.status === 200) {
+        router.push({
+          pathname: ROUTES.SIGNUP_FORM_BIOGRAPHY,
+          query: { profile: profile },
+        })
+      }
+    } catch (error) {}
+  }
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
@@ -165,11 +272,13 @@ export const SignUpFormCoachSkills = () => {
               autoSize={{ minRows: 5, maxRows: 5 }}
               rows={5}
             />
-            <SpecialityTags label="Speciality tags" />
-            <Button
-              text="Next"
-              className="bg-[#4654EA] rounded-[8px] text-[15px] w-full h-[48px] mt-[24px]"
-            />
+            <SpecialityTags label="Speciality tags" setTags={setTags} />
+            <div onClick={handleNext}>
+              <Button
+                text="Next"
+                className="bg-[#4654EA] rounded-[8px] text-[15px] w-full h-[48px] mt-[24px]"
+              />
+            </div>
           </ItemSkills>
         </div>
       </div>

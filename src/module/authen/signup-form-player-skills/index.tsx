@@ -33,6 +33,7 @@ export const SignUpFormPlayerSkills = () => {
   const { TextArea } = Input
   const router = useRouter()
   const date = new Date()
+  const { profile } = router.query
 
   const [technics, setTechnics] = useState<number>(0)
   const [tactics, setTactics] = useState<number>(0)
@@ -145,7 +146,7 @@ export const SignUpFormPlayerSkills = () => {
         pendingTeamIds: [],
         favoriteRoles: profileForm?.playerCareer?.favoriteRoles,
         shirtNumber: profileForm?.playerCareer?.shirtNumber,
-        summary: profileForm?.playerCareer?.summary,
+        summary: note,
         teamCalendarLinks: [],
         seasonStartDate: date.toISOString(),
         seasonEndDate: date.toISOString(),
@@ -180,7 +181,10 @@ export const SignUpFormPlayerSkills = () => {
       })
 
       if (response.status === 200) {
-        router.push(ROUTES.SIGNUP_FORM_BIOGRAPHY)
+        router.push({
+          pathname: ROUTES.SIGNUP_FORM_BIOGRAPHY,
+          query: { profile: profile },
+        })
       }
     } catch (error) {}
   }

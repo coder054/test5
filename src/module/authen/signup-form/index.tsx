@@ -201,10 +201,12 @@ const SignUpForm = () => {
           formValues.userProfile.label === 'Player'
             ? ROUTES.SIGNUP_FORM_PLAYER
             : ROUTES.SIGNUP_FORM_COACH,
+        /* @ts-ignore */
+        query: { profile: formValues.userProfile.label },
       })
     }
   }
-  console.log('profileCoachForm', profileCoachForm)
+  // console.log('profileCoachForm', profileCoachForm)
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
