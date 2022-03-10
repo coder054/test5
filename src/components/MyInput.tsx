@@ -48,6 +48,7 @@ export const MyInput = ({
   isNeedValidate,
   isValidating,
   errorMessage,
+  placeholder,
   ...rest
 }: {
   className?: string
@@ -60,6 +61,7 @@ export const MyInput = ({
   isDisabled?: boolean
   isNeedValidate?: boolean
   isValidating?: boolean
+  placeholder?: string
 }) => {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -81,6 +83,7 @@ export const MyInput = ({
       <div className={clsx('relative', className)}>
         <CssTextField
           {...rest}
+          placeholder={placeholder}
           value={value}
           onChange={onChange}
           fullWidth
