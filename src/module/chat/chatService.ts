@@ -15,6 +15,7 @@ import {
   startAfter,
   update,
   serverTimestamp,
+  push,
 } from 'firebase/database'
 import { firebaseApp } from 'src/config/firebase-client'
 
@@ -469,7 +470,7 @@ export const queryTabAll = (chatRoom: IChatRoom, userId: string): boolean => {
   /// Display chat room that this user request to send message
   return (
     (chatRoom.memberIds || []).includes(userId) &&
-    !!chatRoom.lastMessageId &&
+    // !!chatRoom.lastMessageId &&
     (!chatRoom.requestedUID || chatRoom.requestedUID === userId)
   )
 }
@@ -693,5 +694,45 @@ export const updateLastMessageTime = async (
   } catch (error) {
     alert(error)
     return { error: true }
+  }
+}
+
+export const createChatRoom = async (
+  requested: boolean,
+  receiverId: string,
+  userId: string
+): Promise<string> => {
+  return ''
+}
+
+export const createGroupChatRoom = async (
+  groupChatId: string,
+  groupName: string,
+  requested: boolean,
+  memberIds: string[],
+  chatRoomImage?: string
+) => {
+  try {
+    // here
+
+    let chatRoom: IChatRoom = {
+      memberIds,
+      requested,
+      //@ts-ignore: Unreachable code error
+      updatedAt: serverTimestamp(),
+      chatRoomId: groupChatId,
+      chatRoomName: groupName,
+      chatRoomImage,
+      isGroup: true,
+    }
+
+    const updates = {}
+    updates[`/chatRooms/${groupChatId}/`] = chatRoom
+
+    await update(dbRef, updates)
+
+    // return newChatRoomKey
+  } catch (error) {
+    console.log('aaa', { error })
   }
 }

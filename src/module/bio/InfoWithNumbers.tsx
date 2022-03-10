@@ -119,7 +119,9 @@ export const InforWithNumbers = ({
 }) => {
   const [tab, setTab] = useState('Total')
   const [urlGetSeasonStats, setUrlGetSeasonStats] = useState('')
-  const { data, error } = useSWR(urlGetSeasonStats, fetcher) as {
+  const { data, error } = useSWR(urlGetSeasonStats, fetcher, {
+    revalidateOnFocus: false,
+  }) as {
     data: IDataStats
     error: any
   }

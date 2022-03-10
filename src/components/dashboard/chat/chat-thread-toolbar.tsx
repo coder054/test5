@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useMemo } from 'react'
 import type { FC } from 'react'
 import PropTypes from 'prop-types'
 import { formatDistanceToNowStrict } from 'date-fns'
@@ -22,6 +22,10 @@ import { Phone as PhoneIcon } from '../../../icons/phone'
 import { DotsHorizontal as DotsHorizontalIcon } from '../../../icons/dots-horizontal'
 import { Trash as TrashIcon } from '../../../icons/trash'
 import type { Participant } from '../../../types/chat'
+import { useAtom } from 'jotai'
+import { activeChatRoomAtom } from 'src/atoms/chatAtom'
+import { IChatRoom } from 'src/module/chat/chatService'
+import { get, isEmpty } from 'lodash'
 
 interface ChatThreadToolbarProps {
   participants: Participant[]
@@ -29,6 +33,9 @@ interface ChatThreadToolbarProps {
 
 export const ChatThreadToolbar: FC<ChatThreadToolbarProps> = (props) => {
   const { participants, ...other } = props
+  const [activeChatRoom] = useAtom(activeChatRoomAtom) as unknown as [
+    activeChatRoom: IChatRoom
+  ]
   const moreRef = useRef<HTMLButtonElement | null>(null)
   const [openMenu, setOpenMenu] = useState<boolean>(false)
   // To get the user from the authContext, you can use
@@ -51,6 +58,16 @@ export const ChatThreadToolbar: FC<ChatThreadToolbarProps> = (props) => {
   const handleMenuClose = (): void => {
     setOpenMenu(false)
   }
+
+  const imagesChatRoom = useMemo(() => {
+    if (isEmpty(activeChatRoom)) {
+      return []
+    }
+    if (!!activeChatRoom.chatRoomImage) {
+      return [activeChatRoom.chatRoomImage] || []
+    }
+    return activeChatRoom.userFaceImages || []
+  }, [activeChatRoom])
 
   return (
     <Box
@@ -77,7 +94,7 @@ export const ChatThreadToolbar: FC<ChatThreadToolbarProps> = (props) => {
         <AvatarGroup
           max={2}
           sx={{
-            ...(recipients.length > 1 && {
+            ...(imagesChatRoom.length > 1 && {
               '& .MuiAvatar-root': {
                 height: 30,
                 width: 30,
@@ -88,12 +105,15 @@ export const ChatThreadToolbar: FC<ChatThreadToolbarProps> = (props) => {
             }),
           }}
         >
-          {recipients.map((recipient) => (
-            <Avatar key={recipient.id} src={recipient.avatar} />
+          {imagesChatRoom.map((imgUrl) => (
+            <Avatar key={imgUrl} src={imgUrl} />
           ))}
         </AvatarGroup>
+
         <Box sx={{ ml: 2 }}>
-          <Typography variant="subtitle2">{name}</Typography>
+          <Typography variant="subtitle2">
+            {activeChatRoom.chatRoomName}
+          </Typography>
           {recipients.length === 1 && (
             <Typography color="textSecondary" variant="caption">
               Last active{' '}

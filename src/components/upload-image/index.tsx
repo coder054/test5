@@ -9,9 +9,8 @@ interface UploadImageProps {
   title?: string
   text?: string
   className?: string
+  classNameInner?: string
   errorMessage?: string
-  width?: number
-  height?: number
   ChangeUpload?: () => void
   setImage?: Function
 }
@@ -20,6 +19,7 @@ export const UploadImage = ({
   title,
   text,
   className,
+  classNameInner,
   errorMessage,
   setImage,
 }: UploadImageProps) => {
@@ -54,7 +54,7 @@ export const UploadImage = ({
     <div className={`${className}`}>
       <p className="text-base text-[#FFFFFF]">{title}</p>
       <div
-        className={`${cls.uploadImage} w-[223px] h-[130px] cursor-pointer rounded-[8px] mt-[12px] text-center  border relative`}
+        className={`${cls.uploadImage} ${classNameInner} w-[223px] h-[130px] cursor-pointer rounded-[8px] mt-[12px] text-center  border relative`}
       >
         {url && url ? (
           // eslint-disable-next-line @next/next/no-img-element
