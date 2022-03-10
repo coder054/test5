@@ -183,20 +183,32 @@ const Biography = () => {
   const { currentRoleId } = useAuth()
 
   const { data: dataAvgPlayer, error: errorAvgPlayer } = useSWR(
-    '/biographies/players/avg-radar'
+    '/biographies/players/avg-radar',
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   ) as {
     data: IAvgPlayerScore
     error: any
   }
 
   const { data: dataBio, error: errorBio } = useSWR(
-    `/biographies/player?username=${username}`
+    `/biographies/player?username=${username}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   ) as {
     data: IBiographyPlayer
     error: any
   }
   const { data: dataClub, error: errorCldataClub } = useSWR(
-    `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`
+    `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   ) as {
     data: IInfoClub
     error: any

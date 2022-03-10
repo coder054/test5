@@ -6,6 +6,7 @@ import { ROUTES } from 'src/constants/constants'
 import { InforWithAChart } from 'src/module/bio/InfoWithAChart'
 import { InfoWithCircleImage } from 'src/module/bio/InfoWithCircleImage'
 import { IBiographyPlayer } from 'src/pages/biography/[username]/[fullname]'
+import { fetcher } from 'src/utils/utils'
 import useSWR from 'swr'
 import { useAuth } from '../auth/AuthContext'
 const cls = require('./signup-form-biography.module.css')
@@ -41,7 +42,11 @@ export const SignupFormBiography = () => {
   })
 
   const { data: dataBio, error: errorBio } = useSWR(
-    `/biographies/player?username=maiJ070101`
+    `/biographies/player?username=maiJ070101`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   ) as {
     data: IBiographyPlayer
     error: any
