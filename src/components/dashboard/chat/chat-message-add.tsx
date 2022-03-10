@@ -1,10 +1,12 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { ChangeEvent, FC, KeyboardEvent } from 'react'
 import PropTypes from 'prop-types'
 import { Avatar, Box, IconButton, TextField, Tooltip } from '@mui/material'
 import { PaperAirplane as PaperAirplaneIcon } from '../../../icons/paper-airplane'
 import { Photograph as PhotographIcon } from '../../../icons/photograph'
 import { PaperClip as PaperClipIcon } from '../../../icons/paper-clip'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { getStr } from 'src/utils/utils'
 
 interface ChatMessageAddProps {
   disabled?: boolean
@@ -12,15 +14,11 @@ interface ChatMessageAddProps {
 }
 
 export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
+  const { playerProfile } = useAuth()
+
   const { disabled, onSend, ...other } = props
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [body, setBody] = useState<string>('')
-  // To get the user from the authContext, you can use
-  // `const { user } = useAuth();`
-  const user = {
-    avatar: '/static/mock-images/avatars/avatar-anika_visser.png',
-    name: 'Anika Visser',
-  }
 
   const handleAttach = (): void => {
     fileInputRef.current.click()
@@ -64,8 +62,9 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
           },
           mr: 2,
         }}
-        src={user.avatar}
+        src={getStr(playerProfile, 'media.faceImage')}
       />
+
       <TextField
         disabled={disabled}
         fullWidth
