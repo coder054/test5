@@ -1,5 +1,6 @@
 // API Authen
 export const API_SIGNIN_WITH_USERNAME = 'auth/log-in-username'
+export const API_SIGNUP_FORM_PLAYER = 'users/player'
 
 // API News
 export const API_GET_LIST_NEWS_POST = 'feed/get-list-news-post'
@@ -16,3 +17,6 @@ export const API_FRIENDS = 'friends'
 export const API_GET_LIST_CLUB = 'clubs'
 export const API_GET_LIST_TEAM = 'clubs/teams'
 export const API_GET_LIST_CONTACT = 'contact-groups/get-list-contacts'
+
+//API Biography
+export const API_GET_BIOGRAPHY_PLAYER = 'biographies/player'

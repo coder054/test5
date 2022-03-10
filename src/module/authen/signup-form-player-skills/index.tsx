@@ -10,6 +10,8 @@ import { useAtom } from 'jotai'
 import { profileAtom } from 'src/atoms/profileAtom'
 import { ROUTES } from 'src/constants/constants'
 import { useRouter } from 'next/router'
+import { axios } from 'src/utils/axios'
+import { API_SIGNUP_FORM_PLAYER } from 'src/constants/api.constants'
 
 interface FormValuesType {
   technics: number
@@ -30,6 +32,7 @@ export const SignUpFormPlayerSkills = () => {
   const [profileForm, setProfileForm] = useAtom(profileAtom)
   const { TextArea } = Input
   const router = useRouter()
+  const date = new Date()
 
   const [technics, setTechnics] = useState<number>(0)
   const [tactics, setTactics] = useState<number>(0)
@@ -80,23 +83,81 @@ export const SignUpFormPlayerSkills = () => {
     }
   }, [profileForm])
 
-  console.log(technics, tactics, physics, mental)
-  console.log(attacking, dribbling, passing, defending, pace, shooting)
-  console.log(note, tags)
-  console.log('profileForm', profileForm)
-
-  const handleNext = (e: any) => {
+  const handleNext = async (e: any) => {
     e.preventDefault()
 
-    setProfileForm({
-      ...profileForm,
+    const profilePlayer = {
+      health: {
+        height: {
+          value: profileForm?.health?.height?.value,
+          updatedAt: date.toISOString(),
+        },
+        weight: {
+          value: profileForm?.health?.weight?.value,
+          updatedAt: date.toISOString(),
+        },
+        leftFootLength: 0,
+        rightFootLength: 0,
+      },
+      media: {
+        faceImage: profileForm?.media?.faceImage,
+        bodyImage: profileForm?.media?.bodyImage,
+        teamImage: '',
+        videoLinks: [],
+      },
+      profile: {
+        phone: '',
+        firstName: profileForm?.profile?.firstName,
+        lastName: profileForm?.profile?.lastName,
+        gender: 'MALE',
+        birthCountry: profileForm?.profile?.birthCountry,
+        birthDay: profileForm?.profile?.birthDay,
+        homeAddress: '',
+        postNumber: '',
+        region: '',
+        city: profileForm?.profile?.city,
+      },
+      settings: {
+        country: profileForm?.profile?.birthCountry,
+        language: '',
+        public: true,
+        notificationOn: true,
+        notificationOptions: {
+          profileAndDiaryUpdates: true,
+          feedUpdates: true,
+          messageUpdates: true,
+          inviteUpdates: true,
+        },
+      },
+      socialLinks: {
+        instagram: '',
+        facebook: '',
+        twitter: '',
+        youtube: '',
+        veoHighlites: '',
+        tiktok: '',
+      },
+      playerCareer: {
+        clubId: profileForm?.playerCareer?.clubId,
+        contractedFrom: date.toISOString(),
+        contractedUntil: date.toISOString(),
+        acceptedTeamIds: profileForm?.playerCareer?.acceptedTeamIds,
+        pendingTeamIds: [],
+        favoriteRoles: profileForm?.playerCareer?.favoriteRoles,
+        shirtNumber: profileForm?.playerCareer?.shirtNumber,
+        summary: profileForm?.playerCareer?.summary,
+        teamCalendarLinks: [],
+        seasonStartDate: date.toISOString(),
+        seasonEndDate: date.toISOString(),
+        estMarketValue: 0,
+      },
       playerSkills: {
         specialityTags: tags,
         overall: {
-          mental: mental,
-          physics: physics,
-          tactics: tactics,
-          technics: technics,
+          mental: mental / 20,
+          physics: physics / 20,
+          tactics: tactics / 20,
+          technics: technics / 20,
           leftFoot: 0,
           rightFoot: 0,
         },
@@ -111,10 +172,17 @@ export const SignUpFormPlayerSkills = () => {
           heading: 0,
         },
       },
-      playerCareer: { ...profileForm.playerCareer, summary: note },
-    })
+    }
 
-    router.push(ROUTES.SIGNUP_FORM_BIOGRAPHY)
+    try {
+      const response = await axios.put(API_SIGNUP_FORM_PLAYER, {
+        ...profilePlayer,
+      })
+
+      if (response.status === 200) {
+        router.push(ROUTES.SIGNUP_FORM_BIOGRAPHY)
+      }
+    } catch (error) {}
   }
 
   return (
