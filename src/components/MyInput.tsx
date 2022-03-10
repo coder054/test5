@@ -99,7 +99,7 @@ export const MyInput = ({
         >
           {password && showPassword ? (
             <svg
-              className="absolute right-[12px] top-1/2 transform -translate-y-1/2 cursor-pointer"
+              className="absolute right-[12px] top-[28px] transform -translate-y-1/2 cursor-pointer"
               width="24"
               height="24"
               viewBox="0 0 24 24"
@@ -114,7 +114,7 @@ export const MyInput = ({
           ) : null}
           {password && !showPassword ? (
             <svg
-              className="absolute right-[12px] top-1/2 transform -translate-y-1/2 cursor-pointer"
+              className="absolute right-[12px] top-[28px] transform -translate-y-1/2 cursor-pointer"
               width="24"
               height="24"
               viewBox="0 0 24 24"

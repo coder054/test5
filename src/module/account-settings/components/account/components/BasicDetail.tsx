@@ -1,8 +1,8 @@
-import { Form, notification } from 'antd'
-import clsx from 'clsx'
 import * as firebase from 'firebase/auth'
 import { signInWithEmailAndPassword, User } from 'firebase/auth'
+import { ErrorMessage, Field, Form, Formik } from 'formik'
 import { useAtom } from 'jotai'
+import _ from 'lodash'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
@@ -10,13 +10,14 @@ import { MyButton } from 'src/components/MyButton'
 import { MyCustomSelect } from 'src/components/MyCustomSelect'
 import { MyInput } from 'src/components/MyInput'
 import { auth } from 'src/config/firebase-client'
-import { getRulePassword } from 'src/hooks/functionCommon'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
+import * as Yup from 'yup'
 import { BackGround } from '../../common-components/Background'
 
-type FormValuesType = {
-  userName?: string
+type InitialValuesType = {
+  username?: string
   newPassword: string
+  userProfile: string
   confirmPassword: string
   verifyPassword: string
 }
@@ -24,36 +25,44 @@ type FormValuesType = {
 export const BasicDetail = () => {
   const { currentUser, currentRoleName } = useAuth()
 
-  const [form] = Form.useForm()
   const [account] = useAtom(settingsAtom)
   const [email, setEmail] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [formValues, setFormValues] = useState<FormValuesType>({
-    userName: '',
+  const [initialValues, setInitialValues] = useState<InitialValuesType>({
+    username: '',
+    userProfile: '',
     newPassword: '',
     confirmPassword: '',
     verifyPassword: '',
   })
 
-  const handleChangeForm = (type: keyof FormValuesType, value: string) => {
-    setFormValues((prev) => ({ ...prev, [type]: value }))
-  }
+  const validationSchema = Yup.object().shape({
+    newPassword: Yup.string()
+      .min(8, 'Password minimum length should be 8')
+      .matches(
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+        'Must contain 1 capital letter and one special case Character'
+      ),
+    confirmPassword: Yup.string().oneOf(
+      [Yup.ref('newPassword')],
+      'Password not matched'
+    ),
+  })
 
-  const handleSubmit = async () => {
-    await form.validateFields()
+  const handleSubmit = async (values: InitialValuesType, { resetForm }) => {
     setIsLoading(true)
-    await signInWithEmailAndPassword(auth, email, formValues.verifyPassword)
+    await signInWithEmailAndPassword(auth, email, values.verifyPassword)
       .then(async () => {
         await firebase
-          .updatePassword(currentUser as User, formValues.newPassword)
+          .updatePassword(currentUser as User, values.newPassword)
           .then(() => {
+            resetForm()
             setIsLoading(false)
             toast.success('Password changed')
-            form.resetFields()
           })
           .catch(() => {
             setIsLoading(false)
-            toast.error('An error has occurred')
+            toast.error('An error has occurred, try to refesh the page')
           })
       })
       .catch(() => {
@@ -65,73 +74,73 @@ export const BasicDetail = () => {
   useEffect(() => {
     currentUser !== null ? setEmail(currentUser.email) : setEmail('')
     account &&
-      setFormValues((prev) => ({ ...prev, userName: account?.username }))
-  }, [currentUser, account])
+      setInitialValues((prev) => ({
+        ...prev,
+        username: account?.username,
+        userProfile: _.upperFirst(currentRoleName.toLowerCase()),
+      }))
+  }, [account])
 
   return (
     <BackGround
       label="Basic detail"
       form={
-        <Form form={form} className="space-y-7">
-          <MyCustomSelect
-            label="User profile"
-            /* @ts-ignore */
-            value={_.upperFirst(currentRoleName.toLowerCase())}
-            arrOptions={['Coach', 'Player']}
-          />
-          <MyInput label="Username" value={formValues.userName} />
-          <Form.Item name="newPassword" rules={[getRulePassword()]}>
-            <MyInput
-              password
-              label="New password"
-              value={formValues.newPassword}
-              onChange={(e) => handleChangeForm('newPassword', e.target.value)}
-            />
-          </Form.Item>
-          <Form.Item
-            name="confirmPassword"
-            dependencies={['newPassword']}
-            rules={[
-              ({ getFieldValue }) => ({
-                validator(_, val) {
-                  if (!val || getFieldValue('newPassword') === val) {
-                    return Promise.resolve()
-                  }
-                  return Promise.reject(
-                    new Error(
-                      'The two passwords that you entered do not match!'
-                    )
-                  )
-                },
-              }),
-            ]}
-          >
-            <MyInput
-              password
-              label="Confirm password"
-              value={formValues.confirmPassword}
-              onChange={(e) =>
-                handleChangeForm('confirmPassword', e.target.value)
-              }
-            />
-          </Form.Item>
-          <Form.Item name="oldPassword">
-            <MyInput
-              password
-              label="Verify with old password"
-              value={formValues.verifyPassword}
-              onChange={(e) =>
-                handleChangeForm('verifyPassword', e.target.value)
-              }
-            />
-          </Form.Item>
-          <MyButton
-            isLoading={isLoading}
-            type="submit"
-            onClick={handleSubmit}
-            label="Save"
-          />
-        </Form>
+        <Formik
+          onSubmit={handleSubmit}
+          enableReinitialize={true}
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+        >
+          {() => (
+            <Form className="space-y-7">
+              <Field
+                as={MyCustomSelect}
+                fullWidth
+                name="userProfle"
+                label="User profile"
+                value={initialValues.userProfile}
+                arrOptions={['Coach', 'Player']}
+                helperText={<ErrorMessage name="userProfile" />}
+              />
+              <Field
+                as={MyInput}
+                fullWidth
+                name="username"
+                label="Username"
+                placeholder="Enter your username"
+                helperText={<ErrorMessage name="username" />}
+              />
+              <Field
+                as={MyInput}
+                password
+                fullWidth
+                name="newPassword"
+                label="New password"
+                placeholder="Enter your new password"
+                helperText={<ErrorMessage name="newPassword" />}
+              />
+              <Field
+                as={MyInput}
+                password
+                fullWidth
+                name="confirmPassword"
+                label="Confirm password"
+                placeholder="Confirm your password"
+                helperText={<ErrorMessage name="confirmPassword" />}
+              />
+              <Field
+                as={MyInput}
+                password
+                fullWidth
+                name="verifyPassword"
+                label="Verify password"
+                placeholder="Verify your old password"
+                helperText={<ErrorMessage name="verifyPassword" />}
+              />
+              <MyButton isLoading={isLoading} type="submit" label="Save" />
+            </Form>
+          )}
+        </Formik>
       }
     />
   )
