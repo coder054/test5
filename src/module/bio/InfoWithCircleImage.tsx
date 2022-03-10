@@ -322,18 +322,11 @@ export const InfoWithCircleImage = ({
         </div>
       )}
 
-      {signupForm && (
-        <p className="text-[14px] text-white">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute
-          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-          fugiat nulla pariatur.
-        </p>
+      {signupForm && dataBio?.summary && (
+        <div className="mx-auto max-w-[466px] text-white text-[14px] leading-[22px] ">
+          {dataBio?.summary}
+        </div>
       )}
-
-      <div className="mx-auto max-w-[466px] text-white text-[14px] leading-[22px] ">
-        {dataBio?.summary}
-      </div>
     </>
   )
 }

@@ -3,6 +3,8 @@ import { BioRadarChart } from 'src/components/specific/BioRadarChart'
 import { Text } from 'src/components/Text'
 import { Stars } from 'src/components/common/Stars'
 import { Button } from 'src/components'
+import { useRouter } from 'next/router'
+import { ROUTES } from 'src/constants/constants'
 
 export const InforWithAChart = ({
   dataBio,
@@ -13,6 +15,8 @@ export const InforWithAChart = ({
   dataBioRadarChart: any
   signupForm?: boolean
 }) => {
+  const router = useRouter()
+
   return (
     <>
       <div className="max-w-[466px] mx-auto p-[8px] flex items-center gap-x-[4px] bg-Dark-3 mb-[20px] ">
@@ -110,7 +114,7 @@ export const InforWithAChart = ({
         <Text name="Subtitle1" className="text-Grey mb-[12px]">
           SPECIALITIES
         </Text>
-        {(dataBio.specialities || []).map((speciality) => (
+        {(dataBio?.specialities || []).map((speciality) => (
           <span
             key={speciality}
             className="rounded-[16px] bg-Blue h-[30px] px-[12px] py-[4px] inline-flex items-center justify-center
@@ -121,10 +125,16 @@ export const InforWithAChart = ({
         ))}
 
         {signupForm && (
-          <Button
-            text="Next"
-            className="text-[15px] bg-[#4654EA] rounded-[8px] h-[48px]"
-          />
+          <div
+            onClick={() => {
+              router.push(ROUTES.dashboard)
+            }}
+          >
+            <Button
+              text="Next"
+              className="text-[15px] bg-[#4654EA] rounded-[8px] h-[48px]"
+            />
+          </div>
         )}
       </div>
     </>
