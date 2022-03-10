@@ -48,6 +48,9 @@ import { UploadImage } from 'src/components/upload-image'
 import { axios } from 'src/utils/axios'
 import { Loading } from 'src/components/loading/loading'
 import { getStr, truncateStr } from 'src/utils/utils'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { chain } from 'lodash'
+import { createGroupChatRoom } from 'src/module/chat/chatService'
 
 interface ChatSidebarProps {
   tab: any
@@ -185,16 +188,13 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
       >
         <Typography variant="h5">Chats</Typography>
         <Box sx={{ flexGrow: 1 }} />
-        <NextLink href="/dashboard/chat?compose=true" passHref>
-          <Button
-            component="a"
-            onClick={handleGroupClick}
-            startIcon={<PlusIcon />}
-            variant="contained"
-          >
-            Group1
-          </Button>
-        </NextLink>
+        <Button
+          onClick={handleGroupClick}
+          startIcon={<PlusIcon />}
+          variant="contained"
+        >
+          Group
+        </Button>
         <IconButton
           onClick={onClose}
           sx={{
@@ -311,10 +311,11 @@ ChatSidebar.propTypes = {
 }
 
 const ModalCreateGroup = ({ open, setOpen }) => {
+  const { currentRoleId } = useAuth()
+  const router = useRouter()
   const [name, setName] = useState('')
   const [keyword, setKeyword] = useState('')
   const [imageUrl, setImageUrl] = useState<string>('')
-  const [checked, setChecked] = useState(true)
   const [privateGroup, setPrivateGroup] = useState(true)
   const [keywordDebounce] = useDebounce(keyword, 300)
   const [membersResult, setMembersResult] = useState([])
@@ -341,11 +342,21 @@ const ModalCreateGroup = ({ open, setOpen }) => {
     console.log('aaa membersResult: ', membersResult)
   }, [membersResult])
 
-  const selectedIdMembers = useMemo(() => {
+  const selectedIdMembers: string[] = useMemo(() => {
     return selectedMembers.map((member) => {
       return member.userId
     })
   }, [selectedMembers])
+
+  const resetModalAddGroup = () => {
+    setName('')
+    setKeyword('')
+    setImageUrl('')
+    setPrivateGroup(true)
+    setMembersResult([])
+    setSelectedMembers([])
+    setLoadingMembers(false)
+  }
 
   return (
     <Modal
@@ -356,12 +367,18 @@ const ModalCreateGroup = ({ open, setOpen }) => {
     >
       <div
         style={{
-          boxShadow:
-            '0px 4px 4px rgba(0, 0, 0, 0.25), 0px 2px 4px rgba(31, 41, 55, 0.06)',
-          backdropFilter: 'blur(68px)',
-          background: 'rgba(32, 33, 40, 0.8)',
+          // boxShadow:
+          //   '0px 4px 4px rgba(0, 0, 0, 0.25), 0px 2px 4px rgba(31, 41, 55, 0.06)',
+          // backdropFilter: 'blur(68px)',
+          // background: 'rgba(32, 33, 40, 0.8)',
+
+          backgroundColor: 'rgb(17, 24, 39)',
+          color: 'rgb(237, 242, 247)',
+          transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+          boxShadow: 'rgb(0 0 0 / 24%) 0px 6px 15px',
+          backgroundImage: 'none',
         }}
-        className="p-[32px] border border-Stroke rounded-[8px] min-h-[400px] overflow-y-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-[700px] "
+        className="p-[24px] rounded-[8px] min-h-[400px] overflow-y-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-[700px] [max-height:calc(100vh_-_40px)]"
       >
         <TextField
           fullWidth
@@ -374,13 +391,20 @@ const ModalCreateGroup = ({ open, setOpen }) => {
           }}
         />
 
-        <div className="h-[32px] "></div>
+        <div className="h-[16px] "></div>
 
         <div className="flex gap-x-[20px] ">
           {selectedMembers.map((member, index) => (
             <div
               key={index}
-              onClick={() => {}}
+              onClick={() => {
+                let findIndex = selectedMembers.findIndex((o) => {
+                  return o.userId === member.userId
+                })
+                const selectedMembersClone = [...selectedMembers]
+                selectedMembersClone.splice(findIndex, 1)
+                setSelectedMembers(selectedMembersClone)
+              }}
               className="w-[40px] h-[40px] relative cursor-pointer  "
             >
               <img
@@ -389,14 +413,14 @@ const ModalCreateGroup = ({ open, setOpen }) => {
                 alt=""
               />
 
-              <div className="absolute z-10 right-[-8px] top-[-8px] rounded-full w-[16px] h-[16px] bg-white text-black flex items-center justify-center ">
+              <div className="absolute z-10 right-[-8px] top-[-8px] rounded-full w-[16px] h-[16px] bg-white text-black flex items-center justify-center select-none ">
                 x
               </div>
             </div>
           ))}
         </div>
 
-        <div className="h-[32px] "></div>
+        <div className="h-[16px] "></div>
 
         <TextField
           fullWidth
@@ -423,7 +447,7 @@ const ModalCreateGroup = ({ open, setOpen }) => {
           setSelectedMembers={setSelectedMembers}
         />
 
-        <div className="h-[32px] "></div>
+        <div className="h-[16px] "></div>
 
         <div className=" ">Group Image</div>
         <UploadImage
@@ -432,7 +456,7 @@ const ModalCreateGroup = ({ open, setOpen }) => {
           classNameInner="border-[#00000000] "
           setImage={setImageUrl}
         />
-        <div className="h-[32px] "></div>
+        <div className="h-[16px] "></div>
         <div className="flex w-full justify-between items-center ">
           <Typography variant="body1">Private group</Typography>
           <Switch
@@ -444,6 +468,73 @@ const ModalCreateGroup = ({ open, setOpen }) => {
               setPrivateGroup(event.target.checked)
             }}
           />
+        </div>
+        <div className="h-[16px] "></div>
+        <div className="flex ">
+          <Button
+            onClick={() => {
+              setOpen(false)
+              resetModalAddGroup()
+            }}
+            fullWidth
+            size="large"
+            sx={{ mr: 2 }}
+            variant="outlined"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={async () => {
+              if (!name) {
+                alert('Name is required')
+                return
+              }
+
+              if (selectedIdMembers.length < 2) {
+                alert('Please add at least 2 members to your group')
+                return
+              }
+
+              try {
+                const {
+                  data,
+                }: {
+                  data: {
+                    groupId: string
+                    acceptedMemberIds: string[]
+                  }
+                } = await axios.post('/groups', {
+                  name,
+                  groupImage: imageUrl,
+                  isPrivate: privateGroup,
+                  memberIds: selectedIdMembers,
+                })
+                setOpen(false)
+                resetModalAddGroup()
+
+                await createGroupChatRoom(
+                  data.groupId,
+                  name,
+                  false,
+                  chain([...data.acceptedMemberIds, currentRoleId])
+                    .compact()
+                    .uniq()
+                    .value(),
+                  imageUrl
+                )
+                setTimeout(() => {
+                  router.push(`/dashboard/chat?roomId=${data.groupId}`)
+                }, 200)
+
+                // here open new chat room
+              } catch (error) {}
+            }}
+            fullWidth
+            size="large"
+            variant="contained"
+          >
+            Save
+          </Button>
         </div>
       </div>
     </Modal>
@@ -475,56 +566,61 @@ const ResultMembers = ({
       </div>
       <div className="h-[12px] "></div>
 
-      {members.map((member, index) => (
-        <div key={index} className="mb-[30px] flex w-full items-center ">
-          <img
-            src={member.faceImage}
-            className="w-[65px] h-[65px] object-cover rounded-[8px] mr-3"
-            alt=""
-          />
-          <div className=" w-[200px] ">
-            <div className="text-white font-semibold ">
-              {member.firstName} {member.lastName}{' '}
-            </div>
-            <div className="flex justify-between ">
-              <span className="text-Grey ">#{member.username}</span>
-              <span className="text-Grey ">
-                {getStr(member, 'favoriteRoles[0]')}
-              </span>
-            </div>
+      <div className="max-h-[300px] py-[4px] overflow-y-auto ">
+        {members.map((member, index) => (
+          <div key={index} className="mb-[30px] flex w-full items-center ">
+            <img
+              src={member.faceImage}
+              className="w-[65px] h-[65px] object-cover rounded-[8px] mr-3"
+              alt=""
+            />
+            <div className=" w-[200px] ">
+              <div className="text-white font-semibold ">
+                {member.firstName} {member.lastName}{' '}
+              </div>
+              <div className="flex justify-between ">
+                <span className="text-Grey ">#{member.username}</span>
+                <span className="text-Grey ">
+                  {getStr(member, 'favoriteRoles[0]')}
+                </span>
+              </div>
 
-            <div className="flex justify-between ">
-              <span className="text-white ">
-                {truncateStr(member.city || '', 11)}
-              </span>
-              <span className="text-white ">{getStr(member, 'clubName')} </span>
+              <div className="flex justify-between ">
+                <span className="text-white ">
+                  {truncateStr(member.city || '', 11)}
+                </span>
+                <span className="text-white ">
+                  {getStr(member, 'clubName')}{' '}
+                </span>
+              </div>
             </div>
+            <div className="grow "></div>
+            <Checkbox
+              checked={selectedMembers
+                .map((o) => o.userId)
+                .includes(member.userId)}
+              onChange={(event) => {
+                // if currently checked
+                if (
+                  selectedMembers.map((o) => o.userId).includes(member.userId)
+                ) {
+                  let findIndex = selectedMembers.findIndex((o) => {
+                    return o.userId === member.userId
+                  })
+                  const selectedMembersClone = [...selectedMembers]
+                  selectedMembersClone.splice(findIndex, 1)
+                  setSelectedMembers(selectedMembersClone)
+                } else {
+                  // if currently unchecked
+                  setSelectedMembers([...selectedMembers, member])
+                }
+              }}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
+            <div className="w-[8px] "></div>
           </div>
-          <div className="grow "></div>
-          <Checkbox
-            checked={selectedMembers
-              .map((o) => o.userId)
-              .includes(member.userId)}
-            onChange={(event) => {
-              // if currently checked
-              if (
-                selectedMembers.map((o) => o.userId).includes(member.userId)
-              ) {
-                let findIndex = selectedMembers.findIndex((o) => {
-                  return o.userId === member.userId
-                })
-                const selectedMembersClone = [...selectedMembers]
-                selectedMembersClone.splice(findIndex, 1)
-                setSelectedMembers(selectedMembersClone)
-              } else {
-                // if currently unchecked
-                setSelectedMembers([...selectedMembers, member])
-              }
-            }}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   )
 }

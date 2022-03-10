@@ -175,7 +175,7 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
       //   .push();
 
       // Get a key for a new Post.
-      const newMessageKey = push(
+      const newMessageKey = await push(
         child(ref(database), `/chatMessages/${chatRoomId}`)
       ).key
 
