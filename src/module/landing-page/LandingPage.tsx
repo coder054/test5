@@ -1,53 +1,52 @@
+import clsx from 'clsx'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { isDesktop, isMobile } from 'react-device-detect'
 import { Button } from 'src/components'
 import {
-  AppStoreIcon,
   CheckedIcon,
   DevTalksIcon,
   DoubleQuote2Icon,
   DoubleQuoteIcon,
   GoalsIcon,
-  GooglePlayIcon,
   ReportsIcon,
   SkillsReviewsIcon,
 } from 'src/components/icons'
 import { Logo } from 'src/components/logo'
+import { MyButton } from 'src/components/MyButton'
 import {
   APP_FEATURE,
   APP_FEATURE_2,
 } from 'src/constants/mocks/app-feature.constants'
 import {
-  APP,
-  APP_SHADOW,
+  APP_4,
+  APP_STORE_WHITE,
   ARROW,
-  BALL,
   COMMENT_AVATAR,
   COMMENT_AVATAR_3,
-  GRAPH,
-  GROUP_ITEMS,
-  IT_FREE,
-  LANDING_TABLET,
-  NEO,
-  NEO_MIRROR,
-  TEAM,
-  PLAYER,
-  GOAL,
-  APP_2,
-  BALL_2,
   COMMENT_NICK,
-  LANDING_4,
-  APP_STORE_WHITE,
+  GOAL_KEERPER,
   GOOGLE_PLAY_WHITE,
   GROUP_DEVICES,
-  GOAL_KEERPER,
-  APP_4,
+  IT_FREE,
+  NEO,
+  NEO_MIRROR,
+  PLAYER_2,
+  PLAYER_3,
+  TEAM,
 } from 'src/imports/images'
 import { AppFeature } from './components/AppFeature'
-import { MyButton } from 'src/components/MyButton'
-import { isMobile, isDesktop } from 'react-device-detect'
-import clsx from 'clsx'
+import { Footer } from './components/Footer'
+import { SectionFive } from './components/SectionFive'
+import { SectionFour } from './components/SectionFour'
+import { SectionThree } from './components/SectionThree'
 
 export const Landing = () => {
+  const router = useRouter()
+  const handleNavigate = () => {
+    router.push('signup')
+  }
   return (
     <div className="flex flex-col bg-white">
       <div className="text-white bg-landing-one w-full h-screen bg-no-repeat bg-cover">
@@ -61,12 +60,15 @@ export const Landing = () => {
         >
           <Logo />
           <div className="flex">
-            <Button
-              text="Sign in"
-              type="button"
-              className="text-[14px] px-[17px] py-[7px]"
-            />
+            <Link href="signin">
+              <Button
+                text="Sign in"
+                type="button"
+                className="text-[14px] px-[17px] py-[7px]"
+              />
+            </Link>
             <MyButton
+              onClick={handleNavigate}
               label="Sign up"
               type="button"
               className="text-[14px] px-[17px] py-[7px]"
@@ -164,7 +166,7 @@ export const Landing = () => {
         <div
           className={clsx(
             'grid ',
-            isMobile && 'grid-cols-2 gap-y-6',
+            isMobile && 'grid-cols-2 gap-y-6 px-[20px]',
             isDesktop && ' grid-cols-4 gap-y-20 gap-x-24 pt-20'
           )}
         >
@@ -180,47 +182,52 @@ export const Landing = () => {
       </div>
       <div
         className={clsx(
-          'bg-landing-two bg-no-repeat bg-cover',
+          'bg-landing-two bg-no-repeat bg-cover relative',
           isMobile && 'h-[420px]',
-          isDesktop && 'h-[530px] relative'
+          isDesktop && 'h-[530px]'
         )}
       >
         {isDesktop && (
           <>
-            <div className="absolute z-20 my-auto right-[340px] -bottom-[6px]">
+            <div className="absolute z-20 my-auto 2xl:right-[340px] laptopM:right-[150px]  -bottom-[6px]">
               <Image src={NEO} />
             </div>
-            <div className="absolute z-10  right-[470px] -bottom-[6px]">
+            <div className="absolute z-10 2xl:right-[470px] laptopM:right-[270px] -bottom-[6px]">
               <Image src={NEO_MIRROR} />
             </div>
           </>
         )}
         <div
           className={clsx(
-            'h-full bg-gradient-to-r from-white  absolute ',
-            isMobile && 'w-[200px] -left-20',
-            isDesktop && 'w-[1000px] -left-96'
+            '  from-white  absolute  z-10',
+            isMobile && 'h-[200px] bg-gradient-to-t w-full bottom-0',
+            isDesktop && 'h-full bg-gradient-to-r w-[1000px] -left-96'
           )}
         ></div>
         <div
           className={clsx(
             isDesktop &&
               'max-w-[1320px] absolute left-[340px] top-[100px] w-[350px] space-y-4 ',
-            isMobile && 'my-[60px] ml-[65px]'
+            isMobile && 'mb-[30px] mt-[30px] ml-[65px] mr-[20px]'
           )}
         >
           <span className="text-center font-semibold text-[#4654EA] text-[14px] tracking-[2px] ">
             TESTIMONIAL
           </span>
-          <p className="text-black text-[36px] font-bold relative">
+          <p
+            className={clsx(
+              'text-black text-[36px] font-bold relative',
+              isMobile && 'text-white z-10'
+            )}
+          >
             <span className="absolute -left-14 top-[14px]">
               <DoubleQuoteIcon />
             </span>
             Zporter makes me visible to all Scouts, Agents and Club Managers.
           </p>
           <div className="flex space-x-4">
-            <Image src={COMMENT_AVATAR} />
-            <span className="text-black">
+            <Image src={COMMENT_AVATAR} className="z-10" />
+            <span className="text-black z-10">
               <p className="text-[18px] font-semibold">Neo Jönsson</p>
               <p className="text-[14px] font-normal">Forward, Maj FC</p>
             </span>
@@ -278,6 +285,7 @@ export const Landing = () => {
               <Image src={IT_FREE} />
             </span>
             <MyButton
+              onClick={handleNavigate}
               type="button"
               label="Sign up"
               className={clsx(
@@ -318,7 +326,7 @@ export const Landing = () => {
             <div
               className={clsx(
                 'grid ',
-                isMobile && 'grid-cols-2 my-[40px] py-[50px] gap-y-6',
+                isMobile && 'grid-cols-2 my-[40px] py-[50px] gap-y-6 px-[20px]',
                 isDesktop && 'grid-cols-4 pt-[1000px] gap-y-20 gap-x-24'
               )}
             >
@@ -393,6 +401,7 @@ export const Landing = () => {
                 <Image src={IT_FREE} />
               </span>
               <MyButton
+                onClick={handleNavigate}
                 type="button"
                 label="Sign up"
                 className={clsx(
@@ -412,94 +421,60 @@ export const Landing = () => {
           )}
         </div>
       </div>
-      <div
-        className={clsx(
-          'relative ',
-          isDesktop &&
-            'h-[1600px] max-w-[1320px] flex flex-col items-center py-8 mx-auto'
-        )}
-      >
-        <p
-          className={clsx(
-            'font-bold text-black text-[30px]',
-            isDesktop && 'mb-14',
-            isMobile && 'px-[30px] mb-6'
-          )}
-        >
-          For the best Coaches
-        </p>
+      <div className="bg-white mobileM:h-[1320px] mobileL:h-[1250px] laptopM:h-[1550px] h-[1550px]">
         <div
           className={clsx(
-            'text-[#6B7280] font-medium text-[16px] ',
-            isDesktop && 'grid grid-cols-3 gap-x-10 gap-y-28 text-center mb-24',
-            isMobile && 'flex flex-col mx-[30px] space-y-6'
+            'relative z-20  laptopM:w-[1320px] laptopM:flex laptopM:flex-col laptopM:items-center laptopM:py-8 laptopM:mx-auto'
           )}
         >
-          <p>
-            Coaches and Personal Trainers that wants go give their ambitious
-            players the best possible support, no matter what club they are part
-            of.
+          {isDesktop && (
+            <span className="absolute 2xl:-bottom-[90px] laptopM:-bottom-[30px] xl:-right-[50px] 2xl:-right-[290px]">
+              <Image src={PLAYER_2} />
+            </span>
+          )}
+          {isDesktop && (
+            <span className="absolute 2xl:-bottom-[45px] laptopM:bottom-0 xl:-left-[60px] 2xl:-left-[290px]">
+              <Image src={PLAYER_3} />
+            </span>
+          )}
+          <p
+            className={clsx(
+              'font-bold text-black text-[30px]',
+              isDesktop && 'mb-14',
+              isMobile && 'px-[30px] mb-6'
+            )}
+          >
+            For the best Coaches
           </p>
-          <p>
-            Can use Zporter to help them set goals, run skills reviews, digital
-            development talks and give them instant feedbacks after matches and
-            trainings.
-          </p>
-          <p>
-            And of course mix real life trainings with digital programs and
-            challenges to help their players learn faster and smarter.
-          </p>
-        </div>
-        {isMobile && (
-          <div className="grid grid-cols-2 gap-6 mt-6">
-            <AppFeature
-              titleColor={clsx(
-                'text-black text-center',
-                isMobile && 'w-[130px]'
-              )}
-              icon={<GoalsIcon />}
-              title="GOALS"
-              content="Helping Players To Set Smart Goals To Aim For"
-            />
-            <AppFeature
-              titleColor={clsx(
-                'text-black text-center',
-                isMobile && 'w-[130px]'
-              )}
-              icon={<DevTalksIcon />}
-              title="DEV. TALKS"
-              content="Run Frequent Feedback Talks"
-            />
-            <AppFeature
-              titleColor={clsx(
-                'text-black text-center',
-                isMobile && 'w-[190px]'
-              )}
-              icon={<SkillsReviewsIcon />}
-              title="SKILLS REVIEWS"
-              content="Performance Reviews & Match Feedback"
-            />
-            <AppFeature
-              titleColor={clsx(
-                'text-black text-center',
-                isMobile && 'w-[100px]'
-              )}
-              icon={<ReportsIcon />}
-              title="REPORTS"
-              content="Reports & Analytics On Health & Skills Development (Q4 2022)"
-            />
+          <div
+            className={clsx(
+              'text-[#6B7280] font-medium text-[16px] ',
+              isDesktop &&
+                'grid grid-cols-3 gap-x-10 gap-y-28 text-center mb-24',
+              isMobile && 'flex flex-col mx-[30px] space-y-6'
+            )}
+          >
+            <p>
+              Coaches and Personal Trainers that wants go give their ambitious
+              players the best possible support, no matter what club they are
+              part of.
+            </p>
+            <p>
+              Can use Zporter to help them set goals, run skills reviews,
+              digital development talks and give them instant feedbacks after
+              matches and trainings.
+            </p>
+            <p>
+              And of course mix real life trainings with digital programs and
+              challenges to help their players learn faster and smarter.
+            </p>
           </div>
-        )}
-        {isDesktop && (
-          <div className={clsx('grid grid-cols-3 gap-x-10 gap-y-28')}>
-            <div
-              className={clsx('text-center ', isDesktop && 'mt-28 space-y-20')}
-            >
+          {isMobile && (
+            <div className="grid grid-cols-2 gap-6 mt-6">
               <AppFeature
                 titleColor={clsx(
                   'text-black text-center',
-
-                  isDesktop && 'w-[160px]'
+                  isMobile && 'w-[130px]'
                 )}
                 icon={<GoalsIcon />}
                 title="GOALS"
@@ -508,22 +483,16 @@ export const Landing = () => {
               <AppFeature
                 titleColor={clsx(
                   'text-black text-center',
-
-                  isDesktop && 'w-[160px]'
+                  isMobile && 'w-[130px]'
                 )}
                 icon={<DevTalksIcon />}
                 title="DEV. TALKS"
                 content="Run Frequent Feedback Talks"
               />
-            </div>
-            <div className="-ml-10">
-              <Image src={APP_4} />
-            </div>
-            <div className={clsx('text-center mt-28 space-y-20')}>
               <AppFeature
                 titleColor={clsx(
                   'text-black text-center',
-                  isDesktop && 'w-[190px]'
+                  isMobile && 'w-[190px]'
                 )}
                 icon={<SkillsReviewsIcon />}
                 title="SKILLS REVIEWS"
@@ -532,64 +501,114 @@ export const Landing = () => {
               <AppFeature
                 titleColor={clsx(
                   'text-black text-center',
-                  isDesktop && 'w-[160px]'
+                  isMobile && 'w-[100px]'
                 )}
                 icon={<ReportsIcon />}
                 title="REPORTS"
                 content="Reports & Analytics On Health & Skills Development (Q4 2022)"
               />
             </div>
-          </div>
-        )}
-        <div
-          className={clsx(
-            isDesktop && 'w-[700px] flex flex-col items-center mt-40',
-            isMobile && 'mt-8 mx-[30px]'
           )}
-        >
-          <span
-            className={clsx(
-              'font-semibold text-[#17C78D] text-[14px] tracking-[2px] ',
-              isMobile && 'text-left'
-            )}
-          >
-            TESTIMONIAL
-          </span>
-          <p className="text-black text-center text-[36px] font-bold relative mb-7 mt-2">
-            {isDesktop && (
-              <span className="absolute -left-[12px] -top-[10px]">
-                <DoubleQuoteIcon />
-              </span>
-            )}
-            Try us out, download the Zporter app from the App store or Google
-            Play
-          </p>
-          <div className="flex space-x-4">
-            <Image src={COMMENT_NICK} />
-            <span className="text-black">
-              <p className="text-[18px] font-semibold">Nicklas Jönsson</p>
-              <p className="text-[14px] font-normal">Founder, Zporter</p>
-            </span>
-          </div>
+          {isDesktop && (
+            <div className={clsx('grid grid-cols-3 gap-x-10 gap-y-28')}>
+              <div
+                className={clsx(
+                  'text-center ',
+                  isDesktop && 'mt-28 space-y-20'
+                )}
+              >
+                <AppFeature
+                  titleColor={clsx(
+                    'text-black text-center',
+
+                    isDesktop && 'w-[160px]'
+                  )}
+                  icon={<GoalsIcon />}
+                  title="GOALS"
+                  content="Helping Players To Set Smart Goals To Aim For"
+                />
+                <AppFeature
+                  titleColor={clsx(
+                    'text-black text-center',
+
+                    isDesktop && 'w-[160px]'
+                  )}
+                  icon={<DevTalksIcon />}
+                  title="DEV. TALKS"
+                  content="Run Frequent Feedback Talks"
+                />
+              </div>
+              <div className="-ml-10">
+                <Image src={APP_4} />
+              </div>
+              <div className={clsx('text-center mt-28 space-y-20')}>
+                <AppFeature
+                  titleColor={clsx(
+                    'text-black text-center',
+                    isDesktop && 'w-[190px]'
+                  )}
+                  icon={<SkillsReviewsIcon />}
+                  title="SKILLS REVIEWS"
+                  content="Performance Reviews & Match Feedback"
+                />
+                <AppFeature
+                  titleColor={clsx(
+                    'text-black text-center',
+                    isDesktop && 'w-[160px]'
+                  )}
+                  icon={<ReportsIcon />}
+                  title="REPORTS"
+                  content="Reports & Analytics On Health & Skills Development (Q4 2022)"
+                />
+              </div>
+            </div>
+          )}
           <div
             className={clsx(
-              'space-x-2 flex justify-center my-5',
-              isMobile && 'mt-4'
+              'relative mb-[250px]',
+              isDesktop && 'w-[700px] flex flex-col items-center mt-40',
+              isMobile && 'mt-8 mx-[30px]'
             )}
           >
-            <Image src={APP_STORE_WHITE} />
-            <Image src={GOOGLE_PLAY_WHITE} />
+            <span
+              className={clsx(
+                'font-semibold text-[#17C78D] text-[14px] tracking-[2px] ',
+                isMobile && 'block text-center'
+              )}
+            >
+              TESTIMONIAL
+            </span>
+            <p className="text-black text-center text-[36px] font-bold  relative mb-7 mt-2">
+              {isDesktop && (
+                <span className="absolute -left-[12px] -top-[10px]">
+                  <DoubleQuoteIcon />
+                </span>
+              )}
+              Try us out, download the Zporter app from the App store or Google
+              Play
+            </p>
+            <div className="flex justify-center space-x-4">
+              <Image src={COMMENT_NICK} />
+              <span className="text-black">
+                <p className="text-[18px] font-semibold">Nicklas Jönsson</p>
+                <p className="text-[14px] font-normal">Founder, Zporter</p>
+              </span>
+            </div>
+            <div
+              className={clsx(
+                'space-x-2 flex justify-center my-5 absolute w-full mx-auto -bottom-[130px]'
+              )}
+            >
+              <Image src={APP_STORE_WHITE} />
+              <Image src={GOOGLE_PLAY_WHITE} />
+            </div>
           </div>
         </div>
       </div>
-      {/* <div className="bg-landing-four h-[1500px] bg-auto"></div> */}
-      {/* <div
-        style={{ backgroundImage: 'url(/assets/landing-page/Landing-4.png)' }}
-      ></div> */}
-      <img
-        src="/assets/landing-page/Landing-4.png"
-        className={clsx('relative', isMobile && 'h-[5 00px]')}
-      />
+      <SectionThree />
+      <SectionFour />
+      <SectionFive />
+      <Footer />
     </div>
   )
 }

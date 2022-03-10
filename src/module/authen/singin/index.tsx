@@ -1,30 +1,26 @@
+import { Form, notification } from 'antd'
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
+import { get } from 'lodash'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
+import OtpInput from 'react-otp-input'
 import { Button, LogoBigSize } from 'src/components'
 import { MyInput } from 'src/components/MyInput'
-import { FormEvent, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { useAtom } from 'jotai'
+import { TabPanel, Tabs } from 'src/components/Tabs'
+import { auth } from 'src/config/firebase-client'
+import { API_SIGNIN_WITH_USERNAME } from 'src/constants/api.constants'
+import { IconWarning } from 'src/imports/svgs'
+import { axios } from 'src/utils/axios'
 import { useAuth } from '../auth/AuthContext'
-import { Form, notification } from 'antd'
 const cls = require('./signin.module.css')
 
-import { IconWarning, SvgXIcon } from 'src/imports/svgs'
-import Link from 'next/link'
-import { TabPanel, Tabs } from 'src/components/Tabs'
-import { signInWithPhoneNumber, RecaptchaVerifier } from 'firebase/auth'
-import OtpInput from 'react-otp-input'
-import { get } from 'lodash'
-import { auth } from 'src/config/firebase-client'
-import { async } from '@firebase/util'
-import { axios } from 'src/utils/axios'
-import { API_SIGNIN_WITH_USERNAME } from 'src/constants/api.constants'
-// import { getCustomToken } from 'src/atoms/signin'
-
 const initialValuesFormEmailSignIn = {
-  emailFormEmailSignIn: 'example@zporter.co',
-  passwordFormEmailSignIn: 'aA&123456',
+  emailFormEmailSignIn: '',
+  passwordFormEmailSignIn: '',
 }
 const initialValuesFormPhoneSignIn = {
-  phoneFormPhoneSignIn: '+84355832199',
+  phoneFormPhoneSignIn: '',
 }
 
 enum Tab {
