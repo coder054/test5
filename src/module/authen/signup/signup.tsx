@@ -1,47 +1,38 @@
-import OtpInput from 'react-otp-input'
-import {
-  useQueryParam,
-  NumberParam,
-  StringParam,
-  withDefault,
-} from 'use-query-params'
-import { Button, LogoBigSize } from 'src/components'
-import { MyInput } from 'src/components/MyInput'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { useAuth } from '../auth/AuthContext'
-import { Form, Button as ButtonAnt, notification } from 'antd'
-import { MyCheckbox } from 'src/components/common/MyCheckbox'
-import { GoBack } from 'src/components/go-back'
-import { MyModal } from 'src/components/MyModal'
-import { LogoLargeSize } from 'src/components/logo/LogoLargeSize'
-import { InputVerifyCode } from 'src/components/input/input-verify-code'
+import { Form, notification } from 'antd'
 import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
   updateEmail,
   updatePassword,
 } from 'firebase/auth'
-
-import { axios } from 'src/utils/axios'
 import { get } from 'lodash'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { SetStateAction, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import OtpInput from 'react-otp-input'
+import { Button, LogoBigSize } from 'src/components'
+import { MyCheckbox } from 'src/components/common/MyCheckbox'
+import { GoBack } from 'src/components/go-back'
+import { MyInput } from 'src/components/MyInput'
 import { TabPanel, Tabs } from 'src/components/Tabs'
-import { notify } from 'src/utils/utils'
-import { ROUTES } from 'src/constants/constants'
 import { auth } from 'src/config/firebase-client'
+import { ROUTES } from 'src/constants/constants'
+import { axios } from 'src/utils/axios'
+import { StringParam, useQueryParam, withDefault } from 'use-query-params'
+import { useAuth } from '../auth/AuthContext'
 
 const initialValuesPhoneSignUp = {
-  phoneFormPhoneSignUp: '+84355832199',
-  emailFormPhoneSignUp: 'example@zporter.co',
-  passwordFormPhoneSignUp: 'aA&123456',
-  confirmPasswordFormPhoneSignUp: 'aA&123456',
+  phoneFormPhoneSignUp: '',
+  emailFormPhoneSignUp: '',
+  passwordFormPhoneSignUp: '',
+  confirmPasswordFormPhoneSignUp: '',
 }
 
 const initialValuesEmailSignUp = {
-  emailFormEmailSignUp: 'example@zporter.co',
-  passwordFormEmailSignUp: 'aA&123456',
-  confirmPasswordFormEmailSignUp: 'aA&123456',
+  emailFormEmailSignUp: '',
+  passwordFormEmailSignUp: '',
+  confirmPasswordFormEmailSignUp: '',
 }
 
 enum Tab {
@@ -127,7 +118,7 @@ export const SignUpWithSMS = () => {
       //@ts-ignore: Unreachable code error
       window.confirmationResult = confirmationResult
     } catch (error) {
-      console.log(error)
+      toast.error('An error has occurred')
     }
   }
 
@@ -143,7 +134,7 @@ export const SignUpWithSMS = () => {
       updateEmail(user, email)
       updatePassword(user, password)
     } catch (error) {
-      console.log(error)
+      toast.error('An error has occurred')
     }
   }
 
@@ -170,7 +161,7 @@ export const SignUpWithSMS = () => {
 
     await SignUpWithEmailAndPassword(
       emailFormEmailSignUp,
-      passwordFormEmailSignUp
+      passwordFormEmailSignUp.replace(/\s/g, '')
     )
     setTimeout(() => {
       setLoading(false)
@@ -200,7 +191,7 @@ export const SignUpWithSMS = () => {
       'capcha_element_signup_with_phone',
       {
         size: 'invisible',
-        callback: (response) => {
+        callback: (response: any) => {
           // reCAPTCHA solved, allow signInWithPhoneNumber.
           // onSignInSubmit();
           setStep(2)
@@ -246,7 +237,6 @@ export const SignUpWithSMS = () => {
                     return
                   }
                   try {
-                    console.log('aaa values', values)
                     const resp = await axios.get(
                       '/auth/check-email/' + emailFormPhoneSignUp
                     )
@@ -262,24 +252,17 @@ export const SignUpWithSMS = () => {
                       '/auth/check-phone/' + phoneFormPhoneSignUp
                     )
                     if (get(respPhone, 'data.phoneExists')) {
-                      notification['error']({
-                        message: 'Failed',
-                        description: 'Phone already existed',
-                      })
+                      toast.error('Phone already exists')
                       return
                     }
 
                     await sendPhone(phoneFormPhoneSignUp)
                   } catch (error) {
-                    console.log('aaa error', error)
+                    toast.error('An error has occurred')
                   }
                 }}
                 onFinishFailed={(errorInfo: any) => {
-                  console.log('aaa Failed:', errorInfo)
-                  notification['error']({
-                    message: 'Failed',
-                    description: 'Your input in not valid',
-                  })
+                  toast.error('An error has occurred')
                   return
                 }}
               >
@@ -298,7 +281,9 @@ export const SignUpWithSMS = () => {
                     name={'phoneFormPhoneSignUp'}
                     label="Mobile phone number"
                     value={phoneFormPhoneSignUp}
-                    onChange={(e) => {
+                    onChange={(e: {
+                      target: { value: SetStateAction<string> }
+                    }) => {
                       setPhoneFormPhoneSignUp(e.target.value)
                     }}
                   />
@@ -318,9 +303,12 @@ export const SignUpWithSMS = () => {
                 >
                   <MyInput
                     name={'emailFormPhoneSignUp'}
+                    placeholder="example@zporter.co"
                     label="Email"
                     value={emailFormPhoneSignUp}
-                    onChange={(e) => {
+                    onChange={(e: {
+                      target: { value: SetStateAction<string> }
+                    }) => {
                       setEmailFormPhoneSignUp(e.target.value)
                     }}
                   />
@@ -346,7 +334,9 @@ export const SignUpWithSMS = () => {
                     label="Choose password (+8 signs)"
                     password
                     value={passwordFormPhoneSignUp}
-                    onChange={(e) => {
+                    onChange={(e: {
+                      target: { value: SetStateAction<string> }
+                    }) => {
                       setPasswordFormPhoneSignUp(e.target.value)
                     }}
                   />
@@ -380,7 +370,9 @@ export const SignUpWithSMS = () => {
                     label="Repeat Password"
                     password
                     value={confirmPasswordFormPhoneSignUp}
-                    onChange={(e) => {
+                    onChange={(e: {
+                      target: { value: SetStateAction<string> }
+                    }) => {
                       setConfirmPasswordFormPhoneSignUp(e.target.value)
                     }}
                   />
@@ -425,11 +417,7 @@ export const SignUpWithSMS = () => {
                   initialValues={initialValuesEmailSignUp}
                   onFinish={async (values: any) => {}}
                   onFinishFailed={(errorInfo: any) => {
-                    console.log('aaa Failed:', errorInfo)
-                    notification['error']({
-                      message: 'Failed',
-                      description: 'Your input in not valid',
-                    })
+                    toast.error('Your input is not valid')
                     return
                   }}
                 >
@@ -449,7 +437,9 @@ export const SignUpWithSMS = () => {
                       name={'emailFormEmailSignUp'}
                       label="Email"
                       value={emailFormEmailSignUp}
-                      onChange={(e) => {
+                      onChange={(e: {
+                        target: { value: SetStateAction<string> }
+                      }) => {
                         setEmailFormEmailSignUp(e.target.value)
                       }}
                     />
@@ -468,6 +458,10 @@ export const SignUpWithSMS = () => {
                         min: 8,
                         message: 'Your password must be more than 8 characters',
                       },
+                      {
+                        whitespace: true,
+                        message: 'Your password must not contain white spaces',
+                      },
                     ]}
                   >
                     <MyInput
@@ -475,7 +469,9 @@ export const SignUpWithSMS = () => {
                       label="Choose password (+8 signs)"
                       password
                       value={passwordFormEmailSignUp}
-                      onChange={(e) => {
+                      onChange={(e: {
+                        target: { value: SetStateAction<string> }
+                      }) => {
                         setPasswordFormEmailSignUp(e.target.value)
                       }}
                     />
@@ -509,7 +505,9 @@ export const SignUpWithSMS = () => {
                       label="Repeat Password"
                       password
                       value={confirmPasswordFormEmailSignUp}
-                      onChange={(e) => {
+                      onChange={(e: {
+                        target: { value: SetStateAction<string> }
+                      }) => {
                         setConfirmPasswordFormEmailSignUp(e.target.value)
                       }}
                     />
@@ -602,7 +600,7 @@ export const SignUpWithSMS = () => {
             </div>
             <OtpInput
               value={otp}
-              onChange={(value) => {
+              onChange={(value: SetStateAction<string>) => {
                 setOtp(value)
               }}
               numInputs={6}

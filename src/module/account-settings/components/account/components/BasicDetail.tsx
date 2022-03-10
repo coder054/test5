@@ -22,7 +22,7 @@ type FormValuesType = {
 }
 
 export const BasicDetail = () => {
-  const { currentUser } = useAuth()
+  const { currentUser, currentRoleName } = useAuth()
 
   const [form] = Form.useForm()
   const [account] = useAtom(settingsAtom)
@@ -75,7 +75,8 @@ export const BasicDetail = () => {
         <Form form={form} className="space-y-7">
           <MyCustomSelect
             label="User profile"
-            val="Coach"
+            /* @ts-ignore */
+            value={_.upperFirst(currentRoleName.toLowerCase())}
             arrOptions={['Coach', 'Player']}
           />
           <MyInput label="Username" value={formValues.userName} />

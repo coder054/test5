@@ -33,7 +33,7 @@ export const Health = () => {
       rightFootLength: +formValues.rightFootLength,
       leftFootLength: +formValues.leftFootLength,
       height: {
-        value: +formValues.weight,
+        value: +formValues.height,
         updateAt: new Date(),
       },
       weight: {
