@@ -39,6 +39,7 @@ import { useAtom } from 'jotai'
 import {
   activeChatRoomAtom,
   chatRoomsAtom,
+  loadingChatRoomsAtom,
   useActiveRoomId,
 } from 'src/atoms/chatAtom'
 import { AllTab } from './AllTab'
@@ -51,6 +52,7 @@ import { getStr, truncateStr } from 'src/utils/utils'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { chain } from 'lodash'
 import { createGroupChatRoom } from 'src/module/chat/chatService'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 interface ChatSidebarProps {
   tab: any
@@ -83,6 +85,7 @@ const ChatSidebarMobile = styled(Drawer)({
 export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
   const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
   const [activeChatRoom] = useAtom(activeChatRoomAtom)
+  const [loadingChatRooms, setLoadingChatRooms] = useAtom(loadingChatRoomsAtom)
   const { activeChatRoomId, setActiveChatRoomId } = useActiveRoomId()
   const { containerRef, onClose, open, tab, setTab, ...other } = props
   const router = useRouter()
@@ -247,16 +250,24 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
                 thread={threads.byId[threadId]}
               />
             ))} */}
-            {chatRooms.map((chatRoom) => (
-              <ChatThreadItem
-                active={activeChatRoomId === chatRoom.chatRoomId}
-                key={'chatRoom-' + chatRoom.chatRoomId}
-                onSelect={() => {
-                  setActiveChatRoomId(chatRoom.chatRoomId)
-                }}
-                chatRoom={chatRoom}
-              />
-            ))}
+            {loadingChatRooms ? (
+              <div className="flex h-[70px] justify-center items-center ">
+                <CircularProgress />
+              </div>
+            ) : (
+              <>
+                {chatRooms.map((chatRoom) => (
+                  <ChatThreadItem
+                    active={activeChatRoomId === chatRoom.chatRoomId}
+                    key={'chatRoom-' + chatRoom.chatRoomId}
+                    onSelect={() => {
+                      setActiveChatRoomId(chatRoom.chatRoomId)
+                    }}
+                    chatRoom={chatRoom}
+                  />
+                ))}
+              </>
+            )}
           </List>
         </Scrollbar>
       </Box>
