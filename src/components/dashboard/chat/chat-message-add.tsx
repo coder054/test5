@@ -38,7 +38,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
   const [body, setBody] = useState<string>('')
   const [videoThumbnail, setVideoThumbnail] = useState<any>('')
   const [videoUrl, setVideoUrl] = useState('')
-  const [urlState, setUrlState] = useState('')
+  const [urlVideoUploaded, setUrlVideoUploaded] = useState('')
 
   const handleAttach = (): void => {
     fileInputRef.current.click()
@@ -156,7 +156,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
           </Box>
         </Tooltip>
       </Box>
-      {videoUrl && !!urlState && (
+      {videoUrl && !!urlVideoUploaded && (
         <div className="hidden ">
           <VideoThumbnail
             renderThumbnail={false}
@@ -182,13 +182,13 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
 
               let message: IChatMessage
 
-              message = newChatMessage().newVideoOrFileMessage(
+              message = newChatMessage().newVideoMessage(
                 get(fileInputRef, 'current.files[0].name') || uuidv4(),
                 serverTimestamp(),
                 currentRoleId,
                 newMessageKey,
                 urlThumb,
-                urlState
+                urlVideoUploaded
               )
 
               const { error: errorCreateMessage } = await createMessage(
@@ -202,7 +202,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               }
               updateLastMessageTime(chatRoomId, newMessageKey)
 
-              setUrlState('')
+              setUrlVideoUploaded('')
               fileInputRef.current.value = ''
               setVideoUrl('')
             }}
@@ -227,7 +227,13 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
             } else if (file.type.indexOf('video/') === 0) {
               type = 'video'
             } else {
-              type = 'custom'
+              type = 'file'
+              // lastModified: 1639976362947
+              // lastModifiedDate: Mon Dec 20 2021 11:59:22 GMT+0700 (Indochina Time) {}
+              // name: "God Rest Ye Merry_ Gentlemen - Mariah Ca.mp3"
+              // size: 3177201
+              // type: "audio/mpeg"
+              // webkitRelativePath: ""
             }
 
             ///////////////////////////////// video /////////////////////////////////
@@ -242,7 +248,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               if (error) {
                 return
               }
-              setUrlState(url)
+              setUrlVideoUploaded(url)
               setVideoUrl(URL.createObjectURL(file))
               // will upload in <VideoThumbnail>
               return
@@ -261,7 +267,6 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               if (error) {
                 return
               }
-              setUrlState(url)
 
               let chatRoomId: string = activeChatRoom.chatRoomId
               const newMessageKey = await push(
@@ -269,17 +274,14 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               ).key
 
               let message: IChatMessage
-              if (type === 'image') {
-                message = {
-                  createdAt: serverTimestamp(), // 1646731132428,
-                  createdBy: currentRoleId,
-                  messageId: newMessageKey,
-                  attachmentName: imageUploadName,
-                  size: file.size,
-                  type: EMessageType.image,
-                  uri: url,
-                }
-              } else {
+              message = {
+                createdAt: serverTimestamp(), // 1646731132428,
+                createdBy: currentRoleId,
+                messageId: newMessageKey,
+                attachmentName: file.name,
+                size: file.size,
+                type: EMessageType.image,
+                uri: url,
               }
 
               const { error: errorCreateMessage } = await createMessage(
@@ -293,10 +295,53 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               }
               updateLastMessageTime(chatRoomId, newMessageKey)
               fileInputRef.current.value = ''
-              setUrlState('')
               return
             }
             ///////////////////////////////// image /////////////////////////////////
+
+            ///////////////////////////////// file /////////////////////////////////
+            if (type === 'file') {
+              const fileUploadName = `${uuidv4()}-${file.name || ''}`
+              const { error, url } = await uploadFile(
+                file,
+                'message',
+                fileUploadName
+              )
+
+              if (error) {
+                return
+              }
+
+              let chatRoomId: string = activeChatRoom.chatRoomId
+              const newMessageKey = await push(
+                child(ref(database), `/chatMessages/${chatRoomId}`)
+              ).key
+
+              let message: IChatMessage
+
+              message = newChatMessage().newFileMessage(
+                file.name,
+                serverTimestamp(),
+                currentRoleId,
+                newMessageKey,
+                url,
+                file.size
+              )
+
+              const { error: errorCreateMessage } = await createMessage(
+                message,
+                chatRoomId
+              )
+
+              if (errorCreateMessage) {
+                alert('error happen')
+                return
+              }
+              updateLastMessageTime(chatRoomId, newMessageKey)
+              fileInputRef.current.value = ''
+              return
+            }
+            ///////////////////////////////// file /////////////////////////////////
           } catch (err) {
             console.error(err)
           }
