@@ -138,7 +138,9 @@ export const InforWithNumbers = ({
     return [
       { text: 'Club' },
       { text: 'Total' },
-      ...activeSeasons.map((o) => ({ text: o })),
+      ...(isEmpty(activeSeasons) ? [] : activeSeasons).map((o) => ({
+        text: o,
+      })),
     ]
   }, [activeSeasons])
 
