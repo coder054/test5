@@ -50,8 +50,6 @@ export const DetailProfile = ({ onFormChange }: DetailProfileProps) => {
     onFormChange && onFormChange(formValues)
   }, [formValues])
 
-  console.log(account.profile.email)
-
   useEffect(() => {
     account &&
       setFormValues((prev) => ({
@@ -67,47 +65,44 @@ export const DetailProfile = ({ onFormChange }: DetailProfileProps) => {
   }, [account])
 
   return (
-    <BackGround
-      label="Detail Profile"
-      form={
-        <div className="space-y-7">
-          <MyInput
-            onChange={(e) => handleChangeForm('email', e.target.value)}
-            value={formValues.email}
-            label="Email"
-          />
-          <MyInput
-            onChange={(e) => handleChangeForm('phone', e.target.value)}
-            value={formValues.phone}
-            label="Mobile phone"
-          />
-          <MyInput
-            onChange={(e) => handleChangeForm('homeAddress', e.target.value)}
-            value={formValues.homeAddress}
-            label="Home address"
-          />
-          <MyInput
-            onChange={(e) => handleChangeForm('postNumber', e.target.value)}
-            value={formValues.postNumber}
-            label="Post number"
-          />
-          <MyInput
-            onChange={(e) => handleChangeForm('city', e.target.value)}
-            value={formValues.city}
-            label="City"
-          />
-          <MyInput
-            onChange={(e) => handleChangeForm('region', e.target.value)}
-            value={formValues.region}
-            label="Region"
-          />
-          <MySelectCountry
-            label="Birthcountry"
-            val={formValues.birthCountry}
-            onChange={(_, value) => handleChangeForm('birthCountry', value)}
-          />
-        </div>
-      }
-    />
+    <BackGround label="Detail Profile" contentClass="xl:w-[400px]">
+      <div className="space-y-7">
+        <MyInput
+          onChange={(e) => handleChangeForm('email', e.target.value)}
+          value={formValues.email}
+          label="Email"
+        />
+        <MyInput
+          onChange={(e) => handleChangeForm('phone', e.target.value)}
+          value={formValues.phone}
+          label="Mobile phone"
+        />
+        <MyInput
+          onChange={(e) => handleChangeForm('homeAddress', e.target.value)}
+          value={formValues.homeAddress}
+          label="Home address"
+        />
+        <MyInput
+          onChange={(e) => handleChangeForm('postNumber', e.target.value)}
+          value={formValues.postNumber}
+          label="Post number"
+        />
+        <MyInput
+          onChange={(e) => handleChangeForm('city', e.target.value)}
+          value={formValues.city}
+          label="City"
+        />
+        <MyInput
+          onChange={(e) => handleChangeForm('region', e.target.value)}
+          value={formValues.region}
+          label="Region"
+        />
+        <MySelectCountry
+          label="Birthcountry"
+          val={formValues.birthCountry}
+          onChange={(_, value) => handleChangeForm('birthCountry', value)}
+        />
+      </div>
+    </BackGround>
   )
 }

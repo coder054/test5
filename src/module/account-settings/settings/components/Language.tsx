@@ -45,20 +45,12 @@ export const Language = () => {
     isBoolean?: boolean
   ) => {
     await axios
-      .patch(
-        `users/${currentRoleName.toLowerCase()}/settings`,
-        {
-          settings: {
-            ...account.settings,
-            [type]: type === 'public' ? isBoolean : value,
-          },
+      .patch(`users/${currentRoleName.toLowerCase()}/settings`, {
+        settings: {
+          ...account.settings,
+          [type]: type === 'public' ? isBoolean : value,
         },
-        {
-          headers: {
-            roleId: currentRoleId,
-          },
-        }
-      )
+      })
       .then(() => {
         setAccount({
           ...account,
@@ -88,34 +80,31 @@ export const Language = () => {
   }, [account])
 
   return (
-    <BackGround
-      label="Language"
-      form={
-        <div className="space-y-7">
-          <MyCustomSelect
-            label="Language"
-            val={formValues.language}
-            onChange={(_, value) => handleChangeForm('language', value)}
-            arrOptions={['English']}
-          />
-          <MySelectCountry
-            label="Country"
-            val={formValues.country}
-            onChange={(_, value) => handleChangeForm('country', value)}
-          />
-          <MyCustomSelect
-            label="Privacy"
-            val={formValues.public}
-            onChange={(_, value) =>
-              handleChangeForm('public', value, value.status)
-            }
-            arrOptions={[
-              { label: 'Public', status: true },
-              { label: 'Private', status: false },
-            ]}
-          />
-        </div>
-      }
-    />
+    <BackGround label="Language" contentClass="xl:w-[400px]">
+      <div className="space-y-7">
+        <MyCustomSelect
+          label="Language"
+          val={formValues.language}
+          onChange={(_, value) => handleChangeForm('language', value)}
+          arrOptions={['English']}
+        />
+        <MySelectCountry
+          label="Country"
+          val={formValues.country}
+          onChange={(_, value) => handleChangeForm('country', value)}
+        />
+        <MyCustomSelect
+          label="Privacy"
+          val={formValues.public}
+          onChange={(_, value) =>
+            handleChangeForm('public', value, value.status)
+          }
+          arrOptions={[
+            { label: 'Public', status: true },
+            { label: 'Private', status: false },
+          ]}
+        />
+      </div>
+    </BackGround>
   )
 }
