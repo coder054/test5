@@ -7,6 +7,7 @@ import { IInfoClub, InfoClub } from './InfoClub'
 import useSWR from 'swr'
 import { fetcher } from 'src/utils/utils'
 import { isEmpty } from 'lodash'
+import { NextRouter } from 'next/router'
 
 enum Tab {
   Club = 'Club',
