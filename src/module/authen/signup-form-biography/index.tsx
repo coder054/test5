@@ -164,26 +164,26 @@ export const SignupFormBiography = () => {
 
   useEffect(() => {
     const getBio = async () => {
-      if (profile === 'Player') {
-        try {
-          const res = await axios.get(API_PLAYER_PROFILE)
-          // console.log('res', res.data.username)
-          const response = await axios.get(
-            `/biographies/player?username=${res.data.username}`
-          )
-          // console.log('res', response.data)
-          setData(response.data)
-        } catch (error) {}
-      } else if (profile === 'Coach') {
-        try {
-          const res = await axios.get(API_COACH_PROFILE)
-          console.log('res', res.data.username)
-          const response = await axios.get(
-            `/biographies/coach?username=${res.data.username}`
-          )
-          console.log('response', response.data)
-          setDataCoach(response.data)
-        } catch (error) {}
+      if (profile && profile === 'Player') {
+        // try {
+        const res = await axios.get(API_PLAYER_PROFILE)
+        // console.log('res', res.data.username)
+        const response = await axios.get(
+          `/biographies/player?username=${res.data.username}`
+        )
+        // console.log('res', response.data)
+        setData(response.data)
+        // } catch (error) {}
+      } else if (profile && profile === 'Coach') {
+        // try {
+        const res = await axios.get(API_COACH_PROFILE)
+        console.log('res', res.data.username)
+        const response = await axios.get(
+          `/biographies/coach?username=${res.data.username}`
+        )
+        console.log('response', response.data)
+        setDataCoach(response.data)
+        // } catch (error) {}
       }
     }
 
