@@ -10,13 +10,14 @@ import { axios } from 'src/utils/axios'
 import { API_FRIENDS } from 'src/constants/api.constants'
 import { Stars } from 'src/components/common/Stars'
 import { Comments } from 'src/components/Comments'
+import { IBiographyCoach } from '../authen/types'
 
 export const InfoWithCircleImage = ({
   dataBio,
   currentRoleId,
   signupForm,
 }: {
-  dataBio: IBiographyPlayer
+  dataBio: IBiographyPlayer | IBiographyCoach
   currentRoleId: string
   signupForm?: boolean
 }) => {

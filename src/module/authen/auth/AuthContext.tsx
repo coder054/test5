@@ -247,6 +247,13 @@ export function AuthProvider({ children }) {
   //   })
   // }
 
+  const updateUserRoles = async () => {
+    const resp = await axios.get('/users/user-roles')
+    localStorage.removeItem(LOCAL_STORAGE_KEY.userRoles)
+    setUserRoles(resp.data)
+    localStorage.setItem(LOCAL_STORAGE_KEY.userRoles, JSON.stringify(resp.data))
+  }
+
   useEffect(() => {
     let initT = +new Date()
     console.log('aaa initT', initT)
@@ -270,13 +277,9 @@ export function AuthProvider({ children }) {
         setTokenCookieHttp(token)
         // update axios token header
         axios.defaults.headers.common.Authorization = `Bearer ${token}`
-        // debugger
 
         const userRoles = localStorage.getItem(LOCAL_STORAGE_KEY.userRoles)
-        // debugger
         if (!userRoles) {
-          // debugger
-
           const resp = await axios.get('/users/user-roles')
 
           if (isEmpty(resp.data)) {
@@ -305,6 +308,7 @@ export function AuthProvider({ children }) {
         if (!localStorage.getItem(LOCAL_STORAGE_KEY.playerProfile)) {
           try {
             const { data: userinfo } = await axios.get(API_PLAYER_PROFILE)
+            debugger
             setPlayerProfile(userinfo)
             localStorage.setItem(
               LOCAL_STORAGE_KEY.playerProfile,
@@ -380,6 +384,7 @@ export function AuthProvider({ children }) {
     playerProfile, // all info about logged in user
     coachProfile, // all info about logged in user
     authenticated: !!currentUser,
+    updateUserRoles,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

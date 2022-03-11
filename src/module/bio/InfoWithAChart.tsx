@@ -5,17 +5,32 @@ import { Stars } from 'src/components/common/Stars'
 import { Button } from 'src/components'
 import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
+import { IBiographyCoach } from '../authen/types'
+import { useAuth } from '../authen/auth/AuthContext'
 
 export const InforWithAChart = ({
   dataBio,
   dataBioRadarChart,
   signupForm,
+  profile,
 }: {
-  dataBio: IBiographyPlayer
+  dataBio: IBiographyPlayer | IBiographyCoach
   dataBioRadarChart: any
   signupForm?: boolean
+  profile?: string
 }) => {
   const router = useRouter()
+  const { updateUserRoles, userRoles } = useAuth()
+
+  const handleNext = async () => {
+    try {
+      await updateUserRoles()
+      console.log('userRoles', userRoles)
+      router.push(ROUTES.dashboard)
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
 
   return (
     <>
@@ -34,7 +49,7 @@ export const InforWithAChart = ({
         </svg>
 
         <div className=" text-[14px] leading-[22px] text-white ">
-          Player Profile
+          {profile === 'coach' ? <p>Coach Profile</p> : <p>Player Profile</p>}
         </div>
       </div>
       <div className="bioradarchart sm:max-w-[466px] mx-auto relative mb-[32px] text-center ">
@@ -125,14 +140,10 @@ export const InforWithAChart = ({
         ))}
 
         {signupForm && (
-          <div
-            onClick={() => {
-              router.push(ROUTES.dashboard)
-            }}
-          >
+          <div onClick={handleNext}>
             <Button
               text="Next"
-              className="text-[15px] bg-[#4654EA] rounded-[8px] h-[48px]"
+              className="text-[15px] bg-[#4654EA] rounded-[8px] h-[48px] mt-[6px]"
             />
           </div>
         )}

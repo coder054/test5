@@ -377,7 +377,7 @@ const ModalCreateGroup = ({ open, setOpen }) => {
           transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
           boxShadow: 'rgb(0 0 0 / 24%) 0px 6px 15px',
           backgroundImage: 'none',
-          width: 'calc(100vw - 32px)'
+          width: 'calc(100vw - 32px)',
         }}
         className="p-[24px]  rounded-[8px] min-h-[400px] overflow-y-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-[700px] [max-height:calc(100vh_-_40px)]"
       >
