@@ -216,17 +216,23 @@ export const InforWithNumbers = ({
               {[
                 {
                   label: 'Matches',
-                  value: matchInTotalStatistic?.matches || '',
+                  value: matchInTotalStatistic?.matches || 0,
                 },
-                { label: 'Hours', value: matchInTotalStatistic?.hours || '' },
-                { label: 'Point', value: matchInTotalStatistic?.points || '' },
-                { label: 'Goals', value: matchInTotalStatistic?.goals || '' },
+                {
+                  label: 'Hours',
+                  value: (matchInTotalStatistic?.hours || 0).toFixed(1),
+                },
+                {
+                  label: 'Point',
+                  value: (matchInTotalStatistic?.points || 0).toFixed(1),
+                },
+                { label: 'Goals', value: matchInTotalStatistic?.goals || 0 },
                 {
                   label: 'Assists',
-                  value: matchInTotalStatistic?.assists || '',
+                  value: matchInTotalStatistic?.assists || 0,
                 },
-                { label: 'Yel', value: matchInTotalStatistic?.yel || '' },
-                { label: 'Red', value: matchInTotalStatistic?.red || '' },
+                { label: 'Yel', value: matchInTotalStatistic?.yel || 0 },
+                { label: 'Red', value: matchInTotalStatistic?.red || 0 },
               ].map((o, index) => (
                 <Match key={index} title={o.label} value={o.value} />
               ))}

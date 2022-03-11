@@ -119,10 +119,10 @@ const ItemClub = ({ data }: { data: ExistingClub | HistoricClub }) => {
       }}
       className="rounded-[8px] w-full min-h-[50px] mb-[16px] overflow-hidden "
     >
-      <div className="flex items-center  px-[16px] py-[8px] ">
+      <div className="flex items-center  px-[16px] py-[8px]  ">
         <img
           src={clubInfo.club.logoUrl}
-          className="w-[40px] mr-[12px] "
+          className="w-[40px] h-[40px] object-cover mr-[12px] rounded-[50%]"
           alt=""
         />
 
@@ -186,13 +186,19 @@ const ItemClub = ({ data }: { data: ExistingClub | HistoricClub }) => {
 
           <div className="flex gap-x-[8px] xl:gap-x-[12px] overflow-x-auto pb-1 justify-center">
             {[
-              { label: 'Matches', value: matchInTotalStatistic?.matches || '' },
-              { label: 'Hours', value: matchInTotalStatistic?.hours || '' },
-              { label: 'Point', value: matchInTotalStatistic?.points || '' },
-              { label: 'Goals', value: matchInTotalStatistic?.goals || '' },
-              { label: 'Assists', value: matchInTotalStatistic?.assists || '' },
-              { label: 'Yel', value: matchInTotalStatistic?.yel || '' },
-              { label: 'Red', value: matchInTotalStatistic?.red || '' },
+              { label: 'Matches', value: matchInTotalStatistic?.matches || 0 },
+              {
+                label: 'Hours',
+                value: (matchInTotalStatistic?.hours || 0).toFixed(1),
+              },
+              {
+                label: 'Point',
+                value: (matchInTotalStatistic?.points || 0).toFixed(1),
+              },
+              { label: 'Goals', value: matchInTotalStatistic?.goals || 0 },
+              { label: 'Assists', value: matchInTotalStatistic?.assists || 0 },
+              { label: 'Yel', value: matchInTotalStatistic?.yel || 0 },
+              { label: 'Red', value: matchInTotalStatistic?.red || 0 },
             ].map((o, index) => (
               <Match key={index} title={o.label} value={o.value} />
             ))}

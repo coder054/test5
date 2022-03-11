@@ -49,9 +49,11 @@ export const AllTab = () => {
     query(ref(database, 'chatRooms'), orderByChild('updatedAt'))
   )
   const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
+  // const [loadingChatRooms, setLoadingChatRooms] = useAtom(loadingChatRoomsAtom)
 
   useEffect(() => {
     if (isEmpty(snapshots) || isEmpty(currentRoleId)) {
+      setChatRooms([])
       return
     }
 
@@ -162,26 +164,25 @@ export const AllTab = () => {
           })
         })
         const results1 = await Promise.all(promises)
-
-        setResults(results1)
+        setChatRooms(results1.filter((o) => o.isShowChatRoom))
       } catch (error) {
         console.log('aaa error', getErrorMessage(error))
       }
     })()
   }, [snapshots, currentRoleId])
 
-  const onlyShow = useMemo(() => {
-    if (isEmpty(results)) {
-      return []
-    }
-    return results.filter((o) => o.isShowChatRoom)
-  }, [results])
+  // const onlyShow = useMemo(() => {
+  //   if (isEmpty(results)) {
+  //     return []
+  //   }
+  //   return results.filter((o) => o.isShowChatRoom)
+  // }, [results])
 
-  useEffect(() => {}, [onlyShow])
+  // useEffect(() => {}, [onlyShow])
 
-  useEffect(() => {
-    console.log('aaa chatRooms: ', onlyShow)
-    setChatRooms(onlyShow)
-  }, [onlyShow])
+  // useEffect(() => {
+  //   console.log('aaa chatRooms: ', onlyShow)
+  //   setChatRooms(onlyShow)
+  // }, [onlyShow])
   return null
 }

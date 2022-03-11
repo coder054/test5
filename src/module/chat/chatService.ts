@@ -748,8 +748,9 @@ export const createGroupChatRoom = async (
 }
 
 export const uploadFile = async (
-  file: File,
-  storageFolder: string // no need slash
+  file: File | Blob,
+  storageFolder: string, // no need slash
+  fileName: string
 ): Promise<{ error: boolean; url: string }> => {
   try {
     if (!file) {
@@ -758,7 +759,7 @@ export const uploadFile = async (
         url: '',
       }
     }
-    const storageRef = storageLibRef(storage, `/${storageFolder}/${file.name}`)
+    const storageRef = storageLibRef(storage, `/${storageFolder}/${fileName}`)
     const snapshot = await uploadBytes(storageRef, file)
     const url = await getDownloadURL(snapshot.ref)
 
@@ -813,7 +814,7 @@ export const newChatMessage = () => {
     return target
   }
 
-  const newVideoOrFileMessage = (
+  const newVideoMessage = (
     attachmentName: string,
     createdAt: any,
     createdBy: string,
@@ -831,9 +832,35 @@ export const newChatMessage = () => {
       uri,
     }
   }
+
+  const newFileMessage = (
+    attachmentName: string,
+    createdAt: any,
+    createdBy: string,
+    messageId: string,
+    uri: string,
+    size: number
+  ) => {
+    return {
+      attachmentName,
+      createdAt,
+      createdBy,
+      messageId,
+      size,
+      type: 'file',
+      uri,
+    }
+  }
   return {
     newTextMessage,
     newImageMessage,
-    newVideoOrFileMessage,
+    newVideoMessage,
+    newFileMessage,
   }
+}
+
+export const fromBase64ToBlob = async (base64: string): Promise<Blob> => {
+  const res = await fetch(base64)
+  const blob = await res.blob()
+  return blob
 }

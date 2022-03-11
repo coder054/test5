@@ -272,6 +272,8 @@ export function AuthProvider({ children }) {
         const token = await user.getIdToken()
         setToken(token)
         setCurrentUser(user)
+
+        // debugger
         setTokenCookieHttp(token)
         // update axios token header
         axios.defaults.headers.common.Authorization = `Bearer ${token}`

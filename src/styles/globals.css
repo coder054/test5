@@ -237,3 +237,8 @@
   width: 210px;
   display: block;
 }
+
+.MuiOutlinedInput-root legend,
+.MuiInputBase-root legend {
+  width: unset !important;
+}

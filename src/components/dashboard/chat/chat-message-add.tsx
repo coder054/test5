@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import VideoThumbnail from 'react-video-thumbnail'
 import type { ChangeEvent, FC, KeyboardEvent } from 'react'
 import PropTypes from 'prop-types'
@@ -17,6 +18,7 @@ import {
   database,
   IChatMessage,
   newChatMessage,
+  fromBase64ToBlob,
 } from 'src/module/chat/chatService'
 import { child, push, ref, serverTimestamp } from 'firebase/database'
 import { useAtom } from 'jotai'
@@ -36,7 +38,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
   const [body, setBody] = useState<string>('')
   const [videoThumbnail, setVideoThumbnail] = useState<any>('')
   const [videoUrl, setVideoUrl] = useState('')
-  const [urlState, setUrlState] = useState('')
+  const [urlVideoUploaded, setUrlVideoUploaded] = useState('')
 
   const handleAttach = (): void => {
     fileInputRef.current.click()
@@ -92,7 +94,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
         fullWidth
         onChange={handleChange}
         onKeyUp={handleKeyUp}
-        placeholder="Leave a message2"
+        placeholder="Leave a message" // placeholder="Leave a message2"
         value={body}
         size="small"
       />
@@ -123,7 +125,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
             </IconButton>
           </Box>
         </Tooltip>
-        <Tooltip title="Attach photo">
+        <Tooltip title="Attach photo or file">
           <Box
             sx={{
               display: {
@@ -138,66 +140,56 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
             </IconButton>
           </Box>
         </Tooltip>
-        <Tooltip title="Attach file">
-          <Box
-            sx={{
-              display: {
-                xs: 'none',
-                sm: 'inline-flex',
-              },
-              m: 1,
-            }}
-          >
-            <IconButton disabled={disabled} edge="end" onClick={handleAttach}>
-              <PaperClipIcon fontSize="small" />
-            </IconButton>
-          </Box>
-        </Tooltip>
       </Box>
-      {videoUrl && !!urlState && (
+      {videoUrl && !!urlVideoUploaded && (
         <div className="hidden ">
           <VideoThumbnail
             renderThumbnail={false}
             videoUrl={videoUrl}
             thumbnailHandler={async (thumbnail) => {
               console.log('aaa thumbnail', thumbnail)
-              fetch(thumbnail)
-                .then((res) => res.blob())
-                .then(async (aaa) => {
-                  //@ts-ignore: Unreachable code error
-                  const image: string = await resizeFile(aaa)
+              const blob = await fromBase64ToBlob(thumbnail)
+              //@ts-ignore: Unreachable code error
+              const imageResized: string = await resizeFile(blob)
+              const blobResized = await fromBase64ToBlob(imageResized)
 
-                  let chatRoomId: string = activeChatRoom.chatRoomId
+              const { error, url: urlThumb } = await uploadFile(
+                blobResized,
+                'media',
+                uuidv4() + '.jpg'
+              )
 
-                  const newMessageKey = await push(
-                    child(ref(database), `/chatMessages/${chatRoomId}`)
-                  ).key
+              let chatRoomId: string = activeChatRoom.chatRoomId
 
-                  let message: IChatMessage
+              const newMessageKey = await push(
+                child(ref(database), `/chatMessages/${chatRoomId}`)
+              ).key
 
-                  message = newChatMessage().newVideoOrFileMessage(
-                    fileInputRef.current.name,
-                    serverTimestamp(),
-                    currentRoleId,
-                    newMessageKey,
-                    image,
-                    urlState
-                  )
+              let message: IChatMessage
 
-                  const { error: errorCreateMessage } = await createMessage(
-                    message,
-                    chatRoomId
-                  )
+              message = newChatMessage().newVideoMessage(
+                get(fileInputRef, 'current.files[0].name') || uuidv4(),
+                serverTimestamp(),
+                currentRoleId,
+                newMessageKey,
+                urlThumb,
+                urlVideoUploaded
+              )
 
-                  if (errorCreateMessage) {
-                    alert('error happen')
-                    return
-                  }
-                  updateLastMessageTime(chatRoomId, newMessageKey)
+              const { error: errorCreateMessage } = await createMessage(
+                message,
+                chatRoomId
+              )
 
-                  setUrlState('')
-                  fileInputRef.current.value = ''
-                })
+              if (errorCreateMessage) {
+                alert('error happen')
+                return
+              }
+              updateLastMessageTime(chatRoomId, newMessageKey)
+
+              setUrlVideoUploaded('')
+              fileInputRef.current.value = ''
+              setVideoUrl('')
             }}
             snapshotAtTime={1}
           />
@@ -213,14 +205,6 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               return
             }
 
-            const { error, url } = await uploadFile(file, 'message')
-
-            if (error) {
-              return
-            }
-            setUrlState(url)
-
-            // accept="image/png, image/gif, image/jpeg, image/jpg"
             let type
 
             if (file.type.indexOf('image/') === 0) {
@@ -228,23 +212,53 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
             } else if (file.type.indexOf('video/') === 0) {
               type = 'video'
             } else {
-              type = 'custom'
+              type = 'file'
+              // lastModified: 1639976362947
+              // lastModifiedDate: Mon Dec 20 2021 11:59:22 GMT+0700 (Indochina Time) {}
+              // name: "God Rest Ye Merry_ Gentlemen - Mariah Ca.mp3"
+              // size: 3177201
+              // type: "audio/mpeg"
+              // webkitRelativePath: ""
             }
 
+            ///////////////////////////////// video /////////////////////////////////
             if (type === 'video') {
+              const videoUploadName = `${uuidv4()}-${file.name || ''}`
+              const { error, url } = await uploadFile(
+                file,
+                'message',
+                videoUploadName
+              )
+
+              if (error) {
+                return
+              }
+              setUrlVideoUploaded(url)
               setVideoUrl(URL.createObjectURL(file))
               // will upload in <VideoThumbnail>
-
               return
             }
+            ///////////////////////////////// video /////////////////////////////////
 
-            let chatRoomId: string = activeChatRoom.chatRoomId
-            const newMessageKey = await push(
-              child(ref(database), `/chatMessages/${chatRoomId}`)
-            ).key
-
-            let message: IChatMessage
+            ///////////////////////////////// image /////////////////////////////////
             if (type === 'image') {
+              const imageUploadName = `${uuidv4()}-${file.name || ''}`
+              const { error, url } = await uploadFile(
+                file,
+                'message',
+                imageUploadName
+              )
+
+              if (error) {
+                return
+              }
+
+              let chatRoomId: string = activeChatRoom.chatRoomId
+              const newMessageKey = await push(
+                child(ref(database), `/chatMessages/${chatRoomId}`)
+              ).key
+
+              let message: IChatMessage
               message = {
                 createdAt: serverTimestamp(), // 1646731132428,
                 createdBy: currentRoleId,
@@ -254,21 +268,65 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
                 type: EMessageType.image,
                 uri: url,
               }
-            } else {
-            }
 
-            const { error: errorCreateMessage } = await createMessage(
-              message,
-              chatRoomId
-            )
+              const { error: errorCreateMessage } = await createMessage(
+                message,
+                chatRoomId
+              )
 
-            if (errorCreateMessage) {
-              alert('error happen')
+              if (errorCreateMessage) {
+                alert('error happen')
+                return
+              }
+              updateLastMessageTime(chatRoomId, newMessageKey)
+              fileInputRef.current.value = ''
               return
             }
-            updateLastMessageTime(chatRoomId, newMessageKey)
-            fileInputRef.current.value = ''
-            setUrlState('')
+            ///////////////////////////////// image /////////////////////////////////
+
+            ///////////////////////////////// file /////////////////////////////////
+            if (type === 'file') {
+              const fileUploadName = `${uuidv4()}-${file.name || ''}`
+              const { error, url } = await uploadFile(
+                file,
+                'message',
+                fileUploadName
+              )
+
+              if (error) {
+                return
+              }
+
+              let chatRoomId: string = activeChatRoom.chatRoomId
+              const newMessageKey = await push(
+                child(ref(database), `/chatMessages/${chatRoomId}`)
+              ).key
+
+              let message: IChatMessage
+
+              message = newChatMessage().newFileMessage(
+                file.name,
+                serverTimestamp(),
+                currentRoleId,
+                newMessageKey,
+                url,
+                file.size
+              )
+
+              const { error: errorCreateMessage } = await createMessage(
+                message,
+                chatRoomId
+              )
+
+              if (errorCreateMessage) {
+                alert('error happen')
+                return
+              }
+              updateLastMessageTime(chatRoomId, newMessageKey)
+              fileInputRef.current.value = ''
+              return
+            }
+            ///////////////////////////////// file /////////////////////////////////
           } catch (err) {
             console.error(err)
           }
