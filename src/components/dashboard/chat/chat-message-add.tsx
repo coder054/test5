@@ -94,7 +94,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
         fullWidth
         onChange={handleChange}
         onKeyUp={handleKeyUp}
-        placeholder="Leave a message2"
+        placeholder="Leave a message" // placeholder="Leave a message2"
         value={body}
         size="small"
       />
@@ -125,7 +125,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
             </IconButton>
           </Box>
         </Tooltip>
-        <Tooltip title="Attach photo">
+        <Tooltip title="Attach photo or file">
           <Box
             sx={{
               display: {
@@ -137,21 +137,6 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
           >
             <IconButton disabled={disabled} edge="end" onClick={handleAttach}>
               <PhotographIcon fontSize="small" />
-            </IconButton>
-          </Box>
-        </Tooltip>
-        <Tooltip title="Attach file">
-          <Box
-            sx={{
-              display: {
-                xs: 'none',
-                sm: 'inline-flex',
-              },
-              m: 1,
-            }}
-          >
-            <IconButton disabled={disabled} edge="end" onClick={handleAttach}>
-              <PaperClipIcon fontSize="small" />
             </IconButton>
           </Box>
         </Tooltip>
