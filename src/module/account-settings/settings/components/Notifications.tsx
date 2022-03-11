@@ -1,15 +1,13 @@
 import { notification } from 'antd'
-import { settingsAtom } from 'src/atoms/accountAndSettings'
-import { MySwitchButton } from 'src/components/MySwitchButton'
-import { API_COACH_SETTINGS } from 'src/constants/api.constants'
-import { NotificationsType } from 'src/constants/types/settingsType.type'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
-import { Cookies } from 'react-cookie'
+import { settingsAtom } from 'src/atoms/accountAndSettings'
+import { MySwitchButton } from 'src/components/MySwitchButton'
+import { NotificationsType } from 'src/constants/types/settingsType.type'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
 import { BackGround } from '../../common-components/Background'
 import { Item } from '../../common-components/ItemSwitch'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
 
 export const Notifications = () => {
   const { currentRoleName, currentRoleId } = useAuth()
@@ -84,69 +82,64 @@ export const Notifications = () => {
   }, [account])
 
   return (
-    <>
-      <BackGround
-        label="Notifications in general"
-        form={
-          <div className="space-y-5">
-            <Item
-              className="justify-end border-b-2 border-[#484A4D] pb-[21px] mb-[21px]"
-              icon={
-                <MySwitchButton
-                  checked={switchAll}
-                  onChange={handleSwitchAll}
-                  name="all"
-                />
-              }
+    <BackGround label="Notifications in general" contentClass="xl:w-[400px]">
+      <div className="space-y-5">
+        <Item
+          className="justify-end border-b-2 border-[#484A4D] pb-[21px] mb-[21px]"
+          icon={
+            <MySwitchButton
+              checked={switchAll}
+              onChange={handleSwitchAll}
+              name="all"
             />
-            <Item
-              isChecked={notifications.profileAndDiaryUpdates}
-              label="Reminders on profile and diary updates"
-              icon={
-                <MySwitchButton
-                  checked={notifications.profileAndDiaryUpdates}
-                  onChange={handleSwitch}
-                  name="profileAndDiaryUpdates"
-                />
-              }
+          }
+        />
+        <Item
+          isChecked={notifications.profileAndDiaryUpdates}
+          label="Reminders on profile and diary updates"
+          icon={
+            <MySwitchButton
+              checked={notifications.profileAndDiaryUpdates}
+              onChange={handleSwitch}
+              name="profileAndDiaryUpdates"
             />
-            <Item
-              isChecked={notifications.feedUpdates}
-              label="Feed updates, likes comments etc."
-              icon={
-                <MySwitchButton
-                  checked={notifications.feedUpdates}
-                  onChange={handleSwitch}
-                  name="feedUpdates"
-                />
-              }
+          }
+        />
+        <Item
+          isChecked={notifications.feedUpdates}
+          label="Feed updates, likes comments etc."
+          icon={
+            <MySwitchButton
+              checked={notifications.feedUpdates}
+              onChange={handleSwitch}
+              name="feedUpdates"
             />
-            <Item
-              isChecked={notifications.messageUpdates}
-              label="Messages from your friends etc."
-              icon={
-                <MySwitchButton
-                  checked={notifications.messageUpdates}
-                  onChange={handleSwitch}
-                  name="messageUpdates"
-                />
-              }
+          }
+        />
+        <Item
+          isChecked={notifications.messageUpdates}
+          label="Messages from your friends etc."
+          icon={
+            <MySwitchButton
+              checked={notifications.messageUpdates}
+              onChange={handleSwitch}
+              name="messageUpdates"
             />
-            <Item
-              isChecked={notifications.inviteUpdates}
-              label="Invites to tests, challenges, events etc."
-              icon={
-                <MySwitchButton
-                  checked={notifications.inviteUpdates}
-                  onChange={handleSwitch}
-                  name="inviteUpdates"
-                />
-              }
+          }
+        />
+        <Item
+          isChecked={notifications.inviteUpdates}
+          label="Invites to tests, challenges, events etc."
+          icon={
+            <MySwitchButton
+              checked={notifications.inviteUpdates}
+              onChange={handleSwitch}
+              name="inviteUpdates"
             />
-            <Item label="Integrations" />
-          </div>
-        }
-      />
-    </>
+          }
+        />
+        <Item label="Integrations" />
+      </div>
+    </BackGround>
   )
 }

@@ -52,7 +52,7 @@ export const MyInput = ({
   ...rest
 }: {
   className?: string
-  label: string
+  label?: string
   errorMessage?: string
   value?: string | number
   onChange?: any

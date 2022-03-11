@@ -118,7 +118,7 @@ export const InforWithNumbers = ({
 }: {
   dataClub: IInfoClub
   activeSeasons: string[]
-  router: NextRouter
+  router?: NextRouter
 }) => {
   const { username } = router.query
   const [tab, setTab] = useState('Total')

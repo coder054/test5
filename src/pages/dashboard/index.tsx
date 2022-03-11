@@ -29,7 +29,7 @@ const Dashboard: NextPage = () => {
   // console.log('type', userRoles[0])
 
   useEffect(() => {
-    if (!userRoles[0].role) {
+    if (!userRoles[0]?.role) {
       router.push(ROUTES.SIGNUP_FORM)
     }
   }, [playerProfile.type])

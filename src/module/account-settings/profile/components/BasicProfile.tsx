@@ -27,8 +27,6 @@ export const BasicProfile = ({ onFormChange }: BasicProfileProps) => {
     birthDay: '',
   })
 
-  console.log(formValues)
-
   const handleChangeForm = (type: keyof FormValuesType, value: any) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
@@ -49,35 +47,32 @@ export const BasicProfile = ({ onFormChange }: BasicProfileProps) => {
   }, [JSON.stringify(account)])
 
   return (
-    <BackGround
-      label="Basic Profile"
-      form={
-        <div className="space-y-7">
-          <div className="grid grid-cols-2 gap-x-4">
-            <MyInput
-              onChange={(e) => handleChangeForm('firstName', e.target.value)}
-              value={formValues.firstName}
-              label="First name"
-            />
-            <MyInput
-              onChange={(e) => handleChangeForm('lastName', e.target.value)}
-              value={formValues.lastName}
-              label="Last name"
-            />
-          </div>
-          <MyCustomSelect
-            val={formValues.gender}
-            label="Gender"
-            onChange={(_, value) => handleChangeForm('gender', value)}
-            arrOptions={['MALE', 'FEMALE']}
+    <BackGround label="Basic Profile" contentClass="xl:w-[400px]">
+      <div className="space-y-7">
+        <div className="grid grid-cols-2 gap-x-4">
+          <MyInput
+            onChange={(e) => handleChangeForm('firstName', e.target.value)}
+            value={formValues.firstName}
+            label="First name"
           />
-          <MyDatePicker
-            onChange={(e) => handleChangeForm('birthDay', e)}
-            val={formValues.birthDay}
-            label="Birth day"
+          <MyInput
+            onChange={(e) => handleChangeForm('lastName', e.target.value)}
+            value={formValues.lastName}
+            label="Last name"
           />
         </div>
-      }
-    />
+        <MyCustomSelect
+          val={formValues.gender}
+          label="Gender"
+          onChange={(_, value) => handleChangeForm('gender', value)}
+          arrOptions={['MALE', 'FEMALE']}
+        />
+        <MyDatePicker
+          onChange={(e) => handleChangeForm('birthDay', e)}
+          val={formValues.birthDay}
+          label="Birth day"
+        />
+      </div>
+    </BackGround>
   )
 }

@@ -1,28 +1,25 @@
-import { useAtom } from 'jotai'
-import { useState, useEffect, useMemo } from 'react'
-import { profileAtom } from 'src/atoms/profileAtom'
+import { get } from 'lodash'
+import { useRouter } from 'next/router'
+import { useEffect, useMemo, useState } from 'react'
 import { GoBack } from 'src/components/go-back'
 import {
   API_COACH_PROFILE,
-  API_GET_BIOGRAPHY_PLAYER,
   API_PLAYER_PROFILE,
 } from 'src/constants/api.constants'
 import { ROUTES } from 'src/constants/constants'
-import { InforWithAChart } from 'src/module/bio/InfoWithAChart'
-import { InfoWithCircleImage } from 'src/module/bio/InfoWithCircleImage'
 import {
   IAvgPlayerScore,
   IBiographyPlayer,
-} from 'src/pages/biography/[username]/[fullname]'
+} from 'src/constants/types/biography.types'
+import { InforWithAChart } from 'src/module/bio/InfoWithAChart'
+import { InfoWithCircleImage } from 'src/module/bio/InfoWithCircleImage'
 import { axios } from 'src/utils/axios'
-import { toQueryString } from 'src/utils/common.utils'
 import { fetcher } from 'src/utils/utils'
 import useSWR from 'swr'
 import { useAuth } from '../auth/AuthContext'
-const cls = require('./signup-form-biography.module.css')
-import { get, isEmpty } from 'lodash'
-import { useRouter } from 'next/router'
 import { IAvgCoachScore, IBiographyCoach } from '../types'
+
+const cls = require('./signup-form-biography.module.css')
 
 export const SignupFormBiography = () => {
   const { currentRoleId, playerProfile, coachProfile, currentUser } = useAuth()
