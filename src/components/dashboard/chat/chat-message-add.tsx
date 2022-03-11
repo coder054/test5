@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import VideoThumbnail from 'react-video-thumbnail'
 import type { ChangeEvent, FC, KeyboardEvent } from 'react'
 import PropTypes from 'prop-types'
@@ -17,6 +18,7 @@ import {
   database,
   IChatMessage,
   newChatMessage,
+  fromBase64ToBlob,
 } from 'src/module/chat/chatService'
 import { child, push, ref, serverTimestamp } from 'firebase/database'
 import { useAtom } from 'jotai'
@@ -161,43 +163,48 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
             videoUrl={videoUrl}
             thumbnailHandler={async (thumbnail) => {
               console.log('aaa thumbnail', thumbnail)
-              fetch(thumbnail)
-                .then((res) => res.blob())
-                .then(async (aaa) => {
-                  //@ts-ignore: Unreachable code error
-                  const image: string = await resizeFile(aaa)
+              const blob = await fromBase64ToBlob(thumbnail)
+              //@ts-ignore: Unreachable code error
+              const imageResized: string = await resizeFile(blob)
+              const blobResized = await fromBase64ToBlob(imageResized)
 
-                  let chatRoomId: string = activeChatRoom.chatRoomId
+              const { error, url: urlThumb } = await uploadFile(
+                blobResized,
+                'media',
+                uuidv4() + '.jpg'
+              )
 
-                  const newMessageKey = await push(
-                    child(ref(database), `/chatMessages/${chatRoomId}`)
-                  ).key
+              let chatRoomId: string = activeChatRoom.chatRoomId
 
-                  let message: IChatMessage
+              const newMessageKey = await push(
+                child(ref(database), `/chatMessages/${chatRoomId}`)
+              ).key
 
-                  message = newChatMessage().newVideoOrFileMessage(
-                    fileInputRef.current.name,
-                    serverTimestamp(),
-                    currentRoleId,
-                    newMessageKey,
-                    image,
-                    urlState
-                  )
+              let message: IChatMessage
 
-                  const { error: errorCreateMessage } = await createMessage(
-                    message,
-                    chatRoomId
-                  )
+              message = newChatMessage().newVideoOrFileMessage(
+                get(fileInputRef, 'current.files[0].name') || uuidv4(),
+                serverTimestamp(),
+                currentRoleId,
+                newMessageKey,
+                urlThumb,
+                urlState
+              )
 
-                  if (errorCreateMessage) {
-                    alert('error happen')
-                    return
-                  }
-                  updateLastMessageTime(chatRoomId, newMessageKey)
+              const { error: errorCreateMessage } = await createMessage(
+                message,
+                chatRoomId
+              )
 
-                  setUrlState('')
-                  fileInputRef.current.value = ''
-                })
+              if (errorCreateMessage) {
+                alert('error happen')
+                return
+              }
+              updateLastMessageTime(chatRoomId, newMessageKey)
+
+              setUrlState('')
+              fileInputRef.current.value = ''
+              setVideoUrl('')
             }}
             snapshotAtTime={1}
           />
@@ -213,14 +220,6 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               return
             }
 
-            const { error, url } = await uploadFile(file, 'message')
-
-            if (error) {
-              return
-            }
-            setUrlState(url)
-
-            // accept="image/png, image/gif, image/jpeg, image/jpg"
             let type
 
             if (file.type.indexOf('image/') === 0) {
@@ -231,44 +230,73 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               type = 'custom'
             }
 
+            ///////////////////////////////// video /////////////////////////////////
             if (type === 'video') {
+              const videoUploadName = `${uuidv4()}-${file.name || ''}`
+              const { error, url } = await uploadFile(
+                file,
+                'message',
+                videoUploadName
+              )
+
+              if (error) {
+                return
+              }
+              setUrlState(url)
               setVideoUrl(URL.createObjectURL(file))
               // will upload in <VideoThumbnail>
-
               return
             }
+            ///////////////////////////////// video /////////////////////////////////
 
-            let chatRoomId: string = activeChatRoom.chatRoomId
-            const newMessageKey = await push(
-              child(ref(database), `/chatMessages/${chatRoomId}`)
-            ).key
-
-            let message: IChatMessage
+            ///////////////////////////////// image /////////////////////////////////
             if (type === 'image') {
-              message = {
-                createdAt: serverTimestamp(), // 1646731132428,
-                createdBy: currentRoleId,
-                messageId: newMessageKey,
-                attachmentName: file.name,
-                size: file.size,
-                type: EMessageType.image,
-                uri: url,
+              const imageUploadName = `${uuidv4()}-${file.name || ''}`
+              const { error, url } = await uploadFile(
+                file,
+                'message',
+                imageUploadName
+              )
+
+              if (error) {
+                return
               }
-            } else {
-            }
+              setUrlState(url)
 
-            const { error: errorCreateMessage } = await createMessage(
-              message,
-              chatRoomId
-            )
+              let chatRoomId: string = activeChatRoom.chatRoomId
+              const newMessageKey = await push(
+                child(ref(database), `/chatMessages/${chatRoomId}`)
+              ).key
 
-            if (errorCreateMessage) {
-              alert('error happen')
+              let message: IChatMessage
+              if (type === 'image') {
+                message = {
+                  createdAt: serverTimestamp(), // 1646731132428,
+                  createdBy: currentRoleId,
+                  messageId: newMessageKey,
+                  attachmentName: imageUploadName,
+                  size: file.size,
+                  type: EMessageType.image,
+                  uri: url,
+                }
+              } else {
+              }
+
+              const { error: errorCreateMessage } = await createMessage(
+                message,
+                chatRoomId
+              )
+
+              if (errorCreateMessage) {
+                alert('error happen')
+                return
+              }
+              updateLastMessageTime(chatRoomId, newMessageKey)
+              fileInputRef.current.value = ''
+              setUrlState('')
               return
             }
-            updateLastMessageTime(chatRoomId, newMessageKey)
-            fileInputRef.current.value = ''
-            setUrlState('')
+            ///////////////////////////////// image /////////////////////////////////
           } catch (err) {
             console.error(err)
           }
