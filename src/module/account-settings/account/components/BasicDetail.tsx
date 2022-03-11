@@ -38,11 +38,8 @@ export const BasicDetail = () => {
 
   const validationSchema = Yup.object().shape({
     newPassword: Yup.string()
-      .min(8, 'Password minimum length should be 8')
-      .matches(
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        'Must contain 1 capital letter and one special case Character'
-      ),
+      .min(8, 'Min 8 signs & 1 capital letter')
+      .matches(/(?=.*?[A-Z])/, 'Min 8 signs & 1 capital letter'),
     confirmPassword: Yup.string().oneOf(
       [Yup.ref('newPassword')],
       'Password not matched'
@@ -82,66 +79,67 @@ export const BasicDetail = () => {
   }, [account])
 
   return (
-    <BackGround
-      label="Basic detail"
-      form={
-        <Formik
-          onSubmit={handleSubmit}
-          enableReinitialize={true}
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-        >
-          {() => (
-            <Form className="space-y-7">
-              <Field
-                as={MyCustomSelect}
-                fullWidth
-                name="userProfle"
-                label="User profile"
-                value={initialValues.userProfile}
-                arrOptions={['Coach', 'Player']}
-                helperText={<ErrorMessage name="userProfile" />}
-              />
-              <Field
-                as={MyInput}
-                fullWidth
-                name="username"
-                label="Username"
-                placeholder="Enter your username"
-                helperText={<ErrorMessage name="username" />}
-              />
-              <Field
-                as={MyInput}
-                password
-                fullWidth
-                name="newPassword"
-                label="New password"
-                placeholder="Enter your new password"
-                helperText={<ErrorMessage name="newPassword" />}
-              />
-              <Field
-                as={MyInput}
-                password
-                fullWidth
-                name="confirmPassword"
-                label="Confirm password"
-                placeholder="Confirm your password"
-                helperText={<ErrorMessage name="confirmPassword" />}
-              />
-              <Field
-                as={MyInput}
-                password
-                fullWidth
-                name="verifyPassword"
-                label="Verify password"
-                placeholder="Verify your old password"
-                helperText={<ErrorMessage name="verifyPassword" />}
-              />
-              <MyButton isLoading={isLoading} type="submit" label="Save" />
-            </Form>
-          )}
-        </Formik>
-      }
-    />
+    <BackGround label="Basic detail" contentClass="xl:w-[400px]">
+      <Formik
+        onSubmit={handleSubmit}
+        enableReinitialize={true}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+      >
+        {() => (
+          <Form className="space-y-7">
+            <Field
+              as={MyCustomSelect}
+              fullWidth
+              name="userProfle"
+              label="User profile"
+              value={initialValues.userProfile}
+              arrOptions={['Coach', 'Player']}
+            />
+            <Field
+              as={MyInput}
+              fullWidth
+              name="username"
+              label="Username"
+              placeholder="Enter your username"
+            />
+            <Field
+              as={MyInput}
+              password
+              fullWidth
+              name="newPassword"
+              label="New password"
+              placeholder="Enter your new password"
+              helperText={
+                <ErrorMessage
+                  name="newPassword"
+                  render={(msg) => (
+                    <p className="text-red-500 animate-appear ">{msg}</p>
+                  )}
+                />
+              }
+            />
+            <Field
+              as={MyInput}
+              password
+              fullWidth
+              name="confirmPassword"
+              label="Confirm password"
+              placeholder="Confirm your password"
+              helperText={<ErrorMessage name="confirmPassword" />}
+            />
+            <Field
+              as={MyInput}
+              password
+              fullWidth
+              name="verifyPassword"
+              label="Verify password"
+              placeholder="Verify your old password"
+            />
+            <MyButton isLoading={isLoading} type="submit" label="Save" />
+          </Form>
+        )}
+      </Formik>
+    </BackGround>
   )
 }
