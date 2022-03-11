@@ -339,7 +339,7 @@ const SignIn = () => {
               >
                 <MyInput
                   name={'userFormUserNameSignIn'}
-                  label="Email address"
+                  label="User name"
                   value={userFormUserNameSignIn}
                   onChange={(e) => {
                     setUserFormUserNameSignIn(e.target.value)

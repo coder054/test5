@@ -296,7 +296,7 @@ export const SignUpFormPlayer = () => {
           <MySelect
             signupForm
             className="mt-[24px] w-[470px]"
-            label={'length'}
+            label={'Length'}
             value={formValues.length}
             onChange={(e) => {
               handleChangeForm('length', e.target.value)
@@ -308,7 +308,7 @@ export const SignUpFormPlayer = () => {
         <MySelect
           signupForm
           className="mt-[24px] w-[470px]"
-          label={'weight'}
+          label={'Weight'}
           value={formValues.weight}
           onChange={(e) => {
             handleChangeForm('weight', e.target.value)

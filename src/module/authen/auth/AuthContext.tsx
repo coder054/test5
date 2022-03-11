@@ -308,7 +308,6 @@ export function AuthProvider({ children }) {
         if (!localStorage.getItem(LOCAL_STORAGE_KEY.playerProfile)) {
           try {
             const { data: userinfo } = await axios.get(API_PLAYER_PROFILE)
-            debugger
             setPlayerProfile(userinfo)
             localStorage.setItem(
               LOCAL_STORAGE_KEY.playerProfile,

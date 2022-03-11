@@ -7,6 +7,7 @@ import { IInfoClub, InfoClub } from './InfoClub'
 import useSWR from 'swr'
 import { fetcher } from 'src/utils/utils'
 import { isEmpty } from 'lodash'
+import { NextRouter } from 'next/router'
 
 enum Tab {
   Club = 'Club',
@@ -113,10 +114,13 @@ export interface TrainingCategory {
 export const InforWithNumbers = ({
   dataClub,
   activeSeasons,
+  router,
 }: {
   dataClub: IInfoClub
   activeSeasons: string[]
+  router: NextRouter
 }) => {
+  const { username } = router.query
   const [tab, setTab] = useState('Total')
   const [urlGetSeasonStats, setUrlGetSeasonStats] = useState('')
   const { data, error } = useSWR(urlGetSeasonStats, fetcher, {
@@ -148,7 +152,7 @@ export const InforWithNumbers = ({
     const season = getSeason(tab)
 
     let params: any = {}
-    params.username = 'DriWat981211'
+    params.username = username
     params.limit = 20
     params.startAfter = 0
     params.sorted = 'asc'

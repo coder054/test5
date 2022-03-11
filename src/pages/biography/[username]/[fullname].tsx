@@ -364,6 +364,7 @@ const Biography = () => {
               <InforWithNumbers
                 dataClub={dataClub}
                 activeSeasons={dataBio.activeSeasons}
+                router={router}
               />
             </div>
           </div>
