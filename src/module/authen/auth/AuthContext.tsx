@@ -263,6 +263,9 @@ export function AuthProvider({ children }) {
         localStorage.removeItem(LOCAL_STORAGE_KEY.userRoles)
       } else {
         const token = await user.getIdToken()
+        setToken(token)
+        setCurrentUser(user)
+
         // debugger
         setTokenCookieHttp(token)
         // update axios token header
@@ -296,8 +299,6 @@ export function AuthProvider({ children }) {
             // update axios token header
             //@ts-ignore: Unreachable code error
             axios.defaults.headers.roleId = roleId
-            setToken(token)
-            setCurrentUser(user)
           }
         }
 
