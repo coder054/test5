@@ -1,14 +1,13 @@
-import { Button } from 'src/components'
-import { MyInput } from 'src/components/MyInput'
-import React, { useCallback, useState } from 'react'
+import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
-import { useAuth } from '../auth/AuthContext'
+import React, { useCallback, useState } from 'react'
+import { profileCoachAtom } from 'src/atoms/profileCoachAtom'
+import { Button } from 'src/components'
 import { GoBack } from 'src/components/go-back'
-import { MySelect } from 'src/components/MySelect'
-import { OptionCoach, OptionPlayer } from '../types'
-import { DynamicFields } from 'src/components/dynamic-fields'
-import { useIncrementNumber } from 'src/hooks/useIncrementNumber'
+import { MinusIcon, PlusIcon } from 'src/components/icons'
+import { MyInput } from 'src/components/MyInput'
 import { MyModal } from 'src/components/MyModal'
+import { MySelect } from 'src/components/MySelect'
 import { ROUTES } from 'src/constants/constants'
 import {
   CoachingStyle,
@@ -20,11 +19,11 @@ import {
   ClubType,
   CurrentTeamType,
 } from 'src/constants/types/settingsType.type'
-import { useAtom } from 'jotai'
-import { InfiniteScrollClub } from 'src/module/account-settings/components/football/components/InfiniteScrollClub'
-import { InfiniteScrollTeam } from 'src/module/account-settings/components/football/components/InfiniteScrollTeam'
-import { MinusIcon, PlusIcon } from 'src/components/icons'
-import { profileCoachAtom } from 'src/atoms/profileCoachAtom'
+import { InfiniteScrollClub } from 'src/module/account-settings/football/components/InfiniteScrollClub'
+import { InfiniteScrollTeam } from 'src/module/account-settings/football/components/InfiniteScrollTeam'
+
+import { useAuth } from '../auth/AuthContext'
+import { OptionCoach } from '../types'
 
 type FormArrayType = Partial<{
   yourTeams: CurrentTeamType[]

@@ -1,15 +1,15 @@
+import { useState } from 'react'
+import { GradientCircularProgress } from 'react-circular-gradient-progress'
+import { Button } from 'src/components'
+import { Comments } from 'src/components/Comments'
+import { Stars } from 'src/components/common/Stars'
+import { API_FRIENDS } from 'src/constants/api.constants'
 import {
   EStatusRelationShip,
   IBiographyPlayer,
-} from 'src/pages/biography/[username]/[fullname]'
-import { Button } from 'src/components'
-import { GradientCircularProgress } from 'react-circular-gradient-progress'
-import { useContext, useEffect, useMemo, useState } from 'react'
-import { useAuth } from '../authen/auth/AuthContext'
+} from 'src/constants/types/biography.types'
 import { axios } from 'src/utils/axios'
-import { API_FRIENDS } from 'src/constants/api.constants'
-import { Stars } from 'src/components/common/Stars'
-import { Comments } from 'src/components/Comments'
+import { useAuth } from '../authen/auth/AuthContext'
 import { IBiographyCoach } from '../authen/types'
 
 export const InfoWithCircleImage = ({

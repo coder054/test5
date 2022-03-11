@@ -12,8 +12,8 @@ import { createPortal } from 'react-dom'
 import { Text } from 'src/components/Text'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { useScreenWidth } from 'src/hooks/useScreenWidth'
-import { IBiographyPlayer } from 'src/pages/biography/[username]/[fullname]'
 import clsx from 'clsx'
+import { IBiographyPlayer } from 'src/constants/types/biography.types'
 
 export const TopVideos = ({ dataBio }: { dataBio: IBiographyPlayer }) => {
   const { screenWidth } = useScreenWidth()
