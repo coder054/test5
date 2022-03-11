@@ -22,6 +22,7 @@ import { useAuth } from '../auth/AuthContext'
 const cls = require('./signup-form-biography.module.css')
 import { get, isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
+import { IAvgCoachScore, IBiographyCoach } from '../types'
 
 export const SignupFormBiography = () => {
   const { currentRoleId, playerProfile, coachProfile, currentUser } = useAuth()
@@ -93,7 +94,51 @@ export const SignupFormBiography = () => {
     activeSeasons: [],
   })
 
-  // const [dataCoach, setDataCoach] = useState<>()
+  const [dataCoach, setDataCoach] = useState<IBiographyCoach>({
+    activeSeasons: [],
+    age: 0,
+    bioUrl: '',
+    birthDay: '',
+    circleCompleted: 0,
+    coachRadarSkills: {
+      attacking: 0,
+      playerDevelopment: 0,
+      turnovers: 0,
+      setPieces: 0,
+      defending: 0,
+      analytics: 0,
+    },
+    contractedUntil: '',
+    countryFlagUrl: '',
+    currentClubIconUrl: '',
+    education: '',
+    expLevel: '',
+    faceImageUrl: '',
+    fanCount: 0,
+    firstName: '',
+    followCount: 0,
+    friendCount: 0,
+    lastName: '',
+    lastUpdatedDate: '',
+    managementStyle: '',
+    managementType: '',
+    position: '',
+    socialLinks: {
+      veoHighlites: '',
+      facebook: '',
+      instagram: '',
+      twitter: '',
+      tiktok: '',
+      youtube: '',
+    },
+    specialities: [],
+    starRating: 0,
+    summary: '',
+    topVideoLinks: [],
+    userId: '',
+    userRole: '',
+    username: '',
+  })
 
   const { data: dataAvgPlayer, error: errorAvgPlayer } = useSWR(
     '/biographies/players/avg-radar',
@@ -106,30 +151,89 @@ export const SignupFormBiography = () => {
     error: any
   }
 
+  const { data: dataAvgCoach, error: errorAvgCoach } = useSWR(
+    '/biographies/coachs/avg-radar',
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  ) as {
+    data: IAvgCoachScore
+    error: any
+  }
+
   useEffect(() => {
     const getBio = async () => {
       if (profile === 'Player') {
-        const res = await axios.get(toQueryString(API_PLAYER_PROFILE))
+        debugger
+        const res = await axios.get(API_PLAYER_PROFILE)
         // console.log('res', res.data.username)
 
         const response = await axios.get(
           `/biographies/player?username=${res.data.username}`
         )
-        console.log('res', response.data)
+        // console.log('res', response.data)
         setData(response.data)
       } else if (profile === 'Coach') {
-        // const res = await axios.get(toQueryString(API_COACH_PROFILE))
-        // console.log('res', res.data.username)
-        // const response = await axios.get(
-        //   `/biographies/coach?username=${res.data.username}`
-        // )
-        // console.log('res', response.data)
-        // setData(response.data)
+        const res = await axios.get(API_COACH_PROFILE)
+        console.log('res', res.data.username)
+        const response = await axios.get(
+          `/biographies/coach?username=${res.data.username}`
+        )
+        console.log('response', response.data)
+        setDataCoach(response.data)
       }
     }
 
     getBio()
   }, [])
+
+  const dataBioCoachRadarChart = useMemo(() => {
+    const coach = get(dataCoach, 'coachRadarSkills')
+    const average = dataAvgCoach
+    if (!coach || !average) {
+      return [{}]
+    }
+
+    return [
+      {
+        subject: 'ATTACKING',
+        Average: average.avgCoachAttacking,
+        Coach: coach.attacking,
+        fullMark: 100,
+      },
+      {
+        subject: 'ANALYTICS',
+        Average: average.avgCoachAnalytics,
+        Coach: coach.analytics,
+        fullMark: 100,
+      },
+      {
+        subject: 'SETPIECES',
+        Average: average.avgCoachSetPieces,
+        Coach: coach.setPieces,
+        fullMark: 100,
+      },
+      {
+        subject: 'URNOVERS',
+        Average: average.avgCoachTurnovers,
+        Coach: coach.turnovers,
+        fullMark: 100,
+      },
+      {
+        subject: 'DEFENDING',
+        Average: average.avgCoachDefending,
+        Coach: coach.defending,
+        fullMark: 100,
+      },
+      {
+        subject: 'PLAYERDEVELOPMENT',
+        Average: average.avgCoachPlayerDevelopment,
+        Coach: coach.playerDevelopment,
+        fullMark: 100,
+      },
+    ]
+  }, [dataAvgCoach, get(dataCoach, 'coachRadarSkills')])
 
   const dataBioRadarChart = useMemo(() => {
     const coach = get(data, 'radarUpdatedByCoach')
@@ -203,6 +307,7 @@ export const SignupFormBiography = () => {
     get(data, 'playerRadarSkills'),
   ])
   console.log('dataBioRadarChart', dataBioRadarChart)
+  console.log('dataBioCoachRadarChart', dataBioCoachRadarChart)
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
@@ -217,20 +322,38 @@ export const SignupFormBiography = () => {
         <div
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 max-h-[626px]`}
         >
-          <InfoWithCircleImage
-            dataBio={data}
-            currentRoleId={currentRoleId}
-            signupForm
-          />
+          {profile === 'Player' ? (
+            <InfoWithCircleImage
+              dataBio={data}
+              currentRoleId={currentRoleId}
+              signupForm
+            />
+          ) : (
+            <InfoWithCircleImage
+              dataBio={dataCoach}
+              currentRoleId={currentRoleId}
+              signupForm
+            />
+          )}
         </div>
         <div
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 `}
         >
-          <InforWithAChart
-            dataBio={data}
-            dataBioRadarChart={dataBioRadarChart}
-            signupForm
-          />
+          {profile === 'Player' ? (
+            <InforWithAChart
+              dataBio={data}
+              dataBioRadarChart={dataBioRadarChart}
+              signupForm
+              profile={profile as string}
+            />
+          ) : (
+            <InforWithAChart
+              dataBio={dataCoach}
+              dataBioRadarChart={dataBioCoachRadarChart}
+              signupForm
+              profile={profile as string}
+            />
+          )}
         </div>
       </div>
     </div>
