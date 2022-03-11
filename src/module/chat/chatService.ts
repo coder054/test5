@@ -814,7 +814,7 @@ export const newChatMessage = () => {
     return target
   }
 
-  const newVideoOrFileMessage = (
+  const newVideoMessage = (
     attachmentName: string,
     createdAt: any,
     createdBy: string,
@@ -832,10 +832,30 @@ export const newChatMessage = () => {
       uri,
     }
   }
+
+  const newFileMessage = (
+    attachmentName: string,
+    createdAt: any,
+    createdBy: string,
+    messageId: string,
+    uri: string,
+    size: number
+  ) => {
+    return {
+      attachmentName,
+      createdAt,
+      createdBy,
+      messageId,
+      size,
+      type: 'file',
+      uri,
+    }
+  }
   return {
     newTextMessage,
     newImageMessage,
-    newVideoOrFileMessage,
+    newVideoMessage,
+    newFileMessage,
   }
 }
 
