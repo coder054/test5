@@ -27,7 +27,6 @@ import { MinusIcon, PlusIcon } from 'src/components/icons'
 import { profileCoachAtom } from 'src/atoms/profileCoachAtom'
 
 type FormArrayType = Partial<{
-  favoriteRoles: string[]
   yourTeams: CurrentTeamType[]
 }>
 
@@ -52,6 +51,7 @@ export const SignUpFormCoach = () => {
   const router = useRouter()
   const [openModal, setOpenModal] = useState<boolean>(false)
   const { signin } = useAuth()
+  const { profile } = router.query
 
   console.log('profileCoachForm', profileCoachForm)
 
@@ -103,6 +103,13 @@ export const SignUpFormCoach = () => {
     }))
   }
 
+  const setSelectedTeam = (value: string, index?: string) => {
+    let newArr = [...(formValues.yourTeams || [])]
+    /* @ts-ignore */
+    newArr[+index] = value.teamName
+    setFormValues((prev) => ({ ...prev, yourTeams: newArr }))
+  }
+
   const handleAddForm = useCallback(
     (type: keyof FormArrayType, initialValue: any) => {
       if (formValues[type].length < 3) {
@@ -146,20 +153,25 @@ export const SignUpFormCoach = () => {
     setProfileCoachForm({
       ...profileCoachForm,
       coachCareer: {
-        clubId: '',
+        clubId: formValues.contractedClub.clubId,
         contractedFrom: '',
         contractedUntil: '',
         seasonStartDate: '',
         seasonEndDate: '',
-        acceptedTeamIds: [],
+        acceptedTeamIds: formValues.yourTeams,
         pendingTeamIds: [],
-        role: '',
-        highestCoachingEducation: '',
-        expLevel: '',
-        managementStyle: '',
-        managementType: '',
+        role: formValues.favoriteRole,
+        highestCoachingEducation: formValues.highestCoachingEducation,
+        expLevel: formValues.experienceLevel,
+        managementStyle: formValues.coachingStyle,
+        managementType: formValues.coachingType,
         summary: '',
       },
+    })
+
+    router.push({
+      pathname: ROUTES.SIGNUP_FORM_COACH_SKILLS,
+      query: { profile: profile },
     })
   }
 

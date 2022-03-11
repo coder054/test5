@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { profileAtom } from 'src/atoms/profileAtom'
 import { GoBack } from 'src/components/go-back'
 import {
+  API_COACH_PROFILE,
   API_GET_BIOGRAPHY_PLAYER,
   API_PLAYER_PROFILE,
 } from 'src/constants/api.constants'
@@ -20,9 +21,14 @@ import useSWR from 'swr'
 import { useAuth } from '../auth/AuthContext'
 const cls = require('./signup-form-biography.module.css')
 import { get, isEmpty } from 'lodash'
+import { useRouter } from 'next/router'
 
 export const SignupFormBiography = () => {
   const { currentRoleId, playerProfile, coachProfile, currentUser } = useAuth()
+  const router = useRouter()
+  const { profile } = router.query
+  console.log('profile', profile)
+
   const [data, setData] = useState<IBiographyPlayer>({
     isConfirmBox: true,
     isFollowed: true,
@@ -87,6 +93,8 @@ export const SignupFormBiography = () => {
     activeSeasons: [],
   })
 
+  // const [dataCoach, setDataCoach] = useState<>()
+
   const { data: dataAvgPlayer, error: errorAvgPlayer } = useSWR(
     '/biographies/players/avg-radar',
     fetcher,
@@ -99,18 +107,28 @@ export const SignupFormBiography = () => {
   }
 
   useEffect(() => {
-    const getBioPlayer = async () => {
-      const res = await axios.get(toQueryString(API_PLAYER_PROFILE))
-      // console.log('res', res.data.username)
+    const getBio = async () => {
+      if (profile === 'Player') {
+        const res = await axios.get(toQueryString(API_PLAYER_PROFILE))
+        // console.log('res', res.data.username)
 
-      const response = await axios.get(
-        `/biographies/player?username=${res.data.username}`
-      )
-      console.log('res', response.data)
-      setData(response.data)
+        const response = await axios.get(
+          `/biographies/player?username=${res.data.username}`
+        )
+        console.log('res', response.data)
+        setData(response.data)
+      } else if (profile === 'Coach') {
+        // const res = await axios.get(toQueryString(API_COACH_PROFILE))
+        // console.log('res', res.data.username)
+        // const response = await axios.get(
+        //   `/biographies/coach?username=${res.data.username}`
+        // )
+        // console.log('res', response.data)
+        // setData(response.data)
+      }
     }
 
-    getBioPlayer()
+    getBio()
   }, [])
 
   const dataBioRadarChart = useMemo(() => {
