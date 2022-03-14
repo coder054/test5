@@ -8,13 +8,13 @@ import { IBiographyCoach } from '../authen/types'
 import { useAuth } from '../authen/auth/AuthContext'
 import { IBiographyPlayer } from 'src/constants/types/biography.types'
 
-export const InforWithAChart = ({
+export const InfoCoachWithAChart = ({
   dataBio,
   dataBioRadarChart,
   signupForm,
   profile,
 }: {
-  dataBio: IBiographyPlayer | IBiographyCoach
+  dataBio: IBiographyCoach
   dataBioRadarChart: any
   signupForm?: boolean
   profile: string

@@ -11,8 +11,8 @@ import {
   IAvgPlayerScore,
   IBiographyPlayer,
 } from 'src/constants/types/biography.types'
-import { InforWithAChart } from 'src/module/bio/InfoWithAChart'
-import { InfoWithCircleImage } from 'src/module/bio/InfoWithCircleImage'
+import { InfoPlayerWithAChart } from 'src/module/bio/InfoPlayerWithAChart'
+import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
 import { axios } from 'src/utils/axios'
 import { fetcher } from 'src/utils/utils'
 import useSWR from 'swr'
@@ -319,13 +319,13 @@ export const SignupFormBiography = () => {
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 max-h-[626px]`}
         >
           {profile === 'Player' ? (
-            <InfoWithCircleImage
+            InfoPlayerWithCircleImage
               dataBio={data}
               currentRoleId={currentRoleId}
               signupForm
             />
           ) : (
-            <InfoWithCircleImage
+            InfoPlayerWithCircleImage
               dataBio={dataCoach}
               currentRoleId={currentRoleId}
               signupForm
@@ -336,20 +336,21 @@ export const SignupFormBiography = () => {
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 `}
         >
           {profile === 'Player' ? (
-            <InforWithAChart
+            <InfoPlayerWithAChart
               dataBio={data}
               dataBioRadarChart={dataBioRadarChart}
               signupForm
               profile={profile as string}
             />
-          ) : (
-            <InforWithAChart
-              dataBio={dataCoach}
-              dataBioRadarChart={dataBioCoachRadarChart}
-              signupForm
-              profile={'coach'}
-            />
-          )}
+          ) : null
+          // todo
+          // <InfoPlayerWithAChart
+          //   dataBio={dataCoach}
+          //   dataBioRadarChart={dataBioCoachRadarChart}
+          //   signupForm
+          //   profile={'coach'}
+          // />
+          }
         </div>
       </div>
     </div>

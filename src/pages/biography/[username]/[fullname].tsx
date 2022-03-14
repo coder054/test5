@@ -18,8 +18,10 @@ import {
 import { useScreenWidth } from 'src/hooks/useScreenWidth'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { IInfoClub } from 'src/module/bio/InfoClub'
-import { InforWithAChart } from 'src/module/bio/InfoWithAChart'
-import { InfoWithCircleImage } from 'src/module/bio/InfoWithCircleImage'
+import { InfoPlayerWithAChart } from 'src/module/bio/InfoPlayerWithAChart'
+import { InfoCoachWithAChart } from 'src/module/bio/InfoCoachWithAChart'
+import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
+import { InfoCoachWithCircleImage } from 'src/module/bio/InfoCoachWithCircleImage'
 import { InfoWithImages } from 'src/module/bio/InfoWithImages'
 import { InforWithNumbers } from 'src/module/bio/InfoWithNumbers'
 import { NavigationAndFilter } from 'src/module/bio/NavigationAndFilter'
@@ -81,6 +83,76 @@ export default function Biography({
   const handleTabsChange = (event: ChangeEvent<{}>, value: string): void => {
     setCurrentTab(value)
   }
+
+  return (
+    <DashboardLayout>
+      {profile === 'coach' ? (
+        <BioForCoach
+          dataBioCoach={dataBioCoach}
+          dataAvgCoach={dataAvgCoach}
+          profile={profile}
+          currentRoleId={currentRoleId}
+          authenticated={authenticated}
+          currentTab={currentTab}
+          dataClub={dataClub}
+          router={router}
+        />
+      ) : (
+        <BioForPlayer
+          dataBioPlayer={dataBioPlayer}
+          dataAvgPlayer={dataAvgPlayer}
+          authenticated={authenticated}
+          currentTab={currentTab}
+          handleTabsChange={handleTabsChange}
+          currentRoleId={currentRoleId}
+          profile={profile}
+          dataClub={dataClub}
+          router={router}
+        />
+      )}
+    </DashboardLayout>
+  )
+}
+
+const BioForPlayer = ({
+  dataBioPlayer,
+  dataAvgPlayer,
+  authenticated,
+  currentTab,
+  handleTabsChange,
+  currentRoleId,
+  profile,
+  dataClub,
+  router,
+}: {
+  dataBioPlayer: IBiographyPlayer
+  dataAvgPlayer: IAvgPlayerScore
+  authenticated: boolean
+  currentTab: string
+  handleTabsChange: Function
+  currentRoleId: any
+  profile: string
+  dataClub: IInfoClub
+  router: any
+}) => {
+  useEffect(() => {
+    const {
+      friendStatus,
+      followStatus,
+      isConfirmBox,
+      isFollowed,
+      isPublic,
+      userId,
+    } = dataBioPlayer
+    console.log('aaa dataBio: ', dataBioPlayer, {
+      friendStatus,
+      followStatus,
+      isConfirmBox,
+      isFollowed,
+      isPublic,
+      userId,
+    })
+  }, [dataBioPlayer])
 
   const dataBioPlayerRadarChart = useMemo(() => {
     const coach = get(dataBioPlayer, 'radarUpdatedByCoach')
@@ -155,67 +227,6 @@ export default function Biography({
   ])
 
   return (
-    <DashboardLayout>
-      {profile === 'coach' ? (
-        <BioForCoach />
-      ) : (
-        <BioForPlayer
-          dataBioPlayer={dataBioPlayer}
-          authenticated={authenticated}
-          currentTab={currentTab}
-          handleTabsChange={handleTabsChange}
-          currentRoleId={currentRoleId}
-          profile={profile}
-          dataBioPlayerRadarChart={dataBioPlayerRadarChart}
-          dataClub={dataClub}
-          router={router}
-        />
-      )}
-    </DashboardLayout>
-  )
-}
-
-const BioForPlayer = ({
-  dataBioPlayer,
-  authenticated,
-  currentTab,
-  handleTabsChange,
-  currentRoleId,
-  profile,
-  dataBioPlayerRadarChart,
-  dataClub,
-  router,
-}: {
-  dataBioPlayer: IBiographyPlayer
-  authenticated: boolean
-  currentTab: string
-  handleTabsChange: Function
-  currentRoleId: any
-  profile: string
-  dataBioPlayerRadarChart: any
-  dataClub: IInfoClub
-  router: any
-}) => {
-  useEffect(() => {
-    const {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    } = dataBioPlayer
-    console.log('aaa dataBio: ', dataBioPlayer, {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    })
-  }, [dataBioPlayer])
-
-  return (
     <>
       <Head>
         <title>
@@ -280,7 +291,7 @@ const BioForPlayer = ({
                 className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
               >
                 <div className="max-w-[466px] mx-auto ">
-                  <InfoWithCircleImage
+                  <InfoPlayerWithCircleImage
                     dataBio={dataBioPlayer}
                     currentRoleId={currentRoleId}
                   />
@@ -298,11 +309,11 @@ const BioForPlayer = ({
                 className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
               >
                 <div className="max-w-[466px] mx-auto">
-                  <InforWithAChart
+                  <InfoPlayerWithAChart
                     profile={profile}
                     dataBio={dataBioPlayer}
                     dataBioRadarChart={dataBioPlayerRadarChart}
-                  ></InforWithAChart>
+                  ></InfoPlayerWithAChart>
 
                   <div className="h-[1px] my-[32px] bg-Stroke "></div>
 
@@ -331,8 +342,201 @@ const BioForPlayer = ({
   )
 }
 
-const BioForCoach = () => {
-  return <div className=" ">Coach</div>
+const BioForCoach = ({
+  dataBioCoach,
+  dataAvgCoach,
+  profile,
+  currentRoleId,
+  authenticated,
+  currentTab,
+  handleTabsChange,
+  dataClub,
+  router,
+}: {
+  dataBioCoach: IBiographyCoach
+  dataAvgCoach: IAvgCoachScore
+  profile: string
+  currentRoleId: string
+  authenticated: boolean
+  currentTab: string
+  handleTabsChange: Function
+  dataClub: IInfoClub
+  router: any
+}) => {
+  useEffect(() => {
+    console.log('aaa dataBioCoach: ', dataBioCoach)
+  }, [dataBioCoach])
+
+  const dataBioCoachRadarChart = useMemo(() => {
+    const coach = get(dataBioCoach, 'radarUpdatedByCoach')
+    const average = dataAvgCoach
+    const you = get(dataBioCoach, 'playerRadarSkills')
+    if (!coach || !average || !you) {
+      return [{}]
+    }
+
+    return [
+      {
+        subject: 'ATTACKING',
+        You: you.attacking,
+        Average: 1,
+        Coach: coach.attacking,
+        fullMark: 100,
+      },
+      {
+        subject: 'PACE',
+        You: you.pace,
+        Average: 2,
+        Coach: coach.pace,
+        fullMark: 100,
+      },
+      {
+        subject: 'SHOOTING',
+        You: you.shooting,
+        Average: 3,
+        Coach: coach.shooting,
+        fullMark: 100,
+      },
+      {
+        subject: 'PASSING',
+        You: you.passing,
+        Average: 4,
+        Coach: coach.passing,
+        fullMark: 100,
+      },
+      {
+        subject: 'DEFENDING',
+        You: you.defending,
+        Average: 5,
+        Coach: coach.defending,
+        fullMark: 100,
+      },
+      {
+        subject: 'TACKLING',
+        You: you.tackling,
+        Average: 6,
+        Coach: coach.tackling,
+        fullMark: 100,
+      },
+    ]
+  }, [
+    dataAvgCoach,
+    get(dataBioCoach, 'radarUpdatedByCoach'),
+    get(dataBioCoach, 'playerRadarSkills'),
+  ])
+
+  return (
+    <>
+      <Head>
+        <title>
+          {get(dataBioCoach, 'firstName') + ' ' + get(dataBioCoach, 'lastName')}
+        </title>
+        <meta name="description" content="Zporter"></meta>
+        <meta property="og:url" content="https://www.byeindonesia.com/" />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content={
+            get(dataBioCoach, 'firstName') + ' ' + get(dataBioCoach, 'lastName')
+          }
+        />
+        <meta property="og:description" content="Zporter" />
+        <meta
+          property="og:image"
+          content={
+            get(dataBioCoach, 'faceImageUrl') ||
+            'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
+          }
+        />
+      </Head>
+      <div className="mobileM:px-[16px] laptopM:px-[60px] pt-[18px]">
+        <Tabs
+          indicatorColor="secondary"
+          //@ts-ignore: Unreachable code error
+          onChange={handleTabsChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          textColor="secondary"
+          value={currentTab}
+          sx={{ display: authenticated ? 'block' : 'none' }}
+        >
+          {tabs.map((tab) => (
+            <Tab key={tab.value} label={tab.label} value={tab.value} />
+          ))}
+        </Tabs>
+      </div>
+      {isDesktop && <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />}
+      <div className="mobileM:px-[16px] laptopM:px-[60px] laptopM:mb-11">
+        {currentTab === 'biography' && (
+          <div>
+            {/* /// Navigate and filter */}
+            <NavigationAndFilter
+              username={dataBioCoach.username}
+            ></NavigationAndFilter>
+
+            <div className="h-[32px] 2xl:h-[42px] "></div>
+
+            {/* /// 2 main column */}
+            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-[24px] 2xl:gap-[24px] ">
+              <div
+                style={{
+                  background: 'rgba(32, 33, 40, 0.3)',
+                  backdropFilter: 'blur(68px)',
+                }}
+                className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
+              >
+                <div className="max-w-[466px] mx-auto ">
+                  {/* todo */}
+                  <InfoCoachWithCircleImage
+                    dataBio={dataBioCoach}
+                    currentRoleId={currentRoleId}
+                  />
+
+                  <div className="h-[1px] my-[40px] bg-Stroke "></div>
+                  <InfoWithImages />
+                </div>
+              </div>
+
+              <div
+                style={{
+                  background: 'rgba(32, 33, 40, 0.3)',
+                  backdropFilter: 'blur(68px)',
+                }}
+                className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
+              >
+                <div className="max-w-[466px] mx-auto">
+                  {/* todo */}
+                  {/* <InfoCoachWithAChart
+                    profile={profile}
+                    dataBio={dataBioCoach}
+                    dataBioRadarChart={dataBioCoachRadarChart}
+                  ></InfoCoachWithAChart> */}
+
+                  <div className="h-[1px] my-[32px] bg-Stroke "></div>
+
+                  <InforWithNumbers
+                    dataClub={dataClub}
+                    activeSeasons={dataBioCoach.activeSeasons}
+                    router={router}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/*  */}
+            <div className="mt-[30px] ">
+              <SocialLinksComponent socialLinks={dataBioCoach.socialLinks} />
+            </div>
+
+            {/* <TopVideos dataBio={dataBioCoach} /> */}
+            {/*  */}
+          </div>
+        )}
+        {currentTab === 'update' && <UpdateBiography />}
+        {/* {currentTab === 'profile' && <Profile />} */}
+      </div>
+    </>
+  )
 }
 
 // Biography.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>

@@ -7,17 +7,17 @@ import { API_FRIENDS } from 'src/constants/api.constants'
 import {
   EStatusRelationShip,
   IBiographyPlayer,
+  IBiographyCoach,
 } from 'src/constants/types/biography.types'
 import { axios } from 'src/utils/axios'
 import { useAuth } from '../authen/auth/AuthContext'
-import { IBiographyCoach } from '../authen/types'
 
-export const InfoWithCircleImage = ({
+export const InfoPlayerWithCircleImage = ({
   dataBio,
   currentRoleId,
   signupForm,
 }: {
-  dataBio: IBiographyPlayer | IBiographyCoach
+  dataBio: IBiographyPlayer
   currentRoleId?: string
   signupForm?: boolean
 }) => {
@@ -78,7 +78,7 @@ export const InfoWithCircleImage = ({
       <div className="w-[316px]  mx-auto flex justify-center gap-x-[24px] mb-[24px] ">
         <div className=" flex flex-col justify-between">
           <div className="h-[45px] ">
-            <div className="text-white text-[18px] leading-[24px] text-right">
+            <div className="text-white text-[18px] leading-[24px] text-right whitespace-nowrap">
               {dataBio?.position}
             </div>
             <div className="text-Grey text-[12px] leading-[20px] font-bold text-right ">
@@ -115,12 +115,12 @@ export const InfoWithCircleImage = ({
             </div>
           </div>
         </div>
-        <div className="w-[164px] h-[164px]  mx-auto my-[5px] relative ">
+        <div className="w-[194px] h-[194px]  mx-auto my-[5px] relative ">
           <GradientCircularProgress
             startColor="#4c3fe0"
             middleColor="#a35ef6"
             endColor="#8a56f0"
-            size={164}
+            size={194}
             progress={dataBio?.circleCompleted}
             strokeWidth={1}
             classes={{
@@ -191,12 +191,12 @@ export const InfoWithCircleImage = ({
                     // background: '#c4c4c4',
                   }
                 }
-                className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
+                className="rounded-full w-[180px] h-[180px] absolute top-1/2 left-1/2 transform
               -translate-x-1/2 -translate-y-1/2  "
               ></div>
               <img
                 src={dataBio?.faceImageUrl}
-                className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
+                className="rounded-full w-[180px] h-[180px] absolute top-1/2 left-1/2 transform
               -translate-x-1/2 -translate-y-1/2 object-cover "
                 alt=""
               />
@@ -205,7 +205,7 @@ export const InfoWithCircleImage = ({
                   background:
                     'linear-gradient(180deg, rgba(19, 19, 27, 0) 18.23%, #13141E 100%)',
                 }}
-                className="rounded-full w-[140px] h-[140px] absolute top-1/2 left-1/2 transform
+                className="rounded-full w-[180px] h-[180px] absolute top-1/2 left-1/2 transform
               -translate-x-1/2 -translate-y-1/2  "
               ></div>
             </>
