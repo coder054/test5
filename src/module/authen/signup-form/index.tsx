@@ -16,6 +16,9 @@ import { MyCustomSelect } from 'src/components/MyCustomSelect'
 import { useAtom } from 'jotai'
 import { profileAtom } from 'src/atoms/profileAtom'
 import { profileCoachAtom } from 'src/atoms/profileCoachAtom'
+import { CustomUploadImage } from 'src/components/custom-upload-image'
+import { isMobile } from 'react-device-detect'
+import clsx from 'clsx'
 
 type FormValues = {
   firstName?: string
@@ -206,31 +209,29 @@ const SignUpForm = () => {
         <GoBack label="Sign in form" goBack="/signin" />
       </div>
       <div
-        className={`w-[320px] mobileM:w-[365px] md:w-[480px] md:h-[880px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 
-          2xl:right-[25%] pl-[5px] pr-[5px] mx-auto lg:mr-0 lg:absolute`}
+        className={`w-[320px] mobileM:w-[365px] md:w-[480px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 
+          2xl:right-[25%] mx-auto lg:mr-0 lg:absolute`}
       >
         <p className="text-[24px] text-[#FFFFFF] font-semibold md:mb-[48px] text-center md:text-left absolute">
           Sign up form
         </p>
 
-        <div className="w-full flex justify-between mt-[34px] md:mt-[48px]">
+        <div className="w-full flex justify-between mt-[38px] md:pt-[48px]">
           <MyInput
             signupForm
             name={'firstName'}
             label="First name"
             onChange={(e) => handleChangeForm('firstName', e.target.value)}
-            className="w-[235px] pr-[12px]"
+            className="pr-[6px] md:pr-[12px]"
             errorMessage={formErrors.firstName}
-            // value={formValues.firstName || form.firstName}
           />
           <MyInput
             signupForm
             name={'lastName'}
             label="Last name"
             onChange={(e) => handleChangeForm('lastName', e.target.value)}
-            className="w-[235px] pl-[12px]"
+            className="pl-[6px] md:pl-[12px]"
             errorMessage={formErrors.lastName}
-            // value={form.lastName}
           />
         </div>
 
@@ -267,25 +268,34 @@ const SignUpForm = () => {
           errorMessage={formErrors.userProfile}
         />
 
-        <div className="absolute md:flex mt-[4px] md:mt-[24px] w-full">
-          <UploadImage
-            title="Face image"
-            text="Add portrait photo of 480*640 pixels or more"
-            className="float-left"
-            setImage={setFaceImage}
-          />
-          <UploadImage
-            title="Full body image"
-            text="Add portrait photo of 480*640 pixels or more"
-            className="md:ml-[24px] float-left mt-[18px] md:mt-0"
-            setImage={setFullBodyImage}
-          />
+        <div className="mt-[4px] md:flex md:gap-[24px] md:mt-[24px] w-full">
+          <div className="md:flex-1">
+            <CustomUploadImage
+              title="Face image"
+              text="Add portrait photo of 480*640 pixels or more"
+              width={isMobile ? '100%' : 223}
+              height={isMobile ? 160 : 130}
+              className="border-[2px] border-gray-700 hover:border-white duration-150"
+              textClass="pt-8 px-9 font-medium"
+              iconClass={clsx(isMobile ? 'pt-[38px]' : 'pt-[18px]')}
+              setImage={setFullBodyImage}
+            />
+          </div>
+          <div className="md:flex-1">
+            <CustomUploadImage
+              title="Body image"
+              text="Add portrait photo of 480*640 pixels or more"
+              width={isMobile ? '100%' : 223}
+              height={isMobile ? 160 : 130}
+              className="border-[2px] border-gray-700 hover:border-white duration-150"
+              textClass="pt-8 px-9 font-medium"
+              iconClass={clsx(isMobile ? 'pt-[38px]' : 'pt-[18px]')}
+              setImage={setFullBodyImage}
+            />
+          </div>
         </div>
 
-        <div
-          className="absolute mt-[368px] md:mt-[230px]"
-          onClick={handleSubmit}
-        >
+        <div className="mt-[40px]" onClick={handleSubmit}>
           <Button
             loading={loading}
             className=" h-[48px] w-[300px] md:w-[470px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"

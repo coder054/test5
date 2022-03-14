@@ -6,7 +6,7 @@ import clsx from 'clsx'
 const cls = require('./upload-image.module.css')
 
 interface UploadImageProps {
-  value: string
+  value?: string
   title?: string
   text?: string
   width?: number | string
