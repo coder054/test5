@@ -4,6 +4,7 @@ import { get, isEmpty } from 'lodash'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { ChangeEvent, useEffect, useMemo } from 'react'
+import { isDesktop } from 'react-device-detect'
 import { DashboardLayout } from 'src/components/dashboard/dashboard-layout'
 import { Loading } from 'src/components/loading/loading'
 import { loadIdToken } from 'src/config/firebase-admin'
@@ -188,7 +189,7 @@ export default function Biography({
           }
         />
       </Head>
-      <div className="px-[39px] pt-[18px]">
+      <div className="mobileM:px-[16px] laptopM:px-[60px] pt-[18px]">
         <Tabs
           indicatorColor="secondary"
           onChange={handleTabsChange}
@@ -203,8 +204,8 @@ export default function Biography({
           ))}
         </Tabs>
       </div>
-      <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />
-      <div className="px-[16px] xl:px-[39px]">
+      {isDesktop && <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />}
+      <div className="mobileM:px-[16px] laptopM:px-[60px] laptopM:mb-11">
         {currentTab === 'biography' && (
           <div>
             {/* /// Navigate and filter */}

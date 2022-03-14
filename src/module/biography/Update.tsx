@@ -1,13 +1,15 @@
 import { Divider, Tab, Tabs } from '@mui/material'
 import React from 'react'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
-import { BackGround } from '../account-settings/common-components/Background'
 import { Skills } from './skills'
+import { Development } from './development'
+import { HeightAndWeight } from './height-and-weight'
+import { Trophies } from './trophies'
 
 const tabs = [
   { label: 'Skills', value: 'skills' },
   { label: 'Development', value: 'development' },
-  { label: 'Height & Weight', value: 'height' },
+  { label: 'Height & Weight', value: 'heightAndWeight' },
   { label: 'Trophies & Awards', value: 'trophies' },
   { label: 'Future Career', value: 'future ' },
   { label: 'Historic Career Data', value: 'historic' },
@@ -38,17 +40,10 @@ export const UpdateBiography = () => {
         ))}
       </Tabs>
       <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />
-      <>
-        {currentTab === 'skills' && (
-          <BackGround
-            label="Player Skill update"
-            className="2xl:w-3/5"
-            contentClass="xl:w-[600px]"
-          >
-            <Skills />
-          </BackGround>
-        )}
-      </>
+      {currentTab === 'skills' && <Skills />}
+      {currentTab === 'development' && <Development />}
+      {currentTab === 'heightAndWeight' && <HeightAndWeight />}
+      {currentTab === 'trophies' && <Trophies />}
     </>
   )
 }
