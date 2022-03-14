@@ -11,7 +11,9 @@ import { loadIdToken } from 'src/config/firebase-admin'
 import { COOKIE_KEY } from 'src/constants/constants'
 import {
   IAvgPlayerScore,
+  IAvgCoachScore,
   IBiographyPlayer,
+  IBiographyCoach,
 } from 'src/constants/types/biography.types'
 import { useScreenWidth } from 'src/hooks/useScreenWidth'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
@@ -47,15 +49,19 @@ const tabs = [
 ]
 
 export default function Biography({
-  dataBio,
+  dataBioPlayer,
+  dataBioCoach,
   dataClub,
   dataAvgPlayer,
+  dataAvgCoach,
   error,
   profile,
 }: {
-  dataBio: IBiographyPlayer
+  dataBioPlayer: IBiographyPlayer
+  dataBioCoach: IBiographyCoach
   dataClub: IInfoClub
   dataAvgPlayer: IAvgPlayerScore
+  dataAvgCoach: IAvgCoachScore
   error: boolean
   profile: string
 }) {
@@ -76,29 +82,10 @@ export default function Biography({
     setCurrentTab(value)
   }
 
-  useEffect(() => {
-    const {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    } = dataBio
-    console.log('aaa dataBio: ', dataBio, {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    })
-  }, [dataBio])
-
-  const dataBioRadarChart = useMemo(() => {
-    const coach = get(dataBio, 'radarUpdatedByCoach')
+  const dataBioPlayerRadarChart = useMemo(() => {
+    const coach = get(dataBioPlayer, 'radarUpdatedByCoach')
     const average = dataAvgPlayer
-    const you = get(dataBio, 'playerRadarSkills')
+    const you = get(dataBioPlayer, 'playerRadarSkills')
     if (!coach || !average || !you) {
       return [{}]
     }
@@ -163,28 +150,95 @@ export default function Biography({
     ]
   }, [
     dataAvgPlayer,
-    get(dataBio, 'radarUpdatedByCoach'),
-    get(dataBio, 'playerRadarSkills'),
+    get(dataBioPlayer, 'radarUpdatedByCoach'),
+    get(dataBioPlayer, 'playerRadarSkills'),
   ])
 
   return (
     <DashboardLayout>
+      {profile === 'coach' ? (
+        <BioForCoach />
+      ) : (
+        <BioForPlayer
+          dataBioPlayer={dataBioPlayer}
+          authenticated={authenticated}
+          currentTab={currentTab}
+          handleTabsChange={handleTabsChange}
+          currentRoleId={currentRoleId}
+          profile={profile}
+          dataBioPlayerRadarChart={dataBioPlayerRadarChart}
+          dataClub={dataClub}
+          router={router}
+        />
+      )}
+    </DashboardLayout>
+  )
+}
+
+const BioForPlayer = ({
+  dataBioPlayer,
+  authenticated,
+  currentTab,
+  handleTabsChange,
+  currentRoleId,
+  profile,
+  dataBioPlayerRadarChart,
+  dataClub,
+  router,
+}: {
+  dataBioPlayer: IBiographyPlayer
+  authenticated: boolean
+  currentTab: string
+  handleTabsChange: Function
+  currentRoleId: any
+  profile: string
+  dataBioPlayerRadarChart: any
+  dataClub: IInfoClub
+  router: any
+}) => {
+  useEffect(() => {
+    const {
+      friendStatus,
+      followStatus,
+      isConfirmBox,
+      isFollowed,
+      isPublic,
+      userId,
+    } = dataBioPlayer
+    console.log('aaa dataBio: ', dataBioPlayer, {
+      friendStatus,
+      followStatus,
+      isConfirmBox,
+      isFollowed,
+      isPublic,
+      userId,
+    })
+  }, [dataBioPlayer])
+
+  return (
+    <>
       <Head>
         <title>
-          {get(dataBio, 'firstName') + ' ' + get(dataBio, 'lastName')}
+          {get(dataBioPlayer, 'firstName') +
+            ' ' +
+            get(dataBioPlayer, 'lastName')}
         </title>
         <meta name="description" content="Zporter"></meta>
         <meta property="og:url" content="https://www.byeindonesia.com/" />
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content={get(dataBio, 'firstName') + ' ' + get(dataBio, 'lastName')}
+          content={
+            get(dataBioPlayer, 'firstName') +
+            ' ' +
+            get(dataBioPlayer, 'lastName')
+          }
         />
         <meta property="og:description" content="Zporter" />
         <meta
           property="og:image"
           content={
-            get(dataBio, 'faceImageUrl') ||
+            get(dataBioPlayer, 'faceImageUrl') ||
             'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
           }
         />
@@ -192,6 +246,7 @@ export default function Biography({
       <div className="mobileM:px-[16px] laptopM:px-[60px] pt-[18px]">
         <Tabs
           indicatorColor="secondary"
+          //@ts-ignore: Unreachable code error
           onChange={handleTabsChange}
           variant="scrollable"
           scrollButtons="auto"
@@ -210,7 +265,7 @@ export default function Biography({
           <div>
             {/* /// Navigate and filter */}
             <NavigationAndFilter
-              username={dataBio.username}
+              username={dataBioPlayer.username}
             ></NavigationAndFilter>
 
             <div className="h-[32px] 2xl:h-[42px] "></div>
@@ -226,7 +281,7 @@ export default function Biography({
               >
                 <div className="max-w-[466px] mx-auto ">
                   <InfoWithCircleImage
-                    dataBio={dataBio}
+                    dataBio={dataBioPlayer}
                     currentRoleId={currentRoleId}
                   />
 
@@ -245,58 +300,39 @@ export default function Biography({
                 <div className="max-w-[466px] mx-auto">
                   <InforWithAChart
                     profile={profile}
-                    dataBio={dataBio}
-                    dataBioRadarChart={dataBioRadarChart}
+                    dataBio={dataBioPlayer}
+                    dataBioRadarChart={dataBioPlayerRadarChart}
                   ></InforWithAChart>
 
                   <div className="h-[1px] my-[32px] bg-Stroke "></div>
 
                   <InforWithNumbers
                     dataClub={dataClub}
-                    activeSeasons={dataBio.activeSeasons}
+                    activeSeasons={dataBioPlayer.activeSeasons}
                     router={router}
                   />
                 </div>
               </div>
             </div>
 
-            <div
-              style={{
-                background: 'rgba(32, 33, 40, 0.3)',
-                backdropFilter: 'blur(68px)',
-              }}
-              className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
-            >
-              <div className="max-w-[466px] mx-auto">
-                <InforWithAChart
-                  dataBio={dataBio}
-                  dataBioRadarChart={dataBioRadarChart}
-                  profile={profile}
-                ></InforWithAChart>
-
-                <div className="h-[1px] my-[32px] bg-Stroke "></div>
-
-                <InforWithNumbers
-                  dataClub={dataClub}
-                  activeSeasons={dataBio.activeSeasons}
-                  router={router}
-                />
-                <div className="mt-[30px] ">
-                  <SocialLinksComponent socialLinks={dataBio.socialLinks} />
-                </div>
-
-                <div className="h-[32px] "></div>
-
-                <TopVideos dataBio={dataBio} />
-              </div>
+            {/*  */}
+            <div className="mt-[30px] ">
+              <SocialLinksComponent socialLinks={dataBioPlayer.socialLinks} />
             </div>
+
+            <TopVideos dataBio={dataBioPlayer} />
+            {/*  */}
           </div>
         )}
         {currentTab === 'update' && <UpdateBiography />}
         {/* {currentTab === 'profile' && <Profile />} */}
       </div>
-    </DashboardLayout>
+    </>
   )
+}
+
+const BioForCoach = () => {
+  return <div className=" ">Coach</div>
 }
 
 // Biography.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>
@@ -310,9 +346,11 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   const lastCharacter = username[username.length - 1]
 
   let error: boolean
-  let dataBio: IBiographyPlayer
+  let dataBioPlayer: IBiographyPlayer
+  let dataBioCoach: IBiographyCoach
   let dataClub: IInfoClub
   let dataAvgPlayer: IAvgPlayerScore
+  let dataAvgCoach: IAvgCoachScore
 
   const fetcher1 = async (url) => {
     if (url === null) return
@@ -341,33 +379,57 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     axios.defaults.headers.roleId = roleId
   }
 
-  const p1 = axios.get(
-    `/biographies/${
-      lastCharacter === 'C' ? 'coach' : 'player'
-    }?username=${username}`
-  )
+  const promiseDataBioPlayer =
+    lastCharacter === 'C'
+      ? null
+      : axios.get(`/biographies/player?username=${username}`)
+
+  const promiseDataBioCoach =
+    lastCharacter === 'C'
+      ? axios.get(`/biographies/coach?username=${username}`)
+      : null
+
   // console.log('aaa p1', p1.data)
-  const p2 = axios.get(
+  // this endpoin can be used for both player or coach
+  const promiseDataClub = axios.get(
     `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`
   )
   // console.log('aaa p2', p2.data)
-  const p3 = axios.get(
-    `/biographies/${lastCharacter === 'C' ? 'coaches' : 'players'}/avg-radar`
-  )
+  const promiseDataAvgPlayer =
+    lastCharacter === 'C' ? null : axios.get(`/biographies/players/avg-radar`)
+
+  const promiseDataAvgCoach =
+    lastCharacter === 'C' ? axios.get(`/biographies/coaches/avg-radar`) : null
+
   // console.log('aaa p3', p3.data)
 
   ///////////////////////////////////////////////
 
   try {
-    const [data1, data2, data3] = await Promise.all([p1, p2, p3])
-    dataBio = data1.data
-    dataClub = data2.data
-    dataAvgPlayer = data3.data
+    const [data1, data2, data3, data4, data5] = await Promise.all([
+      promiseDataBioPlayer,
+      promiseDataBioCoach,
+      promiseDataClub,
+      promiseDataAvgPlayer,
+      promiseDataAvgCoach,
+    ])
+    dataBioPlayer = get(data1, 'data') || null
+    dataBioCoach = get(data2, 'data') || null
+    dataClub = get(data3, 'data') || null
+    dataAvgPlayer = get(data4, 'data') || null
+    dataAvgCoach = get(data5, 'data') || null
     error = false
+    console.log('aaa no error')
   } catch (err) {
     console.log('aaa error', getErrorMessage(err))
     //@ts-ignore: Unreachable code error
-    ;[dataBio, dataClub, dataAvgPlayer] = [{}, {}, {}]
+    ;[dataBioPlayer, dataBioCoach, dataClub, dataAvgPlayer, dataAvgCoach] = [
+      null,
+      null,
+      null,
+      null,
+      null,
+    ]
     error = true
   }
 
@@ -375,11 +437,28 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 
   return {
     props: {
-      dataBio,
+      dataBioPlayer,
+      dataBioCoach,
       dataClub,
       dataAvgPlayer,
+      dataAvgCoach,
       error,
       profile: lastCharacter === 'C' ? 'coach' : 'player',
     },
   }
 }
+// ;(async function () {
+//   const p1 = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve('successsss')
+//     }, 2000)
+//   })
+//   const p2 = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       reject('errorrrrr')
+//     }, 3000)
+//   })
+
+//   const values = await Promise.allSettled([p1, p2])
+//   debugger
+// })()
