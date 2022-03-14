@@ -1,7 +1,11 @@
 import { TextField } from '@mui/material'
 import _ from 'lodash'
 import React, { useCallback, useState } from 'react'
+import { MyButton } from 'src/components/MyButton'
+import { MyInputChips } from 'src/components/MyInputChips'
 import { MySlider } from 'src/components/MySlider'
+import { MyTextArea } from 'src/components/MyTextarea'
+import { BackGround } from 'src/module/account-settings/common-components/Background'
 
 type FootBallSkillTypes = {
   technics: number
@@ -19,7 +23,11 @@ type RadarChartTypes = {
   playerDevelopment: number
 }
 
+const tagsClass =
+  'text-white bg-[#13161A] laptopM:py-[10px] laptopM:pl-[10px] laptopM:pr-[20px] mobileM:p-[10px] rounded-[8px]'
+
 export const Skills = () => {
+  const [tags, setTags] = useState<string[]>([])
   const [footballSkills, setFootBallSkills] = useState<FootBallSkillTypes>({
     technics: 60,
     tactics: 25,
@@ -51,66 +59,72 @@ export const Skills = () => {
   )
 
   return (
-    <div className="space-y-12">
-      <div className="space-y-7">
-        <p className="text-white bg-[#13161A] p-[10px] rounded-[8px]">
-          Update how your football skill, specialitites and attributes has
-          developed lately compared to peers in your age?
-        </p>
-        <div className="space-y-1">
-          {Object.keys(footballSkills).map((skill: string) => (
-            <MySlider
-              isStar
-              label={_.upperFirst(skill)}
-              onChange={(e) =>
-                handleChangeSkills(skill as keyof FootBallSkillTypes, e)
-              }
+    <div className="space-y-5">
+      <BackGround
+        label="Player Skill update"
+        className="2xl:w-3/5"
+        contentClass="xl:w-[600px]"
+      >
+        <div className="space-y-12">
+          <div className="space-y-7">
+            <p className={tagsClass}>
+              Update how your football skill, specialitites and attributes has
+              developed lately compared to peers in your age?
+            </p>
+            <div className="space-y-1">
+              {Object.keys(footballSkills).map((skill: string) => (
+                <MySlider
+                  isStar
+                  step={5}
+                  readOnly={true}
+                  label={_.upperFirst(skill)}
+                  onChange={(e) =>
+                    handleChangeSkills(skill as keyof FootBallSkillTypes, e)
+                  }
+                  labelClass="text-[#A2A5AD]"
+                  value={footballSkills[skill]}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="space-y-7">
+            <p className={tagsClass}>
+              And to be a bit more detailed, so we can update your radar chart
+            </p>
+            <div className="space-y-1">
+              {Object.keys(radarChart).map((chart) => (
+                <MySlider
+                  step={1}
+                  isPoint
+                  label={_.upperFirst(chart)}
+                  onChange={(e) =>
+                    handleChangeChart(chart as keyof RadarChartTypes, e)
+                  }
+                  labelClass="text-[#A2A5AD]"
+                  value={radarChart[chart]}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="space-y-7">
+            <p className={tagsClass}>
+              Now update the profile summary of yourself and your specialities
+            </p>
+            <MyTextArea placeholder="As for ex, - Fast, hard shooting, power forward and striker with an amazing left foot." />
+            <MyInputChips
+              label="Speciality tags"
               labelClass="text-[#A2A5AD]"
-              value={footballSkills[skill]}
+              value={['Leader']}
             />
-          ))}
+          </div>
         </div>
-      </div>
-      <div className="space-y-7">
-        <p className="text-white bg-[#13161A] py-[10px] px-[14px] rounded-[8px]">
-          And to be a bit more detailed, so we can update your radar chart
-        </p>
-        <div className="space-y-1">
-          {Object.keys(radarChart).map((chart) => (
-            <MySlider
-              isPoint
-              label={_.upperFirst(chart)}
-              onChange={(e) =>
-                handleChangeChart(chart as keyof RadarChartTypes, e)
-              }
-              labelClass="text-[#A2A5AD]"
-              value={radarChart[chart]}
-            />
-          ))}
-        </div>
-      </div>
-      <div className="space-y-7">
-        <p className="text-white bg-[#13161A] py-[10px] px-[14px] rounded-[8px]">
-          Now update the profile summary of yourself and your specialities
-        </p>
-        <TextField
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              '& legend': {
-                display: 'none',
-              },
-            },
-            '& MuiOutlinedInput-input': {
-              color: '#ffffff',
-              fontSize: 12,
-            },
-          }}
-          placeholder="As for ex, - Fast, hard shooting, power forward and striker with an amazing left foot."
-          fullWidth
-          multiline
-          rows={6}
-        />
-      </div>
+      </BackGround>
+      <MyButton
+        // onClick={handleSubmit}
+        // isLoading={isLoading}
+        type="submit"
+        label="Save"
+      />
     </div>
   )
 }
