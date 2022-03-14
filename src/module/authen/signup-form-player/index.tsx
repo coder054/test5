@@ -10,16 +10,16 @@ import { useIncrementNumber } from 'src/hooks/useIncrementNumber'
 import { MyModal } from 'src/components/MyModal'
 import { ROUTES } from 'src/constants/constants'
 import { MyCustomSelect } from 'src/components/MyCustomSelect'
-import { InfiniteScrollClub } from 'src/module/account-settings/components/football/components/InfiniteScrollClub'
 import {
   ClubType,
   CurrentTeamType,
   PlayerCareerType,
 } from 'src/constants/types/settingsType.type'
-import { InfiniteScrollTeam } from 'src/module/account-settings/components/football/components/InfiniteScrollTeam'
 import { MinusIcon, PlusIcon } from 'src/components/icons'
 import { useAtom } from 'jotai'
 import { profileAtom } from 'src/atoms/profileAtom'
+import { InfiniteScrollTeam } from 'src/module/account-settings/football/components/InfiniteScrollTeam'
+import { InfiniteScrollClub } from 'src/module/account-settings/football/components/InfiniteScrollClub'
 
 type FormArrayType = Partial<{
   favoriteRoles: string[]

@@ -1,6 +1,6 @@
 import { Slider, Rate } from 'antd'
 import { useState } from 'react'
-const cls = require('./slider-star.module.css')
+
 import clsx from 'clsx'
 
 interface SliderStarProps {

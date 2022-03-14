@@ -1,4 +1,3 @@
-import { IBiographyPlayer } from 'src/pages/biography/[username]/[fullname]'
 import { BioRadarChart } from 'src/components/specific/BioRadarChart'
 import { Text } from 'src/components/Text'
 import { Stars } from 'src/components/common/Stars'
@@ -7,6 +6,7 @@ import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
 import { IBiographyCoach } from '../authen/types'
 import { useAuth } from '../authen/auth/AuthContext'
+import { IBiographyPlayer } from 'src/constants/types/biography.types'
 
 export const InforWithAChart = ({
   dataBio,
@@ -17,7 +17,7 @@ export const InforWithAChart = ({
   dataBio: IBiographyPlayer | IBiographyCoach
   dataBioRadarChart: any
   signupForm?: boolean
-  profile?: string
+  profile: string
 }) => {
   const router = useRouter()
   const { updateUserRoles, userRoles } = useAuth()

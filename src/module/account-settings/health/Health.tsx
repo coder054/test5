@@ -68,14 +68,29 @@ export const Health = () => {
 
   return (
     <div className="space-y-6">
-      <BackGround
-        label="Health"
-        form={
-          <div className="space-y-7">
+      <BackGround label="Health" contentClass="xl:w-[400px]">
+        <div className="space-y-7">
+          <MyInput
+            label="Weight"
+            value={formValues?.weight}
+            onChange={(e) => handleChange('weight', e.target.value)}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">cm</InputAdornment>,
+            }}
+          />
+          <MyInput
+            label="Height"
+            value={formValues?.height}
+            onChange={(e) => handleChange('height', e.target.value)}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">cm</InputAdornment>,
+            }}
+          />
+          <div className="grid grid-cols-2 gap-x-6">
             <MyInput
-              label="Weight"
-              value={formValues?.weight}
-              onChange={(e) => handleChange('weight', e.target.value)}
+              label="Left foot"
+              value={formValues?.leftFootLength}
+              onChange={(e) => handleChange('leftFootLength', e.target.value)}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">cm</InputAdornment>
@@ -83,42 +98,18 @@ export const Health = () => {
               }}
             />
             <MyInput
-              label="Height"
-              value={formValues?.height}
-              onChange={(e) => handleChange('height', e.target.value)}
+              label="Right foot"
+              value={formValues?.rightFootLength}
+              onChange={(e) => handleChange('rightFootLength', e.target.value)}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">cm</InputAdornment>
                 ),
               }}
             />
-            <div className="grid grid-cols-2 gap-x-6">
-              <MyInput
-                label="Left foot"
-                value={formValues?.leftFootLength}
-                onChange={(e) => handleChange('leftFootLength', e.target.value)}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">cm</InputAdornment>
-                  ),
-                }}
-              />
-              <MyInput
-                label="Right foot"
-                value={formValues?.rightFootLength}
-                onChange={(e) =>
-                  handleChange('rightFootLength', e.target.value)
-                }
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">cm</InputAdornment>
-                  ),
-                }}
-              />
-            </div>
           </div>
-        }
-      />
+        </div>
+      </BackGround>
       <MyButton
         onClick={handleSubmit}
         isLoading={isLoading}

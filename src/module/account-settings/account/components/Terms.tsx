@@ -44,17 +44,14 @@ export const Terms = () => {
     )
   }
   return (
-    <BackGround
-      label="Terms"
-      form={
-        <div className="space-y-4">
-          <Item label="Support" icon={icon} />
-          <Item label="Terms & Conditions" icon={icon} />
-          <Item label="Privacy rules" icon={icon} />
-          <Item label="Delete user profile" icon={icon} />
-          <Item onClick={signout} label="Log out" icon={<LogoutIcon />} />
-        </div>
-      }
-    />
+    <BackGround label="Terms" contentClass="xl:w-[400px]">
+      <div className="space-y-4">
+        <Item label="Support" icon={icon} />
+        <Item label="Terms & Conditions" icon={icon} />
+        <Item label="Privacy rules" icon={icon} />
+        <Item label="Delete user profile" icon={icon} />
+        <Item onClick={signout} label="Log out" icon={<LogoutIcon />} />
+      </div>
+    </BackGround>
   )
 }

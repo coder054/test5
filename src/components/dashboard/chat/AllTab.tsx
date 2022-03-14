@@ -35,7 +35,7 @@ import { AVATAR_DEFAULT, LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import { chain, isEmpty, shuffle } from 'lodash'
 import React from 'react'
 import { getErrorMessage } from 'src/utils/utils'
-import { chatRoomsAtom } from 'src/atoms/chatAtom'
+import { chatRoomsAtom, loadingChatRoomsAtom } from 'src/atoms/chatAtom'
 import { useAtom } from 'jotai'
 
 const database = getDatabase(firebaseApp)
@@ -49,7 +49,7 @@ export const AllTab = () => {
     query(ref(database, 'chatRooms'), orderByChild('updatedAt'))
   )
   const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
-  // const [loadingChatRooms, setLoadingChatRooms] = useAtom(loadingChatRoomsAtom)
+  const [, setLoadingChatRooms] = useAtom(loadingChatRoomsAtom)
 
   useEffect(() => {
     if (isEmpty(snapshots) || isEmpty(currentRoleId)) {
@@ -59,6 +59,7 @@ export const AllTab = () => {
 
     ;(async () => {
       try {
+        setLoadingChatRooms(true)
         let a1 = snapshots
           .filter((o) => {
             const chatRoom = o.val()
@@ -167,6 +168,8 @@ export const AllTab = () => {
         setChatRooms(results1.filter((o) => o.isShowChatRoom))
       } catch (error) {
         console.log('aaa error', getErrorMessage(error))
+      } finally {
+        setLoadingChatRooms(false)
       }
     })()
   }, [snapshots, currentRoleId])
