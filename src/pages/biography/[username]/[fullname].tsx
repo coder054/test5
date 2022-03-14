@@ -350,7 +350,9 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`
   )
   // console.log('aaa p2', p2.data)
-  const p3 = axios.get(`/biographies/players/avg-radar`)
+  const p3 = axios.get(
+    `/biographies/${lastCharacter === 'C' ? 'coaches' : 'players'}/avg-radar`
+  )
   // console.log('aaa p3', p3.data)
 
   ///////////////////////////////////////////////
