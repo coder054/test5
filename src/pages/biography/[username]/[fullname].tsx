@@ -60,7 +60,10 @@ const Biography = () => {
     '/biographies/players/avg-radar',
     fetcher,
     {
+      revalidateIfStale: false,
       revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      shouldRetryOnError: false,
     }
   ) as {
     data: IAvgPlayerScore
@@ -71,7 +74,10 @@ const Biography = () => {
     `/biographies/player?username=${username}`,
     fetcher,
     {
+      revalidateIfStale: false,
       revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      shouldRetryOnError: false,
     }
   ) as {
     data: IBiographyPlayer
@@ -81,7 +87,10 @@ const Biography = () => {
     `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`,
     fetcher,
     {
+      revalidateIfStale: false,
       revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      shouldRetryOnError: false,
     }
   ) as {
     data: IInfoClub
