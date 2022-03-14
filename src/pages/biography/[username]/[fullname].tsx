@@ -96,6 +96,7 @@ export default function Biography({
           currentTab={currentTab}
           dataClub={dataClub}
           router={router}
+          handleTabsChange={handleTabsChange}
         />
       ) : (
         <BioForPlayer
@@ -152,6 +153,10 @@ const BioForPlayer = ({
       isPublic,
       userId,
     })
+  }, [dataBioPlayer])
+
+  useEffect(() => {
+    console.log('aaa dataBioPlayer: ', dataBioPlayer)
   }, [dataBioPlayer])
 
   const dataBioPlayerRadarChart = useMemo(() => {
@@ -368,10 +373,12 @@ const BioForCoach = ({
   }, [dataBioCoach])
 
   const dataBioCoachRadarChart = useMemo(() => {
+    // todo
     const coach = get(dataBioCoach, 'radarUpdatedByCoach')
     const average = dataAvgCoach
-    const you = get(dataBioCoach, 'playerRadarSkills')
-    if (!coach || !average || !you) {
+    const you = get(dataBioCoach, 'coachRadarSkills')
+    // todo
+    if (!average || !you) {
       return [{}]
     }
 
@@ -379,43 +386,43 @@ const BioForCoach = ({
       {
         subject: 'ATTACKING',
         You: you.attacking,
-        Average: 1,
-        Coach: coach.attacking,
+        Average: average.attacking,
+        Coach: 0,
         fullMark: 100,
       },
       {
-        subject: 'PACE',
-        You: you.pace,
-        Average: 2,
-        Coach: coach.pace,
+        subject: 'TURNOVERS',
+        You: you.turnovers,
+        Average: average.turnovers,
+        Coach: 0,
         fullMark: 100,
       },
       {
-        subject: 'SHOOTING',
-        You: you.shooting,
-        Average: 3,
-        Coach: coach.shooting,
-        fullMark: 100,
-      },
-      {
-        subject: 'PASSING',
-        You: you.passing,
-        Average: 4,
-        Coach: coach.passing,
+        subject: 'ANALYTICS',
+        You: you.analytics,
+        Average: average.analytics,
+        Coach: 0,
         fullMark: 100,
       },
       {
         subject: 'DEFENDING',
         You: you.defending,
-        Average: 5,
-        Coach: coach.defending,
+        Average: average.defending,
+        Coach: 0,
         fullMark: 100,
       },
       {
-        subject: 'TACKLING',
-        You: you.tackling,
-        Average: 6,
-        Coach: coach.tackling,
+        subject: 'PLAYER DEV.',
+        You: you.playerDevelopment,
+        Average: average.playerDevelopment,
+        Coach: 0,
+        fullMark: 100,
+      },
+      {
+        subject: 'SET PIECES',
+        You: you.setPieces,
+        Average: average.setPieces,
+        Coach: 0,
         fullMark: 100,
       },
     ]
@@ -486,7 +493,6 @@ const BioForCoach = ({
                 className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
               >
                 <div className="max-w-[466px] mx-auto ">
-                  {/* todo */}
                   <InfoCoachWithCircleImage
                     dataBio={dataBioCoach}
                     currentRoleId={currentRoleId}
@@ -506,11 +512,11 @@ const BioForCoach = ({
               >
                 <div className="max-w-[466px] mx-auto">
                   {/* todo */}
-                  {/* <InfoCoachWithAChart
+                  <InfoCoachWithAChart
                     profile={profile}
                     dataBio={dataBioCoach}
                     dataBioRadarChart={dataBioCoachRadarChart}
-                  ></InfoCoachWithAChart> */}
+                  ></InfoCoachWithAChart>
 
                   <div className="h-[1px] my-[32px] bg-Stroke "></div>
 

@@ -145,7 +145,14 @@ export interface IAvgPlayerScore {
   avgPlayerTackling: number
   avgPlayerHeading: number
 }
-export interface IAvgCoachScore {}
+export interface IAvgCoachScore {
+  analytics: number
+  attacking: number
+  defending: number
+  playerDevelopment: number
+  setPieces: number
+  turnovers: number
+}
 
 export interface IFlipPlayer {
   userId: string

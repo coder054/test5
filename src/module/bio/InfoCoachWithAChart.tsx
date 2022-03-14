@@ -4,9 +4,13 @@ import { Stars } from 'src/components/common/Stars'
 import { Button } from 'src/components'
 import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
-import { IBiographyCoach } from '../authen/types'
 import { useAuth } from '../authen/auth/AuthContext'
-import { IBiographyPlayer } from 'src/constants/types/biography.types'
+import {
+  IBiographyPlayer,
+  IBiographyCoach,
+} from 'src/constants/types/biography.types'
+import { getStr } from 'src/utils/utils'
+import { useEffect } from 'react'
 
 export const InfoCoachWithAChart = ({
   dataBio,
@@ -21,6 +25,10 @@ export const InfoCoachWithAChart = ({
 }) => {
   const router = useRouter()
   const { updateUserRoles, userRoles } = useAuth()
+
+  useEffect(() => {
+    console.log('aaa dataBioRadarChart: ', dataBioRadarChart)
+  }, [dataBioRadarChart])
 
   const handleNext = async () => {
     try {
@@ -69,11 +77,11 @@ export const InfoCoachWithAChart = ({
           {[
             {
               title: 'LEFT FOOT',
-              rate: dataBio?.leftFoot,
+              rate: getStr(dataBio, 'leftFoot') || 0,
             },
             {
               title: 'RIGHT FOOT',
-              rate: dataBio?.rightFoot,
+              rate: getStr(dataBio, 'rightFoot') || 0,
             },
           ].map((o, index) => (
             <div key={o.title} className="">

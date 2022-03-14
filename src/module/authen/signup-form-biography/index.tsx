@@ -12,7 +12,9 @@ import {
   IBiographyPlayer,
 } from 'src/constants/types/biography.types'
 import { InfoPlayerWithAChart } from 'src/module/bio/InfoPlayerWithAChart'
+import { InfoCoachWithAChart } from 'src/module/bio/InfoCoachWithAChart'
 import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
+import { InfoCoachWithCircleImage } from 'src/module/bio/InfoCoachWithCircleImage'
 import { axios } from 'src/utils/axios'
 import { fetcher } from 'src/utils/utils'
 import useSWR from 'swr'
@@ -319,13 +321,15 @@ export const SignupFormBiography = () => {
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 max-h-[626px]`}
         >
           {profile === 'Player' ? (
-            InfoPlayerWithCircleImage
+            <InfoPlayerWithCircleImage
               dataBio={data}
               currentRoleId={currentRoleId}
               signupForm
             />
           ) : (
-            InfoPlayerWithCircleImage
+            <InfoPlayerWithCircleImage
+              //@ts-ignore: Unreachable code error
+              // todo
               dataBio={dataCoach}
               currentRoleId={currentRoleId}
               signupForm
@@ -342,15 +346,16 @@ export const SignupFormBiography = () => {
               signupForm
               profile={profile as string}
             />
-          ) : null
-          // todo
-          // <InfoPlayerWithAChart
-          //   dataBio={dataCoach}
-          //   dataBioRadarChart={dataBioCoachRadarChart}
-          //   signupForm
-          //   profile={'coach'}
-          // />
-          }
+          ) : (
+            // todo
+            <InfoCoachWithAChart
+              //@ts-ignore: Unreachable code error
+              dataBio={dataCoach}
+              dataBioRadarChart={dataBioCoachRadarChart}
+              signupForm
+              profile={'coach'}
+            />
+          )}
         </div>
       </div>
     </div>
