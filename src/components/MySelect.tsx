@@ -57,6 +57,7 @@ export const MySelect = ({
   onChange,
   arrOption,
   setOpenModal,
+  errorMessage,
   ...rest
 }: {
   className?: string
@@ -69,41 +70,53 @@ export const MySelect = ({
   arrOption: { value: number | string; label: string }[]
   [rest: string]: any
   setOpenModal?: Function
+  errorMessage?: string
 }) => {
   const handleAddNew = () => {
     setOpenModal && setOpenModal(true)
   }
 
   return (
-    <div className={clsx('relative', className)}>
-      <CssTextField
-        value={value}
-        onChange={onChange}
-        fullWidth
-        select
-        label={label}
-        inputProps={{
-          autoComplete: 'off',
-        }}
-      >
-        {addNew ? (
-          <p className="text-base text-[#FFFFFF] pl-[16px] pt-[5px] pb-[5px]">
-            {titleAddNew}{' '}
-            <span className="underline cursor-pointer" onClick={handleAddNew}>
-              {linkAddNew}
-            </span>
-          </p>
-        ) : null}
-        {arrOption.map((option) => (
-          <MenuItem
-            className="text-white"
-            key={`${option.value}-{option.label}`}
-            value={option.value}
-          >
-            {option.label}
-          </MenuItem>
-        ))}
-      </CssTextField>
-    </div>
+    <>
+      <div className={clsx('relative', className)}>
+        <CssTextField
+          value={value}
+          onChange={onChange}
+          fullWidth
+          select
+          label={label}
+          inputProps={{
+            autoComplete: 'off',
+          }}
+        >
+          {addNew ? (
+            <p className="text-base text-[#FFFFFF] pl-[16px] pt-[5px] pb-[5px]">
+              {titleAddNew}{' '}
+              <span className="underline cursor-pointer" onClick={handleAddNew}>
+                {linkAddNew}
+              </span>
+            </p>
+          ) : null}
+          {arrOption.map((option) => (
+            <MenuItem
+              className="text-white"
+              key={`${option.value}-{option.label}`}
+              value={option.value}
+            >
+              {option.label}
+            </MenuItem>
+          ))}
+        </CssTextField>
+      </div>
+      {errorMessage && (
+        <p
+          className={`text-[#D60C0C] text-[14px] ${
+            label === 'Last name' ? 'ml-[12px]' : ''
+          }`}
+        >
+          {errorMessage}
+        </p>
+      )}
+    </>
   )
 }

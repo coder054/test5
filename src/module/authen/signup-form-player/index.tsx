@@ -36,6 +36,14 @@ type FormValueType = Partial<{
   weight: string
   contractedClub: ClubType
 }>
+type FormErrorType = Partial<{
+  yourClub: string
+  yourTeams: string
+  shirtNumber: string
+  favoriteRoles: string
+  length: string
+  weight: string
+}>
 
 const COMMON_CLASS =
   'active:border-2 active:border-[#6B7280] border-2 border-[#202128cc] rounded-full duration-150 cursor-pointer'
@@ -66,6 +74,14 @@ export const SignUpFormPlayer = () => {
       nickName: '',
       websiteUrl: null,
     },
+  })
+  const [formErrors, setFormErrors] = useState<FormErrorType>({
+    yourClub: '',
+    yourTeams: '',
+    shirtNumber: '',
+    favoriteRoles: '',
+    length: '',
+    weight: '',
   })
 
   const shirtNumber = useIncrementNumber({
@@ -111,6 +127,7 @@ export const SignUpFormPlayer = () => {
       clubId: value.clubId,
       yourClub: value.clubName,
     }))
+    setFormErrors((prev) => ({ ...prev, yourClub: '' }))
   }
 
   const setSelectedTeam = (value: string, index?: string) => {
@@ -118,6 +135,7 @@ export const SignUpFormPlayer = () => {
     /* @ts-ignore */
     newArr[+index] = value.teamName
     setFormValues((prev) => ({ ...prev, yourTeams: newArr }))
+    setFormErrors((prev) => ({ ...prev, yourTeams: '' }))
   }
 
   const handleAddForm = useCallback(
@@ -147,8 +165,6 @@ export const SignUpFormPlayer = () => {
       /* @ts-ignore */
       let newArr = [...(formValues[type] || [])]
       /* @ts-ignore */
-
-      // console.log('value', value.teamName)
       if (type === 'favoriteRoles') {
         /* @ts-ignore */
         newArr[+index] = value.key
@@ -157,50 +173,77 @@ export const SignUpFormPlayer = () => {
         newArr[+index] = value.teamName
       }
       setFormValues((prev) => ({ ...prev, [type]: index ? newArr : value }))
+      setFormErrors((prev) => ({ ...prev, [type]: '' }))
     },
     [formValues]
   )
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    // console.log('form', formValues)
-    setProfileForm({
-      ...profileForm,
-      playerCareer: {
-        clubId: formValues.contractedClub.clubId,
-        contractedFrom: '',
-        contractedUntil: '',
-        acceptedTeamIds: formValues.yourTeams,
-        pendingTeamIds: [],
-        favoriteRoles: formValues.favoriteRoles,
-        shirtNumber: +formValues.shirtNumber,
-        summary: '',
-        teamCalendarLinks: [],
-        seasonStartDate: '',
-        seasonEndDate: '',
-        estMarketValue: 0,
-      },
-      health: {
-        height: {
-          value: +formValues.length,
-          updatedAt: '',
-        },
-        weight: {
-          value: +formValues.weight,
-          updatedAt: '',
-        },
-        leftFootLength: 0,
-        rightFootLength: 0,
-      },
-    })
+    if (!formValues.yourClub) {
+      setFormErrors((prev) => ({ ...prev, yourClub: 'Input Your Club' }))
+    } else if (!formValues.yourTeams[0]) {
+      setFormErrors((prev) => ({ ...prev, yourTeams: 'Input Your Teams' }))
+    } else if (!formValues.shirtNumber) {
+      setFormErrors((prev) => ({
+        ...prev,
+        shirtNumber: 'Input your Shirt number',
+      }))
+    } else if (!formValues.favoriteRoles[0]) {
+      setFormErrors((prev) => ({
+        ...prev,
+        favoriteRoles: 'Input your Favorite Role(s)',
+      }))
+    } else if (!formValues.length) {
+      setFormErrors((prev) => ({ ...prev, length: 'Input your Length' }))
+    } else if (!formValues.weight) {
+      setFormErrors((prev) => ({ ...prev, weight: 'Input your Weight' }))
+    }
 
-    router.push({
-      pathname: ROUTES.SIGNUP_FORM_PLAYER_SKILLS,
-      query: { profile: profile },
-    })
+    if (
+      formValues.yourClub &&
+      formValues.yourTeams &&
+      formValues.shirtNumber &&
+      formValues.favoriteRoles &&
+      formValues.length &&
+      formValues.weight
+    ) {
+      setProfileForm({
+        ...profileForm,
+        playerCareer: {
+          clubId: formValues.contractedClub.clubId,
+          contractedFrom: '',
+          contractedUntil: '',
+          acceptedTeamIds: formValues.yourTeams,
+          pendingTeamIds: [],
+          favoriteRoles: formValues.favoriteRoles,
+          shirtNumber: +formValues.shirtNumber,
+          summary: '',
+          teamCalendarLinks: [],
+          seasonStartDate: '',
+          seasonEndDate: '',
+          estMarketValue: 0,
+        },
+        health: {
+          height: {
+            value: +formValues.length,
+            updatedAt: '',
+          },
+          weight: {
+            value: +formValues.weight,
+            updatedAt: '',
+          },
+          leftFootLength: 0,
+          rightFootLength: 0,
+        },
+      })
+
+      router.push({
+        pathname: ROUTES.SIGNUP_FORM_PLAYER_SKILLS,
+        query: { profile: profile },
+      })
+    }
   }
-
-  // console.log('values', JSON.parse(values as any))
 
   return (
     <div className="autofill2 w-screen min-h-screen lg:flex md:items-center">
@@ -219,6 +262,7 @@ export const SignUpFormPlayer = () => {
           <InfiniteScrollClub
             initialValue={formValues.contractedClub}
             handleSetClub={setSelectedClub}
+            errorMessage={formErrors.yourClub}
           />
         </div>
 
@@ -231,6 +275,7 @@ export const SignUpFormPlayer = () => {
                 handleSetTeam={(value) => setSelectedTeam(value, index + '')}
                 /* @ts-ignore */
                 item={item}
+                errorMessage={formErrors.yourTeams}
               />
             </div>
             {index === 0 && (
@@ -261,33 +306,41 @@ export const SignUpFormPlayer = () => {
             handleChangeForm('shirtNumber', e.target.value)
           }}
           arrOption={shirtNumber}
+          errorMessage={formErrors.shirtNumber}
         />
         {(formValues.favoriteRoles || []).map((item, index) => (
-          <div key={index} className="flex items-center space-x-3">
-            <MySelect
-              className="w-[270px] md:w-[430px] mt-[24px]"
-              label={'Favorite Role(s)'}
-              onChange={(_, value) => {
-                handleChangeForm('favoriteRoles', value, index + '')
-              }}
-              val={item}
-              arrOption={OptionPlayer}
-            />
-            {index === 0 && (
-              <span
-                onClick={() => handleAddForm('favoriteRoles', '')}
-                className={`${COMMON_CLASS} mt-[24px]`}
-              >
-                <PlusIcon />
-              </span>
-            )}
-            {index !== 0 && (
-              <span
-                onClick={() => handleRemoveForm('favoriteRoles', index)}
-                className={`${COMMON_CLASS} mt-[24px]`}
-              >
-                <MinusIcon />
-              </span>
+          <div key={index} className="w-[470px]">
+            <div className="flex items-center space-x-3">
+              <MySelect
+                className="w-[270px] md:w-[430px] mt-[24px]"
+                label={'Favorite Role(s)'}
+                onChange={(_, value) => {
+                  handleChangeForm('favoriteRoles', value, index + '')
+                }}
+                val={item}
+                arrOption={OptionPlayer}
+              />
+              {index === 0 && (
+                <span
+                  onClick={() => handleAddForm('favoriteRoles', '')}
+                  className={`${COMMON_CLASS} mt-[24px]`}
+                >
+                  <PlusIcon />
+                </span>
+              )}
+              {index !== 0 && (
+                <span
+                  onClick={() => handleRemoveForm('favoriteRoles', index)}
+                  className={`${COMMON_CLASS} mt-[24px]`}
+                >
+                  <MinusIcon />
+                </span>
+              )}
+            </div>
+            {formErrors.favoriteRoles && (
+              <p className={`text-[#D60C0C] text-[14px]`}>
+                Input your Favorite Role(s)
+              </p>
             )}
           </div>
         ))}
@@ -302,6 +355,7 @@ export const SignUpFormPlayer = () => {
               handleChangeForm('length', e.target.value)
             }}
             arrOption={lengthNumber}
+            errorMessage={formErrors.length}
           />
         )}
 
@@ -314,6 +368,7 @@ export const SignUpFormPlayer = () => {
             handleChangeForm('weight', e.target.value)
           }}
           arrOption={weightNumber}
+          errorMessage={formErrors.weight}
         />
 
         <div className="mt-[40px]" onClick={handleSubmit}>

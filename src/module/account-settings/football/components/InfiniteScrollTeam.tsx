@@ -28,12 +28,14 @@ type InfiniteScrollTeamProps = {
   handleSetTeam?: (value: CurrentTeamType) => void
   idClub: string
   item: CurrentTeamType
+  errorMessage?: string
 }
 
 export const InfiniteScrollTeam = ({
   handleSetTeam,
   idClub,
   item,
+  errorMessage,
 }: InfiniteScrollTeamProps) => {
   const { currentRoleId } = useAuth()
   const [items, setItems] = useState<any>([])
@@ -138,6 +140,7 @@ export const InfiniteScrollTeam = ({
               </InputAdornment>
             ),
           }}
+          errorMessage={errorMessage}
         />
         <div
           className={clsx('absolute w-full z-50', !isOpenOption && 'hidden')}

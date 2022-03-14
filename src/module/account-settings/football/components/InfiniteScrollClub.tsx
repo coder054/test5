@@ -21,6 +21,7 @@ import { axios } from 'src/utils/axios'
 import { NewClubModal } from './NewClubModal'
 
 type InfiniteScrollClubProps = {
+  errorMessage?: string
   handleSetClub: (value: ClubType) => void
   initialValue: ContractedClubType
 }
@@ -39,6 +40,7 @@ const style = {
 export const InfiniteScrollClub = ({
   handleSetClub,
   initialValue,
+  errorMessage,
 }: InfiniteScrollClubProps) => {
   const { currentRoleId } = useAuth()
   const [items, setItems] = useState<any>([])
@@ -159,6 +161,7 @@ export const InfiniteScrollClub = ({
                 </InputAdornment>
               ),
             }}
+            errorMessage={errorMessage && errorMessage}
           />
           <div
             className={clsx('absolute w-full z-50', !isOpenOption && 'hidden')}
