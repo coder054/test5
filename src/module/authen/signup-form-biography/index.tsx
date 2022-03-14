@@ -350,7 +350,7 @@ export const SignupFormBiography = () => {
               dataBio={dataCoach}
               dataBioRadarChart={dataBioCoachRadarChart}
               signupForm
-              profile={profile as string}
+              profile={'coach'}
             />
           )}
         </div>

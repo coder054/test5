@@ -17,7 +17,7 @@ export const InforWithAChart = ({
   dataBio: IBiographyPlayer | IBiographyCoach
   dataBioRadarChart: any
   signupForm?: boolean
-  profile?: string
+  profile: string
 }) => {
   const router = useRouter()
   const { updateUserRoles, userRoles } = useAuth()

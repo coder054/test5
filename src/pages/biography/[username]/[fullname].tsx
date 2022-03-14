@@ -50,11 +50,13 @@ export default function Biography({
   dataClub,
   dataAvgPlayer,
   error,
+  profile,
 }: {
   dataBio: IBiographyPlayer
   dataClub: IInfoClub
   dataAvgPlayer: IAvgPlayerScore
   error: boolean
+  profile: string
 }) {
   if (error) {
     return <div className=" ">Error occured</div>
@@ -241,6 +243,7 @@ export default function Biography({
               >
                 <div className="max-w-[466px] mx-auto">
                   <InforWithAChart
+                    profile={profile}
                     dataBio={dataBio}
                     dataBioRadarChart={dataBioRadarChart}
                   ></InforWithAChart>
@@ -267,6 +270,7 @@ export default function Biography({
                 <InforWithAChart
                   dataBio={dataBio}
                   dataBioRadarChart={dataBioRadarChart}
+                  profile={profile}
                 ></InforWithAChart>
 
                 <div className="h-[1px] my-[32px] bg-Stroke "></div>
@@ -300,7 +304,9 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   const uid = await loadIdToken(req as any)
 
   const fullname = query.fullname // not use
-  const username = query.username
+  const username: string = query.username
+
+  const lastCharacter = username[username.length - 1]
 
   let error: boolean
   let dataBio: IBiographyPlayer
@@ -334,7 +340,11 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     axios.defaults.headers.roleId = roleId
   }
 
-  const p1 = axios.get(`/biographies/player?username=${username}`)
+  const p1 = axios.get(
+    `/biographies/${
+      lastCharacter === 'C' ? 'coach' : 'player'
+    }?username=${username}`
+  )
   // console.log('aaa p1', p1.data)
   const p2 = axios.get(
     `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`
@@ -366,6 +376,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
       dataClub,
       dataAvgPlayer,
       error,
+      profile: lastCharacter === 'C' ? 'coach' : 'player',
     },
   }
 }
