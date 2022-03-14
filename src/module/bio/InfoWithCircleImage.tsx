@@ -18,7 +18,7 @@ export const InfoWithCircleImage = ({
   signupForm,
 }: {
   dataBio: IBiographyPlayer | IBiographyCoach
-  currentRoleId: string
+  currentRoleId?: string
   signupForm?: boolean
 }) => {
   const [elmButtonFollow, setElmButtonFollow] = useState<string>('Follow')

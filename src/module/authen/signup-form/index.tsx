@@ -97,33 +97,21 @@ const SignUpForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log('form', formValues)
-
-    const valueSignup: valueSignupType = {
-      media: {
-        faceImage: faceImages,
-        bodyImage: fullBodyImage,
-        teamImage: '',
-        videoLinks: [],
-      },
-      profile: {
-        firstName: formValues.firstName,
-        lastName: formValues.lastName,
-        birthDay: formValues.birthDay,
-        birthCountry: formValues.country,
-        city: formValues.city,
-        phone: '',
-        gender: '',
-        homeAddress: '',
-        postNumber: '',
-        region: '',
-      },
-    }
     //validate
     if (!formValues.firstName) {
       setFormErrors((prev) => ({ ...prev, firstName: 'Input your First Name' }))
+    } else if (formValues.firstName.length === 1) {
+      setFormErrors((prev) => ({
+        ...prev,
+        lastName: 'First Name must be more than 2 character',
+      }))
     } else if (!formValues.lastName) {
       setFormErrors((prev) => ({ ...prev, lastName: 'Input your Last Name' }))
+    } else if (formValues.lastName.length === 1) {
+      setFormErrors((prev) => ({
+        ...prev,
+        lastName: 'Last Name must be more than 2 character',
+      }))
     } else if (!formValues.birthDay) {
       setFormErrors((prev) => ({ ...prev, birthDay: 'Input your Birthdate' }))
     } else if (!formValues.country) {
@@ -206,7 +194,6 @@ const SignUpForm = () => {
       })
     }
   }
-  // console.log('profileCoachForm', profileCoachForm)
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">

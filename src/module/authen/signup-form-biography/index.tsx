@@ -28,7 +28,6 @@ export const SignupFormBiography = () => {
   const { currentRoleId, playerProfile, coachProfile, currentUser } = useAuth()
   const router = useRouter()
   const { profile } = router.query
-  console.log('profile', profile)
 
   const [data, setData] = useState<IBiographyPlayer>({
     isConfirmBox: true,
@@ -164,26 +163,20 @@ export const SignupFormBiography = () => {
 
   useEffect(() => {
     const getBio = async () => {
-      if (profile && profile === 'Player') {
-        // try {
-        const res = await axios.get(API_PLAYER_PROFILE)
-        // console.log('res', res.data.username)
-        const response = await axios.get(
-          `/biographies/player?username=${res.data.username}`
-        )
-        // console.log('res', response.data)
-        setData(response.data)
-        // } catch (error) {}
-      } else if (profile && profile === 'Coach') {
-        // try {
-        const res = await axios.get(API_COACH_PROFILE)
-        console.log('res', res.data.username)
-        const response = await axios.get(
-          `/biographies/coach?username=${res.data.username}`
-        )
-        console.log('response', response.data)
-        setDataCoach(response.data)
-        // } catch (error) {}
+      if (profile && profile === 'Player' && playerProfile.userId) {
+        try {
+          const response = await axios.get(
+            `/biographies/player?userIdQuery=${playerProfile.userId}`
+          )
+          setData(response.data)
+        } catch (error) {}
+      } else if (profile && profile === 'Coach' && coachProfile.userId) {
+        try {
+          const response = await axios.get(
+            `/biographies/coach?userIdQuery=${coachProfile.userId}`
+          )
+          setDataCoach(response.data)
+        } catch (error) {}
       }
     }
 
@@ -308,8 +301,6 @@ export const SignupFormBiography = () => {
     get(data, 'radarUpdatedByCoach'),
     get(data, 'playerRadarSkills'),
   ])
-  console.log('dataBioRadarChart', dataBioRadarChart)
-  console.log('dataBioCoachRadarChart', dataBioCoachRadarChart)
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
