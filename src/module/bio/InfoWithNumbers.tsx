@@ -124,7 +124,10 @@ export const InforWithNumbers = ({
   const [tab, setTab] = useState('Total')
   const [urlGetSeasonStats, setUrlGetSeasonStats] = useState('')
   const { data, error } = useSWR(urlGetSeasonStats, fetcher, {
+    revalidateIfStale: false,
     revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    shouldRetryOnError: false,
   }) as {
     data: IDataStats
     error: any

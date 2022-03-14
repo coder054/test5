@@ -141,7 +141,10 @@ export const SignupFormBiography = () => {
     '/biographies/players/avg-radar',
     fetcher,
     {
+      revalidateIfStale: false,
       revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      shouldRetryOnError: false,
     }
   ) as {
     data: IAvgPlayerScore
@@ -152,7 +155,10 @@ export const SignupFormBiography = () => {
     '/biographies/coachs/avg-radar',
     fetcher,
     {
+      revalidateIfStale: false,
       revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      shouldRetryOnError: false,
     }
   ) as {
     data: IAvgCoachScore
