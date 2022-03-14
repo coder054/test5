@@ -24,8 +24,8 @@ import { SocialLinksComponent } from 'src/module/bio/SocialLinksComponent'
 import { TopVideos } from 'src/module/bio/TopVideos'
 import { UpdateBiography } from 'src/module/biography/Update'
 import { axios } from 'src/utils/axios'
+import axiosLib from 'axios'
 import { fetcher, getErrorMessage, parseCookies } from 'src/utils/utils'
-import useSWR, { SWRConfig } from 'swr'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 
 export const fetcherForEndpointFlip = async (url) => {
@@ -45,7 +45,20 @@ const tabs = [
   { label: 'Update', value: 'update' },
 ]
 
-const Biography = () => {
+export default function Biography({
+  dataBio,
+  dataClub,
+  dataAvgPlayer,
+  error,
+}: {
+  dataBio: IBiographyPlayer
+  dataClub: IInfoClub
+  dataAvgPlayer: IAvgPlayerScore
+  error: boolean
+}) {
+  if (error) {
+    return <div className=" ">Error occured</div>
+  }
   const [currentTab, setCurrentTab] = useQueryParam(
     'type',
     withDefault(StringParam, 'biography')
@@ -55,47 +68,6 @@ const Biography = () => {
 
   const { username } = router.query
   const { currentRoleId, authenticated } = useAuth()
-
-  const { data: dataAvgPlayer, error: errorAvgPlayer } = useSWR(
-    '/biographies/players/avg-radar',
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      shouldRetryOnError: false,
-    }
-  ) as {
-    data: IAvgPlayerScore
-    error: any
-  }
-
-  const { data: dataBio, error: errorBio } = useSWR(
-    `/biographies/player?username=${username}`,
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      shouldRetryOnError: false,
-    }
-  ) as {
-    data: IBiographyPlayer
-    error: any
-  }
-  const { data: dataClub, error: errorCldataClub } = useSWR(
-    `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`,
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-      shouldRetryOnError: false,
-    }
-  ) as {
-    data: IInfoClub
-    error: any
-  }
 
   const handleTabsChange = (event: ChangeEvent<{}>, value: string): void => {
     setCurrentTab(value)
@@ -192,21 +164,28 @@ const Biography = () => {
     get(dataBio, 'playerRadarSkills'),
   ])
 
-  if (errorBio || errorAvgPlayer)
-    return (
-      <div className=" p-[40px] text-center">
-        <div className="text-white ">Failed to load</div>
-      </div>
-    )
-  if (!dataBio || !dataAvgPlayer)
-    return (
-      <div className=" p-[40px] text-center">
-        <Loading size={40}></Loading>
-      </div>
-    )
-
   return (
     <DashboardLayout>
+      <Head>
+        <title>
+          {get(dataBio, 'firstName') + ' ' + get(dataBio, 'lastName')}
+        </title>
+        <meta name="description" content="Zporter"></meta>
+        <meta property="og:url" content="https://www.byeindonesia.com/" />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content={get(dataBio, 'firstName') + ' ' + get(dataBio, 'lastName')}
+        />
+        <meta property="og:description" content="Zporter" />
+        <meta
+          property="og:image"
+          content={
+            get(dataBio, 'faceImageUrl') ||
+            'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
+          }
+        />
+      </Head>
       <div className="px-[39px] pt-[18px]">
         <Tabs
           indicatorColor="secondary"
@@ -323,6 +302,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   const fullname = query.fullname // not use
   const username = query.username
 
+  let error: boolean
   let dataBio: IBiographyPlayer
   let dataClub: IInfoClub
   let dataAvgPlayer: IAvgPlayerScore
@@ -343,76 +323,49 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     return { error: true }
   }
 
+  const axios = axiosLib.create({
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  })
+  //@ts-ignore: Unreachable code error
+  axios.defaults.headers.username = username
+  const roleId = parseCookies(req)[COOKIE_KEY.roleid]
+  if (!isEmpty(roleId)) {
+    //@ts-ignore: Unreachable code error
+    axios.defaults.headers.roleId = roleId
+  }
+
+  const p1 = axios.get(`/biographies/player?username=${username}`)
+  // console.log('aaa p1', p1.data)
+  const p2 = axios.get(
+    `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`
+  )
+  // console.log('aaa p2', p2.data)
+  const p3 = axios.get(`/biographies/players/avg-radar`)
+  // console.log('aaa p3', p3.data)
+
   ///////////////////////////////////////////////
 
   try {
-    ;[dataBio, dataClub, dataAvgPlayer] = await Promise.all([
-      fetcher1(`/biographies/player?username=${username}`),
-      fetcher(
-        `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`
-      ),
-      fetcher1('/biographies/players/avg-radar'),
-    ])
-  } catch (error) {
-    console.log('aaa error', getErrorMessage(error))
+    const [data1, data2, data3] = await Promise.all([p1, p2, p3])
+    dataBio = data1.data
+    dataClub = data2.data
+    dataAvgPlayer = data3.data
+    error = false
+  } catch (err) {
+    console.log('aaa error', getErrorMessage(err))
     //@ts-ignore: Unreachable code error
     ;[dataBio, dataClub, dataAvgPlayer] = [{}, {}, {}]
+    error = true
   }
 
   ///////////////////////////////////////////////
 
   return {
     props: {
-      fallback: {
-        [`/biographies/player?username=${username}`]: dataBio,
-        [`/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`]:
-          dataClub,
-        [`/biographies/players/avg-radar`]: dataAvgPlayer,
-      },
+      dataBio,
+      dataClub,
+      dataAvgPlayer,
+      error,
     },
   }
-}
-
-export default function BiographyWithSWR({ fallback }) {
-  useEffect(() => {
-    console.log('aaa fallback: ', fallback)
-  }, [fallback])
-
-  const dataBio = useMemo(() => {
-    if (isEmpty(fallback)) {
-      return {}
-    }
-    return (
-      Object.values(fallback).filter((o) => o.hasOwnProperty('username'))[0] ||
-      {}
-    )
-  }, [fallback])
-
-  return (
-    <>
-      <Head>
-        <title>
-          {get(dataBio, 'firstName') + ' ' + get(dataBio, 'lastName')}
-        </title>
-        <meta name="description" content="Zporter"></meta>
-        <meta property="og:url" content="https://www.byeindonesia.com/" />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:title"
-          content={get(dataBio, 'firstName') + ' ' + get(dataBio, 'lastName')}
-        />
-        <meta property="og:description" content="Zporter" />
-        <meta
-          property="og:image"
-          content={
-            get(dataBio, 'faceImageUrl') ||
-            'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
-          }
-        />
-      </Head>
-      <SWRConfig value={{ fallback }}>
-        <Biography />
-      </SWRConfig>
-    </>
-  )
 }
