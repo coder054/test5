@@ -1,7 +1,7 @@
 // import { auth } from 'src/config/firebase-client'
 import { notification } from 'antd'
 import { auth } from 'src/config/firebase-client'
-import { COOKIE_KEY, LOCAL_STORAGE_KEY } from 'src/constants/constants'
+import { COOKIE_KEY, LOCAL_STORAGE_KEY, ROUTES } from 'src/constants/constants'
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -99,6 +99,7 @@ export function AuthProvider({ children }) {
     //@ts-ignore: Unreachable code error
     axios.defaults.headers.roleId = currentRoleId
     setCookieUtil(COOKIE_KEY.roleid, currentRoleId)
+    console.log('aaa changed roleId to', currentRoleId)
   }, [currentRoleId])
 
   useEffect(() => {
@@ -116,7 +117,7 @@ export function AuthProvider({ children }) {
     if (isEmpty(userRoles)) {
       return {}
     }
-    return userRoles.find((o) => o.role === currentRoleName)
+    return userRoles.find((o) => o.role === currentRoleName) || {}
   }, [currentRoleName, userRoles])
 
   const signin = (email: string, password: string) => {
@@ -275,6 +276,9 @@ export function AuthProvider({ children }) {
         //@ts-ignore: Unreachable code error
         axios.defaults.headers.roleId = roleId
         setCookieUtil(COOKIE_KEY.roleid, roleId)
+        if (!get(respUserRoles, 'data[0].role')) {
+          router.push(ROUTES.SIGNUP_FORM)
+        }
         ///////////////////////////////// userRoles /////////////////////////////////
       }
       const doneT = +new Date()
