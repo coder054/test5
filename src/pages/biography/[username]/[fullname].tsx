@@ -632,14 +632,14 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     console.log('aaa no error')
   } catch (err) {
     console.log('aaa error', getErrorMessage(err))
-    //@ts-ignore: Unreachable code error
-    ;[dataBioPlayer, dataBioCoach, dataClub, dataAvgPlayer, dataAvgCoach] = [
-      null,
-      null,
-      null,
-      null,
-      null,
-    ]
+      //@ts-ignore: Unreachable code error
+      ;[dataBioPlayer, dataBioCoach, dataClub, dataAvgPlayer, dataAvgCoach] = [
+        null,
+        null,
+        null,
+        null,
+        null,
+      ]
     error = true
   }
 
