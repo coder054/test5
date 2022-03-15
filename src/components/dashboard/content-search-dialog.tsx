@@ -1,4 +1,7 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
+import Link from 'next/link'
+import queryString from 'query-string'
 import type { FC } from 'react'
 import {
   Badge,
@@ -17,6 +20,9 @@ import { wait } from '../../utils/wait'
 import { X as XIcon } from '../../icons/x'
 import { Tip } from '../tip'
 import PropTypes from 'prop-types'
+import { axios } from 'src/utils/axios'
+import { IUsersSearch } from 'src/constants/types/searchUsers.types'
+import { getStr, truncateStr } from 'src/utils/utils'
 
 interface ContentSearchProps {
   onClose?: () => void
@@ -55,20 +61,75 @@ const results = {
 }
 
 export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
+  const searchInputRef = useRef(null)
   const { onClose, open, ...other } = props
   const [value, setValue] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [showResults, setShowResults] = useState<boolean>(false)
+  const [users, setUsers] = useState<IUsersSearch[]>(null)
+  const limit = 30
 
   const handleSubmit = async (event): Promise<void> => {
     event.preventDefault()
     setShowResults(false)
     setIsLoading(true)
     // Do search here
-    await wait(1500)
+    // here
+
+    const getMembersWithKeyword = async (
+      keyword: string
+    ): Promise<{
+      error: boolean
+      data: IUsersSearch[]
+    }> => {
+      try {
+        const params = {
+          limit,
+          startAfter: 0,
+          sorted: 'asc',
+          name: keyword,
+        }
+        const { data } = await axios.get(
+          `/users?${queryString.stringify(params)}`
+        )
+        return {
+          error: false,
+          data,
+        }
+      } catch (error) {
+        console.log('aaa getMembersWithKeyword error', error)
+        return {
+          error: true,
+          data: null,
+        }
+      }
+    }
+    const { data, error } = await getMembersWithKeyword(value)
+    if (error) {
+      alert('Error searching users')
+      setIsLoading(false)
+      return
+    }
+    console.log('aaa data', data)
+    setUsers(data)
     setIsLoading(false)
     setShowResults(true)
   }
+
+  useEffect(() => {
+    if (open === true) {
+      setTimeout(() => {
+        const el = document.getElementById('searchInputRef')
+        if (el) {
+          el.focus()
+        }
+      }, 300)
+    }
+  }, [open])
+
+  const usersSafe = useMemo(() => {
+    return users || []
+  }, [users])
 
   return (
     <Dialog fullWidth maxWidth="sm" onClose={onClose} open={open} {...other}>
@@ -92,6 +153,8 @@ export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
         <form onSubmit={handleSubmit}>
           <Tip message="Search by entering a keyword and pressing Enter" />
           <TextField
+            id="searchInputRef"
+            ref={searchInputRef}
             fullWidth
             InputProps={{
               startAdornment: (
@@ -120,50 +183,71 @@ export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
         )}
         {showResults && (
           <>
-            {Object.keys(results).map((type, index) => (
-              <div key={index}>
-                <Typography sx={{ my: 2 }} variant="h6">
-                  {type}
-                </Typography>
-                <Box
-                  sx={{
-                    borderColor: 'divider',
-                    borderRadius: 1,
-                    borderStyle: 'solid',
-                    borderWidth: 1,
-                  }}
-                >
-                  {results[type].map((result, index) => (
-                    <Fragment key={result.title}>
-                      <Box sx={{ p: 2 }}>
-                        <Box
-                          sx={{
-                            alignItems: 'center',
-                            display: 'flex',
-                          }}
-                        >
-                          <Badge color="primary" sx={{ ml: 1 }} variant="dot" />
-                          <Typography variant="subtitle1" sx={{ ml: 2 }}>
-                            {result.title}
-                          </Typography>
-                        </Box>
-                        <Typography color="textSecondary" variant="body2">
-                          {result.path}
-                        </Typography>
-                        <Typography
-                          color="textSecondary"
-                          variant="body2"
-                          sx={{ mt: 1 }}
-                        >
-                          {result.description}
-                        </Typography>
-                      </Box>
-                      {index !== results[type].length - 1 && <Divider />}
-                    </Fragment>
-                  ))}
-                </Box>
-              </div>
-            ))}
+            {/*  */}
+            <div className="h-[12px] "></div>
+            <div className=" flex ">
+              <span className="text-Green mr-[8px] ">
+                {usersSafe.length === limit
+                  ? `${usersSafe.length}+`
+                  : usersSafe.length}
+              </span>
+              <span className="text-Grey ">members found</span>
+            </div>
+            <div className="h-[12px] "></div>
+            <div className="max-h-[300px] py-[4px] overflow-y-auto">
+              {usersSafe.map((user, index) => {
+                const firstLastNameUrl =
+                  `${user?.firstName}.${user?.lastName}`
+                    .replace(/\s/g, '')
+                    .toLowerCase() || 'coach'
+                const urlBio = `/biography/${user?.username}/${firstLastNameUrl}`
+
+                return (
+                  <Fragment key={user.username}>
+                    <Link href={urlBio}>
+                      <a className="block py-[4px] ">
+                        <div key={index} className="flex w-full items-center ">
+                          <img
+                            src={user.faceImage}
+                            className="w-[65px] h-[65px] object-cover rounded-[8px] mr-3"
+                            alt=""
+                          />
+                          <div className=" w-[200px] ">
+                            <div className="text-white font-semibold ">
+                              {user.firstName} {user.lastName}{' '}
+                            </div>
+                            <div className="flex justify-between ">
+                              <span className="text-Grey ">
+                                #{user.username}
+                              </span>
+                              <span className="text-Grey ">
+                                {getStr(user, 'favoriteRoles[0]')}
+                              </span>
+                            </div>
+
+                            <div className="flex justify-between ">
+                              <span className="text-white ">
+                                {truncateStr(user.city || '', 11)}
+                              </span>
+                              <span className="text-white ">
+                                {getStr(user, 'clubName')}{' '}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="grow "></div>
+                          <div className="text-white ">
+                            <ArrowForwardIosIcon />
+                          </div>
+                          <div className="w-[8px] "></div>
+                        </div>
+                      </a>
+                    </Link>
+                    <div className="h-[16px] "></div>
+                  </Fragment>
+                )
+              })}
+            </div>
+            {/*  */}
           </>
         )}
       </DialogContent>
