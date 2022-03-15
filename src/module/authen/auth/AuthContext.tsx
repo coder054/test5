@@ -126,38 +126,19 @@ export function AuthProvider({ children }) {
       })
       .catch((error) => {
         if (error.message === 'Firebase: Error (auth/wrong-password).') {
-          notification.open({
-            message: '',
-            description: 'Your password invalid.',
-            className: 'custom-class',
-            style: {
-              backgroundColor: '#ff4d4f',
-              color: '#FFFFFF',
-            },
-            duration: 3,
+          notification['error']({
+            message: 'Your password invalid.',
+            description: '',
           })
         } else if (error.message === 'Firebase: Error (auth/user-not-found).') {
-          notification.open({
-            message: '',
-            description: 'Your account does not exist.',
-            className: 'custom-class',
-            style: {
-              backgroundColor: '#ff4d4f',
-              color: '#FFFFFF',
-            },
-            duration: 3,
+          notification['error']({
+            message: 'Your account does not exist.',
+            description: '',
           })
         } else {
-          notification.open({
-            message: '',
-            description:
-              'Login Fail. Please check your email or your password.',
-            className: 'custom-class',
-            style: {
-              backgroundColor: '#ff4d4f',
-              color: '#FFFFFF',
-            },
-            duration: 3,
+          notification['error']({
+            message: 'Login Fail. Please check your email or your password.',
+            description: '',
           })
         }
       })

@@ -145,18 +145,18 @@ const BioForPlayer = ({
       isPublic,
       userId,
     } = dataBioPlayer
-    console.log('aaa dataBio: ', dataBioPlayer, {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    })
+    // console.log('aaa dataBio: ', dataBioPlayer, {
+    //   friendStatus,
+    //   followStatus,
+    //   isConfirmBox,
+    //   isFollowed,
+    //   isPublic,
+    //   userId,
+    // })
   }, [dataBioPlayer])
 
   useEffect(() => {
-    console.log('aaa dataBioPlayer: ', dataBioPlayer)
+    // console.log('aaa dataBioPlayer: ', dataBioPlayer)
   }, [dataBioPlayer])
 
   const dataBioPlayerRadarChart = useMemo(() => {

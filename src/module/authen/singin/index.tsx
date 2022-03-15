@@ -65,7 +65,7 @@ const SignIn = () => {
   const [formEmail] = Form.useForm()
   const [formPhone] = Form.useForm()
 
-  const { signin, currentUser, errorSignin, SignInCustomToken } = useAuth()
+  const { signin, updateUserRoles, SignInCustomToken } = useAuth()
 
   const handleSubmit = async (e) => {
     try {
@@ -80,6 +80,7 @@ const SignIn = () => {
         })
         await SignInCustomToken(response.data.customToken)
       }
+
       setTimeout(() => {
         setLoading(false)
       }, 1000)
@@ -175,7 +176,7 @@ const SignIn = () => {
       // console.log('aaa error.message', error.message)
       // console.log('aaa JSON.stringify(error)', JSON.stringify(error))
       //@ts-ignore: Unreachable code error
-      console.log('aaa error.code', error.code)
+      // console.log('aaa error.code', error.code)
       if (get(error, 'code') === 'auth/invalid-verification-code') {
         notification['error']({
           message: 'Invalid verification code',
