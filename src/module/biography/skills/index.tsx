@@ -28,6 +28,8 @@ const tagsClass =
 
 export const Skills = () => {
   const [tags, setTags] = useState<string[]>([])
+  const [summary, setSummary] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(false)
   const [footballSkills, setFootBallSkills] = useState<FootBallSkillTypes>({
     technics: 60,
     tactics: 25,
@@ -57,6 +59,8 @@ export const Skills = () => {
     },
     [radarChart]
   )
+
+  const handleSubmit = async () => {}
 
   return (
     <div className="space-y-5">
@@ -110,20 +114,29 @@ export const Skills = () => {
             <p className={tagsClass}>
               Now update the profile summary of yourself and your specialities
             </p>
-            <MyTextArea placeholder="As for ex, - Fast, hard shooting, power forward and striker with an amazing left foot." />
+            <MyTextArea
+              placeholder="As for ex, - Fast, hard shooting, power forward and striker with an amazing left foot."
+              value={summary}
+              onChange={(e) => {
+                setSummary(e.target.value)
+              }}
+            />
             <MyInputChips
               label="Speciality tags"
               labelClass="text-[#A2A5AD]"
-              value={['Leader']}
+              value={tags}
+              // onChange={setTags}
+              setTags={setTags}
             />
           </div>
         </div>
       </BackGround>
       <MyButton
-        // onClick={handleSubmit}
-        // isLoading={isLoading}
+        onClick={handleSubmit}
+        isLoading={loading}
         type="submit"
         label="Save"
+        className="mt-[24px] mb-[181px]"
       />
     </div>
   )

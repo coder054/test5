@@ -2,9 +2,15 @@ import { TextField } from '@mui/material'
 
 type MyTextAreaProps = {
   placeholder?: string
+  value?: string
+  onChange?: any
 }
 
-export const MyTextArea = ({ placeholder }: MyTextAreaProps) => {
+export const MyTextArea = ({
+  placeholder,
+  value,
+  onChange,
+}: MyTextAreaProps) => {
   return (
     <TextField
       sx={{
@@ -27,6 +33,8 @@ export const MyTextArea = ({ placeholder }: MyTextAreaProps) => {
       fullWidth
       multiline
       rows={5}
+      value={value}
+      onChange={onChange}
     />
   )
 }
