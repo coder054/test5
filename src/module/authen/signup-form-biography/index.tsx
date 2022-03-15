@@ -21,8 +21,7 @@ import { IAvgCoachScore } from '../types'
 const cls = require('./signup-form-biography.module.css')
 
 export const SignupFormBiography = () => {
-  const { currentRoleId, playerProfile, coachProfile, updateUserRoles } =
-    useAuth()
+  const { currentRoleId, updateUserRoles } = useAuth()
   const router = useRouter()
   const { profile } = router.query
 
