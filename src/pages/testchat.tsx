@@ -100,7 +100,7 @@ const TestGetUnreadMessageIdsInRoom = () => {
       // } , '')
 
       try {
-        const a = await getUnreadMessageIdsInRoom('-MtatGBZFKG4zNVIggD3', 0)
+        // const a = await getUnreadMessageIdsInRoom('-MtatGBZFKG4zNVIggD3', 0, userId)
       } catch (error) {}
     })()
   }, [])
@@ -151,7 +151,8 @@ const TestGetChatRooms = () => {
           let lastMessageContent: string = ''
           lastMessageContent = await getMessageContent(
             chatRoom.chatRoomId,
-            chatRoom.lastMessageId || ''
+            chatRoom.lastMessageId || '',
+            currentRoleId
           )
 
           if (!!chatRoom.chatRoomImage) {

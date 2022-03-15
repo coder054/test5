@@ -77,7 +77,7 @@ const SignUpForm = () => {
   })
   const [faceImages, setFaceImage] = useState<string>('')
   const [fullBodyImage, setFullBodyImage] = useState<string>('')
-  const { signout, playerProfile } = useAuth()
+  const { signout } = useAuth()
 
   React.useEffect(() => {
     if (typeof window === 'undefined') {

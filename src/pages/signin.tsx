@@ -9,11 +9,7 @@ import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import { GuestGuard } from 'src/components/authentication/guest-guard'
 
 const SignInPage = () => {
-  const router = useRouter()
-  const { currentUser } = useAuth()
-
   useEffect(() => {
-    localStorage.removeItem(LOCAL_STORAGE_KEY.currentRoleId)
     localStorage.removeItem(LOCAL_STORAGE_KEY.userRoles)
   }, [])
 

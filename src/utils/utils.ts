@@ -68,7 +68,13 @@ export const equalStr = (str1: string, str2: string) => {
 }
 
 export function parseCookies(req) {
-  return cookie.parse(req ? req.headers.cookie || '' : document.cookie)
+  return cookie.parse(
+    req
+      ? req.headers.cookie || ''
+      : typeof window !== 'undefined'
+      ? window.document.cookie
+      : ''
+  )
 }
 
 export function notify(

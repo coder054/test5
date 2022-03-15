@@ -30,7 +30,7 @@ interface ChatMessageAddProps {
 }
 
 export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
-  const { playerProfile, currentRoleId } = useAuth()
+  const { infoActiveProfile, currentRoleId } = useAuth()
   const [activeChatRoom] = useAtom(activeChatRoomAtom)
 
   const { disabled, onSend, ...other } = props
@@ -86,7 +86,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
           },
           mr: 2,
         }}
-        src={getStr(playerProfile, 'media.faceImage')}
+        src={getStr(infoActiveProfile, 'faceImageUrl')}
       />
 
       <TextField

@@ -10,10 +10,6 @@ import clsx from 'clsx'
 import { truncateStr } from 'src/utils/utils'
 
 export const NavigationAndFilter = ({ username }, { username: string }) => {
-  const { authenticated, playerProfile } = useAuth() as {
-    playerProfile: IPlayerProfile
-    authenticated: boolean
-  }
   const [loadingDataFlip, setLoadingDataFlip] = useState(true)
   const [dataFlip, setDataFlip] = useState([])
   const [currentIndexFlip, setCurrentIndexFlip] = useState(0)
