@@ -74,11 +74,11 @@ export const SignUpFormCoach = () => {
     },
   })
 
-  // React.useEffect(() => {
-  //   if (!profileCoachForm.profile?.firstName) {
-  //     router.push(ROUTES.SIGNUP_FORM)
-  //   }
-  // }, [profileCoachForm])
+  React.useEffect(() => {
+    if (!profileCoachForm.profile?.firstName) {
+      router.push(ROUTES.SIGNUP_FORM)
+    }
+  }, [profileCoachForm])
 
   React.useEffect(() => {
     if (typeof window === 'undefined') {

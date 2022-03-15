@@ -183,11 +183,8 @@ const NotificationsButton = () => {
   )
 }
 
-const AccountButton = ({
-  playerProfile,
-}: {
-  playerProfile: IPlayerProfile
-}) => {
+const AccountButton = () => {
+  const { infoActiveProfile } = useAuth()
   const anchorRef = useRef<HTMLButtonElement | null>(null)
   const [openPopover, setOpenPopover] = useState<boolean>(false)
   // To get the user from the authContext, you can use
@@ -218,13 +215,12 @@ const AccountButton = ({
             height: 40,
             width: 40,
           }}
-          src={playerProfile?.media?.faceImage}
+          src={infoActiveProfile?.faceImageUrl}
         >
           <UserCircleIcon fontSize="small" />
         </Avatar>
       </Box>
       <AccountPopover
-        playerProfile={playerProfile}
         anchorEl={anchorRef.current}
         onClose={handleClosePopover}
         open={openPopover}
@@ -409,9 +405,8 @@ export interface SocialLinks {
 export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
   const { onOpenSidebar, ...other } = props
 
-  const { authenticated, playerProfile } = useAuth() as {
+  const { authenticated } = useAuth() as {
     authenticated: boolean
-    playerProfile: IPlayerProfile
   }
 
   return (
@@ -471,7 +466,7 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
               <ContentSearchButton />
               <ContactsButton />
               <NotificationsButton />
-              <AccountButton playerProfile={playerProfile} />
+              <AccountButton />
             </>
           )}
         </Toolbar>

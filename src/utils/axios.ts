@@ -1,10 +1,10 @@
 import axiosLib from 'axios'
-import { auth } from 'src/config/firebase-client'
 import { signOut } from 'firebase/auth'
-import querystring from 'query-string'
 import { get } from 'lodash'
-import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
-import { Cookies } from 'react-cookie'
+import querystring from 'query-string'
+import { auth } from 'src/config/firebase-client'
+import { COOKIE_KEY } from 'src/constants/constants'
+import { parseCookies } from './utils'
 
 /**
  * Axios instance for browser,
@@ -47,18 +47,12 @@ axios.interceptors.request.use((config) => {
   return config
 })
 
-if (
-  typeof window !== 'undefined' &&
-  window.localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId)
-) {
+if (typeof window !== 'undefined' && parseCookies(null)[COOKIE_KEY.roleid]) {
   //@ts-ignore: Unreachable code error
-  axios.defaults.headers.roleId = window.localStorage.getItem(
-    LOCAL_STORAGE_KEY.currentRoleId
-  )
+  axios.defaults.headers.roleId = parseCookies(null)[COOKIE_KEY.roleid]
 }
 
-const cookies = new Cookies()
-const token = cookies.get('token')
+const token = parseCookies(null)[COOKIE_KEY.token]
 
 if (token) {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`

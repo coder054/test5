@@ -4,23 +4,31 @@ import { Stars } from 'src/components/common/Stars'
 import { Button } from 'src/components'
 import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
-import { IBiographyCoach } from '../authen/types'
 import { useAuth } from '../authen/auth/AuthContext'
-import { IBiographyPlayer } from 'src/constants/types/biography.types'
+import {
+  IBiographyPlayer,
+  IBiographyCoach,
+} from 'src/constants/types/biography.types'
+import { getStr } from 'src/utils/utils'
+import { useEffect } from 'react'
 
-export const InforWithAChart = ({
+export const InfoCoachWithAChart = ({
   dataBio,
   dataBioRadarChart,
   signupForm,
   profile,
 }: {
-  dataBio: IBiographyPlayer | IBiographyCoach
+  dataBio: IBiographyCoach
   dataBioRadarChart: any
   signupForm?: boolean
   profile: string
 }) => {
   const router = useRouter()
   const { updateUserRoles, userRoles } = useAuth()
+
+  useEffect(() => {
+    console.log('aaa dataBioRadarChart: ', dataBioRadarChart)
+  }, [dataBioRadarChart])
 
   const handleNext = async () => {
     try {
@@ -69,11 +77,11 @@ export const InforWithAChart = ({
           {[
             {
               title: 'LEFT FOOT',
-              rate: dataBio?.leftFoot,
+              rate: getStr(dataBio, 'leftFoot') || 0,
             },
             {
               title: 'RIGHT FOOT',
-              rate: dataBio?.rightFoot,
+              rate: getStr(dataBio, 'rightFoot') || 0,
             },
           ].map((o, index) => (
             <div key={o.title} className="">

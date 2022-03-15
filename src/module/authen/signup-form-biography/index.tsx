@@ -2,27 +2,26 @@ import { get } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { GoBack } from 'src/components/go-back'
-import {
-  API_COACH_PROFILE,
-  API_PLAYER_PROFILE,
-} from 'src/constants/api.constants'
-import { ROUTES } from 'src/constants/constants'
+import { Loading } from 'src/components/loading/loading'
 import {
   IAvgPlayerScore,
+  IBiographyCoach,
   IBiographyPlayer,
 } from 'src/constants/types/biography.types'
-import { InforWithAChart } from 'src/module/bio/InfoWithAChart'
-import { InfoWithCircleImage } from 'src/module/bio/InfoWithCircleImage'
+import { InfoPlayerWithAChart } from 'src/module/bio/InfoPlayerWithAChart'
+import { InfoCoachWithAChart } from 'src/module/bio/InfoCoachWithAChart'
+import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
+import { InfoCoachWithCircleImage } from 'src/module/bio/InfoCoachWithCircleImage'
 import { axios } from 'src/utils/axios'
 import { fetcher } from 'src/utils/utils'
 import useSWR from 'swr'
 import { useAuth } from '../auth/AuthContext'
-import { IAvgCoachScore, IBiographyCoach } from '../types'
+import { IAvgCoachScore } from '../types'
 
 const cls = require('./signup-form-biography.module.css')
 
 export const SignupFormBiography = () => {
-  const { currentRoleId, playerProfile, coachProfile, currentUser } = useAuth()
+  const { currentRoleId, updateUserRoles } = useAuth()
   const router = useRouter()
   const { profile } = router.query
 
@@ -129,11 +128,12 @@ export const SignupFormBiography = () => {
     },
     specialities: [],
     starRating: 0,
-    summary: '',
+    summary: null,
     topVideoLinks: [],
     userId: '',
     userRole: '',
     username: '',
+    isFollowed: true,
   })
 
   const { data: dataAvgPlayer, error: errorAvgPlayer } = useSWR(
@@ -166,17 +166,20 @@ export const SignupFormBiography = () => {
 
   useEffect(() => {
     const getBio = async () => {
-      if (profile && profile === 'Player' && playerProfile.userId) {
+      if (profile && profile === 'Player') {
+        await updateUserRoles()
         try {
           const response = await axios.get(
-            `/biographies/player?userIdQuery=${playerProfile.userId}`
+            `/biographies/player?userIdQuery=${currentRoleId}`
           )
+
           setData(response.data)
         } catch (error) {}
-      } else if (profile && profile === 'Coach' && coachProfile.userId) {
+      } else if (profile && profile === 'Coach') {
+        await updateUserRoles()
         try {
           const response = await axios.get(
-            `/biographies/coach?userIdQuery=${coachProfile.userId}`
+            `/biographies/coach?userIdQuery=${currentRoleId}`
           )
           setDataCoach(response.data)
         } catch (error) {}
@@ -187,7 +190,7 @@ export const SignupFormBiography = () => {
   }, [])
 
   const dataBioCoachRadarChart = useMemo(() => {
-    const coach = get(dataCoach, 'coachRadarSkills')
+    const coach = get(dataCoach, 'coachRadarSkill')
     const average = dataAvgCoach
     if (!coach || !average) {
       return [{}]
@@ -305,12 +308,14 @@ export const SignupFormBiography = () => {
     get(data, 'playerRadarSkills'),
   ])
 
+  console.log('data', data)
+
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
       <div className="absolute top-[16px] lg:top-[40px] md:left-[40px] z-20">
         <GoBack
           label="Sign up form"
-          goBack={ROUTES.SIGNUP_FORM_PLAYER_SKILLS}
+          // goBack={ROUTES.SIGNUP_FORM_PLAYER_SKILLS}
         />
       </div>
 
@@ -318,38 +323,48 @@ export const SignupFormBiography = () => {
         <div
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 max-h-[626px]`}
         >
-          {profile === 'Player' ? (
-            <InfoWithCircleImage
+          {data.userId && profile === 'Player' ? (
+            <InfoPlayerWithCircleImage
               dataBio={data}
               currentRoleId={currentRoleId}
               signupForm
             />
           ) : (
-            <InfoWithCircleImage
+            <div className="w-12 mx-auto">
+              <Loading />
+            </div>
+          )}
+          {profile === 'Coach' && data.userId ? (
+            <InfoCoachWithCircleImage
               dataBio={dataCoach}
               currentRoleId={currentRoleId}
               signupForm
             />
-          )}
+          ) : null}
         </div>
         <div
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 `}
         >
           {profile === 'Player' ? (
-            <InforWithAChart
+            <InfoPlayerWithAChart
               dataBio={data}
               dataBioRadarChart={dataBioRadarChart}
               signupForm
               profile={profile as string}
             />
           ) : (
-            <InforWithAChart
+            <div className="w-12 mx-auto">
+              <Loading />
+            </div>
+          )}
+          {profile === 'Coach' ? (
+            <InfoCoachWithAChart
               dataBio={dataCoach}
               dataBioRadarChart={dataBioCoachRadarChart}
               signupForm
-              profile={'coach'}
+              profile={profile as string}
             />
-          )}
+          ) : null}
         </div>
       </div>
     </div>

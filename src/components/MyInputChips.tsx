@@ -7,6 +7,7 @@ type MyInputChipsProps = {
   label: string
   labelClass?: string
   value?: string[]
+  setTags?: Function
   onChange?: (value: string[]) => void
 }
 
@@ -14,6 +15,7 @@ export const MyInputChips = ({
   label,
   labelClass,
   value,
+  setTags,
   onChange,
 }: MyInputChipsProps) => {
   const [currentValue, setCurrentValue] = useState<string>()
@@ -31,6 +33,7 @@ export const MyInputChips = ({
         let newArr = [...chips]
         newArr.push(currentValue)
         setChips(newArr)
+        setTags && setTags(newArr)
         setCurrentValue('')
       } else {
         toast.error('Tag already exists!')
@@ -44,6 +47,7 @@ export const MyInputChips = ({
 
   useEffect(() => {
     value && setChips(value)
+    value && setTags && setTags(value)
   }, [value])
 
   return (

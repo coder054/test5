@@ -29,3 +29,4 @@ note.txt
 src/styles/globals_compiled.css
 
 tsconfig.tsbuildinfo
+src/components/dashboard/workspace-zporter.code-workspace

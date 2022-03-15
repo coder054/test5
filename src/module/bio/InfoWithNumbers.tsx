@@ -8,6 +8,7 @@ import useSWR from 'swr'
 import { fetcher } from 'src/utils/utils'
 import { isEmpty } from 'lodash'
 import { NextRouter } from 'next/router'
+import { CircularProgress } from '@mui/material'
 
 enum Tab {
   Club = 'Club',
@@ -178,11 +179,19 @@ export const InforWithNumbers = ({
 
   const renderStats = () => {
     if (error) {
-      return <TabPanel visible={tab !== 'Club'}>Error</TabPanel>
+      return (
+        <TabPanel visible={tab !== 'Club'}>
+          <div className="hidden ">Error</div>
+        </TabPanel>
+      )
     }
 
     if (isEmpty(data)) {
-      return <TabPanel visible={tab !== 'Club'}>Loading</TabPanel>
+      return <TabPanel visible={tab !== 'Club'}>
+        <div className="flex justify-center mt-[20px]  ">
+          <CircularProgress />
+        </div>
+      </TabPanel>
     }
 
     const { statsItems, matchInTotalStatistic, trainingInTotalStatistics } =

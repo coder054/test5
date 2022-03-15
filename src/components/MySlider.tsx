@@ -1,6 +1,7 @@
 import StarIcon from '@mui/icons-material/Star'
 import { Rating, Slider, Tooltip, SliderProps } from '@mui/material'
 import clsx from 'clsx'
+import { styled } from '@mui/material/styles'
 
 type MySliderProps = SliderProps & {
   step: number
@@ -13,6 +14,17 @@ type MySliderProps = SliderProps & {
   isAdjective?: boolean
   onChange?: (value: number) => void
 }
+
+const CustomSlider = styled(Slider)(({ theme }) => ({
+  '& .MuiSlider-thumb': {
+    backgroundColor: '#09E099',
+    height: 6,
+    width: 6,
+  },
+  '& .MuiSlider-rail': {
+    color: '#A2A5AD',
+  },
+}))
 
 export const MySlider = ({
   step,
@@ -49,7 +61,7 @@ export const MySlider = ({
   return (
     <div>
       <p className={clsx('text-[16px] font-normal', labelClass)}>{label}</p>
-      <Slider
+      <CustomSlider
         step={step}
         value={value}
         size="small"

@@ -11,13 +11,17 @@ import { loadIdToken } from 'src/config/firebase-admin'
 import { COOKIE_KEY } from 'src/constants/constants'
 import {
   IAvgPlayerScore,
+  IAvgCoachScore,
   IBiographyPlayer,
+  IBiographyCoach,
 } from 'src/constants/types/biography.types'
 import { useScreenWidth } from 'src/hooks/useScreenWidth'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { IInfoClub } from 'src/module/bio/InfoClub'
-import { InforWithAChart } from 'src/module/bio/InfoWithAChart'
-import { InfoWithCircleImage } from 'src/module/bio/InfoWithCircleImage'
+import { InfoPlayerWithAChart } from 'src/module/bio/InfoPlayerWithAChart'
+import { InfoCoachWithAChart } from 'src/module/bio/InfoCoachWithAChart'
+import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
+import { InfoCoachWithCircleImage } from 'src/module/bio/InfoCoachWithCircleImage'
 import { InfoWithImages } from 'src/module/bio/InfoWithImages'
 import { InforWithNumbers } from 'src/module/bio/InfoWithNumbers'
 import { NavigationAndFilter } from 'src/module/bio/NavigationAndFilter'
@@ -47,15 +51,19 @@ const tabs = [
 ]
 
 export default function Biography({
-  dataBio,
+  dataBioPlayer,
+  dataBioCoach,
   dataClub,
   dataAvgPlayer,
+  dataAvgCoach,
   error,
   profile,
 }: {
-  dataBio: IBiographyPlayer
+  dataBioPlayer: IBiographyPlayer
+  dataBioCoach: IBiographyCoach
   dataClub: IInfoClub
   dataAvgPlayer: IAvgPlayerScore
+  dataAvgCoach: IAvgCoachScore
   error: boolean
   profile: string
 }) {
@@ -76,6 +84,58 @@ export default function Biography({
     setCurrentTab(value)
   }
 
+  return (
+    <DashboardLayout>
+      {profile === 'coach' ? (
+        <BioForCoach
+          dataBioCoach={dataBioCoach}
+          dataAvgCoach={dataAvgCoach}
+          profile={profile}
+          currentRoleId={currentRoleId}
+          authenticated={authenticated}
+          currentTab={currentTab}
+          dataClub={dataClub}
+          router={router}
+          handleTabsChange={handleTabsChange}
+        />
+      ) : (
+        <BioForPlayer
+          dataBioPlayer={dataBioPlayer}
+          dataAvgPlayer={dataAvgPlayer}
+          authenticated={authenticated}
+          currentTab={currentTab}
+          handleTabsChange={handleTabsChange}
+          currentRoleId={currentRoleId}
+          profile={profile}
+          dataClub={dataClub}
+          router={router}
+        />
+      )}
+    </DashboardLayout>
+  )
+}
+
+const BioForPlayer = ({
+  dataBioPlayer,
+  dataAvgPlayer,
+  authenticated,
+  currentTab,
+  handleTabsChange,
+  currentRoleId,
+  profile,
+  dataClub,
+  router,
+}: {
+  dataBioPlayer: IBiographyPlayer
+  dataAvgPlayer: IAvgPlayerScore
+  authenticated: boolean
+  currentTab: string
+  handleTabsChange: Function
+  currentRoleId: any
+  profile: string
+  dataClub: IInfoClub
+  router: any
+}) => {
   useEffect(() => {
     const {
       friendStatus,
@@ -84,21 +144,25 @@ export default function Biography({
       isFollowed,
       isPublic,
       userId,
-    } = dataBio
-    console.log('aaa dataBio: ', dataBio, {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    })
-  }, [dataBio])
+    } = dataBioPlayer
+    // console.log('aaa dataBio: ', dataBioPlayer, {
+    //   friendStatus,
+    //   followStatus,
+    //   isConfirmBox,
+    //   isFollowed,
+    //   isPublic,
+    //   userId,
+    // })
+  }, [dataBioPlayer])
 
-  const dataBioRadarChart = useMemo(() => {
-    const coach = get(dataBio, 'radarUpdatedByCoach')
+  useEffect(() => {
+    // console.log('aaa dataBioPlayer: ', dataBioPlayer)
+  }, [dataBioPlayer])
+
+  const dataBioPlayerRadarChart = useMemo(() => {
+    const coach = get(dataBioPlayer, 'radarUpdatedByCoach')
     const average = dataAvgPlayer
-    const you = get(dataBio, 'playerRadarSkills')
+    const you = get(dataBioPlayer, 'playerRadarSkills')
     if (!coach || !average || !you) {
       return [{}]
     }
@@ -163,28 +227,34 @@ export default function Biography({
     ]
   }, [
     dataAvgPlayer,
-    get(dataBio, 'radarUpdatedByCoach'),
-    get(dataBio, 'playerRadarSkills'),
+    get(dataBioPlayer, 'radarUpdatedByCoach'),
+    get(dataBioPlayer, 'playerRadarSkills'),
   ])
 
   return (
-    <DashboardLayout>
+    <>
       <Head>
         <title>
-          {get(dataBio, 'firstName') + ' ' + get(dataBio, 'lastName')}
+          {get(dataBioPlayer, 'firstName') +
+            ' ' +
+            get(dataBioPlayer, 'lastName')}
         </title>
         <meta name="description" content="Zporter"></meta>
         <meta property="og:url" content="https://www.byeindonesia.com/" />
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content={get(dataBio, 'firstName') + ' ' + get(dataBio, 'lastName')}
+          content={
+            get(dataBioPlayer, 'firstName') +
+            ' ' +
+            get(dataBioPlayer, 'lastName')
+          }
         />
         <meta property="og:description" content="Zporter" />
         <meta
           property="og:image"
           content={
-            get(dataBio, 'faceImageUrl') ||
+            get(dataBioPlayer, 'faceImageUrl') ||
             'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
           }
         />
@@ -192,6 +262,7 @@ export default function Biography({
       <div className="mobileM:px-[16px] laptopM:px-[60px] pt-[18px]">
         <Tabs
           indicatorColor="secondary"
+          //@ts-ignore: Unreachable code error
           onChange={handleTabsChange}
           variant="scrollable"
           scrollButtons="auto"
@@ -210,7 +281,7 @@ export default function Biography({
           <div>
             {/* /// Navigate and filter */}
             <NavigationAndFilter
-              username={dataBio.username}
+              username={dataBioPlayer.username}
             ></NavigationAndFilter>
 
             <div className="h-[32px] 2xl:h-[42px] "></div>
@@ -225,8 +296,8 @@ export default function Biography({
                 className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
               >
                 <div className="max-w-[466px] mx-auto ">
-                  <InfoWithCircleImage
-                    dataBio={dataBio}
+                  <InfoPlayerWithCircleImage
+                    dataBio={dataBioPlayer}
                     currentRoleId={currentRoleId}
                   />
 
@@ -243,59 +314,234 @@ export default function Biography({
                 className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
               >
                 <div className="max-w-[466px] mx-auto">
-                  <InforWithAChart
+                  <InfoPlayerWithAChart
                     profile={profile}
-                    dataBio={dataBio}
-                    dataBioRadarChart={dataBioRadarChart}
-                  ></InforWithAChart>
+                    dataBio={dataBioPlayer}
+                    dataBioRadarChart={dataBioPlayerRadarChart}
+                  ></InfoPlayerWithAChart>
 
                   <div className="h-[1px] my-[32px] bg-Stroke "></div>
 
                   <InforWithNumbers
                     dataClub={dataClub}
-                    activeSeasons={dataBio.activeSeasons}
+                    activeSeasons={dataBioPlayer.activeSeasons}
                     router={router}
                   />
                 </div>
               </div>
             </div>
 
-            <div
-              style={{
-                background: 'rgba(32, 33, 40, 0.3)',
-                backdropFilter: 'blur(68px)',
-              }}
-              className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
-            >
-              <div className="max-w-[466px] mx-auto">
-                <InforWithAChart
-                  dataBio={dataBio}
-                  dataBioRadarChart={dataBioRadarChart}
-                  profile={profile}
-                ></InforWithAChart>
-
-                <div className="h-[1px] my-[32px] bg-Stroke "></div>
-
-                <InforWithNumbers
-                  dataClub={dataClub}
-                  activeSeasons={dataBio.activeSeasons}
-                  router={router}
-                />
-                <div className="mt-[30px] ">
-                  <SocialLinksComponent socialLinks={dataBio.socialLinks} />
-                </div>
-
-                <div className="h-[32px] "></div>
-
-                <TopVideos dataBio={dataBio} />
-              </div>
+            {/*  */}
+            <div className="mt-[30px] ">
+              <SocialLinksComponent socialLinks={dataBioPlayer.socialLinks} />
             </div>
+
+            <TopVideos dataBio={dataBioPlayer} />
+            {/*  */}
           </div>
         )}
         {currentTab === 'update' && <UpdateBiography />}
         {/* {currentTab === 'profile' && <Profile />} */}
       </div>
-    </DashboardLayout>
+    </>
+  )
+}
+
+const BioForCoach = ({
+  dataBioCoach,
+  dataAvgCoach,
+  profile,
+  currentRoleId,
+  authenticated,
+  currentTab,
+  handleTabsChange,
+  dataClub,
+  router,
+}: {
+  dataBioCoach: IBiographyCoach
+  dataAvgCoach: IAvgCoachScore
+  profile: string
+  currentRoleId: string
+  authenticated: boolean
+  currentTab: string
+  handleTabsChange: Function
+  dataClub: IInfoClub
+  router: any
+}) => {
+  useEffect(() => {
+    console.log('aaa dataBioCoach: ', dataBioCoach)
+  }, [dataBioCoach])
+
+  const dataBioCoachRadarChart = useMemo(() => {
+    // todo
+    const coach = get(dataBioCoach, 'radarUpdatedByCoach')
+    const average = dataAvgCoach
+    const you = get(dataBioCoach, 'coachRadarSkills')
+    // todo
+    if (!average || !you) {
+      return [{}]
+    }
+
+    return [
+      {
+        subject: 'ATTACKING',
+        You: you.attacking,
+        Average: average.attacking,
+        Coach: 0,
+        fullMark: 100,
+      },
+      {
+        subject: 'TURNOVERS',
+        You: you.turnovers,
+        Average: average.turnovers,
+        Coach: 0,
+        fullMark: 100,
+      },
+      {
+        subject: 'ANALYTICS',
+        You: you.analytics,
+        Average: average.analytics,
+        Coach: 0,
+        fullMark: 100,
+      },
+      {
+        subject: 'DEFENDING',
+        You: you.defending,
+        Average: average.defending,
+        Coach: 0,
+        fullMark: 100,
+      },
+      {
+        subject: 'PLAYER DEV.',
+        You: you.playerDevelopment,
+        Average: average.playerDevelopment,
+        Coach: 0,
+        fullMark: 100,
+      },
+      {
+        subject: 'SET PIECES',
+        You: you.setPieces,
+        Average: average.setPieces,
+        Coach: 0,
+        fullMark: 100,
+      },
+    ]
+  }, [
+    dataAvgCoach,
+    get(dataBioCoach, 'radarUpdatedByCoach'),
+    get(dataBioCoach, 'playerRadarSkills'),
+  ])
+
+  return (
+    <>
+      <Head>
+        <title>
+          {get(dataBioCoach, 'firstName') + ' ' + get(dataBioCoach, 'lastName')}
+        </title>
+        <meta name="description" content="Zporter"></meta>
+        <meta property="og:url" content="https://www.byeindonesia.com/" />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:title"
+          content={
+            get(dataBioCoach, 'firstName') + ' ' + get(dataBioCoach, 'lastName')
+          }
+        />
+        <meta property="og:description" content="Zporter" />
+        <meta
+          property="og:image"
+          content={
+            get(dataBioCoach, 'faceImageUrl') ||
+            'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60'
+          }
+        />
+      </Head>
+      <div className="mobileM:px-[16px] laptopM:px-[60px] pt-[18px]">
+        <Tabs
+          indicatorColor="secondary"
+          //@ts-ignore: Unreachable code error
+          onChange={handleTabsChange}
+          variant="scrollable"
+          scrollButtons="auto"
+          textColor="secondary"
+          value={currentTab}
+          sx={{ display: authenticated ? 'block' : 'none' }}
+        >
+          {tabs.map((tab) => (
+            <Tab key={tab.value} label={tab.label} value={tab.value} />
+          ))}
+        </Tabs>
+      </div>
+      {isDesktop && <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />}
+      <div className="mobileM:px-[16px] laptopM:px-[60px] laptopM:mb-11">
+        {currentTab === 'biography' && (
+          <div>
+            {/* /// Navigate and filter */}
+            <NavigationAndFilter
+              username={dataBioCoach.username}
+            ></NavigationAndFilter>
+
+            <div className="h-[32px] 2xl:h-[42px] "></div>
+
+            {/* /// 2 main column */}
+            <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-[24px] 2xl:gap-[24px] ">
+              <div
+                style={{
+                  background: 'rgba(32, 33, 40, 0.3)',
+                  backdropFilter: 'blur(68px)',
+                }}
+                className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
+              >
+                <div className="max-w-[466px] mx-auto ">
+                  <InfoCoachWithCircleImage
+                    dataBio={dataBioCoach}
+                    currentRoleId={currentRoleId}
+                  />
+
+                  <div className="h-[1px] my-[40px] bg-Stroke "></div>
+                  <InfoWithImages />
+                </div>
+              </div>
+
+              <div
+                style={{
+                  background: 'rgba(32, 33, 40, 0.3)',
+                  backdropFilter: 'blur(68px)',
+                }}
+                className="rounded-[8px] p-[16px] sm:p-[32px] mx-auto w-full sm:w-[532px] lg:w-full "
+              >
+                <div className="max-w-[466px] mx-auto">
+                  {/* todo */}
+                  <InfoCoachWithAChart
+                    profile={profile}
+                    dataBio={dataBioCoach}
+                    dataBioRadarChart={dataBioCoachRadarChart}
+                  ></InfoCoachWithAChart>
+
+                  <div className="h-[1px] my-[32px] bg-Stroke "></div>
+
+                  <InforWithNumbers
+                    dataClub={dataClub}
+                    activeSeasons={dataBioCoach.activeSeasons}
+                    router={router}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/*  */}
+            <div className="mt-[30px] ">
+              <SocialLinksComponent socialLinks={dataBioCoach.socialLinks} />
+            </div>
+
+            {/* <TopVideos dataBio={dataBioCoach} /> */}
+            {/*  */}
+          </div>
+        )}
+        {currentTab === 'update' && <UpdateBiography />}
+        {/* {currentTab === 'profile' && <Profile />} */}
+      </div>
+    </>
   )
 }
 
@@ -310,9 +556,11 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   const lastCharacter = username[username.length - 1]
 
   let error: boolean
-  let dataBio: IBiographyPlayer
+  let dataBioPlayer: IBiographyPlayer
+  let dataBioCoach: IBiographyCoach
   let dataClub: IInfoClub
   let dataAvgPlayer: IAvgPlayerScore
+  let dataAvgCoach: IAvgCoachScore
 
   const fetcher1 = async (url) => {
     if (url === null) return
@@ -341,43 +589,75 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     axios.defaults.headers.roleId = roleId
   }
 
-  const p1 = axios.get(
-    `/biographies/${
-      lastCharacter === 'C' ? 'coach' : 'player'
-    }?username=${username}`
-  )
+  const promiseDataBioPlayer =
+    lastCharacter === 'C'
+      ? null
+      : axios.get(`/biographies/player?username=${username}`)
+
+  const promiseDataBioCoach =
+    lastCharacter === 'C'
+      ? axios.get(`/biographies/coach?username=${username}`)
+      : null
+
   // console.log('aaa p1', p1.data)
-  const p2 = axios.get(
+  // this endpoin can be used for both player or coach
+  const promiseDataClub = axios.get(
     `/biographies/player/clubs?limit=20&startAfter=0&sorted=asc&username=${username}&type=HISTORIC`
   )
   // console.log('aaa p2', p2.data)
-  const p3 = axios.get(
-    `/biographies/${lastCharacter === 'C' ? 'coaches' : 'players'}/avg-radar`
-  )
+  const promiseDataAvgPlayer =
+    lastCharacter === 'C' ? null : axios.get(`/biographies/players/avg-radar`)
+
+  const promiseDataAvgCoach =
+    lastCharacter === 'C' ? axios.get(`/biographies/coaches/avg-radar`) : null
+
   // console.log('aaa p3', p3.data)
 
   ///////////////////////////////////////////////
 
-  try {
-    const [data1, data2, data3] = await Promise.all([p1, p2, p3])
-    dataBio = data1.data
-    dataClub = data2.data
-    dataAvgPlayer = data3.data
-    error = false
-  } catch (err) {
-    console.log('aaa error', getErrorMessage(err))
+  const values = await Promise.allSettled([
+    promiseDataBioPlayer,
+    promiseDataBioCoach,
+    promiseDataClub,
+    promiseDataAvgPlayer,
+    promiseDataAvgCoach,
+  ])
+  const errorExisted = values.some((o) => o.status === 'rejected')
+  if (errorExisted) {
+    // at least one error
     //@ts-ignore: Unreachable code error
-    ;[dataBio, dataClub, dataAvgPlayer] = [{}, {}, {}]
+    const errors = values.map((o) => o.reason)
+    console.log('aaa errors', errors)
+    ;[dataBioPlayer, dataBioCoach, dataClub, dataAvgPlayer, dataAvgCoach] = [
+      null,
+      null,
+      null,
+      null,
+      null,
+    ]
     error = true
+  } else {
+    // no error at all
+    //@ts-ignore: Unreachable code error
+    const [data1, data2, data3, data4, data5] = values.map((o) => o.value)
+    dataBioPlayer = get(data1, 'data') || null
+    dataBioCoach = get(data2, 'data') || null
+    dataClub = get(data3, 'data') || null
+    dataAvgPlayer = get(data4, 'data') || null
+    dataAvgCoach = get(data5, 'data') || null
+    error = false
+    console.log('aaa no error')
   }
 
   ///////////////////////////////////////////////
 
   return {
     props: {
-      dataBio,
+      dataBioPlayer,
+      dataBioCoach,
       dataClub,
       dataAvgPlayer,
+      dataAvgCoach,
       error,
       profile: lastCharacter === 'C' ? 'coach' : 'player',
     },

@@ -395,7 +395,8 @@ export const getChatUser = async (userId: string): Promise<IChatUser> => {
 
 export const getMessageContent = async (
   chatRoomId: string,
-  messageId: string
+  messageId: string,
+  userId: string
 ): Promise<string> => {
   console.log('aaa', { chatRoomId })
   // if (chatRoomId !== 'ie9IaY34EpcpCrDXl5wc') {
@@ -420,15 +421,13 @@ export const getMessageContent = async (
     return ''
   }
 
-  const currentRoleId = localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId)
-
   switch (chatMessage.type) {
     case EChatMessageType.text:
       content = chatMessage.text ?? ''
       break
 
     case EChatMessageType.image:
-      if (chatMessage.createdBy == currentRoleId) {
+      if (chatMessage.createdBy == userId) {
         content = 'You sent an image'
       } else {
         content = 'Image sent to you'
@@ -436,28 +435,28 @@ export const getMessageContent = async (
       break
 
     case EChatMessageType.custom:
-      if (chatMessage.createdBy == currentRoleId) {
+      if (chatMessage.createdBy == userId) {
         content = 'You sent a video'
       } else {
         content = 'Video sent to you'
       }
       break
     case EChatMessageType.developmentLink:
-      if (chatMessage.createdBy == currentRoleId) {
+      if (chatMessage.createdBy == userId) {
         content = 'You sent a development update request'
       } else {
         content = 'A development update request sent to you'
       }
       break
     case EChatMessageType.skillUpdateLink:
-      if (chatMessage.createdBy == currentRoleId) {
+      if (chatMessage.createdBy == userId) {
         content = 'You sent a skill update request'
       } else {
         content = 'A skill update request sent to you'
       }
       break
     default:
-      if (chatMessage.createdBy == currentRoleId) {
+      if (chatMessage.createdBy == userId) {
         content = 'You sent an attachment file'
       } else {
         content = 'An attachment file sent to you'
@@ -555,24 +554,6 @@ export const createMessage = async (
   message: IChatMessage,
   chatRoomId: string
 ): Promise<{ error: boolean }> => {
-  // try {
-  //   let listReadMessages: IUnReadMessage
-  //   listReadMessages = await getUnreadMessageIdsInRoom(chatRoomId)
-
-  //   if (  !isEmpty(listReadMessages)  ) {
-  //     DatabaseReference ref =
-  //         databaseReference.child('chatMessages').child(chatRoomId);
-  //     final map = {
-  //       for (var readMessage in listReadMessages)
-  //         '${readMessage.messageId}/$seenMessageUIdsNode':
-  //             readMessage.seenUserIds
-  //     };
-  //     await ref.update(map);
-  //     int number = await getUnreadChatRoomNumber;
-  //     MessageStream.shared.updateMessageNumber(number);
-  //     }
-  // } catch (error) {}
-
   try {
     const updates = {}
     updates[`/chatMessages/${chatRoomId}/${message.messageId}`] = message
@@ -583,10 +564,13 @@ export const createMessage = async (
   }
 }
 
-export const updateMessageStatus = async (chatRoomId: string) => {
+export const updateMessageStatus = async (
+  chatRoomId: string,
+  userId: string
+) => {
   try {
     let listReadMessages: IUnReadMessage[]
-    listReadMessages = await getUnreadMessageIdsInRoom(chatRoomId)
+    listReadMessages = await getUnreadMessageIdsInRoom(chatRoomId, 0, userId)
 
     if (!isEmpty(listReadMessages)) {
       const updates = {}
@@ -607,7 +591,8 @@ export const updateMessageStatus = async (chatRoomId: string) => {
 
 export const getUnreadMessageIdsInRoom = async (
   chatRoomId: string,
-  start: number = 0
+  start: number = 0,
+  userId: string
 ): Promise<IUnReadMessage[]> => {
   let listReadMessages: IUnReadMessage[]
   const snapshot = await get(child(dbRef, `chatMessages/${chatRoomId}`))
@@ -620,8 +605,6 @@ export const getUnreadMessageIdsInRoom = async (
 
   ////////////////////
   try {
-    const currentUserId =
-      localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId) || ''
     const snapShot = await get(
       query(
         ref(database, '/chatMessages/-MtatGBZFKG4zNVIggD3'),
@@ -635,7 +618,7 @@ export const getUnreadMessageIdsInRoom = async (
     }
 
     const data2 = Object.values(data).filter(
-      (message) => message.createdBy !== currentUserId
+      (message) => message.createdBy !== userId
     )
 
     const listReadMessages = []
@@ -643,7 +626,7 @@ export const getUnreadMessageIdsInRoom = async (
     data2.forEach((message) => {
       const unReadMessage: IUnReadMessage = {
         messageId: message.messageId,
-        seenUserIds: chain([currentUserId, ...(message.seenMessageUIds || [])])
+        seenUserIds: chain([userId, ...(message.seenMessageUIds || [])])
           .compact()
           .uniq()
           .value(),
