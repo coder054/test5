@@ -178,7 +178,11 @@ export const InforWithNumbers = ({
 
   const renderStats = () => {
     if (error) {
-      return <TabPanel visible={tab !== 'Club'}>Error</TabPanel>
+      return (
+        <TabPanel visible={tab !== 'Club'}>
+          <div className="hidden ">Error</div>
+        </TabPanel>
+      )
     }
 
     if (isEmpty(data)) {
