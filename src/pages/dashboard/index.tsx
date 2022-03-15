@@ -11,28 +11,15 @@ import { toQueryString } from 'src/utils/common.utils'
 import { API_PLAYER_PROFILE } from 'src/constants/api.constants'
 
 const Dashboard: NextPage = () => {
-  const { playerProfile, coachProfile, userRoles } = useAuth()
-  const [role, setRole] = useState<string>('')
+  const { userRoles } = useAuth()
 
   const router = useRouter()
-
-  // useEffect(() => {
-  //   const getBioPlayer = async () => {
-  //     const res = await axios.get(toQueryString(API_PLAYER_PROFILE))
-  //     console.log('res', res.data.role)
-  //     setRole(res.data.role)
-  //   }
-
-  //   getBioPlayer()
-  // }, [])
-  // console.log('type', playerProfile.type)
-  // console.log('type', userRoles[0])
 
   useEffect(() => {
     if (!userRoles[0]?.role) {
       router.push(ROUTES.SIGNUP_FORM)
     }
-  }, [playerProfile.type])
+  }, [!userRoles[0]?.role])
 
   return <h1 className="text-white">Dashboard</h1>
 }

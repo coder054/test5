@@ -256,10 +256,10 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     let initT = +new Date()
-    console.log('aaa initT', initT)
+    // console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      console.log('aaa onIdTokenChanged', user)
+      // console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
         removeTokenCookieHttp()

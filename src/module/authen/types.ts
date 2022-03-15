@@ -46,7 +46,7 @@ export interface IBiographyCoach {
   userId: string
   userRole: string
   username: string
-  isFollowed?: string
+  isFollowed?: boolean
   estMarketValue?: string
   height?: string
   leftFoot?: number

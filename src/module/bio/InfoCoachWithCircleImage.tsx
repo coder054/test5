@@ -65,7 +65,9 @@ export const InfoCoachWithCircleImage = ({
           />
         </div>
       )}
-      <div className="text-center text-Grey text-[12px] ">{dataBio?.lastUpdatedDate}</div>
+      <div className="text-center text-Grey text-[12px] ">
+        {dataBio?.lastUpdatedDate}
+      </div>
       <div className="text-center text-[24px] leading-[33px]">
         <span className="text-Green mr-[4px] "> {dataBio?.firstName} </span>
         <span className="text-white "> {dataBio?.lastName} </span>
