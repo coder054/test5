@@ -1,8 +1,10 @@
-import type { FC, ReactNode } from 'react'
+import { FC, ReactNode, useMemo } from 'react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { get, size } from 'lodash'
+import { ROUTES } from 'src/constants/constants'
 
 interface AuthGuardProps {
   children: ReactNode
@@ -10,10 +12,14 @@ interface AuthGuardProps {
 
 export const AuthGuard: FC<AuthGuardProps> = (props) => {
   const { children } = props
-  const { authenticated } = useAuth()
+  const { authenticated, userRoles } = useAuth()
 
   const router = useRouter()
   const [checked, setChecked] = useState(false)
+
+  const isRoleNull = useMemo(() => {
+    return size(userRoles) === 1 && get(userRoles, '[0].role') === null
+  }, [userRoles])
 
   useEffect(
     () => {
@@ -27,12 +33,18 @@ export const AuthGuard: FC<AuthGuardProps> = (props) => {
           pathname: '/signin',
           // query: { returnUrl: router.asPath },
         })
+      } else if (isRoleNull) {
+        if (router.asPath !== ROUTES.SIGNUP_FORM) {
+          router.push(ROUTES.SIGNUP_FORM)
+        } else {
+          setChecked(true)
+        }
       } else {
         setChecked(true)
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.isReady, authenticated]
+    [router.isReady, authenticated, isRoleNull]
   )
 
   if (!checked) {
