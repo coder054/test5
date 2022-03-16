@@ -34,7 +34,7 @@ export const AuthGuard: FC<AuthGuardProps> = (props) => {
           // query: { returnUrl: router.asPath },
         })
       } else if (isRoleNull) {
-        if (router.asPath !== ROUTES.SIGNUP_FORM) {
+        if (!router.asPath.includes('/signup-form')) {
           router.push(ROUTES.SIGNUP_FORM)
         } else {
           setChecked(true)

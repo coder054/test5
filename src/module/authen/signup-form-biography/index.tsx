@@ -13,7 +13,7 @@ import { InfoCoachWithAChart } from 'src/module/bio/InfoCoachWithAChart'
 import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
 import { InfoCoachWithCircleImage } from 'src/module/bio/InfoCoachWithCircleImage'
 import { axios } from 'src/utils/axios'
-import { fetcher } from 'src/utils/utils'
+import { fetcher, getStr } from 'src/utils/utils'
 import useSWR from 'swr'
 import { useAuth } from '../auth/AuthContext'
 import { IAvgCoachScore } from '../types'
@@ -167,19 +167,24 @@ export const SignupFormBiography = () => {
   useEffect(() => {
     const getBio = async () => {
       if (profile && profile === 'Player') {
-        await updateUserRoles()
+        const { data, error } = await updateUserRoles()
+
         try {
           const response = await axios.get(
-            `/biographies/player?userIdQuery=${currentRoleId}`
+            `/biographies/player?userIdQuery=${
+              currentRoleId || getStr(data, '[0].roleId')
+            }`
           )
 
           setData(response.data)
         } catch (error) {}
       } else if (profile && profile === 'Coach') {
-        await updateUserRoles()
+        const { data, error } = await updateUserRoles()
         try {
           const response = await axios.get(
-            `/biographies/coach?userIdQuery=${currentRoleId}`
+            `/biographies/coach?userIdQuery=${
+              currentRoleId || getStr(data, '[0].roleId')
+            }`
           )
           setDataCoach(response.data)
         } catch (error) {}
