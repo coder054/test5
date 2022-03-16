@@ -21,16 +21,11 @@ import { useEffect, useMemo, useState } from 'react'
 
 export const Sidebar = () => {
   const router = useRouter()
+  const { currentRoleId } = useAuth()
 
   const [arrSidebar, setArrSidebar] = useState<any>([])
 
   useEffect(() => {
-    let currentRoleLocalStorage = ''
-    if (typeof window !== 'undefined') {
-      currentRoleLocalStorage =
-        window.localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId) || ''
-    }
-
     setArrSidebar([
       { link: ROUTES.feed, icon: SvgFeed, text: 'Feed', active: true },
       {
@@ -71,7 +66,7 @@ export const Sidebar = () => {
         active: false,
       },
       {
-        link: `/biography/${currentRoleLocalStorage}`,
+        link: `/biography/${currentRoleId}`,
         icon: SvgBiography,
         text: 'Biography',
         active: false,

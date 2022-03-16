@@ -91,7 +91,8 @@ export const AllTab = () => {
           let lastMessageContent: string = ''
           lastMessageContent = await getMessageContent(
             chatRoom.chatRoomId,
-            chatRoom.lastMessageId || ''
+            chatRoom.lastMessageId || '',
+            currentRoleId
           )
 
           if (!!chatRoom.chatRoomImage) {

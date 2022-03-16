@@ -618,24 +618,19 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 
   ///////////////////////////////////////////////
 
-  try {
-    const [data1, data2, data3, data4, data5] = await Promise.all([
-      promiseDataBioPlayer,
-      promiseDataBioCoach,
-      promiseDataClub,
-      promiseDataAvgPlayer,
-      promiseDataAvgCoach,
-    ])
-    dataBioPlayer = get(data1, 'data') || null
-    dataBioCoach = get(data2, 'data') || null
-    dataClub = get(data3, 'data') || null
-    dataAvgPlayer = get(data4, 'data') || null
-    dataAvgCoach = get(data5, 'data') || null
-    error = false
-    console.log('aaa no error')
-  } catch (err) {
-    console.log('aaa error', getErrorMessage(err))
+  const values = await Promise.allSettled([
+    promiseDataBioPlayer,
+    promiseDataBioCoach,
+    promiseDataClub,
+    promiseDataAvgPlayer,
+    promiseDataAvgCoach,
+  ])
+  const errorExisted = values.some((o) => o.status === 'rejected')
+  if (errorExisted) {
+    // at least one error
     //@ts-ignore: Unreachable code error
+    const errors = values.map((o) => o.reason)
+    console.log('aaa errors', errors)
     ;[dataBioPlayer, dataBioCoach, dataClub, dataAvgPlayer, dataAvgCoach] = [
       null,
       null,
@@ -644,6 +639,17 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
       null,
     ]
     error = true
+  } else {
+    // no error at all
+    //@ts-ignore: Unreachable code error
+    const [data1, data2, data3, data4, data5] = values.map((o) => o.value)
+    dataBioPlayer = get(data1, 'data') || null
+    dataBioCoach = get(data2, 'data') || null
+    dataClub = get(data3, 'data') || null
+    dataAvgPlayer = get(data4, 'data') || null
+    dataAvgCoach = get(data5, 'data') || null
+    error = false
+    console.log('aaa no error')
   }
 
   ///////////////////////////////////////////////
@@ -660,18 +666,3 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     },
   }
 }
-// ;(async function () {
-//   const p1 = new Promise((resolve, reject) => {
-//     setTimeout(() => {
-//       resolve('successsss')
-//     }, 2000)
-//   })
-//   const p2 = new Promise((resolve, reject) => {
-//     setTimeout(() => {
-//       reject('errorrrrr')
-//     }, 3000)
-//   })
-
-//   const values = await Promise.allSettled([p1, p2])
-//   debugger
-// })()

@@ -43,17 +43,11 @@ interface Section {
   items: Item[]
 }
 
-const getSections = (t: TFunction, playerProfile): Section[] => {
-  let currentRoleLocalStorage = ''
-  if (typeof window !== 'undefined') {
-    currentRoleLocalStorage =
-      window.localStorage.getItem(LOCAL_STORAGE_KEY.currentRoleId) || ''
-  }
-
-  const firstname = getStr(playerProfile, 'profile.firstName')
+const getSections = (t: TFunction, infoActiveProfile): Section[] => {
+  const firstname = getStr(infoActiveProfile, 'firstName')
     .toLowerCase()
     .replaceAll(' ', '')
-  const lastname = getStr(playerProfile, 'profile.lastName')
+  const lastname = getStr(infoActiveProfile, 'lastName')
     .toLowerCase()
     .replaceAll(' ', '')
   const fullname = `${firstname}.${lastname}`
@@ -67,16 +61,11 @@ const getSections = (t: TFunction, playerProfile): Section[] => {
           path: '/dashboard/news',
           icon: <Newspaper fontSize="small" />,
         },
-        // {
-        //   title: t('Account and Settings'),
-        //   path: '/dashboard/account',
-        //   icon: <Cog fontSize="small" />,
-        // },
         {
           title: t('Biography'),
-          path: `/biography/${playerProfile.username}/${fullname}`, // current
+          path: `/biography/${infoActiveProfile.username}/${fullname}`, // current
           icon: <UserCircle fontSize="small" />,
-          disabled: isEmpty(playerProfile),
+          disabled: isEmpty(infoActiveProfile), // here
         },
         {
           title: t('Contacts'),
@@ -94,7 +83,7 @@ const getSections = (t: TFunction, playerProfile): Section[] => {
 }
 
 export const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
-  const { playerProfile } = useAuth()
+  const { infoActiveProfile } = useAuth()
   const { onClose, open } = props
   const router = useRouter()
   const { t } = useTranslation()
@@ -102,8 +91,8 @@ export const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
     noSsr: true,
   })
   const sections = useMemo(() => {
-    return getSections(t, playerProfile)
-  }, [t, playerProfile])
+    return getSections(t, infoActiveProfile)
+  }, [t, infoActiveProfile])
   const handlePathChange = () => {
     if (!router.isReady) {
       return

@@ -9,6 +9,7 @@ import { NewsType } from 'src/constants/types'
 import { useEffect, useState } from 'react'
 import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
+import { get } from 'lodash'
 
 enum Tab {
   TopStories = 'TopStories',
@@ -47,7 +48,7 @@ const News = () => {
       } catch (error) {}
     }
     getNews()
-  }, [])
+  }, [get(axios, 'defaults.headers.roleId')])
 
   const handleFavorite = async (id: string, type: string, status: string) => {
     const res = await axios.post(
