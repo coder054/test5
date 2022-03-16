@@ -168,23 +168,24 @@ export const SignupFormBiography = () => {
     const getBio = async () => {
       if (profile && profile === 'Player') {
         const { data, error } = await updateUserRoles()
-
+        const roleId = getStr(data, '[0].roleId')
+        //@ts-ignore: Unreachable code error
+        axios.defaults.headers.roleId = roleId
         try {
           const response = await axios.get(
-            `/biographies/player?userIdQuery=${
-              currentRoleId || getStr(data, '[0].roleId')
-            }`
+            `/biographies/player?userIdQuery=${currentRoleId || roleId}`
           )
 
           setData(response.data)
         } catch (error) {}
       } else if (profile && profile === 'Coach') {
         const { data, error } = await updateUserRoles()
+        const roleId = getStr(data, '[0].roleId')
+        //@ts-ignore: Unreachable code error
+        axios.defaults.headers.roleId = roleId
         try {
           const response = await axios.get(
-            `/biographies/coach?userIdQuery=${
-              currentRoleId || getStr(data, '[0].roleId')
-            }`
+            `/biographies/coach?userIdQuery=${currentRoleId || roleId}`
           )
           setDataCoach(response.data)
         } catch (error) {}
@@ -340,18 +341,15 @@ export const SignupFormBiography = () => {
         <div
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 max-h-[626px]`}
         >
-          {data.userId && profile === 'Player' ? (
+          {data.userId && profile === 'Player' && (
             <InfoPlayerWithCircleImage
               dataBio={data}
               currentRoleId={currentRoleId}
               signupForm
             />
-          ) : (
-            <div className="w-12 mx-auto">
-              <Loading />
-            </div>
           )}
           {profile === 'Coach' && data.userId ? (
+            // here
             <InfoCoachWithCircleImage
               dataBio={dataCoach}
               currentRoleId={currentRoleId}
