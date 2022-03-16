@@ -5,10 +5,12 @@ import { styled } from '@mui/material/styles'
 
 type MySliderProps = SliderProps & {
   step: number
+  unit?: string
   value: number
   label: string
   isStar?: boolean
   isPoint?: boolean
+  isScale?: boolean
   readOnly?: boolean
   labelClass?: string
   isAdjective?: boolean
@@ -28,9 +30,11 @@ const CustomSlider = styled(Slider)(({ theme }) => ({
 
 export const MySlider = ({
   step,
+  unit,
   value,
   label,
   isStar,
+  isScale,
   isPoint,
   readOnly,
   onChange,
@@ -67,7 +71,12 @@ export const MySlider = ({
         size="small"
         onChange={handleChange}
         valueLabelDisplay="auto"
-        sx={{ color: '#09E099', paddingBottom: 1, paddingTop: 0 }}
+        sx={{
+          color: '#09E099',
+          paddingBottom: 1,
+          paddingTop: 0,
+          '& .MuiSlider-rail': { backgroundColor: '#A2A5AD' },
+        }}
         components={{
           ValueLabel: ValueLabelComponent,
         }}
@@ -85,7 +94,10 @@ export const MySlider = ({
       )}
       {isPoint && (
         <div className="flex justify-end">
-          <p className="text-[#A2A5AD] text-[16px]">{value}</p>
+          <p className="text-[#A2A5AD] text-[16px]">
+            {value}
+            {unit}
+          </p>
         </div>
       )}
       {isAdjective && (
@@ -95,6 +107,15 @@ export const MySlider = ({
           <span className={clsx(handleRange(50))}>Normal</span>
           <span className={clsx(handleRange(75))}>Good</span>
           <span className={clsx(handleRange(100))}>Very good</span>
+        </div>
+      )}
+      {isScale && (
+        <div className="flex justify-between text-[#A2A5AD] text-[14px] font-normal">
+          <span className={clsx(handleRange(0))}>Very low</span>
+          <span className={clsx(handleRange(25))}>Low</span>
+          <span className={clsx(handleRange(50))}>Normal</span>
+          <span className={clsx(handleRange(75))}>High</span>
+          <span className={clsx(handleRange(100))}>Very high</span>
         </div>
       )}
     </div>

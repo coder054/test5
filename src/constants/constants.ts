@@ -35,3 +35,4 @@ export const AVATAR_DEFAULT =
 export const SPECIALITY_TAGS_INJURU_PRONE = 'Injury Prone'
 export const SPECIALITY_TAGS_LEADERSHIP = 'Leadership'
 export const SPECIALITY_TAGS_TEAMPLAYER = 'Team Player'
+export const DEFAULT_DATE = 'YYYY-MM-DDTHH:mm:ssZ'
