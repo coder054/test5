@@ -60,3 +60,25 @@ export type CountryType = {
   phoneCode: string
   region: string
 }
+
+export interface UpdateSkills {
+  specialityTags: string[]
+  overall: {
+    mental: number
+    physics: number
+    tactics: number
+    technics: number
+    leftFoot: number
+    rightFoot: number
+  }
+  radar: {
+    attacking: number
+    defending: number
+    dribbling: number
+    passing: number
+    shooting: number
+    pace: number
+    tackling: number
+    heading: number
+  }
+}

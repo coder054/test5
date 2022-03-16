@@ -3,7 +3,7 @@ import { Divider, Tab, Tabs } from '@mui/material'
 import { get, isEmpty } from 'lodash'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { ChangeEvent, useEffect, useMemo } from 'react'
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { isDesktop } from 'react-device-detect'
 import { DashboardLayout } from 'src/components/dashboard/dashboard-layout'
 import { Loading } from 'src/components/loading/loading'
@@ -136,6 +136,8 @@ const BioForPlayer = ({
   dataClub: IInfoClub
   router: any
 }) => {
+  const [playerId, setPlayerId] = useState<string>('')
+
   useEffect(() => {
     const {
       friendStatus,
@@ -157,6 +159,7 @@ const BioForPlayer = ({
 
   useEffect(() => {
     // console.log('aaa dataBioPlayer: ', dataBioPlayer)
+    dataBioPlayer.userId && setPlayerId(dataBioPlayer.userId)
   }, [dataBioPlayer])
 
   const dataBioPlayerRadarChart = useMemo(() => {
@@ -340,7 +343,7 @@ const BioForPlayer = ({
             {/*  */}
           </div>
         )}
-        {currentTab === 'update' && <UpdateBiography />}
+        {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
         {/* {currentTab === 'profile' && <Profile />} */}
       </div>
     </>
@@ -632,14 +635,14 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     console.log('aaa no error')
   } catch (err) {
     console.log('aaa error', getErrorMessage(err))
-      //@ts-ignore: Unreachable code error
-      ;[dataBioPlayer, dataBioCoach, dataClub, dataAvgPlayer, dataAvgCoach] = [
-        null,
-        null,
-        null,
-        null,
-        null,
-      ]
+    //@ts-ignore: Unreachable code error
+    ;[dataBioPlayer, dataBioCoach, dataClub, dataAvgPlayer, dataAvgCoach] = [
+      null,
+      null,
+      null,
+      null,
+      null,
+    ]
     error = true
   }
 

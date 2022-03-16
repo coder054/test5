@@ -177,10 +177,10 @@ export const SignupFormBiography = () => {
           setData(response.data)
         } catch (error) {}
       } else if (profile && profile === 'Coach') {
-        await updateUserRoles()
+        const resp = await axios.get('/users/user-roles')
         try {
           const response = await axios.get(
-            `/biographies/coach?userIdQuery=${currentRoleId}`
+            `/biographies/coach?username=${resp.data[0].username}`
           )
           setDataCoach(response.data)
         } catch (error) {}
@@ -309,7 +309,8 @@ export const SignupFormBiography = () => {
     get(data, 'playerRadarSkills'),
   ])
 
-  console.log('data', data)
+  console.log('dataCoach', dataCoach)
+  console.log('dataBioCoachRadarChart', dataBioCoachRadarChart)
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
@@ -324,18 +325,14 @@ export const SignupFormBiography = () => {
         <div
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 max-h-[626px]`}
         >
-          {data.userId && profile === 'Player' ? (
+          {data.userId && profile === 'Player' && (
             <InfoPlayerWithCircleImage
               dataBio={data}
               currentRoleId={currentRoleId}
               signupForm
             />
-          ) : (
-            <div className="w-12 mx-auto">
-              <Loading />
-            </div>
           )}
-          {profile === 'Coach' && data.userId ? (
+          {profile === 'Coach' ? (
             <InfoCoachWithCircleImage
               dataBio={dataCoach}
               currentRoleId={currentRoleId}

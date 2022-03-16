@@ -14,8 +14,11 @@ const tabs = [
   { label: 'Future Career', value: 'future ' },
   { label: 'Historic Career Data', value: 'historic' },
 ]
+interface UpdateBiographyProps {
+  playerId?: string
+}
 
-export const UpdateBiography = () => {
+export const UpdateBiography = ({ playerId }: UpdateBiographyProps) => {
   const [currentTab, setCurrentTab] = useQueryParam(
     'child',
     withDefault(StringParam, 'skills')
@@ -40,7 +43,7 @@ export const UpdateBiography = () => {
         ))}
       </Tabs>
       <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />
-      {currentTab === 'skills' && <Skills />}
+      {currentTab === 'skills' && <Skills playerId={playerId} />}
       {currentTab === 'development' && <Development />}
       {currentTab === 'heightAndWeight' && <HeightAndWeight />}
       {currentTab === 'trophies' && <Trophies />}
