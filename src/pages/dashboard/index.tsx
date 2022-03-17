@@ -11,16 +11,16 @@ import { API_GET_USER_ROLES } from 'src/constants/api.constants'
 const Dashboard: NextPage = () => {
   const router = useRouter()
 
-  useEffect(() => {
-    const getUserRole = async () => {
-      const resp = await axios.get(API_GET_USER_ROLES)
-
-      if (!resp.data[0].role) {
-        router.push(ROUTES.SIGNUP_FORM)
-      }
-    }
-    getUserRole()
-  }, [])
+  // handle at AuthContext
+  // useEffect(() => {
+  //   const getUserRole = async () => {
+  //     const resp = await axios.get(API_GET_USER_ROLES)
+  //     if (!resp.data[0].role) {
+  //       router.push(ROUTES.SIGNUP_FORM)
+  //     }
+  //   }
+  //   getUserRole()
+  // }, [])
 
   return <h1 className="text-white">Dashboard</h1>
 }

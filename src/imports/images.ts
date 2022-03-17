@@ -77,3 +77,16 @@ export const APPSTORE_BLACK = require('./../../public' +
   '/assets/landing-page/AppStore.png')
 export const GG_PLAY_BLACK = require('./../../public' +
   '/assets/landing-page/GGPlay.png')
+export const imgTrophyOther = require('./../../public' +
+  '/biography/trophy/trophy_other.svg')
+
+export const imgMedalPom = require('./../../public' +
+  '/biography/award/medal-pom.svg')
+export const imgMedalPow = require('./../../public' +
+  '/biography/award/medal-pow.svg')
+export const imgMedalDream = require('./../../public' +
+  '/biography/award/medal-dream.svg')
+export const imgMedalGoal = require('./../../public' +
+  '/biography/award/medal-goal.svg')
+export const imgMedalMVP = require('./../../public' +
+  '/biography/award/medal-mvp.svg')

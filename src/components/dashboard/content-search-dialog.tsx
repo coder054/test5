@@ -74,7 +74,6 @@ export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
     setShowResults(false)
     setIsLoading(true)
     // Do search here
-    // here
 
     const getMembersWithKeyword = async (
       keyword: string
@@ -205,7 +204,12 @@ export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
                 return (
                   <Fragment key={user.username}>
                     <Link href={urlBio}>
-                      <a className="block py-[4px] ">
+                      <a
+                        onClick={() => {
+                          onClose()
+                        }}
+                        className="block py-[4px] "
+                      >
                         <div key={index} className="flex w-full items-center ">
                           <img
                             src={user.faceImage}

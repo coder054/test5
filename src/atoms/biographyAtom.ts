@@ -11,3 +11,5 @@ import { useAuth } from '../module/authen/auth/AuthContext'
 //   )
 //   return await response.data
 // })
+
+export const dataStatsAtom = atom([])

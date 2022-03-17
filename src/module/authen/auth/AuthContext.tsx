@@ -1,7 +1,7 @@
 // import { auth } from 'src/config/firebase-client'
 import { notification } from 'antd'
 import { auth } from 'src/config/firebase-client'
-import { COOKIE_KEY, LOCAL_STORAGE_KEY } from 'src/constants/constants'
+import { COOKIE_KEY, LOCAL_STORAGE_KEY, ROUTES } from 'src/constants/constants'
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -12,13 +12,14 @@ import {
   confirmPasswordReset,
   signInWithCustomToken,
 } from 'firebase/auth'
-import { get, isEmpty } from 'lodash'
+import { get, isEmpty, size } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { axios } from 'src/utils/axios'
 import {
   dataFromToken,
+  getStr,
   ITokenData,
   removeCookieUtil,
   setCookieUtil,
@@ -66,20 +67,10 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState<string>('')
   const [errorSignin, setErrorSignin] = useState<string>('')
   const [checkEmail, setCheckEmail] = useState<boolean>(false)
-  const [userRoles, setUserRoles] = useState<any>(
-    typeof window !== 'undefined'
-      ? //@ts-ignore: Unreachable code error
-        JSON.parse(window.localStorage.getItem(LOCAL_STORAGE_KEY.userRoles)) ||
-          []
-      : []
-  )
+  const [userRoles, setUserRoles] = useState<any>([])
   const [currentRoleName, setCurrentRoleName] = useState<'COACH' | 'PLAYER'>(
     'PLAYER'
   )
-
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY.currentRoleName, currentRoleName)
-  }, [currentRoleName])
 
   const currentRoleId = useMemo(() => {
     if (isEmpty(userRoles)) return ''
@@ -99,11 +90,16 @@ export function AuthProvider({ children }) {
     //@ts-ignore: Unreachable code error
     axios.defaults.headers.roleId = currentRoleId
     setCookieUtil(COOKIE_KEY.roleid, currentRoleId)
+    console.log('aaa changed roleId to', currentRoleId)
   }, [currentRoleId])
 
   useEffect(() => {
     //@ts-ignore: Unreachable code error
     localStorage.setItem(LOCAL_STORAGE_KEY.userRoles, JSON.stringify(userRoles))
+
+    if (size(userRoles) === 1) {
+      setCurrentRoleName(getStr(userRoles, '[0].role'))
+    }
   }, [userRoles])
 
   useEffect(() => {
@@ -116,7 +112,7 @@ export function AuthProvider({ children }) {
     if (isEmpty(userRoles)) {
       return {}
     }
-    return userRoles.find((o) => o.role === currentRoleName)
+    return userRoles.find((o) => o.role === currentRoleName) || {}
   }, [currentRoleName, userRoles])
 
   const signin = (email: string, password: string) => {
@@ -216,11 +212,15 @@ export function AuthProvider({ children }) {
       })
   }
 
-  const updateUserRoles = async () => {
-    const resp = await axios.get('/users/user-roles')
-    localStorage.removeItem(LOCAL_STORAGE_KEY.userRoles)
-    setUserRoles(resp.data)
-    localStorage.setItem(LOCAL_STORAGE_KEY.userRoles, JSON.stringify(resp.data))
+  const updateUserRoles = async (): Promise<{ error: boolean; data: any }> => {
+    try {
+      const resp = await axios.get('/users/user-roles')
+      setUserRoles(resp.data)
+      return { error: false, data: resp.data }
+    } catch (error) {
+      console.log('aaa updateUserRoles error', error)
+      return { error: true, data: [] }
+    }
   }
 
   useEffect(() => {
@@ -237,7 +237,6 @@ export function AuthProvider({ children }) {
         setToken('')
         setCurrentUser(null)
       } else {
-        localStorage.setItem(LOCAL_STORAGE_KEY.currentRoleName, 'PLAYER')
         setCurrentUser(user)
         const token = await user.getIdToken()
         setToken(token)
@@ -275,6 +274,9 @@ export function AuthProvider({ children }) {
         //@ts-ignore: Unreachable code error
         axios.defaults.headers.roleId = roleId
         setCookieUtil(COOKIE_KEY.roleid, roleId)
+        if (!get(respUserRoles, 'data[0].role')) {
+          router.push(ROUTES.SIGNUP_FORM)
+        }
         ///////////////////////////////// userRoles /////////////////////////////////
       }
       const doneT = +new Date()

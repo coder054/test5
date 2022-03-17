@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GradientCircularProgress } from 'react-circular-gradient-progress'
 import { Button } from 'src/components'
 import { Comments } from 'src/components/Comments'
@@ -20,6 +20,10 @@ export const InfoCoachWithCircleImage = ({
   currentRoleId?: string
   signupForm?: boolean
 }) => {
+  useEffect(() => {
+    console.log('aaa dataBio2: ', dataBio)
+  }, [dataBio])
+
   const [elmButtonFollow, setElmButtonFollow] = useState<string>('Follow')
   const [loading, setLoading] = useState<boolean>(false)
   const { authenticated } = useAuth() as {
