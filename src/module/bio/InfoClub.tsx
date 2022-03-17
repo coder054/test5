@@ -265,10 +265,10 @@ const ItemClub = ({ data }: { data: ExistingClub | HistoricClub }) => {
 const Match = ({ title, value }) => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <span className=" text-[13px] xl:text-[16px] leading-[150%] text-Grey mb-2 ">
+      <span className=" text-[13px] xl:text-[13px] leading-[150%] text-Grey mb-2 ">
         {title}
       </span>
-      <span className="text-white text-[15px] xl:text-[24px] leading-[138%] font-semibold">
+      <span className="text-white text-[15px] xl:text-[21px] leading-[138%] font-semibold">
         {value}
       </span>
     </div>
