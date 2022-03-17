@@ -74,7 +74,6 @@ export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
     setShowResults(false)
     setIsLoading(true)
     // Do search here
-    // here
 
     const getMembersWithKeyword = async (
       keyword: string

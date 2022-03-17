@@ -8,7 +8,7 @@ export const TitleCollapse = ({
   alwayShowContent,
 }: {
   title: string
-  children: ReactChild
+  children: any
   alwayShowContent: any
 }) => {
   const [show, setShow] = useState(true)
