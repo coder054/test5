@@ -4,31 +4,24 @@ import {
   ClickAwayListener,
   InputAdornment,
 } from '@mui/material'
-import Box from '@mui/material/Box'
-import Modal from '@mui/material/Modal'
 import clsx from 'clsx'
 import { useCallback, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { ArrowBackIcon } from 'src/components/icons'
 import { MyInput } from 'src/components/MyInput'
+import { API_GET_LIST_TEAM } from 'src/constants/api.constants'
 import {
-  API_GET_LIST_CLUB,
-  API_GET_LIST_TEAM,
-} from 'src/constants/api.constants'
-import {
-  ClubType,
   CurrentTeamType,
   TeamType,
 } from 'src/constants/types/settingsType.type'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
-import { NewClubModal } from './NewClubModal'
 
 type InfiniteScrollTeamProps = {
   handleSetTeam?: (value: CurrentTeamType) => void
   idClub: string
   item: CurrentTeamType
   errorMessage?: string
+  value?: string
 }
 
 export const InfiniteScrollTeam = ({
@@ -36,6 +29,7 @@ export const InfiniteScrollTeam = ({
   idClub,
   item,
   errorMessage,
+  value,
 }: InfiniteScrollTeamProps) => {
   const { currentRoleId } = useAuth()
   const [items, setItems] = useState<any>([])
@@ -54,6 +48,7 @@ export const InfiniteScrollTeam = ({
 
   useEffect(() => {
     setTeam(item.teamName)
+    value && setTeam(value)
   }, [item])
 
   const handleChangeClub = useCallback(
@@ -125,7 +120,7 @@ export const InfiniteScrollTeam = ({
           label="Your Teams(s)"
           onChange={(e) => handleSearch(e.target.value)}
           onClick={() => setIsOpenOption(true)}
-          value={team}
+          value={team || value}
           name="password"
           autoComplete="off"
           type="text"

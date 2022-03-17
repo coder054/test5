@@ -3,7 +3,7 @@ import { Divider, Tab, Tabs } from '@mui/material'
 import { get, isEmpty } from 'lodash'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { ChangeEvent, useEffect, useMemo } from 'react'
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { isDesktop } from 'react-device-detect'
 import { DashboardLayout } from 'src/components/dashboard/dashboard-layout'
 import { Loading } from 'src/components/loading/loading'
@@ -136,6 +136,8 @@ const BioForPlayer = ({
   dataClub: IInfoClub
   router: any
 }) => {
+  const [playerId, setPlayerId] = useState<string>('')
+
   useEffect(() => {
     const {
       friendStatus,
@@ -156,7 +158,7 @@ const BioForPlayer = ({
   }, [dataBioPlayer])
 
   useEffect(() => {
-    // console.log('aaa dataBioPlayer: ', dataBioPlayer)
+    dataBioPlayer.userId && setPlayerId(dataBioPlayer.userId)
   }, [dataBioPlayer])
 
   const dataBioPlayerRadarChart = useMemo(() => {
@@ -340,7 +342,7 @@ const BioForPlayer = ({
             {/*  */}
           </div>
         )}
-        {currentTab === 'update' && <UpdateBiography />}
+        {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
         {/* {currentTab === 'profile' && <Profile />} */}
       </div>
     </>
@@ -368,8 +370,13 @@ const BioForCoach = ({
   dataClub: IInfoClub
   router: any
 }) => {
+  const [playerId, setPlayerId] = useState<string>('')
+
   useEffect(() => {
-    console.log('aaa dataBioCoach: ', dataBioCoach)
+    console.log('Coach: ', dataBioCoach)
+    console.log('IdCoach: ', dataBioCoach.userId)
+
+    dataBioCoach.userId && setPlayerId(dataBioCoach.userId)
   }, [dataBioCoach])
 
   const dataBioCoachRadarChart = useMemo(() => {
@@ -544,7 +551,7 @@ const BioForCoach = ({
             {/*  */}
           </div>
         )}
-        {currentTab === 'update' && <UpdateBiography />}
+        {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
         {/* {currentTab === 'profile' && <Profile />} */}
       </div>
     </>

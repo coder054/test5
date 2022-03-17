@@ -1,19 +1,16 @@
 import { Button } from 'src/components'
 import { MyInput } from 'src/components/MyInput'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useRouter } from 'next/router'
 import { GoBack } from 'src/components/go-back'
 import { MySelect } from 'src/components/MySelect'
-import { OptionCoach, OptionPlayer } from '../types'
-import { DynamicFields } from 'src/components/dynamic-fields'
+import { OptionPlayer } from '../types'
 import { useIncrementNumber } from 'src/hooks/useIncrementNumber'
 import { MyModal } from 'src/components/MyModal'
 import { ROUTES } from 'src/constants/constants'
-import { MyCustomSelect } from 'src/components/MyCustomSelect'
 import {
   ClubType,
   CurrentTeamType,
-  PlayerCareerType,
 } from 'src/constants/types/settingsType.type'
 import { MinusIcon, PlusIcon } from 'src/components/icons'
 import { useAtom } from 'jotai'
@@ -164,10 +161,9 @@ export const SignUpFormPlayer = () => {
     (type: keyof FormValueType, value: string, index?: string) => {
       /* @ts-ignore */
       let newArr = [...(formValues[type] || [])]
-      /* @ts-ignore */
       if (type === 'favoriteRoles') {
         /* @ts-ignore */
-        newArr[+index] = value.key
+        newArr[+index] = value.props.value
       } else if (type === 'yourTeams') {
         /* @ts-ignore */
         newArr[+index] = value.teamName
@@ -177,9 +173,11 @@ export const SignUpFormPlayer = () => {
     },
     [formValues]
   )
+  console.log('form: ', formValues)
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    setLoading(true)
     if (!formValues.yourClub) {
       setFormErrors((prev) => ({ ...prev, yourClub: 'Input Your Club' }))
     } else if (!formValues.yourTeams[0]) {
@@ -237,7 +235,7 @@ export const SignUpFormPlayer = () => {
           rightFootLength: 0,
         },
       })
-
+      setLoading(false)
       router.push({
         pathname: ROUTES.SIGNUP_FORM_PLAYER_SKILLS,
         query: { profile: profile },
