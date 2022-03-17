@@ -8,7 +8,10 @@ import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
 import { UpdateSkills } from 'src/constants/types'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
-import { coachUpdatePlayerSkills, getPlayerRadar } from 'src/service/biography'
+import {
+  coachUpdatePlayerSkills,
+  getPlayerRadar,
+} from 'src/service/biography-update'
 import { axios } from 'src/utils/axios'
 import { useAuth } from '../../authen/auth/AuthContext'
 
@@ -45,28 +48,51 @@ export const Skills = ({ playerId }: SkillProps) => {
   const [summary, setSummary] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [footballSkills, setFootBallSkills] = useState<FootBallSkillTypes>({
-    technics: 60,
-    tactics: 25,
-    physics: 85,
-    mental: 90,
+    technics: 0,
+    tactics: 0,
+    physics: 0,
+    mental: 0,
     leftFoot: 0,
     rightFoot: 0,
   })
 
   const [radarChart, setRadarChart] = useState<RadarChartTypes>({
-    attacking: 60,
-    defending: 60,
-    dribbling: 60,
-    passing: 60,
-    shooting: 60,
-    pace: 60,
-    tackling: 60,
-    heading: 60,
+    attacking: 0,
+    defending: 0,
+    dribbling: 0,
+    passing: 0,
+    shooting: 0,
+    pace: 0,
+    tackling: 0,
+    heading: 0,
   })
+  console.log('playerId', playerId)
 
   useEffect(() => {
-    getPlayerRadar(currentRoleId)
-  }, [currentRoleId])
+    try {
+      const res = getPlayerRadar(playerId)
+      res.then((data) => {
+        setFootBallSkills({
+          technics: 0,
+          tactics: 0,
+          physics: 0,
+          mental: 0,
+          leftFoot: data.data.leftFoot,
+          rightFoot: data.data.rightFoot,
+        })
+        setRadarChart({
+          attacking: data.data.radarUpdatedByCoach.attacking,
+          defending: data.data.radarUpdatedByCoach.defending,
+          dribbling: data.data.radarUpdatedByCoach.dribbling,
+          passing: data.data.radarUpdatedByCoach.passing,
+          shooting: data.data.radarUpdatedByCoach.shooting,
+          pace: data.data.radarUpdatedByCoach.pace,
+          tackling: data.data.radarUpdatedByCoach.tackling,
+          heading: data.data.radarUpdatedByCoach.heading,
+        })
+      })
+    } catch (error) {}
+  }, [playerId])
 
   const handleChangeSkills = useCallback(
     (type: keyof FootBallSkillTypes, value: number) => {

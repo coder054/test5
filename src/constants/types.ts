@@ -82,3 +82,45 @@ export interface UpdateSkills {
     heading: number
   }
 }
+
+export interface DevelopmentNoteType {
+  shortTermGoal?: {
+    coachComment: string
+    playerContent: string
+  }
+  updatedAt?: number
+  strength?: {
+    playerContent: string
+    coachComment: string
+  }
+  createdAt?: number
+  bestDevelopSkills?: {
+    coachComment: string
+    playerContent: string
+  }
+  playerDevelopmentProgress?: string
+  skillsNeededToDevelop?: {
+    coachComment: string
+    playerContent: string
+  }
+  weaknesses?: {
+    playerContent: string
+    coachComment: string
+  }
+  otherComments?: {
+    coachComment: string
+    playerContent: string
+  }
+  bestWayToDevelop?: {
+    playerContent: string
+    coachComment: string
+  }
+  playerId?: string
+  longTermGoal?: {
+    playerContent: string
+    coachComment: string
+  }
+  playerNotedAt?: number
+  coachDevelopmentProgress?: string
+  devTalkId?: string
+}

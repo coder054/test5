@@ -158,7 +158,6 @@ const BioForPlayer = ({
   }, [dataBioPlayer])
 
   useEffect(() => {
-    // console.log('aaa dataBioPlayer: ', dataBioPlayer)
     dataBioPlayer.userId && setPlayerId(dataBioPlayer.userId)
   }, [dataBioPlayer])
 
@@ -371,8 +370,13 @@ const BioForCoach = ({
   dataClub: IInfoClub
   router: any
 }) => {
+  const [playerId, setPlayerId] = useState<string>('')
+
   useEffect(() => {
-    console.log('aaa dataBioCoach: ', dataBioCoach)
+    console.log('Coach: ', dataBioCoach)
+    console.log('IdCoach: ', dataBioCoach.userId)
+
+    dataBioCoach.userId && setPlayerId(dataBioCoach.userId)
   }, [dataBioCoach])
 
   const dataBioCoachRadarChart = useMemo(() => {
@@ -541,7 +545,7 @@ const BioForCoach = ({
             {/*  */}
           </div>
         )}
-        {currentTab === 'update' && <UpdateBiography />}
+        {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
         {/* {currentTab === 'profile' && <Profile />} */}
       </div>
     </>
