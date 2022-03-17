@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { Divider, Tab, Tabs } from '@mui/material'
+import axiosLib from 'axios'
 import { get, isEmpty } from 'lodash'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { isDesktop } from 'react-device-detect'
 import { DashboardLayout } from 'src/components/dashboard/dashboard-layout'
-import { Loading } from 'src/components/loading/loading'
 import { loadIdToken } from 'src/config/firebase-admin'
 import { COOKIE_KEY } from 'src/constants/constants'
 import {
@@ -27,10 +27,10 @@ import { InforWithNumbers } from 'src/module/bio/InfoWithNumbers'
 import { NavigationAndFilter } from 'src/module/bio/NavigationAndFilter'
 import { SocialLinksComponent } from 'src/module/bio/SocialLinksComponent'
 import { TopVideos } from 'src/module/bio/TopVideos'
-import { UpdateBiography } from 'src/module/biography/Update'
+import { Diary } from 'src/module/biography/diary/Diary'
+import { UpdateBiography } from 'src/module/biography/update/Update'
 import { axios } from 'src/utils/axios'
-import axiosLib from 'axios'
-import { fetcher, getErrorMessage, parseCookies } from 'src/utils/utils'
+import { getErrorMessage, parseCookies } from 'src/utils/utils'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 
 export const fetcherForEndpointFlip = async (url) => {
@@ -343,7 +343,7 @@ const BioForPlayer = ({
           </div>
         )}
         {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
-        {/* {currentTab === 'profile' && <Profile />} */}
+        {currentTab === 'diary' && <Diary />}
       </div>
     </>
   )
@@ -552,7 +552,7 @@ const BioForCoach = ({
           </div>
         )}
         {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
-        {/* {currentTab === 'profile' && <Profile />} */}
+        {currentTab === 'diary' && <Diary />}
       </div>
     </>
   )

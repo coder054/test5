@@ -1,22 +1,9 @@
-import { TextField } from '@mui/material'
-import _ from 'lodash'
-import React, { useCallback, useEffect, useState } from 'react'
-import toast from 'react-hot-toast'
+import React, { useState } from 'react'
 import { MyButton } from 'src/components/MyButton'
 import { MyDatePicker } from 'src/components/MyDatePicker'
-import { MyInputChips } from 'src/components/MyInputChips'
 import { MySelect } from 'src/components/MySelect'
-import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
-import { UpdateSkills } from 'src/constants/types'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
-import { InfiniteScrollClub } from 'src/module/account-settings/football/components/InfiniteScrollClub'
-import { InfiniteScrollTeam } from 'src/module/account-settings/football/components/InfiniteScrollTeam'
-import {
-  coachUpdatePlayerSkills,
-  getPlayerRadar,
-} from 'src/service/biography-update'
-import { axios } from 'src/utils/axios'
 import { useAuth } from '../../authen/auth/AuthContext'
 
 interface FutureCareerProps {

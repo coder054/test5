@@ -5,8 +5,8 @@ import { Skills } from './skills'
 import { Development } from './development'
 import { HeightAndWeight } from './height-and-weight'
 import { Trophies } from './trophies'
-import { FutureCareer } from './future-career'
-import { Historic } from './historic'
+import { FutureCareer } from '../future-career'
+import { Historic } from '../historic'
 
 const tabs = [
   { label: 'Skills', value: 'skills' },
