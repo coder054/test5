@@ -393,42 +393,48 @@ const BioForCoach = ({
       {
         subject: 'ATTACKING',
         You: you.attacking,
-        Average: average.attacking,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachAttacking || average.attacking,
         Coach: 0,
         fullMark: 100,
       },
       {
         subject: 'TURNOVERS',
         You: you.turnovers,
-        Average: average.turnovers,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachTurnovers || average.turnovers,
         Coach: 0,
         fullMark: 100,
       },
       {
         subject: 'ANALYTICS',
         You: you.analytics,
-        Average: average.analytics,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachAnalytics || average.analytics,
         Coach: 0,
         fullMark: 100,
       },
       {
         subject: 'DEFENDING',
         You: you.defending,
-        Average: average.defending,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachDefending || average.defending,
         Coach: 0,
         fullMark: 100,
       },
       {
         subject: 'PLAYER DEV.',
         You: you.playerDevelopment,
-        Average: average.playerDevelopment,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachPlayerDevelopment || average.playerDevelopment,
         Coach: 0,
         fullMark: 100,
       },
       {
         subject: 'SET PIECES',
         You: you.setPieces,
-        Average: average.setPieces,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachSetPieces || average.setPieces,
         Coach: 0,
         fullMark: 100,
       },

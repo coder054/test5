@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { GoBack } from 'src/components/go-back'
 import { Loading } from 'src/components/loading/loading'
 import {
+  IAvgCoachScore,
   IAvgPlayerScore,
   IBiographyCoach,
   IBiographyPlayer,
@@ -13,10 +14,9 @@ import { InfoCoachWithAChart } from 'src/module/bio/InfoCoachWithAChart'
 import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
 import { InfoCoachWithCircleImage } from 'src/module/bio/InfoCoachWithCircleImage'
 import { axios } from 'src/utils/axios'
-import { fetcher } from 'src/utils/utils'
+import { fetcher, getStr } from 'src/utils/utils'
 import useSWR from 'swr'
 import { useAuth } from '../auth/AuthContext'
-import { IAvgCoachScore } from '../types'
 
 const cls = require('./signup-form-biography.module.css')
 
@@ -151,7 +151,7 @@ export const SignupFormBiography = () => {
   }
 
   const { data: dataAvgCoach, error: errorAvgCoach } = useSWR(
-    '/biographies/coachs/avg-radar',
+    '/biographies/coaches/avg-radar',
     fetcher,
     {
       revalidateIfStale: false,
@@ -167,19 +167,25 @@ export const SignupFormBiography = () => {
   useEffect(() => {
     const getBio = async () => {
       if (profile && profile === 'Player') {
-        await updateUserRoles()
+        const { data, error } = await updateUserRoles()
+        const roleId = getStr(data, '[0].roleId')
+        //@ts-ignore: Unreachable code error
+        axios.defaults.headers.roleId = roleId
         try {
           const response = await axios.get(
-            `/biographies/player?userIdQuery=${currentRoleId}`
+            `/biographies/player?userIdQuery=${currentRoleId || roleId}`
           )
 
           setData(response.data)
         } catch (error) {}
       } else if (profile && profile === 'Coach') {
-        const resp = await axios.get('/users/user-roles')
+        const { data, error } = await updateUserRoles()
+        const roleId = getStr(data, '[0].roleId')
+        //@ts-ignore: Unreachable code error
+        axios.defaults.headers.roleId = roleId
         try {
           const response = await axios.get(
-            `/biographies/coach?username=${resp.data[0].username}`
+            `/biographies/coach?userIdQuery=${currentRoleId || roleId}`
           )
           setDataCoach(response.data)
         } catch (error) {}
@@ -190,47 +196,59 @@ export const SignupFormBiography = () => {
   }, [])
 
   const dataBioCoachRadarChart = useMemo(() => {
-    const coach = get(dataCoach, 'coachRadarSkill')
     const average = dataAvgCoach
-    if (!coach || !average) {
+    const you = get(dataCoach, 'coachRadarSkills')
+    if (!you || !average) {
       return [{}]
     }
 
     return [
       {
         subject: 'ATTACKING',
-        Average: average.avgCoachAttacking,
-        Coach: coach.attacking,
+        You: 10,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachAttacking || average.attacking,
+        Coach: 0,
+        fullMark: 100,
+      },
+      {
+        subject: 'TURNOVERS',
+        You: 30,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachTurnovers || average.turnovers,
+        Coach: 0,
         fullMark: 100,
       },
       {
         subject: 'ANALYTICS',
-        Average: average.avgCoachAnalytics,
-        Coach: coach.analytics,
-        fullMark: 100,
-      },
-      {
-        subject: 'SETPIECES',
-        Average: average.avgCoachSetPieces,
-        Coach: coach.setPieces,
-        fullMark: 100,
-      },
-      {
-        subject: 'URNOVERS',
-        Average: average.avgCoachTurnovers,
-        Coach: coach.turnovers,
+        You: 66,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachAnalytics || average.analytics,
+        Coach: 0,
         fullMark: 100,
       },
       {
         subject: 'DEFENDING',
-        Average: average.avgCoachDefending,
-        Coach: coach.defending,
+        You: 77,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachDefending || average.defending,
+        Coach: 0,
         fullMark: 100,
       },
       {
-        subject: 'PLAYERDEVELOPMENT',
-        Average: average.avgCoachPlayerDevelopment,
-        Coach: coach.playerDevelopment,
+        subject: 'PLAYER DEV.',
+        You: 88,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachPlayerDevelopment || average.playerDevelopment,
+        Coach: 0,
+        fullMark: 100,
+      },
+      {
+        subject: 'SET PIECES',
+        You: 99,
+        //@ts-ignore: Unreachable code error
+        Average: average.avgCoachSetPieces || average.setPieces,
+        Coach: 0,
         fullMark: 100,
       },
     ]
@@ -331,7 +349,8 @@ export const SignupFormBiography = () => {
               signupForm
             />
           )}
-          {profile === 'Coach' ? (
+
+          {profile === 'Coach' && data.userId ? (
             <InfoCoachWithCircleImage
               dataBio={dataCoach}
               currentRoleId={currentRoleId}
@@ -342,24 +361,21 @@ export const SignupFormBiography = () => {
         <div
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 `}
         >
-          {profile === 'Player' ? (
+          {profile === 'Player' && (
             <InfoPlayerWithAChart
               dataBio={data}
               dataBioRadarChart={dataBioRadarChart}
               signupForm
               profile={profile as string}
             />
-          ) : (
-            <div className="w-12 mx-auto">
-              <Loading />
-            </div>
           )}
+
           {profile === 'Coach' ? (
             <InfoCoachWithAChart
               dataBio={dataCoach}
               dataBioRadarChart={dataBioCoachRadarChart}
-              signupForm
-              profile={profile as string}
+              // signupForm
+              profile="coach"
             />
           ) : null}
         </div>

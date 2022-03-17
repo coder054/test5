@@ -7,7 +7,9 @@ import {
   ListItemIcon,
   ListItemText,
   MenuItem,
+  Modal,
   Popover,
+  TextField,
   Typography,
 } from '@mui/material'
 import clsx from 'clsx'
@@ -20,6 +22,7 @@ import { Cog as CogIcon } from '../../icons/cog'
 import { SwitchHorizontalOutlined as SwitchHorizontalOutlinedIcon } from '../../icons/switch-horizontal-outlined'
 import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
 import { IPlayerProfile } from './dashboard-navbar'
+import { safeAvatar } from 'src/utils/utils'
 
 interface AccountPopoverProps {
   anchorEl: null | Element
@@ -173,15 +176,18 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
                   isActive ? ' pointer-events-none ' : ' cursor-pointer '
                 )}
                 onClick={() => {
+                  onClose()
+                  setAnchorEl2(null)
                   setCurrentRoleName(item.role)
                   router.push('/dashboard/news')
                 }}
               >
                 <img
-                  src={item.faceImageUrl}
+                  src={safeAvatar(item.faceImageUrl)}
                   className="w-[32px] h-[32px] rounded-full object-cover mr-[16px] "
                   alt=""
                 />
+
                 <div className=" ">
                   <div
                     className={`${
@@ -248,7 +254,12 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
               />
             </svg>
             <div className="w-[8px] "></div>
-            <div className="text-white text-[16px] leading-[150%] ">
+            <div
+              onClick={() => {
+                // here
+              }}
+              className="text-white text-[16px] leading-[150%] "
+            >
               Create new role
             </div>
           </div>
@@ -262,4 +273,57 @@ AccountPopover.propTypes = {
   anchorEl: PropTypes.any,
   onClose: PropTypes.func,
   open: PropTypes.bool,
+}
+
+const ModalCreatNewRole = ({
+  open,
+  setOpen,
+}: {
+  open: boolean
+  setOpen: Function
+}) => {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+
+  return (
+    <Modal
+      open={open}
+      onClose={() => setOpen(false)}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <div
+        style={{
+          backgroundColor: 'rgb(17, 24, 39)',
+          color: 'rgb(237, 242, 247)',
+          transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+          boxShadow: 'rgb(0 0 0 / 24%) 0px 6px 15px',
+          backgroundImage: 'none',
+          width: 'calc(100vw - 32px)',
+        }}
+        className="p-[24px]  rounded-[8px] min-h-[400px] overflow-y-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-[700px] [max-height:calc(100vh_-_40px)]"
+      >
+        <TextField
+          fullWidth
+          label="First Name"
+          name="firstName"
+          value={firstName}
+          onChange={(e) => {
+            //@ts-ignore: Unreachable code error
+            setFirstName(e.target.value)
+          }}
+        />
+        <TextField
+          fullWidth
+          label="Last Name"
+          name="lastName"
+          value={lastName}
+          onChange={(e) => {
+            //@ts-ignore: Unreachable code error
+            setLastName(e.target.value)
+          }}
+        />
+      </div>
+    </Modal>
+  )
 }

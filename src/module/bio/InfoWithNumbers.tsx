@@ -9,6 +9,8 @@ import { fetcher } from 'src/utils/utils'
 import { isEmpty } from 'lodash'
 import { NextRouter } from 'next/router'
 import { CircularProgress } from '@mui/material'
+import { useAtom } from 'jotai'
+import { dataStatsAtom } from 'src/atoms/biographyAtom'
 
 enum Tab {
   Club = 'Club',
@@ -121,6 +123,7 @@ export const InforWithNumbers = ({
   activeSeasons: string[]
   router?: NextRouter
 }) => {
+  const [dataStats, setDataStats] = useAtom(dataStatsAtom)
   const { username } = router.query
   const [tab, setTab] = useState('Total')
   const [urlGetSeasonStats, setUrlGetSeasonStats] = useState('')
@@ -135,7 +138,8 @@ export const InforWithNumbers = ({
   }
 
   useEffect(() => {
-    console.log('aaa data: ', data)
+    //@ts-ignore: Unreachable code error
+    setDataStats(data)
   }, [data])
 
   const tabs = useMemo(() => {
@@ -187,11 +191,13 @@ export const InforWithNumbers = ({
     }
 
     if (isEmpty(data)) {
-      return <TabPanel visible={tab !== 'Club'}>
-        <div className="flex justify-center mt-[20px]  ">
-          <CircularProgress />
-        </div>
-      </TabPanel>
+      return (
+        <TabPanel visible={tab !== 'Club'}>
+          <div className="flex justify-center mt-[20px]  ">
+            <CircularProgress />
+          </div>
+        </TabPanel>
+      )
     }
 
     const { statsItems, matchInTotalStatistic, trainingInTotalStatistics } =
@@ -332,10 +338,10 @@ export const OneRowStat = ({ title, value }: { title: any; value: any }) => {
 const Match = ({ title, value }) => {
   return (
     <div className="flex flex-col justify-center items-center">
-      <span className=" text-[13px] xl:text-[16px] leading-[150%] text-Grey mb-2 ">
+      <span className=" text-[13px] xl:text-[13px] leading-[150%] text-Grey mb-2 ">
         {title}
       </span>
-      <span className="text-white text-[15px] xl:text-[24px] leading-[138%] font-semibold">
+      <span className="text-white text-[15px] xl:text-[22px] leading-[138%] font-semibold">
         {value}
       </span>
     </div>

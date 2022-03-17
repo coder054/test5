@@ -65,7 +65,7 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
           title: t('Biography'),
           path: `/biography/${infoActiveProfile.username}/${fullname}`, // current
           icon: <UserCircle fontSize="small" />,
-          disabled: isEmpty(infoActiveProfile), // here
+          disabled: isEmpty(infoActiveProfile),
         },
         {
           title: t('Contacts'),
