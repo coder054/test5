@@ -338,7 +338,7 @@ const ModalCreateGroup = ({ open, setOpen }) => {
     const searchMembers = async () => {
       setLoadingMembers(true)
       const { data } = await axios.get(
-        `https://dev.api.zporter.co/contact-groups/get-list-contacts?limit=10&sorted=asc&startAfter=0&search=${keywordDebounce}&tab=ALL`
+        `/contact-groups/get-list-contacts?limit=10&sorted=asc&startAfter=0&search=${keywordDebounce}&tab=ALL`
       )
       setMembersResult(data.data)
       setLoadingMembers(false)
