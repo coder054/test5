@@ -326,7 +326,8 @@ export const SignupFormBiography = () => {
     get(data, 'playerRadarSkills'),
   ])
 
-  console.log('data', data)
+  console.log('dataCoach', dataCoach)
+  console.log('dataBioCoachRadarChart', dataBioCoachRadarChart)
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
@@ -348,8 +349,8 @@ export const SignupFormBiography = () => {
               signupForm
             />
           )}
+
           {profile === 'Coach' && data.userId ? (
-            // here
             <InfoCoachWithCircleImage
               dataBio={dataCoach}
               currentRoleId={currentRoleId}
