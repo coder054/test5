@@ -22,6 +22,7 @@ import { Cog as CogIcon } from '../../icons/cog'
 import { SwitchHorizontalOutlined as SwitchHorizontalOutlinedIcon } from '../../icons/switch-horizontal-outlined'
 import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
 import { IPlayerProfile } from './dashboard-navbar'
+import { safeAvatar } from 'src/utils/utils'
 
 interface AccountPopoverProps {
   anchorEl: null | Element
@@ -175,15 +176,18 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
                   isActive ? ' pointer-events-none ' : ' cursor-pointer '
                 )}
                 onClick={() => {
+                  onClose()
+                  setAnchorEl2(null)
                   setCurrentRoleName(item.role)
                   router.push('/dashboard/news')
                 }}
               >
                 <img
-                  src={item.faceImageUrl}
+                  src={safeAvatar(item.faceImageUrl)}
                   className="w-[32px] h-[32px] rounded-full object-cover mr-[16px] "
                   alt=""
                 />
+
                 <div className=" ">
                   <div
                     className={`${

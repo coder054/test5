@@ -5,6 +5,7 @@ import cookie from 'cookie'
 import { notification } from 'antd'
 import { axios } from './axios'
 import jwtDecode from 'jwt-decode'
+import { AVATAR_DEFAULT } from 'src/constants/constants'
 
 export interface ITokenData {
   iss: string
@@ -189,4 +190,11 @@ export const resizeFile = (file) =>
 
 export const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+export const safeAvatar = (str: string) => {
+  if (str === 'faceImage' || str === '') {
+    return AVATAR_DEFAULT
+  }
+  return str
 }
