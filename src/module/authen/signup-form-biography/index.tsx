@@ -342,12 +342,18 @@ export const SignupFormBiography = () => {
         <div
           className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 max-h-[626px]`}
         >
-          {data.userId && profile === 'Player' && (
+          {data.userId && profile === 'Player' ? (
             <InfoPlayerWithCircleImage
               dataBio={data}
               currentRoleId={currentRoleId}
               signupForm
             />
+          ) : (
+            <div className="w-full">
+              <div className="w-[48px] mx-auto">
+                <Loading />
+              </div>
+            </div>
           )}
 
           {profile === 'Coach' && data.userId ? (
