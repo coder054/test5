@@ -60,3 +60,72 @@ export type CountryType = {
   phoneCode: string
   region: string
 }
+
+export interface UpdateSkills {
+  specialityTags: string[]
+  overall: {
+    mental: number
+    physics: number
+    tactics: number
+    technics: number
+    leftFoot: number
+    rightFoot: number
+  }
+  radar: {
+    attacking: number
+    defending: number
+    dribbling: number
+    passing: number
+    shooting: number
+    pace: number
+    tackling: number
+    heading: number
+  }
+}
+
+export interface DevelopmentNoteType {
+  shortTermGoal?: {
+    coachComment: string
+    playerContent: string
+  }
+  updatedAt?: number
+  strength?: {
+    playerContent: string
+    coachComment: string
+  }
+  createdAt?: number
+  bestDevelopSkills?: {
+    coachComment: string
+    playerContent: string
+  }
+  playerDevelopmentProgress?: string
+  skillsNeededToDevelop?: {
+    coachComment: string
+    playerContent: string
+  }
+  weaknesses?: {
+    playerContent: string
+    coachComment: string
+  }
+  otherComments?: {
+    coachComment: string
+    playerContent: string
+  }
+  bestWayToDevelop?: {
+    playerContent: string
+    coachComment: string
+  }
+  playerId?: string
+  longTermGoal?: {
+    playerContent: string
+    coachComment: string
+  }
+  playerNotedAt?: number
+  coachDevelopmentProgress?: string
+  devTalkId?: string
+}
+
+export interface ImageVideoType {
+  value?: string
+  position?: number
+}

@@ -22,8 +22,8 @@ type InitialValuesType = {
   verifyPassword: string
 }
 
-export const BasicDetail = () => {
-  const { currentUser, currentRoleName } = useAuth()
+export const BasicDetail = ({ getSettings }) => {
+  const { currentUser, currentRoleName, updateUserRoles } = useAuth()
 
   const [account] = useAtom(settingsAtom)
   const [email, setEmail] = useState<string>('')
@@ -56,6 +56,8 @@ export const BasicDetail = () => {
             resetForm()
             setIsLoading(false)
             toast.success('Password changed')
+            updateUserRoles()
+            getSettings()
           })
           .catch(() => {
             setIsLoading(false)

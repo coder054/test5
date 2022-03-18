@@ -45,6 +45,7 @@ export const AllTab = () => {
   const { currentRoleId } = useAuth()
 
   const [results, setResults] = useState<any>(null)
+  const [firstRender, setFirstRender] = useState(true)
   const [snapshots, loading, error] = useList(
     query(ref(database, 'chatRooms'), orderByChild('updatedAt'))
   )
@@ -59,7 +60,10 @@ export const AllTab = () => {
 
     ;(async () => {
       try {
-        setLoadingChatRooms(true)
+        if (firstRender === true) {
+          setLoadingChatRooms(true)
+          setFirstRender(false)
+        }
         let a1 = snapshots
           .filter((o) => {
             const chatRoom = o.val()

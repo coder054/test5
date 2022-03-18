@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { GradientCircularProgress } from 'react-circular-gradient-progress'
 import { Button } from 'src/components'
 import { Comments } from 'src/components/Comments'
@@ -11,6 +11,7 @@ import {
 } from 'src/constants/types/biography.types'
 import { axios } from 'src/utils/axios'
 import { useAuth } from '../authen/auth/AuthContext'
+import { FollowButton, FriendButton } from './ButtonsRelation'
 
 export const InfoPlayerWithCircleImage = ({
   dataBio,
@@ -21,6 +22,47 @@ export const InfoPlayerWithCircleImage = ({
   currentRoleId?: string
   signupForm?: boolean
 }) => {
+  const [fakeRelation, setFakeRelation] = useState({
+    followStatus: null,
+    friendStatus: null,
+    isConfirmBox: null,
+    isFollowed: null,
+    isPublic: null,
+    fanCount: null,
+  })
+
+  const relations = useMemo(() => {
+    return Object.assign(
+      {},
+      {
+        followStatus:
+          fakeRelation.followStatus !== null
+            ? fakeRelation.followStatus
+            : dataBio.followStatus,
+        friendStatus:
+          fakeRelation.friendStatus !== null
+            ? fakeRelation.friendStatus
+            : dataBio.friendStatus,
+        isConfirmBox:
+          fakeRelation.isConfirmBox !== null
+            ? fakeRelation.isConfirmBox
+            : dataBio.isConfirmBox,
+        isFollowed:
+          fakeRelation.isFollowed !== null
+            ? fakeRelation.isFollowed
+            : dataBio.isFollowed,
+        isPublic:
+          fakeRelation.isPublic !== null
+            ? fakeRelation.isPublic
+            : dataBio.isPublic,
+        fanCount:
+          fakeRelation.fanCount !== null
+            ? fakeRelation.fanCount
+            : dataBio.fanCount,
+      }
+    )
+  }, [fakeRelation, dataBio])
+
   const [elmButtonFollow, setElmButtonFollow] = useState<string>('Follow')
   const [loading, setLoading] = useState<boolean>(false)
   const { authenticated } = useAuth() as {
@@ -278,7 +320,7 @@ export const InfoPlayerWithCircleImage = ({
 
           <div className=" ">
             <div className="text-[14px] leading-[22px] text-white ">
-              {dataBio?.fanCount}
+              {relations?.fanCount}
             </div>
             <div className="text-Grey text-[12px] leading-[20px] ">Fans</div>
           </div>
@@ -310,16 +352,19 @@ export const InfoPlayerWithCircleImage = ({
 
       {!signupForm && dataBio?.userId !== currentRoleId && authenticated && (
         <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px] ">
-          <FriendButton friendStatus={EStatusRelationShip.response} />
-          <Button
-            loading={loading}
-            // text={elmButtonFollow}
-            // text={'Follow'}
-            onClick={handleFollow}
-            className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent border border-Green font-medium text-Green"
-          >
-            {elmButtonFollow}
-          </Button>
+          <FriendButton
+            setFakeRelation={setFakeRelation}
+            friendStatus={relations.friendStatus}
+            userId={dataBio.userId}
+          />
+
+          <FollowButton
+            setFakeRelation={setFakeRelation}
+            followStatus={relations.followStatus}
+            isFollowed={relations.isFollowed}
+            userId={dataBio.userId}
+            relations={relations}
+          />
         </div>
       )}
 
@@ -329,95 +374,5 @@ export const InfoPlayerWithCircleImage = ({
         </div>
       )}
     </>
-  )
-}
-
-const FriendButton = ({
-  friendStatus,
-}: {
-  friendStatus: EStatusRelationShip
-}) => {
-  const ButtonAddAsFriend = () => {
-    return (
-      <Button
-        onClick={() => {}}
-        className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue font-medium "
-      >
-        Add as friend
-      </Button>
-    )
-  }
-
-  const ButtonResponse = () => {
-    return (
-      <Button
-        onClick={() => {}}
-        className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue font-medium "
-      >
-        Response
-      </Button>
-    )
-  }
-
-  const ButtonFriendRequested = () => {
-    return (
-      <Button
-        onClick={() => {}}
-        className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Dark-3 font-medium
-        border-[2px] border-Grey
-        "
-      >
-        Friend Requested
-      </Button>
-    )
-  }
-
-  const ButtonFriends = () => {
-    return (
-      <Button
-        onClick={() => {}}
-        className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Dark-3 font-medium
-        border-[2px] border-Grey "
-      >
-        Friends
-      </Button>
-    )
-  }
-
-  if (friendStatus === EStatusRelationShip.response) {
-    return <>{ButtonResponse()}</>
-  }
-
-  if (friendStatus === EStatusRelationShip.no_relationship) {
-    return <>{ButtonAddAsFriend()}</>
-  }
-  if (friendStatus === EStatusRelationShip.requested) {
-    return <>{ButtonFriendRequested()}</>
-  }
-  if (friendStatus === EStatusRelationShip.accepted) {
-    return <>{ButtonFriends()}</>
-  }
-
-  return <div className="text-white ">test</div>
-}
-
-export const ButtonFollow = () => {
-  return (
-    <Button
-      onClick={() => {}}
-      className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent border border-Green font-medium text-Green"
-    >
-      Follow
-    </Button>
-  )
-}
-export const ButtonFollowBack = () => {
-  return (
-    <Button
-      onClick={() => {}}
-      className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent border border-Green font-medium text-Green"
-    >
-      Follow back
-    </Button>
   )
 }

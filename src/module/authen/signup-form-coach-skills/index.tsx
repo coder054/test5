@@ -15,7 +15,6 @@ import { ROUTES } from 'src/constants/constants'
 
 export const SignUpFormCoachSkills = () => {
   const [profileCoachForm, setProfileCoachForm] = useAtom(profileCoachAtom)
-  console.log('profileCoachFormSkill', profileCoachForm)
 
   const { TextArea } = Input
   const date = new Date()
@@ -138,7 +137,6 @@ export const SignUpFormCoachSkills = () => {
         },
       },
     }
-    // console.log('submit', profileCoach)
 
     try {
       const response = await axios.put(API_SIGNUP_FORM_COACH, {

@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import { Divider, Tab, Tabs } from '@mui/material'
+import axiosLib from 'axios'
 import { get, isEmpty } from 'lodash'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { ChangeEvent, useEffect, useMemo } from 'react'
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import { isDesktop } from 'react-device-detect'
 import { DashboardLayout } from 'src/components/dashboard/dashboard-layout'
-import { Loading } from 'src/components/loading/loading'
 import { loadIdToken } from 'src/config/firebase-admin'
 import { COOKIE_KEY } from 'src/constants/constants'
 import {
@@ -27,10 +27,10 @@ import { InforWithNumbers } from 'src/module/bio/InfoWithNumbers'
 import { NavigationAndFilter } from 'src/module/bio/NavigationAndFilter'
 import { SocialLinksComponent } from 'src/module/bio/SocialLinksComponent'
 import { TopVideos } from 'src/module/bio/TopVideos'
-import { UpdateBiography } from 'src/module/biography/Update'
+import { Diary } from 'src/module/biography/diary/Diary'
+import { UpdateBiography } from 'src/module/biography/update/Update'
 import { axios } from 'src/utils/axios'
-import axiosLib from 'axios'
-import { fetcher, getErrorMessage, parseCookies } from 'src/utils/utils'
+import { getErrorMessage, parseCookies } from 'src/utils/utils'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 
 export const fetcherForEndpointFlip = async (url) => {
@@ -136,6 +136,8 @@ const BioForPlayer = ({
   dataClub: IInfoClub
   router: any
 }) => {
+  const [playerId, setPlayerId] = useState<string>('')
+
   useEffect(() => {
     const {
       friendStatus,
@@ -145,18 +147,19 @@ const BioForPlayer = ({
       isPublic,
       userId,
     } = dataBioPlayer
-    // console.log('aaa dataBio: ', dataBioPlayer, {
-    //   friendStatus,
-    //   followStatus,
-    //   isConfirmBox,
-    //   isFollowed,
-    //   isPublic,
-    //   userId,
-    // })
+    console.log('aaa dataBio: ', dataBioPlayer)
+    console.log('aaa dataBio2', {
+      friendStatus,
+      followStatus,
+      isConfirmBox,
+      isFollowed,
+      isPublic,
+      userId,
+    })
   }, [dataBioPlayer])
 
   useEffect(() => {
-    // console.log('aaa dataBioPlayer: ', dataBioPlayer)
+    dataBioPlayer.userId && setPlayerId(dataBioPlayer.userId)
   }, [dataBioPlayer])
 
   const dataBioPlayerRadarChart = useMemo(() => {
@@ -326,6 +329,8 @@ const BioForPlayer = ({
                     dataClub={dataClub}
                     activeSeasons={dataBioPlayer.activeSeasons}
                     router={router}
+                    //@ts-ignore: Unreachable code error
+                    profile={profile}
                   />
                 </div>
               </div>
@@ -340,8 +345,8 @@ const BioForPlayer = ({
             {/*  */}
           </div>
         )}
-        {currentTab === 'update' && <UpdateBiography />}
-        {/* {currentTab === 'profile' && <Profile />} */}
+        {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
+        {currentTab === 'diary' && <Diary />}
       </div>
     </>
   )
@@ -368,8 +373,32 @@ const BioForCoach = ({
   dataClub: IInfoClub
   router: any
 }) => {
+  const [playerId, setPlayerId] = useState<string>('')
+
   useEffect(() => {
-    console.log('aaa dataBioCoach: ', dataBioCoach)
+    const {
+      friendStatus,
+      followStatus,
+      isConfirmBox,
+      isFollowed,
+      isPublic,
+      userId,
+    } = dataBioCoach
+    console.log('aaa dataBio: ', dataBioCoach)
+    console.log('aaa dataBio2', {
+      friendStatus,
+      followStatus,
+      isConfirmBox,
+      isFollowed,
+      isPublic,
+      userId,
+    })
+  }, [dataBioCoach])
+  useEffect(() => {
+    console.log('Coach: ', dataBioCoach)
+    console.log('IdCoach: ', dataBioCoach.userId)
+
+    dataBioCoach.userId && setPlayerId(dataBioCoach.userId)
   }, [dataBioCoach])
 
   const dataBioCoachRadarChart = useMemo(() => {
@@ -530,6 +559,7 @@ const BioForCoach = ({
                     dataClub={dataClub}
                     activeSeasons={dataBioCoach.activeSeasons}
                     router={router}
+                    profile={profile}
                   />
                 </div>
               </div>
@@ -544,8 +574,8 @@ const BioForCoach = ({
             {/*  */}
           </div>
         )}
-        {currentTab === 'update' && <UpdateBiography />}
-        {/* {currentTab === 'profile' && <Profile />} */}
+        {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
+        {currentTab === 'diary' && <Diary />}
       </div>
     </>
   )
@@ -632,7 +662,10 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   if (errorExisted) {
     // at least one error
     //@ts-ignore: Unreachable code error
-    const errors = values.map((o) => o.reason)
+    const errors = values.map((o) => {
+      //@ts-ignore: Unreachable code error
+      o.reason === undefined ? 'noerror' : 'error'
+    })
     console.log('aaa errors', errors)
     ;[dataBioPlayer, dataBioCoach, dataClub, dataAvgPlayer, dataAvgCoach] = [
       null,

@@ -1,50 +1,98 @@
 import { TextField } from '@mui/material'
 import _ from 'lodash'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { MyButton } from 'src/components/MyButton'
 import { MyInputChips } from 'src/components/MyInputChips'
 import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
+import { UpdateSkills } from 'src/constants/types'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
+import {
+  coachUpdatePlayerSkills,
+  getPlayerRadar,
+} from 'src/service/biography-update'
+import { axios } from 'src/utils/axios'
 
 type FootBallSkillTypes = {
   technics: number
   tactics: number
   physics: number
   mental: number
+  leftFoot: number
+  rightFoot: number
 }
 
 type RadarChartTypes = {
   attacking: number
   defending: number
-  turnovers: number
-  setPieces: number
-  analytics: number
-  playerDevelopment: number
+  dribbling: number
+  passing: number
+  shooting: number
+  pace: number
+  tackling: number
+  heading: number
+}
+
+interface SkillProps {
+  playerId?: string
 }
 
 const tagsClass =
   'text-white bg-[#13161A] laptopM:py-[10px] laptopM:pl-[10px] laptopM:pr-[20px] mobileM:p-[10px] rounded-[8px]'
 
-export const Skills = () => {
+export const Skills = ({ playerId }: SkillProps) => {
+  const { userRoles } = useAuth()
   const [tags, setTags] = useState<string[]>([])
   const [summary, setSummary] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
   const [footballSkills, setFootBallSkills] = useState<FootBallSkillTypes>({
-    technics: 60,
-    tactics: 25,
-    physics: 85,
-    mental: 90,
+    technics: 0,
+    tactics: 0,
+    physics: 0,
+    mental: 0,
+    leftFoot: 0,
+    rightFoot: 0,
   })
 
   const [radarChart, setRadarChart] = useState<RadarChartTypes>({
-    attacking: 70,
-    defending: 55,
-    turnovers: 65,
-    setPieces: 80,
-    analytics: 70,
-    playerDevelopment: 75,
+    attacking: 0,
+    defending: 0,
+    dribbling: 0,
+    passing: 0,
+    shooting: 0,
+    pace: 0,
+    tackling: 0,
+    heading: 0,
   })
+  console.log('playerId', playerId)
+
+  useEffect(() => {
+    try {
+      const res = getPlayerRadar(playerId)
+      res.then((data) => {
+        setFootBallSkills({
+          technics: 0,
+          tactics: 0,
+          physics: 0,
+          mental: 0,
+          leftFoot: data.data.leftFoot,
+          rightFoot: data.data.rightFoot,
+        })
+        setRadarChart({
+          attacking: data.data.radarUpdatedByCoach.attacking,
+          defending: data.data.radarUpdatedByCoach.defending,
+          dribbling: data.data.radarUpdatedByCoach.dribbling,
+          passing: data.data.radarUpdatedByCoach.passing,
+          shooting: data.data.radarUpdatedByCoach.shooting,
+          pace: data.data.radarUpdatedByCoach.pace,
+          tackling: data.data.radarUpdatedByCoach.tackling,
+          heading: data.data.radarUpdatedByCoach.heading,
+        })
+      })
+    } catch (error) {}
+  }, [playerId])
 
   const handleChangeSkills = useCallback(
     (type: keyof FootBallSkillTypes, value: number) => {
@@ -60,7 +108,53 @@ export const Skills = () => {
     [radarChart]
   )
 
-  const handleSubmit = async () => {}
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    if (userRoles[0].role === 'COACH') {
+      const updateSkills: UpdateSkills = {
+        specialityTags: tags,
+        overall: {
+          mental: footballSkills.mental / 20,
+          physics: footballSkills.physics / 20,
+          tactics: footballSkills.tactics / 20,
+          technics: footballSkills.technics / 20,
+          leftFoot: footballSkills.leftFoot / 20,
+          rightFoot: footballSkills.rightFoot / 20,
+        },
+        radar: {
+          attacking: radarChart.attacking,
+          defending: radarChart.defending,
+          dribbling: radarChart.dribbling,
+          passing: radarChart.passing,
+          shooting: radarChart.shooting,
+          pace: radarChart.pace,
+          tackling: radarChart.tackling,
+          heading: radarChart.heading,
+        },
+      }
+      try {
+        const response = await axios.patch(
+          `/users/${playerId}/coach-update-player-skills`,
+          updateSkills,
+          {
+            headers: {
+              roleId: userRoles[0].roleId,
+            },
+          }
+        )
+
+        if (response.status === 200) {
+          setLoading(false)
+          toast.success(response.data)
+        }
+      } catch (error) {}
+    } else {
+      setTimeout(() => {
+        setLoading(false)
+      }, 1000)
+    }
+  }
 
   return (
     <div className="space-y-5">
@@ -79,6 +173,7 @@ export const Skills = () => {
               {Object.keys(footballSkills).map((skill: string) => (
                 <MySlider
                   isStar
+                  key={skill}
                   step={5}
                   readOnly={true}
                   label={_.upperFirst(skill)}
@@ -100,6 +195,7 @@ export const Skills = () => {
                 <MySlider
                   step={1}
                   isPoint
+                  key={chart}
                   label={_.upperFirst(chart)}
                   onChange={(e) =>
                     handleChangeChart(chart as keyof RadarChartTypes, e)

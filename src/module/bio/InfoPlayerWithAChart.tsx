@@ -4,9 +4,9 @@ import { Stars } from 'src/components/common/Stars'
 import { Button } from 'src/components'
 import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
-import { IBiographyCoach } from '../authen/types'
 import { useAuth } from '../authen/auth/AuthContext'
 import { IBiographyPlayer } from 'src/constants/types/biography.types'
+import { useState } from 'react'
 
 export const InfoPlayerWithAChart = ({
   dataBio,
@@ -21,11 +21,13 @@ export const InfoPlayerWithAChart = ({
 }) => {
   const router = useRouter()
   const { updateUserRoles, userRoles } = useAuth()
+  const [loading, setLoading] = useState<boolean>(false)
 
   const handleNext = async () => {
+    setLoading(true)
     try {
       await updateUserRoles()
-      console.log('userRoles', userRoles)
+      setLoading(false)
       router.push(ROUTES.dashboard)
     } catch (error) {
       console.log('error', error)
@@ -142,6 +144,7 @@ export const InfoPlayerWithAChart = ({
         {signupForm && (
           <div onClick={handleNext}>
             <Button
+              loading={loading}
               text="Next"
               className="text-[15px] bg-[#4654EA] rounded-[8px] h-[48px] mt-[6px]"
             />

@@ -1,12 +1,10 @@
 import { Button } from 'src/components'
 import { MyInput } from 'src/components/MyInput'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../auth/AuthContext'
 const cls = require('./signup-form.module.css')
 import { GoBack } from 'src/components/go-back'
-import { UploadImage } from 'src/components/upload-image'
-import { MySelect } from 'src/components/MySelect'
 import { OptionUserProfile } from '../types'
 import { MyDatePicker } from 'src/components/MyDatePicker'
 import { ROUTES } from 'src/constants/constants'
@@ -100,6 +98,7 @@ const SignUpForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    setLoading(true)
     //validate
     if (!formValues.firstName) {
       setFormErrors((prev) => ({ ...prev, firstName: 'Input your First Name' }))
@@ -186,6 +185,7 @@ const SignUpForm = () => {
         })
       }
 
+      setLoading(false)
       router.push({
         pathname:
           /* @ts-ignore */

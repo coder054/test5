@@ -10,8 +10,8 @@ import { useAtom } from 'jotai'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
 import toast from 'react-hot-toast'
 
-export const Profile = () => {
-  const { currentRoleName, currentRoleId } = useAuth()
+export const Profile = ({ getSettings }) => {
+  const { currentRoleName, currentRoleId, updateUserRoles } = useAuth()
   const [account, setAccount] = useAtom(settingsAtom)
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [submitForm, setSubmitForm] = useState<ProfileType>({
@@ -51,6 +51,8 @@ export const Profile = () => {
         setAccount({ ...account, profile: { ...submitForm } })
         setIsLoading(false)
         toast.success('Successfully updated')
+        updateUserRoles()
+        getSettings()
       })
       .catch(() => {
         setIsLoading(false)
