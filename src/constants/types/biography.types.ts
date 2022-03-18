@@ -47,6 +47,7 @@ export interface IBiographyPlayer {
   userRole?: string
   bioUrl?: string
   activeSeasons?: string[]
+  teamIds?: string[]
 }
 
 export interface PlayerRadarSkills {

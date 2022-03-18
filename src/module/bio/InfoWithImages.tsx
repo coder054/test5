@@ -16,7 +16,7 @@ export const InfoWithImages = () => {
   // const { totalTrophies, totalAwards, totalCaps } = dataStats
 
   useEffect(() => {
-    console.log('aaa dataStats: ', dataStats)
+    // console.log('aaa dataStats: ', dataStats)
   }, [dataStats])
 
   return (

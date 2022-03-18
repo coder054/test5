@@ -83,7 +83,7 @@ export interface HistoricClub {
 
 export const InfoClub = ({ dataClub }: { dataClub: IInfoClub }) => {
   useEffect(() => {
-    console.log('aaa dataClub: ', dataClub)
+    // console.log('aaa dataClub: ', dataClub)
   }, [dataClub])
   return (
     <div className="">

@@ -49,7 +49,7 @@ type MyDatePickerProps = {
   className?: string
   label: string
   errorMessage?: string
-  val?: Date | string | null
+  value?: Date | string | null
   isNextable?: boolean
   onChange?: (value: string) => void
   maxDate?: any
@@ -59,7 +59,7 @@ export const MyDatePicker = ({
   className,
   label,
   size,
-  val,
+  value,
   maxDate,
   isNextable,
   errorMessage,
@@ -69,8 +69,8 @@ export const MyDatePicker = ({
   const [currentValue, setCurrentValue] = useState<string | Date>()
 
   useEffect(() => {
-    val && setCurrentValue(val)
-  }, [val])
+    setCurrentValue(value)
+  }, [value])
 
   const handleChangeDate = (type: 'inc' | 'dec') => {
     const initial = dayjs(currentValue)
