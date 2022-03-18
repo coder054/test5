@@ -559,6 +559,7 @@ const BioForCoach = ({
                     dataClub={dataClub}
                     activeSeasons={dataBioCoach.activeSeasons}
                     router={router}
+                    //@ts-ignore: Unreachable code error
                     profile={profile}
                   />
                 </div>
