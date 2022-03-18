@@ -19,7 +19,7 @@ import {
 import { styled } from '@mui/material/styles'
 import ReplyAllIcon from '@mui/icons-material/ReplyAll'
 import ReplyIcon from '@mui/icons-material/Reply'
-import { ArrowLeft as ArrowLeftIcon } from '../../../icons/arrow-left'
+import { ArrowNarrowLeft as ArrowLeftIcon } from '../../../icons/arrow-narrow-left'
 import { ChevronLeft as ChevronLeftIcon } from '../../../icons/chevron-left'
 import { ChevronRight as ChevronRightIcon } from '../../../icons/chevron-right'
 import { DotsHorizontal as DotsHorizontalIcon } from '../../../icons/dots-horizontal'

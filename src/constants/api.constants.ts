@@ -29,3 +29,5 @@ export const API_COACH_COMMENT_DEVELOPMENT_NOTE =
   'development-talk/coach/comment-development-note'
 export const API_PLAYER_UPDATE_DEVELOPMENT_NOTE =
   'development-talk/player/update-development-note'
+export const API_DIARY = 'diaries'
+export const API_GET_DIARY = 'get-diary-by-query'

@@ -3,7 +3,13 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import { styled, TextField } from '@mui/material'
 import clsx from 'clsx'
-import * as React from 'react'
+import dayjs from 'dayjs'
+import { useEffect, useState } from 'react'
+import { flexingFormatDate, getToday } from 'src/hooks/functionCommon'
+import { ChevronLeft as ChervonLeftIcon } from 'src/icons/chevron-left'
+import { ChevronRight as ChervonRightIcon } from 'src/icons/chevron-right'
+var isSameOrBefore = require('dayjs/plugin/isSameOrBefore')
+dayjs.extend(isSameOrBefore)
 
 const CssTextField = styled(TextField)({
   '& label': {
@@ -11,7 +17,6 @@ const CssTextField = styled(TextField)({
     marginLeft: '4px',
   },
   '& label.Mui-focused': {
-    // color: '#5048E5',
     color: '#ffffff',
   },
   '& .MuiInput-underline:after': {
@@ -25,9 +30,9 @@ const CssTextField = styled(TextField)({
     },
 
     '& fieldset': {
-      borderColor: '#484A4D', // border normal
-      borderRadius: '8px', // border normal
-      padding: '17px 12px 15px 12px',
+      borderColor: '#484A4D',
+      borderRadius: '8px',
+      padding: '12px 12px 12px 12px',
       color: '#ffffff',
     },
     '&:hover fieldset': {
@@ -39,35 +44,85 @@ const CssTextField = styled(TextField)({
   },
 })
 
-export const MyDatePicker = ({
-  className,
-  label,
-  val,
-  errorMessage,
-  onChange,
-  type,
-  ...rest
-}: {
+type MyDatePickerProps = {
+  size?: 'small' | 'medium'
   className?: string
   label: string
   errorMessage?: string
   val?: Date | string | null
-  onChange?: any
-  [rest: string]: any
-}) => {
+  isNextable?: boolean
+  onChange?: (value: string) => void
+  maxDate?: any
+}
+
+export const MyDatePicker = ({
+  className,
+  label,
+  size,
+  val,
+  maxDate,
+  isNextable,
+  errorMessage,
+  onChange,
+  ...rest
+}: MyDatePickerProps) => {
+  const [currentValue, setCurrentValue] = useState<string | Date>()
+
+  useEffect(() => {
+    val && setCurrentValue(val)
+  }, [val])
+
+  const handleChangeDate = (type: 'inc' | 'dec') => {
+    const initial = dayjs(currentValue)
+      .add(type === 'inc' ? 1 : -1, 'day')
+      .toString()
+    setCurrentValue(initial)
+    onChange && onChange(initial)
+  }
+
+  const handleChange = (value: any) => {
+    onChange && onChange(value)
+  }
+
   return (
-    <div className={clsx('relative', className)}>
+    <div className={clsx('relative flex items-center space-x-2', className)}>
+      {isNextable && (
+        <button type="button" onClick={() => handleChangeDate('dec')}>
+          <ChervonLeftIcon
+            className="hover:text-[#09E099] cursor-pointer duration-150"
+            fontSize="medium"
+          />
+        </button>
+      )}
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DesktopDatePicker
           label={label}
-          value={val ? val : null}
+          value={currentValue}
           inputFormat="dd/MM/yyyy"
-          onChange={onChange}
-          renderInput={(params) => <CssTextField fullWidth {...params} />}
+          onChange={handleChange}
+          maxDate={maxDate ? maxDate : null}
+          renderInput={(params) => (
+            <CssTextField fullWidth size={size} {...params} />
+          )}
           {...rest}
         />
       </LocalizationProvider>
-
+      {isNextable && (
+        <button
+          className={clsx(
+            dayjs(currentValue).add(1, 'day').isBefore(dayjs(getToday()))
+              ? 'block'
+              : 'hidden'
+          )}
+          type="button"
+          onClick={() => handleChangeDate('inc')}
+        >
+          <ChervonRightIcon
+            className="hover:text-[#09E099] cursor-pointer duration-150"
+            fontSize="medium"
+          />
+        </button>
+      )}
       {errorMessage && (
         <p className="text-[#D60C0C] text-[14px]">{errorMessage}</p>
       )}

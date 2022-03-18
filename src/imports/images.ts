@@ -90,3 +90,5 @@ export const imgMedalGoal = require('./../../public' +
   '/biography/award/medal-goal.svg')
 export const imgMedalMVP = require('./../../public' +
   '/biography/award/medal-mvp.svg')
+
+export const FRONT_BODY = require('/public/assets/FrontBody.png')
