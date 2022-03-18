@@ -617,7 +617,7 @@ const BioForCoach = ({
                     dataClub={dataClub}
                     activeSeasons={dataBioCoach.activeSeasons}
                     router={router}
-                    profile={profile}
+                    profile={profile as 'coach' | 'player'}
                   />
                 </div>
               </div>
