@@ -27,7 +27,7 @@ export const InfoCoachWithAChart = ({
   const { updateUserRoles, userRoles } = useAuth()
 
   useEffect(() => {
-    console.log('aaa dataBioRadarChart: ', dataBioRadarChart)
+    // console.log('aaa dataBioRadarChart: ', dataBioRadarChart)
   }, [dataBioRadarChart])
 
   const handleNext = async () => {

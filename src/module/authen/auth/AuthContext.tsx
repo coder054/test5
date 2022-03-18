@@ -90,7 +90,7 @@ export function AuthProvider({ children }) {
     //@ts-ignore: Unreachable code error
     axios.defaults.headers.roleId = currentRoleId
     setCookieUtil(COOKIE_KEY.roleid, currentRoleId)
-    console.log('aaa changed roleId to', currentRoleId)
+    // console.log('aaa changed roleId to', currentRoleId)
   }, [currentRoleId])
 
   useEffect(() => {
@@ -228,7 +228,7 @@ export function AuthProvider({ children }) {
     // console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      console.log('aaa onIdTokenChanged', user)
+      // console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
         localStorage.clear()

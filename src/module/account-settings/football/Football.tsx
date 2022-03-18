@@ -245,22 +245,22 @@ export const Football = () => {
           ))}
           <MyDatePicker
             onChange={(e) => handleChangeForm('seasonStartDate', e)}
-            val={formValues.seasonStartDate}
+            value={formValues.seasonStartDate}
             label="Season start date"
           />
           <MyDatePicker
             onChange={(e) => handleChangeForm('seasonEndDate', e)}
-            val={formValues.seasonEndDate}
+            value={formValues.seasonEndDate}
             label="Season end date"
           />
           <MyDatePicker
             onChange={(e) => handleChangeForm('contractedFrom', e)}
-            val={formValues.contractedFrom}
+            value={formValues.contractedFrom}
             label="Contracted from"
           />
           <MyDatePicker
             onChange={(e) => handleChangeForm('contractedUntil', e)}
-            val={formValues.contractedUntil}
+            value={formValues.contractedUntil}
             label="Contracted until"
           />
         </div>

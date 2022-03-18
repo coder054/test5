@@ -32,6 +32,7 @@ import { UpdateBiography } from 'src/module/biography/update/Update'
 import { axios } from 'src/utils/axios'
 import { getErrorMessage, parseCookies } from 'src/utils/utils'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
+import { getProfileCoach } from 'src/service/biography-update'
 
 export const fetcherForEndpointFlip = async (url) => {
   if (url === null) return
@@ -78,11 +79,12 @@ export default function Biography({
   const router = useRouter()
 
   const { username } = router.query
-  const { currentRoleId, authenticated } = useAuth()
+  const { currentRoleId, currentRoleName, authenticated } = useAuth()
 
   const handleTabsChange = (event: ChangeEvent<{}>, value: string): void => {
     setCurrentTab(value)
   }
+  console.log('profile', profile)
 
   return (
     <DashboardLayout>
@@ -96,6 +98,7 @@ export default function Biography({
           currentTab={currentTab}
           dataClub={dataClub}
           router={router}
+          currentRoleName={currentRoleName}
           handleTabsChange={handleTabsChange}
         />
       ) : (
@@ -108,6 +111,7 @@ export default function Biography({
           currentRoleId={currentRoleId}
           profile={profile}
           dataClub={dataClub}
+          currentRoleName={currentRoleName}
           router={router}
         />
       )}
@@ -124,6 +128,7 @@ const BioForPlayer = ({
   currentRoleId,
   profile,
   dataClub,
+  currentRoleName,
   router,
 }: {
   dataBioPlayer: IBiographyPlayer
@@ -134,9 +139,16 @@ const BioForPlayer = ({
   currentRoleId: any
   profile: string
   dataClub: IInfoClub
+  currentRoleName?: string
   router: any
 }) => {
   const [playerId, setPlayerId] = useState<string>('')
+  const [tabsBar, setTabsBar] = useState(tabs)
+  const [checkTeam, setCheckTeam] = useState<boolean>(false)
+  const [teamsPlayer, setTeamsPlayer] = useState<string[]>(
+    dataBioPlayer.teamIds
+  )
+  const [teamsCoach, setTeamsCoach] = useState<string[]>([])
 
   useEffect(() => {
     const {
@@ -234,6 +246,46 @@ const BioForPlayer = ({
     get(dataBioPlayer, 'playerRadarSkills'),
   ])
 
+  console.log('teamPlayer', dataBioPlayer.teamIds)
+  console.log('teamsCoach', teamsCoach)
+
+  useEffect(() => {
+    if (
+      !isEmpty(teamsCoach) &&
+      !isEmpty(teamsPlayer) &&
+      currentRoleName === 'COACH'
+    ) {
+      for (let i = 0; i < teamsCoach.length; i++) {
+        for (let j = 0; j < teamsPlayer.length; j++) {
+          if (teamsCoach[i] === teamsPlayer[j]) {
+            setCheckTeam(true)
+            setTabsBar(tabs)
+            return
+          }
+        }
+      }
+    }
+  }, [teamsCoach, teamsPlayer, tabsBar, checkTeam])
+
+  useEffect(() => {
+    if (currentRoleName === 'COACH') {
+      const getCoachProfile = async () => {
+        getProfileCoach().then((item) => {
+          setTeamsCoach(item.data.teamIds)
+        })
+      }
+      getCoachProfile()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (playerId && currentRoleId && playerId === currentRoleId) {
+      setTabsBar(tabs)
+    } else {
+      setTabsBar([{ label: 'Biography', value: 'biography' }])
+    }
+  }, [playerId, currentRoleId, tabs])
+
   return (
     <>
       <Head>
@@ -273,7 +325,7 @@ const BioForPlayer = ({
           value={currentTab}
           sx={{ display: authenticated ? 'block' : 'none' }}
         >
-          {tabs.map((tab) => (
+          {tabsBar.map((tab) => (
             <Tab key={tab.value} label={tab.label} value={tab.value} />
           ))}
         </Tabs>
@@ -361,6 +413,7 @@ const BioForCoach = ({
   currentTab,
   handleTabsChange,
   dataClub,
+  currentRoleName,
   router,
 }: {
   dataBioCoach: IBiographyCoach
@@ -371,11 +424,16 @@ const BioForCoach = ({
   currentTab: string
   handleTabsChange: Function
   dataClub: IInfoClub
+  currentRoleName?: string
   router: any
 }) => {
   const [playerId, setPlayerId] = useState<string>('')
+  const [tabsBar, setTabsBar] = useState([
+    { label: 'Biography', value: 'biography' },
+  ])
 
   useEffect(() => {
+    // console.log('IdCoach: ', dataBioCoach.userId)
     const {
       friendStatus,
       followStatus,
@@ -502,7 +560,7 @@ const BioForCoach = ({
           value={currentTab}
           sx={{ display: authenticated ? 'block' : 'none' }}
         >
-          {tabs.map((tab) => (
+          {tabsBar.map((tab) => (
             <Tab key={tab.value} label={tab.label} value={tab.value} />
           ))}
         </Tabs>
@@ -559,7 +617,7 @@ const BioForCoach = ({
                     dataClub={dataClub}
                     activeSeasons={dataBioCoach.activeSeasons}
                     router={router}
-                    profile={profile}
+                    profile={profile as 'coach' | 'player'}
                   />
                 </div>
               </div>

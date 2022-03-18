@@ -128,7 +128,7 @@ const Component = () => {
               size="small"
               isNextable
               maxDate={dayjs(getToday()).toDate()}
-              val={date}
+              value={date}
               onChange={(val) => setDate(val)}
             />
           </div>

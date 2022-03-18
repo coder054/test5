@@ -51,16 +51,15 @@ export const SignUpFormPlayer = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState<boolean>(false)
   const { profile } = router.query
-  // console.log('profileForm', profileForm)
 
   const [formValues, setFormValues] = useState<FormValueType>({
     yourClub: '',
     currentTeams: [],
     yourTeams: [''],
-    shirtNumber: '',
+    shirtNumber: '8',
     favoriteRoles: [''],
-    length: '',
-    weight: '',
+    length: '160',
+    weight: '60',
     contractedClub: {
       arena: '',
       city: '',
@@ -116,6 +115,8 @@ export const SignUpFormPlayer = () => {
       router.push(ROUTES.SIGNUP_FORM)
     }
   }, [profileForm])
+
+  // console.log('profileForm', profileForm)
 
   const setSelectedClub = (value: ClubType) => {
     setFormValues((prev) => ({
@@ -173,7 +174,6 @@ export const SignUpFormPlayer = () => {
     },
     [formValues]
   )
-  console.log('form: ', formValues)
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -315,8 +315,9 @@ export const SignUpFormPlayer = () => {
                 onChange={(_, value) => {
                   handleChangeForm('favoriteRoles', value, index + '')
                 }}
-                val={item}
+                value={item}
                 arrOption={OptionPlayer}
+                defauleValue={'CM'}
               />
               {index === 0 && (
                 <span
