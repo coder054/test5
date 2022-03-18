@@ -118,10 +118,12 @@ export const InforWithNumbers = ({
   dataClub,
   activeSeasons,
   router,
+  profile,
 }: {
   dataClub: IInfoClub
   activeSeasons: string[]
   router?: NextRouter
+  profile: 'coach' | 'player'
 }) => {
   const [dataStats, setDataStats] = useAtom(dataStatsAtom)
   const { username } = router.query
@@ -176,8 +178,16 @@ export const InforWithNumbers = ({
       params.endDate = `${season}-12-30`
     }
 
+    // here url stats
+    // endpoint for coach stats not available for now
+    // setUrlGetSeasonStats(
+    //   `/biographies/${
+    //     profile === 'coach' ? 'coach' : 'player'
+    //   }/stats?${queryString.stringify(params)}`
+    // )
+
     setUrlGetSeasonStats(
-      `/biographies/player/stats?${queryString.stringify(params)}`
+      `/biographies/${'player'}/stats?${queryString.stringify(params)}`
     )
   }, [tab])
 

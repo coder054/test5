@@ -71,9 +71,9 @@ const AccountPage: NextPage = () => {
             ))}
           </Tabs>
           <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />
-          {currentTab === 'account' && <Account />}
+          {currentTab === 'account' && <Account getSettings={getSettings} />}
           {currentTab === 'settings' && <Settings />}
-          {currentTab === 'profile' && <Profile />}
+          {currentTab === 'profile' && <Profile getSettings={getSettings} />}
           {currentTab === 'media' && <Media />}
           {currentTab === 'health' && <Health />}
           {currentTab === 'football' && <Football />}
