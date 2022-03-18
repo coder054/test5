@@ -1,4 +1,5 @@
 import {
+  API_COACH_PROFILE,
   API_GET_LIST_DEVELOPMENT_NOTES,
   API_PLAYER_CREATE_DEVELOPMENT_NOTE,
   API_PLAYER_UPDATE_DEVELOPMENT_NOTE,
@@ -54,6 +55,12 @@ export const playerUpdateDevelopmentNote = async (
     `${API_PLAYER_UPDATE_DEVELOPMENT_NOTE}/${devTalkId}`,
     body
   )
+
+  return response
+}
+
+export const getProfileCoach = async () => {
+  const response = await axios.get(API_COACH_PROFILE)
 
   return response
 }

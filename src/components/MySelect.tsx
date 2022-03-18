@@ -1,5 +1,6 @@
 import { MenuItem, styled, TextField } from '@mui/material'
 import clsx from 'clsx'
+import { useEffect, useState } from 'react'
 
 const CssTextField = styled(TextField)({
   '& label': {
@@ -58,11 +59,13 @@ export const MySelect = ({
   arrOption,
   setOpenModal,
   errorMessage,
+  defauleValue,
   ...rest
 }: {
   className?: string
   label: string
   value?: string
+  defauleValue?: string
   addNew?: boolean
   titleAddNew?: string
   linkAddNew?: string
@@ -75,12 +78,25 @@ export const MySelect = ({
   const handleAddNew = () => {
     setOpenModal && setOpenModal(true)
   }
+  const [defaultOption, setDefaultOption] = useState({})
+
+  useEffect(() => {
+    if (defauleValue) {
+      arrOption.map((item) => {
+        if (item.value === defauleValue) {
+          setDefaultOption(item)
+        }
+      })
+    }
+  }, [defauleValue, defaultOption])
 
   return (
     <>
       <div className={clsx('relative', className)}>
         <CssTextField
           value={value}
+          /* @ts-ignore */
+          defaultValue={defaultOption.label && defaultOption.label}
           onChange={onChange}
           fullWidth
           select

@@ -69,7 +69,7 @@ export const BasicProfile = ({ onFormChange }: BasicProfileProps) => {
         />
         <MyDatePicker
           onChange={(e) => handleChangeForm('birthDay', e)}
-          val={formValues.birthDay}
+          value={formValues.birthDay}
           label="Birth day"
         />
       </div>
