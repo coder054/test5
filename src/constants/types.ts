@@ -124,3 +124,8 @@ export interface DevelopmentNoteType {
   coachDevelopmentProgress?: string
   devTalkId?: string
 }
+
+export interface ImageVideoType {
+  value?: string
+  position?: number
+}
