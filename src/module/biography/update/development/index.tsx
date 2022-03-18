@@ -79,7 +79,7 @@ export const Development = ({ playerId }: DevelopmentProps) => {
           <MyDatePicker
             label="Date"
             onChange={(e) => handleChangeForm('date', e)}
-            val={formValues.date}
+            value={formValues.date}
           />
           <MySlider
             marks

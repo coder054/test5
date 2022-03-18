@@ -58,7 +58,7 @@ const SignUpForm = () => {
   const [formValues, setFormValues] = useState<FormValues>({
     firstName: '',
     lastName: '',
-    birthDay: '',
+    birthDay: null,
     country: '',
     city: '',
     userProfile: '',
@@ -196,6 +196,9 @@ const SignUpForm = () => {
         query: { profile: formValues.userProfile.label },
       })
     }
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
   }
 
   return (
@@ -238,7 +241,7 @@ const SignUpForm = () => {
         <MyDatePicker
           label="Birthdate"
           onChange={(e) => handleChangeForm('birthDay', e)}
-          val={formValues.birthDay}
+          value={formValues.birthDay}
           className="mt-[24px]"
           errorMessage={formErrors.birthDay}
         />
