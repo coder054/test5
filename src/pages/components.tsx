@@ -140,7 +140,7 @@ const Components = () => {
         <div className="my-6 w-[439px] ">
           <MyDatePicker
             label="Birthdate"
-            value={date}
+            // value={date}
             onChange={(e) => setDate(e)}
           />
         </div>

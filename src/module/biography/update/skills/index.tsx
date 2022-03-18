@@ -8,12 +8,12 @@ import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
 import { UpdateSkills } from 'src/constants/types'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
 import {
   coachUpdatePlayerSkills,
   getPlayerRadar,
 } from 'src/service/biography-update'
 import { axios } from 'src/utils/axios'
-import { useAuth } from '../../authen/auth/AuthContext'
 
 type FootBallSkillTypes = {
   technics: number
@@ -43,7 +43,7 @@ const tagsClass =
   'text-white bg-[#13161A] laptopM:py-[10px] laptopM:pl-[10px] laptopM:pr-[20px] mobileM:p-[10px] rounded-[8px]'
 
 export const Skills = ({ playerId }: SkillProps) => {
-  const { userRoles, currentRoleId } = useAuth()
+  const { userRoles } = useAuth()
   const [tags, setTags] = useState<string[]>([])
   const [summary, setSummary] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
@@ -173,6 +173,7 @@ export const Skills = ({ playerId }: SkillProps) => {
               {Object.keys(footballSkills).map((skill: string) => (
                 <MySlider
                   isStar
+                  key={skill}
                   step={5}
                   readOnly={true}
                   label={_.upperFirst(skill)}
@@ -194,6 +195,7 @@ export const Skills = ({ playerId }: SkillProps) => {
                 <MySlider
                   step={1}
                   isPoint
+                  key={chart}
                   label={_.upperFirst(chart)}
                   onChange={(e) =>
                     handleChangeChart(chart as keyof RadarChartTypes, e)
