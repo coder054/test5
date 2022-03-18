@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { GradientCircularProgress } from 'react-circular-gradient-progress'
 import { Button } from 'src/components'
 import { Comments } from 'src/components/Comments'
@@ -21,6 +21,47 @@ export const InfoCoachWithCircleImage = ({
   currentRoleId?: string
   signupForm?: boolean
 }) => {
+  const [fakeRelation, setFakeRelation] = useState({
+    followStatus: null,
+    friendStatus: null,
+    isConfirmBox: null,
+    isFollowed: null,
+    isPublic: null,
+    fanCount: null,
+  })
+
+  const relations = useMemo(() => {
+    return Object.assign(
+      {},
+      {
+        followStatus:
+          fakeRelation.followStatus !== null
+            ? fakeRelation.followStatus
+            : dataBio.followStatus,
+        friendStatus:
+          fakeRelation.friendStatus !== null
+            ? fakeRelation.friendStatus
+            : dataBio.friendStatus,
+        isConfirmBox:
+          fakeRelation.isConfirmBox !== null
+            ? fakeRelation.isConfirmBox
+            : dataBio.isConfirmBox,
+        isFollowed:
+          fakeRelation.isFollowed !== null
+            ? fakeRelation.isFollowed
+            : dataBio.isFollowed,
+        isPublic:
+          fakeRelation.isPublic !== null
+            ? fakeRelation.isPublic
+            : dataBio.isPublic,
+        fanCount:
+          fakeRelation.fanCount !== null
+            ? fakeRelation.fanCount
+            : dataBio.fanCount,
+      }
+    )
+  }, [fakeRelation, dataBio])
+
   const [elmButtonFollow, setElmButtonFollow] = useState<string>('Follow')
   const [loading, setLoading] = useState<boolean>(false)
   const { authenticated } = useAuth() as {
@@ -297,7 +338,7 @@ export const InfoCoachWithCircleImage = ({
 
           <div className=" ">
             <div className="text-[14px] leading-[22px] text-white ">
-              {dataBio?.fanCount}
+              {relations?.fanCount}
             </div>
             <div className="text-Grey text-[12px] leading-[20px] ">Fans</div>
           </div>
@@ -329,15 +370,17 @@ export const InfoCoachWithCircleImage = ({
 
       {!signupForm && dataBio?.userId !== currentRoleId && authenticated && (
         <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px] ">
-          {/* // here coach button friend render */}
           <FriendButton
-            friendStatus={dataBio.friendStatus}
+            setFakeRelation={setFakeRelation}
+            friendStatus={relations.friendStatus}
             userId={dataBio.userId}
           />
           <FollowButton
-            followStatus={dataBio.followStatus}
-            isFollowed={dataBio.isFollowed}
+            setFakeRelation={setFakeRelation}
+            followStatus={relations.followStatus}
+            isFollowed={relations.isFollowed}
             userId={dataBio.userId}
+            relations={relations}
           />
         </div>
       )}

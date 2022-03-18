@@ -1,10 +1,8 @@
 import { useAtom } from 'jotai'
-import { get, isEmpty } from 'lodash'
+import { get } from 'lodash'
 import { useEffect } from 'react'
 import { dataStatsAtom } from 'src/atoms/biographyAtom'
 import { TitleCollapse } from 'src/components/common/TitleCollapse'
-import { Text } from 'src/components/Text'
-import { SvgCap } from 'src/imports/svgs'
 import { capitalize, getStr } from 'src/utils/utils'
 import { IDataStats } from './InfoWithNumbers'
 
@@ -144,7 +142,11 @@ export const InfoWithImages = () => {
                 <div className="text-white text-[10px] text-center ">
                   {capitalize(o.type.toLowerCase())}
                 </div>
-                <SvgCap className="text-center mx-auto mb-1 " />
+                <img
+                  src={'/biography/cap/Cap_National.svg'}
+                  className="text-center mx-auto mb-1 "
+                  alt=""
+                />
                 <div className="text-white text-[8px] text-center ">
                   {o.teamName}
                 </div>
