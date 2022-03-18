@@ -91,11 +91,14 @@ export function notify(
 
 export const fetcher = async (url) => {
   if (url === null) return
-  const data = await axios.get(url)
-  if (data.status === 200) {
-    return data.data
+  try {
+    const data = await axios.get(url)
+    if (data.status === 200) {
+      return data.data
+    }
+  } catch (error) {
+    return { error: true }
   }
-  return { error: true }
 }
 
 export const dataFromToken = (token: string) => {
