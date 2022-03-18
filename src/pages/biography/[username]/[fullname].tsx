@@ -159,14 +159,15 @@ const BioForPlayer = ({
       isPublic,
       userId,
     } = dataBioPlayer
-    // console.log('aaa dataBio: ', dataBioPlayer, {
-    //   friendStatus,
-    //   followStatus,
-    //   isConfirmBox,
-    //   isFollowed,
-    //   isPublic,
-    //   userId,
-    // })
+    console.log('aaa dataBio: ', dataBioPlayer)
+    console.log('aaa dataBio2', {
+      friendStatus,
+      followStatus,
+      isConfirmBox,
+      isFollowed,
+      isPublic,
+      userId,
+    })
   }, [dataBioPlayer])
 
   useEffect(() => {
@@ -380,6 +381,8 @@ const BioForPlayer = ({
                     dataClub={dataClub}
                     activeSeasons={dataBioPlayer.activeSeasons}
                     router={router}
+                    //@ts-ignore: Unreachable code error
+                    profile={profile}
                   />
                 </div>
               </div>
@@ -431,6 +434,27 @@ const BioForCoach = ({
 
   useEffect(() => {
     // console.log('IdCoach: ', dataBioCoach.userId)
+    const {
+      friendStatus,
+      followStatus,
+      isConfirmBox,
+      isFollowed,
+      isPublic,
+      userId,
+    } = dataBioCoach
+    console.log('aaa dataBio: ', dataBioCoach)
+    console.log('aaa dataBio2', {
+      friendStatus,
+      followStatus,
+      isConfirmBox,
+      isFollowed,
+      isPublic,
+      userId,
+    })
+  }, [dataBioCoach])
+  useEffect(() => {
+    console.log('Coach: ', dataBioCoach)
+    console.log('IdCoach: ', dataBioCoach.userId)
 
     dataBioCoach.userId && setPlayerId(dataBioCoach.userId)
   }, [dataBioCoach])
@@ -593,6 +617,7 @@ const BioForCoach = ({
                     dataClub={dataClub}
                     activeSeasons={dataBioCoach.activeSeasons}
                     router={router}
+                    profile={profile}
                   />
                 </div>
               </div>
@@ -695,7 +720,10 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   if (errorExisted) {
     // at least one error
     //@ts-ignore: Unreachable code error
-    const errors = values.map((o) => o.reason)
+    const errors = values.map((o) => {
+      //@ts-ignore: Unreachable code error
+      o.reason === undefined ? 'noerror' : 'error'
+    })
     console.log('aaa errors', errors)
     ;[dataBioPlayer, dataBioCoach, dataClub, dataAvgPlayer, dataAvgCoach] = [
       null,

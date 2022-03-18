@@ -84,6 +84,7 @@ export interface IBiographyCoach {
   followStatus?: string
   isConfirmBox?: boolean
   isFollowed?: boolean
+  isPublic?: boolean
 
   friendCount: number
   followCount: number

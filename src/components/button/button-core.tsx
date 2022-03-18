@@ -12,7 +12,7 @@ interface ButtonProps {
   disable?: boolean
   id?: string
   children?: any
-  onClick?: () => void
+  onClick?: any
   [rest: string]: any
 }
 
