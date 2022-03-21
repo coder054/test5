@@ -59,6 +59,7 @@ export const chattingUIDsNode = 'chattingUIDs'
 export const previewDataNode = 'previewData'
 
 export interface IChatRoom {
+  aaa: number
   chatRoomId: string
   memberIds: string[]
   updatedAt: number
@@ -76,6 +77,12 @@ export interface IChatRoom {
   chattingUIDs?: string[]
   deletedDate?: number
   isShowChatRoom?: boolean // defauld true
+  roomType?: ERoomType
+}
+
+export enum ERoomType {
+  GROUP = 'GROUP',
+  TEAM = 'TEAM',
 }
 
 export interface IUser {
@@ -706,10 +713,12 @@ export const createGroupChatRoom = async (
   groupName: string,
   requested: boolean,
   memberIds: string[],
-  chatRoomImage?: string
+  chatRoomImage?: string,
+  //@ts-ignore: Unreachable code error
+  roomType: ERoomType
 ) => {
   try {
-    let chatRoom: IChatRoom = {
+    const chatRoom: IChatRoom = {
       memberIds,
       requested,
       //@ts-ignore: Unreachable code error
@@ -718,6 +727,7 @@ export const createGroupChatRoom = async (
       chatRoomName: groupName,
       chatRoomImage,
       isGroup: true,
+      roomType,
     }
 
     const updates = {}
