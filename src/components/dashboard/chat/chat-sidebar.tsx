@@ -51,7 +51,7 @@ import { Loading } from 'src/components/loading/loading'
 import { getStr, truncateStr } from 'src/utils/utils'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { chain } from 'lodash'
-import { createGroupChatRoom } from 'src/module/chat/chatService'
+import { createGroupChatRoom, ERoomType } from 'src/module/chat/chatService'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 interface ChatSidebarProps {
@@ -532,7 +532,8 @@ const ModalCreateGroup = ({ open, setOpen }) => {
                     .compact()
                     .uniq()
                     .value(),
-                  imageUrl
+                  imageUrl,
+                  ERoomType.GROUP
                 )
                 setTimeout(() => {
                   router.push(`/dashboard/chat?roomId=${data.groupId}`)

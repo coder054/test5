@@ -27,6 +27,7 @@ export const LOCAL_STORAGE_KEY = {
 export const COOKIE_KEY = {
   roleid: 'roleid',
   token: 'token',
+  currentRoleName: 'currentRoleName',
 }
 
 export const AVATAR_DEFAULT =
