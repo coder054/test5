@@ -6,6 +6,7 @@ import {
 } from '@mui/material'
 import clsx from 'clsx'
 import { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { MyInput } from 'src/components/MyInput'
 import { API_GET_LIST_TEAM } from 'src/constants/api.constants'
@@ -18,8 +19,9 @@ import { axios } from 'src/utils/axios'
 
 type InfiniteScrollTeamProps = {
   handleSetTeam?: (value: CurrentTeamType) => void
-  idClub: string
-  item: CurrentTeamType
+  label: string
+  idClub?: string
+  item?: CurrentTeamType
   errorMessage?: string
   value?: string
 }
@@ -27,6 +29,7 @@ type InfiniteScrollTeamProps = {
 export const InfiniteScrollTeam = ({
   handleSetTeam,
   idClub,
+  label,
   item,
   errorMessage,
   value,
@@ -47,7 +50,7 @@ export const InfiniteScrollTeam = ({
   }
 
   useEffect(() => {
-    setTeam(item.teamName)
+    item && setTeam(item.teamName)
     value && setTeam(value)
   }, [item])
 
@@ -69,36 +72,45 @@ export const InfiniteScrollTeam = ({
   const handleSearch = useCallback(
     (value: string) => {
       setTeam(value)
-      setTimeout(async () => {
-        const res = await axios.get(API_GET_LIST_TEAM, {
-          headers: {
-            roleId: currentRoleId,
-          },
-          params: {
-            ...param,
-            startAfter: 0,
-            searchQuery: value,
-          },
-        })
-        if (res.status === 200) {
-          setItems(res.data)
-        }
-      }, 500)
+      idClub &&
+        setTimeout(async () => {
+          await axios
+            .get(API_GET_LIST_TEAM, {
+              headers: {
+                roleId: currentRoleId,
+              },
+              params: {
+                ...param,
+                startAfter: 0,
+                searchQuery: value,
+              },
+            })
+            .then((res) => {
+              setItems(res.data)
+            })
+            .catch(() => {
+              toast.error('An error has occurred')
+            })
+        }, 500)
     },
     [team]
   )
 
   const getListTeam = async () => {
-    const res = await axios.get(API_GET_LIST_TEAM, {
-      params: {
-        ...param,
-        startAfter: items.length,
-      },
-    })
-    if (res.status === 200) {
-      const arr = items.concat(res.data)
-      setItems(arr)
-    }
+    await axios
+      .get(API_GET_LIST_TEAM, {
+        params: {
+          ...param,
+          startAfter: items.length,
+        },
+      })
+      .then((res) => {
+        const arr = items.concat(res.data)
+        setItems(arr)
+      })
+      .catch(() => {
+        toast.error('An error has occurred')
+      })
   }
 
   const fetchMoreData = async () => {
@@ -110,14 +122,14 @@ export const InfiniteScrollTeam = ({
   }
 
   useEffect(() => {
-    getListTeam()
+    idClub && getListTeam()
   }, [])
 
   return (
     <ClickAwayListener onClickAway={() => setIsOpenOption(false)}>
       <div className="relative w-full">
         <MyInput
-          label="Your Teams(s)"
+          label={label}
           onChange={(e) => handleSearch(e.target.value)}
           onClick={() => setIsOpenOption(true)}
           value={team || value}

@@ -1,5 +1,7 @@
 import clsx from 'clsx'
+import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
+import { diaryAtom } from 'src/atoms/diaryAtoms'
 
 type TabsProps = {
   value: { label: string; value: string }[]
@@ -9,25 +11,31 @@ type TabsProps = {
 
 export const Tabs = ({ value, onChange, current }: TabsProps) => {
   const [currentTab, setCurrentTab] = useState<string>('')
+  const [diary] = useAtom(diaryAtom)
+
   useEffect(() => {
     current && setCurrentTab(current)
   }, [current])
 
-  console.log(currentTab)
   return (
     <div className="flex flex-wrap">
       {value.map((it) => (
-        <span
+        <button
+          type="button"
+          disabled={diary.diaryId && currentTab !== it.value}
           onClick={() => onChange(it.value)}
           className={clsx(
-            ' text-white text-[14px] font-medium py-2 px-4 mr-2 mb-2 rounded-full hover:bg-[#09E099] cursor-pointer duration-150',
+            ' text-white border-[1px] border-[#64748b] text-[14px] font-medium py-2 px-4 mr-2 mb-2 rounded-full hover:bg-[#09E099] cursor-pointer duration-150',
             currentTab === it.value
               ? 'bg-[#09E099]'
-              : 'bg-[#64748b] bg-opacity-[0.4]'
+              : 'bg-[#64748b] bg-opacity-[0.4]',
+            diary.diaryId &&
+              currentTab !== it.value &&
+              ' bg-[#202128cc] bg-opacity-0  hover:bg-inherit text-gray-500'
           )}
         >
           {it.label}
-        </span>
+        </button>
       ))}
     </div>
   )
