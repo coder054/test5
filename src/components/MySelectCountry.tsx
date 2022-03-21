@@ -10,7 +10,7 @@ const CssTextField = styled(TextField)({
     marginLeft: '4px',
   },
   '& label.Mui-focused': {
-    color: '#5048E5',
+    color: '#ffffff',
   },
   '& .MuiInput-underline:after': {
     borderBottomColor: 'green',
@@ -25,7 +25,7 @@ const CssTextField = styled(TextField)({
     '& fieldset': {
       borderColor: '#484A4D', // border normal
       borderRadius: '8px', // border normal
-      padding: '17px 12px 15px 12px',
+      padding: '12px 12px 12px 12px',
       color: '#ffffff',
     },
     '&:hover fieldset': {
@@ -52,17 +52,6 @@ export const MySelectCountry = ({
   onChange?: any
   [rest: string]: any
 }) => {
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-    let el = window.document.querySelector('.ant-form')
-    if (!el) {
-      return
-    }
-    el.classList.remove('ant-form')
-  }, [])
-
   return (
     <div className={clsx('relative', className)} {...rest}>
       <Autocomplete

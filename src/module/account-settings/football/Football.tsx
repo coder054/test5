@@ -27,14 +27,11 @@ type FormArrayType = {
   favoriteRoles: string[]
 }
 
-const COMMON_CLASS =
-  'active:border-2 active:border-[#6B7280] border-2 border-[#202128cc] rounded-full duration-150 cursor-pointer'
+const COMMON_CLASS = 'cursor-pointer'
 
 export const Football = () => {
   const [account, setAccount] = useAtom(settingsAtom)
-  const { currentRoleId, currentRoleName } = useAuth()
-  console.log(account)
-
+  const { currentRoleName } = useAuth()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [formValues, setFormValues] = useState<PlayerCareerType>({
     teamCalendarLinks: [],
@@ -77,7 +74,7 @@ export const Football = () => {
       newArr[+index] = value
       setFormValues((prev) => ({ ...prev, [type]: index ? newArr : value }))
     },
-    [formValues]
+    [JSON.stringify(formValues)]
   )
 
   const handleAddForm = useCallback(
@@ -88,7 +85,7 @@ export const Football = () => {
         setFormValues((prev) => ({ ...prev, [type]: arr }))
       }
     },
-    [formValues]
+    [JSON.stringify(formValues)]
   )
 
   const handleRemoveForm = useCallback(
@@ -99,7 +96,7 @@ export const Football = () => {
       })
       setFormValues((prev) => ({ ...prev, [type]: arr }))
     },
-    [formValues]
+    [JSON.stringify(formValues)]
   )
 
   const handleSubmit = async () => {
@@ -123,6 +120,18 @@ export const Football = () => {
     account &&
       setFormValues({
         ...account.playerCareer,
+        currentTeams:
+          account.playerCareer?.currentTeams.length === 0
+            ? [
+                {
+                  clubId: '',
+                  status: '',
+                  teamId: '',
+                  teamImage: '',
+                  teamName: '',
+                },
+              ]
+            : account.playerCareer?.currentTeams,
         favoriteRoles:
           account.playerCareer?.favoriteRoles.length === 0
             ? ['']
@@ -139,12 +148,14 @@ export const Football = () => {
       <BackGround label="Football" contentClass="xl:w-[400px]">
         <div className="space-y-7">
           <InfiniteScrollClub
+            label="Your Club"
             initialValue={formValues.contractedClub}
             handleSetClub={setSelectedClub}
           />
           {(formValues.currentTeams || []).map((item, index) => (
             <div key={index} className="flex items-center space-x-3">
               <InfiniteScrollTeam
+                label="Your team(s)"
                 idClub={formValues.contractedClub.clubId}
                 handleSetTeam={(value) => setSelectedTeam(value, index + '')}
                 item={item}

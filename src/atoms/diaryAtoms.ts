@@ -7,4 +7,5 @@ export const diaryAtom = atom<DiaryType>({
   energyLevel: 'NORMAL',
   injuries: [],
   sleep: 'NORMAL',
+  typeOfDiary: 'TRAINING',
 })
