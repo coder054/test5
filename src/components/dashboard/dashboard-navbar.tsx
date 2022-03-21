@@ -213,7 +213,7 @@ const AccountButton = () => {
       >
         <img
           src={safeAvatar(infoActiveProfile?.faceImageUrl)}
-          className="w-[33px] h-[33px] rounded-full object-cover mr-[16px] "
+          className="w-[36px] h-[36px] rounded-full object-cover mr-[16px] "
           alt=""
         />
       </Box>
