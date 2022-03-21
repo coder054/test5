@@ -46,6 +46,7 @@ module.exports = {
         Yellow: {
           DEFAULT: 'rgba(255, 150, 7, 1)',
         },
+        lighterGray: 'rgba(255, 255, 255, 0.04)',
       },
       fontFamily: {
         SVNGilroy: ['SVN-Gilroy'],

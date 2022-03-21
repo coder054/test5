@@ -27,6 +27,7 @@ import { Search as SearchIcon } from '../../icons/search'
 import { Users as UsersIcon } from '../../icons/users'
 import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { safeAvatar } from 'src/utils/utils'
 
 interface DashboardNavbarProps extends AppBarProps {
   onOpenSidebar?: () => void
@@ -210,15 +211,11 @@ const AccountButton = () => {
           ml: 2,
         }}
       >
-        <Avatar
-          sx={{
-            height: 40,
-            width: 40,
-          }}
-          src={infoActiveProfile?.faceImageUrl}
-        >
-          <UserCircleIcon fontSize="small" />
-        </Avatar>
+        <img
+          src={safeAvatar(infoActiveProfile?.faceImageUrl)}
+          className="w-[33px] h-[33px] rounded-full object-cover mr-[16px] "
+          alt=""
+        />
       </Box>
       <AccountPopover
         anchorEl={anchorRef.current}

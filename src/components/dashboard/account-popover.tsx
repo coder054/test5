@@ -66,37 +66,107 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
           id="test5"
           className="border w-[0px] h-[0px] relative top-0 left-0 z-50 bg-red-400 transform translate-x-[-300px] "
         ></div>
-        <Box
-          onClick={(event) => {
-            setAnchorEl2(document.getElementById('test5'))
-          }}
-          sx={{
-            alignItems: 'center',
-            p: 2,
-            display: 'flex',
-            cursor: 'pointer',
-          }}
-        >
-          <Avatar
-            src={infoActiveProfile?.faceImageUrl}
-            sx={{
-              height: 40,
-              width: 40,
+
+        <div className="py-[5px] ">
+          {userRoles.map((item, index) => {
+            const isActive: boolean = item.roleId === currentRoleId
+            return (
+              <div
+                key={item.roleId}
+                className={clsx(
+                  ` h-[58px] w-full  flex items-center mb-[5px] px-[16px] `,
+                  isActive ? ' pointer-events-none ' : ' cursor-pointer '
+                )}
+                onClick={() => {
+                  onClose()
+                  setAnchorEl2(null)
+                  setCurrentRoleName(item.role)
+                  router.push('/dashboard/news')
+                }}
+              >
+                <img
+                  src={safeAvatar(item.faceImageUrl)}
+                  className="w-[40px] h-[40px] rounded-full object-cover mr-[16px] "
+                  alt=""
+                />
+
+                <div className=" ">
+                  <div
+                    className={`${
+                      isActive ? 'text-Green' : 'text-white'
+                    } text-[16px] leading-[150%]`}
+                  >
+                    {item.firstName} {item.lastName}
+                  </div>
+                  <div className="flex ">
+                    <span
+                      className={`${
+                        isActive ? 'text-Green' : 'text-Grey'
+                      } text-[12px] leading-[150%] `}
+                    >
+                      #{item.username}
+                    </span>
+                    <div className="w-[8px] inline-block "></div>
+                    <span
+                      className={`${
+                        isActive ? 'text-Green' : 'text-Grey'
+                      } text-[12px] leading-[150%] `}
+                    >
+                      {item.role === 'COACH' ? 'Coach' : item.position}
+                    </span>
+                  </div>
+                </div>
+                <div className="grow "></div>
+
+                {isActive && (
+                  <svg
+                    className="cursor-pointer"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6.0001 10.7799L3.2201 7.9999L2.27344 8.9399L6.0001 12.6666L14.0001 4.66656L13.0601 3.72656L6.0001 10.7799Z"
+                      fill="#09E099"
+                    />
+                  </svg>
+                )}
+              </div>
+            )
+          })}
+
+          <div
+            onClick={() => {
+              // todo
             }}
+            className=" px-[16px] h-[40px] flex w-full items-center cursor-pointer hover:bg-lighterGray "
           >
-            <UserCircleIcon fontSize="small" />
-          </Avatar>
-          <Box
-            sx={{
-              ml: 1,
-            }}
-          >
-            <Typography variant="body1">{`${infoActiveProfile?.firstName} ${infoActiveProfile?.lastName}`}</Typography>
-            <Typography color="textSecondary" variant="body2">
-              Company Inc
-            </Typography>
-          </Box>
-        </Box>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M19 13H13V19H11V13H5V11H11V5H13V11H19V13Z"
+                fill="white"
+              />
+            </svg>
+            <div className="w-[8px] "></div>
+            <div
+              onClick={() => {
+                // here
+              }}
+              className="text-white text-[16px] leading-[150%]  "
+            >
+              Create new role
+            </div>
+          </div>
+        </div>
+
         <Divider />
         <Box sx={{ my: 1 }}>
           {/* <NextLink href="/dashboard/social/profile" passHref> */}
@@ -118,7 +188,7 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
                 primary={
                   <Typography variant="body1">
                     <Link href="/account-and-settings">
-                      <a className="">Account & Settings</a>
+                      <a className="hover:text-white text-white">Account & Settings</a>
                     </Link>
                   </Typography>
                 }
