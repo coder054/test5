@@ -99,7 +99,7 @@ export const DetailProfile = ({ onFormChange }: DetailProfileProps) => {
         />
         <MySelectCountry
           label="Birthcountry"
-          val={formValues.birthCountry}
+          value={formValues.birthCountry}
           onChange={(_, value) => handleChangeForm('birthCountry', value)}
         />
       </div>

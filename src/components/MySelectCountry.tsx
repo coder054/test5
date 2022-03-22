@@ -2,7 +2,6 @@
 import { Autocomplete, Box, styled, TextField } from '@mui/material'
 import clsx from 'clsx'
 import { COUNTRY_LIST } from 'src/constants/mocks/countries.constants'
-import { useEffect } from 'react'
 
 const CssTextField = styled(TextField)({
   '& label': {
@@ -40,14 +39,14 @@ const CssTextField = styled(TextField)({
 export const MySelectCountry = ({
   className,
   label,
-  val,
+  value,
   errorMessage,
   onChange,
   ...rest
 }: {
   className?: string
   label: string
-  val?: any
+  value?: any
   errorMessage?: string
   onChange?: any
   [rest: string]: any
@@ -67,7 +66,7 @@ export const MySelectCountry = ({
         disablePortal
         options={COUNTRY_LIST}
         onChange={onChange}
-        value={val ? val : null}
+        value={value ? value : null}
         fullWidth
         renderInput={(params) => (
           <CssTextField

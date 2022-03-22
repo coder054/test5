@@ -1,25 +1,23 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useAtom } from 'jotai'
+import { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import { settingsAtom } from 'src/atoms/accountAndSettings'
 import { MinusIcon, PlusIcon } from 'src/components/icons'
+import { MyButton } from 'src/components/MyButton'
 import { MyCustomSelect } from 'src/components/MyCustomSelect'
+import { MyDatePicker } from 'src/components/MyDatePicker'
 import { MyInput } from 'src/components/MyInput'
 import { POSITION } from 'src/constants/mocks/position.constants'
 import {
   ClubType,
   CurrentTeamType,
   PlayerCareerType,
-  TeamType,
 } from 'src/constants/types/settingsType.type'
-import { BackGround } from '../common-components/Background'
-import { InfiniteScrollClub } from './components/InfiniteScrollClub'
-import { useAtom } from 'jotai'
-import { settingsAtom } from 'src/atoms/accountAndSettings'
-import { MyDatePicker } from 'src/components/MyDatePicker'
-import { MyButton } from 'src/components/MyButton'
-import { InfiniteScrollTeam } from './components/InfiniteScrollTeam'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
-import { notification } from 'antd'
-import toast from 'react-hot-toast'
+import { BackGround } from '../common-components/Background'
+import { InfiniteScrollClub } from './components/InfiniteScrollClub'
+import { InfiniteScrollTeam } from './components/InfiniteScrollTeam'
 
 type FormArrayType = {
   currentTeams?: CurrentTeamType[]
@@ -149,7 +147,7 @@ export const Football = () => {
         <div className="space-y-7">
           <InfiniteScrollClub
             label="Your Club"
-            initialValue={formValues.contractedClub}
+            value={formValues.contractedClub}
             handleSetClub={setSelectedClub}
           />
           {(formValues.currentTeams || []).map((item, index) => (
