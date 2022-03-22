@@ -47,7 +47,6 @@ export const fetcherForEndpointFlip = async (url) => {
 
 const tabs = [
   { label: 'Biography', value: 'biography' },
-  { label: 'Diary', value: 'diary' },
   { label: 'Update', value: 'update' },
 ]
 
@@ -398,7 +397,6 @@ const BioForPlayer = ({
           </div>
         )}
         {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
-        {currentTab === 'diary' && <Diary />}
       </div>
     </>
   )

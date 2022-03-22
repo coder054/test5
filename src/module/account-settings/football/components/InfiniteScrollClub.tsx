@@ -13,10 +13,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { ArrowBackIcon } from 'src/components/icons'
 import { MyInput } from 'src/components/MyInput'
 import { API_GET_LIST_CLUB } from 'src/constants/api.constants'
-import {
-  ClubType,
-  ContractedClubType,
-} from 'src/constants/types/settingsType.type'
+import { ClubType } from 'src/constants/types/settingsType.type'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
 import { NewClubModal } from './NewClubModal'
@@ -25,7 +22,7 @@ type InfiniteScrollClubProps = {
   label: string
   errorMessage?: string
   handleSetClub?: (value: ClubType) => void
-  initialValue?: ContractedClubType
+  value?: ClubType
 }
 
 const style = {
@@ -41,7 +38,7 @@ const style = {
 
 export const InfiniteScrollClub = ({
   handleSetClub,
-  initialValue,
+  value,
   errorMessage,
   label,
 }: InfiniteScrollClubProps) => {
@@ -117,8 +114,8 @@ export const InfiniteScrollClub = ({
   }
 
   useEffect(() => {
-    initialValue && setClub(initialValue.clubName)
-  }, [initialValue])
+    value && setClub(value.clubName)
+  }, [JSON.stringify(value)])
 
   useEffect(() => {
     getListClub()

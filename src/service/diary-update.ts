@@ -18,3 +18,14 @@ export const fetchDiary = async (date?: string | Date, roleName?: string) => {
       toast.error('An error has occurred')
     })
 }
+
+export const fetchMember = async (teamId: string) => {
+  return axios
+    .get(`teams/${teamId}/get-members-in-team`)
+    .then((res) => {
+      return res.data
+    })
+    .catch(() => {
+      toast.error('An error has occurred')
+    })
+}

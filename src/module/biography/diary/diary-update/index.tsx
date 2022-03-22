@@ -73,12 +73,6 @@ const Component = () => {
     }
   }, [JSON.stringify(diary)])
 
-  useEffect(() => {
-    return () => {
-      setCurrentTab(undefined)
-    }
-  }, [])
-
   return (
     <Loading isLoading={isLoading}>
       <div className="space-y-5">

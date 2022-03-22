@@ -249,7 +249,7 @@ const SignUpForm = () => {
         <MySelectCountry
           label="Select Country"
           onChange={(_, value) => handleChangeForm('country', value)}
-          val={formValues.country}
+          value={formValues.country}
           className="mt-[24px]"
           errorMessage={formErrors.country}
         />

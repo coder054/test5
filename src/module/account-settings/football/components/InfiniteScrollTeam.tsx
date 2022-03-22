@@ -86,6 +86,9 @@ export const InfiniteScrollTeam = ({
               },
             })
             .then((res) => {
+              if (res.data.length === 0) {
+                setHasMore(false)
+              }
               setItems(res.data)
             })
             .catch(() => {
