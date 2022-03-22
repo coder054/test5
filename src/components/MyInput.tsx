@@ -12,39 +12,6 @@ const MenuProps = {
   },
 }
 
-const CssTextField = styled(TextField)({
-  '& label': {
-    color: 'rgba(129, 131, 137, 1)',
-    marginLeft: '4px',
-  },
-  '& label.Mui-focused': {
-    color: '#ffffff',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: 'green',
-  },
-  '& .MuiOutlinedInput-root': {
-    '& input': {
-      color: '#ffffff',
-      fontSize: '16px',
-      lineHeight: '25px',
-    },
-
-    '& fieldset': {
-      borderColor: '#484A4D', // border normal
-      borderRadius: '8px', // border normal
-      padding: '12px 12px 12px 12px',
-      color: '#ffffff',
-    },
-    '&:hover fieldset': {
-      borderColor: '#484A4D',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#5048E5',
-    },
-  },
-})
-
 export const MyInput = ({
   className,
   label,
@@ -76,7 +43,7 @@ export const MyInput = ({
   return (
     <div className="w-full">
       <div className={clsx('relative', className)}>
-        <CssTextField
+        <TextField
           {...rest}
           placeholder={placeholder}
           fullWidth
