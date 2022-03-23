@@ -356,7 +356,7 @@ export const SignupFormBiography = () => {
             </div>
           )}
 
-          {profile === 'Coach' && data.userId ? (
+          {profile === 'Coach' && dataCoach.userId ? (
             <InfoCoachWithCircleImage
               dataBio={dataCoach}
               currentRoleId={currentRoleId}
@@ -380,7 +380,7 @@ export const SignupFormBiography = () => {
             <InfoCoachWithAChart
               dataBio={dataCoach}
               dataBioRadarChart={dataBioCoachRadarChart}
-              // signupForm
+              signupForm
               profile="coach"
             />
           ) : null}

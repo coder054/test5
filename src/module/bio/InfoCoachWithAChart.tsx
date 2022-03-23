@@ -34,7 +34,7 @@ export const InfoCoachWithAChart = ({
     try {
       await updateUserRoles()
       console.log('userRoles', userRoles)
-      setCurrentRoleName('PLAYER')
+      setCurrentRoleName('COACH')
       router.push(ROUTES.dashboard)
     } catch (error) {
       console.log('error', error)
