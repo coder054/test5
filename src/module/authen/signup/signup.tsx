@@ -51,7 +51,7 @@ const tabs = [
   { text: Tab.Apple },
 ]
 
-export const SignUpWithSMS = () => {
+export const SignUp = () => {
   const router = useRouter()
   const [tab, setTab] = useQueryParam('type', withDefault(StringParam, Tab.SMS))
   const [step, setStep] = useState<1 | 2>(1)
