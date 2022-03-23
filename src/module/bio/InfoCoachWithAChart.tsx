@@ -24,7 +24,7 @@ export const InfoCoachWithAChart = ({
   profile: string
 }) => {
   const router = useRouter()
-  const { updateUserRoles, userRoles } = useAuth()
+  const { updateUserRoles, userRoles, setCurrentRoleName } = useAuth()
 
   useEffect(() => {
     // console.log('aaa dataBioRadarChart: ', dataBioRadarChart)
@@ -34,6 +34,7 @@ export const InfoCoachWithAChart = ({
     try {
       await updateUserRoles()
       console.log('userRoles', userRoles)
+      setCurrentRoleName('PLAYER')
       router.push(ROUTES.dashboard)
     } catch (error) {
       console.log('error', error)

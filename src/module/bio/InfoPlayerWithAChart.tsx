@@ -18,9 +18,10 @@ export const InfoPlayerWithAChart = ({
   dataBioRadarChart: any
   signupForm?: boolean
   profile: string
-}) => {
+  }) => {
+  
   const router = useRouter()
-  const { updateUserRoles, userRoles } = useAuth()
+  const { updateUserRoles, setCurrentRoleName } = useAuth()
   const [loading, setLoading] = useState<boolean>(false)
 
   const handleNext = async () => {
@@ -28,6 +29,7 @@ export const InfoPlayerWithAChart = ({
     try {
       await updateUserRoles()
       setLoading(false)
+      setCurrentRoleName('PLAYER')
       router.push(ROUTES.dashboard)
     } catch (error) {
       console.log('error', error)
