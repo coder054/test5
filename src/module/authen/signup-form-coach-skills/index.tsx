@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import { Button, SliderStar } from 'src/components'
 import { Comments } from 'src/components/Comments'
 const cls = require('./signup-form-coach-skills.module.css')
@@ -141,6 +142,7 @@ export const SignUpFormCoachSkills = () => {
     try {
       const response = await axios.put(API_SIGNUP_FORM_COACH, {
         ...profileCoach,
+        roleId: uuidv4(),
       })
 
       if (response.status === 200) {

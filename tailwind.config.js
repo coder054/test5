@@ -18,11 +18,14 @@ module.exports = {
         'landing-four': "url('/assets/landing-page/Landing-4.png')",
         'landing-five': "url('/assets/landing-page/Landing-5.png')",
         'front-body': "url('/assets/Front.png')",
+        'authen-desktop': "url('/authen/bg-login-desktop.png')",
+        'authen-mobile': "url('/authen/bg-login-mobile.png')",
       },
       animation: {
         appear: 'appear 0.2s ease-in-out',
       },
       colors: {
+        DefaultTextColor: 'rgb(160, 174, 192)',
         Blue: '#4654EA',
         'Dark-1': '#252627',
         'Dark-2': 'rgba(30, 31, 36, 1)',
