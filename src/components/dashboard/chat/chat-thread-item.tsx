@@ -178,6 +178,15 @@ export const ChatThreadItem: FC<ChatThreadItemProps> = (props) => {
           },
         })}
       </Typography>
+
+      {Number(chatRoom.unReadMessageNumber) > 0 && (
+        <div
+          className="rounded-full min-w-[25px] w-[25px] h-[25px] bg-[#116699] text-white flex items-center justify-center text-[12px] ml-[8px] 
+      whitespace-nowrap "
+        >
+          {chatRoom.unReadMessageNumber}
+        </div>
+      )}
     </ListItem>
   )
 }

@@ -25,6 +25,8 @@ import {
   getDeleteChatRoomDate,
   getMessageContent,
   getMessageNumber,
+  getNumberUnreadMessageIdsInRoom,
+  getUnreadMessageIdsInRoom,
   IChatMessage,
   IChatRoom,
   IChatUser,
@@ -90,7 +92,12 @@ export const AllTab = () => {
             }
           }
 
-          let unReadMessageNumber: number = 50
+          let unReadMessageNumber: number =
+            await getNumberUnreadMessageIdsInRoom(
+              chatRoom.chatRoomId,
+              deletedDate,
+              currentRoleId
+            )
 
           let lastMessageContent: string = ''
           lastMessageContent = await getMessageContent(
@@ -170,6 +177,10 @@ export const AllTab = () => {
           })
         })
         const results1 = await Promise.all(promises)
+        const rsatsra = results1
+          .filter((o) => o.isShowChatRoom)
+          .map((o) => o.unReadMessageNumber)
+        console.log('aaa rsatsra', rsatsra)
         setChatRooms(results1.filter((o) => o.isShowChatRoom))
       } catch (error) {
         console.log('aaa error', getErrorMessage(error))
