@@ -21,6 +21,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import {
   fromChatMessageToTypesMessage,
+  getChatRoomStream,
   getChatUser,
   getDeleteChatRoomDate,
   getMessageContent,
@@ -54,6 +55,90 @@ export const UnreadTab = () => {
   const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
   const [, setLoadingChatRooms] = useAtom(loadingChatRoomsAtom)
 
+  // useEffect(() => {
+  //   if (isEmpty(snapshots) || isEmpty(currentRoleId)) {
+  //     setChatRooms([])
+  //     return
+  //   }
+
+  //   ;(async () => {
+  //     try {
+  //       if (firstRender === true) {
+  //         setLoadingChatRooms(true)
+  //         setFirstRender(false)
+  //       }
+  //       let a1 = snapshots
+  //         .filter((o) => {
+  //           const chatRoom = o.val()
+  //           return _queryUnreadMessage(chatRoom, currentRoleId)
+  //         })
+  //         .reverse()
+  //       const promises = a1.map(async (o) => {
+  //         let chatRoom: IChatRoom = o.val()
+  //         console.log('aaa chatRoom2', chatRoom)
+
+  //         let deletedDate: number = getDeleteChatRoomDate(
+  //           chatRoom,
+  //           currentRoleId
+  //         )
+  //         let isShowChatRoom = true
+
+  //         if (!!deletedDate) {
+  //           let messageNumber = await getMessageNumber(
+  //             chatRoom.chatRoomId,
+  //             deletedDate
+  //           )
+  //           if (messageNumber === 0) {
+  //             isShowChatRoom = false
+  //           }
+  //         }
+
+  //         let unReadMessageNumber: number =
+  //           await getNumberUnreadMessageIdsInRoom(
+  //             chatRoom.chatRoomId,
+  //             deletedDate,
+  //             currentRoleId
+  //           )
+
+  //         let lastMessageContent: string = ''
+  //         lastMessageContent = await getMessageContent(
+  //           chatRoom.chatRoomId,
+  //           chatRoom.lastMessageId || '',
+  //           currentRoleId
+  //         )
+
+  //         /// ================================================================
+  //         /// Get chat room image
+
+  //         let chatUser: IChatUser
+
+  //         return Object.assign({}, chatRoom, {
+  //           chatRoomName: '', //
+  //           chatRoomImage: '', //
+  //           userName: '', //
+  //           lastMessageContent: lastMessageContent, //
+  //           unReadMessageNumber: unReadMessageNumber, //
+  //           isShowChatRoom: isShowChatRoom,
+  //         })
+  //       })
+  //       const results1 = await Promise.all(promises)
+  //       const a11 = results1.filter(
+  //         (o) => o.isShowChatRoom && (o.unReadMessageNumber || 0) > 0
+  //       )
+  //       debugger
+  //       setChatRooms(
+  //         results1.filter(
+  //           (o) => o.isShowChatRoom && (o.unReadMessageNumber || 0) > 0
+  //         )
+  //       )
+  //     } catch (error) {
+  //       console.log('aaa error', getErrorMessage(error))
+  //     } finally {
+  //       setLoadingChatRooms(false)
+  //     }
+  //   })()
+  // }, [snapshots, currentRoleId])
+
   useEffect(() => {
     if (isEmpty(snapshots) || isEmpty(currentRoleId)) {
       setChatRooms([])
@@ -66,69 +151,13 @@ export const UnreadTab = () => {
           setLoadingChatRooms(true)
           setFirstRender(false)
         }
-        let a1 = snapshots
-          .filter((o) => {
-            const chatRoom = o.val()
-            return _queryUnreadMessage(chatRoom, currentRoleId)
-          })
-          .reverse()
-        const promises = a1.map(async (o) => {
-          let chatRoom: IChatRoom = o.val()
-          console.log('aaa chatRoom2', chatRoom)
-
-          let deletedDate: number = getDeleteChatRoomDate(
-            chatRoom,
-            currentRoleId
-          )
-          let isShowChatRoom = true
-
-          if (!!deletedDate) {
-            let messageNumber = await getMessageNumber(
-              chatRoom.chatRoomId,
-              deletedDate
-            )
-            if (messageNumber === 0) {
-              isShowChatRoom = false
-            }
-          }
-
-          let unReadMessageNumber: number =
-            await getNumberUnreadMessageIdsInRoom(
-              chatRoom.chatRoomId,
-              deletedDate,
-              currentRoleId
-            )
-
-          let lastMessageContent: string = ''
-          lastMessageContent = await getMessageContent(
-            chatRoom.chatRoomId,
-            chatRoom.lastMessageId || '',
-            currentRoleId
-          )
-
-          /// ================================================================
-          /// Get chat room image
-
-          let chatUser: IChatUser
-
-          return Object.assign({}, chatRoom, {
-            chatRoomName: '', //
-            chatRoomImage: '', //
-            userName: '', //
-            lastMessageContent: lastMessageContent, //
-            unReadMessageNumber: unReadMessageNumber, //
-            isShowChatRoom: isShowChatRoom,
-          })
-        })
-        const results1 = await Promise.all(promises)
-        const a11 = results1.filter(
-          (o) => o.isShowChatRoom && (o.unReadMessageNumber || 0) > 0
+        const { data, error } = await getChatRoomStream(
+          snapshots,
+          currentRoleId
         )
-        debugger
+
         setChatRooms(
-          results1.filter(
-            (o) => o.isShowChatRoom && (o.unReadMessageNumber || 0) > 0
-          )
+          data.filter((o) => o.isShowChatRoom && o.unReadMessageNumber > 0)
         )
       } catch (error) {
         console.log('aaa error', getErrorMessage(error))
