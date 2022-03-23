@@ -643,7 +643,8 @@ export const getUnreadMessageIdsInRoom = async (
 
     return listReadMessages
   } catch (error) {
-    throw error
+    console.log('aaa error at getUnreadMessageIdsInRoom', error.message)
+    return []
   }
   ////////////////////
 }
@@ -654,7 +655,7 @@ export const getNumberUnreadMessageIdsInRoom = async (
   userId: string
 ): Promise<number> => {
   const list = await getUnreadMessageIdsInRoom(chatRoomId, start, userId)
-  return list.length
+  return getLodash(list, 'length') || 0
 }
 
 /// ==========================================================================
