@@ -1,38 +1,30 @@
 // import { auth } from 'src/config/firebase-client'
 import { notification } from 'antd'
-import { auth } from 'src/config/firebase-client'
-import { COOKIE_KEY, LOCAL_STORAGE_KEY, ROUTES } from 'src/constants/constants'
 import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signOut,
-  onIdTokenChanged,
   confirmPasswordReset,
+  createUserWithEmailAndPassword,
+  onIdTokenChanged,
+  sendPasswordResetEmail,
   signInWithCustomToken,
+  signInWithEmailAndPassword,
+  signOut,
 } from 'firebase/auth'
+import { useAtom } from 'jotai'
 import { get, isEmpty, size } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
+import { signingOutAtom } from 'src/atoms/UIAtoms'
+import { auth } from 'src/config/firebase-client'
+import { COOKIE_KEY, LOCAL_STORAGE_KEY, ROUTES } from 'src/constants/constants'
 import { axios } from 'src/utils/axios'
 import {
-  dataFromToken,
   getStr,
-  ITokenData,
   parseCookies,
   removeCookieUtil,
   setCookieUtil,
 } from 'src/utils/utils'
 import { removeTokenCookieHttp, setTokenCookieHttp } from './tokenCookies'
-import {
-  API_COACH_PROFILE,
-  API_PLAYER_PROFILE,
-} from 'src/constants/api.constants'
-
-import { IPlayerProfile } from 'src/components/dashboard/dashboard-navbar'
-import { wait } from 'src/utils/wait'
 
 interface ValueType {
   currentUser?: any
@@ -61,6 +53,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
+  const [signingOut, setSigningOut] = useAtom(signingOutAtom)
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const router = useRouter()
   const [initialized, setInitialized] = useState(false)
@@ -205,6 +198,12 @@ export function AuthProvider({ children }) {
   //logout
   const signout = () => {
     signOut(auth)
+      .then(() => {
+        setSigningOut(true)
+      })
+      .catch((error) => {
+        console.log('aaa error signout', error.message)
+      })
   }
 
   const ResetPassword = (email: string) => {
@@ -254,6 +253,7 @@ export function AuthProvider({ children }) {
         setUserRoles([])
         setCurrentRoleName('')
       } else {
+        setSigningOut(false)
         setCurrentUser(user)
         const token = await user.getIdToken()
         setToken(token)
@@ -262,16 +262,7 @@ export function AuthProvider({ children }) {
         axios.defaults.headers.common.Authorization = `Bearer ${token}`
 
         ///////////////////////////////// userRoles /////////////////////////////////
-        let respUserRoles = null
-        const resp = await axios.get('/users/user-roles')
-        respUserRoles = resp
-
-        if (isEmpty(respUserRoles.data)) {
-          console.log('aaa wait1')
-          await wait(300)
-          const resp2 = await axios.get('/users/user-roles')
-          respUserRoles = resp2
-        }
+        const respUserRoles = await axios.get('/users/user-roles')
 
         // set current role name
         if (isEmpty(respUserRoles.data)) {
