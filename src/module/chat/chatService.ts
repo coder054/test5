@@ -105,7 +105,7 @@ export interface IChatMessage {
   status?: any
   uri?: any
   size?: any
-  seenMessageUIds?: any
+  seenMessageUIds?: string[]
   thumbVideo?: any
   previewData?: any
   teamResponse?: any
@@ -604,20 +604,11 @@ export const getUnreadMessageIdsInRoom = async (
   start: number = 0,
   userId: string
 ): Promise<IUnReadMessage[]> => {
-  let listReadMessages: IUnReadMessage[]
-  const snapshot = await get(child(dbRef, `chatMessages/${chatRoomId}`))
-
-  if (!snapshot.exists()) {
-    return
-  }
-
-  let a1 = snapshot.val()
-
-  ////////////////////
   try {
+    let listReadMessages: IUnReadMessage[] = []
     const snapShot = await get(
       query(
-        ref(database, '/chatMessages/-MtatGBZFKG4zNVIggD3'),
+        ref(database, `chatMessages/${chatRoomId}`),
         orderByChild('createdAt'),
         startAt(start)
       )
@@ -630,24 +621,40 @@ export const getUnreadMessageIdsInRoom = async (
     const data2 = Object.values(data).filter(
       (message) => message.createdBy !== userId
     )
-
-    const listReadMessages = []
-
-    data2.forEach((message) => {
-      const unReadMessage: IUnReadMessage = {
-        messageId: message.messageId,
-        seenUserIds: chain([userId, ...(message.seenMessageUIds || [])])
-          .compact()
-          .uniq()
-          .value(),
+    data2.forEach((chatMessage) => {
+      if (chatMessage.createdBy != userId) {
+        if (!!chatMessage.seenMessageUIds) {
+          if (!chatMessage.seenMessageUIds.includes(userId)) {
+            let target: IUnReadMessage = {
+              messageId: chatMessage.messageId,
+              seenUserIds: [...chatMessage.seenMessageUIds, userId || ''],
+            }
+            listReadMessages.push(target)
+          }
+        } else {
+          let target: IUnReadMessage = {
+            messageId: chatMessage.messageId,
+            seenUserIds: [userId || ''],
+          }
+          listReadMessages.push(target)
+        }
       }
-      listReadMessages.push(unReadMessage)
     })
+
     return listReadMessages
   } catch (error) {
     throw error
   }
   ////////////////////
+}
+
+export const getNumberUnreadMessageIdsInRoom = async (
+  chatRoomId: string,
+  start: number = 0,
+  userId: string
+): Promise<number> => {
+  const list = await getUnreadMessageIdsInRoom(chatRoomId, start, userId)
+  return list.length
 }
 
 /// ==========================================================================
