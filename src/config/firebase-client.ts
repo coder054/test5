@@ -29,7 +29,7 @@ export const firebaseApp = initializeApp({
 })
 
 // if (false) {
-  
+
 //   const firebaseMessaging = getMessaging(firebaseApp)
 //   console.log('aaa2')
 //   // firebaseMessaging.getToken({vapidKey: process.env.NEXT_PUBLIC_FIREBASE_WEB_PUSH_CERTIFICATE});

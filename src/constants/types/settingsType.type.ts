@@ -5,7 +5,7 @@ export type AccountType = {
   verifyCode: string
 }
 
-export type ContractedClubType = {
+export type ContractedClubType = Partial<{
   city: string
   clubId: string
   clubName: string
@@ -13,7 +13,7 @@ export type ContractedClubType = {
   arena: string
   country: CountryType | string
   websiteUrl: string | null
-}
+}>
 
 export type CoachCareerType = {
   clubId: string
@@ -29,13 +29,13 @@ export type CoachCareerType = {
   summary: string
 }
 
-export type CurrentTeamType = {
+export type CurrentTeamType = Partial<{
   clubId: string
   status?: string
   teamId: string
   teamImage: string
   teamName: string
-}
+}>
 
 export type PlayerCareerType = Partial<{
   clubId: string
@@ -137,7 +137,7 @@ export type SocialLinksType = {
   youtube: string
 }
 
-export type ClubType = {
+export type ClubType = Partial<{
   arena: string
   city: string
   clubId: string
@@ -146,19 +146,24 @@ export type ClubType = {
   logoUrl: string
   nickName: string
   websiteUrl: string
-}
+  fromTime: string
+  toTime: string
+  contractedUntil: string
+}>
 
-export type TeamType = {
+export type TeamType = Partial<{
   teamId: string
   isPrivate: boolean
   updatedAt: number
   synced: boolean
   clubId: string
+  clubName: string
   teamImage: string
   teamName: string
   teamNameAsArray: string[]
   createdAt: number
-}
+  clubLogo: string
+}>
 
 export type CoachSkillsType = {
   overall: OverallType

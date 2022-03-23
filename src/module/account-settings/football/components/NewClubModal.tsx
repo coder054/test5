@@ -88,7 +88,7 @@ export const NewClubModal = ({ handleClose }: NewClubModal) => {
       />
       <MySelectCountry
         onChange={(_, value) => handleChangeForm('country', value)}
-        val={formValues.country}
+        value={formValues.country}
         label="Country"
       />
       <MyInput

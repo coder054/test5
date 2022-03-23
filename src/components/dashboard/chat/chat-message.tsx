@@ -122,7 +122,11 @@ export const ChatMessage: FC<ChatMessageProps> = (props) => {
             {body}
           </Typography>
 
-          <a target="_blank" href={getStr(previewData, 'link')} className="hover:text-black  " >
+          <a
+            target="_blank"
+            href={getStr(previewData, 'link')}
+            className="hover:text-black  "
+          >
             <div className="font-semibold mt-4 ">{previewData.title}</div>
             <div className="">{previewData.description}</div>
             <img src={getStr(previewData, 'image.url')} className=" " alt="" />

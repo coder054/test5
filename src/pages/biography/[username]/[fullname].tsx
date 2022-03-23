@@ -33,6 +33,7 @@ import { axios } from 'src/utils/axios'
 import { getErrorMessage, parseCookies } from 'src/utils/utils'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 import { getProfileCoach } from 'src/service/biography-update'
+import { tabsUnstyledClasses } from '@mui/base'
 
 export const fetcherForEndpointFlip = async (url) => {
   if (url === null) return
@@ -47,7 +48,6 @@ export const fetcherForEndpointFlip = async (url) => {
 
 const tabs = [
   { label: 'Biography', value: 'biography' },
-  { label: 'Diary', value: 'diary' },
   { label: 'Update', value: 'update' },
 ]
 
@@ -84,7 +84,6 @@ export default function Biography({
   const handleTabsChange = (event: ChangeEvent<{}>, value: string): void => {
     setCurrentTab(value)
   }
-  console.log('profile', profile)
 
   return (
     <DashboardLayout>
@@ -145,9 +144,7 @@ const BioForPlayer = ({
   const [playerId, setPlayerId] = useState<string>('')
   const [tabsBar, setTabsBar] = useState(tabs)
   const [checkTeam, setCheckTeam] = useState<boolean>(false)
-  const [teamsPlayer, setTeamsPlayer] = useState<string[]>(
-    dataBioPlayer.teamIds
-  )
+  const [teamsPlayer, setTeamsPlayer] = useState<string[]>([])
   const [teamsCoach, setTeamsCoach] = useState<string[]>([])
 
   useEffect(() => {
@@ -159,19 +156,20 @@ const BioForPlayer = ({
       isPublic,
       userId,
     } = dataBioPlayer
-    console.log('aaa dataBio: ', dataBioPlayer)
-    console.log('aaa dataBio2', {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    })
+    // console.log('aaa dataBio: ', dataBioPlayer)
+    // console.log('aaa dataBio2', {
+    //   friendStatus,
+    //   followStatus,
+    //   isConfirmBox,
+    //   isFollowed,
+    //   isPublic,
+    //   userId,
+    // })
   }, [dataBioPlayer])
 
   useEffect(() => {
     dataBioPlayer.userId && setPlayerId(dataBioPlayer.userId)
+    dataBioPlayer.teamIds && setTeamsPlayer(dataBioPlayer.teamIds)
   }, [dataBioPlayer])
 
   const dataBioPlayerRadarChart = useMemo(() => {
@@ -246,26 +244,21 @@ const BioForPlayer = ({
     get(dataBioPlayer, 'playerRadarSkills'),
   ])
 
-  console.log('teamPlayer', dataBioPlayer.teamIds)
-  console.log('teamsCoach', teamsCoach)
+  // console.log('teamPlayer', dataBioPlayer.teamIds)
+  // console.log('teamsCoach', teamsCoach)
+  // console.log('playerId', playerId)
+  // console.log('tabsBar', tabsBar)
 
   useEffect(() => {
-    if (
-      !isEmpty(teamsCoach) &&
-      !isEmpty(teamsPlayer) &&
-      currentRoleName === 'COACH'
-    ) {
-      for (let i = 0; i < teamsCoach.length; i++) {
-        for (let j = 0; j < teamsPlayer.length; j++) {
-          if (teamsCoach[i] === teamsPlayer[j]) {
-            setCheckTeam(true)
-            setTabsBar(tabs)
-            return
-          }
+    if (currentRoleName === 'COACH') {
+      teamsPlayer.forEach((teamPlayer) => {
+        if (teamsCoach.includes(teamPlayer)) {
+          // debugger
+          setTabsBar(tabs)
         }
-      }
+      })
     }
-  }, [teamsCoach, teamsPlayer, tabsBar, checkTeam])
+  }, [teamsCoach, teamsPlayer, currentRoleName, playerId])
 
   useEffect(() => {
     if (currentRoleName === 'COACH') {
@@ -325,9 +318,10 @@ const BioForPlayer = ({
           value={currentTab}
           sx={{ display: authenticated ? 'block' : 'none' }}
         >
-          {tabsBar.map((tab) => (
-            <Tab key={tab.value} label={tab.label} value={tab.value} />
-          ))}
+          {tabsBar &&
+            tabsBar.map((tab) => (
+              <Tab key={tab.value} label={tab.label} value={tab.value} />
+            ))}
         </Tabs>
       </div>
       {isDesktop && <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />}
@@ -397,7 +391,12 @@ const BioForPlayer = ({
             {/*  */}
           </div>
         )}
-        {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
+        {currentTab === 'update' && (
+          <UpdateBiography
+            playerId={playerId}
+            currentRoleName={currentRoleName}
+          />
+        )}
         {currentTab === 'diary' && <Diary />}
       </div>
     </>

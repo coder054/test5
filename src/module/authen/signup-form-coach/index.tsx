@@ -189,7 +189,7 @@ export const SignUpFormCoach = () => {
         <div className="w-[470px] mt-[48px]">
           <InfiniteScrollClub
             label="Your club"
-            initialValue={formValues.contractedClub}
+            value={formValues.contractedClub}
             handleSetClub={setSelectedClub}
           />
         </div>

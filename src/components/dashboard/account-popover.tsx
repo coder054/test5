@@ -188,7 +188,9 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
                 primary={
                   <Typography variant="body1">
                     <Link href="/account-and-settings">
-                      <a className="hover:text-white text-white">Account & Settings</a>
+                      <a className="hover:text-white text-white">
+                        Account & Settings
+                      </a>
                     </Link>
                   </Typography>
                 }
