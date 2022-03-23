@@ -302,8 +302,8 @@ export const SignUpWithSMS = () => {
                   ]}
                 >
                   <MyInput
+                    fullWidth
                     name={'emailFormPhoneSignUp'}
-                    placeholder="example@zporter.co"
                     label="Email"
                     value={emailFormPhoneSignUp}
                     onChange={(e: {

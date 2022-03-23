@@ -1,9 +1,10 @@
 @import './components/antd.css';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import './components/slick_custom.css';
 @import './components/slider_antd_custom.css';
 @import './components/modal_antd_custom.css';
-@import './components/mui_input_custom.css';
+/* @import './components/mui_input_custom.css'; */
 
 @import './../module/landing/landing.module.css';
 

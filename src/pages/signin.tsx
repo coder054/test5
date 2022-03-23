@@ -10,13 +10,11 @@ const SignInPage = () => {
 
   return (
     <GuestGuard>
-      <LayoutLanding authen>
-        <Head>
-          <title>Zporter Signin</title>
-          <link rel="icon" type="image/png" href="/favicon.png" />
-        </Head>
-        <SignIn />
-      </LayoutLanding>
+      <Head>
+        <title>Zporter Signin</title>
+        <link rel="icon" type="image/png" href="/favicon.png" />
+      </Head>
+      <SignIn />
     </GuestGuard>
   )
 }
