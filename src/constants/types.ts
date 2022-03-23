@@ -62,24 +62,50 @@ export type CountryType = {
 }
 
 export interface UpdateSkills {
-  specialityTags: string[]
-  overall: {
-    mental: number
-    physics: number
-    tactics: number
-    technics: number
-    leftFoot: number
-    rightFoot: number
+  playerSkills: {
+    specialityTags: string[]
+    overall: {
+      mental: number
+      physics: number
+      tactics: number
+      technics: number
+      leftFoot: number
+      rightFoot: number
+    }
+    radar: {
+      attacking: number
+      defending: number
+      dribbling: number
+      passing: number
+      shooting: number
+      pace: number
+      tackling: number
+      heading: number
+    }
   }
-  radar: {
-    attacking: number
-    defending: number
-    dribbling: number
-    passing: number
-    shooting: number
-    pace: number
-    tackling: number
-    heading: number
+  playerCareer: {
+    summary: string
+  }
+}
+
+export interface HeightAndWeightType {
+  height: number
+  weight: number
+  leftFootLength: number
+  rightFootLength: number
+}
+export interface HeightAndWeightBody {
+  health: {
+    height: {
+      value: number
+      updatedAt: string
+    }
+    weight: {
+      value: number
+      updatedAt: string
+    }
+    leftFootLength: number
+    rightFootLength: number
   }
 }
 
@@ -125,7 +151,123 @@ export interface DevelopmentNoteType {
   devTalkId?: string
 }
 
+export interface PlayerCreateDevelopmentNoteType {
+  playerDevelopmentProgress?: string
+  strength?: {
+    playerContent: string
+    coachComment: string
+  }
+  weaknesses?: {
+    playerContent: string
+    coachComment: string
+  }
+  bestDevelopSkills?: {
+    playerContent: string
+    coachComment: string
+  }
+  skillsNeededToDevelop?: {
+    playerContent: string
+    coachComment: string
+  }
+  bestWayToDevelop?: {
+    playerContent: string
+    coachComment: string
+  }
+  shortTermGoal?: {
+    playerContent: string
+    coachComment: string
+  }
+  longTermGoal?: {
+    playerContent: string
+    coachComment: string
+  }
+  otherComments?: {
+    playerContent: string
+    coachComment: string
+  }
+  playerNotedAt?: string
+}
+
 export interface ImageVideoType {
   value?: string
   position?: number
+}
+
+export interface TrophiesAndAwardsType {
+  achievementType?: string
+  trophyType?: string
+  name?: string
+  country?: CountryType
+  connectedClub?: {
+    connectedClubType: string
+    careerId: string
+    clubId: string
+  }
+  date?: string
+  description?: string
+  media?: [
+    {
+      type: string
+      url: string
+    }
+  ]
+}
+
+export interface FutureCareerType {
+  fromTime: string
+  toTime: string
+  country: CountryType
+  league: {
+    name: string
+  }
+  clubId: string
+  team: {
+    teamName: string
+    clubId: string
+  }
+  role: string
+  motivation: string
+}
+
+export interface HistoricCareerType {
+  season: string
+  fromTime: string
+  toTime: string
+  country: {
+    name: string
+    alpha2Code: string
+    alpha3Code: string
+    region: string
+    flag: string
+    phoneCode: string
+  }
+  league: {
+    name: string
+  }
+  clubId: string
+  team: {
+    teamName: string
+    clubId: string
+  }
+  role: string
+  serieMatches: number
+  cupMatches: number
+  friendlyMatches: number
+  wonMatches: number
+  lostMatches: number
+  drawMatches: number
+  madeTeamGoals: number
+  letInTeamGoals: number
+  yourGoals: number
+  yourAssists: number
+  yourYellowCards: number
+  yourRedCards: number
+  yourEstPlayTime: number
+  summary: string
+  mediaLinks: [
+    {
+      type: string
+      url: string
+    }
+  ]
 }

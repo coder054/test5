@@ -5,26 +5,26 @@ interface UseIncrementNumberProps {
   startNumber: number
   endNumber: number
   meanSure?: string
+  incrementNumber?: number
 }
 
 export const useIncrementNumber = ({
   startNumber,
   endNumber,
   meanSure,
+  incrementNumber,
 }: UseIncrementNumberProps) => {
   const [lists, setLists] = useState<OptionType[]>([])
   useEffect(() => {
-    if (meanSure) {
-      for (let i = startNumber; i <= endNumber; i++) {
-        setLists((prev) => [
-          ...prev,
-          { value: `${i}`, label: `${i} ${meanSure}` },
-        ])
-      }
-    } else {
-      for (let i = startNumber; i <= endNumber; i++) {
-        setLists((prev) => [...prev, { value: `${i}`, label: `${i}` }])
-      }
+    for (
+      let i = startNumber;
+      i <= endNumber;
+      incrementNumber ? (i += 0.5) : i++
+    ) {
+      setLists((prev) => [
+        ...prev,
+        { value: `${i}`, label: `${i} ${meanSure ? meanSure : ''}` },
+      ])
     }
   }, [startNumber, endNumber, meanSure])
 

@@ -1,19 +1,25 @@
 import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { MyButton } from 'src/components/MyButton'
 import { MyDatePicker } from 'src/components/MyDatePicker'
 import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
-import { DevelopmentNoteType } from 'src/constants/types'
+import {
+  DevelopmentNoteType,
+  PlayerCreateDevelopmentNoteType,
+} from 'src/constants/types'
+import { getStartOfDate, getToday } from 'src/hooks/functionCommon'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
-import { getListDevelopmentNotes } from 'src/service/biography-update'
+import { playerCreateDevelopmentNote } from 'src/service/biography-update'
 
 interface DevelopmentProps {
   playerId?: string
+  currentRoleName?: string
 }
 interface FormValuesType {
-  date?: string
-  progress?: number
+  date?: any
+  progress?: string
   strengths?: string
   weaknesses?: string
   developedSkill?: string
@@ -24,10 +30,14 @@ interface FormValuesType {
   comment?: string
 }
 
-export const Development = ({ playerId }: DevelopmentProps) => {
+export const Development = ({
+  playerId,
+  currentRoleName,
+}: DevelopmentProps) => {
+  const [loading, setLoading] = useState<boolean>(false)
   const [formValues, setFormValues] = useState<FormValuesType>({
-    date: '',
-    progress: 0,
+    date: getToday(),
+    progress: '',
     strengths: '',
     weaknesses: '',
     developedSkill: '',
@@ -41,32 +51,98 @@ export const Development = ({ playerId }: DevelopmentProps) => {
   const [notes, setNote] = useState<DevelopmentNoteType>({})
   const [devTalkId, setDevTalkId] = useState<string>('')
 
-  useEffect(() => {
-    const getList = async () => {
-      await getListDevelopmentNotes().then((list) => {
-        // console.log('list', list.data)
+  // useEffect(() => {
+  //   if (currentRoleName === 'COACH') {
+  //     const getList = async () => {
+  //       await getListDevelopmentNotes().then((list) => {
+  //         console.log('list', list.data)
 
-        list.data.map((item) => {
-          if (playerId === item.playerId) {
-            setNote(item)
-          }
-        })
-      })
-    }
-    getList()
-  }, [playerId])
-  console.log('notes', notes)
-  console.log('day', dayjs(notes.createdAt).format('YYYY-MM-DD'))
+  //         list.data.map((item) => {
+  //           if (playerId === item.playerId) {
+  //             setNote(item)
+  //           }
+  //         })
+  //       })
+  //     }
+  //     getList()
+  //   }
+  // }, [currentRoleName])
+  // console.log('notes', notes)
 
   const handleChangeForm = (type: keyof FormValuesType, value) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
 
-  const handleSubmit = () => {
-    console.log('formValues', formValues)
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    let developmentProgress = ''
+    if (+formValues.progress === 0) {
+      developmentProgress = 'VERY_BAD'
+    } else if (+formValues.progress === 25) {
+      developmentProgress = 'BAD'
+    } else if (+formValues.progress === 50) {
+      developmentProgress = 'NORMAL'
+    } else if (+formValues.progress === 75) {
+      developmentProgress = 'GOOD'
+    } else if (+formValues.progress === 100) {
+      developmentProgress = 'VERY_GOOD'
+    }
 
-  console.log('playerId', playerId)
+    const valuesUpdate: PlayerCreateDevelopmentNoteType = {
+      playerDevelopmentProgress: developmentProgress,
+      strength: {
+        playerContent: formValues.strengths,
+        coachComment: '',
+      },
+      weaknesses: {
+        playerContent: formValues.weaknesses,
+        coachComment: '',
+      },
+      bestDevelopSkills: {
+        playerContent: formValues.developedSkill,
+        coachComment: '',
+      },
+      skillsNeededToDevelop: {
+        playerContent: formValues.skills,
+        coachComment: '',
+      },
+      bestWayToDevelop: {
+        playerContent: formValues.way,
+        coachComment: '',
+      },
+      shortTermGoal: {
+        playerContent: formValues.shortTerm,
+        coachComment: '',
+      },
+      longTermGoal: {
+        playerContent: formValues.longTerm,
+        coachComment: '',
+      },
+      otherComments: {
+        playerContent: formValues.comment,
+        coachComment: '',
+      },
+      playerNotedAt: getStartOfDate(formValues.date),
+    }
+    // console.log('valuesUpdate', valuesUpdate)
+
+    try {
+      await playerCreateDevelopmentNote(valuesUpdate).then((data) => {
+        if (data.status === 201) {
+          setLoading(false)
+          toast.success('create successfully!')
+          window.scroll(0, 0)
+        } else {
+          toast.error('create failed!')
+          window.scroll(0, 0)
+        }
+      })
+    } catch (error) {}
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
+  }
 
   return (
     <div className="space-y-5">
@@ -80,6 +156,7 @@ export const Development = ({ playerId }: DevelopmentProps) => {
             label="Date"
             onChange={(e) => handleChangeForm('date', e)}
             value={formValues.date}
+            maxDate={dayjs(getToday()).toDate()}
           />
           <MySlider
             marks
@@ -87,7 +164,7 @@ export const Development = ({ playerId }: DevelopmentProps) => {
             onChange={(e) => handleChangeForm('progress', e)}
             isAdjective
             step={25}
-            value={formValues.progress}
+            value={+formValues.progress}
             labelClass="text-[#A2A5AD]"
           />
           <MyTextArea
@@ -134,9 +211,10 @@ export const Development = ({ playerId }: DevelopmentProps) => {
       </BackGround>
       <MyButton
         onClick={handleSubmit}
-        // isLoading={isLoading}
+        isLoading={loading}
         type="submit"
         label="Save"
+        className="mt-[24px] mb-[181px]"
       />
     </div>
   )

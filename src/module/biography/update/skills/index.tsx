@@ -1,4 +1,3 @@
-import { TextField } from '@mui/material'
 import _ from 'lodash'
 import React, { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -6,13 +5,11 @@ import { MyButton } from 'src/components/MyButton'
 import { MyInputChips } from 'src/components/MyInputChips'
 import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
+import { API_PLAYER_SETTINGS } from 'src/constants/api.constants'
 import { UpdateSkills } from 'src/constants/types'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
-import {
-  coachUpdatePlayerSkills,
-  getPlayerRadar,
-} from 'src/service/biography-update'
+import { getProfilePlayer } from 'src/service/biography-update'
 import { axios } from 'src/utils/axios'
 
 type FootBallSkillTypes = {
@@ -43,7 +40,6 @@ const tagsClass =
   'text-white bg-[#13161A] laptopM:py-[10px] laptopM:pl-[10px] laptopM:pr-[20px] mobileM:p-[10px] rounded-[8px]'
 
 export const Skills = ({ playerId }: SkillProps) => {
-  const { userRoles } = useAuth()
   const [tags, setTags] = useState<string[]>([])
   const [summary, setSummary] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
@@ -66,30 +62,31 @@ export const Skills = ({ playerId }: SkillProps) => {
     tackling: 0,
     heading: 0,
   })
-  console.log('playerId', playerId)
 
   useEffect(() => {
     try {
-      const res = getPlayerRadar(playerId)
+      const res = getProfilePlayer()
       res.then((data) => {
         setFootBallSkills({
-          technics: 0,
-          tactics: 0,
-          physics: 0,
-          mental: 0,
-          leftFoot: data.data.leftFoot,
-          rightFoot: data.data.rightFoot,
+          technics: data.data.playerSkills.overall.technics * 20,
+          tactics: data.data.playerSkills.overall.tactics * 20,
+          physics: data.data.playerSkills.overall.physics * 20,
+          mental: data.data.playerSkills.overall.mental * 20,
+          leftFoot: data.data.playerSkills.overall.leftFoot * 20,
+          rightFoot: data.data.playerSkills.overall.rightFoot * 20,
         })
         setRadarChart({
-          attacking: data.data.radarUpdatedByCoach.attacking,
-          defending: data.data.radarUpdatedByCoach.defending,
-          dribbling: data.data.radarUpdatedByCoach.dribbling,
-          passing: data.data.radarUpdatedByCoach.passing,
-          shooting: data.data.radarUpdatedByCoach.shooting,
-          pace: data.data.radarUpdatedByCoach.pace,
-          tackling: data.data.radarUpdatedByCoach.tackling,
-          heading: data.data.radarUpdatedByCoach.heading,
+          attacking: data.data.playerSkills.radar.attacking,
+          defending: data.data.playerSkills.radar.defending,
+          dribbling: data.data.playerSkills.radar.dribbling,
+          passing: data.data.playerSkills.radar.passing,
+          shooting: data.data.playerSkills.radar.shooting,
+          pace: data.data.playerSkills.radar.pace,
+          tackling: data.data.playerSkills.radar.tackling,
+          heading: data.data.playerSkills.radar.heading,
         })
+        setSummary(data.data.playerCareer.summary)
+        setTags(data.data.playerSkills.specialityTags)
       })
     } catch (error) {}
   }, [playerId])
@@ -111,8 +108,8 @@ export const Skills = ({ playerId }: SkillProps) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
-    if (userRoles[0].role === 'COACH') {
-      const updateSkills: UpdateSkills = {
+    const updateSkills: UpdateSkills = {
+      playerSkills: {
         specialityTags: tags,
         overall: {
           mental: footballSkills.mental / 20,
@@ -132,28 +129,28 @@ export const Skills = ({ playerId }: SkillProps) => {
           tackling: radarChart.tackling,
           heading: radarChart.heading,
         },
-      }
-      try {
-        const response = await axios.patch(
-          `/users/${playerId}/coach-update-player-skills`,
-          updateSkills,
-          {
-            headers: {
-              roleId: userRoles[0].roleId,
-            },
-          }
-        )
+      },
+      playerCareer: {
+        summary: summary,
+      },
+    }
 
-        if (response.status === 200) {
-          setLoading(false)
-          toast.success(response.data)
-        }
-      } catch (error) {}
-    } else {
+    try {
+      const response = await axios.patch(API_PLAYER_SETTINGS, updateSkills)
+
+      if (response.status === 200) {
+        setLoading(false)
+        toast.success(response.data)
+        window.scroll(0, 0)
+      }
+    } catch (error) {
       setTimeout(() => {
         setLoading(false)
       }, 1000)
     }
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000)
   }
 
   return (
@@ -221,7 +218,6 @@ export const Skills = ({ playerId }: SkillProps) => {
               label="Speciality tags"
               labelClass="text-[#A2A5AD]"
               value={tags}
-              // onChange={setTags}
               setTags={setTags}
             />
           </div>
