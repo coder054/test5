@@ -278,7 +278,7 @@ export const InfoCoachWithCircleImage = ({
             </div>
           </div>
           <div className="h-[45px] ">
-            <div className="text-white text-[14px] font-semibold leading-[24px] text-left">
+            <div className="text-white text-[14px] font-semibold leading-[24px] text-left whitespace-nowrap ">
               {dataBio.expLevel}
             </div>
             <div className="text-Grey text-[12px] leading-[20px] font-bold text-left ">
