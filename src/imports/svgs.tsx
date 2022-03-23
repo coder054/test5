@@ -210,10 +210,16 @@ export const SvgClose = () => (
   </svg>
 )
 
-export const SvgPlay = () => (
+export const SvgPlay = ({
+  height,
+  width,
+}: {
+  height?: number
+  width?: number
+}) => (
   <svg
-    width="24"
-    height="24"
+    width={width ? width : 24}
+    height={height ? height : 24}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

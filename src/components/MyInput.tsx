@@ -1,41 +1,16 @@
 import { styled, TextField } from '@mui/material'
-
 import clsx from 'clsx'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
-const CssTextField = styled(TextField)({
-  '& label': {
-    color: 'rgba(129, 131, 137, 1)',
-    marginLeft: '4px',
-  },
-  '& label.Mui-focused': {
-    // color: '#5048E5',
-    color: '#ffffff',
-  },
-  '& .MuiInput-underline:after': {
-    borderBottomColor: 'green',
-  },
-  '& .MuiOutlinedInput-root': {
-    '& input': {
-      color: '#ffffff',
-      fontSize: '16px',
-      lineHeight: '25px',
-    },
-
-    '& fieldset': {
-      borderColor: '#484A4D', // border normal
-      borderRadius: '8px', // border normal
-      padding: '12px 12px 12px 12px',
-      color: '#ffffff',
-    },
-    '&:hover fieldset': {
-      borderColor: '#484A4D',
-    },
-    '&.Mui-focused fieldset': {
-      borderColor: '#5048E5',
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
     },
   },
-})
+}
 
 export const MyInput = ({
   className,
@@ -65,28 +40,16 @@ export const MyInput = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false)
 
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    let el = window.document.querySelector('.ant-form')
-    if (!el) {
-      return
-    }
-
-    el.classList.remove('ant-form')
-  }, [])
-
   return (
     <div className="w-full">
       <div className={clsx('relative', className)}>
-        <CssTextField
+        <TextField
           {...rest}
           placeholder={placeholder}
-          value={value}
-          onChange={onChange}
           fullWidth
+          value={value}
+          SelectProps={{ MenuProps: MenuProps }}
+          onChange={onChange}
           label={label}
           id="custom-css-outlined-input"
           autoComplete="current-password"

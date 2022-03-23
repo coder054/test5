@@ -37,3 +37,19 @@ export const CoachingType: OptionType[] = [
   { label: 'Considerate', value: 'Considerate' },
   { label: 'Systematic', value: 'Systematic' },
 ]
+
+export const PersonalAwardOption: OptionType[] = [
+  { label: 'Personal Awards', value: 'AWARD' },
+  { label: 'Team Trophies', value: 'TROPHY' },
+]
+
+export const TypeOfAwardOption: OptionType[] = [
+  { label: 'M.V.P - Most Valuable Playe', value: 'MVP' },
+  { label: 'P.O.W - Player of the Week', value: 'POW' },
+  { label: 'S.O.M - Star of the Match', value: 'SOM' },
+  { label: 'D.T - Dream Team', value: 'DT' },
+  { label: 'P.O.M - Player of the Month', value: 'POM' },
+  { label: 'P.O.Y - Player of the Year', value: 'POY' },
+  { label: 'G.O.L - Goalscorer of the League', value: 'GOL' },
+  { label: 'G.O.C - Goalscorer of the Cup', value: 'GOC' },
+]

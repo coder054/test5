@@ -51,7 +51,11 @@ import { Loading } from 'src/components/loading/loading'
 import { getStr, truncateStr } from 'src/utils/utils'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { chain } from 'lodash'
-import { createGroupChatRoom } from 'src/module/chat/chatService'
+import {
+  createGroupChatRoom,
+  ERoomType,
+  updateMessageStatus,
+} from 'src/module/chat/chatService'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 interface ChatSidebarProps {
@@ -83,6 +87,7 @@ const ChatSidebarMobile = styled(Drawer)({
 })
 
 export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
+  const { currentRoleId } = useAuth()
   const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
   const [activeChatRoom] = useAtom(activeChatRoomAtom)
   const [loadingChatRooms, setLoadingChatRooms] = useAtom(loadingChatRoomsAtom)
@@ -261,6 +266,7 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
                     active={activeChatRoomId === chatRoom.chatRoomId}
                     key={'chatRoom-' + chatRoom.chatRoomId}
                     onSelect={() => {
+                      updateMessageStatus(chatRoom.chatRoomId, currentRoleId)
                       setActiveChatRoomId(chatRoom.chatRoomId)
                     }}
                     chatRoom={chatRoom}
@@ -532,7 +538,8 @@ const ModalCreateGroup = ({ open, setOpen }) => {
                     .compact()
                     .uniq()
                     .value(),
-                  imageUrl
+                  imageUrl,
+                  ERoomType.GROUP
                 )
                 setTimeout(() => {
                   router.push(`/dashboard/chat?roomId=${data.groupId}`)

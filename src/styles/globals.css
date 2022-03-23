@@ -1,9 +1,10 @@
 @import './components/antd.css';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import './components/slick_custom.css';
 @import './components/slider_antd_custom.css';
 @import './components/modal_antd_custom.css';
-@import './components/mui_input_custom.css';
+/* @import './components/mui_input_custom.css'; */
 
 @import './../module/landing/landing.module.css';
 
@@ -30,44 +31,6 @@
 
   * {
     box-sizing: border-box;
-  }
-
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus,
-  textarea:-webkit-autofill,
-  textarea:-webkit-autofill:hover,
-  textarea:-webkit-autofill:focus,
-  select:-webkit-autofill,
-  select:-webkit-autofill:hover,
-  select:-webkit-autofill:focus,
-  input:-internal-autofill-selected {
-    border: 1px solid transparent !important;
-    -webkit-text-fill-color: white !important;
-    font-size: 16px !important;
-    line-height: 24px !important;
-    background: transparent !important;
-    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
-    transition: background-color 5000s ease-in-out 0s !important;
-  }
-
-  .autofill2 input:-webkit-autofill,
-  .autofill2 input:-webkit-autofill:hover,
-  .autofill2 input:-webkit-autofill:focus,
-  .autofill2 textarea:-webkit-autofill,
-  .autofill2 textarea:-webkit-autofill:hover,
-  .autofill2 textarea:-webkit-autofill:focus,
-  .autofill2 select:-webkit-autofill,
-  .autofill2 select:-webkit-autofill:hover,
-  .autofill2 select:-webkit-autofill:focus,
-  .autofill2 input:-internal-autofill-selected {
-    border: 1px solid transparent !important;
-    -webkit-text-fill-color: white !important;
-    font-size: 16px !important;
-    line-height: 24px !important;
-    background: transparent !important;
-    -webkit-box-shadow: 0 0 0px 1000px #42488a inset !important;
-    transition: background-color 5000s ease-in-out 0s !important;
   }
 
   @font-face {

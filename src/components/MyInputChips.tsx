@@ -43,6 +43,7 @@ export const MyInputChips = ({
 
   useEffect(() => {
     onChange && onChange(chips)
+    setTags && setTags(chips)
   }, [chips])
 
   useEffect(() => {

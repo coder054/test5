@@ -1,6 +1,6 @@
 import type { Theme } from '@mui/material'
 import { Box, Divider, Drawer, useMediaQuery } from '@mui/material'
-import { get, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
@@ -8,18 +8,13 @@ import type { FC } from 'react'
 import { ReactNode, useEffect, useMemo } from 'react'
 import type { TFunction } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
-import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
-import { Cog } from 'src/icons/cog'
+import { DevelopmentIcon } from 'src/icons/developmentIcon'
 import { MessagesIcon } from 'src/icons/messagesIcon'
 import { Newspaper } from 'src/icons/newspaper'
 import { Users } from 'src/icons/users'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { getStr } from 'src/utils/utils'
-import {
-  UserCircle,
-  UserCircle as UserCircleIcon,
-} from '../../icons/user-circle'
-import { ContactsIcon } from '../icons'
+import { UserCircle } from '../../icons/user-circle'
 import { Logo } from '../logo'
 import { Scrollbar } from '../scrollbar'
 import { DashboardSidebarSection } from './dashboard-sidebar-section'
@@ -62,12 +57,6 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
           icon: <Newspaper fontSize="small" />,
         },
         {
-          title: t('Biography'),
-          path: `/biography/${infoActiveProfile.username}/${fullname}`, // current
-          icon: <UserCircle fontSize="small" />,
-          disabled: isEmpty(infoActiveProfile),
-        },
-        {
           title: t('Contacts'),
           path: '/contacts',
           icon: <Users fontSize="small" />,
@@ -76,6 +65,17 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
           title: t('Messages'),
           path: `/dashboard/chat`,
           icon: <MessagesIcon fontSize="small" />,
+        },
+        {
+          title: t('Biography'),
+          path: `/biography/${infoActiveProfile.username}/${fullname}`, // current
+          icon: <UserCircle fontSize="small" />,
+          disabled: isEmpty(infoActiveProfile),
+        },
+        {
+          title: t('Development'),
+          path: `/development`,
+          icon: <DevelopmentIcon fontSize="small" />,
         },
       ],
     },
@@ -135,12 +135,7 @@ export const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
               </NextLink>
             </Box>
           </div>
-          {/* <Divider
-            sx={{
-              borderColor: '#2D3748', // dark divider
-              my: 3,
-            }}
-          /> */}
+
           <Box sx={{ flexGrow: 1 }}>
             {sections.map((section) => (
               <DashboardSidebarSection

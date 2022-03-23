@@ -1,37 +1,30 @@
 // import { auth } from 'src/config/firebase-client'
 import { notification } from 'antd'
-import { auth } from 'src/config/firebase-client'
-import { COOKIE_KEY, LOCAL_STORAGE_KEY, ROUTES } from 'src/constants/constants'
 import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  signOut,
-  onIdTokenChanged,
   confirmPasswordReset,
+  createUserWithEmailAndPassword,
+  onIdTokenChanged,
+  sendPasswordResetEmail,
   signInWithCustomToken,
+  signInWithEmailAndPassword,
+  signOut,
 } from 'firebase/auth'
+import { useAtom } from 'jotai'
 import { get, isEmpty, size } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
+import { signingOutAtom } from 'src/atoms/UIAtoms'
+import { auth } from 'src/config/firebase-client'
+import { COOKIE_KEY, LOCAL_STORAGE_KEY, ROUTES } from 'src/constants/constants'
 import { axios } from 'src/utils/axios'
 import {
-  dataFromToken,
   getStr,
-  ITokenData,
+  parseCookies,
   removeCookieUtil,
   setCookieUtil,
 } from 'src/utils/utils'
 import { removeTokenCookieHttp, setTokenCookieHttp } from './tokenCookies'
-import {
-  API_COACH_PROFILE,
-  API_PLAYER_PROFILE,
-} from 'src/constants/api.constants'
-
-import { IPlayerProfile } from 'src/components/dashboard/dashboard-navbar'
-import { wait } from 'src/utils/wait'
 
 interface ValueType {
   currentUser?: any
@@ -60,6 +53,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
+  const [signingOut, setSigningOut] = useAtom(signingOutAtom)
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const router = useRouter()
   const [initialized, setInitialized] = useState(false)
@@ -68,12 +62,15 @@ export function AuthProvider({ children }) {
   const [errorSignin, setErrorSignin] = useState<string>('')
   const [checkEmail, setCheckEmail] = useState<boolean>(false)
   const [userRoles, setUserRoles] = useState<any>([])
-  const [currentRoleName, setCurrentRoleName] = useState<'COACH' | 'PLAYER'>(
-    'PLAYER'
+  const [currentRoleName, setCurrentRoleName] = useState(
+    parseCookies(null)[COOKIE_KEY.currentRoleName]
   )
 
   const currentRoleId = useMemo(() => {
-    if (isEmpty(userRoles)) return ''
+    if (isEmpty(userRoles) || isEmpty(currentRoleName)) {
+      return ''
+    }
+
     const filter = userRoles.filter((role) => {
       return role.role === currentRoleName
     })
@@ -87,19 +84,29 @@ export function AuthProvider({ children }) {
   }, [userRoles, currentRoleName])
 
   useEffect(() => {
+    console.log('aaa currentRoleId', currentRoleId)
     //@ts-ignore: Unreachable code error
     axios.defaults.headers.roleId = currentRoleId
-    setCookieUtil(COOKIE_KEY.roleid, currentRoleId)
-    // console.log('aaa changed roleId to', currentRoleId)
+
+    if (isEmpty(currentRoleId)) {
+      removeCookieUtil(COOKIE_KEY.roleid)
+    } else {
+      setCookieUtil(COOKIE_KEY.roleid, currentRoleId)
+    }
   }, [currentRoleId])
+
+  useEffect(() => {
+    if (isEmpty(currentRoleName)) {
+      removeCookieUtil(COOKIE_KEY.currentRoleName)
+    } else {
+      //@ts-ignore: Unreachable code error
+      setCookieUtil(COOKIE_KEY.currentRoleName, currentRoleName)
+    }
+  }, [currentRoleName])
 
   useEffect(() => {
     //@ts-ignore: Unreachable code error
     localStorage.setItem(LOCAL_STORAGE_KEY.userRoles, JSON.stringify(userRoles))
-
-    if (size(userRoles) === 1) {
-      setCurrentRoleName(getStr(userRoles, '[0].role'))
-    }
   }, [userRoles])
 
   useEffect(() => {
@@ -191,6 +198,12 @@ export function AuthProvider({ children }) {
   //logout
   const signout = () => {
     signOut(auth)
+      .then(() => {
+        setSigningOut(true)
+      })
+      .catch((error) => {
+        console.log('aaa error signout', error.message)
+      })
   }
 
   const ResetPassword = (email: string) => {
@@ -228,15 +241,19 @@ export function AuthProvider({ children }) {
     // console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      // console.log('aaa onIdTokenChanged', user)
+      console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
         localStorage.clear()
         removeTokenCookieHttp()
         removeCookieUtil(COOKIE_KEY.roleid)
+        removeCookieUtil(COOKIE_KEY.currentRoleName)
         setToken('')
         setCurrentUser(null)
+        setUserRoles([])
+        setCurrentRoleName('')
       } else {
+        setSigningOut(false)
         setCurrentUser(user)
         const token = await user.getIdToken()
         setToken(token)
@@ -245,37 +262,31 @@ export function AuthProvider({ children }) {
         axios.defaults.headers.common.Authorization = `Bearer ${token}`
 
         ///////////////////////////////// userRoles /////////////////////////////////
-        let respUserRoles = null
-        const resp = await axios.get('/users/user-roles')
-        respUserRoles = resp
+        const respUserRoles = await axios.get('/users/user-roles')
 
+        // set current role name
         if (isEmpty(respUserRoles.data)) {
-          console.log('aaa wait1')
-          await wait(1000)
-          const resp2 = await axios.get('/users/user-roles')
-          respUserRoles = resp2
-        }
-
-        if (isEmpty(respUserRoles.data)) {
-          console.log('aaa wait2')
-          await wait(1000)
-          const resp3 = await axios.get('/users/user-roles')
-          respUserRoles = resp3
+        } else {
+          if (size(respUserRoles.data) === 1) {
+            setCurrentRoleName(getStr(respUserRoles, 'data[0].role'))
+          } else {
+            let cookieCurrentRoleName =
+              parseCookies(null)[COOKIE_KEY.currentRoleName]
+            if (
+              !cookieCurrentRoleName ||
+              cookieCurrentRoleName === 'undefined'
+            ) {
+              setCurrentRoleName('PLAYER')
+            } else {
+              //@ts-ignore: Unreachable code error
+              setCurrentRoleName(cookieCurrentRoleName)
+            }
+          }
         }
 
         setUserRoles(respUserRoles.data)
-        const roleId =
-          get(
-            respUserRoles.data.find((o) => o.role === 'PLAYER') ||
-              respUserRoles.data[0],
-            'roleId'
-          ) || ''
-
-        //@ts-ignore: Unreachable code error
-        axios.defaults.headers.roleId = roleId
-        setCookieUtil(COOKIE_KEY.roleid, roleId)
         if (!get(respUserRoles, 'data[0].role')) {
-          router.push(ROUTES.SIGNUP_FORM)
+          router.push(ROUTES.UPDATE_PROFILE)
         }
         ///////////////////////////////// userRoles /////////////////////////////////
       }

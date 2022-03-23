@@ -1,25 +1,23 @@
-import { useCallback, useState, useEffect } from 'react'
+import { useAtom } from 'jotai'
+import { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
+import { settingsAtom } from 'src/atoms/accountAndSettings'
 import { MinusIcon, PlusIcon } from 'src/components/icons'
+import { MyButton } from 'src/components/MyButton'
 import { MyCustomSelect } from 'src/components/MyCustomSelect'
+import { MyDatePicker } from 'src/components/MyDatePicker'
 import { MyInput } from 'src/components/MyInput'
 import { POSITION } from 'src/constants/mocks/position.constants'
 import {
   ClubType,
   CurrentTeamType,
   PlayerCareerType,
-  TeamType,
 } from 'src/constants/types/settingsType.type'
-import { BackGround } from '../common-components/Background'
-import { InfiniteScrollClub } from './components/InfiniteScrollClub'
-import { useAtom } from 'jotai'
-import { settingsAtom } from 'src/atoms/accountAndSettings'
-import { MyDatePicker } from 'src/components/MyDatePicker'
-import { MyButton } from 'src/components/MyButton'
-import { InfiniteScrollTeam } from './components/InfiniteScrollTeam'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
-import { notification } from 'antd'
-import toast from 'react-hot-toast'
+import { BackGround } from '../common-components/Background'
+import { InfiniteScrollClub } from './components/InfiniteScrollClub'
+import { InfiniteScrollTeam } from './components/InfiniteScrollTeam'
 
 type FormArrayType = {
   currentTeams?: CurrentTeamType[]
@@ -27,14 +25,11 @@ type FormArrayType = {
   favoriteRoles: string[]
 }
 
-const COMMON_CLASS =
-  'active:border-2 active:border-[#6B7280] border-2 border-[#202128cc] rounded-full duration-150 cursor-pointer'
+const COMMON_CLASS = 'cursor-pointer'
 
 export const Football = () => {
   const [account, setAccount] = useAtom(settingsAtom)
-  const { currentRoleId, currentRoleName } = useAuth()
-  console.log(account)
-
+  const { currentRoleName } = useAuth()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [formValues, setFormValues] = useState<PlayerCareerType>({
     teamCalendarLinks: [],
@@ -77,7 +72,7 @@ export const Football = () => {
       newArr[+index] = value
       setFormValues((prev) => ({ ...prev, [type]: index ? newArr : value }))
     },
-    [formValues]
+    [JSON.stringify(formValues)]
   )
 
   const handleAddForm = useCallback(
@@ -88,7 +83,7 @@ export const Football = () => {
         setFormValues((prev) => ({ ...prev, [type]: arr }))
       }
     },
-    [formValues]
+    [JSON.stringify(formValues)]
   )
 
   const handleRemoveForm = useCallback(
@@ -99,7 +94,7 @@ export const Football = () => {
       })
       setFormValues((prev) => ({ ...prev, [type]: arr }))
     },
-    [formValues]
+    [JSON.stringify(formValues)]
   )
 
   const handleSubmit = async () => {
@@ -123,6 +118,18 @@ export const Football = () => {
     account &&
       setFormValues({
         ...account.playerCareer,
+        currentTeams:
+          account.playerCareer?.currentTeams.length === 0
+            ? [
+                {
+                  clubId: '',
+                  status: '',
+                  teamId: '',
+                  teamImage: '',
+                  teamName: '',
+                },
+              ]
+            : account.playerCareer?.currentTeams,
         favoriteRoles:
           account.playerCareer?.favoriteRoles.length === 0
             ? ['']
@@ -139,12 +146,14 @@ export const Football = () => {
       <BackGround label="Football" contentClass="xl:w-[400px]">
         <div className="space-y-7">
           <InfiniteScrollClub
-            initialValue={formValues.contractedClub}
+            label="Your Club"
+            value={formValues.contractedClub}
             handleSetClub={setSelectedClub}
           />
           {(formValues.currentTeams || []).map((item, index) => (
             <div key={index} className="flex items-center space-x-3">
               <InfiniteScrollTeam
+                label="Your team(s)"
                 idClub={formValues.contractedClub.clubId}
                 handleSetTeam={(value) => setSelectedTeam(value, index + '')}
                 item={item}

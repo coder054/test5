@@ -3,30 +3,36 @@ import { SvgCamera, SvgVideo } from 'src/imports/svgs'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { storage } from 'src/config/firebase-client'
 import toast from 'react-hot-toast'
+import { useAtom } from 'jotai'
+import { listMediaAtom } from 'src/atoms/listMediaAtom'
 
 interface UploadMutilImageVideoProps {
   image?: boolean
   arrayFiles?: any
   setArrayFiles?: Function
+  setProgress?: Function
 }
 
 export const UploadMutilImageVideo = ({
   image,
   arrayFiles,
   setArrayFiles,
+  setProgress,
 }: UploadMutilImageVideoProps) => {
+  const [listMedia, setListMedia] = useAtom(listMediaAtom)
   const [items, setItems] = useState<string[]>([])
-  const [progress, setProgress] = useState<number>(0)
+  const [progress, setProgressImageVideo] = useState<number>(0)
 
   const handleChangeImage = (event) => {
     const files = event.target.files
     if (!files[0]?.name) {
       return
     }
-    // if (items.length + files.length >= 9) {
-    //   toast.error('max file is 9.')
-    //   return
-    // }
+
+    if (arrayFiles.length + files.length > 9) {
+      toast.error('You can not upload bigger than 9 file.')
+      return
+    }
     for (let i = 0; i < files.length; i++) {
       uploadImageAsPromise(files[i])
     }
@@ -41,13 +47,15 @@ export const UploadMutilImageVideo = ({
         'state_changed',
         function progress(snapshot) {
           var prog = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-          setProgress(prog)
+          setProgressImageVideo(prog)
+          setProgress && setProgress(prog)
         },
         function error(err) {},
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             setItems((prev) => [...prev, url])
             setArrayFiles((prev) => [...prev, url])
+            setListMedia((prev) => [...prev, url])
           })
         }
       )

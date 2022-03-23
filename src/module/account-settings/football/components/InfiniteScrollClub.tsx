@@ -1,4 +1,4 @@
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import {
   CircularProgress,
   ClickAwayListener,
@@ -8,22 +8,21 @@ import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import clsx from 'clsx'
 import { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { ArrowBackIcon } from 'src/components/icons'
 import { MyInput } from 'src/components/MyInput'
 import { API_GET_LIST_CLUB } from 'src/constants/api.constants'
-import {
-  ClubType,
-  ContractedClubType,
-} from 'src/constants/types/settingsType.type'
+import { ClubType } from 'src/constants/types/settingsType.type'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
 import { NewClubModal } from './NewClubModal'
 
 type InfiniteScrollClubProps = {
+  label: string
   errorMessage?: string
-  handleSetClub: (value: ClubType) => void
-  initialValue: ContractedClubType
+  handleSetClub?: (value: ClubType) => void
+  value?: ClubType
 }
 
 const style = {
@@ -39,8 +38,9 @@ const style = {
 
 export const InfiniteScrollClub = ({
   handleSetClub,
-  initialValue,
+  value,
   errorMessage,
+  label,
 }: InfiniteScrollClubProps) => {
   const { currentRoleId } = useAuth()
   const [items, setItems] = useState<any>([])
@@ -52,10 +52,6 @@ export const InfiniteScrollClub = ({
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
-
-  useEffect(() => {
-    initialValue && setClub(initialValue.clubName)
-  }, [initialValue])
 
   const handleChangeClub = useCallback(
     (value: ClubType) => {
@@ -89,20 +85,24 @@ export const InfiniteScrollClub = ({
   )
 
   const getListClub = async () => {
-    const res = await axios.get(API_GET_LIST_CLUB, {
-      headers: {
-        roleId: currentRoleId,
-      },
-      params: {
-        limit: 10,
-        startAfter: items.length,
-        clubName: ' ',
-      },
-    })
-    if (res.status === 200) {
-      const arr = items.concat(res.data)
-      setItems(arr)
-    }
+    await axios
+      .get(API_GET_LIST_CLUB, {
+        headers: {
+          roleId: currentRoleId,
+        },
+        params: {
+          limit: 10,
+          startAfter: items.length,
+          clubName: ' ',
+        },
+      })
+      .then((res) => {
+        const arr = items.concat(res.data)
+        setItems(arr)
+      })
+      .catch(() => {
+        toast.error('An error has occurred')
+      })
   }
 
   const fetchMoreData = async () => {
@@ -112,6 +112,10 @@ export const InfiniteScrollClub = ({
     }
     await getListClub()
   }
+
+  useEffect(() => {
+    value && setClub(value.clubName)
+  }, [JSON.stringify(value)])
 
   useEffect(() => {
     getListClub()
@@ -140,23 +144,15 @@ export const InfiniteScrollClub = ({
       <ClickAwayListener onClickAway={() => setIsOpenOption(false)}>
         <div className="relative">
           <MyInput
-            label="Your Club"
+            label={label}
             onChange={(e) => handleSearchClub(e.target.value)}
             onClick={() => setIsOpenOption(true)}
             value={club}
-            name="password"
-            autoComplete="off"
-            type="text"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <span
-                    className={clsx(
-                      isOpenOption && 'rotate-180',
-                      'duration-100'
-                    )}
-                  >
-                    <ArrowDropUpIcon />
+                  <span className={clsx(isOpenOption && 'rotate-180')}>
+                    <ArrowDropDownIcon />
                   </span>
                 </InputAdornment>
               ),
@@ -167,7 +163,7 @@ export const InfiniteScrollClub = ({
             className={clsx('absolute w-full z-50', !isOpenOption && 'hidden')}
           >
             <div className="bg-[#111827] text-gray-400 py-1.5 px-3 ">
-              No club found,{' '}
+              No club found,
               <span onClick={handleOpen} className="underline cursor-pointer">
                 add new club
               </span>
@@ -185,11 +181,16 @@ export const InfiniteScrollClub = ({
             >
               {(items || []).map((it: ClubType, index: number) => (
                 <div
-                  className="bg-[#111827] text-gray-400 py-1.5 px-3 cursor-pointer hover:bg-gray-600 duration-150"
+                  className="bg-[#111827] text-gray-400 py-1.5 px-3 cursor-pointer hover:bg-gray-600 duration-150 flex items-center space-x-4"
                   onClick={() => handleChangeClub(it)}
                   key={index}
                 >
-                  {it.clubName}
+                  <img
+                    src={it.logoUrl}
+                    className="w-[30px] h-[30px] rounded-full"
+                    alt="logo"
+                  />
+                  <p>{it.clubName}</p>
                 </div>
               ))}
             </InfiniteScroll>

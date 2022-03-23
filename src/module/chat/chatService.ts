@@ -17,6 +17,7 @@ import {
   update,
   serverTimestamp,
   push,
+  DataSnapshot,
 } from 'firebase/database'
 import {
   ref as storageLibRef,
@@ -27,8 +28,8 @@ import { storage } from 'src/config/firebase-client'
 
 import { firebaseApp } from 'src/config/firebase-client'
 
-import { chain, isEmpty, get as getLodash } from 'lodash'
-import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
+import { chain, isEmpty, get as getLodash, shuffle } from 'lodash'
+import { AVATAR_DEFAULT, LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import axios from 'axios'
 
 export const database = getDatabase(firebaseApp)
@@ -59,6 +60,7 @@ export const chattingUIDsNode = 'chattingUIDs'
 export const previewDataNode = 'previewData'
 
 export interface IChatRoom {
+  aaa: number
   chatRoomId: string
   memberIds: string[]
   updatedAt: number
@@ -76,6 +78,12 @@ export interface IChatRoom {
   chattingUIDs?: string[]
   deletedDate?: number
   isShowChatRoom?: boolean // defauld true
+  roomType?: ERoomType
+}
+
+export enum ERoomType {
+  GROUP = 'GROUP',
+  TEAM = 'TEAM',
 }
 
 export interface IUser {
@@ -98,7 +106,7 @@ export interface IChatMessage {
   status?: any
   uri?: any
   size?: any
-  seenMessageUIds?: any
+  seenMessageUIds?: string[]
   thumbVideo?: any
   previewData?: any
   teamResponse?: any
@@ -597,20 +605,11 @@ export const getUnreadMessageIdsInRoom = async (
   start: number = 0,
   userId: string
 ): Promise<IUnReadMessage[]> => {
-  let listReadMessages: IUnReadMessage[]
-  const snapshot = await get(child(dbRef, `chatMessages/${chatRoomId}`))
-
-  if (!snapshot.exists()) {
-    return
-  }
-
-  let a1 = snapshot.val()
-
-  ////////////////////
   try {
+    let listReadMessages: IUnReadMessage[] = []
     const snapShot = await get(
       query(
-        ref(database, '/chatMessages/-MtatGBZFKG4zNVIggD3'),
+        ref(database, `chatMessages/${chatRoomId}`),
         orderByChild('createdAt'),
         startAt(start)
       )
@@ -623,24 +622,41 @@ export const getUnreadMessageIdsInRoom = async (
     const data2 = Object.values(data).filter(
       (message) => message.createdBy !== userId
     )
-
-    const listReadMessages = []
-
-    data2.forEach((message) => {
-      const unReadMessage: IUnReadMessage = {
-        messageId: message.messageId,
-        seenUserIds: chain([userId, ...(message.seenMessageUIds || [])])
-          .compact()
-          .uniq()
-          .value(),
+    data2.forEach((chatMessage) => {
+      if (chatMessage.createdBy != userId) {
+        if (!!chatMessage.seenMessageUIds) {
+          if (!chatMessage.seenMessageUIds.includes(userId)) {
+            let target: IUnReadMessage = {
+              messageId: chatMessage.messageId,
+              seenUserIds: [...chatMessage.seenMessageUIds, userId || ''],
+            }
+            listReadMessages.push(target)
+          }
+        } else {
+          let target: IUnReadMessage = {
+            messageId: chatMessage.messageId,
+            seenUserIds: [userId || ''],
+          }
+          listReadMessages.push(target)
+        }
       }
-      listReadMessages.push(unReadMessage)
     })
+
     return listReadMessages
   } catch (error) {
-    throw error
+    console.log('aaa error at getUnreadMessageIdsInRoom', error.message)
+    return []
   }
   ////////////////////
+}
+
+export const getNumberUnreadMessageIdsInRoom = async (
+  chatRoomId: string,
+  start: number = 0,
+  userId: string
+): Promise<number> => {
+  const list = await getUnreadMessageIdsInRoom(chatRoomId, start, userId)
+  return getLodash(list, 'length') || 0
 }
 
 /// ==========================================================================
@@ -706,10 +722,12 @@ export const createGroupChatRoom = async (
   groupName: string,
   requested: boolean,
   memberIds: string[],
-  chatRoomImage?: string
+  chatRoomImage?: string,
+  //@ts-ignore: Unreachable code error
+  roomType: ERoomType
 ) => {
   try {
-    let chatRoom: IChatRoom = {
+    const chatRoom: IChatRoom = {
       memberIds,
       requested,
       //@ts-ignore: Unreachable code error
@@ -718,6 +736,7 @@ export const createGroupChatRoom = async (
       chatRoomName: groupName,
       chatRoomImage,
       isGroup: true,
+      roomType,
     }
 
     const updates = {}
@@ -916,5 +935,123 @@ export const getPreviewData = async (
       error: false,
       data: null,
     }
+  }
+}
+export const getChatRoomStream = async (
+  snapshots: DataSnapshot[],
+  userId: string
+) => {
+  try {
+    let a1 = snapshots
+      .filter((o) => {
+        const chatRoom = o.val()
+        return queryTabAll(chatRoom, userId)
+      })
+      .reverse()
+    const promises = a1.map(async (o) => {
+      let chatRoom: IChatRoom = o.val()
+      console.log('aaa chatRoom1', chatRoom)
+
+      let deletedDate: number = getDeleteChatRoomDate(chatRoom, userId)
+      let isShowChatRoom = true
+
+      if (!!deletedDate) {
+        let messageNumber = await getMessageNumber(
+          chatRoom.chatRoomId,
+          deletedDate
+        )
+        if (messageNumber === 0) {
+          isShowChatRoom = false
+        }
+      }
+
+      let unReadMessageNumber: number = await getNumberUnreadMessageIdsInRoom(
+        chatRoom.chatRoomId,
+        deletedDate,
+        userId
+      )
+
+      let lastMessageContent: string = ''
+      lastMessageContent = await getMessageContent(
+        chatRoom.chatRoomId,
+        chatRoom.lastMessageId || '',
+        userId
+      )
+
+      if (!!chatRoom.chatRoomImage) {
+        return Object.assign({}, chatRoom, {
+          lastMessageContent: lastMessageContent,
+          chatRoomImage: chatRoom.chatRoomImage,
+          unReadMessageNumber: unReadMessageNumber,
+          deletedDate: deletedDate,
+          isShowChatRoom: isShowChatRoom,
+        })
+      }
+
+      /// ================================================================
+      /// Get chat room image
+
+      let chatUser: IChatUser
+
+      /// ================================================================
+      /// Conversation 2 people
+      if (!chatRoom.isGroup) {
+        let memberIdsList: string[] = chatRoom.memberIds || []
+
+        let id: string = memberIdsList[memberIdsList.indexOf(userId)]
+
+        let chatUser: IChatUser = await getChatUser(id)
+
+        let chatRoomImage = chatUser?.faceImage || ''
+
+        return Object.assign({}, chatRoom, {
+          lastMessageContent: lastMessageContent,
+          chatRoomName:
+            `${chatUser?.firstName || ''} ${chatUser?.lastName || ''}` + 'aaa2',
+          chatRoomImage: chatRoomImage,
+          unReadMessageNumber: unReadMessageNumber,
+          userName: chatUser?.username,
+          deletedDate: deletedDate,
+          isShowChatRoom: isShowChatRoom,
+        })
+      }
+
+      let memberIdsList = chatRoom.memberIds || []
+
+      /// Conversation more than 2 people
+      let faceImages = [AVATAR_DEFAULT, AVATAR_DEFAULT]
+      let chatRoomImage: string = ''
+      if (memberIdsList.length == 1) {
+        chatRoomImage = (await getChatUser(memberIdsList[0]))?.faceImage
+      }
+
+      if (memberIdsList.length >= 2) {
+        memberIdsList = shuffle(memberIdsList)
+
+        let chatUser1: IChatUser = await getChatUser(memberIdsList[0])
+
+        faceImages[0] = chatUser1?.faceImage ?? AVATAR_DEFAULT
+
+        let chatUser2 = await getChatUser(memberIdsList[1])
+        faceImages[1] = chatUser2?.faceImage ?? AVATAR_DEFAULT
+      }
+
+      return Object.assign({}, chatRoom, {
+        lastMessageContent: lastMessageContent,
+        userFaceImages: faceImages,
+        unReadMessageNumber: unReadMessageNumber,
+        userName: chatUser?.username,
+        chatRoomImage: chatRoomImage,
+        deletedDate: deletedDate,
+        isShowChatRoom: isShowChatRoom,
+      })
+    })
+    const results1 = await Promise.all(promises)
+    return {
+      error: false,
+      data: results1,
+    }
+  } catch (error) {
+    return { error: true, data: [] }
   }
 }

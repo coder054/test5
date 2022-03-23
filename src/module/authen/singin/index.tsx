@@ -1,16 +1,23 @@
-import { Form, notification } from 'antd'
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Container,
+  Divider,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { notification } from 'antd'
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
 import { get } from 'lodash'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import OtpInput from 'react-otp-input'
-import { Button, LogoBigSize } from 'src/components'
-import { MyInput } from 'src/components/MyInput'
 import { TabPanel, Tabs } from 'src/components/Tabs'
 import { auth } from 'src/config/firebase-client'
 import { API_SIGNIN_WITH_USERNAME } from 'src/constants/api.constants'
-import { IconWarning } from 'src/imports/svgs'
 import { axios } from 'src/utils/axios'
 import { useAuth } from '../auth/AuthContext'
 const cls = require('./signin.module.css')
@@ -25,20 +32,17 @@ const initialValuesFormPhoneSignIn = {
 
 enum Tab {
   Email = 'Email',
-  Phone = 'Phone',
+  SMS = 'SMS',
   UserName = 'UserName',
 }
 
-const tabs = [{ text: Tab.Email }, { text: Tab.Phone }, { text: Tab.UserName }]
+const tabs = [{ text: Tab.Email }, { text: Tab.SMS }, { text: Tab.UserName }]
 
 const SignIn = () => {
   const router = useRouter()
   const [step, setStep] = useState<1 | 2>(1)
   const [tab, setTab] = useState(Tab.Email)
   const [loading, setLoading] = useState<boolean>(false)
-  const [isAuthen, setIsAuthen] = useState<boolean>(false)
-  // const [errorSignIn, setErrorSignIn] = useState<boolean>(false)
-  const [openModal, setOpenModal] = useState<boolean>(false)
 
   /// form sign in with email
   const [emailFormEmailSignIn, setEmailFormEmailSignIn] = useState<string>(
@@ -62,55 +66,9 @@ const SignIn = () => {
 
   const [otp, setOtp] = useState<string>('')
 
-  const [formEmail] = Form.useForm()
-  const [formPhone] = Form.useForm()
-
   const { signin, updateUserRoles, SignInCustomToken } = useAuth()
 
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault()
-      setLoading(true)
-      if (tab === 'Email') {
-        await signin(emailFormEmailSignIn, passwordFormEmailSignIn)
-      } else if (tab === 'UserName') {
-        const response = await axios.post(API_SIGNIN_WITH_USERNAME, {
-          username: userFormUserNameSignIn,
-          password: passFormUserNameSignIn,
-        })
-        await SignInCustomToken(response.data.customToken)
-      }
-
-      setTimeout(() => {
-        setLoading(false)
-      }, 1000)
-    } catch (error) {
-      setTimeout(() => {
-        setLoading(false)
-      }, 1000)
-      notification['error']({
-        message: 'Login failed',
-        description: '',
-      })
-    }
-  }
-
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    let el = window.document.querySelectorAll('.ant-form')
-
-    if (!el) {
-      return
-    }
-
-    let arr = Array.from(el)
-    arr.forEach((o) => {
-      o.classList.remove('ant-form')
-    })
-
     /// init recapcha
     //@ts-ignore: Unreachable code error
     window.recaptchaVerifier = new RecaptchaVerifier(
@@ -126,37 +84,6 @@ const SignIn = () => {
       auth
     )
   }, [])
-  const handleSignup = () => {
-    setOpenModal(true)
-  }
-  const handleResetPassword = () => {
-    router.push('/reset-password')
-  }
-
-  const handleCloseModal = () => {
-    setOpenModal(false)
-  }
-
-  const sendPhone = async (phone: string) => {
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    try {
-      //@ts-ignore: Unreachable code error
-      const appVerifier = window.recaptchaVerifier
-      const confirmationResult = await signInWithPhoneNumber(
-        auth,
-        phone,
-        appVerifier
-      )
-
-      //@ts-ignore: Unreachable code error
-      window.confirmationResult = confirmationResult
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   const sendCode = async (code: string) => {
     if (typeof window === 'undefined') {
@@ -184,227 +111,6 @@ const SignIn = () => {
         })
       }
     }
-  }
-
-  const contentFillInfoSignInWithPhone = () => {
-    return (
-      <div className="autofill2 w-screen min-h-screen md:flex md:items-center float-left">
-        <LogoBigSize className="absolute left-[18%] md:left-2/3 lg:left-[56%] mt-[32px]" />
-
-        <div
-          className={`${cls.formSignIn} w-[310px] mobileM:w-[365px] md:w-[450px] lg:w-[470px] rounded-[8px] mx-auto mt-[118px] md:mt-[0px] 
-            pt-[16px] md:pt-[48px] pl-[12px] md:pl-[24px] lg:pl-[32px] pr-[12px] md:pr-[24px] lg:pr-[32px] pb-[16px] 
-            md:pb-[48px] md:ml-[10%] lg:ml-[8%] xl:ml-[17%]`}
-        >
-          <div className="w-full text-center">
-            <p className="text-[24px] text-[#FFFFFF] font-semibold">Log in</p>
-            <p className="mt-[16px] text-[#818389] text-[14px]">
-              Sign in on the internal platform
-            </p>
-          </div>
-
-          <Tabs tab={tab} setTab={setTab} tabs={tabs} />
-          <TabPanel visible={tab === Tab.Email}>
-            <Form
-              className="h-[312px] "
-              form={formEmail}
-              initialValues={initialValuesFormEmailSignIn}
-            >
-              <Form.Item
-                className="mt-[24px]"
-                name={'emailFormEmailSignIn'}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Input your email address',
-                  },
-                  { type: 'email', message: 'Your email is invalid' },
-                ]}
-              >
-                <MyInput
-                  name={'emailFormEmailSignIn'}
-                  label="Email address"
-                  value={emailFormEmailSignIn}
-                  onChange={(e) => {
-                    setEmailFormEmailSignIn(e.target.value)
-                  }}
-                />
-              </Form.Item>
-              <Form.Item
-                className="mt-[24px]"
-                name={'passwordFormEmailSignIn'}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Input your password',
-                  },
-                  { whitespace: false },
-                ]}
-              >
-                <MyInput
-                  name={'passwordFormEmailSignIn'}
-                  label="Password"
-                  password
-                  value={passwordFormEmailSignIn}
-                  onChange={(e) => {
-                    setPasswordFormEmailSignIn(e.target.value)
-                  }}
-                />
-              </Form.Item>
-              <div className="mt-[24px]" onClick={handleSubmit}>
-                <Button
-                  loading={loading}
-                  className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
-                  text="Log In"
-                />
-              </div>
-              <div
-                className={`${cls.divWarning} w-full h-[56px] rounded-[4px] mt-[24px] flex items-center pl-[16px] pr-[16px]`}
-              >
-                <IconWarning />
-                <span className="text-[#FFFFFF] text-[14px] pl-[8px]">
-                  Use demo@devias.io and password Password123!
-                </span>
-              </div>
-            </Form>
-          </TabPanel>
-          <TabPanel visible={tab === Tab.Phone}>
-            <button
-              id="sign-in-button5"
-              className=" w-[200px] h-[50px] fixed right-0 bottom-0 hidden "
-            >
-              recapcha
-            </button>
-            <Form
-              className="h-[312px] "
-              form={formPhone}
-              initialValues={initialValuesFormPhoneSignIn}
-            >
-              <Form.Item
-                className="mt-[24px]"
-                name={'phoneFormPhoneSignIn'}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Required fields must be filled in.',
-                    max: 25,
-                  },
-                ]}
-              >
-                <MyInput
-                  name={'phoneFormPhoneSignIn'}
-                  label="Mobile phone number"
-                  value={phoneFormPhoneSignIn}
-                  onChange={(e) => {
-                    setPhoneFormPhoneSignIn(e.target.value)
-                  }}
-                />
-              </Form.Item>
-              <div
-                className="mt-[24px]"
-                onClick={async () => {
-                  await sendPhone(phoneFormPhoneSignIn)
-                }}
-              >
-                <Button
-                  loading={loading}
-                  className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
-                  text="Log In"
-                />
-              </div>
-              <div
-                className={`${cls.divWarning} w-full h-[56px] rounded-[4px] mt-[24px] flex items-center pl-[16px] pr-[16px]`}
-              >
-                <IconWarning />
-                <span className="text-[#FFFFFF] text-[14px] pl-[8px]">
-                  Use phone: +84355832199 and otp code: 123456
-                </span>
-              </div>
-            </Form>
-          </TabPanel>
-          <TabPanel visible={tab === Tab.UserName}>
-            <Form
-              className="h-[312px] "
-              form={formEmail}
-              initialValues={initialValuesFormEmailSignIn}
-            >
-              <Form.Item
-                className="mt-[24px]"
-                name={'userFormUserNameSignIn'}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Input your user name',
-                  },
-                ]}
-              >
-                <MyInput
-                  name={'userFormUserNameSignIn'}
-                  label="User name"
-                  value={userFormUserNameSignIn}
-                  onChange={(e) => {
-                    setUserFormUserNameSignIn(e.target.value)
-                  }}
-                />
-              </Form.Item>
-              <Form.Item
-                className="mt-[24px]"
-                name={'passFormUserNameSignIn'}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Input your password',
-                  },
-                  { whitespace: false },
-                ]}
-              >
-                <MyInput
-                  name={'passFormUserNameSignIn'}
-                  label="Password"
-                  password
-                  value={passFormUserNameSignIn}
-                  onChange={(e) => {
-                    setPassFormUserNameSignIn(e.target.value)
-                  }}
-                />
-              </Form.Item>
-              <div className="mt-[24px]" onClick={handleSubmit}>
-                <Button
-                  loading={loading}
-                  className="h-[48px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
-                  text="Log In"
-                />
-              </div>
-              <div
-                className={`${cls.divWarning} w-full h-[56px] rounded-[4px] mt-[24px] flex items-center pl-[16px] pr-[16px]`}
-              >
-                <IconWarning />
-                <span className="text-[#FFFFFF] text-[14px] pl-[8px]">
-                  Use demo@devias.io and password Password123!
-                </span>
-              </div>
-            </Form>
-          </TabPanel>
-
-          <div className="bg-[#818389] w-full h-[1px] mt-[24px]"></div>
-          <div className="mt-[24px]">
-            <Link href="/signup">
-              <a className="text-Blue text-[16px] leading-[175%] hover:text-[#2b3cec] pr-[16px] hover:underline cursor-pointer">
-                Create account
-              </a>
-            </Link>
-            <Link href={'/reset-password'}>
-              <a
-                onClick={handleResetPassword}
-                className="text-[#4654EA] hover:text-[#2b3cec] text-base hover:underline"
-              >
-                Forgot password
-              </a>
-            </Link>
-          </div>
-        </div>
-      </div>
-    )
   }
 
   const contentFillOtp = () => {
@@ -485,11 +191,274 @@ const SignIn = () => {
   }
 
   return (
-    <div className="autofill2">
-      {step === 1 ? contentFillInfoSignInWithPhone() : contentFillOtp()}
+    <div className=" absolute inset-0 p-[16px] bg-authen-mobile xl:bg-authen-desktop w-full bg-cover bg-no-repeat bg-center ">
+      {step === 1 ? (
+        <div className=" flex w-full  h-[100%]  ">
+          <div className="w-full xl:w-[50%] flex justify-center items-center  ">
+            <Container maxWidth="sm">
+              <Card>
+                <CardContent
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: 400,
+                    p: 4,
+                  }}
+                >
+                  <div className="flex items-center">
+                    <div>
+                      <Typography variant="h4">Log in</Typography>
+                      <Typography
+                        color="textSecondary"
+                        sx={{ mt: 1 }}
+                        variant="body2"
+                      >
+                        Log in on the internal platform
+                      </Typography>
+                    </div>
+                    <div className="grow "></div>
+                    <img
+                      alt="Zporter"
+                      src="/zporter.png"
+                      className="w-[150px] h-[34px] cursor-pointer  "
+                    />
+                  </div>
+
+                  <div className="h-[20px] "></div>
+                  <Tabs
+                    className="mb-0"
+                    tab={tab}
+                    setTab={setTab}
+                    tabs={tabs}
+                  />
+
+                  <TabPanel visible={tab === Tab.Email}>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        mt: 1,
+                      }}
+                    >
+                      <FormEmailLogin />
+                    </Box>
+                  </TabPanel>
+
+                  <TabPanel visible={tab === Tab.SMS}>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        mt: 1,
+                      }}
+                    >
+                      <FormSMSLogin />
+                    </Box>
+                  </TabPanel>
+                  <TabPanel visible={tab === Tab.UserName}>
+                    <Box
+                      sx={{
+                        flexGrow: 1,
+                        mt: 1,
+                      }}
+                    >
+                      <FormUsernameLogin />
+                    </Box>
+                  </TabPanel>
+
+                  <Divider sx={{ my: 3 }} />
+                  <Link href="/signup">
+                    <a className="text-DefaultTextColor hover:underline  ">
+                      Create new account
+                    </a>
+                  </Link>
+
+                  <Link href="/reset-password">
+                    <a className="text-DefaultTextColor hover:underline  ">
+                      Forgot Password?
+                    </a>
+                  </Link>
+                </CardContent>
+              </Card>
+            </Container>
+          </div>
+        </div>
+      ) : (
+        contentFillOtp()
+      )}
+
       <div id="capcha_element_signin_with_phone"></div>
     </div>
   )
 }
 
 export default SignIn
+
+const FormEmailLogin = () => {
+  const { signin, updateUserRoles, SignInCustomToken } = useAuth()
+  const [email, setEmail] = useState('')
+  const [pass, setPass] = useState('')
+
+  // here handleLoginEmail
+  const handleLoginEmail = async (e) => {
+    e.preventDefault()
+    try {
+      await signin(email, pass)
+    } catch (error) {
+      notification['error']({
+        message: 'Login failed',
+        description: '',
+      })
+    }
+  }
+
+  return (
+    <form onSubmit={handleLoginEmail}>
+      <TextField
+        value={email}
+        onChange={(e) => {
+          setEmail(e.target.value)
+        }}
+        fullWidth
+        label="Email Address"
+        margin="normal"
+        name="email"
+        type="email"
+      />
+      <TextField
+        fullWidth
+        value={pass}
+        onChange={(e) => {
+          setPass(e.target.value)
+        }}
+        label="Password"
+        margin="normal"
+        name="password"
+        type="password"
+      />
+      <Box sx={{ mt: 2 }}>
+        <Button fullWidth size="large" type="submit" variant="contained">
+          Log In
+        </Button>
+      </Box>
+    </form>
+  )
+}
+
+const FormSMSLogin = () => {
+  const [phone, setPhone] = useState('')
+
+  const sendPhone = async (phone: string) => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    try {
+      //@ts-ignore: Unreachable code error
+      const appVerifier = window.recaptchaVerifier
+      const confirmationResult = await signInWithPhoneNumber(
+        auth,
+        phone,
+        appVerifier
+      )
+
+      //@ts-ignore: Unreachable code error
+      window.confirmationResult = confirmationResult
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+      }}
+    >
+      <button
+        id="sign-in-button5"
+        className=" w-[200px] h-[50px] fixed right-0 bottom-0 hidden "
+      >
+        recapcha
+      </button>
+      <TextField
+        value={phone}
+        onChange={(e) => {
+          setPhone(e.target.value)
+        }}
+        fullWidth
+        label="Phone"
+        margin="normal"
+        name="phone"
+        type="text"
+      />
+      <Box sx={{ mt: 2 }}>
+        <Button
+          onClick={async (e) => {
+            e.preventDefault()
+            await sendPhone(phone)
+          }}
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+        >
+          Log In
+        </Button>
+      </Box>
+    </form>
+  )
+}
+
+const FormUsernameLogin = () => {
+  const { SignInCustomToken } = useAuth()
+  const [username, setUsername] = useState('')
+  const [pass, setPass] = useState('')
+
+  // here handleLoginUsername
+  const handleLoginUsername = async (e) => {
+    e.preventDefault()
+    try {
+      const response = await axios.post(API_SIGNIN_WITH_USERNAME, {
+        username: username,
+        password: pass,
+      })
+      await SignInCustomToken(response.data.customToken)
+    } catch (error) {
+      notification['error']({
+        message: 'Login failed',
+        description: '',
+      })
+    }
+  }
+
+  return (
+    <form onSubmit={handleLoginUsername}>
+      <TextField
+        value={username}
+        onChange={(e) => {
+          setUsername(e.target.value)
+        }}
+        fullWidth
+        label="Username"
+        margin="normal"
+        name="username"
+        type="text"
+      />
+      <TextField
+        fullWidth
+        value={pass}
+        onChange={(e) => {
+          setPass(e.target.value)
+        }}
+        label="Password"
+        margin="normal"
+        name="password2"
+        type="password"
+      />
+      <Box sx={{ mt: 2 }}>
+        <Button fullWidth size="large" type="submit" variant="contained">
+          Log In
+        </Button>
+      </Box>
+    </form>
+  )
+}

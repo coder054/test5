@@ -90,7 +90,7 @@ export const Language = () => {
         />
         <MySelectCountry
           label="Country"
-          val={formValues.country}
+          value={formValues.country}
           onChange={(_, value) => handleChangeForm('country', value)}
         />
         <MyCustomSelect

@@ -10,13 +10,13 @@ export const ROUTES = {
   support: '/support',
   components: '/components',
   news: '/news',
-  SIGNUP_FORM: '/signup-form',
+  UPDATE_PROFILE: '/update-profile',
   SIGNIN: 'signin',
-  SIGNUP_FORM_PLAYER: 'signup-form-player',
-  SIGNUP_FORM_PLAYER_SKILLS: '/signup-form-player-skills',
-  SIGNUP_FORM_COACH: 'signup-form-coach',
-  SIGNUP_FORM_COACH_SKILLS: '/signup-form-coach-skills',
-  SIGNUP_FORM_BIOGRAPHY: '/signup-form-biography',
+  UPDATE_PROFILE_PLAYER: 'update-profile-player',
+  UPDATE_PROFILE_PLAYER_SKILLS: '/update-profile-player-skills',
+  UPDATE_PROFILE_COACH: 'update-profile-coach',
+  UPDATE_PROFILE_COACH_SKILLS: '/update-profile-coach-skills',
+  UPDATE_PROFILE_BIOGRAPHY: '/update-profile-biography',
   aaa: process.env.TEST2,
 }
 
@@ -27,6 +27,7 @@ export const LOCAL_STORAGE_KEY = {
 export const COOKIE_KEY = {
   roleid: 'roleid',
   token: 'token',
+  currentRoleName: 'currentRoleName',
 }
 
 export const AVATAR_DEFAULT =
@@ -36,3 +37,9 @@ export const SPECIALITY_TAGS_INJURU_PRONE = 'Injury Prone'
 export const SPECIALITY_TAGS_LEADERSHIP = 'Leadership'
 export const SPECIALITY_TAGS_TEAMPLAYER = 'Team Player'
 export const DEFAULT_DATE = 'YYYY-MM-DDTHH:mm:ssZ'
+
+export const IMAGE = 'IMAGE'
+export const VIDEO = 'VIDEO'
+
+export const START_YEAR = 1971
+export const END_YEAR = 2072
