@@ -28,7 +28,6 @@ import { NavigationAndFilter } from 'src/module/bio/NavigationAndFilter'
 import { SocialLinksComponent } from 'src/module/bio/SocialLinksComponent'
 import { TopVideos } from 'src/module/bio/TopVideos'
 import { Diary } from 'src/module/biography/diary/Diary'
-import { UpdateBiography } from 'src/module/biography/update/Update'
 import { axios } from 'src/utils/axios'
 import { getErrorMessage, parseCookies } from 'src/utils/utils'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
@@ -244,16 +243,10 @@ const BioForPlayer = ({
     get(dataBioPlayer, 'playerRadarSkills'),
   ])
 
-  // console.log('teamPlayer', dataBioPlayer.teamIds)
-  // console.log('teamsCoach', teamsCoach)
-  // console.log('playerId', playerId)
-  // console.log('tabsBar', tabsBar)
-
   useEffect(() => {
     if (currentRoleName === 'COACH') {
       teamsPlayer.forEach((teamPlayer) => {
         if (teamsCoach.includes(teamPlayer)) {
-          // debugger
           setTabsBar(tabs)
         }
       })
@@ -391,12 +384,12 @@ const BioForPlayer = ({
             {/*  */}
           </div>
         )}
-        {currentTab === 'update' && (
+        {/* {currentTab === 'update' && (
           <UpdateBiography
             playerId={playerId}
             currentRoleName={currentRoleName}
           />
-        )}
+        )} */}
         {currentTab === 'diary' && <Diary />}
       </div>
     </>
@@ -631,8 +624,8 @@ const BioForCoach = ({
             {/*  */}
           </div>
         )}
-        {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
-        {currentTab === 'diary' && <Diary />}
+        {/* {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
+        {currentTab === 'diary' && <Diary />} */}
       </div>
     </>
   )

@@ -57,12 +57,6 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
           icon: <Newspaper fontSize="small" />,
         },
         {
-          title: t('Biography'),
-          path: `/biography/${infoActiveProfile.username}/${fullname}`, // current
-          icon: <UserCircle fontSize="small" />,
-          disabled: isEmpty(infoActiveProfile),
-        },
-        {
           title: t('Contacts'),
           path: '/contacts',
           icon: <Users fontSize="small" />,
@@ -71,6 +65,17 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
           title: t('Messages'),
           path: `/dashboard/chat`,
           icon: <MessagesIcon fontSize="small" />,
+        },
+        {
+          title: t('Biography'),
+          path: `/biography/${infoActiveProfile.username}/${fullname}`, // current
+          icon: <UserCircle fontSize="small" />,
+          disabled: isEmpty(infoActiveProfile),
+        },
+        {
+          title: t('Development'),
+          path: `/development`,
+          icon: <DevelopmentIcon fontSize="small" />,
         },
       ],
     },

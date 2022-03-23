@@ -37,3 +37,9 @@ export const SPECIALITY_TAGS_INJURU_PRONE = 'Injury Prone'
 export const SPECIALITY_TAGS_LEADERSHIP = 'Leadership'
 export const SPECIALITY_TAGS_TEAMPLAYER = 'Team Player'
 export const DEFAULT_DATE = 'YYYY-MM-DDTHH:mm:ssZ'
+
+export const IMAGE = 'IMAGE'
+export const VIDEO = 'VIDEO'
+
+export const START_YEAR = 1971
+export const END_YEAR = 2072

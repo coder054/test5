@@ -1,32 +1,27 @@
+import { useAtom } from 'jotai'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { MyInput } from 'src/components'
+import { listMediaAtom } from 'src/atoms/listMediaAtom'
+import { ModalShowImage, MyInput } from 'src/components'
 import { ListImageVideo } from 'src/components/list-image-video'
+import { ModalShowVideo } from 'src/components/modal-show-video'
 import { MyButton } from 'src/components/MyButton'
 import { MyDatePicker } from 'src/components/MyDatePicker'
+import { MyModal } from 'src/components/MyModal'
 import { MySelect } from 'src/components/MySelect'
 import { MySelectCountry } from 'src/components/MySelectCountry'
-import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
 import { UploadMutilImageVideo } from 'src/components/upload-mutil-image-video'
-import {
-  CountryType,
-  DevelopmentNoteType,
-  HistoricCareerType,
-  ImageVideoType,
-} from 'src/constants/types'
+import { END_YEAR, IMAGE, START_YEAR } from 'src/constants/constants'
+import { CountryType, HistoricCareerType } from 'src/constants/types'
 import { ClubType } from 'src/constants/types/settingsType.type'
 import { useIncrementNumber } from 'src/hooks/useIncrementNumber'
-import { SvgCamera, SvgVideo } from 'src/imports/svgs'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
 import { InfiniteScrollClub } from 'src/module/account-settings/football/components/InfiniteScrollClub'
 import { OptionPlayer } from 'src/module/authen/types'
-import {
-  createCareerHistoric,
-  getListDevelopmentNotes,
-} from 'src/service/biography-update'
+import { createCareerHistoric } from 'src/service/biography-update'
 
-interface DevelopmentProps {
+interface HistoricProps {
   playerId?: string
 }
 interface FormValuesType {
@@ -55,13 +50,14 @@ interface FormValuesType {
   contractedClub?: ClubType
 }
 
-const tagsClass =
-  'text-white bg-[#13161A] laptopM:py-[10px] laptopM:pl-[10px] laptopM:pr-[20px] mobileM:p-[10px] rounded-[8px]'
-
-export const Historic = ({ playerId }: DevelopmentProps) => {
+export const Historic = ({ playerId }: HistoricProps) => {
+  const [listMedia, setListMedia] = useAtom(listMediaAtom)
   const [loading, setLoading] = useState<boolean>(false)
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [showUrl, setShowUrl] = useState('')
   const [images, setImages] = useState([])
   const [arrayFile, setArrayFile] = useState([])
+  const [progress, setProgress] = useState<number>(0)
   const [formValues, setFormValues] = useState<FormValuesType>({
     season: '',
     fromDate: null,
@@ -105,8 +101,8 @@ export const Historic = ({ playerId }: DevelopmentProps) => {
   })
 
   const seasonOption = useIncrementNumber({
-    startNumber: 1971,
-    endNumber: 2072,
+    startNumber: START_YEAR,
+    endNumber: END_YEAR,
   })
 
   useEffect(() => {
@@ -114,12 +110,17 @@ export const Historic = ({ playerId }: DevelopmentProps) => {
       setImages((prev) => [
         ...prev,
         {
-          type: 'IMAGE',
+          type: IMAGE,
           url: item,
         },
       ])
     })
   }, [arrayFile])
+
+  const handleShow = (url: string) => {
+    setIsOpenModal(true)
+    setShowUrl(url)
+  }
 
   const handleChangeForm = (type: keyof FormValuesType, value) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
@@ -199,7 +200,6 @@ export const Historic = ({ playerId }: DevelopmentProps) => {
             onChange={(e) => handleChangeForm('season', e.target.value)}
             arrOption={seasonOption}
             value={formValues.season}
-            // defauleValue={date.getFullYear() + ''}
           />
 
           <div className="flex w-full mt-7">
@@ -246,7 +246,6 @@ export const Historic = ({ playerId }: DevelopmentProps) => {
             label="Role"
             onChange={(e) => handleChangeForm('role', e.target.value)}
             arrOption={OptionPlayer}
-            // value={}
           />
 
           <MyInput
@@ -254,86 +253,108 @@ export const Historic = ({ playerId }: DevelopmentProps) => {
             onChange={(e) => handleChangeForm('serie', e.target.value)}
             value={formValues.serie}
           />
+
           <MyInput
             label="Cup matches"
             onChange={(e) => handleChangeForm('cup', e.target.value)}
             value={formValues.cup}
           />
+
           <MyInput
             label="Friendly matches"
             onChange={(e) => handleChangeForm('friend', e.target.value)}
             value={formValues.friend}
           />
+
           <MyInput
             label="Won matches"
             onChange={(e) => handleChangeForm('won', e.target.value)}
             value={formValues.won}
           />
+
           <MyInput
             label="Lost matches"
             onChange={(e) => handleChangeForm('lost', e.target.value)}
             value={formValues.lost}
           />
+
           <MyInput
             label="Draw matches"
             onChange={(e) => handleChangeForm('draw', e.target.value)}
             value={formValues.draw}
           />
+
           <MyInput
             label="Made Team Goals"
             onChange={(e) => handleChangeForm('madeTeam', e.target.value)}
             value={formValues.madeTeam}
           />
+
           <MyInput
             label="Let in Team Goals"
             onChange={(e) => handleChangeForm('letInTeamGoal', e.target.value)}
             value={formValues.letInTeamGoal}
           />
+
           <MyInput
             label="Your Goals"
             onChange={(e) => handleChangeForm('yourGoals', e.target.value)}
             value={formValues.yourGoals}
           />
+
           <MyInput
             label="Your assist"
             onChange={(e) => handleChangeForm('yourAssist', e.target.value)}
             value={formValues.yourAssist}
           />
+
           <MyInput
             label="Your Yellow Card"
             onChange={(e) => handleChangeForm('yourYellowCard', e.target.value)}
             value={formValues.yourYellowCard}
           />
+
           <MyInput
             label="Your Red Card"
             onChange={(e) => handleChangeForm('yourRedCard', e.target.value)}
             value={formValues.yourRedCard}
           />
+
           <MyInput
             label="Your Estimated Play Time"
             onChange={(e) => handleChangeForm('yourEstimated', e.target.value)}
             value={formValues.yourEstimated}
           />
+
           <MyTextArea
             placeholder="Write a short summary of your time at this Club"
             onChange={(e) => handleChangeForm('summary', e.target.value)}
             value={formValues.summary}
           />
+
           <div className="w-full flex mb-[12.5px] mt-[11.75px]">
             <UploadMutilImageVideo
               image
               arrayFiles={arrayFile}
               setArrayFiles={setArrayFile}
+              setProgress={setProgress}
             />
             <div className="ml-[31px]">
               <UploadMutilImageVideo
                 arrayFiles={arrayFile}
                 setArrayFiles={setArrayFile}
+                setProgress={setProgress}
               />
             </div>
           </div>
-
-          <ListImageVideo arrayFile={arrayFile} setArrayFile={setArrayFile} />
+          {/* {console.log('progress', progress)} */}
+          <ListImageVideo
+            arrayFile={arrayFile}
+            setArrayFile={setArrayFile}
+            progress={progress}
+            setIsOpenModal={setIsOpenModal}
+            handleShow={handleShow}
+          />
         </div>
       </BackGround>
       <MyButton
@@ -343,6 +364,14 @@ export const Historic = ({ playerId }: DevelopmentProps) => {
         label="Save"
         className="mt-[24px] mb-[181px]"
       />
+
+      <MyModal width={751} show={isOpenModal} setShow={setIsOpenModal}>
+        {showUrl.includes('mp4') ? (
+          <ModalShowVideo url={showUrl} setIsOpenModal={setIsOpenModal} />
+        ) : (
+          <ModalShowImage url={showUrl} setIsOpenModal={setIsOpenModal} />
+        )}
+      </MyModal>
     </div>
   )
 }
