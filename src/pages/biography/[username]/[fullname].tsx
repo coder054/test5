@@ -244,16 +244,10 @@ const BioForPlayer = ({
     get(dataBioPlayer, 'playerRadarSkills'),
   ])
 
-  // console.log('teamPlayer', dataBioPlayer.teamIds)
-  // console.log('teamsCoach', teamsCoach)
-  // console.log('playerId', playerId)
-  // console.log('tabsBar', tabsBar)
-
   useEffect(() => {
     if (currentRoleName === 'COACH') {
       teamsPlayer.forEach((teamPlayer) => {
         if (teamsCoach.includes(teamPlayer)) {
-          // debugger
           setTabsBar(tabs)
         }
       })
@@ -391,12 +385,12 @@ const BioForPlayer = ({
             {/*  */}
           </div>
         )}
-        {currentTab === 'update' && (
+        {/* {currentTab === 'update' && (
           <UpdateBiography
             playerId={playerId}
             currentRoleName={currentRoleName}
           />
-        )}
+        )} */}
         {currentTab === 'diary' && <Diary />}
       </div>
     </>
@@ -631,8 +625,8 @@ const BioForCoach = ({
             {/*  */}
           </div>
         )}
-        {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
-        {currentTab === 'diary' && <Diary />}
+        {/* {currentTab === 'update' && <UpdateBiography playerId={playerId} />}
+        {currentTab === 'diary' && <Diary />} */}
       </div>
     </>
   )

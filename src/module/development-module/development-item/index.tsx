@@ -51,24 +51,6 @@ export const Development = ({
   const [notes, setNote] = useState<DevelopmentNoteType>({})
   const [devTalkId, setDevTalkId] = useState<string>('')
 
-  // useEffect(() => {
-  //   if (currentRoleName === 'COACH') {
-  //     const getList = async () => {
-  //       await getListDevelopmentNotes().then((list) => {
-  //         console.log('list', list.data)
-
-  //         list.data.map((item) => {
-  //           if (playerId === item.playerId) {
-  //             setNote(item)
-  //           }
-  //         })
-  //       })
-  //     }
-  //     getList()
-  //   }
-  // }, [currentRoleName])
-  // console.log('notes', notes)
-
   const handleChangeForm = (type: keyof FormValuesType, value) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
@@ -125,7 +107,6 @@ export const Development = ({
       },
       playerNotedAt: getStartOfDate(formValues.date),
     }
-    // console.log('valuesUpdate', valuesUpdate)
 
     try {
       await playerCreateDevelopmentNote(valuesUpdate).then((data) => {

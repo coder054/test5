@@ -1,11 +1,12 @@
 import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { MyInput } from 'src/components'
+import { ModalShowImage, MyInput } from 'src/components'
 import { ListImageVideo } from 'src/components/list-image-video'
 import { MyButton } from 'src/components/MyButton'
 import { MyCustomSelect } from 'src/components/MyCustomSelect'
 import { MyDatePicker } from 'src/components/MyDatePicker'
+import { MyModal } from 'src/components/MyModal'
 import { MySelect } from 'src/components/MySelect'
 import { MySelectCountry } from 'src/components/MySelectCountry'
 import { MyTextArea } from 'src/components/MyTextarea'
@@ -33,6 +34,9 @@ interface FormValuesType {
 export const Trophies = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [arrayFile, setArrayFile] = useState([])
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [newFile, setNewFile] = useState([])
+  const [showUrl, setShowUrl] = useState('')
   const [images, setImages] = useState([])
   const [formValues, setFormValues] = useState<FormValuesType>({
     personalAward: '',
@@ -62,6 +66,10 @@ export const Trophies = () => {
   })
 
   useEffect(() => {
+    setArrayFile(newFile)
+  }, [newFile])
+
+  useEffect(() => {
     arrayFile.forEach((item) => {
       setImages((prev) => [
         ...prev,
@@ -72,6 +80,11 @@ export const Trophies = () => {
       ])
     })
   }, [arrayFile])
+
+  const handleShow = (url: string) => {
+    setIsOpenModal(true)
+    setShowUrl(url)
+  }
 
   const handleChangeForm = (type: keyof FormValuesType, value: string) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
@@ -177,7 +190,14 @@ export const Trophies = () => {
             setArrayFiles={setArrayFile}
           />
 
-          <ListImageVideo arrayFile={arrayFile} setArrayFile={setArrayFile} />
+          <ListImageVideo
+            arrayFile={arrayFile}
+            setArrayFile={setArrayFile}
+            setIsOpenModal={setIsOpenModal}
+            handleShow={handleShow}
+            setNewFile={setNewFile}
+            newFile={newFile}
+          />
         </div>
       </BackGround>
       <MyButton
@@ -187,6 +207,9 @@ export const Trophies = () => {
         label="Save"
         className="mt-[24px] mb-[181px]"
       />
+      <MyModal width={751} show={isOpenModal} setShow={setIsOpenModal}>
+        <ModalShowImage url={showUrl} setIsOpenModal={setIsOpenModal} />
+      </MyModal>
     </div>
   )
 }
