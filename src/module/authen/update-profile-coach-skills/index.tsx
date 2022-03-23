@@ -158,7 +158,7 @@ export const SignUpFormCoachSkills = () => {
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
       <div className="absolute top-[16px] lg:top-[40px] md:left-[40px] z-20">
         <GoBack
-          label="Sign up form"
+          label="Update your profile"
           goBack="/update-profile-player?profile=player"
         />
       </div>
@@ -168,7 +168,7 @@ export const SignUpFormCoachSkills = () => {
           <ItemSkills className="w-[372px] h-[513px]">
             <>
               <p className="text-[24px] text-[#FFFFFF] mb-[48px]">
-                Sign up form - player skills
+                Update your profile - player skills
               </p>
               <Comments
                 listComment={[

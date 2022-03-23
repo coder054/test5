@@ -333,7 +333,7 @@ export const SignupFormBiography = () => {
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
       <div className="absolute top-[16px] lg:top-[40px] md:left-[40px] z-20">
         <GoBack
-          label="Sign up form"
+          label="Update your profile"
           // goBack={ROUTES.UPDATE_PROFILE_PLAYER_SKILLS}
         />
       </div>

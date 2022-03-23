@@ -196,7 +196,7 @@ export const SignUpFormPlayerSkills = () => {
       <div className="absolute top-[16px] lg:top-[40px] md:left-[40px] z-20">
         <GoBack
           textBlack
-          label="Sign up form"
+          label="Update your profile"
           goBack={ROUTES.UPDATE_PROFILE_PLAYER}
         />
       </div>
@@ -206,7 +206,7 @@ export const SignUpFormPlayerSkills = () => {
           <ItemSkills className="w-[372px] h-[513px]">
             <>
               <p className="text-[24px] text-[#FFFFFF] mb-[48px]">
-                Sign up form - player skills
+                Update your profile - player skills
               </p>
               <Comments
                 listComment={[
