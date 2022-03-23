@@ -15,7 +15,7 @@ const SignUpFormPage = () => {
           <title>Zporter</title>
           <link rel="icon" type="image/png" href="/favicon.png" />
         </Head>
-        <SignUpForm />
+        <SignUpForm title="Sign up form" />
       </LayoutSignupForm>
     </AuthGuard>
   )

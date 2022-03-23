@@ -50,7 +50,7 @@ interface valueSignupType {
   }
 }
 
-const SignUpForm = () => {
+const SignUpForm = ({ title }: { title: string }) => {
   const [profileForm, setProfileForm] = useAtom(profileAtom)
   const [profileCoachForm, setProfileCoachForm] = useAtom(profileCoachAtom)
   const router = useRouter()
@@ -216,7 +216,7 @@ const SignUpForm = () => {
           2xl:right-[25%] mx-auto lg:mr-0 lg:absolute`}
       >
         <p className="text-[24px] text-[#FFFFFF] font-semibold md:mb-[48px] text-center md:text-left absolute">
-          Sign up form
+          {title}
         </p>
 
         <div className="w-full flex justify-between mt-[38px] md:pt-[48px]">

@@ -242,7 +242,7 @@ export function AuthProvider({ children }) {
     // console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      // console.log('aaa onIdTokenChanged', user)
+      console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
         localStorage.clear()
@@ -268,29 +268,28 @@ export function AuthProvider({ children }) {
 
         if (isEmpty(respUserRoles.data)) {
           console.log('aaa wait1')
-          await wait(1000)
+          await wait(300)
           const resp2 = await axios.get('/users/user-roles')
           respUserRoles = resp2
         }
 
-        if (isEmpty(respUserRoles.data)) {
-          console.log('aaa wait2')
-          await wait(1000)
-          const resp3 = await axios.get('/users/user-roles')
-          respUserRoles = resp3
-        }
-
         // set current role name
-        if (size(respUserRoles.data) === 1) {
-          setCurrentRoleName(getStr(respUserRoles, 'data[0].role'))
+        if (isEmpty(respUserRoles.data)) {
         } else {
-          let cookieCurrentRoleName =
-            parseCookies(null)[COOKIE_KEY.currentRoleName]
-          if (!cookieCurrentRoleName || cookieCurrentRoleName === 'undefined') {
-            setCurrentRoleName('PLAYER')
+          if (size(respUserRoles.data) === 1) {
+            setCurrentRoleName(getStr(respUserRoles, 'data[0].role'))
           } else {
-            //@ts-ignore: Unreachable code error
-            setCurrentRoleName(cookieCurrentRoleName)
+            let cookieCurrentRoleName =
+              parseCookies(null)[COOKIE_KEY.currentRoleName]
+            if (
+              !cookieCurrentRoleName ||
+              cookieCurrentRoleName === 'undefined'
+            ) {
+              setCurrentRoleName('PLAYER')
+            } else {
+              //@ts-ignore: Unreachable code error
+              setCurrentRoleName(cookieCurrentRoleName)
+            }
           }
         }
 

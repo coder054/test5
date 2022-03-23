@@ -396,7 +396,7 @@ export const SignUp = () => {
                   <Button
                     htmlType="submit"
                     submit
-                    text="Register"
+                    text="Register2"
                     className="sign-in-button h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3]"
                   />
 
@@ -531,7 +531,7 @@ export const SignUp = () => {
                     <Button
                       htmlType="submit"
                       submit
-                      text="Register"
+                      text="Register3"
                       className="sign-in-button h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3]"
                     />
 

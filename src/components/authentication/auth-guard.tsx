@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
-import { get, size } from 'lodash'
+import { get, isEmpty, size } from 'lodash'
 import { ROUTES } from 'src/constants/constants'
+import { AlertUpdateProfile } from '../common/AlertUpdateProfile'
 
 interface AuthGuardProps {
   children: ReactNode
@@ -18,7 +19,10 @@ export const AuthGuard: FC<AuthGuardProps> = (props) => {
   const [checked, setChecked] = useState(false)
 
   const isRoleNull = useMemo(() => {
-    return size(userRoles) === 1 && get(userRoles, '[0].role') === null
+    return (
+      isEmpty(userRoles) ||
+      (size(userRoles) === 1 && get(userRoles, '[0].role') === null)
+    )
   }, [userRoles])
 
   useEffect(
@@ -33,12 +37,6 @@ export const AuthGuard: FC<AuthGuardProps> = (props) => {
           pathname: '/signin',
           // query: { returnUrl: router.asPath },
         })
-      } else if (isRoleNull) {
-        if (!router.asPath.includes('/signup-form')) {
-          router.push(ROUTES.SIGNUP_FORM)
-        } else {
-          setChecked(true)
-        }
       } else {
         setChecked(true)
       }
@@ -54,7 +52,12 @@ export const AuthGuard: FC<AuthGuardProps> = (props) => {
   // If got here, it means that the redirect did not occur, and that tells us that the user is
   // authenticated / authorized.
 
-  return <>{children}</>
+  return (
+    <>
+      {children}
+      <AlertUpdateProfile isRoleNull={isRoleNull} />
+    </>
+  )
 }
 
 AuthGuard.propTypes = {
