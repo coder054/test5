@@ -232,7 +232,8 @@ export const Historic = ({ playerId }: DevelopmentProps) => {
           />
 
           <InfiniteScrollClub
-            initialValue={formValues.contractedClub}
+            label="Club"
+            value={formValues.contractedClub}
             handleSetClub={setSelectedClub}
           />
 

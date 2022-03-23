@@ -154,7 +154,8 @@ export const Trophies = () => {
           />
 
           <InfiniteScrollClub
-            initialValue={formValues.contractedClub}
+            label="Club"
+            value={formValues.contractedClub}
             handleSetClub={setSelectedClub}
           />
 

@@ -22,7 +22,7 @@ interface FutureCareerProps {
   playerId?: string
 }
 
-interface FormValuesType {
+type FormValuesType = Partial<{
   fromDate: string | Date
   toDate: string | Date
   country: CountryType
@@ -33,7 +33,7 @@ interface FormValuesType {
   summary: string
   contractedClub: ClubType
   yourTeams: string[]
-}
+}>
 
 const tagsClass =
   'text-white bg-[#13161A] laptopM:py-[10px] laptopM:pl-[10px] laptopM:pr-[20px] mobileM:p-[10px] rounded-[8px]'
@@ -145,7 +145,6 @@ export const FutureCareer = () => {
                   label="From"
                   onChange={(e) => handleChangeForm('fromDate', e)}
                   value={formValues.fromDate}
-                  // maxDate={dayjs(getToday()).toDate()}
                 />
               </div>
               <div className="flex-1 ml-[10px]">
@@ -153,7 +152,6 @@ export const FutureCareer = () => {
                   label="To"
                   onChange={(e) => handleChangeForm('toDate', e)}
                   value={formValues.toDate}
-                  // maxDate={dayjs(getToday()).toDate()}
                 />
               </div>
             </div>
@@ -171,7 +169,8 @@ export const FutureCareer = () => {
             />
 
             <InfiniteScrollClub
-              initialValue={formValues.contractedClub}
+              label="Club"
+              value={formValues.contractedClub}
               handleSetClub={setSelectedClub}
             />
 
@@ -180,15 +179,6 @@ export const FutureCareer = () => {
               value={formValues.team}
               onChange={(e) => handleChangeForm('team', e.target.value)}
             />
-
-            {/* <InfiniteScrollTeam
-              idClub={formValues.contractedClub.clubId}
-              handleSetTeam={(e) => {
-                handleChangeForm('team', e.teamId)
-                setTeam(e)
-              }}
-              item={team}
-            /> */}
 
             <MySelect
               label="Role"
