@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Button, SliderStar } from 'src/components'
 import { Comments } from 'src/components/Comments'
-const cls = require('./signup-form-player-skills.module.css')
+const cls = require('./update-profile-player-skills.module.css')
 import { GoBack } from 'src/components/go-back'
 import { ItemSkills } from 'src/components/item-skills'
 import { Input } from 'antd'
@@ -12,7 +12,7 @@ import { profileAtom } from 'src/atoms/profileAtom'
 import { ROUTES } from 'src/constants/constants'
 import { useRouter } from 'next/router'
 import { axios } from 'src/utils/axios'
-import { API_SIGNUP_FORM_PLAYER } from 'src/constants/api.constants'
+import { API_UPDATE_PROFILE_PLAYER } from 'src/constants/api.constants'
 
 interface FormValuesType {
   technics: number
@@ -81,7 +81,7 @@ export const SignUpFormPlayerSkills = () => {
 
   React.useEffect(() => {
     if (!profileForm.profile?.firstName) {
-      router.push(ROUTES.SIGNUP_FORM)
+      router.push(ROUTES.UPDATE_PROFILE)
     }
   }, [profileForm])
 
@@ -177,14 +177,14 @@ export const SignUpFormPlayerSkills = () => {
     }
 
     try {
-      const response = await axios.put(API_SIGNUP_FORM_PLAYER, {
+      const response = await axios.put(API_UPDATE_PROFILE_PLAYER, {
         ...profilePlayer,
         roleId: uuidv4(),
       })
 
       if (response.status === 200) {
         router.push({
-          pathname: ROUTES.SIGNUP_FORM_BIOGRAPHY,
+          pathname: ROUTES.UPDATE_PROFILE_BIOGRAPHY,
           query: { profile: profile },
         })
       }
@@ -197,7 +197,7 @@ export const SignUpFormPlayerSkills = () => {
         <GoBack
           textBlack
           label="Sign up form"
-          goBack={ROUTES.SIGNUP_FORM_PLAYER}
+          goBack={ROUTES.UPDATE_PROFILE_PLAYER}
         />
       </div>
 

@@ -1,7 +1,7 @@
 import { LayoutLanding } from 'src/components/layout-landing/layout-landing'
-import { LayoutSignupForm } from 'src/components/layout-signup-form'
+import { LayoutSignupForm } from 'src/components/layout-update-profile'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
-import { SignUpFormPlayer } from 'src/module/authen/signup-form-player'
+import { SignUpFormPlayer } from 'src/module/authen/update-profile-player'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 

@@ -18,7 +18,7 @@ import { fetcher, getStr } from 'src/utils/utils'
 import useSWR from 'swr'
 import { useAuth } from '../auth/AuthContext'
 
-const cls = require('./signup-form-biography.module.css')
+const cls = require('./update-profile-biography.module.css')
 
 export const SignupFormBiography = () => {
   const { currentRoleId, updateUserRoles } = useAuth()
@@ -334,7 +334,7 @@ export const SignupFormBiography = () => {
       <div className="absolute top-[16px] lg:top-[40px] md:left-[40px] z-20">
         <GoBack
           label="Sign up form"
-          // goBack={ROUTES.SIGNUP_FORM_PLAYER_SKILLS}
+          // goBack={ROUTES.UPDATE_PROFILE_PLAYER_SKILLS}
         />
       </div>
 

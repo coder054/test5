@@ -1,4 +1,4 @@
-const cls = require('./layout-signup-form.module.css')
+const cls = require('./layout-update-profile.module.css')
 
 interface LayoutLandingProps {
   authen?: boolean

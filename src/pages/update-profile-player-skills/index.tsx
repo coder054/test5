@@ -1,8 +1,8 @@
-import { LayoutSignupForm } from 'src/components/layout-signup-form'
+import { LayoutSignupForm } from 'src/components/layout-update-profile'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { AuthGuard } from 'src/components/authentication/auth-guard'
-import { SignUpFormPlayerSkills } from 'src/module/authen/signup-form-player-skills'
+import { SignUpFormPlayerSkills } from 'src/module/authen/update-profile-player-skills'
 
 const SignUpFormPlayerSkillsPage = () => {
   const router = useRouter()

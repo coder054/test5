@@ -76,7 +76,7 @@ export const SignUpFormCoach = () => {
 
   React.useEffect(() => {
     if (!profileCoachForm.profile?.firstName) {
-      router.push(ROUTES.SIGNUP_FORM)
+      router.push(ROUTES.UPDATE_PROFILE)
     }
   }, [profileCoachForm])
 
@@ -169,7 +169,7 @@ export const SignUpFormCoach = () => {
     })
 
     router.push({
-      pathname: ROUTES.SIGNUP_FORM_COACH_SKILLS,
+      pathname: ROUTES.UPDATE_PROFILE_COACH_SKILLS,
       query: { profile: profile },
     })
   }
@@ -177,7 +177,7 @@ export const SignUpFormCoach = () => {
   return (
     <div className="autofill2 w-screen min-h-screen lg:flex md:items-center">
       <div className="absolute top-[16px] lg:top-[40px] left-[149px] md:left-[40px]]">
-        <GoBack label="Sign up form" goBack={ROUTES.SIGNUP_FORM} />
+        <GoBack label="Sign up form" goBack={ROUTES.UPDATE_PROFILE} />
       </div>
       <div
         className={`w-[320px] md:w-[500px] md:h-[880px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 2xl:right-[25%] overflow-y-auto 

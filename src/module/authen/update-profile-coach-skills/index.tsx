@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Button, SliderStar } from 'src/components'
 import { Comments } from 'src/components/Comments'
-const cls = require('./signup-form-coach-skills.module.css')
+const cls = require('./update-profile-coach-skills.module.css')
 import { GoBack } from 'src/components/go-back'
 import { ItemSkills } from 'src/components/item-skills'
 import { Input } from 'antd'
@@ -10,7 +10,7 @@ import { SpecialityTags } from 'src/components/speciality-tags'
 import { useAtom } from 'jotai'
 import { profileCoachAtom } from 'src/atoms/profileCoachAtom'
 import { axios } from 'src/utils/axios'
-import { API_SIGNUP_FORM_COACH } from 'src/constants/api.constants'
+import { API_UPDATE_PROFILE_COACH } from 'src/constants/api.constants'
 import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
 
@@ -140,14 +140,14 @@ export const SignUpFormCoachSkills = () => {
     }
 
     try {
-      const response = await axios.put(API_SIGNUP_FORM_COACH, {
+      const response = await axios.put(API_UPDATE_PROFILE_COACH, {
         ...profileCoach,
         roleId: uuidv4(),
       })
 
       if (response.status === 200) {
         router.push({
-          pathname: ROUTES.SIGNUP_FORM_BIOGRAPHY,
+          pathname: ROUTES.UPDATE_PROFILE_BIOGRAPHY,
           query: { profile: profile },
         })
       }
@@ -159,7 +159,7 @@ export const SignUpFormCoachSkills = () => {
       <div className="absolute top-[16px] lg:top-[40px] md:left-[40px] z-20">
         <GoBack
           label="Sign up form"
-          goBack="/signup-form-player?profile=player"
+          goBack="/update-profile-player?profile=player"
         />
       </div>
 

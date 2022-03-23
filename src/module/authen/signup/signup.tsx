@@ -97,7 +97,7 @@ export const SignUp = () => {
 
   useEffect(() => {
     if (token) {
-      router.push(ROUTES.SIGNUP_FORM)
+      router.push(ROUTES.UPDATE_PROFILE)
     }
   }, [router, token])
 

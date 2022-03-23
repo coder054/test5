@@ -3,7 +3,7 @@ import { MyInput } from 'src/components/MyInput'
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useAuth } from '../auth/AuthContext'
-const cls = require('./signup-form.module.css')
+const cls = require('./update-profile.module.css')
 import { GoBack } from 'src/components/go-back'
 import { OptionUserProfile } from '../types'
 import { MyDatePicker } from 'src/components/MyDatePicker'
@@ -190,8 +190,8 @@ const SignUpForm = ({ title }: { title: string }) => {
         pathname:
           /* @ts-ignore */
           formValues.userProfile.label === 'Player'
-            ? ROUTES.SIGNUP_FORM_PLAYER
-            : ROUTES.SIGNUP_FORM_COACH,
+            ? ROUTES.UPDATE_PROFILE_PLAYER
+            : ROUTES.UPDATE_PROFILE_COACH,
         /* @ts-ignore */
         query: { profile: formValues.userProfile.label },
       })

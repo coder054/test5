@@ -15,7 +15,7 @@ export const AlertUpdateProfile = ({ isRoleNull }) => {
 
   useEffect(() => {
     const path = get(router, 'asPath')
-    if (path.includes('/signup-form')) {
+    if (path.includes('/update-profile')) {
       setIsRouteUpdateProfile(true)
     } else {
       setIsRouteUpdateProfile(false)
@@ -52,7 +52,7 @@ export const AlertUpdateProfile = ({ isRoleNull }) => {
           <div className="text-center mt-[38px] ">
             <Button
               onClick={() => {
-                router.push(ROUTES.SIGNUP_FORM)
+                router.push(ROUTES.UPDATE_PROFILE)
               }}
               variant="outlined"
             >

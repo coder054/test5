@@ -16,7 +16,7 @@ const Dashboard: NextPage = () => {
   //   const getUserRole = async () => {
   //     const resp = await axios.get(API_GET_USER_ROLES)
   //     if (!resp.data[0].role) {
-  //       router.push(ROUTES.SIGNUP_FORM)
+  //       router.push(ROUTES.UPDATE_PROFILE)
   //     }
   //   }
   //   getUserRole()

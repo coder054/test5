@@ -286,7 +286,7 @@ export function AuthProvider({ children }) {
 
         setUserRoles(respUserRoles.data)
         if (!get(respUserRoles, 'data[0].role')) {
-          router.push(ROUTES.SIGNUP_FORM)
+          router.push(ROUTES.UPDATE_PROFILE)
         }
         ///////////////////////////////// userRoles /////////////////////////////////
       }
