@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import { Loading } from 'src/components/loading/loading'
 import { SvgClose, SvgPlay } from 'src/imports/svgs'
 const cls = require('./item.module.css')
 
@@ -7,35 +8,29 @@ interface ItemImageProps {
   url?: string
   setArrayFile?: Function
   handleRemoveItem?: Function
+  setIsOpenModal?: Function
+  handleShow?: Function
+  progress?: number
 }
 
 export const IteamImage = ({
   url,
-  setArrayFile,
   handleRemoveItem,
+  setIsOpenModal,
+  handleShow,
 }: ItemImageProps) => {
   const [isVideo, setIsVideo] = useState<boolean>(url.includes('mp4'))
   const [playVideo, setPlayVideo] = useState<boolean>(false)
   const videoRef = useRef(null)
+  // console.log('url', url)
 
   const handleRemoveImage = () => {
-    // console.log('url', url)
-
     handleRemoveItem && handleRemoveItem(url)
   }
 
-  const handleplayVideo = () => {
-    if (!playVideo) {
-      setPlayVideo(true)
-      videoRef.current.play()
-    }
-  }
-
-  const handlepauseVideo = () => {
-    if (playVideo) {
-      setPlayVideo(false)
-      videoRef.current.pause()
-    }
+  const handleShowImage = () => {
+    setIsOpenModal && setIsOpenModal(true)
+    handleShow && handleShow(url)
   }
 
   return (
@@ -48,6 +43,7 @@ export const IteamImage = ({
       </div>
       {!isVideo ? (
         <img
+          onClick={handleShowImage}
           src={url}
           alt=""
           className={`${cls.image} absolute w-[64px] h-[64px] rounded-[4px] opacity-70 z-10 hover:scale-105 duration-200 object-cover`}
@@ -55,20 +51,18 @@ export const IteamImage = ({
       ) : (
         <>
           <video
+            onClick={handleShowImage}
             ref={videoRef}
             className={`${cls.image} absolute w-[64px] h-[64px] rounded-[4px] opacity-70 z-10 hover:scale-105 duration-200 object-cover`}
-            onClick={handlepauseVideo}
           >
             <source src={url} />
           </video>
-          {!playVideo ? (
-            <div
-              className="absolute top-[20px] left-[20px] z-20 cursor-pointer"
-              onClick={handleplayVideo}
-            >
-              <SvgPlay />
-            </div>
-          ) : null}
+          <div
+            className="absolute top-[20px] left-[20px] z-20 cursor-pointer"
+            onClick={handleShowImage}
+          >
+            <SvgPlay />
+          </div>
         </>
       )}
     </div>
