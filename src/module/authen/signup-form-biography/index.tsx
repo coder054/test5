@@ -348,13 +348,7 @@ export const SignupFormBiography = () => {
               currentRoleId={currentRoleId}
               signupForm
             />
-          ) : (
-            <div className="w-full">
-              <div className="w-[48px] mx-auto">
-                <Loading />
-              </div>
-            </div>
-          )}
+          ) : null}
 
           {profile === 'Coach' && dataCoach.userId ? (
             <InfoCoachWithCircleImage
