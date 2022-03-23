@@ -258,7 +258,8 @@ export const SignUpFormPlayer = () => {
 
         <div className="w-[470px]">
           <InfiniteScrollClub
-            initialValue={formValues.contractedClub}
+            label="Your Club"
+            value={formValues.contractedClub}
             handleSetClub={setSelectedClub}
             errorMessage={formErrors.yourClub}
           />

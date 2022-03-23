@@ -24,7 +24,7 @@ export const BasicProfile = ({ onFormChange }: BasicProfileProps) => {
     firstName: '',
     lastName: '',
     gender: '',
-    birthDay: '',
+    birthDay: null,
   })
 
   const handleChangeForm = (type: keyof FormValuesType, value: any) => {

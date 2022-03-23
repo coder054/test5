@@ -1,11 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
-import type { FC } from 'react'
-import Link from 'next/link'
-import PropTypes from 'prop-types'
-import { useTranslation } from 'react-i18next'
+import type { AppBarProps } from '@mui/material'
 import {
   AppBar,
-  Avatar,
   Badge,
   Box,
   ButtonBase,
@@ -14,19 +9,23 @@ import {
   Tooltip,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import type { AppBarProps } from '@mui/material'
+import Link from 'next/link'
+import PropTypes from 'prop-types'
+import type { FC } from 'react'
+import { useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { safeAvatar } from 'src/utils/utils'
+import { Bell as BellIcon } from '../../icons/bell'
 import { Menu as MenuIcon } from '../../icons/menu'
+import { Search as SearchIcon } from '../../icons/search'
+import { Users as UsersIcon } from '../../icons/users'
+import { UpdateDiaryIcon } from '../icons'
 import { AccountPopover } from './account-popover'
 import { ContactsPopover } from './contacts-popover'
 import { ContentSearchDialog } from './content-search-dialog'
-import { NotificationsPopover } from './notifications-popover'
 import { LanguagePopover } from './language-popover'
-import { Bell as BellIcon } from '../../icons/bell'
-import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
-import { Search as SearchIcon } from '../../icons/search'
-import { Users as UsersIcon } from '../../icons/users'
-import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { NotificationsPopover } from './notifications-popover'
 
 interface DashboardNavbarProps extends AppBarProps {
   onOpenSidebar?: () => void
@@ -114,6 +113,21 @@ const ContentSearchButton = () => {
         open={openDialog}
       />
     </>
+  )
+}
+
+const UpdateDiaryButton = () => {
+  return (
+    <Link href="/diary-update">
+      <button className="bg-[#4654EA]  active:scale-110 duration-150 py-2 px-5 rounded-[8px] flex items-center space-x-2 relative">
+        <span>
+          <UpdateDiaryIcon />
+        </span>
+        <span className="text-white text-[14px] font-semibold">
+          Update Diary
+        </span>
+      </button>
+    </Link>
   )
 }
 
@@ -210,15 +224,11 @@ const AccountButton = () => {
           ml: 2,
         }}
       >
-        <Avatar
-          sx={{
-            height: 40,
-            width: 40,
-          }}
-          src={infoActiveProfile?.faceImageUrl}
-        >
-          <UserCircleIcon fontSize="small" />
-        </Avatar>
+        <img
+          src={safeAvatar(infoActiveProfile?.faceImageUrl)}
+          className="w-[36px] h-[36px] rounded-full object-cover mr-[16px] "
+          alt=""
+        />
       </Box>
       <AccountPopover
         anchorEl={anchorRef.current}
@@ -462,7 +472,8 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
             </div>
           ) : (
             <>
-              <LanguageButton />
+              <UpdateDiaryButton />
+              {/* <LanguageButton /> */}
               <ContentSearchButton />
               <ContactsButton />
               <NotificationsButton />

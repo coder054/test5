@@ -5,7 +5,7 @@ import type { Message, Participant } from '../../../types/chat'
 import { ChatMessage } from './chat-message'
 import { IChatMessage } from 'src/module/chat/chatService'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
-import { isEmpty } from 'lodash'
+import { get, isEmpty } from 'lodash'
 import { AVATAR_DEFAULT } from 'src/constants/constants'
 
 interface ChatMessagesProps {
@@ -83,6 +83,7 @@ export const ChatMessages: FC<ChatMessagesProps> = (props) => {
                   }
                 : null
             }
+            previewData={get(message, 'previewData')}
             key={index}
           />
         )

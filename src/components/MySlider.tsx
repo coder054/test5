@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles'
 type MySliderProps = SliderProps & {
   step: number
   unit?: string
-  value: number
+  value?: number
   label: string
   isStar?: boolean
   isPoint?: boolean
@@ -20,8 +20,8 @@ type MySliderProps = SliderProps & {
 const CustomSlider = styled(Slider)(({ theme }) => ({
   '& .MuiSlider-thumb': {
     backgroundColor: '#09E099',
-    height: 6,
-    width: 6,
+    height: 12,
+    width: 12,
   },
   '& .MuiSlider-rail': {
     color: '#A2A5AD',

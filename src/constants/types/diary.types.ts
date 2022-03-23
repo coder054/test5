@@ -1,3 +1,5 @@
+import { MatchType } from './match.types'
+
 export type SPOT_KEY =
   | 'FLH'
   | 'FRH'
@@ -34,7 +36,7 @@ export type DiaryType = Partial<{
   diaryId: string
   cap: Cap
   userType: string
-  match: Match
+  match: MatchType
 }>
 
 export type InjuryType = {

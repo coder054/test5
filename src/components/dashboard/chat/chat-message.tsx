@@ -1,9 +1,11 @@
-import { useState } from 'react'
-import type { FC } from 'react'
-import PropTypes from 'prop-types'
-import { formatDistanceToNowStrict } from 'date-fns'
 import { Avatar, Box, Card, CardMedia, Link, Typography } from '@mui/material'
+import { formatDistanceToNowStrict } from 'date-fns'
 import { isEmpty } from 'lodash'
+import PropTypes from 'prop-types'
+import type { FC } from 'react'
+import { useState } from 'react'
+import { IPreviewData } from 'src/module/chat/chatService'
+import { getStr } from 'src/utils/utils'
 
 interface ChatMessageProps {
   authorAvatar: string
@@ -19,6 +21,7 @@ interface ChatMessageProps {
     size: number
   }
   createdAt: number
+  previewData: IPreviewData
 }
 
 export const ChatMessage: FC<ChatMessageProps> = (props) => {
@@ -32,11 +35,29 @@ export const ChatMessage: FC<ChatMessageProps> = (props) => {
     imageUrl,
     videoUrl,
     fileMeta,
+    previewData,
     ...other
   } = props
   const [expandMedia, setExpandMedia] = useState<boolean>(false)
 
   const renderContent = () => {
+    // return (
+    //   <LinkPreview
+    //     url="https://dantri.com.vn/the-gioi/slovakia-ra-dieu-kien-cap-s300-ngay-lap-tuc-cho-ukraine-20220318135631706.htm"
+    //     width="400px"
+    //     customFetcher={async (url) => {
+    //       const target: {
+    //         title: string | null
+    //         description: string | null
+    //         image: string | null
+    //         siteName: string | null
+    //         hostname: string | null
+    //       }
+    //       return target
+    //     }}
+    //   />
+    // )
+
     if (contentType === 'image') {
       return (
         <CardMedia
@@ -90,6 +111,26 @@ export const ChatMessage: FC<ChatMessageProps> = (props) => {
               {(fileMeta.size / (1024 * 1024)).toFixed(2)} MB
             </div>
           </div>
+        </div>
+      )
+    }
+
+    if (contentType === 'text' && !isEmpty(previewData)) {
+      return (
+        <div className=" ">
+          <Typography color="inherit" variant="body1">
+            {body}
+          </Typography>
+
+          <a
+            target="_blank"
+            href={getStr(previewData, 'link')}
+            className="hover:text-black  "
+          >
+            <div className="font-semibold mt-4 ">{previewData.title}</div>
+            <div className="">{previewData.description}</div>
+            <img src={getStr(previewData, 'image.url')} className=" " alt="" />
+          </a>
         </div>
       )
     }

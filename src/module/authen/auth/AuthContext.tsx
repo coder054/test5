@@ -21,6 +21,7 @@ import {
   dataFromToken,
   getStr,
   ITokenData,
+  parseCookies,
   removeCookieUtil,
   setCookieUtil,
 } from 'src/utils/utils'
@@ -68,12 +69,15 @@ export function AuthProvider({ children }) {
   const [errorSignin, setErrorSignin] = useState<string>('')
   const [checkEmail, setCheckEmail] = useState<boolean>(false)
   const [userRoles, setUserRoles] = useState<any>([])
-  const [currentRoleName, setCurrentRoleName] = useState<'COACH' | 'PLAYER'>(
-    'PLAYER'
+  const [currentRoleName, setCurrentRoleName] = useState(
+    parseCookies(null)[COOKIE_KEY.currentRoleName]
   )
 
   const currentRoleId = useMemo(() => {
-    if (isEmpty(userRoles)) return ''
+    if (isEmpty(userRoles) || isEmpty(currentRoleName)) {
+      return ''
+    }
+
     const filter = userRoles.filter((role) => {
       return role.role === currentRoleName
     })
@@ -87,19 +91,29 @@ export function AuthProvider({ children }) {
   }, [userRoles, currentRoleName])
 
   useEffect(() => {
+    console.log('aaa currentRoleId', currentRoleId)
     //@ts-ignore: Unreachable code error
     axios.defaults.headers.roleId = currentRoleId
-    setCookieUtil(COOKIE_KEY.roleid, currentRoleId)
-    // console.log('aaa changed roleId to', currentRoleId)
+
+    if (isEmpty(currentRoleId)) {
+      removeCookieUtil(COOKIE_KEY.roleid)
+    } else {
+      setCookieUtil(COOKIE_KEY.roleid, currentRoleId)
+    }
   }, [currentRoleId])
+
+  useEffect(() => {
+    if (isEmpty(currentRoleName)) {
+      removeCookieUtil(COOKIE_KEY.currentRoleName)
+    } else {
+      //@ts-ignore: Unreachable code error
+      setCookieUtil(COOKIE_KEY.currentRoleName, currentRoleName)
+    }
+  }, [currentRoleName])
 
   useEffect(() => {
     //@ts-ignore: Unreachable code error
     localStorage.setItem(LOCAL_STORAGE_KEY.userRoles, JSON.stringify(userRoles))
-
-    if (size(userRoles) === 1) {
-      setCurrentRoleName(getStr(userRoles, '[0].role'))
-    }
   }, [userRoles])
 
   useEffect(() => {
@@ -234,8 +248,11 @@ export function AuthProvider({ children }) {
         localStorage.clear()
         removeTokenCookieHttp()
         removeCookieUtil(COOKIE_KEY.roleid)
+        removeCookieUtil(COOKIE_KEY.currentRoleName)
         setToken('')
         setCurrentUser(null)
+        setUserRoles([])
+        setCurrentRoleName('')
       } else {
         setCurrentUser(user)
         const token = await user.getIdToken()
@@ -263,17 +280,21 @@ export function AuthProvider({ children }) {
           respUserRoles = resp3
         }
 
-        setUserRoles(respUserRoles.data)
-        const roleId =
-          get(
-            respUserRoles.data.find((o) => o.role === 'PLAYER') ||
-              respUserRoles.data[0],
-            'roleId'
-          ) || ''
+        // set current role name
+        if (size(respUserRoles.data) === 1) {
+          setCurrentRoleName(getStr(respUserRoles, 'data[0].role'))
+        } else {
+          let cookieCurrentRoleName =
+            parseCookies(null)[COOKIE_KEY.currentRoleName]
+          if (!cookieCurrentRoleName || cookieCurrentRoleName === 'undefined') {
+            setCurrentRoleName('PLAYER')
+          } else {
+            //@ts-ignore: Unreachable code error
+            setCurrentRoleName(cookieCurrentRoleName)
+          }
+        }
 
-        //@ts-ignore: Unreachable code error
-        axios.defaults.headers.roleId = roleId
-        setCookieUtil(COOKIE_KEY.roleid, roleId)
+        setUserRoles(respUserRoles.data)
         if (!get(respUserRoles, 'data[0].role')) {
           router.push(ROUTES.SIGNUP_FORM)
         }

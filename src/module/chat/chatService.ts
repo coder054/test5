@@ -1,3 +1,4 @@
+import queryString from 'query-string'
 import {
   ref,
   getDatabase,
@@ -26,8 +27,9 @@ import { storage } from 'src/config/firebase-client'
 
 import { firebaseApp } from 'src/config/firebase-client'
 
-import { chain, isEmpty } from 'lodash'
+import { chain, isEmpty, get as getLodash } from 'lodash'
 import { LOCAL_STORAGE_KEY } from 'src/constants/constants'
+import axios from 'axios'
 
 export const database = getDatabase(firebaseApp)
 export const dbRef = ref(database)
@@ -57,6 +59,7 @@ export const chattingUIDsNode = 'chattingUIDs'
 export const previewDataNode = 'previewData'
 
 export interface IChatRoom {
+  aaa: number
   chatRoomId: string
   memberIds: string[]
   updatedAt: number
@@ -74,6 +77,12 @@ export interface IChatRoom {
   chattingUIDs?: string[]
   deletedDate?: number
   isShowChatRoom?: boolean // defauld true
+  roomType?: ERoomType
+}
+
+export enum ERoomType {
+  GROUP = 'GROUP',
+  TEAM = 'TEAM',
 }
 
 export interface IUser {
@@ -203,11 +212,12 @@ export interface ITextMessage extends IMessage {
 }
 
 export interface IPreviewData {
-  description?: any
-  image?: any
-  link?: any
-  title?: any
+  description?: string
+  image?: IPreviewDataImage
+  link?: string
+  title?: string
 }
+
 export interface IPreviewDataImage {
   height: any
   url: any
@@ -703,12 +713,12 @@ export const createGroupChatRoom = async (
   groupName: string,
   requested: boolean,
   memberIds: string[],
-  chatRoomImage?: string
+  chatRoomImage?: string,
+  //@ts-ignore: Unreachable code error
+  roomType: ERoomType
 ) => {
   try {
-    // here
-
-    let chatRoom: IChatRoom = {
+    const chatRoom: IChatRoom = {
       memberIds,
       requested,
       //@ts-ignore: Unreachable code error
@@ -717,6 +727,7 @@ export const createGroupChatRoom = async (
       chatRoomName: groupName,
       chatRoomImage,
       isGroup: true,
+      roomType,
     }
 
     const updates = {}
@@ -834,11 +845,30 @@ export const newChatMessage = () => {
       uri,
     }
   }
+
+  const newLinkMessage = (
+    createdAt: any,
+    createdBy: string,
+    messageId: string,
+    text: string,
+    previewData: IPreviewData
+  ) => {
+    return {
+      createdAt,
+      createdBy,
+      messageId,
+      previewData,
+      text,
+      type: 'text',
+    }
+  }
+
   return {
     newTextMessage,
     newImageMessage,
     newVideoMessage,
     newFileMessage,
+    newLinkMessage,
   }
 }
 
@@ -846,4 +876,55 @@ export const fromBase64ToBlob = async (base64: string): Promise<Blob> => {
   const res = await fetch(base64)
   const blob = await res.blob()
   return blob
+}
+
+export const updateMessagePreviewData = async (
+  messageId: string,
+  chatRoomId: string,
+  previewData: IPreviewData
+): Promise<{ error: boolean }> => {
+  try {
+    const updates = {}
+    updates[`/chatMessages/${chatRoomId}/${messageId}/previewData`] =
+      previewData
+    await update(dbRef, updates)
+    return { error: false }
+  } catch (error) {
+    return { error: true }
+  }
+}
+
+export const getPreviewData = async (
+  url: string
+): Promise<{
+  error: boolean
+  data: {
+    description: string
+    hostname: string
+    image: string
+    siteName: string
+    title: string
+    url: string
+  }
+}> => {
+  try {
+    const params = {
+      url: url,
+    }
+
+    const resp = await axios.get(
+      `https://rlp-proxy.herokuapp.com/v2?${queryString.stringify(params)}`
+    )
+
+    return {
+      error: false,
+      //@ts-ignore: Unreachable code error
+      data: getLodash(resp, 'data.metadata'),
+    }
+  } catch (error) {
+    return {
+      error: false,
+      data: null,
+    }
+  }
 }

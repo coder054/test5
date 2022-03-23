@@ -1,5 +1,6 @@
 import { Rule } from 'antd/lib/form'
 import dayjs from 'dayjs'
+import _ from 'lodash'
 import { DEFAULT_DATE } from 'src/constants/constants'
 
 export const getCookieFromReq = (cookieString: string, cookieKey: string) => {
@@ -67,7 +68,10 @@ export function formatUnixDate(date: number, format: string) {
   return dayjs(date).format(format)
 }
 
-export function flexingFormatDate(date: string | Date, format: string) {
+export function flexingFormatDate(
+  date: string | number | Date,
+  format: string
+) {
   return dayjs(date).format(format)
 }
 
@@ -75,4 +79,25 @@ export const getToday = () => {
   if (+dayjs(new Date()).format('HH') < 12) {
     return dayjs(new Date()).add(-1, 'day').format(DEFAULT_DATE)
   } else return new Date()
+}
+
+export const upperFirst = (str: string) => {
+  return _.upperFirst(str.toLowerCase().trim())
+}
+
+export const getDefaultDay = (date: string | Date) => {
+  if (
+    dayjs(flexingFormatDate(date, 'MM/DD/YYYY')).isBefore(
+      dayjs(flexingFormatDate(new Date(), 'MM/DD/YYYY'))
+    )
+  ) {
+    return 'New diary'
+  }
+  if (
+    flexingFormatDate(date, 'MM/DD/YYYY') ===
+      flexingFormatDate(new Date(), 'MM/DD/YYYY') &&
+    +flexingFormatDate(date, 'HH') > 12
+  ) {
+    return 'Today'
+  }
 }

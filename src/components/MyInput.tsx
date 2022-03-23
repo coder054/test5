@@ -1,7 +1,16 @@
 import { styled, TextField } from '@mui/material'
-
 import clsx from 'clsx'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+
+const ITEM_HEIGHT = 48
+const ITEM_PADDING_TOP = 8
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+    },
+  },
+}
 
 const CssTextField = styled(TextField)({
   '& label': {
@@ -9,7 +18,6 @@ const CssTextField = styled(TextField)({
     marginLeft: '4px',
   },
   '& label.Mui-focused': {
-    // color: '#5048E5',
     color: '#ffffff',
   },
   '& .MuiInput-underline:after': {
@@ -65,28 +73,16 @@ export const MyInput = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false)
 
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return
-    }
-
-    let el = window.document.querySelector('.ant-form')
-    if (!el) {
-      return
-    }
-
-    el.classList.remove('ant-form')
-  }, [])
-
   return (
     <div className="w-full">
       <div className={clsx('relative', className)}>
         <CssTextField
           {...rest}
           placeholder={placeholder}
-          value={value}
-          onChange={onChange}
           fullWidth
+          value={value}
+          SelectProps={{ MenuProps: MenuProps }}
+          onChange={onChange}
           label={label}
           id="custom-css-outlined-input"
           autoComplete="current-password"

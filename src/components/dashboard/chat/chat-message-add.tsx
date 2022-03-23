@@ -182,7 +182,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               )
 
               if (errorCreateMessage) {
-                alert('error happen')
+                alert('error happen1')
                 return
               }
               updateLastMessageTime(chatRoomId, newMessageKey)
@@ -275,7 +275,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               )
 
               if (errorCreateMessage) {
-                alert('error happen')
+                alert('error happen2')
                 return
               }
               updateLastMessageTime(chatRoomId, newMessageKey)
@@ -319,7 +319,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
               )
 
               if (errorCreateMessage) {
-                alert('error happen')
+                alert('error happen3')
                 return
               }
               updateLastMessageTime(chatRoomId, newMessageKey)

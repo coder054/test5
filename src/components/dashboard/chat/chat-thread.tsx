@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { chain, isEmpty } from 'lodash'
+import { chain, get, isEmpty } from 'lodash'
 import { useAtom } from 'jotai'
 import {
   activeChatRoomAtom,
@@ -44,6 +44,9 @@ import {
   IChatUser,
   createMessage,
   updateLastMessageTime,
+  IPreviewData,
+  newChatMessage,
+  getPreviewData,
 } from 'src/module/chat/chatService'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 
@@ -169,26 +172,71 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
   // get the thread.
   const handleSendMessage = async (body: string): Promise<void> => {
     try {
-      let chatRoomId: string = activeChatRoom.chatRoomId
-      const newMessageKey = await push(
-        child(ref(database), `/chatMessages/${chatRoomId}`)
-      ).key
+      var urlRegex =
+        /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gi
 
-      let message: IChatMessage = {
-        createdAt: serverTimestamp(), // 1646731132428,
-        createdBy: currentRoleId,
-        messageId: newMessageKey,
-        text: body,
-        type: 'text',
+      let link = get(body.match(urlRegex), '[0]')
+      if (!!link) {
+        let chatRoomId: string = activeChatRoom.chatRoomId
+        const newMessageKey = await push(
+          child(ref(database), `/chatMessages/${chatRoomId}`)
+        ).key
+
+        const { data, error: errorGetPreviewData } = await getPreviewData(link)
+        if (errorGetPreviewData) {
+          return
+        }
+
+        const { description, hostname, image, siteName, title, url } = data
+
+        let previewData: IPreviewData = {
+          description,
+          link: url,
+          title,
+          image: {
+            height: 630,
+            url: image,
+            width: 1200,
+          },
+        }
+        let message = newChatMessage().newLinkMessage(
+          //@ts-ignore: Unreachable code error
+          serverTimestamp(),
+          currentRoleId,
+          newMessageKey,
+          body,
+          previewData
+        )
+
+        const { error } = await createMessage(message, chatRoomId)
+
+        if (error) {
+          alert('error happen4')
+          return
+        }
+        updateLastMessageTime(chatRoomId, newMessageKey)
+      } else {
+        let chatRoomId: string = activeChatRoom.chatRoomId
+        const newMessageKey = await push(
+          child(ref(database), `/chatMessages/${chatRoomId}`)
+        ).key
+
+        let message: IChatMessage = {
+          createdAt: serverTimestamp(), // 1646731132428,
+          createdBy: currentRoleId,
+          messageId: newMessageKey,
+          text: body,
+          type: 'text',
+        }
+
+        const { error } = await createMessage(message, chatRoomId)
+
+        if (error) {
+          alert('error happen5')
+          return
+        }
+        updateLastMessageTime(chatRoomId, newMessageKey)
       }
-
-      const { error } = await createMessage(message, chatRoomId)
-
-      if (error) {
-        alert('error happen')
-        return
-      }
-      updateLastMessageTime(chatRoomId, newMessageKey)
     } catch (err) {
       console.error(err)
     }

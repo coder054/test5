@@ -48,7 +48,6 @@ export const fetcherForEndpointFlip = async (url) => {
 
 const tabs = [
   { label: 'Biography', value: 'biography' },
-  { label: 'Diary', value: 'diary' },
   { label: 'Update', value: 'update' },
 ]
 
@@ -722,7 +721,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     //@ts-ignore: Unreachable code error
     const errors = values.map((o) => {
       //@ts-ignore: Unreachable code error
-      o.reason === undefined ? 'noerror' : 'error'
+      return o.reason === undefined ? 'noerror' : 'error'
     })
     console.log('aaa errors', errors)
     ;[dataBioPlayer, dataBioCoach, dataClub, dataAvgPlayer, dataAvgCoach] = [
