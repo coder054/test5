@@ -13,6 +13,8 @@ import { axios } from 'src/utils/axios'
 import { API_UPDATE_PROFILE_COACH } from 'src/constants/api.constants'
 import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
+import toast from 'react-hot-toast'
+import { getErrorMessage } from 'src/utils/utils'
 
 export const SignUpFormCoachSkills = () => {
   const [profileCoachForm, setProfileCoachForm] = useAtom(profileCoachAtom)
@@ -151,7 +153,9 @@ export const SignUpFormCoachSkills = () => {
           query: { profile: profile },
         })
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
   }
 
   return (
