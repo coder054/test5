@@ -119,11 +119,11 @@ const ContentSearchButton = () => {
 const UpdateDiaryButton = () => {
   return (
     <Link href="/diary-update">
-      <button className="bg-[#4654EA]  active:scale-110 duration-150 py-2 px-[22px] rounded-[8px] flex items-center space-x-2 relative">
-        <span>
+      <button className="bg-[#4654EA] active:scale-110 duration-150 laptopM:py-2 mobileM:py-[4px] mobileM:px-[8px] laptopM:px-[22px] laptopM:rounded-[8px] mobileM:rounded-[4px] flex items-center laptopM:space-x-2 relative">
+        <span className="mobileM:hidden">
           <UpdateDiaryIcon />
         </span>
-        <span className="text-white text-[14px] font-semibold">
+        <span className="text-white mobileM:text-[13px] laptopM:text-[14px] font-semibold">
           Update Diary
         </span>
       </button>
