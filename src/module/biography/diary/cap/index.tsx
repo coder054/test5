@@ -15,32 +15,48 @@ import {
 } from 'src/constants/mocks/match-length.constants'
 import { POSITION } from 'src/constants/mocks/position.constants'
 import { CountryType } from 'src/constants/types'
+import { CapType } from 'src/constants/types/cap.types'
 import {
   EventType,
-  MatchType,
   ReviewType,
   StatType,
 } from 'src/constants/types/match.types'
 import {
-  generateRateByNumber,
-  generateRateByString,
+  emotionlToNum,
+  numToEmotional,
+  numToScale,
+  scaleToNum,
 } from 'src/hooks/functionCommon'
-import { InfiniteScrollClub } from 'src/module/account-settings/football/components/InfiniteScrollClub'
-import { InfiniteScrollMember } from 'src/module/account-settings/football/components/InfiniteScrollMember'
-import { InfiniteScrollTeam } from 'src/module/account-settings/football/components/InfiniteScrollTeam'
-
+import { useAuth } from 'src/module/authen/auth/AuthContext'
 type FormArrayType = {
   stats: StatType[]
   events: EventType[]
 }
 
-export const Match = () => {
+type CapProps = {
+  onChange?: (value: CapType) => void
+}
+
+const tagsClass =
+  'text-white bg-[#13161A] laptopM:py-[10px] laptopM:pl-[10px] laptopM:pr-[20px] mobileM:p-[10px] rounded-[8px]'
+
+export const Cap = ({ onChange }: CapProps) => {
   const [diary] = useAtom(diaryAtom)
 
-  console.log('Data: ', diary)
-
-  const [formValues, setFormValues] = useState<MatchType>({
+  const [formValues, setFormValues] = useState<CapType>({
+    arena: '',
     length: 90,
+    country: null,
+    yourTeam: 'U15',
+    place: 'HOME',
+    capMedia: [],
+    opponentTeam: 'U15',
+    opponentCountry: null,
+    typeOfCap: 'REGIONAL',
+    typeOfGame: 'SERIES',
+    dateTime: new Date(),
+    events: [{ minutes: 0, event: '' }],
+    stats: [{ minutesPlayed: 90, role: '' }],
     review: {
       teamPerformance: 'NORMAL',
       teamReview: '',
@@ -48,88 +64,43 @@ export const Match = () => {
       playerPerformance: 'NORMAL',
       yourReview: '',
     },
-    yourTeam: {
-      clubId: '',
-      clubLogo: '',
-      clubName: '',
-      teamId: '',
-      teamImage: '',
-      teamName: '',
-    },
-    stats: [{ minutesPlayed: 90, role: '' }],
-    typeOfGame: 'SERIES',
-    dateTime: new Date(),
-    matchMedia: [],
-    mvp: {
-      yourTeam: {},
-      opponents: {},
-    },
-    arena: '',
-    events: [{ minutes: 0, event: '' }],
-    opponentClub: {
-      clubName: '',
-      fromTime: null,
-      websiteUrl: null,
-      contractedUntil: null,
-      city: null,
-      logoUrl: '',
-      toTime: null,
-      country: null,
-      clubId: '',
-    },
-    opponentTeam: {
-      clubId: '',
-      clubLogo: '',
-      clubName: '',
-      teamId: '',
-      teamImage: '',
-      teamName: '',
-    },
     result: {
       opponents: 0,
       yourTeam: 0,
     },
-    club: {
-      fromTime: null,
-      clubName: '',
-      websiteUrl: null,
-      toTime: null,
-      country: null,
-      logoUrl: '',
-      city: null,
-      clubId: '',
-      contractedUntil: null,
-    },
-    place: '',
-    country: {
-      alpha3Code: '',
-      name: '',
-      phoneCode: '',
-      region: '',
-      flag: '',
-      alpha2Code: '',
-    },
   })
 
-  const handleChange = (
-    value: string | number | CountryType,
-    type: keyof MatchType
-  ) => {
+  const handleChange = (value: any, type: keyof CapType) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
 
-  const handleChangeReview = (
-    value: string | number,
-    type: keyof ReviewType
-  ) => {
-    setFormValues((prev) => ({
-      ...prev,
-      review: {
-        ...formValues.review,
-        [type]: typeof value === 'number' ? generateRateByNumber(value) : value,
-      },
-    }))
-  }
+  const handleChangeReview = useCallback(
+    (value: string | number, type: keyof ReviewType) => {
+      setFormValues((prev) => ({
+        ...prev,
+        review: {
+          ...formValues.review,
+          [type]: value,
+        },
+      }))
+    },
+    [JSON.stringify(formValues.review)]
+  )
+
+  const handleChangeArrayForm = useCallback(
+    (
+      formName: 'stats' | 'events',
+      type: 'minutesPlayed' | 'role' | 'minutes' | 'event',
+      value: string | number,
+      index: string
+    ) => {
+      let newArr = [...(formValues[formName] || [])]
+      /* @ts-ignore */
+      newArr[+index][type] = value
+      setFormValues((prev) => ({ ...prev, [formName]: newArr }))
+    },
+    [JSON.stringify(formValues.events), JSON.stringify(formValues.stats)]
+  )
 
   const handleAddForm = useCallback(
     (type: keyof FormArrayType, initialValue: any) => {
@@ -139,7 +110,7 @@ export const Match = () => {
         setFormValues((prev) => ({ ...prev, [type]: arr }))
       }
     },
-    [JSON.stringify(formValues)]
+    [JSON.stringify(formValues.events), JSON.stringify(formValues.stats)]
   )
 
   const handleRemoveForm = useCallback(
@@ -150,26 +121,33 @@ export const Match = () => {
       })
       setFormValues((prev) => ({ ...prev, [type]: arr }))
     },
-    [JSON.stringify(formValues)]
+    [JSON.stringify(formValues.events), JSON.stringify(formValues.stats)]
   )
 
   useEffect(() => {
+    onChange && onChange(formValues)
+  }, [JSON.stringify(formValues)])
+
+  useEffect(() => {
     const initialValues = {
-      ...diary.match,
+      ...diary.cap,
       events:
-        diary.match?.events.length === 0
+        diary.cap?.events.length === 0
           ? [{ minutes: 0, event: '' }]
-          : diary.match?.events,
+          : diary.cap?.events,
       stats:
-        diary.match?.stats.length === 0
+        diary.cap?.stats.length === 0
           ? [{ minutesPlayed: 0, role: '' }]
-          : diary.match?.stats,
+          : diary.cap?.stats,
     }
-    diary.match && setFormValues(initialValues)
+    diary.cap && setFormValues(initialValues)
   }, [])
 
   return (
     <div className="space-y-10 ">
+      <p className={tagsClass}>
+        Add your Regional and National Caps to your Biography
+      </p>
       <div className="space-y-9">
         <div className="grid grid-cols-2 gap-x-6">
           <MyDatePicker
@@ -222,27 +200,62 @@ export const Match = () => {
             </MenuItem>
           </MyInput>
         </div>
-        <InfiniteScrollClub value={formValues.club} label="Your Club" />
-        <InfiniteScrollTeam
-          item={formValues.yourTeam}
-          idClub={formValues.club.clubId}
+        <MyInput
+          onChange={(_, e) => handleChange(e.props.value, 'typeOfCap')}
+          value={formValues.typeOfCap}
+          label="National/Regional"
+          select
+        >
+          <MenuItem value="NATIONAL">National</MenuItem>
+          <MenuItem value="REGIONAL">Regional</MenuItem>
+        </MyInput>
+        <MyInput
+          onChange={(_, e) => handleChange(e.props.value, 'yourTeam')}
+          value={formValues.yourTeam}
           label="Your Team"
+          select
+        >
+          <MenuItem value="U15">U15</MenuItem>
+          <MenuItem value="U16">U16</MenuItem>
+          <MenuItem value="U17">U17</MenuItem>
+          <MenuItem value="U19">U19</MenuItem>
+          <MenuItem value="U21">U21</MenuItem>
+          <MenuItem value="SENIOR">Senior</MenuItem>
+        </MyInput>
+        <MySelectCountry
+          label="Opponent country/region"
+          value={formValues.opponentCountry}
+          onChange={(_, e: CountryType) => handleChange(e, 'opponentCountry')}
         />
-        <InfiniteScrollClub
-          value={formValues.opponentClub}
-          label="Opponent Club"
+        <MyInput
+          onChange={(_, e) => handleChange(e.props.value, 'opponentTeam')}
+          value={formValues.opponentTeam}
+          label="Your Team"
+          select
+        >
+          <MenuItem value="U15">U15</MenuItem>
+          <MenuItem value="U16">U16</MenuItem>
+          <MenuItem value="U17">U17</MenuItem>
+          <MenuItem value="U19">U19</MenuItem>
+          <MenuItem value="U21">U21</MenuItem>
+          <MenuItem value="SENIOR">Senior</MenuItem>
+        </MyInput>
+        <MyInput
+          value={formValues.arena}
+          label="Arena"
+          onChange={(e) => handleChange(e.target.value, 'arena')}
         />
-        <InfiniteScrollTeam
-          idClub={formValues.opponentClub.clubId}
-          item={formValues.opponentTeam}
-          label="Opponent Team"
-        />
-        <MyInput value={formValues.arena} label="Arena" />
       </div>
       <div className="space-y-3">
-        <p className="text-[#A2A5AD] font-normal text-[16px]">Match result</p>
+        <p className="text-[#A2A5AD] font-normal text-[16px]">Cap result</p>
         <div className="flex justify-between items-center space-x-6">
           <MyNormalInput
+            onChange={(e) =>
+              setFormValues((prev) => ({
+                ...prev,
+                result: { ...prev.result, yourTeam: +e.target.value },
+              }))
+            }
             value={formValues.result.yourTeam}
             label="Your Team Goals"
             type="number"
@@ -250,6 +263,12 @@ export const Match = () => {
           />
           <p className="text-[25px]">:</p>
           <MyNormalInput
+            onChange={(e) =>
+              setFormValues((prev) => ({
+                ...prev,
+                result: { ...prev.result, opponents: +e.target.value },
+              }))
+            }
             value={formValues.result.opponents}
             label="Opponent Goals"
             type="number"
@@ -257,36 +276,44 @@ export const Match = () => {
           />
         </div>
       </div>
-      <p className="text-[18px] font-normal">Your Ztar of the Match goes to:</p>
-      <div className="space-y-3">
-        <div className="space-y-9">
-          <InfiniteScrollMember
-            teamId={formValues.yourTeam.teamId}
-            value={formValues.mvp.yourTeam}
-            label="Your Team"
-          />
-          <InfiniteScrollMember
-            teamId={formValues.opponentTeam.teamId}
-            value={formValues.mvp.opponents}
-            label="Opponent Team"
-          />
-        </div>
-      </div>
-      <p className="text-[18px] font-normal">Your match stats & events</p>
       <div className="space-y-3">
         <p className="text-[#A2A5AD] font-normal text-[16px]">Your stats</p>
         <div className="space-y-9">
           {formValues.stats.map((item, index) => (
             <div key={index} className="flex items-center space-x-2">
               <div className="flex-1 grid grid-cols-2 gap-x-6">
-                <MyInput value={item.minutesPlayed} select label="Played">
+                <MyInput
+                  value={item.minutesPlayed}
+                  select
+                  label="Played"
+                  onChange={(e) =>
+                    handleChangeArrayForm(
+                      'stats',
+                      'minutesPlayed',
+                      e.target.value,
+                      index + ''
+                    )
+                  }
+                >
                   {MATCH_LENGTH.map((it) => (
                     <MenuItem key={it} value={it}>
                       {`${it} min`}
                     </MenuItem>
                   ))}
                 </MyInput>
-                <MyInput value={item.role} select label="Role">
+                <MyInput
+                  value={item.role}
+                  select
+                  label="Role"
+                  onChange={(e) =>
+                    handleChangeArrayForm(
+                      'stats',
+                      'role',
+                      e.target.value,
+                      index + ''
+                    )
+                  }
+                >
                   {POSITION.map((it) => (
                     <MenuItem key={it} value={it}>
                       {it}
@@ -294,7 +321,7 @@ export const Match = () => {
                   ))}
                 </MyInput>
               </div>
-              {index === formValues.stats.length - 1 ? (
+              {index === 0 ? (
                 <span
                   onClick={() =>
                     handleAddForm('stats', { minutesPlayed: null, role: '' })
@@ -321,14 +348,38 @@ export const Match = () => {
           {formValues.events.map((item, index) => (
             <div key={index} className="flex items-center space-x-2">
               <div className="flex-1 grid grid-cols-2 gap-x-6">
-                <MyInput value={item.minutes} select label="Minute">
+                <MyInput
+                  value={item.minutes}
+                  select
+                  label="Minute"
+                  onChange={(e) =>
+                    handleChangeArrayForm(
+                      'events',
+                      'minutes',
+                      e.target.value,
+                      index + ''
+                    )
+                  }
+                >
                   {MINUTES.map((it) => (
                     <MenuItem key={it} value={it}>
                       {`${it} min`}
                     </MenuItem>
                   ))}
                 </MyInput>
-                <MyInput value={item.event} select label="Event">
+                <MyInput
+                  onChange={(e) =>
+                    handleChangeArrayForm(
+                      'events',
+                      'event',
+                      e.target.value,
+                      index + ''
+                    )
+                  }
+                  value={item.event}
+                  select
+                  label="Event"
+                >
                   {EVENT.map((it) => (
                     <MenuItem key={it.key} value={it.key}>
                       {it.label}
@@ -336,7 +387,7 @@ export const Match = () => {
                   ))}
                 </MyInput>
               </div>
-              {index === formValues.events.length - 1 ? (
+              {index === 0 ? (
                 <span
                   onClick={() =>
                     handleAddForm('events', { minutes: null, event: '' })
@@ -361,36 +412,42 @@ export const Match = () => {
       <div className="space-y-9">
         <MySlider
           label="How was your Team performance?"
-          onChange={(e) => handleChangeReview(e, 'teamPerformance')}
+          onChange={(e) =>
+            handleChangeReview(numToEmotional(e), 'teamPerformance')
+          }
           isAdjective
           step={25}
-          value={generateRateByString(formValues.review.teamPerformance)}
+          value={emotionlToNum(formValues.review.teamPerformance)}
           labelClass="text-[#A2A5AD]"
         />
         <MyTextArea
           value={formValues.review.teamReview}
-          onChange={(e) => handleChangeReview(e, 'teamReview')}
+          onChange={(e) => handleChangeReview(e.target.value, 'teamReview')}
           placeholder="Your Teams game review (Describe what you’re team did well and what you’re team could have done better)"
         />
         <MySlider
           label="How physically strain, was it?"
-          onChange={(e) => handleChangeReview(e, 'physicallyStrain')}
+          onChange={(e) =>
+            handleChangeReview(numToScale(e), 'physicallyStrain')
+          }
           isScale
           step={25}
-          value={generateRateByString(formValues.review.physicallyStrain)}
+          value={scaleToNum(formValues.review.physicallyStrain)}
           labelClass="text-[#A2A5AD]"
         />
         <MySlider
           label="How was your match performance? "
-          onChange={(e) => handleChangeReview(e, 'playerPerformance')}
+          onChange={(e) =>
+            handleChangeReview(numToEmotional(e), 'playerPerformance')
+          }
           isAdjective
           step={25}
-          value={generateRateByString(formValues.review.playerPerformance)}
+          value={emotionlToNum(formValues.review.playerPerformance)}
           labelClass="text-[#A2A5AD]"
         />
         <MyTextArea
           value={formValues.review.yourReview}
-          onChange={(e) => handleChangeReview(e, 'yourReview')}
+          onChange={(e) => handleChangeReview(e.target.value, 'yourReview')}
           placeholder="Your game review (Describe what you did well and what you could have done better)"
         />
       </div>

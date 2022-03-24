@@ -394,6 +394,7 @@ export const SignUp = () => {
                 </div>
                 <div className="w-full mt-[22px]" onClick={() => {}}>
                   <Button
+                    loading={loading}
                     htmlType="submit"
                     submit
                     text="Register2"

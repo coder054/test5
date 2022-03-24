@@ -10,6 +10,7 @@ type MySliderProps = SliderProps & {
   label: string
   isStar?: boolean
   isPoint?: boolean
+  isNumber?: boolean
   isScale?: boolean
   readOnly?: boolean
   labelClass?: string
@@ -36,6 +37,7 @@ export const MySlider = ({
   isStar,
   isScale,
   isPoint,
+  isNumber,
   readOnly,
   onChange,
   labelClass,
@@ -98,6 +100,11 @@ export const MySlider = ({
             {value}
             {unit}
           </p>
+        </div>
+      )}
+      {isNumber && (
+        <div className="flex justify-end">
+          <p className="text-[#A2A5AD] text-[16px]">{value}</p>
         </div>
       )}
       {isAdjective && (
