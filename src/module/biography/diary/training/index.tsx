@@ -1,13 +1,9 @@
 import { useAtom } from 'jotai'
-import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { MyInputChips } from 'src/components'
 import { MySlider } from 'src/components/MySlider'
-import {
-  generateRateByNumber,
-  generateRateByString,
-} from 'src/hooks/functionCommon'
+import { numToScale, scaleToNum } from 'src/hooks/functionCommon'
 
 type FormValuesType = {
   hoursOfPractice: number
@@ -23,9 +19,10 @@ type FormValuesType = {
 
 type TrainingProps = {
   currentTab: string
+  onChange?: (value: FormValuesType) => void
 }
 
-export const Training = ({ currentTab }: TrainingProps) => {
+export const Training = ({ currentTab, onChange }: TrainingProps) => {
   const [diary] = useAtom(diaryAtom)
 
   const [formValues, setFormValues] = useState<FormValuesType>({
@@ -100,7 +97,11 @@ export const Training = ({ currentTab }: TrainingProps) => {
         typeOfTraining: currentTab,
       })
     }
-  }, [JSON.stringify(diary)])
+  }, [JSON.stringify(diary.training)])
+
+  useEffect(() => {
+    onChange && onChange(formValues)
+  }, [JSON.stringify(formValues)])
 
   return (
     <div className="space-y-4">
@@ -109,10 +110,10 @@ export const Training = ({ currentTab }: TrainingProps) => {
         onChange={(e) =>
           setFormValues((prev) => ({
             ...prev,
-            physicallyStrain: generateRateByNumber(e),
+            physicallyStrain: numToScale(e),
           }))
         }
-        value={generateRateByString(formValues.physicallyStrain)}
+        value={scaleToNum(formValues.physicallyStrain)}
         isScale
         step={25}
         labelClass="text-[#A2A5AD]"
