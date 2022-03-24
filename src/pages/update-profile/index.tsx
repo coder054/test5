@@ -1,5 +1,5 @@
-import { LayoutSignupForm } from 'src/components/layout-signup-form'
-import SignUpForm from 'src/module/authen/signup-form'
+import { LayoutSignupForm } from 'src/components/layout-update-profile'
+import SignUpForm from 'src/module/authen/update-profile'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { requireAuth } from 'src/config/firebase-admin'
@@ -15,7 +15,7 @@ const SignUpFormPage = () => {
           <title>Zporter</title>
           <link rel="icon" type="image/png" href="/favicon.png" />
         </Head>
-        <SignUpForm />
+        <SignUpForm title="Update your profile" />
       </LayoutSignupForm>
     </AuthGuard>
   )

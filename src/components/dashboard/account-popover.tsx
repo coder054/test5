@@ -23,6 +23,7 @@ import { SwitchHorizontalOutlined as SwitchHorizontalOutlinedIcon } from '../../
 import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
 import { IPlayerProfile } from './dashboard-navbar'
 import { safeAvatar } from 'src/utils/utils'
+import { ROUTES } from 'src/constants/constants'
 
 interface AccountPopoverProps {
   anchorEl: null | Element
@@ -156,14 +157,12 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
               />
             </svg>
             <div className="w-[8px] "></div>
-            <div
-              onClick={() => {
-                // here
-              }}
-              className="text-white text-[16px] leading-[150%]  "
-            >
-              Create new role
-            </div>
+
+            <Link href={ROUTES.UPDATE_PROFILE}>
+              <a className="text-white text-[16px] leading-[150%]  ">
+                Create new role2
+              </a>
+            </Link>
           </div>
         </div>
 

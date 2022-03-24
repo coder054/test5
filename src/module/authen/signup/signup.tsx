@@ -51,7 +51,7 @@ const tabs = [
   { text: Tab.Apple },
 ]
 
-export const SignUpWithSMS = () => {
+export const SignUp = () => {
   const router = useRouter()
   const [tab, setTab] = useQueryParam('type', withDefault(StringParam, Tab.SMS))
   const [step, setStep] = useState<1 | 2>(1)
@@ -97,7 +97,7 @@ export const SignUpWithSMS = () => {
 
   useEffect(() => {
     if (token) {
-      router.push(ROUTES.SIGNUP_FORM)
+      router.push(ROUTES.UPDATE_PROFILE)
     }
   }, [router, token])
 
@@ -397,8 +397,8 @@ export const SignUpWithSMS = () => {
                     loading={loading}
                     htmlType="submit"
                     submit
-                    text="Register"
-                    className="sign-in-button h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3] active:bg-[#293af8]"
+                    text="Register2"
+                    className="sign-in-button h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3]"
                   />
 
                   {/* <ButtonAnt type="primary" htmlType="submit">
@@ -532,7 +532,7 @@ export const SignUpWithSMS = () => {
                     <Button
                       htmlType="submit"
                       submit
-                      text="Register"
+                      text="Register3"
                       className="sign-in-button h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3]"
                     />
 

@@ -1,7 +1,7 @@
 // API Authen
 export const API_SIGNIN_WITH_USERNAME = 'auth/log-in-username'
-export const API_SIGNUP_FORM_PLAYER = 'users/player'
-export const API_SIGNUP_FORM_COACH = 'users/coach'
+export const API_UPDATE_PROFILE_PLAYER = 'users/player'
+export const API_UPDATE_PROFILE_COACH = 'users/coach'
 
 // API News
 export const API_GET_LIST_NEWS_POST = 'feed/get-list-news-post'

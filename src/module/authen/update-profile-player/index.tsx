@@ -112,7 +112,7 @@ export const SignUpFormPlayer = () => {
 
   React.useEffect(() => {
     if (!profileForm.profile?.firstName) {
-      router.push(ROUTES.SIGNUP_FORM)
+      router.push(ROUTES.UPDATE_PROFILE)
     }
   }, [profileForm])
 
@@ -237,7 +237,7 @@ export const SignUpFormPlayer = () => {
       })
       setLoading(false)
       router.push({
-        pathname: ROUTES.SIGNUP_FORM_PLAYER_SKILLS,
+        pathname: ROUTES.UPDATE_PROFILE_PLAYER_SKILLS,
         query: { profile: profile },
       })
     }
@@ -246,14 +246,14 @@ export const SignUpFormPlayer = () => {
   return (
     <div className="autofill2 w-screen min-h-screen lg:flex md:items-center">
       <div className="absolute top-[16px] lg:top-[40px] md:left-[40px]">
-        <GoBack label="Sign up form" goBack={ROUTES.SIGNUP_FORM} />
+        <GoBack label="Update your profile" goBack={ROUTES.UPDATE_PROFILE} />
       </div>
       <div
         className={`w-[320px] md:w-[500px] md:h-[880px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 2xl:right-[25%] overflow-y-auto 
         pl-[5px] pr-[5px] mx-auto lg:mr-0 lg:absolute`}
       >
         <p className="text-[24px] text-[#FFFFFF] font-semibold text-center md:text-left mb-[48px]">
-          Sign up form - player
+          Update your profile - player
         </p>
 
         <div className="w-[470px]">

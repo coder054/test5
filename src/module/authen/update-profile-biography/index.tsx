@@ -17,7 +17,7 @@ import { fetcher, getStr } from 'src/utils/utils'
 import useSWR from 'swr'
 import { useAuth } from '../auth/AuthContext'
 
-const cls = require('./signup-form-biography.module.css')
+const cls = require('./update-profile-biography.module.css')
 
 export const SignupFormBiography = () => {
   const { currentRoleId, updateUserRoles } = useAuth()
@@ -167,24 +167,24 @@ export const SignupFormBiography = () => {
     const getBio = async () => {
       if (profile && profile === 'Player') {
         const { data, error } = await updateUserRoles()
-        const roleId = getStr(data, '[0].roleId')
-        //@ts-ignore: Unreachable code error
-        axios.defaults.headers.roleId = roleId
+
+        const find = data.find((o) => o.role === 'PLAYER')
+        const username = getStr(find, 'username')
         try {
           const response = await axios.get(
-            `/biographies/player?userIdQuery=${currentRoleId || roleId}`
+            `/biographies/player?username=${username}`
           )
 
           setData(response.data)
         } catch (error) {}
       } else if (profile && profile === 'Coach') {
         const { data, error } = await updateUserRoles()
-        const roleId = getStr(data, '[0].roleId')
-        //@ts-ignore: Unreachable code error
-        axios.defaults.headers.roleId = roleId
+        const find = data.find((o) => o.role === 'COACH')
+        const username = getStr(find, 'username')
+
         try {
           const response = await axios.get(
-            `/biographies/coach?userIdQuery=${currentRoleId || roleId}`
+            `/biographies/coach?username=${username}`
           )
           setDataCoach(response.data)
         } catch (error) {}

@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Button, MyInputChips } from 'src/components'
 import { Comments } from 'src/components/Comments'
-const cls = require('./signup-form-coach-skills.module.css')
+const cls = require('./update-profile-coach-skills.module.css')
 import { GoBack } from 'src/components/go-back'
 import { ItemSkills } from 'src/components/item-skills'
 import { Input } from 'antd'
 import { useAtom } from 'jotai'
 import { profileCoachAtom } from 'src/atoms/profileCoachAtom'
 import { axios } from 'src/utils/axios'
-import { API_SIGNUP_FORM_COACH } from 'src/constants/api.constants'
+import { API_UPDATE_PROFILE_COACH } from 'src/constants/api.constants'
 import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
 import { MySlider } from 'src/components/MySlider'
@@ -30,6 +30,8 @@ interface RadarChartType {
   analytics: number
   playerDevelopment: number
 }
+import toast from 'react-hot-toast'
+import { getErrorMessage } from 'src/utils/utils'
 
 export const SignUpFormCoachSkills = () => {
   const [profileCoachForm, setProfileCoachForm] = useAtom(profileCoachAtom)
@@ -169,26 +171,28 @@ export const SignUpFormCoachSkills = () => {
     }
 
     try {
-      const response = await axios.put(API_SIGNUP_FORM_COACH, {
+      const response = await axios.put(API_UPDATE_PROFILE_COACH, {
         ...profileCoach,
         roleId: uuidv4(),
       })
 
       if (response.status === 200) {
         router.push({
-          pathname: ROUTES.SIGNUP_FORM_BIOGRAPHY,
+          pathname: ROUTES.UPDATE_PROFILE_BIOGRAPHY,
           query: { profile: profile },
         })
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
   }
 
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
       <div className="absolute top-[16px] lg:top-[40px] md:left-[40px] z-20">
         <GoBack
-          label="Sign up form"
-          goBack="/signup-form-player?profile=player"
+          label="Update your profile"
+          goBack="/update-profile-player?profile=player"
         />
       </div>
 
@@ -196,8 +200,8 @@ export const SignUpFormCoachSkills = () => {
         <div className="mx-auto w-2/3 grid grid-cols-3 gap-2">
           <ItemSkills className="w-[372px] h-[513px]">
             <>
-              <p className="text-[24px] text-[#FFFFFF] mb-[24px]">
-                Sign up form - player skills
+              <p className="text-[24px] text-[#FFFFFF] mb-[48px]">
+                Update your profile - player skills
               </p>
               <Comments
                 listComment={[

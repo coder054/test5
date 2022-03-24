@@ -21,11 +21,12 @@ export const InfoCoachWithAChart = ({
   profile: string
 }) => {
   const router = useRouter()
-  const { updateUserRoles, userRoles } = useAuth()
+  const { updateUserRoles, userRoles, setCurrentRoleName } = useAuth()
 
   const handleNext = async () => {
     try {
       await updateUserRoles()
+      setCurrentRoleName('COACH')
       router.push(ROUTES.dashboard)
     } catch (error) {}
   }
