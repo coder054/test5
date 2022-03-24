@@ -6,7 +6,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { ROUTES } from 'src/constants/constants'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 
-
 interface GuestGuardProps {
   children: ReactNode
 }
@@ -42,7 +41,7 @@ export const GuestGuard: FC<GuestGuardProps> = (props) => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.isReady, authenticated]
+    [router.isReady, authenticated, isRoleNull]
   )
 
   if (!checked) {
