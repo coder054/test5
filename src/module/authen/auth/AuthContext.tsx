@@ -243,6 +243,7 @@ export function AuthProvider({ children }) {
     // console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
+      setInitialized(false)
       console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
@@ -287,10 +288,6 @@ export function AuthProvider({ children }) {
         }
 
         setUserRoles(respUserRoles.data)
-        if (!get(respUserRoles, 'data[0].role')) {
-          router.push(ROUTES.UPDATE_PROFILE)
-        } else {
-        }
         ///////////////////////////////// userRoles /////////////////////////////////
       }
       const doneT = +new Date()
