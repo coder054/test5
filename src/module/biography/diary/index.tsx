@@ -150,15 +150,10 @@ const Component = () => {
     return !!diary.diaryId
   }, [JSON.stringify(diary)])
 
-  const diaryForm = useMemo(() => {
-    return { ...diary }
-  }, [JSON.stringify(diary)])
-
   const handleChange = useCallback(
     (type: TypeofDiary, value: any) => {
-      console.log('Diary form: ', diaryForm)
       setSubmitForm({
-        ...diaryForm,
+        ...diary,
         userType: type === 'cap' ? currentRoleName : null,
         typeOfDiary: filterType(currentTab),
         [type]: value,
@@ -265,7 +260,7 @@ const Component = () => {
             </MyModal>
           </div>
         </BackGround>
-        <div className="flex space-x-4">
+        <div className="laptopM:flex laptopM:space-x-4 mobileM:pb-5 mobileM:px-2 mobileM:space-y-4">
           <MyButton
             isLoading={isCreating || isUpdating}
             onClick={handleSubmit}
@@ -273,12 +268,12 @@ const Component = () => {
             label={isUpdate ? 'Update' : 'Save'}
           />
           {isUpdate && (
-            <button
+            <Button
+              type="button"
+              label="Delete Diary"
               onClick={() => setIsOpenModal(true)}
               className="bg-[#D60C0C] px-[45px] py-[11px] rounded-[8px]"
-            >
-              Delete Diary
-            </button>
+            />
           )}
         </div>
       </div>

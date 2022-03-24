@@ -1,6 +1,6 @@
 import { SnackbarOrigin } from '@mui/material/Snackbar'
-import { useEffect, useRef, useState } from 'react'
-import { toast, ToastContainer } from 'react-toastify'
+import { useState } from 'react'
+import { Slide, toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { MyInputChips } from 'src/components'
 import { MySlider } from 'src/components/MySlider'
@@ -8,7 +8,6 @@ import { MyTextArea } from 'src/components/MyTextarea'
 import { BODY_PART, SPOT_KEY } from 'src/constants/types/diary.types'
 import { BodyPart } from './BodyPart'
 import { BooleanOption } from './BooleanOption'
-import { Slide } from 'react-toastify'
 
 type PointsType = {
   x: number
@@ -21,7 +20,6 @@ export interface State extends SnackbarOrigin {
 }
 
 export const InjuryReport = () => {
-  const toastId = useRef(null)
   const [tags, setTags] = useState<string[]>([])
   const [side, setSide] = useState<boolean>(true)
   const [painLevel, setPainLevel] = useState<number>(0)
@@ -32,7 +30,7 @@ export const InjuryReport = () => {
     name: '',
   })
 
-  const handleOverall = (e: any) => {
+  const handleOverall = (e: React.MouseEvent<HTMLDivElement>) => {
     setOverallSpot((prev) => ({
       ...prev,
       x: e.nativeEvent.offsetX,
@@ -53,7 +51,6 @@ export const InjuryReport = () => {
     }))
   }
 
-  4
   const notify = (key: string) => {
     toast(`Hey, you've click on ${BODY_PART[key].injuryName} !`, {
       position: 'bottom-left',
@@ -79,7 +76,7 @@ export const InjuryReport = () => {
       <div className="flex flex-col items-center space-y-9 my-9">
         <ToastContainer transition={Slide} limit={0} />
         {side ? (
-          <div className="bg-front-body relative w-[214px] h-[440px] bg-no-repeat bg-center cursor-pointer duration-150">
+          <div className="bg-front-body  relative w-[214px] h-[440px] bg-no-repeat bg-center cursor-pointer duration-150">
             <div onClick={handleOverall} className="w-full h-full"></div>
             <BodyPart
               level={painLevel}

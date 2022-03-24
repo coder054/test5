@@ -5,7 +5,7 @@ import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
 
 const DiaryUpdatePage: NextPage = () => {
   return (
-    <div className="p-11">
+    <div className="laptopM:p-11">
       <DiaryUpdate />
     </div>
   )
