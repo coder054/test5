@@ -128,8 +128,8 @@ const SignUpForm = ({ title }: { title: string }) => {
     }
 
     if (
-      formValues.firstName &&
-      formValues.lastName &&
+      formValues.firstName.length > 1 &&
+      formValues.lastName.length > 1 &&
       formValues.birthDay &&
       formValues.country &&
       formValues.city &&
@@ -281,7 +281,7 @@ const SignUpForm = ({ title }: { title: string }) => {
               className="border-[2px] border-gray-700 hover:border-white duration-150"
               textClass="pt-8 px-9 font-medium"
               iconClass={clsx(isMobile ? 'pt-[38px]' : 'pt-[18px]')}
-              setImage={setFullBodyImage}
+              setImage={setFaceImage}
             />
           </div>
           <div className="md:flex-1">
@@ -301,7 +301,7 @@ const SignUpForm = ({ title }: { title: string }) => {
         <div className="mt-[40px]" onClick={handleSubmit}>
           <Button
             loading={loading}
-            className=" h-[48px] w-[300px] md:w-[470px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+            className="active:bg-[#293af8] h-[48px] w-[300px] md:w-[470px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
             text="Next"
           />
         </div>

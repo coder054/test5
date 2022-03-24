@@ -1,5 +1,4 @@
-import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { Loading } from 'src/components/loading/loading'
 import { SvgClose, SvgPlay } from 'src/imports/svgs'
 const cls = require('./item.module.css')
@@ -18,13 +17,11 @@ export const IteamImage = ({
   handleRemoveItem,
   setIsOpenModal,
   handleShow,
+  progress,
 }: ItemImageProps) => {
-  const [isVideo, setIsVideo] = useState<boolean>(url.includes('mp4'))
-  const [playVideo, setPlayVideo] = useState<boolean>(false)
   const videoRef = useRef(null)
-  // console.log('url', url)
 
-  const handleRemoveImage = () => {
+  const handleRemoveImage = (url) => {
     handleRemoveItem && handleRemoveItem(url)
   }
 
@@ -33,11 +30,17 @@ export const IteamImage = ({
     handleShow && handleShow(url)
   }
 
+  const isVideo = useMemo(() => {
+    return url.includes('mp4')
+  }, [url])
+
   return (
     <div className={`${cls.image} w-[64px] h-[64px] rounded-[4px] relative`}>
       <div
         className="absolute top-[4px] right-[4px] z-30 cursor-pointer hover:scale-150 duration-150"
-        onClick={handleRemoveImage}
+        onClick={() => {
+          handleRemoveImage(url)
+        }}
       >
         <SvgClose />
       </div>

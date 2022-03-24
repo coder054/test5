@@ -10,29 +10,27 @@ import { DashboardLayout } from 'src/components/dashboard/dashboard-layout'
 import { loadIdToken } from 'src/config/firebase-admin'
 import { COOKIE_KEY } from 'src/constants/constants'
 import {
-  IAvgPlayerScore,
   IAvgCoachScore,
-  IBiographyPlayer,
+  IAvgPlayerScore,
   IBiographyCoach,
+  IBiographyPlayer,
 } from 'src/constants/types/biography.types'
 import { useScreenWidth } from 'src/hooks/useScreenWidth'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { IInfoClub } from 'src/module/bio/InfoClub'
-import { InfoPlayerWithAChart } from 'src/module/bio/InfoPlayerWithAChart'
 import { InfoCoachWithAChart } from 'src/module/bio/InfoCoachWithAChart'
-import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
 import { InfoCoachWithCircleImage } from 'src/module/bio/InfoCoachWithCircleImage'
+import { InfoPlayerWithAChart } from 'src/module/bio/InfoPlayerWithAChart'
+import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
 import { InfoWithImages } from 'src/module/bio/InfoWithImages'
 import { InforWithNumbers } from 'src/module/bio/InfoWithNumbers'
 import { NavigationAndFilter } from 'src/module/bio/NavigationAndFilter'
 import { SocialLinksComponent } from 'src/module/bio/SocialLinksComponent'
 import { TopVideos } from 'src/module/bio/TopVideos'
-import { Diary } from 'src/module/biography/diary/Diary'
-import { axios } from 'src/utils/axios'
-import { getErrorMessage, parseCookies } from 'src/utils/utils'
-import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 import { getProfileCoach } from 'src/service/biography-update'
-import { tabsUnstyledClasses } from '@mui/base'
+import { axios } from 'src/utils/axios'
+import { parseCookies } from 'src/utils/utils'
+import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 
 export const fetcherForEndpointFlip = async (url) => {
   if (url === null) return
@@ -384,13 +382,6 @@ const BioForPlayer = ({
             {/*  */}
           </div>
         )}
-        {/* {currentTab === 'update' && (
-          <UpdateBiography
-            playerId={playerId}
-            currentRoleName={currentRoleName}
-          />
-        )} */}
-        {currentTab === 'diary' && <Diary />}
       </div>
     </>
   )

@@ -120,6 +120,7 @@ export const FutureCareer = () => {
         console.log('data', data)
         if (data.status === 201) {
           setLoading(false)
+          window.scroll(0, 0)
           toast.success(data.data)
         }
       })
@@ -159,7 +160,7 @@ export const FutureCareer = () => {
             <MySelectCountry
               label="Country"
               onChange={(_, value) => handleChangeForm('country', value)}
-              val={formValues.country}
+              value={formValues.country}
             />
 
             <MyInput
