@@ -198,3 +198,7 @@ export const safeAvatar = (str: string) => {
   }
   return str
 }
+
+export const toFixedIfNecessary = (value, dp = 2) => {
+  return +parseFloat(value).toFixed(dp)
+}

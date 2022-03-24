@@ -5,7 +5,7 @@ import { TitleCollapse } from 'src/components/common/TitleCollapse'
 import { TabPanel, Tabs } from 'src/components/Tabs'
 import { IInfoClub, InfoClub } from './InfoClub'
 import useSWR from 'swr'
-import { fetcher } from 'src/utils/utils'
+import { fetcher, toFixedIfNecessary } from 'src/utils/utils'
 import { isEmpty } from 'lodash'
 import { NextRouter } from 'next/router'
 import { CircularProgress } from '@mui/material'
@@ -339,7 +339,7 @@ export const OneRowStat = ({ title, value }: { title: any; value: any }) => {
         {title}
       </Text>
       <Text name="Header6" className="text-white ">
-        {value}
+        {toFixedIfNecessary(value)}
       </Text>
     </div>
   )
