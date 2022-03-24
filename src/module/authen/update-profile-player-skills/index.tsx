@@ -13,6 +13,8 @@ import { ROUTES } from 'src/constants/constants'
 import { useRouter } from 'next/router'
 import { axios } from 'src/utils/axios'
 import { API_UPDATE_PROFILE_PLAYER } from 'src/constants/api.constants'
+import { getErrorMessage } from 'src/utils/utils'
+import toast from 'react-hot-toast'
 
 interface FormValuesType {
   technics: number
@@ -188,7 +190,9 @@ export const SignUpFormPlayerSkills = () => {
           query: { profile: profile },
         })
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error(getErrorMessage(error))
+    }
   }
 
   return (

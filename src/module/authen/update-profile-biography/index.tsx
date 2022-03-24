@@ -170,12 +170,10 @@ export const SignupFormBiography = () => {
         const { data, error } = await updateUserRoles()
 
         const find = data.find((o) => o.role === 'PLAYER')
-        const roleId = getStr(find, 'roleId')
-        //@ts-ignore: Unreachable code error
-        axios.defaults.headers.roleId = roleId
+        const username = getStr(find, 'username')
         try {
           const response = await axios.get(
-            `/biographies/player?userIdQuery=${currentRoleId || roleId}`
+            `/biographies/player?username=${username}`
           )
 
           setData(response.data)
@@ -183,12 +181,11 @@ export const SignupFormBiography = () => {
       } else if (profile && profile === 'Coach') {
         const { data, error } = await updateUserRoles()
         const find = data.find((o) => o.role === 'COACH')
-        const roleId = getStr(find, 'roleId')
-        //@ts-ignore: Unreachable code error
-        axios.defaults.headers.roleId = roleId
+        const username = getStr(find, 'username')
+
         try {
           const response = await axios.get(
-            `/biographies/coach?userIdQuery=${currentRoleId || roleId}`
+            `/biographies/coach?username=${username}`
           )
           setDataCoach(response.data)
         } catch (error) {}

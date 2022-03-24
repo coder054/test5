@@ -169,7 +169,7 @@ export const removeCookieUtil = (key: string) => {
 }
 
 export const getErrorMessage = (err) => {
-  return get(err, 'response.data.messages', get(err, 'message')) || ''
+  return get(err, 'response.data.message', get(err, 'message')) || ''
 }
 
 export const resizeFile = (file) =>
