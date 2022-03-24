@@ -6,18 +6,18 @@ import SignIn from 'src/module/authen/singin'
 
 const SignInPage = () => {
   return (
-    <>
+    <GuestGuard>
       <Head>
         <title>Zporter Signin</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
       <SignIn />
-    </>
+    </GuestGuard>
   )
 }
 
 export default SignInPage
-export const getServerSideProps: any = async ({ req, res }) => {
-  await requireNotAuth(req as any, res as any)
-  return { props: {} }
-}
+// export const getServerSideProps: any = async ({ req, res }) => {
+//   await requireNotAuth(req as any, res as any)
+//   return { props: {} }
+// }

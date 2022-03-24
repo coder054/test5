@@ -53,6 +53,7 @@ type MyDatePickerProps = {
   isNextable?: boolean
   onChange?: (value: string) => void
   maxDate?: any
+  minDate?: any
 }
 
 export const MyDatePicker = ({
@@ -61,6 +62,7 @@ export const MyDatePicker = ({
   size,
   value,
   maxDate,
+  minDate,
   isNextable,
   errorMessage,
   onChange,
@@ -101,6 +103,7 @@ export const MyDatePicker = ({
           inputFormat="dd/MM/yyyy"
           onChange={handleChange}
           maxDate={maxDate ? maxDate : null}
+          minDate={minDate ? minDate : null}
           renderInput={(params) => (
             <CssTextField fullWidth size={size} {...params} />
           )}

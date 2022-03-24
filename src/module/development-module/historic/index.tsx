@@ -168,11 +168,33 @@ export const Historic = ({ playerId }: HistoricProps) => {
       summary: formValues.summary,
       mediaLinks: images as [{ type: string; url: string }],
     }
+    if (formValues.season !== formValues?.fromDate?.toString().slice(11, 15)) {
+      toast.error('Make sure you enter a right timing for your historic club')
+      setLoading(false)
+      return
+    }
+
+    if (+formValues.yourEstimated < 1) {
+      toast.error('Estimated Time must not be less than 1')
+      setLoading(false)
+      return
+    }
+    if (
+      +formValues.serie + +formValues.cup + +formValues.friend !==
+      +formValues.won + +formValues.lost + +formValues.draw
+    ) {
+      toast.error(
+        'total of serieMatches + cupMatches + friendlyMatches has to equal to wonMatches + lostMatches + drawMatches'
+      )
+      setLoading(false)
+
+      return
+    }
 
     try {
       createCareerHistoric(valueHistoric).then((data) => {
         console.log('data', data)
-        if (data.status === 201) {
+        if (data?.status === 201) {
           window.scroll(0, 0)
           toast.success(data.data)
           setLoading(false)
@@ -212,9 +234,10 @@ export const Historic = ({ playerId }: HistoricProps) => {
             </div>
             <div className="flex-1 ml-[10px]">
               <MyDatePicker
-                label="From"
+                label="To"
                 onChange={(e) => handleChangeForm('toDate', e)}
                 value={formValues.toDate}
+                minDate={formValues.fromDate}
               />
             </div>
           </div>
@@ -222,7 +245,7 @@ export const Historic = ({ playerId }: HistoricProps) => {
           <MySelectCountry
             label="Country"
             onChange={(_, value) => handleChangeForm('country', value)}
-            val={formValues.country}
+            value={formValues.country}
           />
 
           <MyInput

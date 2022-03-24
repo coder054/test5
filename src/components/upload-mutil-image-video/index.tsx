@@ -5,6 +5,7 @@ import { storage } from 'src/config/firebase-client'
 import toast from 'react-hot-toast'
 import { useAtom } from 'jotai'
 import { listMediaAtom } from 'src/atoms/listMediaAtom'
+import { Loading } from '../loading/loading'
 
 interface UploadMutilImageVideoProps {
   image?: boolean
@@ -48,6 +49,7 @@ export const UploadMutilImageVideo = ({
         function progress(snapshot) {
           var prog = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
           setProgressImageVideo(prog)
+
           setProgress && setProgress(prog)
         },
         function error(err) {},
@@ -64,13 +66,9 @@ export const UploadMutilImageVideo = ({
 
   return (
     <div className="cursor-pointer w-[28px] h-[28px] relative">
-      {image ? (
-        <div className="hover:scale-150">
-          <SvgCamera />
-        </div>
-      ) : (
-        <SvgVideo />
-      )}
+      {!image && progress !== 0 && progress !== 100 && <Loading />}
+      {image && <SvgCamera />}
+      {!image && (progress === 0 || progress === 100) && <SvgVideo />}
       <input
         type={'file'}
         accept={image ? '.jpg,.jpeg,.png' : '.mp4'}
