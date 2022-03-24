@@ -269,6 +269,7 @@ export const SignUpFormPlayer = () => {
           <div key={index} className="flex items-center mt-[24px] w-[470px]">
             <div className="w-[430px]">
               <InfiniteScrollTeam
+                label="Your Team(s)"
                 idClub={formValues.contractedClub.clubId}
                 /* @ts-ignore */
                 handleSetTeam={(value) => setSelectedTeam(value, index + '')}
@@ -402,7 +403,7 @@ export const SignUpFormPlayer = () => {
           <MyInput label="City" className="mt-[24px]" />
           <Button
             text="Save"
-            className="h-[48px] mt-[40px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+            className="active:bg-[#293af8] h-[48px] mt-[40px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
           />
         </div>
       </MyModal>

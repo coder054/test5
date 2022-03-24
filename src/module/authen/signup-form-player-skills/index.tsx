@@ -1,32 +1,33 @@
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { Button, SliderStar } from 'src/components'
+import { Button, MyInputChips } from 'src/components'
 import { Comments } from 'src/components/Comments'
 const cls = require('./signup-form-player-skills.module.css')
 import { GoBack } from 'src/components/go-back'
 import { ItemSkills } from 'src/components/item-skills'
 import { Input } from 'antd'
-import { SpecialityTags } from 'src/components/speciality-tags'
 import { useAtom } from 'jotai'
 import { profileAtom } from 'src/atoms/profileAtom'
 import { ROUTES } from 'src/constants/constants'
 import { useRouter } from 'next/router'
 import { axios } from 'src/utils/axios'
 import { API_SIGNUP_FORM_PLAYER } from 'src/constants/api.constants'
+import { MySlider } from 'src/components/MySlider'
+import _ from 'lodash'
 
-interface FormValuesType {
+interface FootBallSkillType {
   technics: number
   tactics: number
   physics: number
   mental: number
+}
+interface RadarChartType {
   attacking: number
   dribbling: number
   passing: number
   defending: number
   pace: number
   shooting: number
-  note: string
-  specialTags: string[]
 }
 
 export const SignUpFormPlayerSkills = () => {
@@ -36,35 +37,24 @@ export const SignUpFormPlayerSkills = () => {
   const date = new Date()
   const { profile } = router.query
 
-  const [technics, setTechnics] = useState<number>(0)
-  const [tactics, setTactics] = useState<number>(0)
-  const [physics, setPhysics] = useState<number>(0)
-  const [mental, setMental] = useState<number>(0)
-
-  const [attacking, setAttacking] = useState<number>(0)
-  const [dribbling, setDribbling] = useState<number>(0)
-  const [passing, setPassing] = useState<number>(0)
-  const [defending, setDefending] = useState<number>(0)
-  const [pace, setPace] = useState<number>(0)
-  const [shooting, setShooting] = useState<number>(0)
-
-  const [note, setNote] = useState<string>('')
-  const [tags, setTags] = useState<string[]>([])
-
-  const [errorFormValues, setErrorFormValues] = useState<FormValuesType>({
+  const [footBallSkills, setFootBallSkills] = useState<FootBallSkillType>({
     technics: 0,
     tactics: 0,
     physics: 0,
     mental: 0,
+  })
+
+  const [radarCharts, setRadarCharts] = useState<RadarChartType>({
     attacking: 0,
     dribbling: 0,
     passing: 0,
     defending: 0,
     pace: 0,
     shooting: 0,
-    note: '',
-    specialTags: [],
   })
+
+  const [note, setNote] = useState<string>('')
+  const [tags, setTags] = useState<string[]>([])
 
   React.useEffect(() => {
     if (typeof window === 'undefined') {
@@ -84,6 +74,14 @@ export const SignUpFormPlayerSkills = () => {
       router.push(ROUTES.SIGNUP_FORM)
     }
   }, [profileForm])
+
+  const handleChangeSkills = (type: keyof FootBallSkillType, value: string) => {
+    setFootBallSkills((prev) => ({ ...prev, [type]: value }))
+  }
+
+  const handleChangeRadar = (type: keyof RadarChartType, value: string) => {
+    setRadarCharts((prev) => ({ ...prev, [type]: value }))
+  }
 
   const handleNext = async (e: any) => {
     e.preventDefault()
@@ -156,20 +154,20 @@ export const SignUpFormPlayerSkills = () => {
       playerSkills: {
         specialityTags: tags,
         overall: {
-          mental: mental / 20,
-          physics: physics / 20,
-          tactics: tactics / 20,
-          technics: technics / 20,
+          mental: footBallSkills.mental / 20,
+          physics: footBallSkills.physics / 20,
+          tactics: footBallSkills.tactics / 20,
+          technics: footBallSkills.technics / 20,
           leftFoot: 0,
           rightFoot: 0,
         },
         radar: {
-          attacking: attacking,
-          defending: defending,
-          dribbling: dribbling,
-          passing: passing,
-          shooting: shooting,
-          pace: pace,
+          attacking: radarCharts.attacking,
+          defending: radarCharts.defending,
+          dribbling: radarCharts.dribbling,
+          passing: radarCharts.passing,
+          shooting: radarCharts.shooting,
+          pace: radarCharts.pace,
           tackling: 0,
           heading: 0,
         },
@@ -205,7 +203,7 @@ export const SignUpFormPlayerSkills = () => {
         <div className="mx-auto w-11/12 md:w-5/6 lg:w-2/3 grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-2">
           <ItemSkills className="w-[372px] h-[513px]">
             <>
-              <p className="text-[24px] text-[#FFFFFF] mb-[48px]">
+              <p className="text-[24px] text-[#FFFFFF] mb-[24px]">
                 Sign up form - player skills
               </p>
               <Comments
@@ -215,32 +213,23 @@ export const SignUpFormPlayerSkills = () => {
                     text: 'Honestly now, how’s your football skills, specialities and attributes compared to peers in your age? Let’s start with an overall view.',
                   },
                 ]}
-                className="mb-[28px]"
+                className="mb-[20px]"
               />
-              <SliderStar
-                star
-                label="Technics"
-                className="h-[60px]"
-                setValues={setTechnics}
-              />
-              <SliderStar
-                star
-                label="Tactics"
-                className="h-[60px]"
-                setValues={setTactics}
-              />
-              <SliderStar
-                star
-                label="Physics"
-                className="h-[60px]"
-                setValues={setPhysics}
-              />
-              <SliderStar
-                star
-                label="Mental"
-                className="h-[60px]"
-                setValues={setMental}
-              />
+              <div>
+                {Object.keys(footBallSkills).map((skill: string) => (
+                  <MySlider
+                    isStar
+                    key={skill}
+                    step={5}
+                    readOnly
+                    label={_.upperFirst(skill)}
+                    value={footBallSkills[skill]}
+                    onChange={(e) =>
+                      handleChangeSkills(skill as keyof FootBallSkillType, e)
+                    }
+                  />
+                ))}
+              </div>
             </>
           </ItemSkills>
 
@@ -254,42 +243,21 @@ export const SignUpFormPlayerSkills = () => {
               ]}
               className="mb-[30px]"
             />
-            <SliderStar
-              point
-              label="Attacking"
-              className="h-[60px]"
-              setValues={setAttacking}
-            />
-            <SliderStar
-              point
-              label="Dribbling"
-              className="h-[60px]"
-              setValues={setDribbling}
-            />
-            <SliderStar
-              point
-              label="Passing"
-              className="h-[60px]"
-              setValues={setPassing}
-            />
-            <SliderStar
-              point
-              label="Defending"
-              className="h-[60px]"
-              setValues={setDefending}
-            />
-            <SliderStar
-              point
-              label="Pace"
-              className="h-[60px]"
-              setValues={setPace}
-            />
-            <SliderStar
-              point
-              label="Shooting"
-              className="h-[60px]"
-              setValues={setShooting}
-            />
+            <div className="-space-y-2">
+              {Object.keys(radarCharts).map((radar: string) => (
+                <MySlider
+                  isNumber
+                  key={radar}
+                  step={1}
+                  labelClass="text-[#A2A5AD]"
+                  label={_.upperFirst(radar)}
+                  value={footBallSkills[radar]}
+                  onChange={(e) =>
+                    handleChangeRadar(radar as keyof RadarChartType, e)
+                  }
+                />
+              ))}
+            </div>
           </ItemSkills>
           <ItemSkills className="w-[372px] h-[513px]">
             <Comments
@@ -310,12 +278,20 @@ export const SignUpFormPlayerSkills = () => {
               autoSize={{ minRows: 5, maxRows: 5 }}
               rows={5}
             />
-            <SpecialityTags label="Speciality tags" setTags={setTags} />
+
+            <div className="mt-[24px]">
+              <MyInputChips
+                label="Speciality tags"
+                labelClass="text-[#A2A5AD]"
+                value={tags}
+                setTags={setTags}
+              />
+            </div>
 
             <div onClick={handleNext}>
               <Button
                 text="Next"
-                className="bg-[#4654EA] rounded-[8px] text-[15px] w-full h-[48px] mt-[24px]"
+                className="bg-[#4654EA] hover:bg-[#5b67f3] active:bg-[#293af8] rounded-[8px] text-[15px] w-full h-[48px] mt-[24px]"
               />
             </div>
           </ItemSkills>

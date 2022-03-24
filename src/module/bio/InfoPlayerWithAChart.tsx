@@ -146,7 +146,7 @@ export const InfoPlayerWithAChart = ({
             <Button
               loading={loading}
               text="Next"
-              className="text-[15px] bg-[#4654EA] rounded-[8px] h-[48px] mt-[6px]"
+              className="text-[15px] bg-[#4654EA] hover:bg-[#5b67f3] active:bg-[#293af8]  rounded-[8px] h-[48px] mt-[6px]"
             />
           </div>
         )}

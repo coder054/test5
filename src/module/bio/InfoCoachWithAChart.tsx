@@ -5,10 +5,7 @@ import { Button } from 'src/components'
 import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
 import { useAuth } from '../authen/auth/AuthContext'
-import {
-  IBiographyPlayer,
-  IBiographyCoach,
-} from 'src/constants/types/biography.types'
+import { IBiographyCoach } from 'src/constants/types/biography.types'
 import { getStr } from 'src/utils/utils'
 import { useEffect } from 'react'
 
@@ -26,18 +23,11 @@ export const InfoCoachWithAChart = ({
   const router = useRouter()
   const { updateUserRoles, userRoles } = useAuth()
 
-  useEffect(() => {
-    // console.log('aaa dataBioRadarChart: ', dataBioRadarChart)
-  }, [dataBioRadarChart])
-
   const handleNext = async () => {
     try {
       await updateUserRoles()
-      console.log('userRoles', userRoles)
       router.push(ROUTES.dashboard)
-    } catch (error) {
-      console.log('error', error)
-    }
+    } catch (error) {}
   }
 
   return (
@@ -62,75 +52,85 @@ export const InfoCoachWithAChart = ({
       </div>
       <div className="bioradarchart sm:max-w-[466px] mx-auto relative mb-[32px] text-center ">
         <div className="bioradarchartsmall flex sm:hidden justify-center mx-auto ">
-          <BioRadarChart type="small" data={dataBioRadarChart}></BioRadarChart>
+          <BioRadarChart
+            type="small"
+            data={dataBioRadarChart}
+            profile={profile}
+          ></BioRadarChart>
         </div>
 
         <div className="bioradarchartnormal hidden sm:block ">
-          <BioRadarChart type="normal" data={dataBioRadarChart}></BioRadarChart>
+          <BioRadarChart
+            type="normal"
+            data={dataBioRadarChart}
+            profile={profile}
+          ></BioRadarChart>
         </div>
 
-        <div
-          className="w-full sm:w-[404px] absolute left-1/2 transform -translate-x-1/2 bottom-[46px] min-h-[60px] 
+        {profile !== 'Coach' && (
+          <div
+            className="w-full sm:w-[404px] absolute left-1/2 transform -translate-x-1/2 bottom-[46px] min-h-[60px] 
               flex justify-between
             "
-        >
-          {[
-            {
-              title: 'LEFT FOOT',
-              rate: getStr(dataBio, 'leftFoot') || 0,
-            },
-            {
-              title: 'RIGHT FOOT',
-              rate: getStr(dataBio, 'rightFoot') || 0,
-            },
-          ].map((o, index) => (
-            <div key={o.title} className="">
-              <div className="text-white font-semibold text-[16px] leading-[28px] text-center mb-2 ">
-                {o.title}
-              </div>
+          >
+            {[
+              {
+                title: 'LEFT FOOT',
+                rate: getStr(dataBio, 'leftFoot') || 0,
+              },
+              {
+                title: 'RIGHT FOOT',
+                rate: getStr(dataBio, 'rightFoot') || 0,
+              },
+            ].map((o, index) => (
+              <div key={o.title} className="">
+                <div className="text-white font-semibold text-[16px] leading-[28px] text-center mb-2 ">
+                  {o.title}
+                </div>
 
-              <Stars
-                svgStarFull={
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                      fill="#FFB400"
+                <Stars
+                  svgStarFull={
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
+                        fill="#FFB400"
+                      />
+                    </svg>
+                  }
+                  svgStarHalf={
+                    <img
+                      src={'/biography/starhalf.png'}
+                      className="w-[24px] h-[24px] "
+                      alt=""
                     />
-                  </svg>
-                }
-                svgStarHalf={
-                  <img
-                    src={'/biography/starhalf.png'}
-                    className="w-[24px] h-[24px] "
-                    alt=""
-                  />
-                }
-                svgStarEmpty={
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
-                      fill="#484A4D"
-                    />
-                  </svg>
-                }
-                numberOfStars={o.rate}
-                className={' gap-x-[4px] sm:gap-x-[12px]'}
-              />
-            </div>
-          ))}
-        </div>
+                  }
+                  svgStarEmpty={
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z"
+                        fill="#484A4D"
+                      />
+                    </svg>
+                  }
+                  numberOfStars={o.rate}
+                  className={' gap-x-[4px] sm:gap-x-[12px]'}
+                />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="max-w-[466px] mx-auto ">
@@ -151,7 +151,7 @@ export const InfoCoachWithAChart = ({
           <div onClick={handleNext}>
             <Button
               text="Next"
-              className="text-[15px] bg-[#4654EA] rounded-[8px] h-[48px] mt-[6px]"
+              className="text-[15px] bg-[#4654EA] hover:bg-[#5b67f3] active:bg-[#293af8] rounded-[8px] h-[48px] mt-[24px]"
             />
           </div>
         )}

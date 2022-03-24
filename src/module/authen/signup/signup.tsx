@@ -394,10 +394,11 @@ export const SignUpWithSMS = () => {
                 </div>
                 <div className="w-full mt-[22px]" onClick={() => {}}>
                   <Button
+                    loading={loading}
                     htmlType="submit"
                     submit
                     text="Register"
-                    className="sign-in-button h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3]"
+                    className="sign-in-button h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3] active:bg-[#293af8]"
                   />
 
                   {/* <ButtonAnt type="primary" htmlType="submit">

@@ -21,8 +21,6 @@ import {
 } from 'src/constants/types/settingsType.type'
 import { InfiniteScrollClub } from 'src/module/account-settings/football/components/InfiniteScrollClub'
 import { InfiniteScrollTeam } from 'src/module/account-settings/football/components/InfiniteScrollTeam'
-
-import { useAuth } from '../auth/AuthContext'
 import { OptionCoach } from '../types'
 
 type FormArrayType = Partial<{
@@ -49,10 +47,7 @@ export const SignUpFormCoach = () => {
 
   const router = useRouter()
   const [openModal, setOpenModal] = useState<boolean>(false)
-  const { signin } = useAuth()
   const { profile } = router.query
-
-  console.log('profileCoachForm', profileCoachForm)
 
   const [formValues, setFormValues] = useState<FormValueType>({
     yourClub: '',
@@ -198,6 +193,7 @@ export const SignUpFormCoach = () => {
           <div key={index} className="flex items-center mt-[24px] w-[470px]">
             <div className="w-[430px]">
               <InfiniteScrollTeam
+                label="Your Team(s)"
                 idClub={formValues.contractedClub.clubId}
                 /* @ts-ignore */
                 handleSetTeam={(value) => setSelectedTeam(value, index + '')}
@@ -276,7 +272,7 @@ export const SignUpFormCoach = () => {
         <div className="mt-[40px]" onClick={handleSubmit}>
           <Button
             // loading={loading}
-            className="h-[48px] w-[310px] md:w-[470px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3] absolute"
+            className="h-[48px] w-[310px] md:w-[470px] bg-[#4654EA] active:bg-[#293af8] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3] absolute"
             text="Next"
           />
         </div>
@@ -304,7 +300,7 @@ export const SignUpFormCoach = () => {
           <MyInput label="City" className="mt-[24px]" />
           <Button
             text="Save"
-            className="h-[48px] mt-[40px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"
+            className="h-[48px] mt-[40px] bg-[#4654EA] hover:bg-[#5b67f3] active:bg-[#293af8]  text-[15px] text-[#FFFFFF] font-semibold"
           />
         </div>
       </MyModal>

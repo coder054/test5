@@ -1,18 +1,35 @@
 import React, { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { Button, SliderStar } from 'src/components'
+import { Button, MyInputChips } from 'src/components'
 import { Comments } from 'src/components/Comments'
 const cls = require('./signup-form-coach-skills.module.css')
 import { GoBack } from 'src/components/go-back'
 import { ItemSkills } from 'src/components/item-skills'
 import { Input } from 'antd'
-import { SpecialityTags } from 'src/components/speciality-tags'
 import { useAtom } from 'jotai'
 import { profileCoachAtom } from 'src/atoms/profileCoachAtom'
 import { axios } from 'src/utils/axios'
 import { API_SIGNUP_FORM_COACH } from 'src/constants/api.constants'
 import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
+import { MySlider } from 'src/components/MySlider'
+import _ from 'lodash'
+
+interface CoachSkillsType {
+  technics: number
+  tactics: number
+  physics: number
+  mental: number
+}
+
+interface RadarChartType {
+  attacking: number
+  defending: number
+  turnovers: number
+  pieces: number
+  analytics: number
+  playerDevelopment: number
+}
 
 export const SignUpFormCoachSkills = () => {
   const [profileCoachForm, setProfileCoachForm] = useAtom(profileCoachAtom)
@@ -22,17 +39,21 @@ export const SignUpFormCoachSkills = () => {
   const router = useRouter()
   const { profile } = router.query
 
-  const [technics, setTechnics] = useState<number>(0)
-  const [tactics, setTactics] = useState<number>(0)
-  const [physics, setPhysics] = useState<number>(0)
-  const [mental, setMental] = useState<number>(0)
+  const [coachSkills, setCoachSkills] = useState<CoachSkillsType>({
+    technics: 0,
+    tactics: 0,
+    physics: 0,
+    mental: 0,
+  })
 
-  const [attacking, setAttacking] = useState<number>(0)
-  const [defending, setDefending] = useState<number>(0)
-  const [turnovers, setTurnovers] = useState<number>(0)
-  const [pieces, setPieces] = useState<number>(0)
-  const [analytics, setAnalytics] = useState<number>(0)
-  const [playerDevelopment, setPlayerDevelopment] = useState<number>(0)
+  const [radarChart, setRadarChart] = useState<RadarChartType>({
+    attacking: 0,
+    defending: 0,
+    turnovers: 0,
+    pieces: 0,
+    analytics: 0,
+    playerDevelopment: 0,
+  })
 
   const [note, setNote] = useState<string>('')
   const [tags, setTags] = useState<string[]>([])
@@ -49,6 +70,14 @@ export const SignUpFormCoachSkills = () => {
 
     el.classList.remove('ant-form')
   }, [])
+
+  const handleChangeSkills = (type: keyof CoachSkillsType, value: string) => {
+    setCoachSkills((prev) => ({ ...prev, [type]: value }))
+  }
+
+  const handleChangeRadar = (type: keyof RadarChartType, value: string) => {
+    setRadarChart((prev) => ({ ...prev, [type]: value }))
+  }
 
   const handleNext = async (e) => {
     e.preventDefault()
@@ -123,18 +152,18 @@ export const SignUpFormCoachSkills = () => {
       coachSkills: {
         specialityTags: tags,
         overall: {
-          mental: mental / 20,
-          physics: physics / 20,
-          tactics: tactics / 20,
-          technics: technics / 20,
+          mental: coachSkills.mental / 20,
+          physics: coachSkills.physics / 20,
+          tactics: coachSkills.tactics / 20,
+          technics: coachSkills.technics / 20,
         },
         radar: {
-          attacking: attacking,
-          defending: defending,
-          turnovers: turnovers,
-          setPieces: pieces,
-          analytics: analytics,
-          playerDevelopment: playerDevelopment,
+          attacking: radarChart.attacking,
+          defending: radarChart.defending,
+          turnovers: radarChart.turnovers,
+          setPieces: radarChart.pieces,
+          analytics: radarChart.analytics,
+          playerDevelopment: radarChart.playerDevelopment,
         },
       },
     }
@@ -167,7 +196,7 @@ export const SignUpFormCoachSkills = () => {
         <div className="mx-auto w-2/3 grid grid-cols-3 gap-2">
           <ItemSkills className="w-[372px] h-[513px]">
             <>
-              <p className="text-[24px] text-[#FFFFFF] mb-[48px]">
+              <p className="text-[24px] text-[#FFFFFF] mb-[24px]">
                 Sign up form - player skills
               </p>
               <Comments
@@ -177,32 +206,23 @@ export const SignUpFormCoachSkills = () => {
                     text: 'Honestly now, how’s your football skills, specialities and attributes compared to peers in your age? Let’s start with an overall view.',
                   },
                 ]}
-                className="mb-[28px]"
+                className="mb-[20px]"
               />
-              <SliderStar
-                star
-                label="Technics"
-                className="h-[60px]"
-                setValues={setTechnics}
-              />
-              <SliderStar
-                star
-                label="Tactics"
-                className="h-[60px]"
-                setValues={setTactics}
-              />
-              <SliderStar
-                star
-                label="Physics"
-                className="h-[60px]"
-                setValues={setPhysics}
-              />
-              <SliderStar
-                star
-                label="Mental"
-                className="h-[60px]"
-                setValues={setMental}
-              />
+              <div>
+                {Object.keys(coachSkills).map((skill) => (
+                  <MySlider
+                    isStar
+                    key={skill}
+                    step={5}
+                    readOnly
+                    label={_.upperFirst(skill)}
+                    value={coachSkills[skill]}
+                    onChange={(e) =>
+                      handleChangeSkills(skill as keyof CoachSkillsType, e)
+                    }
+                  />
+                ))}
+              </div>
             </>
           </ItemSkills>
 
@@ -216,42 +236,22 @@ export const SignUpFormCoachSkills = () => {
               ]}
               className="mb-[30px]"
             />
-            <SliderStar
-              point
-              label="Attacking"
-              className="h-[60px]"
-              setValues={setAttacking}
-            />
-            <SliderStar
-              point
-              label="Defending"
-              className="h-[60px]"
-              setValues={setDefending}
-            />
-            <SliderStar
-              point
-              label="Turnovers"
-              className="h-[60px]"
-              setValues={setTurnovers}
-            />
-            <SliderStar
-              point
-              label="Set Pieces"
-              className="h-[60px]"
-              setValues={setPieces}
-            />
-            <SliderStar
-              point
-              label="Analytics"
-              className="h-[60px]"
-              setValues={setAnalytics}
-            />
-            <SliderStar
-              point
-              label="Player development"
-              className="h-[60px]"
-              setValues={setPlayerDevelopment}
-            />
+
+            <div className="-space-y-2">
+              {Object.keys(radarChart).map((radar) => (
+                <MySlider
+                  isNumber
+                  key={radar}
+                  step={1}
+                  readOnly
+                  label={_.upperFirst(radar)}
+                  value={radarChart[radar]}
+                  onChange={(e) =>
+                    handleChangeRadar(radar as keyof RadarChartType, e)
+                  }
+                />
+              ))}
+            </div>
           </ItemSkills>
           <ItemSkills className="w-[372px] h-[513px]">
             <Comments
@@ -272,11 +272,20 @@ export const SignUpFormCoachSkills = () => {
               autoSize={{ minRows: 5, maxRows: 5 }}
               rows={5}
             />
-            <SpecialityTags label="Speciality tags" setTags={setTags} />
+
+            <div className="mt-[24px]">
+              <MyInputChips
+                label="Speciality tags"
+                labelClass="text-[#A2A5AD]"
+                value={tags}
+                setTags={setTags}
+              />
+            </div>
+
             <div onClick={handleNext}>
               <Button
                 text="Next"
-                className="bg-[#4654EA] rounded-[8px] text-[15px] w-full h-[48px] mt-[24px]"
+                className="bg-[#4654EA] hover:bg-[#5b67f3] active:bg-[#293af8]  rounded-[8px] text-[15px] w-full h-[48px] mt-[24px]"
               />
             </div>
           </ItemSkills>

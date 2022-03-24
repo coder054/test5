@@ -2,7 +2,6 @@ import { get } from 'lodash'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { GoBack } from 'src/components/go-back'
-import { Loading } from 'src/components/loading/loading'
 import {
   IAvgCoachScore,
   IAvgPlayerScore,
@@ -326,16 +325,13 @@ export const SignupFormBiography = () => {
     get(data, 'playerRadarSkills'),
   ])
 
-  console.log('dataCoach', dataCoach)
-  console.log('dataBioCoachRadarChart', dataBioCoachRadarChart)
-
   return (
     <div className="autofill2 w-screen min-h-screen float-left lg:flex md:items-center">
       <div className="absolute top-[16px] lg:top-[40px] md:left-[40px] z-20">
-        <GoBack
+        {/* <GoBack
           label="Sign up form"
-          // goBack={ROUTES.SIGNUP_FORM_PLAYER_SKILLS}
-        />
+          goBack={ROUTES.SIGNUP_FORM_PLAYER_SKILLS}
+        /> */}
       </div>
 
       <div className="w-2/3 h-full mx-auto grid grid-cols-2 -mt-[48px]">
@@ -348,15 +344,9 @@ export const SignupFormBiography = () => {
               currentRoleId={currentRoleId}
               signupForm
             />
-          ) : (
-            <div className="w-full">
-              <div className="w-[48px] mx-auto">
-                <Loading />
-              </div>
-            </div>
-          )}
+          ) : null}
 
-          {profile === 'Coach' && data.userId ? (
+          {profile === 'Coach' && dataCoach.userId ? (
             <InfoCoachWithCircleImage
               dataBio={dataCoach}
               currentRoleId={currentRoleId}
@@ -365,7 +355,7 @@ export const SignupFormBiography = () => {
           ) : null}
         </div>
         <div
-          className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30 `}
+          className={`${cls.formInfor} rounded-[8px] w-[568px] p-[24px] z-30`}
         >
           {profile === 'Player' && (
             <InfoPlayerWithAChart
@@ -380,8 +370,8 @@ export const SignupFormBiography = () => {
             <InfoCoachWithAChart
               dataBio={dataCoach}
               dataBioRadarChart={dataBioCoachRadarChart}
-              // signupForm
-              profile="coach"
+              signupForm
+              profile={profile as string}
             />
           ) : null}
         </div>

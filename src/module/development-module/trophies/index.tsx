@@ -122,6 +122,7 @@ export const Trophies = () => {
       createTrophies(vaueUpdate).then((data) => {
         if (data.status === 201) {
           setLoading(false)
+          window.scroll(0, 0)
           toast.success(data.data)
         }
       })
@@ -163,7 +164,7 @@ export const Trophies = () => {
           <MySelectCountry
             label="Country"
             onChange={(_, value) => handleChangeForm('country', value)}
-            val={formValues.country}
+            value={formValues.country}
           />
 
           <InfiniteScrollClub

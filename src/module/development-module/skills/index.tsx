@@ -40,6 +40,7 @@ const tagsClass =
   'text-white bg-[#13161A] laptopM:py-[10px] laptopM:pl-[10px] laptopM:pr-[20px] mobileM:p-[10px] rounded-[8px]'
 
 export const Skills = ({ playerId }: SkillProps) => {
+  const { currentRoleName } = useAuth()
   const [tags, setTags] = useState<string[]>([])
   const [summary, setSummary] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(false)
@@ -64,32 +65,34 @@ export const Skills = ({ playerId }: SkillProps) => {
   })
 
   useEffect(() => {
-    try {
-      const res = getProfilePlayer()
-      res.then((data) => {
-        setFootBallSkills({
-          technics: data.data.playerSkills.overall.technics * 20,
-          tactics: data.data.playerSkills.overall.tactics * 20,
-          physics: data.data.playerSkills.overall.physics * 20,
-          mental: data.data.playerSkills.overall.mental * 20,
-          leftFoot: data.data.playerSkills.overall.leftFoot * 20,
-          rightFoot: data.data.playerSkills.overall.rightFoot * 20,
+    if (currentRoleName === 'PLAYER') {
+      try {
+        const res = getProfilePlayer()
+        res.then((data) => {
+          setFootBallSkills({
+            technics: data.data.playerSkills.overall.technics * 20,
+            tactics: data.data.playerSkills.overall.tactics * 20,
+            physics: data.data.playerSkills.overall.physics * 20,
+            mental: data.data.playerSkills.overall.mental * 20,
+            leftFoot: data.data.playerSkills.overall.leftFoot * 20,
+            rightFoot: data.data.playerSkills.overall.rightFoot * 20,
+          })
+          setRadarChart({
+            attacking: data.data.playerSkills.radar.attacking,
+            defending: data.data.playerSkills.radar.defending,
+            dribbling: data.data.playerSkills.radar.dribbling,
+            passing: data.data.playerSkills.radar.passing,
+            shooting: data.data.playerSkills.radar.shooting,
+            pace: data.data.playerSkills.radar.pace,
+            tackling: data.data.playerSkills.radar.tackling,
+            heading: data.data.playerSkills.radar.heading,
+          })
+          setSummary(data.data.playerCareer.summary)
+          setTags(data.data.playerSkills.specialityTags)
         })
-        setRadarChart({
-          attacking: data.data.playerSkills.radar.attacking,
-          defending: data.data.playerSkills.radar.defending,
-          dribbling: data.data.playerSkills.radar.dribbling,
-          passing: data.data.playerSkills.radar.passing,
-          shooting: data.data.playerSkills.radar.shooting,
-          pace: data.data.playerSkills.radar.pace,
-          tackling: data.data.playerSkills.radar.tackling,
-          heading: data.data.playerSkills.radar.heading,
-        })
-        setSummary(data.data.playerCareer.summary)
-        setTags(data.data.playerSkills.specialityTags)
-      })
-    } catch (error) {}
-  }, [playerId])
+      } catch (error) {}
+    }
+  }, [playerId, currentRoleName])
 
   const handleChangeSkills = useCallback(
     (type: keyof FootBallSkillTypes, value: number) => {
