@@ -1,8 +1,11 @@
-import type { FC, ReactNode } from 'react'
-import { useEffect, useState } from 'react'
+import { get, isEmpty, size } from 'lodash'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
+import type { FC, ReactNode } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { ROUTES } from 'src/constants/constants'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
+
 
 interface GuestGuardProps {
   children: ReactNode
@@ -10,10 +13,16 @@ interface GuestGuardProps {
 
 export const GuestGuard: FC<GuestGuardProps> = (props) => {
   const { children } = props
-  const { authenticated } = useAuth()
+  const { authenticated, userRoles } = useAuth()
   const router = useRouter()
   const [checked, setChecked] = useState(false)
-  const disableGuard = router.query.disableGuard as string
+
+  const isRoleNull = useMemo(() => {
+    return (
+      isEmpty(userRoles) ||
+      (size(userRoles) === 1 && !get(userRoles, '[0].role'))
+    )
+  }, [userRoles])
 
   useEffect(
     () => {
@@ -22,8 +31,12 @@ export const GuestGuard: FC<GuestGuardProps> = (props) => {
       }
 
       // You should remove the "disableGuard" check, because it's meant to be used only in the demo.
-      if (authenticated && disableGuard !== 'true') {
+      if (authenticated && isRoleNull) {
+        router.push(ROUTES.UPDATE_PROFILE)
+        return null
+      } else if (authenticated && !isRoleNull) {
         router.push('/dashboard')
+        return null
       } else {
         setChecked(true)
       }
