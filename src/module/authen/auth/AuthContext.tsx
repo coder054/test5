@@ -287,6 +287,8 @@ export function AuthProvider({ children }) {
         setUserRoles(respUserRoles.data)
         if (!get(respUserRoles, 'data[0].role')) {
           router.push(ROUTES.UPDATE_PROFILE)
+        } else {
+          router.push('/dashboard')
         }
         ///////////////////////////////// userRoles /////////////////////////////////
       }
