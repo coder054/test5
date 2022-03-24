@@ -145,15 +145,7 @@ const BioForPlayer = ({
   const [teamsCoach, setTeamsCoach] = useState<string[]>([])
 
   useEffect(() => {
-    const {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    } = dataBioPlayer
-    // console.log('aaa dataBio: ', dataBioPlayer)
+    console.log('aaa dataBio: ', dataBioPlayer)
     // console.log('aaa dataBio2', {
     //   friendStatus,
     //   followStatus,
@@ -629,8 +621,12 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 
   const fullname = query.fullname // not use
   const username: string = query.username
-
-  const lastCharacter = username[username.length - 1]
+  const role: string = query.role
+  if (role !== 'player' && role !== 'coach') {
+    return {
+      notFound: true,
+    }
+  }
 
   let error: boolean
   let dataBioPlayer: IBiographyPlayer
@@ -667,12 +663,12 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   }
 
   const promiseDataBioPlayer =
-    lastCharacter === 'C'
+    role === 'coach'
       ? null
       : axios.get(`/biographies/player?username=${username}`)
 
   const promiseDataBioCoach =
-    lastCharacter === 'C'
+    role === 'coach'
       ? axios.get(`/biographies/coach?username=${username}`)
       : null
 
@@ -683,10 +679,10 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   )
   // console.log('aaa p2', p2.data)
   const promiseDataAvgPlayer =
-    lastCharacter === 'C' ? null : axios.get(`/biographies/players/avg-radar`)
+    role === 'coach' ? null : axios.get(`/biographies/players/avg-radar`)
 
   const promiseDataAvgCoach =
-    lastCharacter === 'C' ? axios.get(`/biographies/coaches/avg-radar`) : null
+    role === 'coach' ? axios.get(`/biographies/coaches/avg-radar`) : null
 
   // console.log('aaa p3', p3.data)
 
@@ -739,7 +735,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
       dataAvgPlayer,
       dataAvgCoach,
       error,
-      profile: lastCharacter === 'C' ? 'coach' : 'player',
+      profile: role === 'coach' ? 'coach' : 'player',
     },
   }
 }
