@@ -22,33 +22,18 @@ export const ListImageVideo = ({
   newFile,
 }: ListImageVideoProps) => {
   const handleRemoveItem = (urlRemove: string) => {
-    // console.log('urlRemove', urlRemove)
-    if (!urlRemove.includes('.mp4')) {
-      const newList = arrayFile.filter((item) => item !== urlRemove)
-      // console.log('newLlist', newList)
+    let arrFileNew = [...arrayFile]
 
-      setArrayFile && setArrayFile(newList)
-    } else {
-      const findItemRemove = arrayFile.findIndex((item) => item === urlRemove)
-      let res = []
-      for (let i = 0; i < arrayFile.length; i++) {
-        if (i !== findItemRemove) {
-          res.push(arrayFile[i])
-          console.log('i', i)
-        }
-      }
-      console.log('res', res)
-
-      setArrayFile && setArrayFile(res)
+    let findIndex = arrayFile.findIndex((o) => o === urlRemove)
+    if (findIndex !== -1) {
+      arrFileNew.splice(findIndex, 1)
+      setArrayFile(arrFileNew)
+      return
     }
-    // const findItemRemove = arrayFile.findIndex((item) => item === urlRemove)
-    // let newList = arrayFile
-    // newList.splice(findItemRemove, 1)
   }
-  // console.log('arrayFile', arrayFile)
 
   return (
-    <div className="w-full grid grid-cols-7 gap-4">
+    <div className="w-full grid grid-cols-7 gap-4  ">
       {arrayFile &&
         arrayFile.map((item) => (
           <IteamImage

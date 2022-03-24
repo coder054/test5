@@ -8,10 +8,12 @@ import { API_PLAYER_SETTINGS } from 'src/constants/api.constants'
 import { HeightAndWeightBody, HeightAndWeightType } from 'src/constants/types'
 import { useIncrementNumber } from 'src/hooks/useIncrementNumber'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { getProfilePlayer } from 'src/service/biography-update'
 import { axios } from 'src/utils/axios'
 
 export const HeightAndWeight = () => {
+  const { currentRoleName } = useAuth()
   const date = new Date()
   const [loading, setLoading] = useState<boolean>(false)
   const [values, setValues] = useState({
@@ -50,18 +52,20 @@ export const HeightAndWeight = () => {
   }
 
   useEffect(() => {
-    try {
-      const res = getProfilePlayer()
-      res.then((data) => {
-        setValues({
-          height: data.data.health.height.value,
-          weight: data.data.health.weight.value,
-          leftFootLength: data.data.health.leftFootLength,
-          rightFootLength: data.data.health.rightFootLength,
+    if (currentRoleName === 'PLAYER') {
+      try {
+        const res = getProfilePlayer()
+        res.then((data) => {
+          setValues({
+            height: data.data.health.height.value,
+            weight: data.data.health.weight.value,
+            leftFootLength: data.data.health.leftFootLength,
+            rightFootLength: data.data.health.rightFootLength,
+          })
         })
-      })
-    } catch (error) {}
-  }, [])
+      } catch (error) {}
+    }
+  }, [currentRoleName])
 
   const handleSubmit = async (e) => {
     e.preventDefault()

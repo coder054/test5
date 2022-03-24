@@ -1,7 +1,13 @@
 import { useEffect } from 'react'
 import { Radar, RadarChart, PolarGrid, Legend, PolarAngleAxis } from 'recharts'
 
-export const BioRadarChart = ({ data, type }) => {
+interface BioRadarChartProps {
+  profile?: string
+  data: any
+  type: any
+}
+
+export const BioRadarChart = ({ data, type, profile }: BioRadarChartProps) => {
   useEffect(() => {
     let els = Array.from(
       document.querySelectorAll('.bioradarchart .recharts-wrapper')
@@ -151,7 +157,7 @@ export const BioRadarChart = ({ data, type }) => {
       cy={145}
       outerRadius={120}
       width={466}
-      height={410}
+      height={profile !== 'Coach' ? 410 : 340}
       data={data}
     >
       <PolarGrid gridType="circle" outerRadius={500} />
@@ -173,15 +179,17 @@ export const BioRadarChart = ({ data, type }) => {
         fillOpacity={0}
         legendType="circle"
       />
-      <Radar
-        dot={false}
-        name="Coach"
-        dataKey="Coach"
-        stroke="#4654EA"
-        fill="#8884d8"
-        fillOpacity={0}
-        legendType="circle"
-      />
+      {profile !== 'Coach' && (
+        <Radar
+          dot={false}
+          name="Coach"
+          dataKey="Coach"
+          stroke="#4654EA"
+          fill="#8884d8"
+          fillOpacity={0}
+          legendType="circle"
+        />
+      )}
       <Radar
         dot={false}
         name="You"

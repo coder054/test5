@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast'
 import {
   API_ACHIEVEMENTS_TROPHY,
   API_COACH_PROFILE,
