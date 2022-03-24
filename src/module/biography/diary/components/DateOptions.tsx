@@ -48,7 +48,6 @@ export const DateOptions = ({
             onChangeDiary({
               eatAndDrink: 'NORMAL',
               energyLevel: 'NORMAL',
-              injuries: [],
               sleep: 'NORMAL',
               typeOfDiary: 'TRAINING',
             })

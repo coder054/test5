@@ -2,10 +2,7 @@ import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { MySlider } from 'src/components/MySlider'
-import {
-  generateRateByNumber,
-  generateRateByString,
-} from 'src/hooks/functionCommon'
+import { emotionlToNum, numToEmotional } from 'src/hooks/functionCommon'
 
 type HealthType = {
   date: string | Date
@@ -18,7 +15,6 @@ export const Health = ({ date }: HealthType) => {
     setDiary({
       eatAndDrink: 'NORMAL',
       energyLevel: 'NORMAL',
-      injuries: [],
       sleep: 'NORMAL',
       typeOfDiary: 'TRAINING',
     })
@@ -31,12 +27,12 @@ export const Health = ({ date }: HealthType) => {
         onChange={(e) =>
           setDiary((prev) => ({
             ...prev,
-            energyLevel: generateRateByNumber(e),
+            energyLevel: numToEmotional(e),
           }))
         }
         isAdjective
         step={25}
-        value={generateRateByString(diary.energyLevel)}
+        value={emotionlToNum(diary.energyLevel)}
         labelClass="text-[#A2A5AD]"
       />
       <MySlider
@@ -44,12 +40,12 @@ export const Health = ({ date }: HealthType) => {
         onChange={(e) =>
           setDiary((prev) => ({
             ...prev,
-            sleep: generateRateByNumber(e),
+            sleep: numToEmotional(e),
           }))
         }
         isAdjective
         step={25}
-        value={generateRateByString(diary.sleep)}
+        value={emotionlToNum(diary.sleep)}
         labelClass="text-[#A2A5AD]"
       />
       <MySlider
@@ -57,12 +53,12 @@ export const Health = ({ date }: HealthType) => {
         onChange={(e) =>
           setDiary((prev) => ({
             ...prev,
-            eatAndDrink: generateRateByNumber(e),
+            eatAndDrink: numToEmotional(e),
           }))
         }
         isAdjective
         step={25}
-        value={generateRateByString(diary.eatAndDrink)}
+        value={emotionlToNum(diary.eatAndDrink)}
         labelClass="text-[#A2A5AD]"
       />
     </div>

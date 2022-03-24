@@ -20,6 +20,7 @@ module.exports = {
         'front-body': "url('/assets/Front.png')",
         'authen-desktop': "url('/authen/bg-login-desktop.png')",
         'authen-mobile': "url('/authen/bg-login-mobile.png')",
+        'back-body': "url('/assets/Back.png')",
       },
       animation: {
         appear: 'appear 0.2s ease-in-out',
