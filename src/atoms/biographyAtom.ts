@@ -5,7 +5,6 @@ import { useAuth } from '../module/authen/auth/AuthContext'
 
 // export const getBiographyPlayerAtom = atom(async (get) => {
 //   const { playerProfile } = useAuth()
-//   console.log('userId', playerProfile.userId)
 //   const response = await axios.get(
 //     `${API_GET_BIOGRAPHY_PLAYER}?userIdQuery=${playerProfile.userId}`
 //   )

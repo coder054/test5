@@ -138,7 +138,6 @@ export const FutureCareer = () => {
 
     try {
       await createFutureCareer(valueFutureCareers).then((data) => {
-        console.log('data', data)
         if (data.status === 201) {
           setLoading(false)
           window.scroll(0, 0)

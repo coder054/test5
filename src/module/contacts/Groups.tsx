@@ -26,8 +26,6 @@ export const Groups = () => {
   }
 
   const fetchMoreData = async () => {
-    console.log(items.length, count)
-
     if (items.length >= count) {
       setHasMore(false)
       return
