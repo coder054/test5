@@ -19,7 +19,7 @@ export const GoBack = ({
   const styles = clsx(className && className)
 
   return (
-    <div className={`${(clsx(styles), 'float-left')}`}>
+    <div className={`${(clsx(styles), 'float-left px-4 py-2 cursor-pointer')}`}>
       <div
         className="float-left cursor-pointer"
         onClick={() => {
@@ -29,7 +29,7 @@ export const GoBack = ({
         <IconArrowBack textBlack={textBlack} />
       </div>
       <span
-        className={`ml-[13px] ${
+        className={`ml-[13px] select-none ${
           textBlack ? 'text-[#1E1F24]' : 'text-[#FFFFFF]'
         } text-base float-left`}
       >
