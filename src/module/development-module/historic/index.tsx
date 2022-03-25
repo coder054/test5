@@ -18,8 +18,12 @@ import { ClubType } from 'src/constants/types/settingsType.type'
 import { useIncrementNumber } from 'src/hooks/useIncrementNumber'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
 import { InfiniteScrollClub } from 'src/module/account-settings/football/components/InfiniteScrollClub'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { OptionPlayer } from 'src/module/authen/types'
-import { createCareerHistoric } from 'src/service/biography-update'
+import {
+  createCareerHistoric,
+  getProfilePlayer,
+} from 'src/service/biography-update'
 
 interface HistoricProps {
   playerId?: string
@@ -51,7 +55,7 @@ interface FormValuesType {
 }
 
 export const Historic = ({ playerId }: HistoricProps) => {
-  const [listMedia, setListMedia] = useAtom(listMediaAtom)
+  const date = new Date()
   const [loading, setLoading] = useState<boolean>(false)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [showUrl, setShowUrl] = useState('')
@@ -59,7 +63,7 @@ export const Historic = ({ playerId }: HistoricProps) => {
   const [arrayFile, setArrayFile] = useState([])
   const [progress, setProgress] = useState<number>(0)
   const [formValues, setFormValues] = useState<FormValuesType>({
-    season: '',
+    season: date.getFullYear() + '',
     fromDate: null,
     toDate: null,
     country: {
@@ -86,7 +90,7 @@ export const Historic = ({ playerId }: HistoricProps) => {
     yourAssist: null,
     yourYellowCard: null,
     yourRedCard: null,
-    yourEstimated: null,
+    yourEstimated: 50,
     summary: '',
     contractedClub: {
       arena: '',
@@ -99,6 +103,30 @@ export const Historic = ({ playerId }: HistoricProps) => {
       websiteUrl: null,
     },
   })
+
+  const estimateOption = useIncrementNumber({
+    startNumber: 1,
+    endNumber: 100,
+    meanSure: '%',
+  })
+
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        await getProfilePlayer().then((data) => {
+          setFormValues((prev) => ({
+            ...prev,
+            country: data.data.profile.birthCountry,
+            contractedClub: data.data.playerCareer.contractedClub,
+            team: data.data.playerCareer.currentTeams[0].teamName,
+            role: data.data.playerCareer.favoriteRoles[0],
+          }))
+        })
+      } catch (error) {}
+    }
+
+    getProfile()
+  }, [])
 
   const seasonOption = useIncrementNumber({
     startNumber: START_YEAR,
@@ -263,90 +291,119 @@ export const Historic = ({ playerId }: HistoricProps) => {
           <MyInput
             label="Team"
             onChange={(e) => handleChangeForm('team', e.target.value)}
+            value={formValues.team}
+            defaultValue={formValues.team}
           />
 
           <MySelect
             label="Role"
             onChange={(e) => handleChangeForm('role', e.target.value)}
             arrOption={OptionPlayer}
+            defauleValue={formValues.role}
           />
 
           <MyInput
             label="Serie matches"
             onChange={(e) => handleChangeForm('serie', e.target.value)}
             value={formValues.serie}
+            isNumber
+            defaultValue="22"
           />
 
           <MyInput
             label="Cup matches"
             onChange={(e) => handleChangeForm('cup', e.target.value)}
             value={formValues.cup}
+            isNumber
+            defaultValue="8"
           />
 
           <MyInput
             label="Friendly matches"
             onChange={(e) => handleChangeForm('friend', e.target.value)}
             value={formValues.friend}
+            isNumber
+            defaultValue="10"
           />
 
           <MyInput
             label="Won matches"
             onChange={(e) => handleChangeForm('won', e.target.value)}
             value={formValues.won}
+            isNumber
+            defaultValue="20"
           />
 
           <MyInput
             label="Lost matches"
             onChange={(e) => handleChangeForm('lost', e.target.value)}
             value={formValues.lost}
+            isNumber
+            defaultValue="10"
           />
 
           <MyInput
             label="Draw matches"
             onChange={(e) => handleChangeForm('draw', e.target.value)}
             value={formValues.draw}
+            isNumber
+            defaultValue="10"
           />
 
           <MyInput
             label="Made Team Goals"
             onChange={(e) => handleChangeForm('madeTeam', e.target.value)}
             value={formValues.madeTeam}
+            isNumber
+            defaultValue="80"
           />
 
           <MyInput
             label="Let in Team Goals"
             onChange={(e) => handleChangeForm('letInTeamGoal', e.target.value)}
             value={formValues.letInTeamGoal}
+            isNumber
+            defaultValue="40"
           />
 
           <MyInput
             label="Your Goals"
             onChange={(e) => handleChangeForm('yourGoals', e.target.value)}
             value={formValues.yourGoals}
+            isNumber
+            defaultValue="10"
           />
 
           <MyInput
             label="Your assist"
             onChange={(e) => handleChangeForm('yourAssist', e.target.value)}
             value={formValues.yourAssist}
+            isNumber
+            defaultValue="10"
           />
 
           <MyInput
             label="Your Yellow Card"
             onChange={(e) => handleChangeForm('yourYellowCard', e.target.value)}
             value={formValues.yourYellowCard}
+            isNumber
+            defaultValue="0"
           />
 
           <MyInput
             label="Your Red Card"
             onChange={(e) => handleChangeForm('yourRedCard', e.target.value)}
             value={formValues.yourRedCard}
+            isNumber
+            defaultValue="0"
           />
 
-          <MyInput
+          <MySelect
+            arrOption={estimateOption}
             label="Your Estimated Play Time"
             onChange={(e) => handleChangeForm('yourEstimated', e.target.value)}
-            value={formValues.yourEstimated}
+            value={formValues.yourEstimated + ''}
+            isNumber
           />
 
           <MyTextArea
@@ -370,7 +427,6 @@ export const Historic = ({ playerId }: HistoricProps) => {
               />
             </div>
           </div>
-          {/* {console.log('progress', progress)} */}
           <ListImageVideo
             arrayFile={arrayFile}
             setArrayFile={setArrayFile}

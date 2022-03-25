@@ -37,7 +37,7 @@ export const Development = ({
   const [loading, setLoading] = useState<boolean>(false)
   const [formValues, setFormValues] = useState<FormValuesType>({
     date: getToday(),
-    progress: '',
+    progress: '50',
     strengths: '',
     weaknesses: '',
     developedSkill: '',
