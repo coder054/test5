@@ -12,7 +12,7 @@ interface GuestGuardProps {
 
 export const GuestGuard: FC<GuestGuardProps> = (props) => {
   const { children } = props
-  const { authenticated, userRoles, initialized } = useAuth()
+  const { authenticated, userRoles, initialized, updatingAuthInfo } = useAuth()
   const router = useRouter()
   const [checked, setChecked] = useState(false)
 
@@ -25,7 +25,7 @@ export const GuestGuard: FC<GuestGuardProps> = (props) => {
 
   useEffect(
     () => {
-      if (!router.isReady || !initialized) {
+      if (!router.isReady || !initialized || updatingAuthInfo === true) {
         return
       }
 
@@ -41,7 +41,7 @@ export const GuestGuard: FC<GuestGuardProps> = (props) => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.isReady, authenticated, isRoleNull, initialized]
+    [router.isReady, authenticated, isRoleNull, initialized, updatingAuthInfo]
   )
 
   if (!checked) {

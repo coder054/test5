@@ -59,6 +59,7 @@ export function AuthProvider({ children }) {
   const router = useRouter()
   const [_, setSettings] = useAtom(settingsAtom)
   const [initialized, setInitialized] = useState(false)
+  const [updatingAuthInfo, setUpdatingAuthInfo] = useState(true)
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [token, setToken] = useState<string>('')
   const [errorSignin, setErrorSignin] = useState<string>('')
@@ -236,7 +237,7 @@ export function AuthProvider({ children }) {
     // console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      setInitialized(false)
+      setUpdatingAuthInfo(true)
       if (!user) {
         localStorage.clear()
         removeTokenCookieHttp()
@@ -281,10 +282,11 @@ export function AuthProvider({ children }) {
         setUserRoles(respUserRoles.data)
         ///////////////////////////////// userRoles /////////////////////////////////
       }
-      const doneT = +new Date()
+      // const doneT = +new Date()
       // console.log('aaa doneT', doneT)
       // console.log('aaa doneT - initT', doneT - initT)
       setTimeout(() => {
+        setUpdatingAuthInfo(false)
         setInitialized(true)
       }, 50)
     })
@@ -299,12 +301,8 @@ export function AuthProvider({ children }) {
     if (!get(currentUser, 'uid')) {
       return
     }
-    const handle = setInterval(async () => {
-      const token = await currentUser.getIdToken(true)
-      setTokenCookieHttp(token)
-      // update axios token header
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`
-      setToken(token)
+    const handle = setInterval(() => {
+      currentUser.getIdToken(true)
     }, 4 * 60 * 1000)
     return () => clearInterval(handle)
   }, [get(currentUser, 'uid')])
@@ -325,6 +323,7 @@ export function AuthProvider({ children }) {
     setCurrentRoleName,
     userRoles,
     initialized,
+    updatingAuthInfo,
     infoActiveProfile, // info about active profile, no matter player or coach
     authenticated: !!currentUser,
     updateUserRoles,
