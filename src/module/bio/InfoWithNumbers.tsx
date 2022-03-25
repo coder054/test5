@@ -246,7 +246,7 @@ export const InforWithNumbers = ({
               Matches in total
             </Text>
 
-            <div className="flex gap-x-[12px] xl:gap-x-[30px] overflow-x-auto pb-1 justify-center">
+            <div className="flex gap-x-[10px] sm:gap-x-[12px] xl:gap-x-[24px] overflow-x-auto pb-1 justify-center">
               {[
                 {
                   label: 'Matches',
@@ -280,7 +280,7 @@ export const InforWithNumbers = ({
               Trainings in total
             </Text>
 
-            <div className="flex gap-x-[12px] xl:gap-x-[30px] overflow-x-auto pb-1 justify-center ">
+            <div className="flex gap-x-[10px] sm:gap-x-[12px] xl:gap-x-[24px] overflow-x-auto pb-1 justify-center ">
               {[
                 {
                   label: 'Sessions',
@@ -351,7 +351,7 @@ const Match = ({ title, value }) => {
       <span className=" text-[13px] xl:text-[13px] leading-[150%] text-Grey mb-2 ">
         {title}
       </span>
-      <span className="text-white text-[15px] xl:text-[22px] leading-[138%] font-semibold">
+      <span className="text-white text-[15px] xl:text-[18px] leading-[138%] font-semibold">
         {value}
       </span>
     </div>
