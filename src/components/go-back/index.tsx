@@ -19,13 +19,13 @@ export const GoBack = ({
   const styles = clsx(className && className)
 
   return (
-    <div className={`${(clsx(styles), 'float-left px-4 py-2 cursor-pointer')}`}>
-      <div
-        className="float-left cursor-pointer"
-        onClick={() => {
-          goBack && router.push(goBack)
-        }}
-      >
+    <div
+      onClick={() => {
+        goBack && router.push(goBack)
+      }}
+      className={`${(clsx(styles), 'float-left px-4 py-2 cursor-pointer')}`}
+    >
+      <div className="float-left cursor-pointer">
         <IconArrowBack textBlack={textBlack} />
       </div>
       <span
