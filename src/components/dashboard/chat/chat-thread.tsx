@@ -191,7 +191,7 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
 
         let previewData: IPreviewData = {
           description,
-          link: url,
+          link,
           title,
           image: {
             height: 630,
