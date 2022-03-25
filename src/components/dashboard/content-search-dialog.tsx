@@ -199,7 +199,9 @@ export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
                   `${user?.firstName}.${user?.lastName}`
                     .replace(/\s/g, '')
                     .toLowerCase() || 'coach'
-                const urlBio = `/biography/${user?.username}/${firstLastNameUrl}`
+                const urlBio = `/${
+                  user.type === 'COACH' ? 'coach' : 'player'
+                }/${user?.username}/${firstLastNameUrl}`
 
                 return (
                   <Fragment key={user.username}>
