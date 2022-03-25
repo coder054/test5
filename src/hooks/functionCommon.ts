@@ -115,6 +115,13 @@ export const getToday = () => {
   } else return new Date()
 }
 
+export const getNextYear = (number: number) => {
+  return dayjs(new Date())
+    .startOf('year')
+    .add(+number, 'year')
+    .format(DEFAULT_DATE)
+}
+
 export const upperFirst = (str: string) => {
   return _.upperFirst(str.toLowerCase().trim())
 }

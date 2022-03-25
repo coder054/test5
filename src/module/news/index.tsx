@@ -81,10 +81,13 @@ const News = () => {
           <Loading />
         </div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-y-6 gap-x-2 mobileM:gap-x-10 2xl:gap-x-2">
+      <div
+        className="md:grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 md:gap-y-6 md:gap-x-2 mobileM:gap-x-10 2xl:gap-x-2
+        flex flex-col items-center"
+      >
         {!loading && news ? (
           (news || [])?.map((item: NewsType, index) => (
-            <div key={index} className="">
+            <div key={index} className="mb-[24px] md:mb-[0px]">
               <CardNews card={item} handleFavorite={handleFavorite} />
             </div>
           ))

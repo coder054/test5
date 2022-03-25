@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { MyInput } from 'src/components'
 import { MyButton } from 'src/components/MyButton'
@@ -12,11 +12,14 @@ import {
   ClubType,
   CurrentTeamType,
 } from 'src/constants/types/settingsType.type'
-import { getToday } from 'src/hooks/functionCommon'
+import { getNextYear, getToday } from 'src/hooks/functionCommon'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
 import { InfiniteScrollClub } from 'src/module/account-settings/football/components/InfiniteScrollClub'
 import { OptionPlayer } from 'src/module/authen/types'
-import { createFutureCareer } from 'src/service/biography-update'
+import {
+  createFutureCareer,
+  getProfilePlayer,
+} from 'src/service/biography-update'
 
 interface FutureCareerProps {
   playerId?: string
@@ -48,8 +51,8 @@ export const FutureCareer = () => {
     teamName: '',
   })
   const [formValues, setFormValues] = useState<FormValuesType>({
-    fromDate: getToday(),
-    toDate: getToday(),
+    fromDate: getNextYear(1),
+    toDate: getNextYear(2),
     country: {
       alpha2Code: '',
       alpha3Code: '',
@@ -75,6 +78,24 @@ export const FutureCareer = () => {
     },
     yourTeams: [''],
   })
+
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        await getProfilePlayer().then((data) => {
+          setFormValues((prev) => ({
+            ...prev,
+            country: data.data.profile.birthCountry,
+            contractedClub: data.data.playerCareer.contractedClub,
+            team: data.data.playerCareer.currentTeams[0].teamName,
+            role: data.data.playerCareer.favoriteRoles[0],
+          }))
+        })
+      } catch (error) {}
+    }
+
+    getProfile()
+  }, [])
 
   const handleChangeForm = (type: keyof FormValuesType, value: string) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))

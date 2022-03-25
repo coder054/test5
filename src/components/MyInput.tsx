@@ -24,6 +24,8 @@ export const MyInput = ({
   isValidating,
   errorMessage,
   placeholder,
+  isNumber,
+  defaultValue,
   ...rest
 }: {
   className?: string
@@ -37,24 +39,43 @@ export const MyInput = ({
   isNeedValidate?: boolean
   isValidating?: boolean
   placeholder?: string
+  isNumber?: boolean
+  defaultValue?: string
 }) => {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
     <div className="w-full">
       <div className={clsx('relative', className)}>
-        <TextField
-          {...rest}
-          placeholder={placeholder}
-          fullWidth
-          value={value}
-          SelectProps={{ MenuProps: MenuProps }}
-          onChange={onChange}
-          label={label}
-          id="custom-css-outlined-input"
-          autoComplete="off"
-          type={showPassword || !password ? 'text' : 'password'}
-        />
+        {!isNumber ? (
+          <TextField
+            {...rest}
+            placeholder={placeholder}
+            fullWidth
+            value={value}
+            SelectProps={{ MenuProps: MenuProps }}
+            onChange={onChange}
+            label={label}
+            id="custom-css-outlined-input"
+            autoComplete="off"
+            type={showPassword || !password ? 'text' : 'password'}
+            defaultValue={defaultValue}
+          />
+        ) : (
+          <TextField
+            {...rest}
+            placeholder={placeholder}
+            fullWidth
+            value={value}
+            SelectProps={{ MenuProps: MenuProps }}
+            onChange={onChange}
+            label={label}
+            id="custom-css-outlined-input"
+            autoComplete="off"
+            type={'number'}
+            defaultValue={defaultValue}
+          />
+        )}
         <div
           onClick={() => {
             setShowPassword(!showPassword)

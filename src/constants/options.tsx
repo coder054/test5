@@ -43,7 +43,7 @@ export const PersonalAwardOption: OptionType[] = [
   { label: 'Team Trophies', value: 'TROPHY' },
 ]
 
-export const TypeOfAwardOption: OptionType[] = [
+export const TypeOfPersonalAwardOption: OptionType[] = [
   { label: 'M.V.P - Most Valuable Playe', value: 'MVP' },
   { label: 'P.O.W - Player of the Week', value: 'POW' },
   { label: 'S.O.M - Star of the Match', value: 'SOM' },
@@ -52,4 +52,10 @@ export const TypeOfAwardOption: OptionType[] = [
   { label: 'P.O.Y - Player of the Year', value: 'POY' },
   { label: 'G.O.L - Goalscorer of the League', value: 'GOL' },
   { label: 'G.O.C - Goalscorer of the Cup', value: 'GOC' },
+]
+
+export const TypeOfTeamTrophyOption: OptionType[] = [
+  { label: 'Serie', value: 'SERIE' },
+  { label: 'Cup', value: 'CUP' },
+  { label: 'Other', value: 'OTHER' },
 ]
