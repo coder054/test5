@@ -617,6 +617,11 @@ const BioForCoach = ({
 // Biography.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>
 export const getServerSideProps: any = async ({ req, res, query }) => {
   // const roleId =
+
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=10, stale-while-revalidate=20'
+  )
   const uid = await loadIdToken(req as any)
 
   const fullname = query.fullname // not use
