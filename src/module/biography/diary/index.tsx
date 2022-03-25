@@ -26,13 +26,13 @@ import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 import { Cap } from './cap'
 import { BooleanOption } from './components/BooleanOption'
 import { DateOptions } from './components/DateOptions'
+import { InjuryList } from './components/InjuryList'
 import { InjuryReport } from './components/InjuryReport'
 import { MyModal } from './components/Modal'
 import { Tabs } from './components/Tabs'
 import { Health } from './health'
 import { Match } from './match'
 import { Training } from './training'
-import { InjuryList } from './components/InjuryList'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -89,6 +89,9 @@ const Component = () => {
         toast.success('Diary successfully created')
         queryClient.invalidateQueries('diary')
       },
+      onError: () => {
+        toast.error('Please complete all fields')
+      },
     }
   )
 
@@ -115,6 +118,9 @@ const Component = () => {
       onSuccess: () => {
         toast.success('Diary successfully updated')
         queryClient.invalidateQueries('diary')
+      },
+      onError: () => {
+        toast.error('An error has occurred')
       },
     }
   )
@@ -270,7 +276,7 @@ const Component = () => {
             </MyModal>
           </div>
         </BackGround>
-        <div className="laptopM:flex laptopM:space-x-4 laptopM:space-y-0 mobileM:space-y-4 mobileM:px-4 mobileM:pb-4 laptopM:px-0 laptopM:pb-0">
+        <div className="mobileL:flex mobileL:space-x-4 mobileL:space-y-0 mobileM:space-y-4 mobileM:px-4 mobileM:pb-4 mobileL:px-0 mobileL:pb-0">
           <MyButton
             isLoading={isCreating || isUpdating}
             onClick={handleSubmit}

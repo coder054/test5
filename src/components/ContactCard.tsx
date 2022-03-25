@@ -14,9 +14,6 @@ type ContactCardProps = {
 
 export const ContactCard = ({ user }: ContactCardProps) => {
   const [isActive, setIsActive] = useState<boolean>(false)
-
-  console.log('DATA: ', user)
-
   return (
     <div className="flex min-h-[82px] my-5">
       <div

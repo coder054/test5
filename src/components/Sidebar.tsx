@@ -103,8 +103,6 @@ export const Sidebar = () => {
         <ul>
           {arrSidebar.map((o, index) => {
             const isActive = o.link === router.asPath
-            // console.log('aaa o.link', o.link)
-            // console.log('aaa router.pathname', router.pathname)
             // if (router.pathname === '/biography/[userid]') {
             //   debugger
             // }

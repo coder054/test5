@@ -37,6 +37,7 @@ import { AVATAR_DEFAULT, LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import { chain, isEmpty, shuffle } from 'lodash'
 import React from 'react'
 import { getErrorMessage } from 'src/utils/utils'
+import toast from 'react-hot-toast'
 
 const database = getDatabase(firebaseApp)
 const dbRef = ref(getDatabase())
@@ -231,7 +232,7 @@ const TestGetChatRooms = () => {
 
         setResults(results1)
       } catch (error) {
-        console.log('aaa error', getErrorMessage(error))
+        toast.error('An error occurred')
       }
     })()
   }, [snapshots])
@@ -242,9 +243,6 @@ const TestGetChatRooms = () => {
     }
     return results.filter((o) => o.isShowChatRoom)
   }, [results])
-  useEffect(() => {
-    console.log('aaa onlyShow: ', onlyShow)
-  }, [onlyShow])
 
   return (
     <div>
@@ -256,7 +254,6 @@ const TestGetChatRooms = () => {
             <span>
               List:{' '}
               {onlyShow.map((v) => {
-                console.log('aaa v', v)
                 return (
                   <div className="border h-[50px] w-full mb-1 flex gap-x-[20px] ">
                     <div className="text-red-400 ">{v.chatRoomName}</div>
@@ -286,14 +283,12 @@ const TestGetUnreadChatRooms = () => {
   )
 
   useEffect(() => {
-    console.log('aaa snapshots', snapshots)
     if (isEmpty(snapshots)) {
       return
     }
 
     let a1 = snapshots.filter((o) => {
       const chatRoom = o.val()
-      console.log('aaa chatRoom11', chatRoom)
       return _queryUnreadMessage(chatRoom, currentRoleId)
     })
 

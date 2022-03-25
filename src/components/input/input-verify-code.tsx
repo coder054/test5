@@ -28,7 +28,6 @@ export const InputVerifyCode = ({ number }: InputVerifyCodeProps) => {
     }
     return result
   }
-  console.log('otp', getOtp(otp))
 
   return (
     <div className="w-full flex mt-[8px]">

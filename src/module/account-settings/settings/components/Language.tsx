@@ -1,15 +1,13 @@
-import { notification } from 'antd'
+import { useAtom } from 'jotai'
+import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
 import { MyCustomSelect } from 'src/components/MyCustomSelect'
 import { MySelectCountry } from 'src/components/MySelectCountry'
 import { CountryType } from 'src/constants/types/settingsType.type'
-import { useAtom } from 'jotai'
-import { useEffect, useState } from 'react'
-import { Cookies } from 'react-cookie'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
 import { BackGround } from '../../common-components/Background'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
-import toast from 'react-hot-toast'
 
 type FormValuesType = {
   country?: CountryType
@@ -23,9 +21,7 @@ type FormValuesType = {
 export const Language = () => {
   const [account, setAccount] = useAtom(settingsAtom)
 
-  console.log(account)
-
-  const { currentRoleName, currentRoleId } = useAuth()
+  const { currentRoleName } = useAuth()
   const [formValues, setFormValues] = useState<FormValuesType>({
     country: {
       alpha2Code: '',

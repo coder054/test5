@@ -389,9 +389,9 @@ const ModalCreateGroup = ({ open, setOpen }) => {
     searchMembers()
   }, [keywordDebounce])
 
-  useEffect(() => {
-    console.log('aaa membersResult: ', membersResult)
-  }, [membersResult])
+  // useEffect(() => {
+  //   console.log('aaa membersResult: ', membersResult)
+  // }, [membersResult])
 
   const selectedIdMembers: string[] = useMemo(() => {
     return selectedMembers.map((member) => {

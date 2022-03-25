@@ -51,14 +51,10 @@ export const createDiary = async ({
   data: any
   type: string
 }) => {
-  return await axios
-    .post(
-      `diaries/${roleName.toString().toLowerCase()}/create-diary-${type}`,
-      data
-    )
-    .catch(() => {
-      toast.error('An error has occurred')
-    })
+  return await axios.post(
+    `diaries/${roleName.toString().toLowerCase()}/create-diary-${type}`,
+    data
+  )
 }
 
 export const deleteDiary = async (id: string) => {
@@ -80,15 +76,11 @@ export const updateDiary = async ({
   diaryId: string
   injuryId?: string
 }) => {
-  return await axios
-    .patch(
-      toQueryString(
-        `diaries/${roleName.toString().toLowerCase()}/update-diary-${type}`,
-        { diaryId: diaryId }
-      ),
-      data
-    )
-    .catch(() => {
-      toast.error('An error has occurred')
-    })
+  return await axios.patch(
+    toQueryString(
+      `diaries/${roleName.toString().toLowerCase()}/update-diary-${type}`,
+      { diaryId: diaryId }
+    ),
+    data
+  )
 }
