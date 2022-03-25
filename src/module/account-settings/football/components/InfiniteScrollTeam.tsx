@@ -5,7 +5,7 @@ import {
   InputAdornment,
 } from '@mui/material'
 import clsx from 'clsx'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { MyInput } from 'src/components/MyInput'
@@ -21,9 +21,9 @@ type InfiniteScrollTeamProps = {
   handleSetTeam?: (value: CurrentTeamType) => void
   label: string
   idClub?: string
+  teamName?: string
   item?: CurrentTeamType
   errorMessage?: string
-  value?: string
 }
 
 export const InfiniteScrollTeam = ({
@@ -31,30 +31,31 @@ export const InfiniteScrollTeam = ({
   idClub,
   label,
   item,
+  teamName,
   errorMessage,
-  value,
 }: InfiniteScrollTeamProps) => {
-  const { currentRoleId } = useAuth()
   const [items, setItems] = useState<any>([])
   const [team, setTeam] = useState<string>('')
 
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [isOpenOption, setIsOpenOption] = useState<boolean>(false)
 
-  const param = {
-    limit: 10,
-    sorted: 'asc',
-    clubId: idClub,
-    gender: 'MALE',
-    userType: 'PLAYER',
-  }
+  const param = useMemo(() => {
+    return {
+      limit: 10,
+      sorted: 'asc',
+      clubId: idClub,
+      gender: 'MALE',
+      userType: 'PLAYER',
+    }
+  }, [idClub])
 
   useEffect(() => {
     item && setTeam(item.teamName)
-    value && setTeam(value)
-  }, [item])
+    teamName && setTeam(teamName)
+  }, [item, teamName])
 
-  const handleChangeClub = useCallback(
+  const handleChangeTeam = useCallback(
     (value: TeamType) => {
       setIsOpenOption(false)
       handleSetTeam &&
@@ -76,9 +77,6 @@ export const InfiniteScrollTeam = ({
         setTimeout(async () => {
           await axios
             .get(API_GET_LIST_TEAM, {
-              headers: {
-                roleId: currentRoleId,
-              },
               params: {
                 ...param,
                 startAfter: 0,
@@ -86,9 +84,6 @@ export const InfiniteScrollTeam = ({
               },
             })
             .then((res) => {
-              if (res.data.length === 0) {
-                setHasMore(false)
-              }
               setItems(res.data)
             })
             .catch(() => {
@@ -108,8 +103,13 @@ export const InfiniteScrollTeam = ({
         },
       })
       .then((res) => {
-        const arr = items.concat(res.data)
-        setItems(arr)
+        if (res.data.length <= 10) {
+          setItems(res.data)
+          setHasMore(false)
+        } else {
+          let arr = items.concat(res.data)
+          setItems(arr)
+        }
       })
       .catch(() => {
         toast.error('An error has occurred')
@@ -126,7 +126,7 @@ export const InfiniteScrollTeam = ({
 
   useEffect(() => {
     idClub && getListTeam()
-  }, [])
+  }, [idClub])
 
   return (
     <ClickAwayListener onClickAway={() => setIsOpenOption(false)}>
@@ -135,9 +135,7 @@ export const InfiniteScrollTeam = ({
           label={label}
           onChange={(e) => handleSearch(e.target.value)}
           onClick={() => setIsOpenOption(true)}
-          value={team || value}
-          name="password"
-          autoComplete="off"
+          value={team}
           type="text"
           InputProps={{
             endAdornment: (
@@ -169,7 +167,7 @@ export const InfiniteScrollTeam = ({
             {(items || []).map((it: TeamType, index: number) => (
               <div
                 className="bg-[#111827] text-gray-400 py-1.5 px-3 cursor-pointer hover:bg-gray-600 duration-150"
-                onClick={() => handleChangeClub(it)}
+                onClick={() => handleChangeTeam(it)}
                 key={index}
               >
                 {it.teamName}

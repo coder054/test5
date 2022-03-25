@@ -68,7 +68,9 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
         },
         {
           title: t('Biography'),
-          path: `/biography/${infoActiveProfile.username}/${fullname}`, // current
+          path: `/${infoActiveProfile.role === 'COACH' ? 'coach' : 'player'}/${
+            infoActiveProfile.username
+          }/${fullname}`, // current
           icon: <UserCircle fontSize="small" />,
           disabled: isEmpty(infoActiveProfile),
         },

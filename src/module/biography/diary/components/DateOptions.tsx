@@ -27,10 +27,10 @@ export const DateOptions = ({
 
   useEffect(() => {
     setValue(getDefaultDay(date))
-  }, [date])
+  }, [date, JSON.stringify(diaryUpdate)])
 
   return (
-    <div className="grid grid-cols-2 gap-x-20">
+    <div className="laptopM:grid laptopM:grid-cols-2 laptopM:gap-x-20 mobileM:flex mobileM:flex-col-reverse mobileM:gap-y-4">
       <MyInput
         sx={{
           '& fieldset': {
@@ -48,7 +48,6 @@ export const DateOptions = ({
             onChangeDiary({
               eatAndDrink: 'NORMAL',
               energyLevel: 'NORMAL',
-              injuries: [],
               sleep: 'NORMAL',
               typeOfDiary: 'TRAINING',
             })

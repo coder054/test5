@@ -50,7 +50,7 @@ import { axios } from 'src/utils/axios'
 import { Loading } from 'src/components/loading/loading'
 import { getStr, truncateStr } from 'src/utils/utils'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
-import { chain } from 'lodash'
+import { chain, isEmpty } from 'lodash'
 import {
   createGroupChatRoom,
   ERoomType,
@@ -258,6 +258,40 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
             {loadingChatRooms ? (
               <div className="flex h-[70px] justify-center items-center ">
                 <CircularProgress />
+              </div>
+            ) : isEmpty(chatRooms) ? (
+              <div
+                className=" 
+                h-[calc(100vh_-_260px)]
+                sm:h-[calc(100vh_-_260px)]
+                md:h-[calc(100vh_-_260px)]
+                lg:h-[calc(100vh_-_260px)]
+                xl:h-[calc(100vh_-_260px)]
+              text-center flex items-center "
+              >
+                <div className="grow ">
+                  <div className="mb-2 mx-auto flex justify-center items-center w-[40px] h-[40px] border-[2px] text-Grey border-Grey rounded-full ">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                      />
+                    </svg>
+                  </div>
+
+                  <div className="font-semibold ">No messages yet</div>
+                  <div className="text-Grey text-[13px] ">
+                    All messages will show up here
+                  </div>
+                </div>
               </div>
             ) : (
               <>

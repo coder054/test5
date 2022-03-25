@@ -66,7 +66,14 @@ export const MySlider = ({
 
   return (
     <div>
-      <p className={clsx('text-[16px] font-normal', labelClass)}>{label}</p>
+      <p
+        className={clsx(
+          'laptopM:text-[16px] mobileM:text-[14px] font-normal',
+          labelClass
+        )}
+      >
+        {label}
+      </p>
       <CustomSlider
         step={step}
         value={value}

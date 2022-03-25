@@ -52,14 +52,14 @@ export interface NewsType {
   updatedAt?: number
 }
 
-export type CountryType = {
+export type CountryType = Partial<{
   alpha2Code: string
   alpha3Code: string
   flag: string
   name: string
   phoneCode: string
   region: string
-}
+}>
 
 export interface UpdateSkills {
   playerSkills: {
@@ -233,14 +233,7 @@ export interface HistoricCareerType {
   season: string
   fromTime: string
   toTime: string
-  country: {
-    name: string
-    alpha2Code: string
-    alpha3Code: string
-    region: string
-    flag: string
-    phoneCode: string
-  }
+  country: CountryType
   league: {
     name: string
   }

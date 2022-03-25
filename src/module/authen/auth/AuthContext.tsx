@@ -14,6 +14,7 @@ import { get, isEmpty, size } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
+import { settingsAtom } from 'src/atoms/accountAndSettings'
 import { signingOutAtom } from 'src/atoms/UIAtoms'
 import { auth } from 'src/config/firebase-client'
 import { COOKIE_KEY, LOCAL_STORAGE_KEY, ROUTES } from 'src/constants/constants'
@@ -56,6 +57,7 @@ export function AuthProvider({ children }) {
   const [signingOut, setSigningOut] = useAtom(signingOutAtom)
   const [cookies, setCookie, removeCookie] = useCookies(['token'])
   const router = useRouter()
+  const [_, setSettings] = useAtom(settingsAtom)
   const [initialized, setInitialized] = useState(false)
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [token, setToken] = useState<string>('')
@@ -241,6 +243,7 @@ export function AuthProvider({ children }) {
     // console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
+      setInitialized(false)
       console.log('aaa onIdTokenChanged', user)
 
       if (!user) {
@@ -285,11 +288,6 @@ export function AuthProvider({ children }) {
         }
 
         setUserRoles(respUserRoles.data)
-        if (!get(respUserRoles, 'data[0].role')) {
-          router.push(ROUTES.UPDATE_PROFILE)
-        } else {
-          router.push('/dashboard')
-        }
         ///////////////////////////////// userRoles /////////////////////////////////
       }
       const doneT = +new Date()

@@ -30,7 +30,7 @@ export const useActiveRoomId = () => {
   return { activeChatRoomId, setActiveChatRoomId: setRoomId }
 }
 
-export const loadingChatRoomsAtom = atom(false)
+export const loadingChatRoomsAtom = atom(true)
 
 // const [loadingChatRooms, setLoadingChatRooms] = useAtom(loadingChatRoomsAtom)
 // const [activeChatRoom] = useAtom(activeChatRoomAtom)

@@ -10,29 +10,27 @@ import { DashboardLayout } from 'src/components/dashboard/dashboard-layout'
 import { loadIdToken } from 'src/config/firebase-admin'
 import { COOKIE_KEY } from 'src/constants/constants'
 import {
-  IAvgPlayerScore,
   IAvgCoachScore,
-  IBiographyPlayer,
+  IAvgPlayerScore,
   IBiographyCoach,
+  IBiographyPlayer,
 } from 'src/constants/types/biography.types'
 import { useScreenWidth } from 'src/hooks/useScreenWidth'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { IInfoClub } from 'src/module/bio/InfoClub'
-import { InfoPlayerWithAChart } from 'src/module/bio/InfoPlayerWithAChart'
 import { InfoCoachWithAChart } from 'src/module/bio/InfoCoachWithAChart'
-import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
 import { InfoCoachWithCircleImage } from 'src/module/bio/InfoCoachWithCircleImage'
+import { InfoPlayerWithAChart } from 'src/module/bio/InfoPlayerWithAChart'
+import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
 import { InfoWithImages } from 'src/module/bio/InfoWithImages'
 import { InforWithNumbers } from 'src/module/bio/InfoWithNumbers'
 import { NavigationAndFilter } from 'src/module/bio/NavigationAndFilter'
 import { SocialLinksComponent } from 'src/module/bio/SocialLinksComponent'
 import { TopVideos } from 'src/module/bio/TopVideos'
-import { Diary } from 'src/module/biography/diary/Diary'
-import { axios } from 'src/utils/axios'
-import { getErrorMessage, parseCookies } from 'src/utils/utils'
-import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 import { getProfileCoach } from 'src/service/biography-update'
-import { tabsUnstyledClasses } from '@mui/base'
+import { axios } from 'src/utils/axios'
+import { parseCookies } from 'src/utils/utils'
+import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 
 export const fetcherForEndpointFlip = async (url) => {
   if (url === null) return
@@ -147,15 +145,7 @@ const BioForPlayer = ({
   const [teamsCoach, setTeamsCoach] = useState<string[]>([])
 
   useEffect(() => {
-    const {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    } = dataBioPlayer
-    // console.log('aaa dataBio: ', dataBioPlayer)
+    console.log('aaa dataBio: ', dataBioPlayer)
     // console.log('aaa dataBio2', {
     //   friendStatus,
     //   followStatus,
@@ -384,13 +374,6 @@ const BioForPlayer = ({
             {/*  */}
           </div>
         )}
-        {/* {currentTab === 'update' && (
-          <UpdateBiography
-            playerId={playerId}
-            currentRoleName={currentRoleName}
-          />
-        )} */}
-        {currentTab === 'diary' && <Diary />}
       </div>
     </>
   )
@@ -638,8 +621,12 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 
   const fullname = query.fullname // not use
   const username: string = query.username
-
-  const lastCharacter = username[username.length - 1]
+  const role: string = query.role
+  if (role !== 'player' && role !== 'coach') {
+    return {
+      notFound: true,
+    }
+  }
 
   let error: boolean
   let dataBioPlayer: IBiographyPlayer
@@ -676,12 +663,12 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   }
 
   const promiseDataBioPlayer =
-    lastCharacter === 'C'
+    role === 'coach'
       ? null
       : axios.get(`/biographies/player?username=${username}`)
 
   const promiseDataBioCoach =
-    lastCharacter === 'C'
+    role === 'coach'
       ? axios.get(`/biographies/coach?username=${username}`)
       : null
 
@@ -692,10 +679,10 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
   )
   // console.log('aaa p2', p2.data)
   const promiseDataAvgPlayer =
-    lastCharacter === 'C' ? null : axios.get(`/biographies/players/avg-radar`)
+    role === 'coach' ? null : axios.get(`/biographies/players/avg-radar`)
 
   const promiseDataAvgCoach =
-    lastCharacter === 'C' ? axios.get(`/biographies/coaches/avg-radar`) : null
+    role === 'coach' ? axios.get(`/biographies/coaches/avg-radar`) : null
 
   // console.log('aaa p3', p3.data)
 
@@ -748,7 +735,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
       dataAvgPlayer,
       dataAvgCoach,
       error,
-      profile: lastCharacter === 'C' ? 'coach' : 'player',
+      profile: role === 'coach' ? 'coach' : 'player',
     },
   }
 }

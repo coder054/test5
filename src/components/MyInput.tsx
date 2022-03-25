@@ -57,7 +57,7 @@ export const MyInput = ({
             onChange={onChange}
             label={label}
             id="custom-css-outlined-input"
-            autoComplete="current-password"
+            autoComplete="off"
             type={showPassword || !password ? 'text' : 'password'}
             defaultValue={defaultValue}
           />
@@ -71,7 +71,7 @@ export const MyInput = ({
             onChange={onChange}
             label={label}
             id="custom-css-outlined-input"
-            autoComplete="current-password"
+            autoComplete="off"
             type={'number'}
             defaultValue={defaultValue}
           />
