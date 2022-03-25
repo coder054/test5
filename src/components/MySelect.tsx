@@ -89,8 +89,6 @@ export const MySelect = ({
       })
     }
   }, [])
-  // console.log('defauleValue', defauleValue)
-  // console.log('defaultOption', defaultOption)
 
   return (
     <>

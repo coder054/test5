@@ -75,7 +75,6 @@ export const AllTab = () => {
 
         setChatRooms(data.filter((o) => o.isShowChatRoom))
       } catch (error) {
-        console.log('aaa error', getErrorMessage(error))
       } finally {
         setLoadingChatRooms(false)
       }

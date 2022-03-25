@@ -86,7 +86,6 @@ export function AuthProvider({ children }) {
   }, [userRoles, currentRoleName])
 
   useEffect(() => {
-    console.log('aaa currentRoleId', currentRoleId)
     //@ts-ignore: Unreachable code error
     axios.defaults.headers.roleId = currentRoleId
 
@@ -189,12 +188,9 @@ export function AuthProvider({ children }) {
   const ForgotPassword = (oobCode: string, newPassword: string) => {
     confirmPasswordReset(auth, oobCode, newPassword)
       .then(() => {
-        console.log('new password')
         window.location.href = '/signin'
       })
-      .catch((error) => {
-        console.log(error)
-      })
+      .catch((error) => {})
   }
 
   //logout
@@ -203,9 +199,7 @@ export function AuthProvider({ children }) {
       .then(() => {
         setSigningOut(true)
       })
-      .catch((error) => {
-        console.log('aaa error signout', error.message)
-      })
+      .catch((error) => {})
   }
 
   const ResetPassword = (email: string) => {
@@ -233,7 +227,6 @@ export function AuthProvider({ children }) {
       setUserRoles(resp.data)
       return { error: false, data: resp.data }
     } catch (error) {
-      console.log('aaa updateUserRoles error', error)
       return { error: true, data: [] }
     }
   }
@@ -244,8 +237,6 @@ export function AuthProvider({ children }) {
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
       setInitialized(false)
-      console.log('aaa onIdTokenChanged', user)
-
       if (!user) {
         localStorage.clear()
         removeTokenCookieHttp()

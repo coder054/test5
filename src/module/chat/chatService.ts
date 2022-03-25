@@ -409,7 +409,6 @@ export const getMessageContent = async (
   messageId: string,
   userId: string
 ): Promise<string> => {
-  console.log('aaa', { chatRoomId })
   // if (chatRoomId !== 'ie9IaY34EpcpCrDXl5wc') {
   //   return ''
   // }
@@ -644,7 +643,6 @@ export const getUnreadMessageIdsInRoom = async (
 
     return listReadMessages
   } catch (error) {
-    console.log('aaa error at getUnreadMessageIdsInRoom', error.message)
     return []
   }
   ////////////////////
@@ -745,9 +743,7 @@ export const createGroupChatRoom = async (
     await update(dbRef, updates)
 
     // return newChatRoomKey
-  } catch (error) {
-    console.log('aaa', { error })
-  }
+  } catch (error) {}
 }
 
 export const uploadFile = async (
@@ -950,7 +946,6 @@ export const getChatRoomStream = async (
       .reverse()
     const promises = a1.map(async (o) => {
       let chatRoom: IChatRoom = o.val()
-      console.log('aaa chatRoom1', chatRoom)
 
       let deletedDate: number = getDeleteChatRoomDate(chatRoom, userId)
       let isShowChatRoom = true

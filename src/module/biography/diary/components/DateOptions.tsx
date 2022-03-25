@@ -25,8 +25,6 @@ export const DateOptions = ({
 }: DateOptionsProps) => {
   const [value, setValue] = useState<string>('')
 
-  console.log('DATE: ', date, getDefaultDay(date))
-
   useEffect(() => {
     setValue(getDefaultDay(date))
   }, [date, JSON.stringify(diaryUpdate)])

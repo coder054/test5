@@ -64,13 +64,13 @@ const TestChat = () => {
     ref(database, `chatMessages/${id}`)
   )
 
-  useEffect(() => {
-    if (!!snapshot) {
-      if (snapshot.exists()) {
-        console.log('aaa snapshot: ', snapshot.val())
-      }
-    }
-  }, [snapshot])
+  // useEffect(() => {
+  //   if (!!snapshot) {
+  //     if (snapshot.exists()) {
+  //       console.log('aaa snapshot: ', snapshot.val())
+  //     }
+  //   }
+  // }, [snapshot])
 
   return (
     <div
