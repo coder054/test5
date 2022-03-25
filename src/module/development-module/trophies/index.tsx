@@ -55,7 +55,7 @@ export const Trophies = () => {
       region: '',
     },
     club: '',
-    date: null,
+    date: getToday(),
     description: '',
     contractedClub: {
       arena: '',
