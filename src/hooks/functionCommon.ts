@@ -90,6 +90,23 @@ export function scaleToNum(str: string) {
   }
 }
 
+export const scaleToColor = (str: string) => {
+  switch (str) {
+    case 'VERY_LOW':
+      return 'text-[#4654EA]'
+    case 'LOW':
+      return 'text-[#07E1FF]'
+    case 'NORMAL':
+      return 'text-[#09E099]'
+    case 'HIGH':
+      return 'text-[#E85CFF]'
+    case 'VERY_HIGH':
+      return 'text-[#D60C0C]'
+    default:
+      return
+  }
+}
+
 export function formatDate(date: string | Date) {
   return dayjs(date).format(DEFAULT_DATE)
 }
@@ -137,9 +154,16 @@ export const getDefaultDay = (date: string | Date) => {
   if (
     flexingFormatDate(date, 'MM/DD/YYYY') ===
       flexingFormatDate(new Date(), 'MM/DD/YYYY') &&
-    +flexingFormatDate(date, 'HH') > 12
+    +flexingFormatDate(date, 'HH') >= 12
   ) {
     return 'Today'
+  }
+  if (
+    flexingFormatDate(date, 'MM/DD/YYYY') ===
+      flexingFormatDate(new Date(), 'MM/DD/YYYY') &&
+    +flexingFormatDate(date, 'HH') < 12
+  ) {
+    return 'Yesterday'
   }
 }
 

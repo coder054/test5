@@ -311,3 +311,9 @@ export type MotivationQuote = {
   content: string
   author: string
 }
+
+export type PointsType = {
+  x: number
+  y: number
+  name?: string
+}
