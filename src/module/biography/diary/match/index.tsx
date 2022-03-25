@@ -63,8 +63,15 @@ export const Match = ({ onChange }: MatchProps) => {
     opponentTeam: {},
     typeOfGame: 'SERIES',
     dateTime: new Date(),
-    events: [{ minutes: 0, event: '' }],
-    stats: [{ minutesPlayed: 90, role: '' }],
+    events: [{ minutes: 0, event: 'GOAL' }],
+    stats: [
+      {
+        minutesPlayed: 90,
+        role: accountSettings.playerCareer.favoriteRoles[0]
+          ? accountSettings.playerCareer.favoriteRoles[0]
+          : '',
+      },
+    ],
     review: {
       teamPerformance: 'NORMAL',
       teamReview: '',
@@ -85,6 +92,8 @@ export const Match = ({ onChange }: MatchProps) => {
   const handleChange = (value: any, type: keyof MatchType) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
+
+  console.log(accountSettings)
 
   const handleChangeReview = useCallback(
     (value: string | number, type: keyof ReviewType) => {
@@ -161,7 +170,7 @@ export const Match = ({ onChange }: MatchProps) => {
         club: accountSettings.playerCareer.contractedClub,
         country: accountSettings.settings.country,
       }))
-  }, [])
+  }, [JSON.stringify(accountSettings)])
 
   useEffect(() => {
     const initialValues = {
