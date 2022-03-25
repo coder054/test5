@@ -23,13 +23,13 @@ type FootBallSkillTypes = {
 
 type RadarChartTypes = {
   attacking: number
-  defending: number
   dribbling: number
   passing: number
   shooting: number
-  pace: number
-  tackling: number
   heading: number
+  defending: number
+  tackling: number
+  pace: number
 }
 
 interface SkillProps {
@@ -55,13 +55,13 @@ export const Skills = ({ playerId }: SkillProps) => {
 
   const [radarChart, setRadarChart] = useState<RadarChartTypes>({
     attacking: 0,
-    defending: 0,
     dribbling: 0,
     passing: 0,
     shooting: 0,
-    pace: 0,
-    tackling: 0,
     heading: 0,
+    defending: 0,
+    tackling: 0,
+    pace: 0,
   })
 
   useEffect(() => {
@@ -79,13 +79,13 @@ export const Skills = ({ playerId }: SkillProps) => {
           })
           setRadarChart({
             attacking: data.data.playerSkills.radar.attacking,
-            defending: data.data.playerSkills.radar.defending,
             dribbling: data.data.playerSkills.radar.dribbling,
             passing: data.data.playerSkills.radar.passing,
             shooting: data.data.playerSkills.radar.shooting,
-            pace: data.data.playerSkills.radar.pace,
-            tackling: data.data.playerSkills.radar.tackling,
             heading: data.data.playerSkills.radar.heading,
+            defending: data.data.playerSkills.radar.defending,
+            tackling: data.data.playerSkills.radar.tackling,
+            pace: data.data.playerSkills.radar.pace,
           })
           setSummary(data.data.playerCareer.summary)
           setTags(data.data.playerSkills.specialityTags)

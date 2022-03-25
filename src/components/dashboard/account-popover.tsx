@@ -160,7 +160,7 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
 
             <Link href={ROUTES.UPDATE_PROFILE}>
               <a className="text-white text-[16px] leading-[150%]  ">
-                Create new role2
+                Create new role
               </a>
             </Link>
           </div>

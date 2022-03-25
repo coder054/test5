@@ -4,6 +4,8 @@ import { TitleCollapse } from 'src/components/common/TitleCollapse'
 
 import { OneRowStat } from './InfoWithNumbers'
 import clsx from 'clsx'
+import { getStr } from 'src/utils/utils'
+import { get } from 'lodash'
 
 export interface IInfoClub {
   historicClubs: HistoricClub[]
@@ -90,7 +92,7 @@ export const InfoClub = ({ dataClub }: { dataClub: IInfoClub }) => {
       <div className="text-Grey text-[15px] font-medium mb-[8px] ">
         Historic
       </div>
-      {dataClub.historicClubs.map((data) => {
+      {(get(dataClub, 'historicClubs') || []).map((data) => {
         return <ItemClub key={data.careerId} data={data}></ItemClub>
       })}
 
@@ -101,7 +103,7 @@ export const InfoClub = ({ dataClub }: { dataClub: IInfoClub }) => {
       <ItemClub data={dataClub.existingClub}></ItemClub>
 
       <div className="text-Grey text-[15px] font-medium mb-[8px] ">Future</div>
-      {dataClub.futureClubs.map((data, index) => {
+      {(get(dataClub, 'futureClubs') || []).map((data, index) => {
         return <ItemClub key={data.careerId || index} data={data}></ItemClub>
       })}
     </div>
@@ -121,23 +123,24 @@ const ItemClub = ({ data }: { data: ExistingClub | HistoricClub }) => {
     >
       <div className="flex items-center  px-[16px] py-[8px]  ">
         <img
-          src={clubInfo.club.logoUrl}
+          src={getStr(clubInfo, 'club.logoUrl')}
           className="w-[40px] h-[40px] object-cover mr-[12px] rounded-[50%]"
           alt=""
         />
 
         <div className=" ">
           <div className="text-white font-medium ">
-            {clubInfo.club.clubName} / {clubInfo.team.teamName}{' '}
+            {getStr(clubInfo, 'club.clubName')} /{' '}
+            {getStr(clubInfo, 'team.teamName')}{' '}
           </div>
           <span className="text-Grey mr-2 text-[12px] font-medium ">
-            {clubInfo.fromTime} - {clubInfo.toTime}{' '}
+            {getStr(clubInfo, 'fromTime')} - {getStr(clubInfo, 'toTime')}{' '}
           </span>
           <span className="text-Grey mr-2 text-[12px] font-medium">
-            {clubInfo.league.name}{' '}
+            {getStr(clubInfo, 'league.name')}{' '}
           </span>
           <span className="text-Grey text-[12px] font-medium">
-            {clubInfo.role}
+            {getStr(clubInfo, 'role')}
           </span>
         </div>
 
@@ -214,15 +217,21 @@ const ItemClub = ({ data }: { data: ExistingClub | HistoricClub }) => {
             {[
               {
                 label: 'Serie',
-                value: !trophies ? '' : trophies.serieTrophyCount + 'x',
+                value: !trophies
+                  ? ''
+                  : getStr(trophies, 'serieTrophyCount', '0') + 'x',
               },
               {
                 label: 'Cup',
-                value: !trophies ? '' : trophies.cupTrophyCount + 'x',
+                value: !trophies
+                  ? ''
+                  : getStr(trophies, 'cupTrophyCount', '0') + 'x',
               },
               {
                 label: 'Other',
-                value: !trophies ? '' : trophies.otherTrophyCount + 'x',
+                value: !trophies
+                  ? ''
+                  : getStr(trophies, 'otherTrophyCount', '0') + 'x',
               },
             ].map((o, index) => (
               <div key={'trophy' + index}>
@@ -268,7 +277,7 @@ const Match = ({ title, value }) => {
       <span className=" text-[13px] xl:text-[13px] leading-[150%] text-Grey mb-2 ">
         {title}
       </span>
-      <span className="text-white text-[15px] xl:text-[21px] leading-[138%] font-semibold">
+      <span className="text-white text-[15px] xl:text-[18px] leading-[138%] font-semibold">
         {value}
       </span>
     </div>

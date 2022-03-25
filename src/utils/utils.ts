@@ -1,11 +1,11 @@
-import { get, truncate } from 'lodash'
-import Resizer from 'react-image-file-resizer'
-import cookies from 'js-cookie'
-import cookie from 'cookie'
 import { notification } from 'antd'
-import { axios } from './axios'
+import cookie from 'cookie'
+import cookies from 'js-cookie'
 import jwtDecode from 'jwt-decode'
+import { get, isNaN, truncate } from 'lodash'
+import Resizer from 'react-image-file-resizer'
 import { AVATAR_DEFAULT } from 'src/constants/constants'
+import { axios } from './axios'
 
 export interface ITokenData {
   iss: string
@@ -200,5 +200,8 @@ export const safeAvatar = (str: string) => {
 }
 
 export const toFixedIfNecessary = (value, dp = 2) => {
+  if (isNaN(parseFloat(value))) {
+    return value
+  }
   return +parseFloat(value).toFixed(dp)
 }

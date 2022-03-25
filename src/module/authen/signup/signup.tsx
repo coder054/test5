@@ -397,7 +397,7 @@ export const SignUp = () => {
                     loading={loading}
                     htmlType="submit"
                     submit
-                    text="Register2"
+                    text="Register"
                     className="sign-in-button h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3]"
                   />
 
@@ -532,7 +532,7 @@ export const SignUp = () => {
                     <Button
                       htmlType="submit"
                       submit
-                      text="Register3"
+                      text="Register"
                       className="sign-in-button h-[48px] font-semibold text-[15px] text-[#FFFFFF] bg-[#4654EA] hover:bg-[#6d78f3]"
                     />
 
@@ -567,8 +567,17 @@ export const SignUp = () => {
   }
 
   const contentFillOtp = () => {
+    const router = useRouter()
     return (
       <div className="absolute w-full">
+        <div
+          className="absolute top-[10px] md:top-[18px] lg:top-[24px] left-[32px] md:left-[40px]"
+          onClick={() => {
+            window.location.href = ROUTES.SIGNUP
+          }}
+        >
+          <GoBack label="Sign up with SMS" />
+        </div>
         <div
           className="w-[320px] md:w-[372px] mx-auto
                   min-h-[412px]
@@ -589,10 +598,17 @@ export const SignUp = () => {
               sent to&nbsp;
             </span>
 
-            <span className="text-[#00e09d] ">
+            <span className="text-[#00e09d]">
               {phoneFormPhoneSignUp}.&nbsp;
             </span>
-            <span className="underline text-white">Wrong number?</span>
+            <span
+              className="underline text-white cursor-pointer hover:text-[#00e09d]"
+              onClick={() => {
+                window.location.href = ROUTES.SIGNUP
+              }}
+            >
+              Wrong number?
+            </span>
           </div>
 
           <div className="w-[300px] md:w-[372px] mx-auto">
