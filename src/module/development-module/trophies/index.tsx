@@ -11,14 +11,18 @@ import { MySelect } from 'src/components/MySelect'
 import { MySelectCountry } from 'src/components/MySelectCountry'
 import { MyTextArea } from 'src/components/MyTextarea'
 import { UploadMutilImageVideo } from 'src/components/upload-mutil-image-video'
-import { PersonalAwardOption, TypeOfAwardOption } from 'src/constants/options'
+import {
+  PersonalAwardOption,
+  TypeOfPersonalAwardOption,
+  TypeOfTeamTrophyOption,
+} from 'src/constants/options'
 import { TrophiesAndAwardsType } from 'src/constants/types'
 import { ClubType } from 'src/constants/types/settingsType.type'
 import { getToday } from 'src/hooks/functionCommon'
 import { SvgCamera } from 'src/imports/svgs'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
 import { InfiniteScrollClub } from 'src/module/account-settings/football/components/InfiniteScrollClub'
-import { createTrophies } from 'src/service/biography-update'
+import { createTrophies, getProfilePlayer } from 'src/service/biography-update'
 
 interface FormValuesType {
   personalAward: string
@@ -39,8 +43,8 @@ export const Trophies = () => {
   const [showUrl, setShowUrl] = useState('')
   const [images, setImages] = useState([])
   const [formValues, setFormValues] = useState<FormValuesType>({
-    personalAward: '',
-    typeOfAward: '',
+    personalAward: 'AWARD',
+    typeOfAward: 'MVP',
     name: '',
     country: {
       alpha2Code: '',
@@ -51,7 +55,7 @@ export const Trophies = () => {
       region: '',
     },
     club: '',
-    date: getToday(),
+    date: null,
     description: '',
     contractedClub: {
       arena: '',
@@ -68,6 +72,22 @@ export const Trophies = () => {
   useEffect(() => {
     setArrayFile(newFile)
   }, [newFile])
+
+  useEffect(() => {
+    const getProfile = async () => {
+      try {
+        await getProfilePlayer().then((data) => {
+          setFormValues((prev) => ({
+            ...prev,
+            country: data.data.profile.birthCountry,
+            contractedClub: data.data.playerCareer.contractedClub,
+          }))
+        })
+      } catch (error) {}
+    }
+
+    getProfile()
+  }, [])
 
   useEffect(() => {
     arrayFile.forEach((item) => {
@@ -145,15 +165,25 @@ export const Trophies = () => {
           </p>
 
           <MySelect
-            label="Personal Award"
+            label=""
             arrOption={PersonalAwardOption}
             onChange={(e) => handleChangeForm('personalAward', e.target.value)}
+            value={formValues.personalAward}
+            // defauleValue="AWARD"
           />
 
           <MySelect
-            label="Type of award"
-            arrOption={TypeOfAwardOption}
+            label=""
+            arrOption={
+              formValues.personalAward === 'AWARD'
+                ? TypeOfPersonalAwardOption
+                : TypeOfTeamTrophyOption
+            }
             onChange={(e) => handleChangeForm('typeOfAward', e.target.value)}
+            // defauleValue={
+            //   formValues.personalAward === 'AWARD' ? 'MVP' : 'SERIE'
+            // }
+            value={formValues.typeOfAward}
           />
 
           <MyInput
