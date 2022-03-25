@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { useAtom } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -31,6 +32,7 @@ import { Tabs } from './components/Tabs'
 import { Health } from './health'
 import { Match } from './match'
 import { Training } from './training'
+import { InjuryList } from './components/InjuryList'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -67,6 +69,8 @@ const Component = () => {
   const [date, setDate] = useState<string | Date>(getToday())
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [isHaveInjury, setIsHaveInjury] = useState<boolean>(false)
+
+  const [injuryData, setInjuryData] = useState(null)
 
   const [currentTab, setCurrentTab] = useQueryParam(
     'type',
@@ -230,7 +234,13 @@ const Component = () => {
               first="Yes"
               second="No"
             />
-            {isHaveInjury && <InjuryReport />}
+            {(isHaveInjury || diary.injuries?.length > 0) && (
+              <>
+                <InjuryReport onChange={setInjuryData} />
+                <InjuryList />
+              </>
+            )}
+
             <MyModal isOpen={isOpenModal} onClose={setIsOpenModal}>
               <div className="flex flex-col items-center">
                 <p className="text-[26px] font-medium mb-[25px]">Delete Data</p>
@@ -260,21 +270,22 @@ const Component = () => {
             </MyModal>
           </div>
         </BackGround>
-        <div className="laptopM:flex laptopM:space-x-4 mobileM:pb-5 mobileM:px-2 mobileM:space-y-4">
+        <div className="laptopM:flex laptopM:space-x-4 laptopM:space-y-0 mobileM:space-y-4 mobileM:px-4 mobileM:pb-4 laptopM:px-0 laptopM:pb-0">
           <MyButton
             isLoading={isCreating || isUpdating}
             onClick={handleSubmit}
             type="submit"
-            label={isUpdate ? 'Update' : 'Save'}
+            label={isUpdate ? 'Save & Update' : 'Save'}
           />
-          {isUpdate && (
-            <Button
-              type="button"
-              label="Delete Diary"
-              onClick={() => setIsOpenModal(true)}
-              className="bg-[#D60C0C] px-[45px] py-[11px] rounded-[8px]"
-            />
-          )}
+          <Button
+            type="button"
+            label="Delete Diary"
+            onClick={() => setIsOpenModal(true)}
+            className={clsx(
+              'bg-[#D60C0C] px-[45px] py-[11px] rounded-[8px]',
+              !isUpdate && 'hidden'
+            )}
+          />
         </div>
       </div>
     </Loading>

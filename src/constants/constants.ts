@@ -12,6 +12,7 @@ export const ROUTES = {
   news: '/news',
   UPDATE_PROFILE: '/update-profile',
   SIGNIN: 'signin',
+  SIGNUP: 'signup',
   UPDATE_PROFILE_PLAYER: 'update-profile-player',
   UPDATE_PROFILE_PLAYER_SKILLS: '/update-profile-player-skills',
   UPDATE_PROFILE_COACH: 'update-profile-coach',
