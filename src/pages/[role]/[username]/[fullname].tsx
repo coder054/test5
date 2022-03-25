@@ -717,6 +717,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
       null,
     ]
     error = true
+    throw 'Error happen'
   } else {
     // no error at all
     //@ts-ignore: Unreachable code error
