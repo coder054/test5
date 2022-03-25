@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { get } from 'lodash'
+import { chain, get, isEmpty } from 'lodash'
 import { useEffect } from 'react'
 import { dataStatsAtom } from 'src/atoms/biographyAtom'
 import { TitleCollapse } from 'src/components/common/TitleCollapse'
@@ -16,6 +16,37 @@ export const InfoWithImages = () => {
   useEffect(() => {
     // console.log('aaa dataStats: ', dataStats)
   }, [dataStats])
+
+  useEffect(() => {
+    console.log('aaa dataStats: ', dataStats)
+  }, [dataStats])
+
+  if (
+    isEmpty(dataStats?.totalCaps) &&
+    isEmpty(
+      chain(Object.values(get(dataStats, 'totalAwards') || {}))
+        .compact()
+        .uniq()
+        .value()
+    ) &&
+    isEmpty(
+      chain(Object.values(get(dataStats, 'totalTrophies') || {}))
+        .compact()
+        .uniq()
+        .value()
+    )
+  ) {
+    return (
+      <div className="my-[120px] sm:my-[200px] ">
+        <img
+          src={'/biography/nodata.png'}
+          className="w-[131px] sm:w-[171px] mx-auto"
+          alt=""
+        />
+        <div className="text-[24px] text-center mt-6 ">No data yet</div>
+      </div>
+    )
+  }
 
   return (
     <>
