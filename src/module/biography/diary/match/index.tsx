@@ -67,9 +67,7 @@ export const Match = ({ onChange }: MatchProps) => {
     stats: [
       {
         minutesPlayed: 90,
-        role: accountSettings.playerCareer.favoriteRoles[0]
-          ? accountSettings.playerCareer.favoriteRoles[0]
-          : '',
+        role: '',
       },
     ],
     review: {
