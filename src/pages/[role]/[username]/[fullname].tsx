@@ -728,7 +728,6 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     dataAvgPlayer = get(data4, 'data') || null
     dataAvgCoach = get(data5, 'data') || null
     error = false
-    console.log('aaa no error')
   }
 
   ///////////////////////////////////////////////
