@@ -87,7 +87,7 @@ export const FutureCareer = () => {
             ...prev,
             country: data.data.profile.birthCountry,
             contractedClub: data.data.playerCareer.contractedClub,
-            team: data.data.playerCareer.currentTeams[0].teamName,
+            team: data.data.playerCareer.currentTeams[0]?.teamName,
             role: data.data.playerCareer.favoriteRoles[0],
           }))
         })

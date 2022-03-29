@@ -12,7 +12,7 @@ import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { Loading } from 'src/components'
 import { Button } from 'src/components/Button'
 import { MyButton } from 'src/components/MyButton'
-import { DiaryType } from 'src/constants/types/diary.types'
+import { DiaryType, InjuryType } from 'src/constants/types/diary.types'
 import { getPreviousDate, getToday } from 'src/hooks/functionCommon'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
@@ -65,12 +65,22 @@ const Component = () => {
   const { currentRoleName } = useAuth()
   const [diary, setDiary] = useAtom(diaryAtom)
   const [submitForm, setSubmitForm] = useState<DiaryType>({})
-
   const [date, setDate] = useState<string | Date>(getToday())
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [isHaveInjury, setIsHaveInjury] = useState<boolean>(false)
+  const [injuryData, setInjuryData] = useState<InjuryType>(null)
 
-  const [injuryData, setInjuryData] = useState(null)
+  const injurySubmit = useMemo(() => {
+    if (submitForm.injuries?.length === 0) {
+      return null
+    } else if (injuryData && injuryData?.injuryArea) {
+      return injuryData
+    } else return submitForm.injuries
+  }, [JSON.stringify(injuryData), JSON.stringify(submitForm.injuries)])
+
+  const isUpdate = useMemo(() => {
+    return !!diary.diaryId
+  }, [JSON.stringify(diary)])
 
   const [currentTab, setCurrentTab] = useQueryParam(
     'type',
@@ -87,6 +97,12 @@ const Component = () => {
     {
       onSuccess: () => {
         toast.success('Diary successfully created')
+        setDiary({
+          eatAndDrink: 'NORMAL',
+          energyLevel: 'NORMAL',
+          sleep: 'NORMAL',
+          typeOfDiary: 'TRAINING',
+        })
         queryClient.invalidateQueries('diary')
       },
       onError: () => {
@@ -116,6 +132,11 @@ const Component = () => {
     updateDiary,
     {
       onSuccess: () => {
+        if (injuryData.injuryArea) {
+          let newArr = [...diary.injuries]
+          newArr.push(injuryData)
+          setDiary((prev) => ({ ...prev, injuries: newArr }))
+        }
         toast.success('Diary successfully updated')
         queryClient.invalidateQueries('diary')
       },
@@ -125,17 +146,21 @@ const Component = () => {
     }
   )
 
-  const filterType = (currentTab: string) => {
-    if (currentTab.includes('TRAINING') || currentTab === 'REST_DAY') {
-      return 'TRAINING'
-    } else return currentTab
-  }
+  const filterType = useCallback(
+    (currentTab: string) => {
+      if (currentTab.includes('TRAINING') || currentTab === 'REST_DAY') {
+        return 'TRAINING'
+      } else return currentTab
+    },
+    [currentTab]
+  )
 
   const handleSubmit = async () => {
     const requestData = {
+      ...diary,
       ...submitForm,
       createdAt: getPreviousDate(date),
-      injuries: submitForm.injuries?.length === 0 ? null : submitForm.injuries,
+      injuries: injurySubmit,
     }
     isUpdate && delete requestData.createdAt
     isUpdate
@@ -156,21 +181,13 @@ const Component = () => {
     mutateDelete(diary.diaryId)
   }
 
-  const isUpdate = useMemo(() => {
-    return !!diary.diaryId
-  }, [JSON.stringify(diary)])
-
-  const handleChange = useCallback(
-    (type: TypeofDiary, value: any) => {
-      setSubmitForm({
-        ...diary,
-        userType: type === 'cap' ? currentRoleName : null,
-        typeOfDiary: filterType(currentTab),
-        [type]: value,
-      })
-    },
-    [JSON.stringify(diary), currentTab]
-  )
+  const handleChange = (type: TypeofDiary, value: any) => {
+    setSubmitForm({
+      userType: type === 'cap' ? currentRoleName : null,
+      typeOfDiary: filterType(currentTab),
+      [type]: value,
+    })
+  }
 
   useEffect(() => {
     if (diary.diaryId && diary.typeOfDiary === 'TRAINING') {
@@ -189,7 +206,12 @@ const Component = () => {
 
   useEffect(() => {
     !diary.diaryId && setCurrentTab('TEAM_TRAINING')
+    !diary.diaryId && setIsHaveInjury(false)
   }, [JSON.stringify(diary.diaryId), JSON.stringify(diaryUpdate)])
+
+  useEffect(() => {
+    diary.injuries?.length > 0 ? setIsHaveInjury(true) : setIsHaveInjury(false)
+  }, [JSON.stringify(diary.injuries)])
 
   return (
     <Loading isLoading={isGettingDiary}>
@@ -211,6 +233,7 @@ const Component = () => {
             {currentTab === 'TEAM_TRAINING' && (
               <Training
                 onChange={(value) => handleChange('training', value)}
+                diaryUpdate={diaryUpdate?.data}
                 currentTab={currentTab}
               />
             )}
@@ -220,6 +243,7 @@ const Component = () => {
             {currentTab === 'GROUP_TRAINING' && (
               <Training
                 onChange={(value) => handleChange('training', value)}
+                diaryUpdate={diaryUpdate?.data}
                 currentTab={currentTab}
               />
             )}
@@ -229,6 +253,7 @@ const Component = () => {
             {currentTab === 'PERSONAL_TRAINING' && (
               <Training
                 onChange={(value) => handleChange('training', value)}
+                diaryUpdate={diaryUpdate?.data}
                 currentTab={currentTab}
               />
             )}
@@ -240,9 +265,12 @@ const Component = () => {
               first="Yes"
               second="No"
             />
-            {(isHaveInjury || diary.injuries?.length > 0) && (
+            {isHaveInjury && (
               <>
-                <InjuryReport onChange={setInjuryData} />
+                <InjuryReport
+                  diaryUpdate={diaryUpdate}
+                  onChange={setInjuryData}
+                />
                 <InjuryList />
               </>
             )}

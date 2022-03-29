@@ -18,22 +18,30 @@ type FormValuesType = {
 }
 
 type TrainingProps = {
+  diaryUpdate: any
   currentTab: string
   onChange?: (value: FormValuesType) => void
 }
 
-export const Training = ({ currentTab, onChange }: TrainingProps) => {
-  const [diary] = useAtom(diaryAtom)
+const INITITAL_VALUE = {
+  hoursOfPractice: 0,
+  mental: 0,
+  physicallyStrain: 'NORMAL',
+  physics: 0,
+  practiceTags: [],
+  tactics: 0,
+  technics: 0,
+  trainingMedia: [],
+}
 
+export const Training = ({
+  currentTab,
+  onChange,
+  diaryUpdate,
+}: TrainingProps) => {
+  const [diary] = useAtom(diaryAtom)
   const [formValues, setFormValues] = useState<FormValuesType>({
-    hoursOfPractice: 0,
-    mental: 0,
-    physicallyStrain: 'NORMAL',
-    physics: 0,
-    practiceTags: [],
-    tactics: 0,
-    technics: 0,
-    trainingMedia: [],
+    ...INITITAL_VALUE,
     typeOfTraining: currentTab,
   })
 
@@ -86,14 +94,7 @@ export const Training = ({ currentTab, onChange }: TrainingProps) => {
     diary.training && setFormValues(diary.training)
     if (!diary.createdAt) {
       setFormValues({
-        hoursOfPractice: 0,
-        mental: 0,
-        physicallyStrain: 'NORMAL',
-        physics: 0,
-        practiceTags: [],
-        tactics: 0,
-        technics: 0,
-        trainingMedia: [],
+        ...INITITAL_VALUE,
         typeOfTraining: currentTab,
       })
     }
