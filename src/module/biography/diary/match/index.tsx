@@ -91,8 +91,6 @@ export const Match = ({ onChange }: MatchProps) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
 
-  console.log(accountSettings)
-
   const handleChangeReview = useCallback(
     (value: string | number, type: keyof ReviewType) => {
       setFormValues((prev) => ({
@@ -150,13 +148,13 @@ export const Match = ({ onChange }: MatchProps) => {
         /* @ts-ignore */
         yourTeam: formValues.yourTeam.teamId,
         /* @ts-ignore */
-        opponentTeam: formValues.opponentTeam.teamId,
+        opponentTeam: formValues.opponentTeam?.teamId,
         mvp: {
           ...formValues.mvp,
           /* @ts-ignore */
           yourTeam: formValues.mvp.yourTeam.userId,
           /* @ts-ignore */
-          opponents: formValues.mvp.opponents.userId,
+          opponents: formValues.mvp.opponents?.userId,
         },
       })
   }, [JSON.stringify(formValues)])
@@ -322,7 +320,7 @@ export const Match = ({ onChange }: MatchProps) => {
                   mvp: { ...prev.mvp, opponents: e },
                 }))
               }
-              teamId={formValues.opponentTeam.teamId}
+              teamId={formValues.opponentTeam?.teamId}
               value={formValues.mvp.opponents}
               label="Opponent Team"
             />

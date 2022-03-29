@@ -4,6 +4,7 @@ import { API_DIARY, API_GET_DIARY } from 'src/constants/api.constants'
 import { getStartOfDate } from 'src/hooks/functionCommon'
 import toast from 'react-hot-toast'
 import { useMutation } from 'react-query'
+import { InjuryType } from 'src/constants/types/diary.types'
 
 export const fetchDiary = async (date?: string | Date, roleName?: string) => {
   return axios
@@ -81,6 +82,44 @@ export const updateDiary = async ({
       `diaries/${roleName.toString().toLowerCase()}/update-diary-${type}`,
       { diaryId: diaryId }
     ),
+    data
+  )
+}
+
+export const deleteInjury = async ({
+  injuryId,
+  diaryId,
+  roleName,
+}: {
+  injuryId: string
+  diaryId: string
+  roleName: string
+}) => {
+  return await axios.delete(
+    toQueryString(
+      `diaries/${roleName.toString().toLowerCase()}/delete-injury`,
+      {
+        injuryId: injuryId,
+        diaryId: diaryId,
+      }
+    )
+  )
+}
+
+export const updateInjury = async ({
+  diaryId,
+  injuryId,
+  data,
+}: {
+  diaryId: string
+  injuryId: string
+  data: InjuryType
+}) => {
+  return await axios.patch(
+    toQueryString(`diaries/player/update-injury`, {
+      injuryId: injuryId,
+      diaryId: diaryId,
+    }),
     data
   )
 }
