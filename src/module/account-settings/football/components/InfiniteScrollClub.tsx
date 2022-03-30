@@ -16,6 +16,7 @@ import { API_GET_LIST_CLUB } from 'src/constants/api.constants'
 import { ClubType } from 'src/constants/types/settingsType.type'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
+import { safeHttpImage } from 'src/utils/utils'
 import { NewClubModal } from './NewClubModal'
 
 type InfiniteScrollClubProps = {
@@ -186,7 +187,7 @@ export const InfiniteScrollClub = ({
                   key={index}
                 >
                   <img
-                    src={it.logoUrl}
+                    src={safeHttpImage(it.logoUrl)}
                     className="w-[30px] h-[30px] rounded-full"
                     alt="logo"
                   />

@@ -192,11 +192,24 @@ export const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
+export const getSafeLink = (link) => link.replace('#', '%23222#')
+
 export const safeAvatar = (str: string) => {
   if (str === 'faceImage' || str === '') {
     return AVATAR_DEFAULT
   }
   return str
+}
+
+export const safeHttpImage = (str: string) => {
+  if (!str) {
+    return ''
+  }
+
+  if (str.indexOf('http://') === 0) {
+    return getSafeLink(`https://images.weserv.nl/?url=${str}`)
+  }
+  return getSafeLink(str)
 }
 
 export const toFixedIfNecessary = (value, dp = 2) => {
