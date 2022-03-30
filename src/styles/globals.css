@@ -232,3 +232,7 @@
   height: 2px;
   background-color: #4654ea;
 }
+
+.apexcharts-legend.apx-legend-position-right {
+  opacity: 0;
+}

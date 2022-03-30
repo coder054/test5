@@ -264,3 +264,12 @@ export interface HistoricCareerType {
     }
   ]
 }
+
+export interface DataAnalytic {
+  title?: string
+  total?: number
+  percent?: number
+  icon?: any
+  data?: number[]
+  color?: string
+}
