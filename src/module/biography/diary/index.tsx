@@ -213,6 +213,10 @@ const Component = () => {
     diary.injuries?.length > 0 ? setIsHaveInjury(true) : setIsHaveInjury(false)
   }, [JSON.stringify(diary.injuries)])
 
+  useEffect(() => {
+    setError('')
+  }, [currentTab])
+
   return (
     <Loading isLoading={isGettingDiary}>
       <div className="space-y-5 p-9">
