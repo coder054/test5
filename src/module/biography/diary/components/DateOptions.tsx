@@ -1,6 +1,8 @@
 import { MenuItem, Select } from '@mui/material'
 import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
+import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { MyDatePicker, MyInput } from 'src/components'
 import { DiaryType } from 'src/constants/types/diary.types'
 import {
@@ -24,13 +26,14 @@ export const DateOptions = ({
   onChangeDiary,
 }: DateOptionsProps) => {
   const [value, setValue] = useState<string>('')
+  const [diary] = useAtom(diaryAtom)
 
   useEffect(() => {
-    setValue(getDefaultDay(date))
-  }, [date, JSON.stringify(diaryUpdate)])
+    !diary.diaryId && setValue(getDefaultDay(date))
+  }, [date, JSON.stringify(diaryUpdate), JSON.stringify(diary)])
 
   return (
-    <div className="laptopM:grid laptopM:grid-cols-2 laptopM:gap-x-20 mobileM:flex mobileM:flex-col-reverse mobileM:gap-y-4">
+    <div className="mobileL:grid mobileL:grid-cols-2 mobileL:gap-x-20 mobileM:flex mobileM:flex-col-reverse mobileM:gap-y-4">
       <MyInput
         sx={{
           '& fieldset': {
@@ -73,6 +76,7 @@ export const DateOptions = ({
         size="small"
         isNextable
         maxDate={dayjs(getToday()).toDate()}
+        minDate={dayjs(new Date()).add(-7, 'day').toDate()}
         value={date}
         onChange={onChange}
       />

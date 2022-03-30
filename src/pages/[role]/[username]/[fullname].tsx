@@ -617,6 +617,11 @@ const BioForCoach = ({
 // Biography.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>
 export const getServerSideProps: any = async ({ req, res, query }) => {
   // const roleId =
+
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=10, stale-while-revalidate=20'
+  )
   const uid = await loadIdToken(req as any)
 
   const fullname = query.fullname // not use
@@ -712,6 +717,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
       null,
     ]
     error = true
+    throw 'Error happen'
   } else {
     // no error at all
     //@ts-ignore: Unreachable code error
@@ -722,7 +728,6 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
     dataAvgPlayer = get(data4, 'data') || null
     dataAvgCoach = get(data5, 'data') || null
     error = false
-    console.log('aaa no error')
   }
 
   ///////////////////////////////////////////////

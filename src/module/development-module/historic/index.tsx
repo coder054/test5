@@ -118,7 +118,7 @@ export const Historic = ({ playerId }: HistoricProps) => {
             ...prev,
             country: data.data.profile.birthCountry,
             contractedClub: data.data.playerCareer.contractedClub,
-            team: data.data.playerCareer.currentTeams[0].teamName,
+            team: data.data.playerCareer.currentTeams[0]?.teamName,
             role: data.data.playerCareer.favoriteRoles[0],
           }))
         })
@@ -221,7 +221,6 @@ export const Historic = ({ playerId }: HistoricProps) => {
 
     try {
       createCareerHistoric(valueHistoric).then((data) => {
-        console.log('data', data)
         if (data?.status === 201) {
           window.scroll(0, 0)
           toast.success(data.data)

@@ -4,6 +4,7 @@ import { API_DIARY, API_GET_DIARY } from 'src/constants/api.constants'
 import { getStartOfDate } from 'src/hooks/functionCommon'
 import toast from 'react-hot-toast'
 import { useMutation } from 'react-query'
+import { InjuryType } from 'src/constants/types/diary.types'
 
 export const fetchDiary = async (date?: string | Date, roleName?: string) => {
   return axios
@@ -51,14 +52,10 @@ export const createDiary = async ({
   data: any
   type: string
 }) => {
-  return await axios
-    .post(
-      `diaries/${roleName.toString().toLowerCase()}/create-diary-${type}`,
-      data
-    )
-    .catch(() => {
-      toast.error('An error has occurred')
-    })
+  return await axios.post(
+    `diaries/${roleName.toString().toLowerCase()}/create-diary-${type}`,
+    data
+  )
 }
 
 export const deleteDiary = async (id: string) => {
@@ -80,15 +77,49 @@ export const updateDiary = async ({
   diaryId: string
   injuryId?: string
 }) => {
-  return await axios
-    .patch(
-      toQueryString(
-        `diaries/${roleName.toString().toLowerCase()}/update-diary-${type}`,
-        { diaryId: diaryId }
-      ),
-      data
+  return await axios.patch(
+    toQueryString(
+      `diaries/${roleName.toString().toLowerCase()}/update-diary-${type}`,
+      { diaryId: diaryId }
+    ),
+    data
+  )
+}
+
+export const deleteInjury = async ({
+  injuryId,
+  diaryId,
+  roleName,
+}: {
+  injuryId: string
+  diaryId: string
+  roleName: string
+}) => {
+  return await axios.delete(
+    toQueryString(
+      `diaries/${roleName.toString().toLowerCase()}/delete-injury`,
+      {
+        injuryId: injuryId,
+        diaryId: diaryId,
+      }
     )
-    .catch(() => {
-      toast.error('An error has occurred')
-    })
+  )
+}
+
+export const updateInjury = async ({
+  diaryId,
+  injuryId,
+  data,
+}: {
+  diaryId: string
+  injuryId: string
+  data: InjuryType
+}) => {
+  return await axios.patch(
+    toQueryString(`diaries/player/update-injury`, {
+      injuryId: injuryId,
+      diaryId: diaryId,
+    }),
+    data
+  )
 }

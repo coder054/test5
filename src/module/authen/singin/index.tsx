@@ -362,9 +362,7 @@ const FormSMSLogin = () => {
 
       //@ts-ignore: Unreachable code error
       window.confirmationResult = confirmationResult
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) {}
   }
 
   return (

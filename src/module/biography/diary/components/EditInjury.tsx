@@ -1,11 +1,15 @@
-import { SnackbarOrigin } from '@mui/material/Snackbar'
 import useMouse from '@react-hook/mouse-position'
 import { useAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
+import { toast as AlertSpot } from 'react-hot-toast'
+import { useMutation } from 'react-query'
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
+import { injuryAtom } from 'src/atoms/injuryAtom'
 import { MyInputChips } from 'src/components'
+import { Button } from 'src/components/Button'
+import { MyButton } from 'src/components/MyButton'
 import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
 import {
@@ -15,16 +19,15 @@ import {
   SPOT_KEY,
 } from 'src/constants/types/diary.types'
 import { numToScale, scaleToNum } from 'src/hooks/functionCommon'
+import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { deleteInjury, updateInjury } from 'src/service/diary-update'
+import { MyModal } from '../../../../components/Modal'
 import { BodyPart } from './BodyPart'
 import { BooleanOption } from './BooleanOption'
 import { InjurySpot } from './InjurySpot'
-export interface State extends SnackbarOrigin {
-  open: boolean
-}
 
-type InjuryReportProps = {
-  onChange?: (value: InjuryType) => void
-  diaryUpdate?: any
+type EditInjuryProps = {
+  onClose: (value: boolean) => void
 }
 
 const INITIAL_FORM = {
@@ -41,17 +44,20 @@ const INITIAL_FORM = {
   },
 }
 
-export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
-  const [diary] = useAtom(diaryAtom)
+export const EditInjury = ({ onClose }: EditInjuryProps) => {
+  const { currentRoleName } = useAuth()
+  const [injury] = useAtom(injuryAtom)
+  const [diary, setDiary] = useAtom(diaryAtom)
+  const [side, setSide] = useState<boolean>(true)
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [formValues, setFormValues] = useState<InjuryType>(INITIAL_FORM)
+
   const parentRef = useRef(null)
   const mouse = useMouse(parentRef, {
     enterDelay: 100,
     leaveDelay: 100,
   })
 
-  const [side, setSide] = useState<boolean>(true)
-  const [response, setResponse] = useState<InjuryType[]>([])
-  const [formValues, setFormValues] = useState<InjuryType>(INITIAL_FORM)
   const [spot, setSpot] = useState<PointsType>({
     x: null,
     y: null,
@@ -84,6 +90,62 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
     })
   }
 
+  const { mutate: mutateDelete, isLoading: isDeleting } = useMutation(
+    deleteInjury,
+    {
+      onSuccess: (data) => {
+        let newArr = [...diary.injuries]
+        setDiary((prev) => ({
+          ...prev,
+          injuries: newArr.filter((it) => it.injuryId !== injury.injuryId),
+        }))
+        setIsOpenModal(false)
+        onClose && onClose(false)
+        AlertSpot.success(data.data)
+      },
+      onError: () => {
+        AlertSpot.error('An error has occurred')
+      },
+    }
+  )
+
+  const { mutate: mutateUpdate, isLoading: isUpdating } = useMutation(
+    updateInjury,
+    {
+      onSuccess: () => {
+        let newArr = [...diary.injuries]
+        setDiary((prev) => ({
+          ...prev,
+          injuries: newArr.map((item) => {
+            return item.injuryId === injury.injuryId ? formValues : item
+          }),
+        }))
+
+        AlertSpot.success('Injury successfully updated')
+        onClose && onClose(false)
+      },
+      onError: () => {
+        AlertSpot.error('An error has occurred')
+      },
+    }
+  )
+
+  const handleDeleteInjury = async () => {
+    mutateDelete({
+      diaryId: injury.diaryId,
+      injuryId: injury.injuryId,
+      roleName: currentRoleName,
+    })
+  }
+
+  const handleUpdateInjury = async () => {
+    mutateUpdate({
+      diaryId: injury.diaryId,
+      injuryId: injury.injuryId,
+      data: { ...formValues, createdAt: new Date(formValues.createdAt) },
+    })
+  }
+
   useEffect(() => {
     setFormValues((prev) => ({
       ...prev,
@@ -94,16 +156,12 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
   }, [JSON.stringify(spot)])
 
   useEffect(() => {
-    onChange && onChange(formValues)
-  }, [JSON.stringify(formValues)])
-
-  useEffect(() => {
-    setFormValues(INITIAL_FORM)
-    diary.injuries && setResponse(diary.injuries)
-  }, [JSON.stringify(diary.injuries), JSON.stringify(diaryUpdate)])
+    setFormValues(injury)
+    setSide(injury.isFront)
+  }, [JSON.stringify(injury)])
 
   return (
-    <div>
+    <div className="pb-6">
       <BooleanOption
         label="Point the mark where your pain is"
         first="Front"
@@ -119,31 +177,12 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
             ref={parentRef}
             className="bg-front-body  relative w-[214px] h-[440px] bg-no-repeat bg-center cursor-pointer duration-150"
           >
-            {formValues.injuryArea && (
+            {formValues.injuryArea && formValues.isFront && (
               <InjurySpot
-                isDeletable
                 level={scaleToNum(formValues.painLevel)}
                 spot={formValues.injuryPosition}
-                handleDeleteSpot={() =>
-                  setFormValues((prev) => ({
-                    ...prev,
-                    injuryPosition: { x: null, y: null },
-                    injuryArea: '',
-                  }))
-                }
               />
             )}
-            {(response || []).map((injury, index) => (
-              <>
-                {injury.isFront && (
-                  <InjurySpot
-                    level={scaleToNum(injury.painLevel)}
-                    spot={injury.injuryPosition}
-                    key={index}
-                  />
-                )}
-              </>
-            ))}
             <BodyPart
               handleChooseSpot={(e) => handleChooseSpot(e, 'FRH')}
               className="absolute z-10 w-[21px] h-[20px]  top-0 left-[86px] rounded-tl-full"
@@ -215,23 +254,12 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
             ref={parentRef}
             className="bg-back-body relative w-[214px] h-[440px] bg-no-repeat bg-center cursor-pointer duration-150"
           >
-            {formValues.injuryArea && (
+            {formValues.injuryArea && !formValues.isFront && (
               <InjurySpot
                 spot={formValues.injuryPosition}
                 level={scaleToNum(formValues.painLevel)}
               />
             )}
-            {(response || []).map((injury, index) => (
-              <>
-                {!injury.isFront && (
-                  <InjurySpot
-                    level={scaleToNum(injury.painLevel)}
-                    spot={injury.injuryPosition}
-                    key={index}
-                  />
-                )}
-              </>
-            ))}
             <BodyPart
               handleChooseSpot={(e) => handleChooseSpot(e, 'BLH')}
               className="absolute z-10 w-[21px] h-[20px]  top-0 left-[86px] rounded-tl-full"
@@ -335,6 +363,49 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
             }
           />
         </div>
+      </div>
+      <MyModal isOpen={isOpenModal} onClose={setIsOpenModal}>
+        <div className="flex flex-col items-center">
+          <p className="text-[26px] font-medium mb-[25px]">Delete injury</p>
+          <p className="text-[16px] font-bold mb-[10px]">
+            Are you sure you want to delete this?
+          </p>
+          <p className="text-[16px] font-normal mb-[15px]">
+            Your data will forever lost!
+          </p>
+          <div className="flex justify-between mt-[20px] space-x-8">
+            <MyButton
+              type="button"
+              label="Cancel"
+              onClick={() => setIsOpenModal(false)}
+            />
+            <Button
+              type="button"
+              loadingColor="#09E099"
+              className="border-2 border-[#09E099] px-[61px]  py-[9px] rounded-[8px]"
+              labelClass="text-[#09E099]"
+              onClick={handleDeleteInjury}
+              label="Delete"
+              isLoading={isDeleting}
+            />
+          </div>
+        </div>
+      </MyModal>
+      <div className="flex space-x-5">
+        <Button
+          type="submit"
+          label="Update injury"
+          isLoading={isUpdating}
+          onClick={handleUpdateInjury}
+          className="bg-[#4654EA] px-[45px] py-[11px] rounded-[8px]"
+        />
+        <Button
+          type="button"
+          label="Delete injury"
+          isLoading={isDeleting}
+          onClick={() => setIsOpenModal(true)}
+          className="bg-[#D60C0C] px-[45px] py-[11px] rounded-[8px]"
+        />
       </div>
     </div>
   )

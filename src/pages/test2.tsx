@@ -1,37 +1,15 @@
 import * as datefns from 'date-fns'
 import dayjs from 'dayjs'
-import { Layout } from 'src/components/Layout'
-
-import { MyInput } from 'src/components/MyInput'
-import {
-  getAuth,
-  PhoneAuthProvider,
-  RecaptchaVerifier,
-  signInWithCredential,
-  signInWithPhoneNumber,
-  updateEmail,
-} from 'firebase/auth'
-
-import { auth } from 'src/config/firebase-client'
-
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  doc,
-  updateDoc,
-  getDoc,
-} from 'firebase/firestore'
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
+import { collection, getDocs, getFirestore } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
-import { initializeApp } from 'firebase/app'
+import { Layout } from 'src/components/Layout'
+import { MyInput } from 'src/components/MyInput'
+import { auth } from 'src/config/firebase-client'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
-import {
-  useQueryParam,
-  NumberParam,
-  StringParam,
-  withDefault,
-} from 'use-query-params'
+import { StringParam, useQueryParam, withDefault } from 'use-query-params'
+import toast from 'react-hot-toast'
 
 const Test = () => {
   const [foo, setFoo] = useQueryParam('foo', withDefault(StringParam, 'email'))
@@ -48,10 +26,6 @@ const Test = () => {
     SignUpWithEmailAndPassword,
     resetPassword,
   } = useAuth()
-
-  useEffect(() => {
-    console.log('aaa foo: ', foo)
-  }, [foo])
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -76,11 +50,7 @@ const Test = () => {
         const users = snapshot.docs.map((doc) => {
           return { ...doc.data(), id: doc.id }
         })
-        console.log('aaa users', users)
-      } catch (err) {
-        console.log('aaa err', err)
-        console.log('aaa JSON.stringify(err)', JSON.stringify(err))
-      }
+      } catch (err) {}
     }
     // f1()
 
@@ -122,7 +92,7 @@ const Test = () => {
       //@ts-ignore: Unreachable code error
       window.confirmationResult = confirmationResult
     } catch (error) {
-      console.log(error)
+      toast.error('An error has occurred')
     }
   }
 
@@ -135,9 +105,8 @@ const Test = () => {
       //@ts-ignore: Unreachable code error
       const result = await window.confirmationResult.confirm(code)
       const user = result.user
-      console.log('user: ', user)
     } catch (error) {
-      console.log(error)
+      toast.error('An error has occurred')
     }
   }
 

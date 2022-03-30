@@ -59,6 +59,7 @@ export function AuthProvider({ children }) {
   const router = useRouter()
   const [_, setSettings] = useAtom(settingsAtom)
   const [initialized, setInitialized] = useState(false)
+  const [updatingAuthInfo, setUpdatingAuthInfo] = useState(true)
   const [currentUser, setCurrentUser] = useState<any>(null)
   const [token, setToken] = useState<string>('')
   const [errorSignin, setErrorSignin] = useState<string>('')
@@ -86,7 +87,6 @@ export function AuthProvider({ children }) {
   }, [userRoles, currentRoleName])
 
   useEffect(() => {
-    console.log('aaa currentRoleId', currentRoleId)
     //@ts-ignore: Unreachable code error
     axios.defaults.headers.roleId = currentRoleId
 
@@ -189,12 +189,9 @@ export function AuthProvider({ children }) {
   const ForgotPassword = (oobCode: string, newPassword: string) => {
     confirmPasswordReset(auth, oobCode, newPassword)
       .then(() => {
-        console.log('new password')
         window.location.href = '/signin'
       })
-      .catch((error) => {
-        console.log(error)
-      })
+      .catch((error) => {})
   }
 
   //logout
@@ -203,9 +200,7 @@ export function AuthProvider({ children }) {
       .then(() => {
         setSigningOut(true)
       })
-      .catch((error) => {
-        console.log('aaa error signout', error.message)
-      })
+      .catch((error) => {})
   }
 
   const ResetPassword = (email: string) => {
@@ -233,7 +228,6 @@ export function AuthProvider({ children }) {
       setUserRoles(resp.data)
       return { error: false, data: resp.data }
     } catch (error) {
-      console.log('aaa updateUserRoles error', error)
       return { error: true, data: [] }
     }
   }
@@ -243,9 +237,7 @@ export function AuthProvider({ children }) {
     // console.log('aaa initT', initT)
 
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
-      setInitialized(false)
-      console.log('aaa onIdTokenChanged', user)
-
+      setUpdatingAuthInfo(true)
       if (!user) {
         localStorage.clear()
         removeTokenCookieHttp()
@@ -290,10 +282,11 @@ export function AuthProvider({ children }) {
         setUserRoles(respUserRoles.data)
         ///////////////////////////////// userRoles /////////////////////////////////
       }
-      const doneT = +new Date()
+      // const doneT = +new Date()
       // console.log('aaa doneT', doneT)
       // console.log('aaa doneT - initT', doneT - initT)
       setTimeout(() => {
+        setUpdatingAuthInfo(false)
         setInitialized(true)
       }, 50)
     })
@@ -308,12 +301,8 @@ export function AuthProvider({ children }) {
     if (!get(currentUser, 'uid')) {
       return
     }
-    const handle = setInterval(async () => {
-      const token = await currentUser.getIdToken(true)
-      setTokenCookieHttp(token)
-      // update axios token header
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`
-      setToken(token)
+    const handle = setInterval(() => {
+      currentUser.getIdToken(true)
     }, 4 * 60 * 1000)
     return () => clearInterval(handle)
   }, [get(currentUser, 'uid')])
@@ -334,6 +323,7 @@ export function AuthProvider({ children }) {
     setCurrentRoleName,
     userRoles,
     initialized,
+    updatingAuthInfo,
     infoActiveProfile, // info about active profile, no matter player or coach
     authenticated: !!currentUser,
     updateUserRoles,

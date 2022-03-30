@@ -186,8 +186,8 @@ export type DiaryType = Partial<{
   match: MatchType
 }>
 
-export type InjuryType = {
-  createdAt: number
+export type InjuryType = Partial<{
+  createdAt: number | string | Date
   description: string
   diaryId: string
   injuryArea: string
@@ -200,7 +200,7 @@ export type InjuryType = {
   treatment: string
   updatedAt: number
   userId?: string
-}
+}>
 
 export type InjuryMediaType = {
   type: string
@@ -310,4 +310,10 @@ export type Training = {
 export type MotivationQuote = {
   content: string
   author: string
+}
+
+export type PointsType = {
+  x: number
+  y: number
+  name?: string
 }

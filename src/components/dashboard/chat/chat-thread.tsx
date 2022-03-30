@@ -104,7 +104,6 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
       return value
     })
 
-    console.log('aaa arrMessages', arrMessages)
     return arrMessages
   }, [snapshot])
 
@@ -145,13 +144,13 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
     }
   }, [messages])
 
-  useEffect(() => {
-    console.log('aaa activeChatRoom: ', activeChatRoom)
-  }, [activeChatRoom])
+  // useEffect(() => {
+  //   console.log('aaa activeChatRoom: ', activeChatRoom)
+  // }, [activeChatRoom])
 
-  useEffect(() => {
-    console.log('aaa error: ', error)
-  }, [error])
+  // useEffect(() => {
+  //   console.log('aaa error: ', error)
+  // }, [error])
 
   useEffect(() => {
     // Scroll to bottom of the messages after loading the thread
@@ -191,7 +190,7 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
 
         let previewData: IPreviewData = {
           description,
-          link: url,
+          link,
           title,
           image: {
             height: 630,

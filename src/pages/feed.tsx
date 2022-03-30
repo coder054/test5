@@ -25,10 +25,10 @@ const tabs = [{ text: Tab.Friends }, { text: Tab.News }, { text: Tab.Diary }]
 const Feed = () => {
   const [tab, setTab] = useState(Tab.Diary)
 
-  useEffect(() => {
-    console.log('process.env.NODE_ENV: ', process.env.NODE_ENV)
-    console.log('version 1.3')
-  }, [])
+  // useEffect(() => {
+  //   console.log('process.env.NODE_ENV: ', process.env.NODE_ENV)
+  //   console.log('version 1.3')
+  // }, [])
 
   return (
     <AuthGuard>

@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { get } from 'lodash'
+import { chain, get, isEmpty } from 'lodash'
 import { useEffect } from 'react'
 import { dataStatsAtom } from 'src/atoms/biographyAtom'
 import { TitleCollapse } from 'src/components/common/TitleCollapse'
@@ -17,56 +17,61 @@ export const InfoWithImages = () => {
     // console.log('aaa dataStats: ', dataStats)
   }, [dataStats])
 
+  useEffect(() => {
+    console.log('aaa dataStats: ', dataStats)
+  }, [dataStats])
+
+  if (
+    isEmpty(dataStats?.totalCaps) &&
+    isEmpty(
+      chain(Object.values(get(dataStats, 'totalAwards') || {}))
+        .compact()
+        .uniq()
+        .value()
+    ) &&
+    isEmpty(
+      chain(Object.values(get(dataStats, 'totalTrophies') || {}))
+        .compact()
+        .uniq()
+        .value()
+    )
+  ) {
+    return (
+      <div className="my-[120px] sm:my-[200px] ">
+        <img
+          src={'/biography/nodata.png'}
+          className="w-[131px] sm:w-[171px] mx-auto"
+          alt=""
+        />
+        <div className="text-[24px] text-center mt-6 ">No data yet</div>
+      </div>
+    )
+  }
+
   return (
     <>
       <TitleCollapse title={'TROPHIES ETC.'} alwayShowContent={undefined}>
         <div className=" flex gap-x-[16px] ">
           {get(dataStats, 'totalTrophies.cupTrophyCount') > 0 && (
-            <div className=" ">
-              <div className="bg-[#1f1f1f] px-2 py-1 rounded-[8px] mb-2 mt-2 w-[58px] h-[58px] ">
-                <div className="text-white text-[12px] text-center mb-1 ">
-                  Cup
-                </div>
-                <img
-                  src={'/biography/trophy/trophy_cup.svg'}
-                  className="mb-1 mx-auto text-center "
-                  alt=""
-                />
-              </div>
-              <div className="text-white text-[13px] text-center ">
-                {get(dataStats, 'totalTrophies.cupTrophyCount')}x
-              </div>
-            </div>
+            <ItemTrophy
+              label="Cup"
+              image="/biography/trophy/trophy_cup.svg"
+              number={get(dataStats, 'totalTrophies.cupTrophyCount')}
+            />
           )}
           {get(dataStats, 'totalTrophies.otherTrophyCount') > 0 && (
-            <div className="">
-              <div className="text-white text-[12px] text-center mb-1 ">
-                Other
-              </div>
-              <img
-                src={'/biography/trophy/trophy_other.svg'}
-                className="mb-1 mx-auto text-center "
-                alt=""
-              />
-              <div className="text-white text-[13px] text-center ">
-                {get(dataStats, 'totalTrophies.otherTrophyCount')}x
-              </div>
-            </div>
+            <ItemTrophy
+              label="Other"
+              image="/biography/trophy/trophy_other.svg"
+              number={get(dataStats, 'totalTrophies.otherTrophyCount')}
+            />
           )}
           {get(dataStats, 'totalTrophies.serieTrophyCount') > 0 && (
-            <div className="">
-              <div className="text-white text-[12px] text-center mb-1 ">
-                Other
-              </div>
-              <img
-                src={'/biography/trophy/trophy_serie.svg'}
-                className="mb-1 mx-auto text-center "
-                alt=""
-              />
-              <div className="text-white text-[13px] text-center ">
-                {get(dataStats, 'totalTrophies.serieTrophyCount')}x
-              </div>
-            </div>
+            <ItemTrophy
+              label="Serie"
+              image="/biography/trophy/trophy_serie.svg"
+              number={get(dataStats, 'totalTrophies.serieTrophyCount')}
+            />
           )}
         </div>
 
@@ -170,5 +175,15 @@ const ItemAward = ({ quantity, src, title }) => (
       <img src={src} className="mb-1 mx-auto text-center " alt="" />
     </div>
     <div className="text-white text-[13px] text-center ">{quantity}x</div>
+  </div>
+)
+
+const ItemTrophy = ({ label, image, number }) => (
+  <div className=" ">
+    <div className="bg-[#1f1f1f] px-2 py-1 rounded-[8px] mb-2 mt-2 w-[58px] h-[58px] ">
+      <div className="text-white text-[12px] text-center mb-1 ">{label}</div>
+      <img src={image} className="mb-1 mx-auto text-center " alt="" />
+    </div>
+    <div className="text-white text-[13px] text-center ">{number}x</div>
   </div>
 )

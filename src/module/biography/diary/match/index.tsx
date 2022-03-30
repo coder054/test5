@@ -33,6 +33,7 @@ import { InfiniteScrollMember } from 'src/module/account-settings/football/compo
 import { InfiniteScrollTeam } from 'src/module/account-settings/football/components/InfiniteScrollTeam'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { fetchSettings } from 'src/service/diary-update'
+
 type FormArrayType = {
   stats: StatType[]
   events: EventType[]
@@ -63,8 +64,13 @@ export const Match = ({ onChange }: MatchProps) => {
     opponentTeam: {},
     typeOfGame: 'SERIES',
     dateTime: new Date(),
-    events: [{ minutes: 0, event: '' }],
-    stats: [{ minutesPlayed: 90, role: '' }],
+    events: [{ minutes: 0, event: 'GOAL' }],
+    stats: [
+      {
+        minutesPlayed: 90,
+        role: '',
+      },
+    ],
     review: {
       teamPerformance: 'NORMAL',
       teamReview: '',
@@ -116,7 +122,7 @@ export const Match = ({ onChange }: MatchProps) => {
 
   const handleAddForm = useCallback(
     (type: keyof FormArrayType, initialValue: any) => {
-      if (formValues[type].length <= 10) {
+      if (formValues[type].length < 5) {
         let arr = [...formValues[type]]
         arr.push(initialValue)
         setFormValues((prev) => ({ ...prev, [type]: arr }))
@@ -143,13 +149,13 @@ export const Match = ({ onChange }: MatchProps) => {
         /* @ts-ignore */
         yourTeam: formValues.yourTeam.teamId,
         /* @ts-ignore */
-        opponentTeam: formValues.opponentTeam.teamId,
+        opponentTeam: formValues.opponentTeam?.teamId,
         mvp: {
           ...formValues.mvp,
           /* @ts-ignore */
           yourTeam: formValues.mvp.yourTeam.userId,
           /* @ts-ignore */
-          opponents: formValues.mvp.opponents.userId,
+          opponents: formValues.mvp.opponents?.userId,
         },
       })
   }, [JSON.stringify(formValues)])
@@ -158,10 +164,19 @@ export const Match = ({ onChange }: MatchProps) => {
     accountSettings &&
       setFormValues((prev) => ({
         ...prev,
+        stats: [
+          {
+            minutesPlayed: 90,
+            role:
+              accountSettings.playerCareer.favoriteRoles.length > 0
+                ? accountSettings.playerCareer.favoriteRoles[0]
+                : '',
+          },
+        ],
         club: accountSettings.playerCareer.contractedClub,
         country: accountSettings.settings.country,
       }))
-  }, [])
+  }, [JSON.stringify(accountSettings)])
 
   useEffect(() => {
     const initialValues = {
@@ -315,7 +330,7 @@ export const Match = ({ onChange }: MatchProps) => {
                   mvp: { ...prev.mvp, opponents: e },
                 }))
               }
-              teamId={formValues.opponentTeam.teamId}
+              teamId={formValues.opponentTeam?.teamId}
               value={formValues.mvp.opponents}
               label="Opponent Team"
             />

@@ -326,7 +326,7 @@ export const OneRowStat = ({ title, value }: { title: any; value: any }) => {
                 p-[6px] sm:p-[8px] xl:p-[12px]
               bg-[#1f1f1f] rounded-[8px] flex flex-col justify-center items-center "
     >
-      <Text name="Subtitle2" className="text-Grey mb-[4px] ">
+      <Text name="Subtitle2" className="text-Grey mb-[4px] text-center">
         {title}
       </Text>
       <Text name="Header6" className="text-white ">

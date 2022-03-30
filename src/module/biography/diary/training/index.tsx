@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { MyInputChips } from 'src/components'
 import { MySlider } from 'src/components/MySlider'
@@ -20,20 +20,24 @@ type FormValuesType = {
 type TrainingProps = {
   currentTab: string
   onChange?: (value: FormValuesType) => void
+  error: (err: string) => void
 }
 
-export const Training = ({ currentTab, onChange }: TrainingProps) => {
-  const [diary] = useAtom(diaryAtom)
+const INITITAL_VALUE = {
+  hoursOfPractice: 0,
+  mental: 0,
+  physicallyStrain: 'NORMAL',
+  physics: 0,
+  practiceTags: [],
+  tactics: 0,
+  technics: 0,
+  trainingMedia: [],
+}
 
+export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
+  const [diary] = useAtom(diaryAtom)
   const [formValues, setFormValues] = useState<FormValuesType>({
-    hoursOfPractice: 0,
-    mental: 0,
-    physicallyStrain: 'NORMAL',
-    physics: 0,
-    practiceTags: [],
-    tactics: 0,
-    technics: 0,
-    trainingMedia: [],
+    ...INITITAL_VALUE,
     typeOfTraining: currentTab,
   })
 
@@ -83,24 +87,34 @@ export const Training = ({ currentTab, onChange }: TrainingProps) => {
   )
 
   useEffect(() => {
-    diary.training && setFormValues(diary.training)
-    if (!diary.createdAt) {
-      setFormValues({
-        hoursOfPractice: 0,
-        mental: 0,
-        physicallyStrain: 'NORMAL',
-        physics: 0,
-        practiceTags: [],
-        tactics: 0,
-        technics: 0,
-        trainingMedia: [],
-        typeOfTraining: currentTab,
-      })
-    }
-  }, [JSON.stringify(diary.training)])
+    diary.training
+      ? setFormValues(diary.training)
+      : setFormValues({
+          ...INITITAL_VALUE,
+          typeOfTraining: currentTab,
+        })
+  }, [JSON.stringify(diary)])
+
+  const isFullfill = useMemo(() => {
+    return (
+      formValues.mental +
+        formValues.physics +
+        formValues.tactics +
+        formValues.technics ===
+      100
+    )
+  }, [formValues])
 
   useEffect(() => {
-    onChange && onChange(formValues)
+    onChange &&
+      onChange({
+        ...formValues,
+      })
+    !isFullfill
+      ? error(
+          'The combination of technics, tactics, physics and mental must be 100%'
+        )
+      : error('')
   }, [JSON.stringify(formValues)])
 
   return (
