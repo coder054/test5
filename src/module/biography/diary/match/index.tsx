@@ -33,6 +33,7 @@ import { InfiniteScrollMember } from 'src/module/account-settings/football/compo
 import { InfiniteScrollTeam } from 'src/module/account-settings/football/components/InfiniteScrollTeam'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { fetchSettings } from 'src/service/diary-update'
+
 type FormArrayType = {
   stats: StatType[]
   events: EventType[]
@@ -121,7 +122,7 @@ export const Match = ({ onChange }: MatchProps) => {
 
   const handleAddForm = useCallback(
     (type: keyof FormArrayType, initialValue: any) => {
-      if (formValues[type].length <= 10) {
+      if (formValues[type].length < 5) {
         let arr = [...formValues[type]]
         arr.push(initialValue)
         setFormValues((prev) => ({ ...prev, [type]: arr }))
@@ -163,6 +164,15 @@ export const Match = ({ onChange }: MatchProps) => {
     accountSettings &&
       setFormValues((prev) => ({
         ...prev,
+        stats: [
+          {
+            minutesPlayed: 90,
+            role:
+              accountSettings.playerCareer.favoriteRoles.length > 0
+                ? accountSettings.playerCareer.favoriteRoles[0]
+                : '',
+          },
+        ],
         club: accountSettings.playerCareer.contractedClub,
         country: accountSettings.settings.country,
       }))
