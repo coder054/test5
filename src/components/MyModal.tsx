@@ -1,6 +1,5 @@
 import { Modal } from 'antd'
-import { Children, Dispatch, ReactChild, SetStateAction } from 'react'
-import { Text } from './Text'
+import { Dispatch, ReactChild, SetStateAction } from 'react'
 
 export const MyModal = ({
   show,
