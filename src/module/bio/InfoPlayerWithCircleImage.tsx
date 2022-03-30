@@ -10,6 +10,7 @@ import {
   IBiographyCoach,
 } from 'src/constants/types/biography.types'
 import { axios } from 'src/utils/axios'
+import { safeHttpImage } from 'src/utils/utils'
 import { useAuth } from '../authen/auth/AuthContext'
 import { FollowButton, FriendButton } from './ButtonsRelation'
 
@@ -129,7 +130,7 @@ export const InfoPlayerWithCircleImage = ({
           </div>
 
           <img
-            src={dataBio?.currentClubIconUrl}
+            src={safeHttpImage(dataBio?.currentClubIconUrl)}
             className="w-[24px] h-[24px] ml-auto rounded-full"
             alt=""
           />
@@ -264,7 +265,7 @@ export const InfoPlayerWithCircleImage = ({
           </div>
 
           <img
-            src={dataBio?.countryFlagUrl}
+            src={safeHttpImage(dataBio?.countryFlagUrl)}
             className="w-[24px] h-[24px] mr-auto rounded-full"
             alt=""
           />

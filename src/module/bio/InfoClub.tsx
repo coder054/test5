@@ -4,7 +4,7 @@ import { TitleCollapse } from 'src/components/common/TitleCollapse'
 
 import { OneRowStat } from './InfoWithNumbers'
 import clsx from 'clsx'
-import { getStr } from 'src/utils/utils'
+import { getStr, safeHttpImage } from 'src/utils/utils'
 import { get } from 'lodash'
 
 export interface IInfoClub {
@@ -123,7 +123,7 @@ const ItemClub = ({ data }: { data: ExistingClub | HistoricClub }) => {
     >
       <div className="flex items-center  px-[16px] py-[8px]  ">
         <img
-          src={getStr(clubInfo, 'club.logoUrl')}
+          src={safeHttpImage(getStr(clubInfo, 'club.logoUrl'))}
           className="w-[40px] h-[40px] object-cover mr-[12px] rounded-[50%]"
           alt=""
         />

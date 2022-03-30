@@ -1,5 +1,6 @@
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
+import { CSSObject } from '@mui/system'
 
 const style = {
   borderRadius: 1,
@@ -13,15 +14,21 @@ const style = {
 }
 
 type MyModalProps = {
+  customStyle?: CSSObject
   isOpen: boolean
   onClose: (value: boolean) => void
   children: React.ReactElement
 }
 
-export const MyModal = ({ isOpen, onClose, children }: MyModalProps) => {
+export const MyModal = ({
+  isOpen,
+  onClose,
+  children,
+  customStyle,
+}: MyModalProps) => {
   return (
     <Modal open={isOpen} onClose={() => onClose(false)}>
-      <Box sx={style}>{children}</Box>
+      <Box sx={{ ...style, ...customStyle }}>{children}</Box>
     </Modal>
   )
 }

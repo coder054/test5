@@ -4,11 +4,15 @@ import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { injuryAtom } from 'src/atoms/injuryAtom'
-import { InjuryType } from 'src/constants/types/diary.types'
+import { DiaryType, InjuryType } from 'src/constants/types/diary.types'
 import { scaleToColor, upperFirst } from 'src/hooks/functionCommon'
 import { EditInjuryArea } from './EditInjuryArea'
 
-export const InjuryList = () => {
+type InjuryList = {
+  diaryUpdate: DiaryType[]
+}
+
+export const InjuryList = ({ diaryUpdate }: InjuryList) => {
   const [diary] = useAtom(diaryAtom)
   const [_, setInjury] = useAtom(injuryAtom)
   const [formValues, setFormValues] = useState<InjuryType[]>()
