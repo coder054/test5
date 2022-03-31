@@ -108,6 +108,7 @@ const ContentSearchButton = () => {
           <SearchIcon fontSize="small" />
         </IconButton>
       </Tooltip>
+      {/* // here render ContentSearchDialog */}
       <ContentSearchDialog
         onClose={handleCloseSearchDialog}
         open={openDialog}

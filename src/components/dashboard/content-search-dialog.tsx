@@ -60,6 +60,7 @@ const results = {
   ],
 }
 
+// here aaa1 declare ContentSearchDialog
 export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
   const searchInputRef = useRef(null)
   const { onClose, open, ...other } = props
@@ -129,7 +130,6 @@ export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
   const usersSafe = useMemo(() => {
     return users || []
   }, [users])
-
   return (
     <Dialog fullWidth maxWidth="sm" onClose={onClose} open={open} {...other}>
       <Box

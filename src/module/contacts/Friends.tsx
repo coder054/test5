@@ -2,12 +2,14 @@ import { InputAdornment, TextField } from '@mui/material'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { ContentSearchDialog } from 'src/components/dashboard/content-search-dialog'
 import { API_GET_LIST_CONTACT } from 'src/constants/api.constants'
 import { FriendsType } from 'src/constants/types/contacts.types'
 import { SearchIcon } from 'src/icons/search'
 import { axios } from 'src/utils/axios'
 import { useDebounce } from 'use-debounce'
 import { FriendsCard } from './components/FriendsCard'
+import { ModalAddFriends } from './components/ModalAddFriends'
 import { SkeletonContact } from './components/SkeletonContact'
 
 export const Friends = () => {
@@ -17,7 +19,18 @@ export const Friends = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [keyword, setKeyword] = useState('')
+
   const [keywordDebounce] = useDebounce(keyword, 300)
+
+  const [openDialog, setOpenDialog] = useState<boolean>(false)
+
+  const handleOpenSearchDialog = (): void => {
+    setOpenDialog(true)
+  }
+
+  const handleCloseSearchDialog = (): void => {
+    setOpenDialog(false)
+  }
 
   const getListContact = async (initItems, search) => {
     setIsLoading(true)
@@ -47,11 +60,11 @@ export const Friends = () => {
       setHasMore(false)
       return
     }
-    await getListContact(items, '')
+    await getListContact(items, keywordDebounce)
   }
 
   useEffect(() => {
-    getListContact(items, '')
+    // getListContact(items, keywordDebounce)
   }, [])
 
   useEffect(() => {
@@ -61,8 +74,19 @@ export const Friends = () => {
 
   return (
     <div>
+      {/* // here aaa1 render ModalAddFriends */}
+      <ModalAddFriends onClose={handleCloseSearchDialog} open={openDialog} />
+
       <div className="md:flex items-center  ">
-        <div className="mb-[16px] md:mb-[0px] flex items-center gap-x-[8px] cursor-pointer ">
+        <div
+          onClick={() => {
+            if (friendRequestCount === 0) {
+              setOpenDialog(true)
+            } else {
+            }
+          }}
+          className=" mb-[16px] md:mb-[0px] flex items-center gap-x-[8px] cursor-pointer "
+        >
           <svg
             width="24"
             height="24"
@@ -94,11 +118,19 @@ export const Friends = () => {
             />
           </svg>
 
-          <div className="text-Grey font-medium text-[16px] leading-[175%] ">
-            You’ve got
-            <span className="text-Green ">{` ${friendRequestCount} `}</span>
-            friend request
-          </div>
+          {friendRequestCount === 0 ? (
+            <>
+              <div className="text-Grey font-medium text-[16px] leading-[175%] ">
+                Add more friends
+              </div>
+            </>
+          ) : (
+            <div className="text-Grey font-medium text-[16px] leading-[175%] ">
+              You’ve got
+              <span className="text-Green ">{` ${friendRequestCount} `}</span>
+              friend request
+            </div>
+          )}
 
           <svg
             width="16"
