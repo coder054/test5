@@ -2,13 +2,16 @@ import { InputAdornment, TextField } from '@mui/material'
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { notiToast } from 'src/components/common/Toast'
 import { ContentSearchDialog } from 'src/components/dashboard/content-search-dialog'
 import { API_GET_LIST_CONTACT } from 'src/constants/api.constants'
 import { FriendsType } from 'src/constants/types/contacts.types'
 import { SearchIcon } from 'src/icons/search'
 import { axios } from 'src/utils/axios'
+import { getErrorMessage } from 'src/utils/utils'
 import { useDebounce } from 'use-debounce'
 import { FriendsCard } from './components/FriendsCard'
+import { ModalAcceptFriends } from './components/ModalAcceptFriends'
 import { ModalAddFriends } from './components/ModalAddFriends'
 import { SkeletonContact } from './components/SkeletonContact'
 
@@ -22,36 +25,56 @@ export const Friends = () => {
 
   const [keywordDebounce] = useDebounce(keyword, 300)
 
-  const [openDialog, setOpenDialog] = useState<boolean>(false)
+  const [setOpenModalAddtFriend, setOpenModalAddFriend] =
+    useState<boolean>(false)
+  const [openModalAcceptFriend, setOpenModalAcceptFriend] =
+    useState<boolean>(false)
 
-  const handleOpenSearchDialog = (): void => {
-    setOpenDialog(true)
+  const handleOpenModalAddFriend = (): void => {
+    setOpenModalAddFriend(true)
   }
 
-  const handleCloseSearchDialog = (): void => {
-    setOpenDialog(false)
+  const handleCloseModalAddFriend = (): void => {
+    setOpenModalAddFriend(false)
+  }
+
+  const handleOpenModalAcceptFriend = (): void => {
+    setOpenModalAcceptFriend(true)
+  }
+
+  const handleCloseModalAcceptFriend = (): void => {
+    setOpenModalAcceptFriend(false)
   }
 
   const getListContact = async (initItems, search) => {
-    setIsLoading(true)
-    const body: any = {
-      limit: 20,
-      startAfter: initItems.length,
-      tab: 'FRIENDS',
-    }
+    try {
+      setIsLoading(true)
+      const body: any = {
+        limit: 20,
+        startAfter: initItems.length,
+        tab: 'FRIENDS',
+      }
 
-    if (!!search) {
-      body.search = search
-    }
-    const res = await axios.get(API_GET_LIST_CONTACT, {
-      params: body,
-    })
-    if (res.status === 200) {
-      setFriendRequestCount(res.data.countFriendRequests)
+      if (!!search) {
+        body.search = search
+      }
+      const res = await axios.get(API_GET_LIST_CONTACT, {
+        params: body,
+      })
+      if (res.status === 200) {
+        debugger
+        setFriendRequestCount(res.data.countFriendRequests)
+        setTotalFriend(res.data.count)
+        const arr = initItems.concat(res.data.data)
+        setItems(arr)
+      }
+    } catch (error) {
+      notiToast({
+        message: getErrorMessage(error),
+        type: 'error',
+      })
+    } finally {
       setIsLoading(false)
-      setTotalFriend(res.data.count)
-      const arr = initItems.concat(res.data.data)
-      setItems(arr)
     }
   }
 
@@ -60,6 +83,7 @@ export const Friends = () => {
       setHasMore(false)
       return
     }
+    console.log('aaa getListContact1')
     await getListContact(items, keywordDebounce)
   }
 
@@ -69,19 +93,34 @@ export const Friends = () => {
 
   useEffect(() => {
     setItems([])
+    console.log('aaa getListContact2')
     getListContact([], keywordDebounce)
   }, [keywordDebounce])
 
+  const refreshListContact = () => {
+    getListContact([], keywordDebounce)
+  }
+
   return (
     <div>
-      <ModalAddFriends onClose={handleCloseSearchDialog} open={openDialog} />
+      <ModalAddFriends
+        onClose={handleCloseModalAddFriend}
+        open={setOpenModalAddtFriend}
+        refreshListContact={refreshListContact}
+      />
+      <ModalAcceptFriends
+        onClose={handleCloseModalAcceptFriend}
+        open={openModalAcceptFriend}
+        refreshListContact={refreshListContact}
+      />
 
       <div className="md:flex items-center  ">
         <div
           onClick={() => {
             if (friendRequestCount === 0) {
-              setOpenDialog(true)
+              setOpenModalAddFriend(true)
             } else {
+              setOpenModalAcceptFriend(true)
             }
           }}
           className=" mb-[16px] md:mb-[0px] flex items-center gap-x-[8px] cursor-pointer "

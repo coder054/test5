@@ -96,26 +96,26 @@ const LanguageButton = () => {
 }
 
 const ContentSearchButton = () => {
-  const [openDialog, setOpenDialog] = useState<boolean>(false)
+  const [setOpenModalAddtFriend, setOpenModalAddFriend] = useState<boolean>(false)
 
-  const handleOpenSearchDialog = (): void => {
-    setOpenDialog(true)
+  const handleOpenModalAddFriend = (): void => {
+    setOpenModalAddFriend(true)
   }
 
-  const handleCloseSearchDialog = (): void => {
-    setOpenDialog(false)
+  const handleCloseModalAddFriend = (): void => {
+    setOpenModalAddFriend(false)
   }
 
   return (
     <>
       <Tooltip title="Search">
-        <IconButton onClick={handleOpenSearchDialog} sx={{ ml: 1 }}>
+        <IconButton onClick={handleOpenModalAddFriend} sx={{ ml: 1 }}>
           <SearchIcon fontSize="small" />
         </IconButton>
       </Tooltip>
       <ContentSearchDialog
-        onClose={handleCloseSearchDialog}
-        open={openDialog}
+        onClose={handleCloseModalAddFriend}
+        open={setOpenModalAddtFriend}
       />
     </>
   )

@@ -14,7 +14,6 @@ import PropTypes from 'prop-types'
 import queryString from 'query-string'
 import type { FC } from 'react'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import { notiToast } from 'src/components/common/Toast'
 import { Loading } from 'src/components/loading/loading'
 import { IUsersSearch } from 'src/constants/types/searchUsers.types'
@@ -27,41 +26,31 @@ import { useDebounce } from 'use-debounce'
 interface ContentSearchProps {
   onClose?: () => void
   open?: boolean
-  refreshListContact: any
+  refreshListContact
 }
 
-export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
+export const ModalAcceptFriends: FC<ContentSearchProps> = (props) => {
   const searchInputRef = useRef(null)
+  const [saving, setSaving] = useState(false)
   const { onClose, open, refreshListContact, ...other } = props
-  const [value, setValue] = useState<string>('')
-  const [valueDebounce] = useDebounce(value, 300)
-  const [users, setUsers] = useState<IUsersSearch[]>(null)
   const [items, setItems] = useState(Array.from({ length: 10 }))
   const [count, setCount] = useState(0)
   const [loading, setLoading] = useState(true)
   const [listChecked, setListChecked] = useState([])
-  const [saving, setSaving] = useState(false)
-
-  const limit = 30
-
-  useEffect(() => {
-    console.log('aaa items: ', items)
-  }, [items])
 
   const resetModal = () => {
     setListChecked([])
     setCount(0)
     setLoading(true)
     setItems([])
-    setValue('')
   }
 
   useEffect(() => {
     if (open) {
       setItems([])
-      fetchMoreData([], valueDebounce)
+      fetchMoreData()
     }
-  }, [valueDebounce, open])
+  }, [open])
 
   useEffect(() => {
     if (open === true) {
@@ -74,62 +63,27 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
     }
   }, [open])
 
-  useEffect(() => {
-    console.log('aaa listChecked: ', listChecked)
-  }, [listChecked])
-
-  const fetchMoreData = async (items, search) => {
-    // a fake async api call like which sends
-    // 20 more records in 1.5 secs
-
-    console.log('aaa search', search)
+  const fetchMoreData = async () => {
     try {
       setLoading(true)
       const params: any = {
-        limit: 10,
-        startAfter: items.length,
+        limit: 1000,
         sorted: 'asc',
-        // search: keyword,
+        status: 'requested',
+        type: 'friends',
       }
 
-      if (!!search) {
-        params.search = search
-      }
       const { data } = await axios.get(
-        // /friends/search-not-friend?limit=10&sorted=asc&startAfter=0&search=bat
-        `/friends/search-not-friend?${queryString.stringify(params)}`
+        `/friends/get-list-relationships?${queryString.stringify(params)}`
       )
 
-      setItems([...items, ...data.data])
+      setItems(data.data)
       setCount(data.count)
     } catch (error) {
     } finally {
       setLoading(false)
     }
   }
-
-  const usersSafe = useMemo(() => {
-    console.log('aaa users', users)
-    return users || []
-  }, [users])
-
-  useEffect(() => {
-    console.log('aaa items: ', items)
-  }, [items])
-
-  const aa = useMemo(() => {
-    if (isEmpty(items)) {
-      return []
-    }
-
-    //@ts-ignore: Unreachable code error
-    const arr = items.map((o) => getStr(o, 'userId'))
-    return chain(arr).compact().uniq().value()
-  }, [items])
-
-  useEffect(() => {
-    console.log('aaa aa: ', aa)
-  }, [aa])
 
   return (
     <Dialog
@@ -153,7 +107,7 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
           py: 2,
         }}
       >
-        <Typography variant="h6">Add Friends</Typography>
+        <Typography variant="h6">Friend requests</Typography>
 
         <IconButton color="inherit" onClick={onClose}>
           <XIcon fontSize="small" />
@@ -187,30 +141,6 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
             </div>
           ))}
         </div>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-          }}
-        >
-          {/* <Tip message="Search by entering a keyword and pressing Enter" /> */}
-          <TextField
-            id="searchInputRef"
-            ref={searchInputRef}
-            fullWidth
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <SearchIcon fontSize="small" />
-                </InputAdornment>
-              ),
-            }}
-            label="Search"
-            onChange={(event): void => setValue(event.target.value)}
-            placeholder="Search..."
-            sx={{ mt: 3 }}
-            value={value}
-          />
-        </form>
         {/*  */}
 
         <div className="h-[16px] "></div>
@@ -223,25 +153,17 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
               <span className="text-Green mr-[10px] ">{count}</span>
             )}
           </div>
-          <span className="text-Grey ">members found</span>
+          <span className="text-Grey ">Friend requests</span>
         </div>
         <div id="scrollableDiv" style={{ height: 300, overflow: 'auto' }}>
-          <InfiniteScroll
-            dataLength={items.length}
-            next={fetchMoreData.bind(null, items, value)}
-            hasMore={items.length < count}
-            scrollableTarget="scrollableDiv"
-            loader={<h4></h4>}
-          >
-            {items.map((user, index) => (
-              <ItemUser
-                key={getStr(user, 'userId')}
-                user={user}
-                listChecked={listChecked}
-                setListChecked={setListChecked}
-              ></ItemUser>
-            ))}
-          </InfiniteScroll>
+          {items.map((user, index) => (
+            <ItemUser
+              key={getStr(user, 'userId')}
+              user={user}
+              listChecked={listChecked}
+              setListChecked={setListChecked}
+            ></ItemUser>
+          ))}
         </div>
         <div className="flex mt-4 ">
           <Button
@@ -269,17 +191,24 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
 
               try {
                 setSaving(true)
-                await axios.post(`/friends/add-multi-friends`, {
+                const params = {
+                  status: 'accepted',
+                  type: 'friends',
                   userIds: listChecked.map((o) => o.userId),
-                })
+                }
 
+                await axios.patch(
+                  `/friends/response-relationship?${queryString.stringify(
+                    params
+                  )}`
+                )
+                refreshListContact()
                 notiToast({
                   type: 'success',
-                  message: 'Friend requests sent successfully',
+                  message: 'Friend requests accepted successfully',
                 })
                 onClose()
                 resetModal()
-                refreshListContact()
               } catch (error) {
                 notiToast({
                   message: getErrorMessage(error),
@@ -356,9 +285,4 @@ const ItemUser = ({ user, listChecked, setListChecked }) => {
       <div className="h-[16px] "></div>
     </Fragment>
   )
-}
-
-ModalAddFriends.propTypes = {
-  onClose: PropTypes.func,
-  open: PropTypes.bool,
 }
