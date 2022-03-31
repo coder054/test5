@@ -78,7 +78,7 @@ export const ChartCircle = ({
       {index === 2 && (
         <p className="font-bold text-[16px] text-center">Day usage</p>
       )}
-      <div className="mt-[24px] mb-[24px] float-left">
+      <div className="mt-[24px] mb-[24px] mx-auto">
         <Chart
           height={386}
           options={chartOptions}
