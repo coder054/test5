@@ -1,4 +1,6 @@
 import type { EmotionCache } from '@emotion/cache'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { CacheProvider } from '@emotion/react'
 import { LocalizationProvider } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
@@ -55,20 +57,11 @@ const App: FC<EnhancedAppProps> = (props) => {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <title>Zporter</title>
-        <meta
-          name="description"
-          content="Zporter"
-        ></meta>
+        <meta name="description" content="Zporter"></meta>
         <meta property="og:url" content={process.env.NEXT_PUBLIC_DOMAIN_NAME} />
         <meta property="og:type" content="website" />
-        <meta
-          property="og:title"
-          content="Zporter"
-        />
-        <meta
-          property="og:description"
-          content="Zporter"
-        />
+        <meta property="og:title" content="Zporter" />
+        <meta property="og:description" content="Zporter" />
         {/* <meta
           property="og:image"
           content="https://www.byeindonesia.com/og-bye-indonesia.png"
@@ -103,6 +96,15 @@ const App: FC<EnhancedAppProps> = (props) => {
                               )
                             }}
                           </AuthConsumer>
+                          <ToastContainer
+                            position="top-right"
+                            autoClose={4000}
+                            hideProgressBar={false}
+                            newestOnTop={false}
+                            draggable={false}
+                            closeOnClick
+                            pauseOnHover
+                          />
                         </RTL>
                       </ThemeProvider>
                     )}
