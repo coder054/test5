@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { MyInputChips } from 'src/components'
 import { MySlider } from 'src/components/MySlider'
@@ -18,9 +18,9 @@ type FormValuesType = {
 }
 
 type TrainingProps = {
-  diaryUpdate: any
   currentTab: string
   onChange?: (value: FormValuesType) => void
+  error: (err: string) => void
 }
 
 const INITITAL_VALUE = {
@@ -34,11 +34,7 @@ const INITITAL_VALUE = {
   trainingMedia: [],
 }
 
-export const Training = ({
-  currentTab,
-  onChange,
-  diaryUpdate,
-}: TrainingProps) => {
+export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
   const [diary] = useAtom(diaryAtom)
   const [formValues, setFormValues] = useState<FormValuesType>({
     ...INITITAL_VALUE,
@@ -91,17 +87,34 @@ export const Training = ({
   )
 
   useEffect(() => {
-    diary.training && setFormValues(diary.training)
-    if (!diary.createdAt) {
-      setFormValues({
-        ...INITITAL_VALUE,
-        typeOfTraining: currentTab,
-      })
-    }
-  }, [JSON.stringify(diary.training)])
+    diary.training
+      ? setFormValues(diary.training)
+      : setFormValues({
+          ...INITITAL_VALUE,
+          typeOfTraining: currentTab,
+        })
+  }, [JSON.stringify(diary)])
+
+  const isFullfill = useMemo(() => {
+    return (
+      formValues.mental +
+        formValues.physics +
+        formValues.tactics +
+        formValues.technics ===
+      100
+    )
+  }, [formValues])
 
   useEffect(() => {
-    onChange && onChange(formValues)
+    onChange &&
+      onChange({
+        ...formValues,
+      })
+    !isFullfill
+      ? error(
+          'The combination of technics, tactics, physics and mental must be 100%'
+        )
+      : error('')
   }, [JSON.stringify(formValues)])
 
   return (

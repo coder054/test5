@@ -35,8 +35,9 @@ export const ListImageVideo = ({
   return (
     <div className="w-full grid grid-cols-7 gap-4  ">
       {arrayFile &&
-        arrayFile.map((item) => (
+        arrayFile.map((item, index) => (
           <IteamImage
+            key={index}
             progress={progress}
             url={item}
             setArrayFile={setArrayFile}

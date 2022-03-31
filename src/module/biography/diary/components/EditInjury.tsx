@@ -1,9 +1,9 @@
 import useMouse from '@react-hook/mouse-position'
 import { useAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
-import { QueryClient, useMutation } from 'react-query'
-import { Slide, toast, ToastContainer } from 'react-toastify'
 import { toast as AlertSpot } from 'react-hot-toast'
+import { useMutation } from 'react-query'
+import { Slide, toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { injuryAtom } from 'src/atoms/injuryAtom'
@@ -18,17 +18,13 @@ import {
   PointsType,
   SPOT_KEY,
 } from 'src/constants/types/diary.types'
-import {
-  getStartOfDate,
-  numToScale,
-  scaleToNum,
-} from 'src/hooks/functionCommon'
+import { numToScale, scaleToNum } from 'src/hooks/functionCommon'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { deleteInjury, updateInjury } from 'src/service/diary-update'
+import { MyModal } from '../../../../components/Modal'
 import { BodyPart } from './BodyPart'
 import { BooleanOption } from './BooleanOption'
 import { InjurySpot } from './InjurySpot'
-import { MyModal } from './Modal'
 
 type EditInjuryProps = {
   onClose: (value: boolean) => void
@@ -97,7 +93,7 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
   const { mutate: mutateDelete, isLoading: isDeleting } = useMutation(
     deleteInjury,
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         let newArr = [...diary.injuries]
         setDiary((prev) => ({
           ...prev,
@@ -105,7 +101,7 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
         }))
         setIsOpenModal(false)
         onClose && onClose(false)
-        AlertSpot.success('Injury successfully deleted')
+        AlertSpot.success(data.data)
       },
       onError: () => {
         AlertSpot.error('An error has occurred')
@@ -124,6 +120,7 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
             return item.injuryId === injury.injuryId ? formValues : item
           }),
         }))
+
         AlertSpot.success('Injury successfully updated')
         onClose && onClose(false)
       },
@@ -180,7 +177,7 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
             ref={parentRef}
             className="bg-front-body  relative w-[214px] h-[440px] bg-no-repeat bg-center cursor-pointer duration-150"
           >
-            {formValues.injuryArea && (
+            {formValues.injuryArea && formValues.isFront && (
               <InjurySpot
                 level={scaleToNum(formValues.painLevel)}
                 spot={formValues.injuryPosition}
@@ -257,7 +254,7 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
             ref={parentRef}
             className="bg-back-body relative w-[214px] h-[440px] bg-no-repeat bg-center cursor-pointer duration-150"
           >
-            {formValues.injuryArea && (
+            {formValues.injuryArea && !formValues.isFront && (
               <InjurySpot
                 spot={formValues.injuryPosition}
                 level={scaleToNum(formValues.painLevel)}
