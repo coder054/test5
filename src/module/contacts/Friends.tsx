@@ -74,7 +74,6 @@ export const Friends = () => {
 
   return (
     <div>
-      {/* // here aaa1 render ModalAddFriends */}
       <ModalAddFriends onClose={handleCloseSearchDialog} open={openDialog} />
 
       <div className="md:flex items-center  ">

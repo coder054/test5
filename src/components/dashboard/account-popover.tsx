@@ -326,9 +326,7 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
             </svg>
             <div className="w-[8px] "></div>
             <div
-              onClick={() => {
-                // here
-              }}
+              onClick={() => {}}
               className="text-white text-[16px] leading-[150%] "
             >
               Create new role

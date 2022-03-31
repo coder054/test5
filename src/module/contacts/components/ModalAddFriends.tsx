@@ -1,8 +1,7 @@
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import {
   Box,
-  CircularProgress,
+  Button,
+  Checkbox,
   Dialog,
   DialogContent,
   IconButton,
@@ -10,35 +9,35 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import Link from 'next/link'
+import { chain, isEmpty } from 'lodash'
 import PropTypes from 'prop-types'
 import queryString from 'query-string'
 import type { FC } from 'react'
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
-import { Tip } from 'src/components/tip'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { notiToast } from 'src/components/common/Toast'
+import { Loading } from 'src/components/loading/loading'
 import { IUsersSearch } from 'src/constants/types/searchUsers.types'
 import { SearchIcon } from 'src/icons/search'
 import { XIcon } from 'src/icons/x'
 import { axios } from 'src/utils/axios'
-import { getStr, truncateStr } from 'src/utils/utils'
+import { getErrorMessage, getStr, truncateStr } from 'src/utils/utils'
 import { useDebounce } from 'use-debounce'
-import { chain, isEmpty } from 'lodash'
 
 interface ContentSearchProps {
   onClose?: () => void
   open?: boolean
 }
 
-// here aaa1 declare ModalAddFriends
 export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
   const searchInputRef = useRef(null)
   const { onClose, open, ...other } = props
   const [value, setValue] = useState<string>('')
   const [valueDebounce] = useDebounce(value, 300)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [showResults, setShowResults] = useState<boolean>(false)
   const [users, setUsers] = useState<IUsersSearch[]>(null)
   const [items, setItems] = useState(Array.from({ length: 10 }))
+  const [count, setCount] = useState(0)
+  const [loading, setLoading] = useState(true)
   const [listChecked, setListChecked] = useState([])
 
   const limit = 30
@@ -47,59 +46,20 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
     console.log('aaa items: ', items)
   }, [items])
 
-  const handleSubmit = async (event): Promise<void> => {
-    event.preventDefault()
-    setShowResults(false)
-    setIsLoading(true)
-    // Do search here
-
-    const getMembersWithKeyword = async (
-      keyword: string,
-      startAfter
-    ): Promise<{
-      error: boolean
-      data: IUsersSearch[]
-    }> => {
-      try {
-        const params = {
-          limit: 15,
-          startAfter,
-          sorted: 'asc',
-          name: keyword,
-        }
-        const { data } = await axios.get(
-          // /friends/search-not-friend?limit=10&sorted=asc&startAfter=0&search=bat
-          `/friends/search-not-friend?${queryString.stringify(params)}`
-        )
-        return {
-          error: false,
-          data,
-        }
-      } catch (error) {
-        console.log('aaa getMembersWithKeyword error', error)
-        return {
-          error: true,
-          data: null,
-        }
-      }
-    }
-    const { data, error } = await getMembersWithKeyword(value, 0)
-    if (error) {
-      alert('Error searching users')
-      setIsLoading(false)
-      return
-    }
-    console.log('aaa data', data)
-    //@ts-ignore: Unreachable code error
-    setUsers(data.data)
-    setIsLoading(false)
-    setShowResults(true)
+  const resetModal = () => {
+    setListChecked([])
+    setCount(0)
+    setLoading(true)
+    setItems([])
+    setValue('')
   }
 
   useEffect(() => {
-    setItems([])
-    fetchMoreData([], valueDebounce)
-  }, [valueDebounce])
+    if (open) {
+      setItems([])
+      fetchMoreData([], valueDebounce)
+    }
+  }, [valueDebounce, open])
 
   useEffect(() => {
     if (open === true) {
@@ -122,6 +82,7 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
 
     console.log('aaa search', search)
     try {
+      setLoading(true)
       const params: any = {
         limit: 10,
         startAfter: items.length,
@@ -138,7 +99,11 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
       )
 
       setItems([...items, ...data.data])
-    } catch (error) {}
+      setCount(data.count)
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }
 
   const usersSafe = useMemo(() => {
@@ -178,16 +143,44 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
         }}
       >
         <Typography variant="h6">Add Friends</Typography>
-        <pre className=" ">
-          {JSON.stringify(listChecked.map((o) => o.userId))}
-        </pre>
 
         <IconButton color="inherit" onClick={onClose}>
           <XIcon fontSize="small" />
         </IconButton>
       </Box>
+
       <DialogContent>
-        <form onSubmit={handleSubmit}>
+        <div className="flex gap-x-[20px]">
+          {listChecked.map((member, index) => (
+            <div
+              key={index}
+              onClick={() => {
+                let findIndex = listChecked.findIndex((o) => {
+                  return o.userId === member.userId
+                })
+                const listCheckedClone = [...listChecked]
+                listCheckedClone.splice(findIndex, 1)
+                setListChecked(listCheckedClone)
+              }}
+              className="w-[40px] h-[40px] relative cursor-pointer  "
+            >
+              <img
+                src={member.faceImage}
+                className="rounded-full w-[35px] h-[35px] "
+                alt=""
+              />
+
+              <div className="absolute z-10 right-[-8px] top-[-8px] rounded-full w-[16px] h-[16px] bg-white text-black flex items-center justify-center select-none ">
+                x
+              </div>
+            </div>
+          ))}
+        </div>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+          }}
+        >
           {/* <Tip message="Search by entering a keyword and pressing Enter" /> */}
           <TextField
             id="searchInputRef"
@@ -211,13 +204,23 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
 
         <div className="h-[16px] "></div>
 
+        <div className=" flex mb-4 ">
+          <div className="w-[20px] ">
+            {loading ? (
+              <Loading size={10}></Loading>
+            ) : (
+              <span className="text-Green mr-[10px] ">{count}</span>
+            )}
+          </div>
+          <span className="text-Grey ">members found</span>
+        </div>
         <div id="scrollableDiv" style={{ height: 300, overflow: 'auto' }}>
           <InfiniteScroll
             dataLength={items.length}
             next={fetchMoreData.bind(null, items, value)}
-            hasMore={items.length < 67}
+            hasMore={items.length < count}
             scrollableTarget="scrollableDiv"
-            loader={<h4>Loading...</h4>}
+            loader={<h4></h4>}
           >
             {items.map((user, index) => (
               <ItemUser
@@ -228,6 +231,54 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
               ></ItemUser>
             ))}
           </InfiniteScroll>
+        </div>
+        <div className="flex mt-4 ">
+          <Button
+            onClick={() => {
+              resetModal()
+              onClose()
+            }}
+            fullWidth
+            size="large"
+            sx={{ mr: 2 }}
+            variant="outlined"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={async () => {
+              if (isEmpty(listChecked)) {
+                notiToast({
+                  type: 'error',
+                  message: 'Please select at least 1 user',
+                })
+                return
+              }
+
+              try {
+                axios.post(`/friends/add-multi-friends`, {
+                  userIds: listChecked.map((o) => o.userId),
+                })
+
+                notiToast({
+                  type: 'success',
+                  message: 'Friend requests sent successfully',
+                })
+                onClose()
+                resetModal()
+              } catch (error) {
+                notiToast({
+                  message: getErrorMessage(error),
+                  type: 'error',
+                })
+              }
+            }}
+            fullWidth
+            size="large"
+            variant="contained"
+          >
+            Save
+          </Button>
         </div>
 
         {/*  */}
@@ -247,7 +298,7 @@ const ItemUser = ({ user, listChecked, setListChecked }) => {
         />
         <div className=" w-[200px] ">
           <div className="text-white font-semibold ">
-            {user.firstName} {user.lastName} {user.userId}
+            {user.firstName} {user.lastName}
           </div>
           <div className="flex justify-between ">
             <span className="text-Grey ">#{user.username}</span>
@@ -264,43 +315,25 @@ const ItemUser = ({ user, listChecked, setListChecked }) => {
           </div>
         </div>
         <div className="grow "></div>
-        <div className="border">
-          {listChecked
-            .map((o) => getStr(o, 'userId'))
-            .includes(getStr(user, 'userId')) ? (
-            <svg
-              onClick={() => {
+        <div className="">
+          <Checkbox
+            checked={listChecked.map((o) => o.userId).includes(user.userId)}
+            onChange={(event) => {
+              // if currently checked
+              if (listChecked.map((o) => o.userId).includes(user.userId)) {
                 let findIndex = listChecked.findIndex((o) => {
-                  return (o.userId = user.userId)
+                  return o.userId === user.userId
                 })
-
-                if (findIndex !== -1) {
-                  const listCheckedClone = [...listChecked]
-                  listCheckedClone.splice(findIndex, 1)
-                  setListChecked(listCheckedClone)
-                }
-              }}
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-Green cursor-pointer"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          ) : (
-            <div
-              onClick={() => {
+                const listCheckedClone = [...listChecked]
+                listCheckedClone.splice(findIndex, 1)
+                setListChecked(listCheckedClone)
+              } else {
+                // if currently unchecked
                 setListChecked([...listChecked, user])
-              }}
-              className="w-6 h-6 border-2 border-Grey rounded-full cursor-pointer "
-            ></div>
-          )}
+              }
+            }}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
         </div>
         <div className="w-[8px] "></div>
       </div>

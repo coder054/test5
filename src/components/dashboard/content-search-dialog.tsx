@@ -60,7 +60,6 @@ const results = {
   ],
 }
 
-// here aaa1 declare ContentSearchDialog
 export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
   const searchInputRef = useRef(null)
   const { onClose, open, ...other } = props
