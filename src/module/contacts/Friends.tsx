@@ -62,7 +62,6 @@ export const Friends = () => {
         params: body,
       })
       if (res.status === 200) {
-        debugger
         setFriendRequestCount(res.data.countFriendRequests)
         setTotalFriend(res.data.count)
         const arr = initItems.concat(res.data.data)
