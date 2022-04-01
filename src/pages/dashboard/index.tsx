@@ -1,10 +1,10 @@
-import type { NextPage } from 'next'
-import { AuthGuard } from 'src/components/authentication/auth-guard'
-import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
 import { Box, Container, Divider, Tab, Tabs } from '@mui/material'
+import type { NextPage } from 'next'
+import { useState } from 'react'
+import { AuthGuard } from 'src/components/authentication/auth-guard'
 import { Overview } from 'src/module/dashboard/overview'
+import DashBoardTraining from 'src/module/dashboard/training'
+import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
 
 const tabs = [
   { label: 'Overview', value: 'overview' },
@@ -18,7 +18,6 @@ const tabs = [
 ]
 
 const Dashboard: NextPage = () => {
-  const router = useRouter()
   const [currentTab, setCurrentTab] = useState<string>('overview')
 
   const handleTabsChange = (_, value: string): void => {
@@ -52,6 +51,7 @@ const Dashboard: NextPage = () => {
             </Tabs>
             <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />
             {currentTab === 'overview' && <Overview />}
+            {currentTab === 'training' && <DashBoardTraining />}
           </Container>
         </Box>
       </>
