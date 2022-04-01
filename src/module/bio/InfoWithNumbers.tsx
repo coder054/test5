@@ -162,7 +162,6 @@ export const InforWithNumbers = ({
       params.endDate = `${season}-12-30`
     }
 
-    // here url stats
     // endpoint for coach stats not available for now
     // setUrlGetSeasonStats(
     //   `/biographies/${

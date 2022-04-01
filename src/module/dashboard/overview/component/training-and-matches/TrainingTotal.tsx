@@ -6,14 +6,14 @@ const cls = require('../../overview.module.css')
 const ArrayTrainingMatchTotal = [
   {
     you: {
-      T: 20,
-      G: 60,
-      P: 10,
+      T: 10,
+      G: 32,
+      P: 120,
     },
     avg: {
       T: 5,
       G: 30,
-      P: 24,
+      P: 540,
     },
   },
   {

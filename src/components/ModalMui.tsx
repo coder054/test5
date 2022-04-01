@@ -20,7 +20,7 @@ type MyModalProps = {
   children: React.ReactElement
 }
 
-export const MyModal = ({
+export const ModalMui = ({
   isOpen,
   onClose,
   children,

@@ -102,6 +102,7 @@
     "react-firebase-hooks": "^5.0.3",
     "react-hot-toast": "^1.0.2",
     "react-i18next": "^11.8.5",
+    "react-icons": "^4.3.1",
     "react-image-file-resizer": "^0.4.7",
     "react-infinite-scroll-component": "^6.1.0",
     "react-markdown": "^5.0.3",
