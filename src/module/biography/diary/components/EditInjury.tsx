@@ -21,7 +21,7 @@ import {
 import { numToScale, scaleToNum } from 'src/hooks/functionCommon'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { deleteInjury, updateInjury } from 'src/service/diary-update'
-import { MyModal } from '../../../../components/Modal'
+import { ModalMui } from 'src/components/ModalMui'
 import { BodyPart } from './BodyPart'
 import { BooleanOption } from './BooleanOption'
 import { InjurySpot } from './InjurySpot'
@@ -364,7 +364,7 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
           />
         </div>
       </div>
-      <MyModal isOpen={isOpenModal} onClose={setIsOpenModal}>
+      <ModalMui isOpen={isOpenModal} onClose={setIsOpenModal}>
         <div className="flex flex-col items-center">
           <p className="text-[26px] font-medium mb-[25px]">Delete injury</p>
           <p className="text-[16px] font-bold mb-[10px]">
@@ -390,7 +390,7 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
             />
           </div>
         </div>
-      </MyModal>
+      </ModalMui>
       <div className="flex space-x-5">
         <Button
           type="submit"

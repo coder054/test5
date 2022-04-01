@@ -8,6 +8,7 @@ type MySliderProps = SliderProps & {
   unit?: string
   value?: number
   label: string
+  isFilter?: boolean
   isStar?: boolean
   isPoint?: boolean
   isNumber?: boolean
@@ -37,6 +38,7 @@ export const MySlider = ({
   isStar,
   isScale,
   isPoint,
+  isFilter,
   isNumber,
   readOnly,
   onChange,
@@ -130,6 +132,17 @@ export const MySlider = ({
           <span className={clsx(handleRange(50))}>Normal</span>
           <span className={clsx(handleRange(75))}>High</span>
           <span className={clsx(handleRange(100))}>Very high</span>
+        </div>
+      )}
+      {isFilter && (
+        <div className="flex justify-between text-[#A2A5AD] text-[14px] font-normal">
+          <span>7d</span>
+          <span>30d</span>
+          <span>90d</span>
+          <span>180d</span>
+          <span>1y</span>
+          <span>3y</span>
+          <span>All</span>
         </div>
       )}
     </div>

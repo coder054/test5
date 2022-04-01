@@ -22,7 +22,7 @@ import {
   fetchDiary,
   updateDiary,
 } from 'src/service/diary-update'
-import { MyModal } from '../../../components/Modal'
+import { ModalMui } from 'src/components/ModalMui'
 import { Cap } from './cap'
 import { BooleanOption } from './components/BooleanOption'
 import { DateOptions } from './components/DateOptions'
@@ -68,7 +68,7 @@ const Component = () => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [isHaveInjury, setIsHaveInjury] = useState<boolean>(false)
   const [injuryData, setInjuryData] = useState<InjuryType>(null)
-
+  const [currentTab, setCurrentTab] = useState('TEAM_TRAINING')
   const [error, setError] = useState<string>('')
 
   const injurySubmit = useMemo(() => {
@@ -82,8 +82,6 @@ const Component = () => {
   const isUpdate = useMemo(() => {
     return !!diary.diaryId
   }, [JSON.stringify(diary)])
-
-  const [currentTab, setCurrentTab] = useState('TEAM_TRAINING')
 
   const { isLoading: isGettingDiary, data: diaryUpdate } = useQuery(
     ['diary', date],
@@ -278,7 +276,7 @@ const Component = () => {
             </>
           )}
 
-          <MyModal isOpen={isOpenModal} onClose={setIsOpenModal}>
+          <ModalMui isOpen={isOpenModal} onClose={setIsOpenModal}>
             <div className="flex flex-col items-center">
               <p className="text-[26px] font-medium mb-[25px]">Delete Data</p>
               <p className="text-[16px] font-bold mb-[10px]">
@@ -304,7 +302,7 @@ const Component = () => {
                 />
               </div>
             </div>
-          </MyModal>
+          </ModalMui>
         </div>
         <div className="grid grid-cols-2 gap-x-9 pt-3">
           <Button

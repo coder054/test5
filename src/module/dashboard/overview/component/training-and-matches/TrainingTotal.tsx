@@ -8,12 +8,12 @@ const ArrayTrainingMatchTotal = [
     you: {
       T: 10,
       G: 32,
-      P: 10,
+      P: 120,
     },
     avg: {
       T: 5,
       G: 30,
-      P: 24,
+      P: 540,
     },
   },
   {
