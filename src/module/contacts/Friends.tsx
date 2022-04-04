@@ -1,9 +1,10 @@
-import { InputAdornment, TextField, CircularProgress } from '@mui/material'
+import { CircularProgress, InputAdornment, TextField } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { notiToast } from 'src/components/common/Toast'
 import { Loading } from 'src/components/loading/loading'
 import { API_GET_LIST_CONTACT } from 'src/constants/api.constants'
+import { LIMIT } from 'src/constants/constants'
 import { optionAllCountry } from 'src/constants/mocks/countries.constants'
 import { FriendsType } from 'src/constants/types/contacts.types'
 import { SearchIcon } from 'src/icons/search'
@@ -14,8 +15,6 @@ import { FriendsCard } from './components/FriendsCard'
 import { ModalAcceptFriends } from './components/ModalAcceptFriends'
 import { ModalAddFriends } from './components/ModalAddFriends'
 import { ModalFilterFriends } from './components/ModalFilterFriends'
-import { SkeletonContact } from './components/SkeletonContact'
-const LIMIT = 1
 
 export const Friends = () => {
   const [totalFriend, setTotalFriend] = useState<Number>(0)
