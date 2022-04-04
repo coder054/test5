@@ -96,7 +96,8 @@ const LanguageButton = () => {
 }
 
 const ContentSearchButton = () => {
-  const [setOpenModalAddtFriend, setOpenModalAddFriend] = useState<boolean>(false)
+  const [setOpenModalAddtFriend, setOpenModalAddFriend] =
+    useState<boolean>(false)
 
   const handleOpenModalAddFriend = (): void => {
     setOpenModalAddFriend(true)

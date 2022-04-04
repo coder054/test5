@@ -51,6 +51,7 @@ export const TrainingCircle = () => {
               chart={chart}
               index={index}
               key={index}
+              type={'training'}
               ArrayColor={ArrayColor}
               ArrayLabel={ArrayLabel}
               ArrayPercent={ArrayPercent}

@@ -273,3 +273,56 @@ export interface DataAnalytic {
   data?: number[]
   color?: string
 }
+
+export interface UserInforType {
+  email?: string
+  isActive?: boolean
+  birthCountry?: {
+    name: string
+    phoneCode: string
+    region: string
+    flag: string
+    alpha3Code: string
+    alpha2Code: string
+  }
+  fullName?: string
+  clubId?: string
+  firstName?: string
+  fcmToken?: string[]
+  city?: string
+  favoriteRoles?: string[]
+  currentTeams?: string[]
+  lastName?: string
+  faceImage?: string
+  username?: string
+  type?: string
+  userId?: string
+  isOnline?: boolean
+  clubName?: string
+  timezone?: string
+  lastActive?: number
+  birthDay?: string
+  createdAt?: number
+  updatedAt?: number
+  shirtNumber?: number
+  gender?: string
+  weight?: number
+  height?: number
+  fatherHeight?: number
+  motherHeight?: number
+  age?: number
+  isPublic?: boolean
+  notificationOn?: boolean
+  notificationOptions?: {
+    inviteUpdates: boolean
+    feedUpdates: boolean
+    profileAndDiaryUpdates: boolean
+    messageUpdates: boolean
+  }
+}
+
+export interface LeaderBoardType {
+  userId?: string
+  value?: number
+  userInfo?: UserInforType
+}

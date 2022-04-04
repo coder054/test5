@@ -4,7 +4,7 @@ import { useEffect, useState, useMemo } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { notiToast } from 'src/components/common/Toast'
 import { ContentSearchDialog } from 'src/components/dashboard/content-search-dialog'
-import { MyModal } from 'src/components/Modal'
+// import { MyModal } from 'src/components/Modal'
 import { API_GET_LIST_CONTACT } from 'src/constants/api.constants'
 import { optionAllCountry } from 'src/constants/mocks/countries.constants'
 import { FriendsType } from 'src/constants/types/contacts.types'
@@ -268,7 +268,9 @@ export const Friends = () => {
           {isLoading ? (
             <Loading size={10}></Loading>
           ) : (
-            <span className="text-[#09E099] ml-[50px] inline-block ">{totalFriend} </span>
+            <span className="text-[#09E099] ml-[50px] inline-block ">
+              {totalFriend}{' '}
+            </span>
           )}
           {totalFriend === 1 ? 'Friend' : 'Friends'}
         </p>
