@@ -364,7 +364,7 @@ export const Friends = () => {
         }
         endMessage={
           isLoading ? null : (
-            <p style={{ textAlign: 'center' }}>
+            <p style={{ textAlign: 'center', opacity: '0' }}>
               <b>Yay! You have seen it all</b>
             </p>
           )
