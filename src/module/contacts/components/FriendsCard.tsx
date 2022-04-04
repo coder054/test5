@@ -4,6 +4,7 @@ import { isMobile } from 'react-device-detect'
 import { ChervonRightIcon } from 'src/components/icons'
 import { FriendsType } from 'src/constants/types/contacts.types'
 import { imgAvatar } from 'src/imports/images'
+import { getStr } from 'src/utils/utils'
 
 type FriendsCardProps = {
   user?: FriendsType
@@ -40,7 +41,9 @@ export const FriendsCard = ({ user }: FriendsCardProps) => {
               {user.favoriteRoles.map((role) => role).join(', ')}
             </span>
             <span className="text-left self-center">
-              {user.clubName ? user.clubName : ''}
+              {`${getStr(user, 'clubName')}`}
+              {!!getStr(user, 'currentTeams[0]') &&
+                ` / ${getStr(user, 'currentTeams[0]')}`}
             </span>
             <span className="text-left self-center">
               {user.city ? user.city : ''}
