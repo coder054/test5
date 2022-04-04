@@ -204,7 +204,7 @@ export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
         </Button>
         <Button
           onClick={async () => {
-            getListContact()
+            getListContact(1)
             onClose()
           }}
           fullWidth

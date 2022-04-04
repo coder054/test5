@@ -1,4 +1,4 @@
-import { InputAdornment, TextField } from '@mui/material'
+import { InputAdornment, TextField, CircularProgress } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { notiToast } from 'src/components/common/Toast'
@@ -15,13 +15,13 @@ import { ModalAcceptFriends } from './components/ModalAcceptFriends'
 import { ModalAddFriends } from './components/ModalAddFriends'
 import { ModalFilterFriends } from './components/ModalFilterFriends'
 import { SkeletonContact } from './components/SkeletonContact'
+const LIMIT = 1
 
 export const Friends = () => {
   const [totalFriend, setTotalFriend] = useState<Number>(0)
   const [friendRequestCount, setFriendRequestCount] = useState(0)
   const [items, setItems] = useState<FriendsType[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [hasMore, setHasMore] = useState<boolean>(true)
   const [keyword, setKeyword] = useState('')
 
   const [keywordDebounce] = useDebounce(keyword, 300)
@@ -46,9 +46,19 @@ export const Friends = () => {
   const [sort, setSort] = useState<'asc' | 'desc'>('asc')
   const [role, setRole] = useState<'All' | 'Player' | 'Coach'>('All')
 
+  const hasMore = useMemo(() => {
+    return items.length < totalFriend
+  }, [items.length, totalFriend])
+
   const countryName = useMemo(() => {
     return getStr(country, 'name')
   }, [country])
+
+  const startAfter = useMemo(() => {
+    const len = items.length
+
+    return Math.floor(len / LIMIT) + 1
+  }, [items.length])
 
   useEffect(() => {
     console.log('aaa countryName: ', countryName)
@@ -74,12 +84,18 @@ export const Friends = () => {
     setOpenModalAcceptFriend(false)
   }
 
-  const getListContact = async (initItems, search, countryName, clubId) => {
+  const getListContact = async (
+    initItems,
+    search,
+    countryName,
+    clubId,
+    startAfter
+  ) => {
     try {
       setIsLoading(true)
       const body: any = {
-        limit: 1000,
-        startAfter: 0,
+        limit: LIMIT,
+        startAfter,
         tab: 'FRIENDS',
       }
 
@@ -114,22 +130,23 @@ export const Friends = () => {
   }
 
   const fetchMoreData = async () => {
-    if (items.length >= totalFriend) {
-      setHasMore(false)
-      return
-    }
-    console.log('aaa getListContact1')
-    await getListContact(items, keywordDebounce, countryName, clubId)
+    await getListContact(
+      items,
+      keywordDebounce,
+      countryName,
+      clubId,
+      startAfter
+    )
   }
 
   useEffect(() => {
     setItems([])
     console.log('aaa getListContact2')
-    getListContact([], keywordDebounce, countryName, clubId)
+    getListContact([], keywordDebounce, countryName, clubId, 1)
   }, [keywordDebounce])
 
   const refreshListContact = () => {
-    getListContact([], keywordDebounce, countryName, clubId)
+    getListContact([], keywordDebounce, countryName, clubId, 1)
   }
 
   return (
@@ -311,11 +328,21 @@ export const Friends = () => {
         dataLength={items.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={isLoading ? <SkeletonContact /> : <></>}
+        loader={
+          isLoading ? (
+            <div className="p-4 flex items-center justify-center ">
+              <CircularProgress />
+            </div>
+          ) : (
+            <></>
+          )
+        }
         endMessage={
-          <p style={{ textAlign: 'center' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
+          isLoading ? null : (
+            <p style={{ textAlign: 'center' }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          )
         }
       >
         {(items || []).map((it: FriendsType, index: number) => (
