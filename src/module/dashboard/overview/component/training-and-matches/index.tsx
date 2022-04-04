@@ -22,7 +22,7 @@ export const TrainingAndMatches = () => {
         <div className="flex-1">
           <TrainingTotal />
         </div>
-        <div className="flex-1 ml-[32px]">
+        <div className="flex-1 ml-[74px]">
           <TrainingCircle />
         </div>
       </div>

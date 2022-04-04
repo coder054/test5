@@ -18,6 +18,7 @@ interface ChartCircleProps {
   ArrayColor?: any
   ArrayLabel?: any
   ArrayPercent?: any
+  type?: string
 }
 
 export const ChartCircle = ({
@@ -26,13 +27,14 @@ export const ChartCircle = ({
   ArrayLabel,
   ArrayColor,
   ArrayPercent,
+  type,
 }: ChartCircleProps) => {
   const theme = useTheme()
 
   const chartOptions: ApexOptions = {
     chart: {
-      height: '300px',
-      width: '300px',
+      height: '200px',
+      width: '200px',
       background: 'transparent',
       stacked: false,
       toolbar: {
@@ -66,29 +68,29 @@ export const ChartCircle = ({
   }
 
   const chartSeries = ArrayPercent[index]
-
   return (
     <div className="">
-      {index === 0 && (
-        <p className="font-bold text-[16px] text-center">Training category</p>
+      {index === 0 && type === 'training' && (
+        <p className="font-bold text-[16px] text-left">Training category</p>
       )}
-      {index === 1 && (
-        <p className="font-bold text-[16px] text-center">Match results</p>
+      {index === 1 && type === 'training' && (
+        <p className="font-bold text-[16px] text-left">Match results</p>
       )}
-      {index === 2 && (
-        <p className="font-bold text-[16px] text-center">Day usage</p>
+      {index === 2 && type === 'training' && (
+        <p className="font-bold text-[16px] text-left">Day usage</p>
       )}
       <div className="mt-[24px] mb-[24px] mx-auto">
         <Chart
-          height={386}
+          height={186}
           options={chartOptions}
           series={chartSeries}
           type="donut"
-          width={186}
+          width={226}
         />
       </div>
       <div>
-        {ArrayLabel &&
+        {type !== 'wellness' &&
+          ArrayLabel &&
           ArrayLabel[index].map(
             (label, index2) =>
               ArrayPercent &&

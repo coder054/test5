@@ -180,6 +180,30 @@ export const SvgFilter = () => (
   </svg>
 )
 
+export const SvgAbove = () => (
+  <svg
+    width="16"
+    height="18"
+    viewBox="0 0 16 18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M5.25 10.5L9 6.75L12.75 10.5H5.25Z" fill="#A2A5AD" />
+  </svg>
+)
+
+export const SvgBelow = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 18 18"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M5.25 7.5L9 11.25L12.75 7.5H5.25Z" fill="#A2A5AD" />
+  </svg>
+)
+
 export const SvgAllowRight = () => (
   <svg
     width="18"
