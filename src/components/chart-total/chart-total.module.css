@@ -1,0 +1,7 @@
+.avg {
+  background: rgba(100, 116, 139, 0.4);
+}
+
+.minHeight {
+  min-height: 16px !important;
+}

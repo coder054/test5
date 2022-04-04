@@ -297,7 +297,6 @@ const FormEmailLogin = () => {
   const [email, setEmail] = useState('')
   const [pass, setPass] = useState('')
 
-  // here handleLoginEmail
   const handleLoginEmail = async (e) => {
     e.preventDefault()
     try {
@@ -411,7 +410,6 @@ const FormUsernameLogin = () => {
   const [username, setUsername] = useState('')
   const [pass, setPass] = useState('')
 
-  // here handleLoginUsername
   const handleLoginUsername = async (e) => {
     e.preventDefault()
     try {

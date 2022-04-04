@@ -13,6 +13,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { ArrowBackIcon } from 'src/components/icons'
 import { MyInput } from 'src/components/MyInput'
 import { API_GET_LIST_CLUB } from 'src/constants/api.constants'
+import { optionAllClub } from 'src/constants/mocks/clubs.constans'
 import { ClubType } from 'src/constants/types/settingsType.type'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
@@ -24,6 +25,7 @@ type InfiniteScrollClubProps = {
   errorMessage?: string
   handleSetClub?: (value: ClubType) => void
   value?: ClubType
+  isHideAddNewClub?: boolean
 }
 
 const style = {
@@ -42,6 +44,7 @@ export const InfiniteScrollClub = ({
   value,
   errorMessage,
   label,
+  isHideAddNewClub = false,
 }: InfiniteScrollClubProps) => {
   const { currentRoleId } = useAuth()
   const [items, setItems] = useState<any>([])
@@ -163,12 +166,15 @@ export const InfiniteScrollClub = ({
           <div
             className={clsx('absolute w-full z-50', !isOpenOption && 'hidden')}
           >
-            <div className="bg-[#111827] text-gray-400 py-1.5 px-3 ">
-              No club found,
-              <span onClick={handleOpen} className="underline cursor-pointer">
-                add new club
-              </span>
-            </div>
+            {isHideAddNewClub ? null : (
+              <div className="bg-[#111827] text-gray-400 py-1.5 px-3 ">
+                No club found,
+                <span onClick={handleOpen} className="underline cursor-pointer">
+                  add new club
+                </span>
+              </div>
+            )}
+
             <InfiniteScroll
               dataLength={items.length}
               next={fetchMoreData}
@@ -180,7 +186,10 @@ export const InfiniteScrollClub = ({
               }
               height={300}
             >
-              {(items || []).map((it: ClubType, index: number) => (
+              {[
+                optionAllClub,
+                ...(items || []),
+              ].map((it: ClubType, index: number) => (
                 <div
                   className="bg-[#111827] text-gray-400 py-1.5 px-3 cursor-pointer hover:bg-gray-600 duration-150 flex items-center space-x-4"
                   onClick={() => handleChangeClub(it)}

@@ -1,10 +1,9 @@
+import toast from 'react-hot-toast'
+import { API_DIARY, API_GET_DIARY } from 'src/constants/api.constants'
+import { InjuryType } from 'src/constants/types/diary.types'
+import { getStartOfDate } from 'src/hooks/functionCommon'
 import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
-import { API_DIARY, API_GET_DIARY } from 'src/constants/api.constants'
-import { getStartOfDate } from 'src/hooks/functionCommon'
-import toast from 'react-hot-toast'
-import { useMutation } from 'react-query'
-import { InjuryType } from 'src/constants/types/diary.types'
 
 export const fetchDiary = async (date?: string | Date, roleName?: string) => {
   return axios

@@ -129,7 +129,6 @@ export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
   const usersSafe = useMemo(() => {
     return users || []
   }, [users])
-
   return (
     <Dialog fullWidth maxWidth="sm" onClose={onClose} open={open} {...other}>
       <Box

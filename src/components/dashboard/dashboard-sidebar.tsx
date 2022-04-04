@@ -9,6 +9,7 @@ import { ReactNode, useEffect, useMemo } from 'react'
 import type { TFunction } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
 import { DevelopmentIcon } from 'src/icons/developmentIcon'
+import { Home } from 'src/icons/home'
 import { MessagesIcon } from 'src/icons/messagesIcon'
 import { Newspaper } from 'src/icons/newspaper'
 import { Users } from 'src/icons/users'
@@ -55,6 +56,11 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
           title: t('Feed'),
           path: '/dashboard/news',
           icon: <Newspaper fontSize="small" />,
+        },
+        {
+          title: t('Dashboard'),
+          path: '/dashboard',
+          icon: <Home fontSize="small" />,
         },
         {
           title: t('Contacts'),

@@ -26,6 +26,8 @@ module.exports = {
         appear: 'appear 0.2s ease-in-out',
       },
       colors: {
+        avgBar: 'rgba(100, 116, 139, 0.4)',
+        defaultBackGround: 'rgba(32, 33, 40, 0.68)',
         DefaultTextColor: 'rgb(160, 174, 192)',
         Blue: '#4654EA',
         'Dark-1': '#252627',

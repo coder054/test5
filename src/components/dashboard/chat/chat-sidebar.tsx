@@ -578,8 +578,6 @@ const ModalCreateGroup = ({ open, setOpen }) => {
                 setTimeout(() => {
                   router.push(`/dashboard/chat?roomId=${data.groupId}`)
                 }, 200)
-
-                // here open new chat room
               } catch (error) {}
             }}
             fullWidth

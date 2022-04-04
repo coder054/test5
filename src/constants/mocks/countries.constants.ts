@@ -1990,3 +1990,12 @@ export const COUNTRY_LIST = [
     phoneCode: '+263',
   },
 ]
+
+export const optionAllCountry = {
+  name: 'All',
+  alpha2Code: '',
+  alpha3Code: '',
+  region: '',
+  flag: '/world-flag.svg',
+  phoneCode: '',
+}

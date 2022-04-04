@@ -1,7 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import { Autocomplete, Box, styled, TextField } from '@mui/material'
 import clsx from 'clsx'
-import { COUNTRY_LIST } from 'src/constants/mocks/countries.constants'
+import {
+  COUNTRY_LIST,
+  optionAllCountry,
+} from 'src/constants/mocks/countries.constants'
 
 const CssTextField = styled(TextField)({
   '& label': {
@@ -42,6 +45,7 @@ export const MySelectCountry = ({
   value,
   errorMessage,
   onChange,
+  isShowOptionAll = false,
   ...rest
 }: {
   className?: string
@@ -49,6 +53,7 @@ export const MySelectCountry = ({
   value?: any
   errorMessage?: string
   onChange?: any
+  isShowOptionAll?: boolean
   [rest: string]: any
 }) => {
   return (
@@ -64,7 +69,9 @@ export const MySelectCountry = ({
           },
         }}
         disablePortal
-        options={COUNTRY_LIST}
+        options={
+          isShowOptionAll ? [optionAllCountry, ...COUNTRY_LIST] : COUNTRY_LIST
+        }
         onChange={onChange}
         value={value ? value : null}
         fullWidth

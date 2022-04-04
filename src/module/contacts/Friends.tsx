@@ -1,68 +1,212 @@
-import { InputAdornment, TextField } from '@mui/material'
-import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { CircularProgress, InputAdornment, TextField } from '@mui/material'
+import { useEffect, useMemo, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import { notiToast } from 'src/components/common/Toast'
+import { Loading } from 'src/components/loading/loading'
 import { API_GET_LIST_CONTACT } from 'src/constants/api.constants'
+import { LIMIT } from 'src/constants/constants'
+import { optionAllCountry } from 'src/constants/mocks/countries.constants'
 import { FriendsType } from 'src/constants/types/contacts.types'
 import { SearchIcon } from 'src/icons/search'
 import { axios } from 'src/utils/axios'
+import { getErrorMessage, getStr } from 'src/utils/utils'
 import { useDebounce } from 'use-debounce'
 import { FriendsCard } from './components/FriendsCard'
-import { SkeletonContact } from './components/SkeletonContact'
+import { ModalAcceptFriends } from './components/ModalAcceptFriends'
+import { ModalAddFriends } from './components/ModalAddFriends'
+import { ModalFilterFriends } from './components/ModalFilterFriends'
 
 export const Friends = () => {
   const [totalFriend, setTotalFriend] = useState<Number>(0)
   const [friendRequestCount, setFriendRequestCount] = useState(0)
   const [items, setItems] = useState<FriendsType[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [hasMore, setHasMore] = useState<boolean>(true)
   const [keyword, setKeyword] = useState('')
+
   const [keywordDebounce] = useDebounce(keyword, 300)
 
-  const getListContact = async (initItems, search) => {
-    setIsLoading(true)
-    const body: any = {
-      limit: 20,
-      startAfter: initItems.length,
-      tab: 'FRIENDS',
-    }
+  const [setOpenModalAddtFriend, setOpenModalAddFriend] =
+    useState<boolean>(false)
+  const [openModalAcceptFriend, setOpenModalAcceptFriend] =
+    useState<boolean>(false)
 
-    if (!!search) {
-      body.search = search
-    }
-    const res = await axios.get(API_GET_LIST_CONTACT, {
-      params: body,
-    })
-    if (res.status === 200) {
-      setFriendRequestCount(res.data.countFriendRequests)
+  const [openModalFilter, setOpenModalFilter] = useState(false)
+  const [country, setCountry] = useState(optionAllCountry)
+  const [contractedClub, setContractedClub] = useState({
+    arena: '',
+    city: '',
+    clubId: '',
+    clubName: '',
+    country: '',
+    logoUrl: '',
+    nickName: '',
+    websiteUrl: null,
+  })
+  const [sort, setSort] = useState<'asc' | 'desc'>('asc')
+  const [role, setRole] = useState<'All' | 'Player' | 'Coach'>('All')
+
+  const hasMore = useMemo(() => {
+    return items.length < totalFriend
+  }, [items.length, totalFriend])
+
+  const countryName = useMemo(() => {
+    return getStr(country, 'name')
+  }, [country])
+
+  const countryNameDisplayed = useMemo(() => {
+    return countryName === 'All' || countryName === ''
+      ? 'the world'
+      : countryName
+  }, [countryName])
+
+  const startAfter = useMemo(() => {
+    const len = items.length
+
+    return Math.floor(len / LIMIT) + 1
+  }, [items.length])
+
+  useEffect(() => {
+    console.log('aaa countryName: ', countryName)
+  }, [countryName])
+
+  const clubId = useMemo(() => {
+    return getStr(contractedClub, 'clubId')
+  }, [contractedClub])
+
+  const handleOpenModalAddFriend = (): void => {
+    setOpenModalAddFriend(true)
+  }
+
+  const handleCloseModalAddFriend = (): void => {
+    setOpenModalAddFriend(false)
+  }
+
+  const handleOpenModalAcceptFriend = (): void => {
+    setOpenModalAcceptFriend(true)
+  }
+
+  const handleCloseModalAcceptFriend = (): void => {
+    setOpenModalAcceptFriend(false)
+  }
+
+  const getListContact = async (
+    initItems,
+    search,
+    countryName,
+    clubId,
+    sort,
+    startAfter
+  ) => {
+    try {
+      setIsLoading(true)
+      const body: any = {
+        limit: LIMIT,
+        startAfter,
+        tab: 'FRIENDS',
+        sorted: sort,
+      }
+
+      if (countryName !== optionAllCountry.name && countryName !== '') {
+        body.country = countryName
+      }
+
+      if (!!clubId) {
+        body.clubId = clubId
+      }
+
+      if (!!search) {
+        body.search = search
+      }
+      const res = await axios.get(API_GET_LIST_CONTACT, {
+        params: body,
+      })
+      if (res.status === 200) {
+        setFriendRequestCount(res.data.countFriendRequests)
+        setTotalFriend(res.data.count)
+        const arr = initItems.concat(res.data.data)
+        setItems(arr)
+      }
+    } catch (error) {
+      notiToast({
+        message: getErrorMessage(error),
+        type: 'error',
+      })
+    } finally {
       setIsLoading(false)
-      setTotalFriend(res.data.count)
-      const arr = initItems.concat(res.data.data)
-      setItems(arr)
     }
   }
 
   const fetchMoreData = async () => {
-    if (items.length >= totalFriend) {
-      setHasMore(false)
-      return
-    }
-    await getListContact(items, '')
+    await getListContact(
+      items,
+      keywordDebounce,
+      countryName,
+      clubId,
+      sort,
+      startAfter
+    )
   }
 
   useEffect(() => {
-    getListContact(items, '')
-  }, [])
+    setItems([])
+    getListContact([], keywordDebounce, countryName, clubId, sort, 1)
+  }, [keywordDebounce])
 
   useEffect(() => {
     setItems([])
-    getListContact([], keywordDebounce)
-  }, [keywordDebounce])
+    getListContact([], keywordDebounce, countryName, clubId, sort, 1)
+  }, [sort])
+
+  const refreshListContact = () => {
+    getListContact([], keywordDebounce, countryName, clubId, sort, 1)
+  }
 
   return (
     <div>
+      {/* // here aaa1 render ModalFilterFriends */}
+      <ModalFilterFriends
+        open={openModalFilter}
+        onClose={() => {
+          setOpenModalFilter(false)
+        }}
+        country={country}
+        setCountry={setCountry}
+        contractedClub={contractedClub}
+        setContractedClub={setContractedClub}
+        role={role}
+        setRole={setRole}
+        getListContact={getListContact.bind(
+          null,
+          [],
+          keywordDebounce,
+          countryName,
+          clubId,
+          sort
+        )}
+      ></ModalFilterFriends>
+
+      <ModalAddFriends
+        onClose={handleCloseModalAddFriend}
+        open={setOpenModalAddtFriend}
+        refreshListContact={refreshListContact}
+      />
+      <ModalAcceptFriends
+        onClose={handleCloseModalAcceptFriend}
+        open={openModalAcceptFriend}
+        refreshListContact={refreshListContact}
+      />
+
       <div className="md:flex items-center  ">
-        <div className="mb-[16px] md:mb-[0px] flex items-center gap-x-[8px] cursor-pointer ">
+        <div
+          onClick={() => {
+            if (friendRequestCount === 0) {
+              setOpenModalAddFriend(true)
+            } else {
+              setOpenModalAcceptFriend(true)
+            }
+          }}
+          className=" mb-[16px] md:mb-[0px] flex items-center gap-x-[8px] cursor-pointer "
+        >
           <svg
             width="24"
             height="24"
@@ -94,11 +238,19 @@ export const Friends = () => {
             />
           </svg>
 
-          <div className="text-Grey font-medium text-[16px] leading-[175%] ">
-            You’ve got
-            <span className="text-Green ">{` ${friendRequestCount} `}</span>
-            friend request
-          </div>
+          {friendRequestCount === 0 ? (
+            <>
+              <div className="text-Grey font-medium text-[16px] leading-[175%] ">
+                Add more friends
+              </div>
+            </>
+          ) : (
+            <div className="text-Grey font-medium text-[16px] leading-[175%] ">
+              You’ve got
+              <span className="text-Green ">{` ${friendRequestCount} `}</span>
+              friend requests
+            </div>
+          )}
 
           <svg
             width="16"
@@ -136,19 +288,86 @@ export const Friends = () => {
           />
         </div>
       </div>
-      <p className="text-18px font-bold">
-        <span className="text-[#09E099]">{totalFriend} </span>
-        {totalFriend === 1 ? 'Friend' : 'Friends'}
-      </p>
+      <div className="flex ">
+        <p className="text-18px font-bold">
+          {isLoading ? (
+            <div className="pr-3 inline-block ">
+              <Loading size={10}></Loading>
+            </div>
+          ) : (
+            <span className="text-[#09E099] inline-block ">{totalFriend} </span>
+          )}
+          {` ${
+            totalFriend === 1 ? 'Friend' : 'Friends'
+          } in ${countryNameDisplayed}`}
+        </p>
+
+        <div className="grow min-w-[50px] "></div>
+        <div className="flex gap-x-[24px] items-center ">
+          {sort === 'asc' ? (
+            <svg
+              onClick={() => {
+                setSort('desc')
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[24px] w-[24px] cursor-pointer"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" />
+            </svg>
+          ) : (
+            <svg
+              onClick={() => {
+                setSort('asc')
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[24px] w-[24px] cursor-pointer"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+            </svg>
+          )}
+
+          {/* // here aaa1 svg filter */}
+          <svg
+            onClick={() => {
+              setOpenModalFilter(true)
+            }}
+            className="cursor-pointer"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 11H16V13H4V11ZM4 6H20V8H4V6ZM4 18H11H11.235V16H11H4V18Z"
+              fill="white"
+            />
+          </svg>
+        </div>
+      </div>
       <InfiniteScroll
         dataLength={items.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={isLoading ? <SkeletonContact /> : <></>}
+        loader={
+          isLoading ? (
+            <div className="p-4 flex items-center justify-center ">
+              <CircularProgress />
+            </div>
+          ) : (
+            <></>
+          )
+        }
         endMessage={
-          <p style={{ textAlign: 'center' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
+          isLoading ? null : (
+            <p style={{ textAlign: 'center', opacity: '0' }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          )
         }
       >
         {(items || []).map((it: FriendsType, index: number) => (

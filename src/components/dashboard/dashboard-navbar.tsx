@@ -13,7 +13,10 @@ import Link from 'next/link'
 import PropTypes from 'prop-types'
 import type { FC } from 'react'
 import { useRef, useState } from 'react'
+import { isMobile } from 'react-device-detect'
 import { useTranslation } from 'react-i18next'
+import SimpleBar from 'simplebar-react'
+import 'simplebar/dist/simplebar.min.css'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import DiaryUpdate from 'src/module/biography/diary'
 import { safeAvatar } from 'src/utils/utils'
@@ -21,16 +24,13 @@ import { Bell as BellIcon } from '../../icons/bell'
 import { Menu as MenuIcon } from '../../icons/menu'
 import { Search as SearchIcon } from '../../icons/search'
 import { Users as UsersIcon } from '../../icons/users'
-import { CloseIcon, UpdateDiaryIcon, XIcon } from '../icons'
-import { MyModal } from '../Modal'
+import { UpdateDiaryIcon, XIcon } from '../icons'
+import { ModalMui } from '../ModalMui'
 import { AccountPopover } from './account-popover'
 import { ContactsPopover } from './contacts-popover'
 import { ContentSearchDialog } from './content-search-dialog'
 import { LanguagePopover } from './language-popover'
 import { NotificationsPopover } from './notifications-popover'
-import SimpleBar from 'simplebar-react'
-import 'simplebar/dist/simplebar.min.css'
-import { isMobile } from 'react-device-detect'
 
 interface DashboardNavbarProps extends AppBarProps {
   onOpenSidebar?: () => void
@@ -96,26 +96,27 @@ const LanguageButton = () => {
 }
 
 const ContentSearchButton = () => {
-  const [openDialog, setOpenDialog] = useState<boolean>(false)
+  const [setOpenModalAddtFriend, setOpenModalAddFriend] =
+    useState<boolean>(false)
 
-  const handleOpenSearchDialog = (): void => {
-    setOpenDialog(true)
+  const handleOpenModalAddFriend = (): void => {
+    setOpenModalAddFriend(true)
   }
 
-  const handleCloseSearchDialog = (): void => {
-    setOpenDialog(false)
+  const handleCloseModalAddFriend = (): void => {
+    setOpenModalAddFriend(false)
   }
 
   return (
     <>
       <Tooltip title="Search">
-        <IconButton onClick={handleOpenSearchDialog} sx={{ ml: 1 }}>
+        <IconButton onClick={handleOpenModalAddFriend} sx={{ ml: 1 }}>
           <SearchIcon fontSize="small" />
         </IconButton>
       </Tooltip>
       <ContentSearchDialog
-        onClose={handleCloseSearchDialog}
-        open={openDialog}
+        onClose={handleCloseModalAddFriend}
+        open={setOpenModalAddtFriend}
       />
     </>
   )
@@ -136,31 +137,29 @@ const UpdateDiaryButton = () => {
           Update Diary
         </span>
       </button>
-      {isOpenModal && (
-        <MyModal
-          customStyle={{
-            padding: 0,
-            top: '50%',
-            width: isMobile ? '100%' : 700,
-            overflow: 'auto',
-          }}
-          isOpen={isOpenModal}
-          onClose={setIsOpenModal}
-        >
-          <SimpleBar style={{ maxHeight: 850 }}>
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setIsOpenModal(false)}
-                className="absolute right-6 top-5"
-              >
-                <XIcon />
-              </button>
-              <DiaryUpdate />
-            </div>
-          </SimpleBar>
-        </MyModal>
-      )}
+      <ModalMui
+        customStyle={{
+          padding: 0,
+          top: '50%',
+          width: isMobile ? '100%' : 700,
+          overflow: 'auto',
+        }}
+        isOpen={isOpenModal}
+        onClose={setIsOpenModal}
+      >
+        <SimpleBar style={{ maxHeight: 850 }}>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setIsOpenModal(false)}
+              className="absolute right-6 top-5"
+            >
+              <XIcon />
+            </button>
+            <DiaryUpdate />
+          </div>
+        </SimpleBar>
+      </ModalMui>
     </>
   )
 }
