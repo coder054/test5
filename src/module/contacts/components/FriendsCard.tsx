@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { ChervonRightIcon } from 'src/components/icons'
 import { FriendsType } from 'src/constants/types/contacts.types'
 import { imgAvatar } from 'src/imports/images'
-import { getErrorMessage, getStr } from 'src/utils/utils'
+import { getErrorMessage, getStr, truncateStr } from 'src/utils/utils'
 import { ModalMui } from 'src/components/ModalMui'
 import { notiToast } from 'src/components/common/Toast'
 import { axios } from 'src/utils/axios'
@@ -216,7 +216,7 @@ export const FriendsCard = ({ user }: FriendsCardProps) => {
             Are you sure you want to block this user?
           </p>
 
-          <div className="flex justify-between mt-[20px] space-x-8">
+          <div className="flex justify-between mt-[20px] space-x-8 sm:space-x-8">
             <MyButton
               type="button"
               label="Cancel"
@@ -235,8 +235,94 @@ export const FriendsCard = ({ user }: FriendsCardProps) => {
         </div>
       </ModalMui>
 
-      <div className="flex xl:hidden border w-full my-5 h-[80px] "></div>
-      <div className=" hidden xl:flex w-full my-5 h-[80px]">
+      <div className="flex lg:hidden w-full my-5 items-center ">
+        <img
+          className=" w-[45px] h-[45px] sm:w-[55px] sm:h-[55px] rounded-lg inline-block mr-[8px]"
+          src={user?.faceImage ? user?.faceImage : imgAvatar}
+          alt="Profile Image"
+        />
+        <div className=" ">
+          <div className="font-semibold text-[15px] leading-[147%] ">
+            {user.firstName} {user.lastName}
+          </div>
+          <div className="text-Grey text-[10px] sm:text-[12px] ">
+            #{user.username}
+          </div>
+          <div className="text-white text-[10px] sm:text-[12px] ">
+            {truncateStr(getStr(user, 'city'), 20)}
+          </div>
+        </div>
+
+        <div className="grow-[2] min-w-[20px] "></div>
+
+        <div className=" ">
+          <div className="h-[22px] "></div>
+          <div className="text-Grey text-[10px] sm:text-[12px] text-right">
+            CAM
+          </div>
+          <div className="text-white text-[10px] sm:text-[12px] ">
+            FC VMO/C3
+          </div>
+        </div>
+        <div className="grow-[3] min-w-[40px]"></div>
+
+        <div className="flex gap-x-[8px] items-center">
+          <svg
+            onClick={() => {
+              alert('coming soon')
+            }}
+            className="cursor-pointer "
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z"
+              fill="white"
+            />
+          </svg>
+          <Link
+            href={`/${user.type === 'COACH' ? 'coach' : 'player'}/${
+              user.username
+            }/${user.firstName}.${user.lastName}`}
+          >
+            <a target={'_blank'}>
+              <svg
+                className="cursor-pointer "
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M8.59009 16.59L13.1701 12L8.59009 7.41L10.0001 6L16.0001 12L10.0001 18L8.59009 16.59Z"
+                  fill="white"
+                />
+              </svg>
+            </a>
+          </Link>
+
+          <svg
+            onClick={handleClick}
+            className="cursor-pointer"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6C10 7.1 10.9 8 12 8ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10ZM12 16C10.9 16 10 16.9 10 18C10 19.1 10.9 20 12 20C13.1 20 14 19.1 14 18C14 16.9 13.1 16 12 16Z"
+              fill="#6B7280"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div className=" hidden lg:flex w-full my-5 h-[80px]">
         <div
           className={clsx(
             'w-full bg-[#202128cc] rounded-lg items-center px-4 grid grid-cols-4'

@@ -29,7 +29,12 @@ const ContactsPage: NextPage = () => {
           px: 2,
         }}
       >
-        <Container maxWidth="xl">
+        <Container
+          maxWidth="xl"
+          sx={{
+            px: 0,
+          }}
+        >
           <Tabs
             indicatorColor="secondary"
             onChange={handleTabsChange}
