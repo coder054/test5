@@ -41,8 +41,6 @@ interface ContentSearchProps {
   setContractedClub: any
   role: any
   setRole: any
-  sort: any
-  setSort: any
   getListContact: any
 }
 
@@ -58,8 +56,6 @@ export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
     setContractedClub,
     role,
     setRole,
-    sort,
-    setSort,
     getListContact,
     ...other
   } = props
@@ -156,22 +152,6 @@ export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
               </Select>
             </FormControl>
           </div>
-          <div className="mb-[24px]">
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Sorted</InputLabel>
-              <Select
-                fullWidth
-                label="Sorted"
-                value={sort}
-                onChange={(e) => {
-                  setSort(e.target.value)
-                }}
-              >
-                <MenuItem value="asc">A-Z</MenuItem>
-                <MenuItem value="desc">Z-A</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
         </form>
         {/*  */}
 
@@ -193,7 +173,6 @@ export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
             })
             setContractedClub(optionAllClub)
             setRole('All')
-            setSort('asc')
           }}
           fullWidth
           size="large"

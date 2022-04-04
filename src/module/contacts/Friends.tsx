@@ -89,6 +89,7 @@ export const Friends = () => {
     search,
     countryName,
     clubId,
+    sort,
     startAfter
   ) => {
     try {
@@ -97,6 +98,7 @@ export const Friends = () => {
         limit: LIMIT,
         startAfter,
         tab: 'FRIENDS',
+        sorted: sort,
       }
 
       if (countryName !== optionAllCountry.name && countryName !== '') {
@@ -135,18 +137,23 @@ export const Friends = () => {
       keywordDebounce,
       countryName,
       clubId,
+      sort,
       startAfter
     )
   }
 
   useEffect(() => {
     setItems([])
-    console.log('aaa getListContact2')
-    getListContact([], keywordDebounce, countryName, clubId, 1)
+    getListContact([], keywordDebounce, countryName, clubId, sort, 1)
   }, [keywordDebounce])
 
+  useEffect(() => {
+    setItems([])
+    getListContact([], keywordDebounce, countryName, clubId, sort, 1)
+  }, [sort])
+
   const refreshListContact = () => {
-    getListContact([], keywordDebounce, countryName, clubId, 1)
+    getListContact([], keywordDebounce, countryName, clubId, sort, 1)
   }
 
   return (
@@ -163,14 +170,13 @@ export const Friends = () => {
         setContractedClub={setContractedClub}
         role={role}
         setRole={setRole}
-        sort={sort}
-        setSort={setSort}
         getListContact={getListContact.bind(
           null,
           [],
           keywordDebounce,
           countryName,
-          clubId
+          clubId,
+          sort
         )}
       ></ModalFilterFriends>
 
@@ -290,20 +296,32 @@ export const Friends = () => {
         </p>
 
         <div className="grow min-w-[50px] "></div>
-        <div className="flex gap-x-[24px] ">
-          <svg
-            className="cursor-pointer"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6.22701 11.0001H17.774C18.636 11.0001 19.094 9.98009 18.521 9.33509L12.748 2.84009C12.6544 2.7344 12.5394 2.64978 12.4106 2.59183C12.2818 2.53387 12.1422 2.50391 12.001 2.50391C11.8598 2.50391 11.7202 2.53387 11.5914 2.59183C11.4627 2.64978 11.3476 2.7344 11.254 2.84009L5.47901 9.33509C4.90601 9.98009 5.36401 11.0001 6.22701 11.0001ZM11.253 21.1591C11.3466 21.2648 11.4617 21.3494 11.5904 21.4074C11.7192 21.4653 11.8588 21.4953 12 21.4953C12.1412 21.4953 12.2808 21.4653 12.4096 21.4074C12.5384 21.3494 12.6534 21.2648 12.747 21.1591L18.52 14.6641C19.094 14.0201 18.636 13.0001 17.773 13.0001H6.22701C5.36501 13.0001 4.90701 14.0201 5.48001 14.6651L11.253 21.1591Z"
-              fill="white"
-            />
-          </svg>
+        <div className="flex gap-x-[24px] items-center ">
+          {sort === 'asc' ? (
+            <svg
+              onClick={() => {
+                setSort('desc')
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[24px] w-[24px] cursor-pointer"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" />
+            </svg>
+          ) : (
+            <svg
+              onClick={() => {
+                setSort('asc')
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[24px] w-[24px] cursor-pointer"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+            </svg>
+          )}
 
           {/* // here aaa1 svg filter */}
           <svg
