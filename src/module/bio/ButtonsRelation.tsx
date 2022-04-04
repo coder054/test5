@@ -81,12 +81,12 @@ export const FriendButton = ({
           }}
           PaperProps={{
             sx: {
-              width: 300,
+              width: 220,
               position: 'relative',
             },
           }}
         >
-          <div className="p-[5px] cursor-pointer">
+          <div className="py-[5px] cursor-pointer">
             <div
               onClick={() => {
                 try {
@@ -106,7 +106,7 @@ export const FriendButton = ({
                   handleClose()
                 }
               }}
-              className="flex gap-[8px] items-center w-full p-[10px] mb-[8px] "
+              className="flex gap-[8px] items-center w-full px-[12px] py-[3px] mb-[5px] hover:bg-[#81838919] "
             >
               <SvgCheck className="fill-white w-[20px] h-[20px] inline-block " />
               <span className="text-white ">Confirm</span>
@@ -130,7 +130,7 @@ export const FriendButton = ({
                   handleClose()
                 }
               }}
-              className="flex gap-[8px] items-center w-full p-[10px] "
+              className="flex gap-[8px] items-center w-full px-[12px] py-[3px] hover:bg-[#81838919]"
             >
               <SvgX className="fill-white w-[20px] h-[20px] inline-block " />
               <span className="text-white ">Delete Request</span>
@@ -174,7 +174,7 @@ export const FriendButton = ({
           }}
           PaperProps={{
             sx: {
-              width: 300,
+              width: 220,
               position: 'relative',
             },
           }}
@@ -198,9 +198,9 @@ export const FriendButton = ({
                 handleClose()
               }
             }}
-            className="p-[5px] cursor-pointer"
+            className="py-[5px] cursor-pointer"
           >
-            <div className="flex gap-[8px] items-center w-full p-[15px] ">
+            <div className="flex gap-[8px] items-center w-full px-[12px] py-[3px] hover:bg-[#81838919]">
               <SvgX className="fill-white w-[20px] h-[20px] inline-block " />
               <span className="text-white ">Cancel Request</span>
             </div>
@@ -244,7 +244,7 @@ export const FriendButton = ({
           }}
           PaperProps={{
             sx: {
-              width: 300,
+              width: 220,
               position: 'relative',
             },
           }}
@@ -268,9 +268,9 @@ export const FriendButton = ({
                 handleClose()
               }
             }}
-            className="p-[5px] cursor-pointer"
+            className="py-[5px] cursor-pointer"
           >
-            <div className="flex gap-[8px] items-center w-full p-[15px] ">
+            <div className="flex gap-[8px] items-center w-full px-[12px] py-[3px] hover:bg-[#81838919]">
               <SvgX className="fill-white w-[20px] h-[20px] inline-block " />
               <span className="text-white ">Unfriend</span>
             </div>
@@ -337,7 +337,7 @@ export const FollowButton = ({
           }}
           PaperProps={{
             sx: {
-              width: 300,
+              width: 220,
               position: 'relative',
             },
           }}
@@ -368,9 +368,9 @@ export const FollowButton = ({
                 handleClose()
               }
             }}
-            className="p-[5px] cursor-pointer"
+            className="py-[5px] cursor-pointer"
           >
-            <div className="flex gap-[8px] items-center w-full p-[15px] ">
+            <div className="flex gap-[8px] items-center w-full px-[12px] py-[3px] hover:bg-[#81838919] ">
               <SvgX className="fill-white w-[20px] h-[20px] inline-block " />
               <span className="text-white ">Unfollow</span>
             </div>
