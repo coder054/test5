@@ -1,18 +1,22 @@
 import { InputAdornment, TextField } from '@mui/material'
-import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { Loading } from 'src/components/loading/loading'
+import { useEffect, useState, useMemo } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { notiToast } from 'src/components/common/Toast'
 import { ContentSearchDialog } from 'src/components/dashboard/content-search-dialog'
+import { MyModal } from 'src/components/Modal'
 import { API_GET_LIST_CONTACT } from 'src/constants/api.constants'
+import { optionAllCountry } from 'src/constants/mocks/countries.constants'
 import { FriendsType } from 'src/constants/types/contacts.types'
 import { SearchIcon } from 'src/icons/search'
+import { SvgXIcon } from 'src/imports/svgs'
 import { axios } from 'src/utils/axios'
-import { getErrorMessage } from 'src/utils/utils'
+import { getErrorMessage, getStr } from 'src/utils/utils'
 import { useDebounce } from 'use-debounce'
 import { FriendsCard } from './components/FriendsCard'
 import { ModalAcceptFriends } from './components/ModalAcceptFriends'
 import { ModalAddFriends } from './components/ModalAddFriends'
+import { ModalFilterFriends } from './components/ModalFilterFriends'
 import { SkeletonContact } from './components/SkeletonContact'
 
 export const Friends = () => {
@@ -30,6 +34,33 @@ export const Friends = () => {
   const [openModalAcceptFriend, setOpenModalAcceptFriend] =
     useState<boolean>(false)
 
+  const [openModalFilter, setOpenModalFilter] = useState(false)
+  const [country, setCountry] = useState(optionAllCountry)
+  const [contractedClub, setContractedClub] = useState({
+    arena: '',
+    city: '',
+    clubId: '',
+    clubName: '',
+    country: '',
+    logoUrl: '',
+    nickName: '',
+    websiteUrl: null,
+  })
+  const [sort, setSort] = useState<'asc' | 'desc'>('asc')
+  const [role, setRole] = useState<'All' | 'Player' | 'Coach'>('All')
+
+  const countryName = useMemo(() => {
+    return getStr(country, 'name')
+  }, [country])
+
+  useEffect(() => {
+    console.log('aaa countryName: ', countryName)
+  }, [countryName])
+
+  const clubId = useMemo(() => {
+    return getStr(contractedClub, 'clubId')
+  }, [contractedClub])
+
   const handleOpenModalAddFriend = (): void => {
     setOpenModalAddFriend(true)
   }
@@ -46,13 +77,21 @@ export const Friends = () => {
     setOpenModalAcceptFriend(false)
   }
 
-  const getListContact = async (initItems, search) => {
+  const getListContact = async (initItems, search, countryName, clubId) => {
     try {
       setIsLoading(true)
       const body: any = {
-        limit: 20,
-        startAfter: initItems.length,
+        limit: 1000,
+        startAfter: 0,
         tab: 'FRIENDS',
+      }
+
+      if (countryName !== optionAllCountry.name && countryName !== '') {
+        body.country = countryName
+      }
+
+      if (!!clubId) {
+        body.clubId = clubId
       }
 
       if (!!search) {
@@ -83,25 +122,44 @@ export const Friends = () => {
       return
     }
     console.log('aaa getListContact1')
-    await getListContact(items, keywordDebounce)
+    await getListContact(items, keywordDebounce, countryName, clubId)
   }
-
-  useEffect(() => {
-    // getListContact(items, keywordDebounce)
-  }, [])
 
   useEffect(() => {
     setItems([])
     console.log('aaa getListContact2')
-    getListContact([], keywordDebounce)
+    getListContact([], keywordDebounce, countryName, clubId)
   }, [keywordDebounce])
 
   const refreshListContact = () => {
-    getListContact([], keywordDebounce)
+    getListContact([], keywordDebounce, countryName, clubId)
   }
 
   return (
     <div>
+      {/* // here aaa1 render ModalFilterFriends */}
+      <ModalFilterFriends
+        open={openModalFilter}
+        onClose={() => {
+          setOpenModalFilter(false)
+        }}
+        country={country}
+        setCountry={setCountry}
+        contractedClub={contractedClub}
+        setContractedClub={setContractedClub}
+        role={role}
+        setRole={setRole}
+        sort={sort}
+        setSort={setSort}
+        getListContact={getListContact.bind(
+          null,
+          [],
+          keywordDebounce,
+          countryName,
+          clubId
+        )}
+      ></ModalFilterFriends>
+
       <ModalAddFriends
         onClose={handleCloseModalAddFriend}
         open={setOpenModalAddtFriend}
@@ -165,7 +223,7 @@ export const Friends = () => {
             <div className="text-Grey font-medium text-[16px] leading-[175%] ">
               You’ve got
               <span className="text-Green ">{` ${friendRequestCount} `}</span>
-              friend request
+              friend requests
             </div>
           )}
 
@@ -205,10 +263,51 @@ export const Friends = () => {
           />
         </div>
       </div>
-      <p className="text-18px font-bold">
-        <span className="text-[#09E099]">{totalFriend} </span>
-        {totalFriend === 1 ? 'Friend' : 'Friends'}
-      </p>
+      <div className="flex ">
+        <p className="text-18px font-bold">
+          {isLoading ? (
+            <Loading size={10}></Loading>
+          ) : (
+            <span className="text-[#09E099] ml-[50px] inline-block ">{totalFriend} </span>
+          )}
+          {totalFriend === 1 ? 'Friend' : 'Friends'}
+        </p>
+
+        <div className="grow min-w-[50px] "></div>
+        <div className="flex gap-x-[24px] ">
+          <svg
+            className="cursor-pointer"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M6.22701 11.0001H17.774C18.636 11.0001 19.094 9.98009 18.521 9.33509L12.748 2.84009C12.6544 2.7344 12.5394 2.64978 12.4106 2.59183C12.2818 2.53387 12.1422 2.50391 12.001 2.50391C11.8598 2.50391 11.7202 2.53387 11.5914 2.59183C11.4627 2.64978 11.3476 2.7344 11.254 2.84009L5.47901 9.33509C4.90601 9.98009 5.36401 11.0001 6.22701 11.0001ZM11.253 21.1591C11.3466 21.2648 11.4617 21.3494 11.5904 21.4074C11.7192 21.4653 11.8588 21.4953 12 21.4953C12.1412 21.4953 12.2808 21.4653 12.4096 21.4074C12.5384 21.3494 12.6534 21.2648 12.747 21.1591L18.52 14.6641C19.094 14.0201 18.636 13.0001 17.773 13.0001H6.22701C5.36501 13.0001 4.90701 14.0201 5.48001 14.6651L11.253 21.1591Z"
+              fill="white"
+            />
+          </svg>
+
+          {/* // here aaa1 svg filter */}
+          <svg
+            onClick={() => {
+              setOpenModalFilter(true)
+            }}
+            className="cursor-pointer"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M4 11H16V13H4V11ZM4 6H20V8H4V6ZM4 18H11H11.235V16H11H4V18Z"
+              fill="white"
+            />
+          </svg>
+        </div>
+      </div>
       <InfiniteScroll
         dataLength={items.length}
         next={fetchMoreData}

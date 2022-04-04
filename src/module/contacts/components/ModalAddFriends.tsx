@@ -86,8 +86,8 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
     try {
       setLoading(true)
       const params: any = {
-        limit: 10,
-        startAfter: items.length,
+        limit: 10000,
+        startAfter: 1,
         sorted: 'asc',
         // search: keyword,
       }
