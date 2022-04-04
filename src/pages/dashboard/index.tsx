@@ -2,6 +2,7 @@ import { Box, Container, Divider, Tab, Tabs } from '@mui/material'
 import type { NextPage } from 'next'
 import { useState } from 'react'
 import { AuthGuard } from 'src/components/authentication/auth-guard'
+import DashboardMatches from 'src/module/dashboard/matches'
 import { Overview } from 'src/module/dashboard/overview'
 import DashBoardTraining from 'src/module/dashboard/training'
 import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
@@ -52,6 +53,7 @@ const Dashboard: NextPage = () => {
             <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />
             {currentTab === 'overview' && <Overview />}
             {currentTab === 'training' && <DashBoardTraining />}
+            {currentTab === 'matches' && <DashboardMatches />}
           </Container>
         </Box>
       </>

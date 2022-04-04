@@ -1,10 +1,10 @@
 import clsx from 'clsx'
-import { useCallback, useEffect, useState } from 'react'
+import { ReactElement, useCallback, useEffect, useState } from 'react'
 import { Button } from 'src/components/Button'
 import { PeriodFilterIcon, XIcon } from 'src/components/icons'
 import { ModalMui } from 'src/components/ModalMui'
 import { MySlider } from 'src/components/MySlider'
-import { LastRangeDateType } from 'src/constants/types/dashboard-training.types'
+import { LastRangeDateType } from 'src/constants/types/dashboard/training.types'
 import { SvgFilter } from 'src/imports/svgs'
 
 type PeriodFilterProps = {
@@ -12,6 +12,7 @@ type PeriodFilterProps = {
   value?: string
   onChange?: (value: LastRangeDateType) => void
   className?: string
+  children?: ReactElement
 }
 
 export const PeriodFilter = ({
@@ -19,6 +20,7 @@ export const PeriodFilter = ({
   label,
   className,
   onChange,
+  children,
 }: PeriodFilterProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [current, setCurrent] = useState<number>(0)
@@ -97,7 +99,7 @@ export const PeriodFilter = ({
         isOpen={isOpen}
         onClose={setIsOpen}
       >
-        <div className="flex flex-col items-center space-y-3 p-2 relative">
+        <div className="flex flex-col items-center space-y-4 p-2 relative">
           <button
             type="button"
             onClick={() => setIsOpen(false)}
@@ -122,6 +124,7 @@ export const PeriodFilter = ({
               labelClass="text-[#A2A5AD]"
             />
           </div>
+          <div className="w-full">{children}</div>
           <div className="grid grid-cols-2 w-full gap-x-6">
             <Button
               type="submit"

@@ -1,18 +1,10 @@
 import { CircularProgress, MenuItem } from '@mui/material'
 import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import { useQuery } from 'react-query'
 import { MyInput } from 'src/components'
 import { MemberType } from 'src/constants/types/member.typs'
 import { fetchMember } from 'src/service/diary-update'
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-})
 
 type InfiniteScrollMemberProps = {
   label: string
@@ -62,23 +54,21 @@ export const InfiniteScrollMember = ({
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <MyInput
-        select
-        value={_.isEmpty(member) ? '' : renderInfo(member)}
-        label={label}
-      >
-        {(members || [])?.map((it: MemberType, index: number) => (
-          <MenuItem
-            key={index}
-            value={renderInfo(it)}
-            onClick={() => handleChange(it)}
-            className="flex space-x-3"
-          >
-            <p>{renderInfo(it)}</p>
-          </MenuItem>
-        ))}
-      </MyInput>
-    </QueryClientProvider>
+    <MyInput
+      select
+      value={_.isEmpty(member) ? '' : renderInfo(member)}
+      label={label}
+    >
+      {(members || [])?.map((it: MemberType, index: number) => (
+        <MenuItem
+          key={index}
+          value={renderInfo(it)}
+          onClick={() => handleChange(it)}
+          className="flex space-x-3"
+        >
+          <p>{renderInfo(it)}</p>
+        </MenuItem>
+      ))}
+    </MyInput>
   )
 }
