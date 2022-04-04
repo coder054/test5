@@ -55,7 +55,9 @@ export const Friends = () => {
   }, [country])
 
   const countryNameDisplayed = useMemo(() => {
-    return countryName === 'All' || countryName === '' ? 'the world' : str
+    return countryName === 'All' || countryName === ''
+      ? 'the world'
+      : countryName
   }, [countryName])
 
   const startAfter = useMemo(() => {
