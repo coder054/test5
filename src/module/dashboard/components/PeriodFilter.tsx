@@ -4,9 +4,8 @@ import { Button } from 'src/components/Button'
 import { PeriodFilterIcon, XIcon } from 'src/components/icons'
 import { ModalMui } from 'src/components/ModalMui'
 import { MySlider } from 'src/components/MySlider'
-import { SvgFilter } from 'src/imports/svgs'
 import { LastRangeDateType } from 'src/constants/types/dashboard-training.types'
-// import { LastRangeDateType } from 'src/service/dashboard-training'
+import { SvgFilter } from 'src/imports/svgs'
 
 type PeriodFilterProps = {
   label: string
