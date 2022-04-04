@@ -106,7 +106,7 @@ export const FriendButton = ({
                   handleClose()
                 }
               }}
-              className="flex gap-[8px] items-center w-full px-[12px] py-[3px] mb-[5px] hover:bg-[#81838919] "
+              className="flex gap-[8px] items-center w-full px-[12px] py-[3px] mb-[5px] cursor-pointer hover:bg-[#81838919] "
             >
               <SvgCheck className="fill-white w-[20px] h-[20px] inline-block " />
               <span className="text-white ">Confirm</span>
@@ -130,7 +130,7 @@ export const FriendButton = ({
                   handleClose()
                 }
               }}
-              className="flex gap-[8px] items-center w-full px-[12px] py-[3px] hover:bg-[#81838919]"
+              className="flex gap-[8px] items-center w-full px-[12px] py-[3px] cursor-pointer hover:bg-[#81838919]"
             >
               <SvgX className="fill-white w-[20px] h-[20px] inline-block " />
               <span className="text-white ">Delete Request</span>
@@ -200,7 +200,7 @@ export const FriendButton = ({
             }}
             className="py-[5px] cursor-pointer"
           >
-            <div className="flex gap-[8px] items-center w-full px-[12px] py-[3px] hover:bg-[#81838919]">
+            <div className="flex gap-[8px] items-center w-full px-[12px] py-[3px] cursor-pointer hover:bg-[#81838919]">
               <SvgX className="fill-white w-[20px] h-[20px] inline-block " />
               <span className="text-white ">Cancel Request</span>
             </div>
@@ -270,7 +270,7 @@ export const FriendButton = ({
             }}
             className="py-[5px] cursor-pointer"
           >
-            <div className="flex gap-[8px] items-center w-full px-[12px] py-[3px] hover:bg-[#81838919]">
+            <div className="flex gap-[8px] items-center w-full px-[12px] py-[3px] cursor-pointer hover:bg-[#81838919]">
               <SvgX className="fill-white w-[20px] h-[20px] inline-block " />
               <span className="text-white ">Unfriend</span>
             </div>
@@ -370,7 +370,7 @@ export const FollowButton = ({
             }}
             className="py-[5px] cursor-pointer"
           >
-            <div className="flex gap-[8px] items-center w-full px-[12px] py-[3px] hover:bg-[#81838919] ">
+            <div className="flex gap-[8px] items-center w-full px-[12px] py-[3px] cursor-pointer hover:bg-[#81838919] ">
               <SvgX className="fill-white w-[20px] h-[20px] inline-block " />
               <span className="text-white ">Unfollow</span>
             </div>
