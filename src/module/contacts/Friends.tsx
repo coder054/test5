@@ -1,15 +1,12 @@
 import { InputAdornment, TextField } from '@mui/material'
-import { Loading } from 'src/components/loading/loading'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { notiToast } from 'src/components/common/Toast'
-import { ContentSearchDialog } from 'src/components/dashboard/content-search-dialog'
-import { MyModal } from 'src/components/Modal'
+import { Loading } from 'src/components/loading/loading'
 import { API_GET_LIST_CONTACT } from 'src/constants/api.constants'
 import { optionAllCountry } from 'src/constants/mocks/countries.constants'
 import { FriendsType } from 'src/constants/types/contacts.types'
 import { SearchIcon } from 'src/icons/search'
-import { SvgXIcon } from 'src/imports/svgs'
 import { axios } from 'src/utils/axios'
 import { getErrorMessage, getStr } from 'src/utils/utils'
 import { useDebounce } from 'use-debounce'
@@ -266,11 +263,13 @@ export const Friends = () => {
       <div className="flex ">
         <p className="text-18px font-bold">
           {isLoading ? (
-            <Loading size={10}></Loading>
+            <div className="pr-3 inline-block ">
+              <Loading size={10}></Loading>
+            </div>
           ) : (
-            <span className="text-[#09E099] ml-[50px] inline-block ">{totalFriend} </span>
+            <span className="text-[#09E099] inline-block ">{totalFriend} </span>
           )}
-          {totalFriend === 1 ? 'Friend' : 'Friends'}
+          {totalFriend === 1 ? ' Friend' : ' Friends'}
         </p>
 
         <div className="grow min-w-[50px] "></div>
