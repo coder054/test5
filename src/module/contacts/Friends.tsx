@@ -54,6 +54,10 @@ export const Friends = () => {
     return getStr(country, 'name')
   }, [country])
 
+  const countryNameDisplayed = useMemo(() => {
+    return countryName === 'All' || countryName === '' ? 'the world' : str
+  }, [countryName])
+
   const startAfter = useMemo(() => {
     const len = items.length
 
@@ -292,7 +296,9 @@ export const Friends = () => {
           ) : (
             <span className="text-[#09E099] inline-block ">{totalFriend} </span>
           )}
-          {totalFriend === 1 ? ' Friend' : ' Friends'}
+          {` ${
+            totalFriend === 1 ? 'Friend' : 'Friends'
+          } in ${countryNameDisplayed}`}
         </p>
 
         <div className="grow min-w-[50px] "></div>
