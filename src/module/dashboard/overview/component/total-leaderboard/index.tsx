@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { TooltipCustom } from 'src/components'
 import { LeaderBoard } from 'src/components/leader-board'
 import {
   SvgAbove,
@@ -686,21 +687,26 @@ export const TotalLeaderBoard = () => {
 
   return (
     <div
-      className={`${cls.item} w-full pt-[32px] pl-[32px] pr-[35px] pb-[38px]`}
+      className={`${cls.item} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[16px] md:pr-[35px] pb-[16px] md:pb-[38px]`}
     >
       <div className="flex justify-between">
         <p className="text-[16px] text-[#ffffff] font-bold">
           Total leaderboard
         </p>
-        <div className="order-list cursor-pointer">
-          <SvgInfomation />
-        </div>
+        <TooltipCustom
+          title="This is total leaderboard tooltip description"
+          placement="top-end"
+        >
+          <div className="order-list cursor-pointer">
+            <SvgInfomation />
+          </div>
+        </TooltipCustom>
       </div>
 
       <LeaderBoard master listMasterLeaderBoard={mockData} />
 
       <div className="w-full mt-[40px]">
-        <table className="w-full p-[6px] text-[14px]">
+        <table className="w-full p-[6px] text-[12px] md:text-[14px]">
           <tr className="bg-[#13161A] text-[#A2A5AD] w-full h-[34px]">
             <td className="w-[15%] cursor-pointer" onClick={handleChangeShow}>
               <span className="float-left">Nr</span>{' '}
