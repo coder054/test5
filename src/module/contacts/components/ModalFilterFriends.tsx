@@ -45,7 +45,6 @@ interface ContentSearchProps {
   countryRef: any
 }
 
-// here aaa1 declare ModalFilterFriends
 export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
   const searchInputRef = useRef(null)
   const {
@@ -111,7 +110,6 @@ export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
             e.preventDefault()
           }}
         >
-          {/* // here aaa1 MySelectCountry */}
           <div className="mb-[24px] ">
             <MySelectCountry
               defauleValue={optionAllCountry}

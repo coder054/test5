@@ -16,9 +16,10 @@ import { axios } from 'src/utils/axios'
 
 type FriendsCardProps = {
   user?: FriendsType
+  refreshListContact: any
 }
 
-export const FriendsCard = ({ user }: FriendsCardProps) => {
+export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
   const [isActive, setIsActive] = useState<boolean>(false)
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
   const [isOpenModalBlock, setIsOpenModalBlock] = useState(false)
@@ -47,6 +48,7 @@ export const FriendsCard = ({ user }: FriendsCardProps) => {
         message: 'Remove relationship successfully',
       })
       setIsOpenModalDelete(false)
+      refreshListContact()
     } catch (error) {
       notiToast({
         message: getErrorMessage(error),
@@ -67,6 +69,7 @@ export const FriendsCard = ({ user }: FriendsCardProps) => {
         message: 'Block successfully',
       })
       setIsOpenModalBlock(false)
+      refreshListContact()
     } catch (error) {
       notiToast({
         message: getErrorMessage(error),
