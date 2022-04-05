@@ -140,7 +140,7 @@ export const getNextYear = (number: number) => {
 }
 
 export const upperFirst = (str: string) => {
-  return _.upperFirst(str.toLowerCase().trim())
+  return _.upperFirst(str.toLowerCase().trim().replace('_', ' '))
 }
 
 export const getDefaultDay = (date: string | Date) => {

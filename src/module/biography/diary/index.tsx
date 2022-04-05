@@ -2,16 +2,12 @@ import clsx from 'clsx'
 import { useAtom } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import {
-  QueryClient,
-  QueryClientProvider,
-  useMutation,
-  useQuery,
-} from 'react-query'
+import { QueryClient, useMutation, useQuery } from 'react-query'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { Loading } from 'src/components'
 import { Button } from 'src/components/Button'
 import { DiaryUpdateIcon } from 'src/components/icons/DiaryUpdateIcon'
+import { ModalMui } from 'src/components/ModalMui'
 import { MyButton } from 'src/components/MyButton'
 import { DiaryType, InjuryType } from 'src/constants/types/diary.types'
 import { getPreviousDate, getToday } from 'src/hooks/functionCommon'
@@ -22,7 +18,6 @@ import {
   fetchDiary,
   updateDiary,
 } from 'src/service/diary-update'
-import { ModalMui } from 'src/components/ModalMui'
 import { Cap } from './cap'
 import { BooleanOption } from './components/BooleanOption'
 import { DateOptions } from './components/DateOptions'
@@ -32,14 +27,6 @@ import { Tabs } from './components/Tabs'
 import { Health } from './health'
 import { Match } from './match'
 import { Training } from './training'
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-})
 
 const ITEMS = [
   { label: 'Team Training', value: 'TEAM_TRAINING' },
@@ -53,14 +40,7 @@ const ITEMS = [
 type TypeofDiary = 'cap' | 'training' | 'match'
 
 const DiaryUpdate = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Component />
-    </QueryClientProvider>
-  )
-}
-
-const Component = () => {
+  const queryClient = new QueryClient()
   const { currentRoleName } = useAuth()
   const [diary, setDiary] = useAtom(diaryAtom)
   const [submitForm, setSubmitForm] = useState<DiaryType>({})
@@ -326,5 +306,7 @@ const Component = () => {
     </Loading>
   )
 }
+
+const Component = () => {}
 
 export default DiaryUpdate

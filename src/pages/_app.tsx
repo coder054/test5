@@ -1,6 +1,4 @@
 import type { EmotionCache } from '@emotion/cache'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 import { CacheProvider } from '@emotion/react'
 import { LocalizationProvider } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
@@ -14,7 +12,11 @@ import nProgress from 'nprogress'
 import type { FC } from 'react'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
+import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider as ReduxProvider } from 'react-redux'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { QueryParamProvider } from 'src/components/QueryParamsProvider'
 import { AuthConsumer, AuthProvider } from 'src/module/authen/auth/AuthContext'
 import { RTL } from '../components/rtl'
 import { SplashScreen } from '../components/splash-screen'
@@ -29,8 +31,6 @@ import { store } from '../store'
 import '../styles/globals_compiled.css'
 import { createTheme } from '../theme'
 import { createEmotionCache } from '../utils/create-emotion-cache'
-import { QueryParamProvider } from 'src/components/QueryParamsProvider'
-import { get } from 'lodash'
 
 type EnhancedAppProps = AppProps & {
   Component: NextPage
@@ -42,6 +42,14 @@ Router.events.on('routeChangeError', nProgress.done)
 Router.events.on('routeChangeComplete', nProgress.done)
 
 const clientSideEmotionCache = createEmotionCache()
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 const App: FC<EnhancedAppProps> = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
@@ -69,50 +77,52 @@ const App: FC<EnhancedAppProps> = (props) => {
       </Head>
       <CacheProvider value={emotionCache}>
         <ReduxProvider store={store}>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <AuthProvider>
-              <QueryParamProvider>
-                <SettingsProvider>
-                  <SettingsConsumer>
-                    {({ settings }) => (
-                      <ThemeProvider
-                        theme={createTheme({
-                          direction: settings.direction,
-                          responsiveFontSizes: settings.responsiveFontSizes,
-                          mode: settings.theme,
-                        })}
-                      >
-                        <RTL direction={settings.direction}>
-                          <CssBaseline />
-                          <Toaster position="top-center" />
-                          {/* <SettingsButton /> */}
-                          {/* {getLayout(<Component {...pageProps} />)} */}
-                          <AuthConsumer>
-                            {(auth) => {
-                              return !auth.initialized ? (
-                                <SplashScreen />
-                              ) : (
-                                getLayout(<Component {...pageProps} />)
-                              )
-                            }}
-                          </AuthConsumer>
-                          <ToastContainer
-                            position="top-right"
-                            autoClose={4000}
-                            hideProgressBar={false}
-                            newestOnTop={false}
-                            draggable={false}
-                            closeOnClick
-                            pauseOnHover
-                          />
-                        </RTL>
-                      </ThemeProvider>
-                    )}
-                  </SettingsConsumer>
-                </SettingsProvider>
-              </QueryParamProvider>
-            </AuthProvider>
-          </LocalizationProvider>
+          <QueryClientProvider client={queryClient}>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <AuthProvider>
+                <QueryParamProvider>
+                  <SettingsProvider>
+                    <SettingsConsumer>
+                      {({ settings }) => (
+                        <ThemeProvider
+                          theme={createTheme({
+                            direction: settings.direction,
+                            responsiveFontSizes: settings.responsiveFontSizes,
+                            mode: settings.theme,
+                          })}
+                        >
+                          <RTL direction={settings.direction}>
+                            <CssBaseline />
+                            <Toaster position="top-center" />
+                            {/* <SettingsButton /> */}
+                            {/* {getLayout(<Component {...pageProps} />)} */}
+                            <AuthConsumer>
+                              {(auth) => {
+                                return !auth.initialized ? (
+                                  <SplashScreen />
+                                ) : (
+                                  getLayout(<Component {...pageProps} />)
+                                )
+                              }}
+                            </AuthConsumer>
+                            <ToastContainer
+                              position="top-right"
+                              autoClose={4000}
+                              hideProgressBar={false}
+                              newestOnTop={false}
+                              draggable={false}
+                              closeOnClick
+                              pauseOnHover
+                            />
+                          </RTL>
+                        </ThemeProvider>
+                      )}
+                    </SettingsConsumer>
+                  </SettingsProvider>
+                </QueryParamProvider>
+              </AuthProvider>
+            </LocalizationProvider>
+          </QueryClientProvider>
         </ReduxProvider>
       </CacheProvider>
     </>
