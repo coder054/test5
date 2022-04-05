@@ -1,3 +1,21 @@
+export const optionAllCountry = {
+  name: 'All',
+  alpha2Code: '',
+  alpha3Code: '',
+  region: '',
+  flag: '/world-flag.svg',
+  phoneCode: '',
+}
+
+export const optionSweden = {
+  name: 'Sweden',
+  alpha2Code: 'SE',
+  alpha3Code: 'SWE',
+  region: 'Europe',
+  flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
+  phoneCode: '+46',
+}
+
 export const COUNTRY_LIST = [
   {
     name: 'Afghanistan',
@@ -1711,14 +1729,7 @@ export const COUNTRY_LIST = [
     flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939463/country-flags/SWZ.png',
     phoneCode: '+268',
   },
-  {
-    name: 'Sweden',
-    alpha2Code: 'SE',
-    alpha3Code: 'SWE',
-    region: 'Europe',
-    flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-    phoneCode: '+46',
-  },
+  optionSweden,
   {
     name: 'Switzerland',
     alpha2Code: 'CH',
@@ -1990,12 +2001,3 @@ export const COUNTRY_LIST = [
     phoneCode: '+263',
   },
 ]
-
-export const optionAllCountry = {
-  name: 'All',
-  alpha2Code: '',
-  alpha3Code: '',
-  region: '',
-  flag: '/world-flag.svg',
-  phoneCode: '',
-}

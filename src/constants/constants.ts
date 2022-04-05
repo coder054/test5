@@ -44,3 +44,5 @@ export const VIDEO = 'VIDEO'
 
 export const START_YEAR = 1971
 export const END_YEAR = 2072
+
+export const LIMIT = 20

@@ -1,15 +1,16 @@
-import { InputAdornment, TextField } from '@mui/material'
-import { Loading } from 'src/components/loading/loading'
-import { useEffect, useState, useMemo } from 'react'
+import { CircularProgress, InputAdornment, TextField } from '@mui/material'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { notiToast } from 'src/components/common/Toast'
-import { ContentSearchDialog } from 'src/components/dashboard/content-search-dialog'
-// import { MyModal } from 'src/components/Modal'
+import { Loading } from 'src/components/loading/loading'
 import { API_GET_LIST_CONTACT } from 'src/constants/api.constants'
-import { optionAllCountry } from 'src/constants/mocks/countries.constants'
+import { LIMIT } from 'src/constants/constants'
+import {
+  optionAllCountry,
+  optionSweden,
+} from 'src/constants/mocks/countries.constants'
 import { FriendsType } from 'src/constants/types/contacts.types'
 import { SearchIcon } from 'src/icons/search'
-import { SvgXIcon } from 'src/imports/svgs'
 import { axios } from 'src/utils/axios'
 import { getErrorMessage, getStr } from 'src/utils/utils'
 import { useDebounce } from 'use-debounce'
@@ -17,14 +18,12 @@ import { FriendsCard } from './components/FriendsCard'
 import { ModalAcceptFriends } from './components/ModalAcceptFriends'
 import { ModalAddFriends } from './components/ModalAddFriends'
 import { ModalFilterFriends } from './components/ModalFilterFriends'
-import { SkeletonContact } from './components/SkeletonContact'
 
 export const Friends = () => {
   const [totalFriend, setTotalFriend] = useState<Number>(0)
   const [friendRequestCount, setFriendRequestCount] = useState(0)
   const [items, setItems] = useState<FriendsType[]>([])
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [hasMore, setHasMore] = useState<boolean>(true)
   const [keyword, setKeyword] = useState('')
 
   const [keywordDebounce] = useDebounce(keyword, 300)
@@ -35,7 +34,8 @@ export const Friends = () => {
     useState<boolean>(false)
 
   const [openModalFilter, setOpenModalFilter] = useState(false)
-  const [country, setCountry] = useState(optionAllCountry)
+  const [country, setCountry] = useState(optionSweden)
+  const countryRef = useRef(country)
   const [contractedClub, setContractedClub] = useState({
     arena: '',
     city: '',
@@ -49,9 +49,25 @@ export const Friends = () => {
   const [sort, setSort] = useState<'asc' | 'desc'>('asc')
   const [role, setRole] = useState<'All' | 'Player' | 'Coach'>('All')
 
+  const hasMore = useMemo(() => {
+    return items.length < totalFriend
+  }, [items.length, totalFriend])
+
   const countryName = useMemo(() => {
-    return getStr(country, 'name')
-  }, [country])
+    return getStr(countryRef.current, 'name')
+  }, [countryRef.current])
+
+  const countryNameDisplayed = useMemo(() => {
+    return countryName === 'All' || countryName === ''
+      ? 'the world'
+      : countryName
+  }, [countryName])
+
+  const startAfter = useMemo(() => {
+    const len = items.length
+
+    return Math.floor(len / LIMIT) + 1
+  }, [items.length])
 
   useEffect(() => {
     console.log('aaa countryName: ', countryName)
@@ -77,13 +93,21 @@ export const Friends = () => {
     setOpenModalAcceptFriend(false)
   }
 
-  const getListContact = async (initItems, search, countryName, clubId) => {
+  const getListContact = async (
+    initItems,
+    search,
+    clubId,
+    sort,
+    countryName,
+    startAfter
+  ) => {
     try {
       setIsLoading(true)
       const body: any = {
-        limit: 1000,
-        startAfter: 0,
+        limit: LIMIT,
+        startAfter,
         tab: 'FRIENDS',
+        sorted: sort,
       }
 
       if (countryName !== optionAllCountry.name && countryName !== '') {
@@ -117,22 +141,28 @@ export const Friends = () => {
   }
 
   const fetchMoreData = async () => {
-    if (items.length >= totalFriend) {
-      setHasMore(false)
-      return
-    }
-    console.log('aaa getListContact1')
-    await getListContact(items, keywordDebounce, countryName, clubId)
+    await getListContact(
+      items,
+      keywordDebounce,
+      clubId,
+      sort,
+      countryName,
+      startAfter
+    )
   }
 
   useEffect(() => {
     setItems([])
-    console.log('aaa getListContact2')
-    getListContact([], keywordDebounce, countryName, clubId)
+    getListContact([], keywordDebounce, clubId, sort, countryName, 1)
   }, [keywordDebounce])
 
+  useEffect(() => {
+    setItems([])
+    getListContact([], keywordDebounce, clubId, sort, countryName, 1)
+  }, [sort])
+
   const refreshListContact = () => {
-    getListContact([], keywordDebounce, countryName, clubId)
+    getListContact([], keywordDebounce, clubId, sort, countryName, 1)
   }
 
   return (
@@ -149,15 +179,14 @@ export const Friends = () => {
         setContractedClub={setContractedClub}
         role={role}
         setRole={setRole}
-        sort={sort}
-        setSort={setSort}
         getListContact={getListContact.bind(
           null,
           [],
           keywordDebounce,
-          countryName,
-          clubId
+          clubId,
+          sort
         )}
+        countryRef={countryRef}
       ></ModalFilterFriends>
 
       <ModalAddFriends
@@ -266,30 +295,44 @@ export const Friends = () => {
       <div className="flex ">
         <p className="text-18px font-bold">
           {isLoading ? (
-            <Loading size={10}></Loading>
+            <div className="pr-3 inline-block ">
+              <Loading size={10}></Loading>
+            </div>
           ) : (
-            <span className="text-[#09E099] ml-[50px] inline-block ">
-              {totalFriend}{' '}
-            </span>
+            <span className="text-[#09E099] inline-block ">{totalFriend} </span>
           )}
-          {totalFriend === 1 ? 'Friend' : 'Friends'}
+          {` ${
+            totalFriend === 1 ? 'Friend' : 'Friends'
+          } in ${countryNameDisplayed}`}
         </p>
 
         <div className="grow min-w-[50px] "></div>
-        <div className="flex gap-x-[24px] ">
-          <svg
-            className="cursor-pointer"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M6.22701 11.0001H17.774C18.636 11.0001 19.094 9.98009 18.521 9.33509L12.748 2.84009C12.6544 2.7344 12.5394 2.64978 12.4106 2.59183C12.2818 2.53387 12.1422 2.50391 12.001 2.50391C11.8598 2.50391 11.7202 2.53387 11.5914 2.59183C11.4627 2.64978 11.3476 2.7344 11.254 2.84009L5.47901 9.33509C4.90601 9.98009 5.36401 11.0001 6.22701 11.0001ZM11.253 21.1591C11.3466 21.2648 11.4617 21.3494 11.5904 21.4074C11.7192 21.4653 11.8588 21.4953 12 21.4953C12.1412 21.4953 12.2808 21.4653 12.4096 21.4074C12.5384 21.3494 12.6534 21.2648 12.747 21.1591L18.52 14.6641C19.094 14.0201 18.636 13.0001 17.773 13.0001H6.22701C5.36501 13.0001 4.90701 14.0201 5.48001 14.6651L11.253 21.1591Z"
-              fill="white"
-            />
-          </svg>
+        <div className="flex gap-x-[24px] items-center ">
+          {sort === 'asc' ? (
+            <svg
+              onClick={() => {
+                setSort('desc')
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[24px] w-[24px] cursor-pointer"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h5a1 1 0 000-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM13 16a1 1 0 102 0v-5.586l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 101.414 1.414L13 10.414V16z" />
+            </svg>
+          ) : (
+            <svg
+              onClick={() => {
+                setSort('asc')
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-[24px] w-[24px] cursor-pointer"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path d="M3 3a1 1 0 000 2h11a1 1 0 100-2H3zM3 7a1 1 0 000 2h7a1 1 0 100-2H3zM3 11a1 1 0 100 2h4a1 1 0 100-2H3zM15 8a1 1 0 10-2 0v5.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L15 13.586V8z" />
+            </svg>
+          )}
 
           {/* // here aaa1 svg filter */}
           <svg
@@ -314,11 +357,21 @@ export const Friends = () => {
         dataLength={items.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={isLoading ? <SkeletonContact /> : <></>}
+        loader={
+          isLoading ? (
+            <div className="p-4 flex items-center justify-center ">
+              <CircularProgress />
+            </div>
+          ) : (
+            <></>
+          )
+        }
         endMessage={
-          <p style={{ textAlign: 'center' }}>
-            <b>Yay! You have seen it all</b>
-          </p>
+          isLoading ? null : (
+            <p style={{ textAlign: 'center', opacity: '0' }}>
+              <b>Yay! You have seen it all</b>
+            </p>
+          )
         }
       >
         {(items || []).map((it: FriendsType, index: number) => (
