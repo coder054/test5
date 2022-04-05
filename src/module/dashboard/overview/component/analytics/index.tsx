@@ -148,13 +148,12 @@ export const Analytics = () => {
     useState<DataAnalytic[]>(arrayAnalytics)
 
   return (
-    <div className="w-full max-h-[146px]">
+    <div className="w-full">
       <Grid container spacing={4}>
         {dataAnalytics.map((item, index) => (
           <Grid item md={3} sm={6} xs={12} key={index}>
-            {/* {console.log('index', index)} */}
             <Card className={`${cls.item} p-[16px]`}>
-              <div className="w-full float-left">
+              <div className="w-full float-left max-h-[146px]">
                 {arrayIcon.map((item2, index2) => {
                   if (index === index2) {
                     return (

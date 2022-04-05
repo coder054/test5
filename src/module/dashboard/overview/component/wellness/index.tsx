@@ -1,5 +1,5 @@
 const cls = require('../../overview.module.css')
-import { Chart } from 'src/components'
+import { Chart, TooltipCustom } from 'src/components'
 import { alpha, useTheme } from '@mui/material/styles'
 import { SvgAllowRight, SvgInfomation } from 'src/imports/svgs'
 import { ApexOptions } from 'apexcharts'
@@ -79,14 +79,19 @@ export const Wellness = () => {
 
   return (
     <div
-      className={`${cls.item} w-full pt-[32px] pl-[32px] pr-[35px] pb-[38px]`}
+      className={`${cls.item} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[16px] md:pr-[35px] pb-[16px] md:pb-[38px]`}
     >
       <div className="flex justify-between">
         <p className="text-[16px] text-[#ffffff] font-bold">Wellness</p>
         <div className="order-list">
-          <Tooltip title="This is wellness tooltip description">
-            <SvgInfomation />
-          </Tooltip>
+          <TooltipCustom
+            title="This is total leaderboard tooltip description"
+            placement="top-end"
+          >
+            <div className="order-list cursor-pointer">
+              <SvgInfomation />
+            </div>
+          </TooltipCustom>
         </div>
       </div>
 
