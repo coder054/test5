@@ -1,5 +1,5 @@
 import { CircularProgress, InputAdornment, TextField } from '@mui/material'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { notiToast } from 'src/components/common/Toast'
 import { Loading } from 'src/components/loading/loading'
@@ -35,6 +35,7 @@ export const Friends = () => {
 
   const [openModalFilter, setOpenModalFilter] = useState(false)
   const [country, setCountry] = useState(optionSweden)
+  const countryRef = useRef(country)
   const [contractedClub, setContractedClub] = useState({
     arena: '',
     city: '',
@@ -53,8 +54,8 @@ export const Friends = () => {
   }, [items.length, totalFriend])
 
   const countryName = useMemo(() => {
-    return getStr(country, 'name')
-  }, [country])
+    return getStr(countryRef.current, 'name')
+  }, [countryRef.current])
 
   const countryNameDisplayed = useMemo(() => {
     return countryName === 'All' || countryName === ''
@@ -95,9 +96,9 @@ export const Friends = () => {
   const getListContact = async (
     initItems,
     search,
-    countryName,
     clubId,
     sort,
+    countryName,
     startAfter
   ) => {
     try {
@@ -143,25 +144,25 @@ export const Friends = () => {
     await getListContact(
       items,
       keywordDebounce,
-      countryName,
       clubId,
       sort,
+      countryName,
       startAfter
     )
   }
 
   useEffect(() => {
     setItems([])
-    getListContact([], keywordDebounce, countryName, clubId, sort, 1)
+    getListContact([], keywordDebounce, clubId, sort, countryName, 1)
   }, [keywordDebounce])
 
   useEffect(() => {
     setItems([])
-    getListContact([], keywordDebounce, countryName, clubId, sort, 1)
+    getListContact([], keywordDebounce, clubId, sort, countryName, 1)
   }, [sort])
 
   const refreshListContact = () => {
-    getListContact([], keywordDebounce, countryName, clubId, sort, 1)
+    getListContact([], keywordDebounce, clubId, sort, countryName, 1)
   }
 
   return (
@@ -182,10 +183,10 @@ export const Friends = () => {
           null,
           [],
           keywordDebounce,
-          countryName,
           clubId,
           sort
         )}
+        countryRef={countryRef}
       ></ModalFilterFriends>
 
       <ModalAddFriends

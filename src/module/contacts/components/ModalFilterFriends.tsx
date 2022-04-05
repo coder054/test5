@@ -42,6 +42,7 @@ interface ContentSearchProps {
   role: any
   setRole: any
   getListContact: any
+  countryRef: any
 }
 
 // here aaa1 declare ModalFilterFriends
@@ -57,6 +58,7 @@ export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
     role,
     setRole,
     getListContact,
+    countryRef,
     ...other
   } = props
 
@@ -183,7 +185,8 @@ export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
         </Button>
         <Button
           onClick={async () => {
-            getListContact(1)
+            countryRef.current = country
+            getListContact(getStr(country, 'name'), 1)
             onClose()
           }}
           fullWidth
