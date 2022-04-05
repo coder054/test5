@@ -1,5 +1,7 @@
+import { CircularProgress } from '@mui/material'
 import { useState } from 'react'
-import { TooltipCustom } from 'src/components'
+import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
+import { Loading, LoadingCustom, TooltipCustom } from 'src/components'
 import { LeaderBoard } from 'src/components/leader-board'
 import {
   SvgAbove,
@@ -7,683 +9,48 @@ import {
   SvgBelow,
   SvgInfomation,
 } from 'src/imports/svgs'
+import { GetListLeaderBoard } from 'src/service/dashboard-overview'
 
 const cls = require('../../overview.module.css')
 
 interface TotalLeaderBoardProps {}
 
-const mockData = [
-  {
-    userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-    value: 0.5,
-    userInfo: {
-      email: 'hellen@zporter.co',
-      isActive: true,
-      birthCountry: {
-        name: 'Sweden',
-        phoneCode: '+46',
-        region: 'Europe',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Steven',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Steven',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['U17s', 'Young Boy', 'C3'],
-      lastName: 'Tran',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-16%2013%3A51%3A05.255841?alt=media&token=50e1f401-7c8b-4616-ac07-0ec6f9b09e67',
-      username: 'SteTra800101C',
-      type: 'COACH',
-      userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647413497832,
-      birthDay: '1980-01-01T00:00:00.000',
-      createdAt: 1647413497771,
-      updatedAt: 1648132220419,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 69,
-      height: 176,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 42,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        inviteUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-      },
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
     },
   },
-  {
-    userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-    value: 0.5,
-    userInfo: {
-      email: 'hellen@zporter.co',
-      isActive: true,
-      birthCountry: {
-        name: 'Sweden',
-        phoneCode: '+46',
-        region: 'Europe',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Steven',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Steven',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['U17s', 'Young Boy', 'C3'],
-      lastName: 'Tran',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-16%2013%3A51%3A05.255841?alt=media&token=50e1f401-7c8b-4616-ac07-0ec6f9b09e67',
-      username: 'SteTra800101C',
-      type: 'COACH',
-      userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647413497832,
-      birthDay: '1980-01-01T00:00:00.000',
-      createdAt: 1647413497771,
-      updatedAt: 1648132220419,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 69,
-      height: 176,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 42,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        inviteUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-      },
-    },
-  },
-  {
-    userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-    value: 0.5,
-    userInfo: {
-      email: 'hellen@zporter.co',
-      isActive: true,
-      birthCountry: {
-        name: 'Sweden',
-        phoneCode: '+46',
-        region: 'Europe',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Steven',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Steven',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['U17s', 'Young Boy', 'C3'],
-      lastName: 'Tran',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-16%2013%3A51%3A05.255841?alt=media&token=50e1f401-7c8b-4616-ac07-0ec6f9b09e67',
-      username: 'SteTra800101C',
-      type: 'COACH',
-      userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647413497832,
-      birthDay: '1980-01-01T00:00:00.000',
-      createdAt: 1647413497771,
-      updatedAt: 1648132220419,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 69,
-      height: 176,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 42,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        inviteUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-      },
-    },
-  },
-  {
-    userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-    value: 0.5,
-    userInfo: {
-      email: 'hellen@zporter.co',
-      isActive: true,
-      birthCountry: {
-        name: 'Sweden',
-        phoneCode: '+46',
-        region: 'Europe',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Steven',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Steven',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['U17s', 'Young Boy', 'C3'],
-      lastName: 'Tran',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-16%2013%3A51%3A05.255841?alt=media&token=50e1f401-7c8b-4616-ac07-0ec6f9b09e67',
-      username: 'SteTra800101C',
-      type: 'COACH',
-      userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647413497832,
-      birthDay: '1980-01-01T00:00:00.000',
-      createdAt: 1647413497771,
-      updatedAt: 1648132220419,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 69,
-      height: 176,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 42,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        inviteUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-      },
-    },
-  },
-  {
-    userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-    value: 0.5,
-    userInfo: {
-      email: 'hellen@zporter.co',
-      isActive: true,
-      birthCountry: {
-        name: 'Sweden',
-        phoneCode: '+46',
-        region: 'Europe',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Steven',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Steven',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['U17s', 'Young Boy', 'C3'],
-      lastName: 'Tran',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-16%2013%3A51%3A05.255841?alt=media&token=50e1f401-7c8b-4616-ac07-0ec6f9b09e67',
-      username: 'SteTra800101C',
-      type: 'COACH',
-      userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647413497832,
-      birthDay: '1980-01-01T00:00:00.000',
-      createdAt: 1647413497771,
-      updatedAt: 1648132220419,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 69,
-      height: 176,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 42,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        inviteUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-      },
-    },
-  },
-  {
-    userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-    value: 0.5,
-    userInfo: {
-      email: 'hellen@zporter.co',
-      isActive: true,
-      birthCountry: {
-        name: 'Sweden',
-        phoneCode: '+46',
-        region: 'Europe',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Steven',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Steven',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['U17s', 'Young Boy', 'C3'],
-      lastName: 'Tran',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-16%2013%3A51%3A05.255841?alt=media&token=50e1f401-7c8b-4616-ac07-0ec6f9b09e67',
-      username: 'SteTra800101C',
-      type: 'COACH',
-      userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647413497832,
-      birthDay: '1980-01-01T00:00:00.000',
-      createdAt: 1647413497771,
-      updatedAt: 1648132220419,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 69,
-      height: 176,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 42,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        inviteUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-      },
-    },
-  },
-  {
-    userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-    value: 0.5,
-    userInfo: {
-      email: 'hellen@zporter.co',
-      isActive: true,
-      birthCountry: {
-        name: 'Sweden',
-        phoneCode: '+46',
-        region: 'Europe',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Steven',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Steven',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['U17s', 'Young Boy', 'C3'],
-      lastName: 'Tran',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-16%2013%3A51%3A05.255841?alt=media&token=50e1f401-7c8b-4616-ac07-0ec6f9b09e67',
-      username: 'SteTra800101C',
-      type: 'COACH',
-      userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647413497832,
-      birthDay: '1980-01-01T00:00:00.000',
-      createdAt: 1647413497771,
-      updatedAt: 1648132220419,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 69,
-      height: 176,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 42,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        inviteUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-      },
-    },
-  },
-  {
-    userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-    value: 0.5,
-    userInfo: {
-      email: 'hellen@zporter.co',
-      isActive: true,
-      birthCountry: {
-        name: 'Sweden',
-        phoneCode: '+46',
-        region: 'Europe',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Steven',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Steven',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['U17s', 'Young Boy', 'C3'],
-      lastName: 'Tran',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-16%2013%3A51%3A05.255841?alt=media&token=50e1f401-7c8b-4616-ac07-0ec6f9b09e67',
-      username: 'SteTra800101C',
-      type: 'COACH',
-      userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647413497832,
-      birthDay: '1980-01-01T00:00:00.000',
-      createdAt: 1647413497771,
-      updatedAt: 1648132220419,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 69,
-      height: 176,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 42,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        inviteUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-      },
-    },
-  },
-  {
-    userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-    value: 0.5,
-    userInfo: {
-      email: 'hellen@zporter.co',
-      isActive: true,
-      birthCountry: {
-        name: 'Sweden',
-        phoneCode: '+46',
-        region: 'Europe',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Steven',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Steven',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['U17s', 'Young Boy', 'C3'],
-      lastName: 'Tran',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-16%2013%3A51%3A05.255841?alt=media&token=50e1f401-7c8b-4616-ac07-0ec6f9b09e67',
-      username: 'SteTra800101C',
-      type: 'COACH',
-      userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647413497832,
-      birthDay: '1980-01-01T00:00:00.000',
-      createdAt: 1647413497771,
-      updatedAt: 1648132220419,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 69,
-      height: 176,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 42,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        inviteUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-      },
-    },
-  },
-  {
-    userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-    value: 0.5,
-    userInfo: {
-      email: 'hellen@zporter.co',
-      isActive: true,
-      birthCountry: {
-        name: 'Sweden',
-        phoneCode: '+46',
-        region: 'Europe',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Steven',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Steven',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['U17s', 'Young Boy', 'C3'],
-      lastName: 'Tran',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-16%2013%3A51%3A05.255841?alt=media&token=50e1f401-7c8b-4616-ac07-0ec6f9b09e67',
-      username: 'SteTra800101C',
-      type: 'COACH',
-      userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647413497832,
-      birthDay: '1980-01-01T00:00:00.000',
-      createdAt: 1647413497771,
-      updatedAt: 1648132220419,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 69,
-      height: 176,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 42,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        inviteUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-      },
-    },
-  },
-  {
-    userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-    value: 0.5,
-    userInfo: {
-      email: 'hellen@zporter.co',
-      isActive: true,
-      birthCountry: {
-        name: 'Sweden',
-        phoneCode: '+46',
-        region: 'Europe',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Steven',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Steven',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['U17s', 'Young Boy', 'C3'],
-      lastName: 'Tran',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-16%2013%3A51%3A05.255841?alt=media&token=50e1f401-7c8b-4616-ac07-0ec6f9b09e67',
-      username: 'SteTra800101C',
-      type: 'COACH',
-      userId: 'a4851dea-0369-4787-816a-d1bf42d8f951',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647413497832,
-      birthDay: '1980-01-01T00:00:00.000',
-      createdAt: 1647413497771,
-      updatedAt: 1648132220419,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 69,
-      height: 176,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 42,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        inviteUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-      },
-    },
-  },
-  {
-    userId: 'adb61138-4f20-42e6-9f59-9722df392404',
-    value: 0.5,
-    userInfo: {
-      email: 'example112@zporter.co',
-      isActive: true,
-      birthCountry: {
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        name: 'Sweden',
-        region: 'Europe',
-        phoneCode: '+46',
-        alpha3Code: 'SWE',
-        alpha2Code: 'SE',
-      },
-      fullName: 'Tuan',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Tuan',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: ['Men Senior'],
-      lastName: 'Anhoneonetwo',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2F2022-03-22%2013%3A20%3A37.532662?alt=media&token=2eaa6bb7-9b77-420a-bb2d-e3f6332e2864',
-      username: 'TuaAnh070101C',
-      type: 'COACH',
-      userId: 'adb61138-4f20-42e6-9f59-9722df392404',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647930114211,
-      birthDay: '2007-01-01T00:00:00.000',
-      createdAt: 1647930113052,
-      updatedAt: 1647930114211,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 60,
-      height: 160,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 15,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        messageUpdates: true,
-        inviteUpdates: true,
-      },
-    },
-  },
-  {
-    userId: 'a6556a3f-c22f-44c7-9a89-ce8fad849c67',
-    value: 1,
-    userInfo: {
-      email: 'coachacc@gmail.com',
-      isActive: false,
-      birthCountry: {
-        name: 'Sweden',
-        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
-        alpha3Code: 'SWE',
-        region: 'Europe',
-        alpha2Code: 'SE',
-        phoneCode: '+46',
-      },
-      fullName: 'Thang',
-      clubId: 'phL7vvhFwA3K3jrmN3ha',
-      firstName: 'Thang',
-      fcmToken: [],
-      city: 'Stockholm, Sweden',
-      favoriteRoles: [],
-      currentTeams: [],
-      lastName: 'Coach',
-      faceImage:
-        'https://firebasestorage.googleapis.com/v0/b/zporter-dev-media/o/media%2Fface_image_default.png?alt=media&token=65eb03b0-4021-441d-9a4f-d43b47d72c40',
-      username: 'ThaCoa070101C',
-      type: 'COACH',
-      userId: 'a6556a3f-c22f-44c7-9a89-ce8fad849c67',
-      isOnline: true,
-      clubName: 'FC VMO',
-      timezone: 'Asia/Ho_Chi_Minh',
-      lastActive: 1647412667152,
-      birthDay: '2007-01-01T00:00:00.000',
-      createdAt: 1647412623861,
-      updatedAt: 1647412667152,
-      shirtNumber: null,
-      gender: 'MALE',
-      weight: 60,
-      height: 160,
-      fatherHeight: 0,
-      motherHeight: 0,
-      age: 15,
-      isPublic: true,
-      notificationOn: true,
-      notificationOptions: {
-        messageUpdates: true,
-        feedUpdates: true,
-        profileAndDiaryUpdates: true,
-        inviteUpdates: true,
-      },
-    },
-  },
-]
+})
 
 export const TotalLeaderBoard = () => {
-  const [showDecrease, setShowDescrease] = useState<boolean>(true)
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Component />
+    </QueryClientProvider>
+  )
+}
+
+const Component = () => {
+  const [limit, setLimit] = useState<number>(13)
+  const [startAfter, setStartAfter] = useState<number>(1)
+  const [sorted, setSorted] = useState<string>('asc')
+  const [category, setCategory] = useState<string>('HOURS')
+  const [lastDateRange, setLastDateRange] = useState<string>('7')
+
+  const { isLoading: loading, data: dataListLeaderBoard } = useQuery(
+    ['leaderBoard', limit, startAfter, sorted, category, lastDateRange],
+    () => GetListLeaderBoard(limit, startAfter, sorted, category, lastDateRange)
+  )
 
   const handleChangeShow = () => {
-    setShowDescrease(!showDecrease)
+    if (sorted === 'asc') {
+      setSorted('desc')
+    } else {
+      setSorted('asc')
+    }
   }
+  console.log('dataListLeaderBoard', dataListLeaderBoard)
 
   return (
     <div
@@ -703,31 +70,40 @@ export const TotalLeaderBoard = () => {
         </TooltipCustom>
       </div>
 
-      <LeaderBoard master listMasterLeaderBoard={mockData} />
+      {loading ? (
+        <LoadingCustom />
+      ) : (
+        <>
+          <LeaderBoard master listMasterLeaderBoard={dataListLeaderBoard} />
 
-      <div className="w-full mt-[40px]">
-        <table className="w-full p-[6px] text-[12px] md:text-[14px]">
-          <tr className="bg-[#13161A] text-[#A2A5AD] w-full h-[34px]">
-            <td className="w-[15%] cursor-pointer" onClick={handleChangeShow}>
-              <span className="float-left">Nr</span>{' '}
-              <div className="mt-[3px]">
-                {showDecrease ? <SvgAbove /> : <SvgBelow />}
-              </div>
-            </td>
-            <td className="w-[40%]">Name</td>
-            <td className="w-[35%]">Team</td>
-            <td className="w-[10%]">Index</td>
-          </tr>
-          {mockData.map((item, index) => (
-            <tr className="h-[40px]">
-              <td className="pl-[4px]">{index + 1}</td>
-              <td>{item.userInfo.fullName}</td>
-              <td>{item.userInfo.clubName}</td>
-              <td>{item.value}</td>
-            </tr>
-          ))}
-        </table>
-      </div>
+          <div className="w-full mt-[40px]">
+            <table className="w-full p-[6px] text-[12px] md:text-[14px]">
+              <tr className="bg-[#13161A] text-[#A2A5AD] w-full h-[34px]">
+                <td
+                  className="w-[15%] cursor-pointer"
+                  onClick={handleChangeShow}
+                >
+                  <span className="float-left">Nr</span>{' '}
+                  <div className="mt-[3px]">
+                    {sorted === 'asc' ? <SvgAbove /> : <SvgBelow />}
+                  </div>
+                </td>
+                <td className="w-[40%]">Name</td>
+                <td className="w-[35%]">Team</td>
+                <td className="w-[10%]">Index</td>
+              </tr>
+              {dataListLeaderBoard.map((item, index) => (
+                <tr className="h-[40px]">
+                  <td className="pl-[4px]">{index + 1}</td>
+                  <td>{item.userInfo.fullName}</td>
+                  <td>{item.userInfo.clubName}</td>
+                  <td>{item.value}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
+        </>
+      )}
 
       <div className="flex items-center mt-[50px] cursor-pointer">
         <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>

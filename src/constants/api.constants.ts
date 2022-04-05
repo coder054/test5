@@ -43,3 +43,6 @@ export const API_ACHIEVEMENTS_TROPHY = 'achievements/trophy'
 export const API_CREATE_CAREERS_FUTURE = 'careers/future'
 
 export const API_CREATE_CAREERs_HISTORIC = 'careers/historic'
+
+//dashboard overview
+export const API_GET_LIST_LEADER_BOARD = 'dashboard/get-list-leader-boards'
