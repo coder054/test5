@@ -8,9 +8,6 @@ import { upperFirst } from 'src/hooks/functionCommon'
 export const TrainingCircleChart = () => {
   const [training] = useAtom(dashboardTraining)
 
-  // Rerender to trigger chart's animation
-  useEffect(() => {}, [JSON.stringify(training)])
-
   const generateData = useCallback(
     (type: 'trainingType' | 'personalTrainingCategory') => {
       const COLOR = ['#E85CFF', '#4654EA', '#07E1FF', '#09E099']

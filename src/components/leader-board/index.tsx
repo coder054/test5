@@ -13,16 +13,16 @@ export const LeaderBoard = ({
 }: LeaderBoardProps) => {
   return (
     <div className="w-full">
-      <div className="w-[68px] mx-auto mt-[40px]">
+      <div className="w-[54px] md:w-[68px] mx-auto mt-[40px]">
         <ItemLeaderBoard
           master
           number={1}
           infor={listMasterLeaderBoard[0]?.userInfo}
         />
       </div>
-      <div className="flex mt-[-44px] gap-[260px]">
+      <div className="flex mt-[-44px] gap-[64px] xl:gap-[260px]">
         <div className="flex-1">
-          <div className="w-[68px] mx-auto">
+          <div className="w-[54px] md:w-[68px] mx-auto">
             <ItemLeaderBoard
               master
               number={2}
@@ -31,7 +31,7 @@ export const LeaderBoard = ({
           </div>
         </div>
         <div className="flex-1">
-          <div className="w-[68px] mx-auto">
+          <div className="w-[54px] md:w-[68px] mx-auto">
             <ItemLeaderBoard
               master
               number={3}

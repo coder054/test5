@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { TooltipCustom } from 'src/components'
 import {
   SvgAbove,
   SvgAllowRight,
@@ -56,19 +57,27 @@ export const MatchUpdates = () => {
   }
   return (
     <div
-      className={`${cls.item} w-full pt-[32px] pl-[32px] pr-[35px] pb-[38px]`}
+      className={`${cls.item} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[16px] md:pr-[35px] pb-[16px] md:pb-[38px]`}
     >
       <div className="flex justify-between">
         <p className="text-[16px] text-[#ffffff] font-bold">Match Updates</p>
-        <div className="order-list">
-          <SvgInfomation />
-        </div>
+        <TooltipCustom
+          title="This is total leaderboard tooltip description"
+          placement="top-end"
+        >
+          <div className="order-list cursor-pointer">
+            <SvgInfomation />
+          </div>
+        </TooltipCustom>
       </div>
 
-      <div className="w-full mt-[40px]">
-        <table className="w-full p-[6px] text-[14px]">
+      <div className="w-full mt-[8px]">
+        <table className="w-full p-[6px] text-[12px] md:text-[14px]">
           <tr className="bg-[#13161A] text-[#A2A5AD] w-full h-[34px]">
-            <td className="w-[20%] cursor-pointer" onClick={handleChangeShow}>
+            <td
+              className="w-[30%] md:w-[20%] cursor-pointer"
+              onClick={handleChangeShow}
+            >
               <span className="float-left">Date</span>{' '}
               <div className="mt-[3px]">
                 {showDecrease ? <SvgAbove /> : <SvgBelow />}
@@ -77,11 +86,11 @@ export const MatchUpdates = () => {
             <td className="w-[30%]">Opponent</td>
             <td className="w-[10%]">Score</td>
             <td className="w-[20%]">Goal/Ass</td>
-            <td className="w-[20%]">Min.</td>
+            <td className="w-[10%] md:w-[20%]">Min.</td>
           </tr>
           {mockData.map((item) => (
             <tr className="h-[40px]">
-              <td className="pl-[4px]">{item.date}</td>
+              <td className="md:pl-[4px]">{item.date}</td>
               <td>{item.opPonent}</td>
               <td>{item.score}</td>
               <td>{item.goal}</td>

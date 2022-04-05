@@ -2,7 +2,7 @@ import { atom } from 'jotai'
 import {
   DashboardTrainingType,
   DashboardUpdatesType,
-} from 'src/constants/types/dashboard-training.types'
+} from 'src/constants/types/dashboard/training.types'
 
 export const dashboardTraining = atom<DashboardTrainingType>({
   personalSessions: {
@@ -82,3 +82,5 @@ export const dashboardTrainingUpdates = atom<DashboardUpdatesType[]>([
     diaryId: '',
   },
 ])
+
+export const dashboardTags = atom<string[]>([''])

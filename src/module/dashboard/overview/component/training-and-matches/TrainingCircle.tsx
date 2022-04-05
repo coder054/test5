@@ -43,7 +43,7 @@ export const TrainingCircle = () => {
   const [trainingDay, setTrainingDay] = useState(ArrayTrainingMatchDay)
 
   return (
-    <div className="grid grid-cols-3 gap-4">
+    <div className="grid grid-cols-3 md:gap-4">
       {trainingDay &&
         trainingDay.map((chart, index) => {
           return (
