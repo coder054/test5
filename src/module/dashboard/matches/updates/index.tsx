@@ -1,14 +1,18 @@
 import clsx from 'clsx'
 import { useCallback, useEffect, useState } from 'react'
+import { isMobile } from 'react-device-detect'
 import toast from 'react-hot-toast'
 import { useQuery } from 'react-query'
+import SimpleBar from 'simplebar-react'
 import { Loading } from 'src/components'
-import { ChervonRightIcon } from 'src/components/icons'
+import { ChervonRightIcon, XIcon } from 'src/components/icons'
 import { ArrowDownIcon } from 'src/components/icons/ArrowDownIcon'
+import { ModalMui } from 'src/components/ModalMui'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { MatchUpdatesType } from 'src/constants/types/match.types'
 import { flexingFormatDate } from 'src/hooks/functionCommon'
-import { fetchUpdates } from 'src/service/dashboard-training'
+import DiaryUpdate from 'src/module/biography/diary'
+import { fetchUpdates } from 'src/service/dashboard/training.service'
 
 type MatchUpdatesProps = {
   range: string
@@ -17,6 +21,8 @@ type MatchUpdatesProps = {
 const MatchUpdates = ({ range }: MatchUpdatesProps) => {
   const [sort, setSort] = useState<boolean>(false)
   const [formValues, setFormValues] = useState<MatchUpdatesType[]>([])
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [selectedUpdates, setSelectedUpdates] = useState(undefined)
   const {
     isLoading: isGettingUpdates,
     data: responseUpdates,
@@ -26,9 +32,18 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
       range: range,
       tab: 'MATCH',
       limit: 10,
-      sorted: 'desc',
+      sorted: sort ? 'asc' : 'desc',
     })
   )
+
+  const handleChooseUpdates = (value: any) => {
+    setSelectedUpdates(value)
+    setIsOpenModal(true)
+  }
+
+  useEffect(() => {
+    !isOpenModal && setSelectedUpdates(undefined)
+  }, [isOpenModal])
 
   const countGoal = useCallback(
     (value: { event: string; minutes: number }[]) => {
@@ -53,10 +68,39 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
   }, [JSON.stringify(responseUpdates)])
 
   return (
-    <Loading isLoading={isGettingUpdates} className="p-8 bg-defaultBackGround">
+    <Loading
+      isLoading={isGettingUpdates}
+      className="p-8 bg-defaultBackGround rounded-lg"
+    >
       <div className=" space-y-6">
         <p className="text-[18px] font-bold">Match Updates</p>
         <div>
+          <ModalMui
+            customStyle={{
+              padding: 0,
+              top: '50%',
+              width: isMobile ? '100%' : 700,
+              overflow: 'auto',
+            }}
+            isOpen={isOpenModal}
+            onClose={setIsOpenModal}
+          >
+            <SimpleBar style={{ maxHeight: 850 }}>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setIsOpenModal(false)}
+                  className="absolute z-50 right-6 top-5"
+                >
+                  <XIcon />
+                </button>
+                <DiaryUpdate
+                  selected={selectedUpdates}
+                  onClose={setIsOpenModal}
+                />
+              </div>
+            </SimpleBar>
+          </ModalMui>
           <div className="grid grid-cols-12 bg-[#13161A] text-[#A2A5AD] text-[16px] font-medium  px-4 py-2">
             <p className="col-span-2">
               <button
@@ -81,7 +125,10 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
             <p className="col-span-1 invisible">Action</p>
           </div>
           {formValues.map((it) => (
-            <div className="grid grid-cols-12  text-[16px] font-normal px-4 py-2.5 cursor-pointer hover:bg-gray-500 duration-150">
+            <div
+              onClick={() => handleChooseUpdates(it)}
+              className="grid grid-cols-12  text-[16px] font-normal px-4 py-2.5 cursor-pointer hover:bg-gray-500 duration-150"
+            >
               <p className="col-span-2">
                 {flexingFormatDate(it.createdAt, 'DD/MM')}
               </p>

@@ -16,7 +16,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
 import { signingOutAtom } from 'src/atoms/UIAtoms'
-import { auth } from 'src/config/firebase-client'
+import { auth, initFirebaseFCM } from 'src/config/firebase-client'
 import { COOKIE_KEY, LOCAL_STORAGE_KEY, ROUTES } from 'src/constants/constants'
 import { axios } from 'src/utils/axios'
 import {
@@ -96,6 +96,12 @@ export function AuthProvider({ children }) {
       setCookieUtil(COOKIE_KEY.roleid, currentRoleId)
     }
   }, [currentRoleId])
+
+  useEffect(() => {
+    if (!!currentRoleId && !!token) {
+      initFirebaseFCM(token, currentRoleId)
+    }
+  }, [currentRoleId, token])
 
   useEffect(() => {
     if (isEmpty(currentRoleName)) {

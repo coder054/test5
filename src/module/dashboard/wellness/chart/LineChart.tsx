@@ -5,26 +5,21 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { Chart, Loading } from 'src/components'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
-import { MatchesTrainingType } from 'src/constants/types/dashboard/matches.types'
 import { fetchMatches } from 'src/service/dashboard/matches.service'
-
-type LineChartProps = {
-  range: string
-  filter?: MatchesTrainingType | string
-}
+import { MatchesTrainingType } from 'src/constants/types/dashboard/matches.types'
 
 type LineChartInputType = {
   series: { color: string; data: number[]; name: string }[]
   xaxis: { dataPoints: string[] }
 }
 
-export const LineChart = ({ range, filter }: LineChartProps) => {
-  const theme = useTheme()
+type LineChartProps = {
+  response: any
+  isLoading: boolean
+}
 
-  const { isLoading: isGettingMatchesChart, data: responseMatchesChart } =
-    useQuery([QUERIES_DASHBOARD.MATCHES_CHART, range, filter], () =>
-      fetchMatches({ range: range, type: filter })
-    )
+export const LineChart = ({ response, isLoading }: LineChartProps) => {
+  const theme = useTheme()
 
   const [selectedSeries, setSelectedSeries] = useState(['You', 'Average'])
   const [data, setData] = useState<LineChartInputType>({
@@ -59,14 +54,12 @@ export const LineChart = ({ range, filter }: LineChartProps) => {
   )
 
   useEffect(() => {
-    if (responseMatchesChart) {
-      const days = responseMatchesChart?.data.personalMatchChart?.map(
-        (it) => it.day
-      )
-      const personal = responseMatchesChart?.data.personalMatchChart.map(
+    if (response) {
+      const days = response?.data.personalDiaryRoutineChart?.map((it) => it.day)
+      const personal = response?.data.personalDiaryRoutineChart.map(
         (it) => it.value
       )
-      const average = responseMatchesChart?.data.averageMatchChart.map(
+      const average = response?.data.averageDiaryRoutineChart.map(
         (it) => it.value
       )
       setData((prev) => ({
@@ -78,7 +71,7 @@ export const LineChart = ({ range, filter }: LineChartProps) => {
         ],
       }))
     }
-  }, [JSON.stringify(responseMatchesChart)])
+  }, [JSON.stringify(response)])
 
   const chartOptions: ApexOptions = useMemo(() => {
     return {
@@ -178,7 +171,7 @@ export const LineChart = ({ range, filter }: LineChartProps) => {
 
   return (
     <div className="bg-defaultBackGround flex flex-col items-center justify-center col-span-7 p-9 rounded-lg">
-      <Loading isLoading={isGettingMatchesChart} className="pt-4">
+      <Loading isLoading={isLoading} className="pt-4">
         <Chart
           width={900}
           height={380}

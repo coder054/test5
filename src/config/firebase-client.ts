@@ -1,6 +1,10 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
+import { getMessaging, getToken, onMessage } from 'firebase/messaging'
+import { getErrorMessage, parseCookies } from 'src/utils/utils'
+import { axios } from 'src/utils/axios'
+import { COOKIE_KEY } from 'src/constants/constants'
 
 // const initFirebaseClient = () => {
 //   const firebaseConfig = {
@@ -28,40 +32,54 @@ export const firebaseApp = initializeApp({
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_MEASUREMENT_ID,
 })
 
-// if (false) {
+export const initFirebaseFCM = (token, roleId) => {
+  if (typeof window === 'undefined') {
+    return
+  }
+  console.log('aaa haha')
+  if (!token || !roleId) {
+    console.log('aaa no token or no roleId')
+    return
+  }
 
-//   const firebaseMessaging = getMessaging(firebaseApp)
-//   console.log('aaa2')
-//   // firebaseMessaging.getToken({vapidKey: process.env.NEXT_PUBLIC_FIREBASE_WEB_PUSH_CERTIFICATE});
-//   // When you need to retrieve the current registration token for an app instance, call getToken. If notification permission has not been granted, this method will ask the user for notification permissions. Otherwise, it returns a token or rejects the promise due to an error.
+  const foo = async () => {
+    try {
+      const firebaseMessaging = getMessaging(firebaseApp)
+      // firebaseMessaging.getToken({vapidKey: process.env.NEXT_PUBLIC_FIREBASE_WEB_PUSH_CERTIFICATE});
+      // When you need to retrieve the current registration token for an app instance, call getToken. If notification permission has not been granted, this method will ask the user for notification permissions. Otherwise, it returns a token or rejects the promise due to an error.
 
-//   getToken(firebaseMessaging, {
-//     vapidKey: process.env.NEXT_PUBLIC_FIREBASE_WEB_PUSH_CERTIFICATE,
-//   })
-//     .then((currentToken) => {
-//       if (currentToken) {
-//         debugger
-//         // Send the token to your server and update the UI if necessary
-//         // ...
-//       } else {
-//         // Show permission request UI
-//         console.log(
-//           'No registration token available. Request permission to generate one.'
-//         )
-//         // ...
-//       }
-//     })
-//     .catch((err) => {
-//       debugger
-//       console.log('An error occurred while retrieving token. ', err)
-//       // ...
-//     })
+      const currentToken = await getToken(firebaseMessaging, {
+        vapidKey: process.env.NEXT_PUBLIC_FIREBASE_WEB_PUSH_CERTIFICATE,
+      })
 
-//   onMessage(firebaseMessaging, (payload) => {
-//     console.log('aaa Message received. ', payload)
-//     // ...
-//   })
-// }
+      if (!currentToken) {
+        console.log(
+          'aaa No registration token available. Request permission to generate one.'
+        )
+        return
+      }
+
+      console.log('aaa currentToken', currentToken)
+
+      const { data } = await axios.post('/notifications/create-fcm-token', {
+        token: currentToken,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      })
+      console.log('aaa complete init fcm')
+
+      // Send the token to your server and update the UI if necessary
+
+      onMessage(firebaseMessaging, (payload) => {
+        console.log('aaa Message received. ', payload)
+        // ...
+      })
+    } catch (error) {
+      alert(getErrorMessage(error))
+    }
+  }
+
+  foo()
+}
 
 console.log('aaa initializeApp')
 

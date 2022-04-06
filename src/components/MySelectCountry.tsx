@@ -5,6 +5,7 @@ import {
   COUNTRY_LIST,
   optionAllCountry,
 } from 'src/constants/mocks/countries.constants'
+import { CountryType } from 'src/constants/types/settingsType.type'
 
 const CssTextField = styled(TextField)({
   '& label': {
@@ -85,6 +86,9 @@ export const MySelectCountry = ({
             }}
           />
         )}
+        isOptionEqualToValue={(option: CountryType) =>
+          option.name === value.name
+        }
         getOptionLabel={(option: any) => option.name}
         renderOption={(props, option) => (
           <Box

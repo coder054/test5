@@ -4,12 +4,12 @@ import { useQuery } from 'react-query'
 import { dashboardTraining } from 'src/atoms/dashboardTrainingAtom'
 import { Loading } from 'src/components'
 import { LastRangeDateType } from 'src/constants/types/dashboard/training.types'
-import { fetchTraining } from 'src/service/dashboard-training'
+import { fetchTraining } from 'src/service/dashboard/training.service'
 import { PeriodFilter } from '../components/PeriodFilter'
 import TrainingChart from './chart'
 import TrainingTable from './table'
-import TrainingUpdates from './updates'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
+import TrainingUpdates from './updates'
 
 const DashBoardTraining = () => {
   const [range, setRange] = useState<LastRangeDateType>('7')

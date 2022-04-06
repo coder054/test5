@@ -12,4 +12,6 @@ export const QUERIES_DASHBOARD = {
   DASHBOARD_VISITOR: 'dashboard-visitor',
   DASHBOARD_FAN: 'dashboard-fan',
   DASHBOARD_FRIEND: 'dashboard-friend',
+  WELLNESS_CHART: 'wellness-chart',
+  WELLNESS_DATA: 'wellness-data',
 }

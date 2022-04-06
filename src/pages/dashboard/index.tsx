@@ -5,6 +5,7 @@ import { AuthGuard } from 'src/components/authentication/auth-guard'
 import DashboardMatches from 'src/module/dashboard/matches'
 import { Overview } from 'src/module/dashboard/overview'
 import DashBoardTraining from 'src/module/dashboard/training'
+import DashboardWellness from 'src/module/dashboard/wellness'
 import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
 
 const tabs = [
@@ -54,6 +55,7 @@ const Dashboard: NextPage = () => {
             {currentTab === 'overview' && <Overview />}
             {currentTab === 'training' && <DashBoardTraining />}
             {currentTab === 'matches' && <DashboardMatches />}
+            {currentTab === 'wellness' && <DashboardWellness />}
           </Container>
         </Box>
       </>

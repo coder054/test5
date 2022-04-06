@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { Loading } from 'src/components'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { MatchesTableType } from 'src/constants/types/match.types'
-import { fetchTraining } from 'src/service/dashboard-training'
+import { fetchTraining } from 'src/service/dashboard/training.service'
 import Ticket from '../components/Ticket'
 import { upperFirst } from 'src/hooks/functionCommon'
 
@@ -55,7 +55,7 @@ export const MatchesTable = ({ range }: MatchesTableProps) => {
   return (
     <Loading
       isLoading={isGettingMatches}
-      className="col-span-5 bg-defaultBackGround"
+      className="col-span-5 bg-defaultBackGround rounded-lg"
     >
       <div className="flex laptopM:flex-col space-y-9 p-8">
         <div className="flex-1 grid grid-cols-4 gap-y-6">

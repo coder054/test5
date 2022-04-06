@@ -295,7 +295,7 @@ export type Team = {
   clubId: string
 }
 
-export type Training = {
+export type Training = Partial<{
   hoursOfPractice: number
   physicallyStrain: string
   physics: number
@@ -305,7 +305,7 @@ export type Training = {
   technics: number
   practiceTags: any[]
   trainingMedia: any[]
-}
+}>
 
 export type MotivationQuote = {
   content: string
