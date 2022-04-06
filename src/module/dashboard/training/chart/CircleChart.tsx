@@ -66,8 +66,8 @@ export const TrainingCircleChart = () => {
           type="donut"
         />
         <div className="w-full">
-          {generateData('personalTrainingCategory').map((it) => (
-            <div className="grid grid-cols-2 my-1">
+          {generateData('personalTrainingCategory').map((it, index) => (
+            <div key={index} className="grid grid-cols-2 my-1">
               <p className="text-right pr-2">{it.data}%</p>
               <p style={{ color: it.color }} className="text-[14px] pl-2">
                 {it.label}

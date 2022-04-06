@@ -1,9 +1,10 @@
-import { MenuItem, Select } from '@mui/material'
+import { MenuItem } from '@mui/material'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { MyDatePicker, MyInput } from 'src/components'
+import { DashboardUpdatesType } from 'src/constants/types/dashboard/training.types'
 import { DiaryType } from 'src/constants/types/diary.types'
 import {
   flexingFormatDate,
@@ -15,6 +16,7 @@ import {
 type DateOptionsProps = {
   diaryUpdate?: DiaryType[]
   date?: string | Date
+  isSelected?: DashboardUpdatesType
   onChange?: (value: string | Date) => void
   onChangeDiary?: (value: DiaryType) => void
 }
@@ -23,6 +25,7 @@ export const DateOptions = ({
   diaryUpdate,
   date,
   onChange,
+  isSelected,
   onChangeDiary,
 }: DateOptionsProps) => {
   const [value, setValue] = useState<string>('')
@@ -31,6 +34,15 @@ export const DateOptions = ({
   useEffect(() => {
     !diary.diaryId && setValue(getDefaultDay(date))
   }, [date, JSON.stringify(diaryUpdate), JSON.stringify(diary)])
+
+  useEffect(() => {
+    if (isSelected && diaryUpdate) {
+      onChangeDiary(
+        diaryUpdate?.find((it) => it.diaryId === isSelected.diaryId)
+      )
+      setValue(isSelected.diaryId)
+    }
+  }, [JSON.stringify(isSelected), JSON.stringify(diaryUpdate)])
 
   return (
     <div className="mobileL:grid mobileL:grid-cols-2 mobileL:gap-x-20 mobileM:flex mobileM:flex-col-reverse mobileM:gap-y-4">
@@ -74,9 +86,12 @@ export const DateOptions = ({
       <MyDatePicker
         label="Date"
         size="small"
-        isNextable
-        maxDate={dayjs(getToday()).toDate()}
-        minDate={dayjs(new Date()).add(-7, 'day').toDate()}
+        readOnly={!!isSelected}
+        isNextable={!isSelected}
+        maxDate={dayjs(isSelected ? isSelected.createdAt : getToday()).toDate()}
+        minDate={dayjs(isSelected ? isSelected.createdAt : new Date())
+          .add(-7, 'day')
+          .toDate()}
         value={date}
         onChange={onChange}
       />
