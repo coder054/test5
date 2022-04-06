@@ -12,7 +12,7 @@ import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants
 import { MatchUpdatesType } from 'src/constants/types/match.types'
 import { flexingFormatDate } from 'src/hooks/functionCommon'
 import DiaryUpdate from 'src/module/biography/diary'
-import { fetchUpdates } from 'src/service/dashboard-training'
+import { fetchUpdates } from 'src/service/dashboard/training.service'
 
 type MatchUpdatesProps = {
   range: string

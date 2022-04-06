@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { MyInput } from 'src/components'
@@ -12,7 +11,7 @@ import {
   ClubType,
   CurrentTeamType,
 } from 'src/constants/types/settingsType.type'
-import { getNextYear, getToday } from 'src/hooks/functionCommon'
+import { getNextYear } from 'src/hooks/functionCommon'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
 import { InfiniteScrollClub } from 'src/module/account-settings/football/components/InfiniteScrollClub'
 import { OptionPlayer } from 'src/module/authen/types'

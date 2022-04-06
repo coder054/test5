@@ -1,7 +1,5 @@
-import { InputAdornment } from '@mui/material'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { MyInput } from 'src/components'
 import { MyButton } from 'src/components/MyButton'
 import { MySelect } from 'src/components/MySelect'
 import { API_PLAYER_SETTINGS } from 'src/constants/api.constants'

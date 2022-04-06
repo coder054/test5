@@ -10,8 +10,9 @@ import MatchUpdates from './updates'
 
 const DashboardMatches = () => {
   const [range, setRange] = useState<LastRangeDateType>('7')
-  const [filterMatch, setFilterMatch] =
-    useState<MatchesTrainingType>('netScore')
+  const [filterMatch, setFilterMatch] = useState<MatchesTrainingType | string>(
+    'netScore'
+  )
 
   return (
     <div className="mb-12">
@@ -19,19 +20,14 @@ const DashboardMatches = () => {
         value={range}
         onChange={setRange}
         className="pb-6"
-        children={
-          <MyInput
-            select
-            className="py-3"
-            value={filterMatch}
-            label="Match chart data"
-            onChange={(_, e) => setFilterMatch(e.props.value)}
-          >
-            <MenuItem value="netScore">Net score</MenuItem>
-            <MenuItem value="avgPoint">Avg point</MenuItem>
-          </MyInput>
-        }
+        option={filterMatch}
+        optionChange={setFilterMatch}
         label="Filter matches"
+        options={[
+          { value: 'netScore', label: 'Net score' },
+          { value: 'avgPoint', label: 'Avg point' },
+        ]}
+        optionLabel="Match chart data"
       />
       <div className="space-y-6">
         <div className=" laptopM:grid laptopM:grid-cols-12 rounded-lg laptopM:space-x-6 flex flex-col space-y-6 xl:space-y-0">

@@ -47,10 +47,11 @@ type TypeofDiary = 'cap' | 'training' | 'match'
 
 type DiaryUpdateProps = {
   selected?: DashboardUpdatesType
+  isWellness?: boolean
   onClose?: (value: boolean) => void
 }
 
-const DiaryUpdate = ({ selected, onClose }: DiaryUpdateProps) => {
+const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
   const queryClient = useQueryClient()
   const { currentRoleName } = useAuth()
   const [diary, setDiary] = useAtom(diaryAtom)
@@ -107,16 +108,13 @@ const DiaryUpdate = ({ selected, onClose }: DiaryUpdateProps) => {
     updateDiary,
     {
       onSuccess: (data) => {
+        toast.success('Diary successfully updated')
         if (injuryData.injuryArea) {
           setDiary((prev) => ({ ...prev, injuries: data.data }))
         }
         onClose(false)
-        toast.success('Diary successfully updated')
         queryClient.invalidateQueries('diary')
         queryClient.invalidateQueries(QUERIES_DASHBOARD.TRAINING_DATA)
-      },
-      onError: () => {
-        toast.error('An error has occurred')
       },
     }
   )
@@ -227,7 +225,7 @@ const DiaryUpdate = ({ selected, onClose }: DiaryUpdateProps) => {
             onChange={setDate}
             date={date}
           />
-          {!selected && <Health date={date} />}
+          {isWellness && <Health date={date} />}
           <Tabs value={ITEMS} onChange={setCurrentTab} current={currentTab} />
           {currentTab === 'TEAM_TRAINING' && (
             <Training

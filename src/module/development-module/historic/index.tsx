@@ -1,7 +1,5 @@
-import { useAtom } from 'jotai'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { listMediaAtom } from 'src/atoms/listMediaAtom'
 import { ModalShowImage, MyInput } from 'src/components'
 import { ListImageVideo } from 'src/components/list-image-video'
 import { ModalShowVideo } from 'src/components/modal-show-video'
@@ -18,7 +16,6 @@ import { ClubType } from 'src/constants/types/settingsType.type'
 import { useIncrementNumber } from 'src/hooks/useIncrementNumber'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
 import { InfiniteScrollClub } from 'src/module/account-settings/football/components/InfiniteScrollClub'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { OptionPlayer } from 'src/module/authen/types'
 import {
   createCareerHistoric,
