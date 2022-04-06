@@ -2,19 +2,21 @@ import clsx from 'clsx'
 import { useAtom } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
-import {
-  QueryClient,
-  QueryClientProvider,
-  useMutation,
-  useQuery,
-} from 'react-query'
+import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { Loading } from 'src/components'
 import { Button } from 'src/components/Button'
 import { DiaryUpdateIcon } from 'src/components/icons/DiaryUpdateIcon'
+import { ModalMui } from 'src/components/ModalMui'
 import { MyButton } from 'src/components/MyButton'
+import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
+import { DashboardUpdatesType } from 'src/constants/types/dashboard/training.types'
 import { DiaryType, InjuryType } from 'src/constants/types/diary.types'
-import { getPreviousDate, getToday } from 'src/hooks/functionCommon'
+import {
+  getPreviousDate,
+  getStartOfDate,
+  getToday,
+} from 'src/hooks/functionCommon'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import {
   createDiary,
@@ -22,7 +24,6 @@ import {
   fetchDiary,
   updateDiary,
 } from 'src/service/diary-update'
-import { ModalMui } from 'src/components/ModalMui'
 import { Cap } from './cap'
 import { BooleanOption } from './components/BooleanOption'
 import { DateOptions } from './components/DateOptions'
@@ -32,14 +33,6 @@ import { Tabs } from './components/Tabs'
 import { Health } from './health'
 import { Match } from './match'
 import { Training } from './training'
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-})
 
 const ITEMS = [
   { label: 'Team Training', value: 'TEAM_TRAINING' },
@@ -52,15 +45,14 @@ const ITEMS = [
 
 type TypeofDiary = 'cap' | 'training' | 'match'
 
-const DiaryUpdate = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Component />
-    </QueryClientProvider>
-  )
+type DiaryUpdateProps = {
+  selected?: DashboardUpdatesType
+  isWellness?: boolean
+  onClose?: (value: boolean) => void
 }
 
-const Component = () => {
+const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
+  const queryClient = useQueryClient()
   const { currentRoleName } = useAuth()
   const [diary, setDiary] = useAtom(diaryAtom)
   const [submitForm, setSubmitForm] = useState<DiaryType>({})
@@ -70,18 +62,6 @@ const Component = () => {
   const [injuryData, setInjuryData] = useState<InjuryType>(null)
   const [currentTab, setCurrentTab] = useState('TEAM_TRAINING')
   const [error, setError] = useState<string>('')
-
-  const injurySubmit = useMemo(() => {
-    if (submitForm.injuries?.length === 0) {
-      return null
-    } else if (injuryData && injuryData?.injuryArea) {
-      return injuryData
-    } else return submitForm.injuries
-  }, [JSON.stringify(injuryData), JSON.stringify(submitForm.injuries)])
-
-  const isUpdate = useMemo(() => {
-    return !!diary.diaryId
-  }, [JSON.stringify(diary)])
 
   const { isLoading: isGettingDiary, data: diaryUpdate } = useQuery(
     ['diary', date],
@@ -128,17 +108,28 @@ const Component = () => {
     updateDiary,
     {
       onSuccess: (data) => {
+        toast.success('Diary successfully updated')
         if (injuryData.injuryArea) {
           setDiary((prev) => ({ ...prev, injuries: data.data }))
         }
-        toast.success('Diary successfully updated')
+        onClose(false)
         queryClient.invalidateQueries('diary')
-      },
-      onError: () => {
-        toast.error('An error has occurred')
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.TRAINING_DATA)
       },
     }
   )
+
+  const injurySubmit = useMemo(() => {
+    if (submitForm.injuries?.length === 0) {
+      return null
+    } else if (injuryData && injuryData?.injuryArea) {
+      return injuryData
+    } else return submitForm.injuries
+  }, [JSON.stringify(injuryData), JSON.stringify(submitForm.injuries)])
+
+  const isUpdate = useMemo(() => {
+    return !!diary.diaryId
+  }, [JSON.stringify(diary)])
 
   const filterType = useCallback(
     (currentTab: string) => {
@@ -149,7 +140,7 @@ const Component = () => {
     [currentTab]
   )
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     const requestData = {
       ...diary,
       ...submitForm,
@@ -173,11 +164,11 @@ const Component = () => {
             type: filterType(currentTab).toLowerCase(),
           })
     }
-  }
+  }, [JSON.stringify(diary), JSON.stringify(submitForm)])
 
-  const handleDeleteDiary = async () => {
+  const handleDeleteDiary = useCallback(async () => {
     mutateDelete(diary.diaryId)
-  }
+  }, [JSON.stringify(diary.diaryId)])
 
   const handleChange = (type: TypeofDiary, value: any) => {
     setSubmitForm({
@@ -203,6 +194,10 @@ const Component = () => {
   }, [JSON.stringify(diary)])
 
   useEffect(() => {
+    selected ? setDate(getStartOfDate(selected.createdAt)) : setDate(getToday())
+  }, [selected])
+
+  useEffect(() => {
     !diary.diaryId && setCurrentTab('TEAM_TRAINING')
     !diary.diaryId && setIsHaveInjury(false)
   }, [JSON.stringify(diary.diaryId), JSON.stringify(diaryUpdate)])
@@ -226,10 +221,11 @@ const Component = () => {
           <DateOptions
             diaryUpdate={diaryUpdate?.data}
             onChangeDiary={setDiary}
+            isSelected={selected}
             onChange={setDate}
             date={date}
           />
-          <Health date={date} />
+          {isWellness && <Health date={date} />}
           <Tabs value={ITEMS} onChange={setCurrentTab} current={currentTab} />
           {currentTab === 'TEAM_TRAINING' && (
             <Training

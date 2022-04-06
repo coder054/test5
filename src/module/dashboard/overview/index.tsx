@@ -24,31 +24,31 @@ export const Overview = () => {
         </span>
       </div>
 
-      <div className="col-span-12">
+      <div className="col-span-12 row-span-4 md:row-span-2 lg:row-span-1">
         <Analytics />
       </div>
 
-      <div className="col-span-12 pt-[40px]">
+      <div className="col-span-12">
         <TrainingAndMatches />
       </div>
 
-      <div className="col-span-5 row-span-5 mt-[20px]">
+      <div className="col-span-12 md:col-span-5 md:row-span-5 md:mt-[20px]">
         <TotalLeaderBoard />
       </div>
 
-      <div className="col-span-7 row-span-2 mt-[20px] ml-[20px]">
+      <div className="col-span-12 md:col-span-7 md:row-span-2 md:mt-[20px] md:ml-[20px]">
         <MatchUpdates />
       </div>
 
-      <div className="col-span-7 row-span-3 mt-[20px] ml-[20px]">
-        <DreamTeam />
+      <div className="col-span-12 md:col-span-7 md:row-span-3 mt-[20px] md:ml-[20px]">
+        <DreamTeam dreamTeam />
       </div>
 
-      <div className="col-span-5 row-span-1 mt-[20px]">
+      <div className="col-span-12 md:col-span-5 md:row-span-1 mt-[20px]">
         <Wellness />
       </div>
 
-      <div className="col-span-7 row-span-1 mt-[20px] ml-[20px]">
+      <div className="col-span-12 md:col-span-7 md:row-span-1 mt-[20px] md:ml-[20px]">
         <Pain />
       </div>
 

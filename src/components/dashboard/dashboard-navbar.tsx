@@ -152,7 +152,7 @@ const UpdateDiaryButton = () => {
             <button
               type="button"
               onClick={() => setIsOpenModal(false)}
-              className="absolute right-6 top-5"
+              className="absolute z-50 right-6 top-5"
             >
               <XIcon />
             </button>

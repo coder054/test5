@@ -167,7 +167,6 @@ export const Friends = () => {
 
   return (
     <div>
-      {/* // here aaa1 render ModalFilterFriends */}
       <ModalFilterFriends
         open={openModalFilter}
         onClose={() => {
@@ -194,6 +193,7 @@ export const Friends = () => {
         open={setOpenModalAddtFriend}
         refreshListContact={refreshListContact}
       />
+
       <ModalAcceptFriends
         onClose={handleCloseModalAcceptFriend}
         open={openModalAcceptFriend}
@@ -334,7 +334,6 @@ export const Friends = () => {
             </svg>
           )}
 
-          {/* // here aaa1 svg filter */}
           <svg
             onClick={() => {
               setOpenModalFilter(true)
@@ -375,7 +374,11 @@ export const Friends = () => {
         }
       >
         {(items || []).map((it: FriendsType, index: number) => (
-          <FriendsCard key={index} user={it} />
+          <FriendsCard
+            key={index}
+            user={it}
+            refreshListContact={refreshListContact}
+          />
         ))}
       </InfiniteScroll>
     </div>

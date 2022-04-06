@@ -111,7 +111,7 @@ export function formatDate(date: string | Date) {
   return dayjs(date).format(DEFAULT_DATE)
 }
 
-export function getStartOfDate(date: string | Date) {
+export function getStartOfDate(date: string | number | Date) {
   return dayjs(date).startOf('day').format(DEFAULT_DATE)
 }
 
@@ -140,7 +140,7 @@ export const getNextYear = (number: number) => {
 }
 
 export const upperFirst = (str: string) => {
-  return _.upperFirst(str.toLowerCase().trim())
+  return _.upperFirst(str.toLowerCase().trim().replace('_', ' '))
 }
 
 export const getDefaultDay = (date: string | Date) => {

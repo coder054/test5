@@ -66,21 +66,29 @@ export const ChartTotal = ({ index, chart }: ChartTotalProps) => {
   return (
     <div className="mx-auto">
       {index && index === 1 && (
-        <p className="font-bold text-[16px] text-center">Training</p>
+        <p className="font-bold text-[14px] md:text-[16px] text-center">
+          Training
+        </p>
       )}
       {index && index === 2 && (
-        <p className="font-bold text-[16px] text-center">Matches</p>
+        <p className="font-bold text-[14px] md:text-[16px] text-center">
+          Matches
+        </p>
       )}
       {index && index === 3 && (
-        <p className="font-bold text-[16px] text-center">Total</p>
+        <p className="font-bold text-[14px] md:text-[16px] text-center">
+          Total
+        </p>
       )}
 
-      <div className="w-[92px] h-[208px] relative">
-        <div className="flex w-full mt-[32px] gap-1 absolute top-0 h-full">
+      <div className="w-[62px] md:w-[92px] h-[168px] md:h-[208px] relative">
+        <div className="flex w-full mt-[52px] md:mt-[32px] gap-1 absolute top-0 h-full">
           <div className="flex-1 relative">
-            <div className="h-[184px] absolute bottom-[28px] w-full">
+            <div className="h-[152px] md:h-[184px] absolute bottom-[28px] w-full">
               <div className="absolute bottom-0 w-full">
-                <p className="text-[12px] text-center -mb-[4px]">{totalYou}h</p>
+                <p className="text-[10px] md:text-[12px] text-center -mb-[4px]">
+                  {totalYou}h
+                </p>
                 <div className="w-full">
                   {keyYou &&
                     keyYou.map((key, index) => (
@@ -88,7 +96,7 @@ export const ChartTotal = ({ index, chart }: ChartTotalProps) => {
                         style={{
                           height: `${youPercent[index] * 1.6}px`,
                         }}
-                        className={`bg-[#4654EA] rounded-[4px] text-[16px] mt-[4px] flex items-center ${cls.minHeight}`}
+                        className={`bg-[#4654EA] rounded-[4px] text-[14px] mdtext-[16px] mt-[4px] flex items-center ${cls.minHeight}`}
                       >
                         <p className="mx-auto">{key}</p>
                       </div>
@@ -96,7 +104,7 @@ export const ChartTotal = ({ index, chart }: ChartTotalProps) => {
                 </div>
               </div>
             </div>
-            <p className="text-[#4654EA] text-[14px] mt-[8px] ml-[6px] text-center absolute bottom-0">
+            <p className="text-[#4654EA] text-[12px] md:text-[14px] mt-[8px] ml-[6px] text-center absolute bottom-0">
               YOU
             </p>
           </div>
@@ -120,7 +128,7 @@ export const ChartTotal = ({ index, chart }: ChartTotalProps) => {
                 </div>
               </div>
             </div>
-            <p className="text-[#A2A5AD] text-[14px] mt-[8px] ml-[6px] text-center absolute bottom-0">
+            <p className="text-[#A2A5AD] text-[12px] md:text-[14px] mt-[8px] ml-[6px] text-center absolute bottom-0">
               AVG
             </p>
           </div>

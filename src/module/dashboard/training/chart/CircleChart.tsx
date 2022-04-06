@@ -8,9 +8,6 @@ import { upperFirst } from 'src/hooks/functionCommon'
 export const TrainingCircleChart = () => {
   const [training] = useAtom(dashboardTraining)
 
-  // Rerender to trigger chart's animation
-  useEffect(() => {}, [JSON.stringify(training)])
-
   const generateData = useCallback(
     (type: 'trainingType' | 'personalTrainingCategory') => {
       const COLOR = ['#E85CFF', '#4654EA', '#07E1FF', '#09E099']
@@ -69,8 +66,8 @@ export const TrainingCircleChart = () => {
           type="donut"
         />
         <div className="w-full">
-          {generateData('personalTrainingCategory').map((it) => (
-            <div className="grid grid-cols-2 my-1">
+          {generateData('personalTrainingCategory').map((it, index) => (
+            <div key={index} className="grid grid-cols-2 my-1">
               <p className="text-right pr-2">{it.data}%</p>
               <p style={{ color: it.color }} className="text-[14px] pl-2">
                 {it.label}

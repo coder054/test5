@@ -1,3 +1,5 @@
+import { Tooltip } from '@material-ui/core'
+import { TooltipCustom } from 'src/components'
 import { SvgAllowRight, SvgInfomation } from 'src/imports/svgs'
 import { TrainingCircle } from './TrainingCircle'
 import { TrainingTotal } from './TrainingTotal'
@@ -7,22 +9,27 @@ const cls = require('../../overview.module.css')
 export const TrainingAndMatches = () => {
   return (
     <div
-      className={`${cls.item} w-full pt-[32px] pl-[32px] pr-[35px] pb-[38px]`}
+      className={`${cls.item} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[15px] md:pr-[35px] pb-[18px] md:pb-[38px]`}
     >
       <div className="flex justify-between">
         <p className="text-[16px] text-[#ffffff] font-bold">
           Training & Matches
         </p>
-        <div className="order-list cursor-pointer">
-          <SvgInfomation />
-        </div>
+        <TooltipCustom
+          title="This is training & matches tootip description"
+          placement="top-end"
+        >
+          <div className="order-list cursor-pointer">
+            <SvgInfomation />
+          </div>
+        </TooltipCustom>
       </div>
 
-      <div className="flex w-full min-h-[200px] pt-[44px]">
-        <div className="flex-1">
+      <div className="lg:flex w-full min-h-[200px] pt-[44px]">
+        <div className="md:flex-1">
           <TrainingTotal />
         </div>
-        <div className="flex-1 ml-[74px]">
+        <div className="md:flex-1 md:ml-[74px] pt-[74px] md:pt-[0px]">
           <TrainingCircle />
         </div>
       </div>

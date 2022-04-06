@@ -202,11 +202,13 @@ export const ModalAcceptFriends: FC<ContentSearchProps> = (props) => {
                     params
                   )}`
                 )
+
                 refreshListContact()
                 notiToast({
                   type: 'success',
                   message: 'Friend requests accepted successfully',
                 })
+
                 onClose()
                 resetModal()
               } catch (error) {
