@@ -177,7 +177,7 @@ export const LineChart = ({ range, filter }: LineChartProps) => {
   }, [JSON.stringify(data)])
 
   return (
-    <div className="bg-defaultBackGround flex flex-col items-center justify-center col-span-7 p-9">
+    <div className="bg-defaultBackGround flex flex-col items-center justify-center col-span-7 p-9 rounded-lg">
       <Loading isLoading={isGettingMatchesChart} className="pt-4">
         <Chart
           width={900}

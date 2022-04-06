@@ -1,11 +1,11 @@
-import { DesktopDatePicker } from '@mui/lab'
+import { DesktopDatePicker, DesktopDatePickerProps } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import { styled, TextField } from '@mui/material'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
-import { flexingFormatDate, getToday } from 'src/hooks/functionCommon'
+import { getToday } from 'src/hooks/functionCommon'
 import { ChevronLeft as ChervonLeftIcon } from 'src/icons/chevron-left'
 import { ChevronRight as ChervonRightIcon } from 'src/icons/chevron-right'
 var isSameOrBefore = require('dayjs/plugin/isSameOrBefore')
@@ -54,6 +54,7 @@ type MyDatePickerProps = {
   onChange?: (value: string) => void
   maxDate?: any
   minDate?: any
+  readOnly?: boolean
 }
 
 export const MyDatePicker = ({
@@ -66,6 +67,7 @@ export const MyDatePicker = ({
   isNextable,
   errorMessage,
   onChange,
+  readOnly,
   ...rest
 }: MyDatePickerProps) => {
   const [currentValue, setCurrentValue] = useState<string | Date>()
@@ -99,6 +101,7 @@ export const MyDatePicker = ({
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DesktopDatePicker
           label={label}
+          readOnly={readOnly}
           value={currentValue}
           inputFormat="dd/MM/yyyy"
           onChange={handleChange}

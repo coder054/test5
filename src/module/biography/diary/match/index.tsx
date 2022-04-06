@@ -191,7 +191,7 @@ export const Match = ({ onChange }: MatchProps) => {
           : diary.match?.stats,
     }
     diary.match && setFormValues(initialValues)
-  }, [])
+  }, [JSON.stringify(diary)])
 
   return (
     <Loading isLoading={isGettingSettings}>

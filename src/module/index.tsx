@@ -1,2 +1,2 @@
-export * from './landing'
+// export * from './landing'
 export * from './news'

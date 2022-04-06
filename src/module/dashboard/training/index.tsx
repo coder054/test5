@@ -8,8 +8,8 @@ import { fetchTraining } from 'src/service/dashboard-training'
 import { PeriodFilter } from '../components/PeriodFilter'
 import TrainingChart from './chart'
 import TrainingTable from './table'
-import TrainingUpdates from './updates'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
+import TrainingUpdates from './updates'
 
 const DashBoardTraining = () => {
   const [range, setRange] = useState<LastRangeDateType>('7')

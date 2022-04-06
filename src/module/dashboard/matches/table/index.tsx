@@ -55,7 +55,7 @@ export const MatchesTable = ({ range }: MatchesTableProps) => {
   return (
     <Loading
       isLoading={isGettingMatches}
-      className="col-span-5 bg-defaultBackGround"
+      className="col-span-5 bg-defaultBackGround rounded-lg"
     >
       <div className="flex laptopM:flex-col space-y-9 p-8">
         <div className="flex-1 grid grid-cols-4 gap-y-6">

@@ -5,7 +5,7 @@ import { MyInputChips } from 'src/components'
 import { MySlider } from 'src/components/MySlider'
 import { numToScale, scaleToNum } from 'src/hooks/functionCommon'
 
-type FormValuesType = {
+type FormValuesType = Partial<{
   hoursOfPractice: number
   mental: number
   physicallyStrain: string
@@ -15,7 +15,7 @@ type FormValuesType = {
   technics: number
   trainingMedia: { url: string; type: string }[]
   typeOfTraining: string | string[]
-}
+}>
 
 type TrainingProps = {
   currentTab: string
