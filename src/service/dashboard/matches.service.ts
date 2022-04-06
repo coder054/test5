@@ -8,7 +8,7 @@ export const fetchMatches = async ({
   type,
 }: {
   range: LastRangeDateType
-  type: MatchesTrainingType
+  type: MatchesTrainingType | string
 }) => {
   return axios.get(
     toQueryString('dashboard/get-matches-chart', {

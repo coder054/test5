@@ -1,5 +1,7 @@
+import { MenuItem } from '@mui/material'
 import clsx from 'clsx'
 import { ReactElement, useCallback, useEffect, useState } from 'react'
+import { MyInput } from 'src/components'
 import { Button } from 'src/components/Button'
 import { PeriodFilterIcon, XIcon } from 'src/components/icons'
 import { ModalMui } from 'src/components/ModalMui'
@@ -13,6 +15,10 @@ type PeriodFilterProps = {
   onChange?: (value: LastRangeDateType) => void
   className?: string
   children?: ReactElement
+  option?: string
+  options?: { value: string; label: string }[]
+  optionLabel?: string
+  optionChange?: (value: string) => void
 }
 
 export const PeriodFilter = ({
@@ -20,11 +26,15 @@ export const PeriodFilter = ({
   label,
   className,
   onChange,
-  children,
+  option,
+  options,
+  optionLabel,
+  optionChange,
 }: PeriodFilterProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [current, setCurrent] = useState<number>(0)
   const [lastValue, setLastValue] = useState<number>(0)
+  const [currentOption, setCurrentOption] = useState<string>('')
 
   const generateInput = (value: string) => {
     switch (value) {
@@ -70,17 +80,19 @@ export const PeriodFilter = ({
   const submit = () => {
     setLastValue(current)
     onChange && onChange(generateOutput(current).query)
+    optionChange && optionChange(currentOption)
     setIsOpen(false)
   }
 
   const reset = () => {
     setCurrent(0)
+    options && setCurrentOption(options[0].value)
   }
 
   useEffect(() => {
-    setLastValue(generateInput(value))
     setCurrent(generateInput(value))
-  }, [value, isOpen])
+    setCurrentOption(option)
+  }, [value, isOpen, option])
 
   return (
     <div className={clsx('flex w-full justify-end', className)}>
@@ -124,7 +136,21 @@ export const PeriodFilter = ({
               labelClass="text-[#A2A5AD]"
             />
           </div>
-          <div className="w-full">{children}</div>
+          {optionLabel && (
+            <MyInput
+              select
+              className="py-3"
+              value={currentOption}
+              label={optionLabel}
+              onChange={(_, e) => setCurrentOption(e.props.value)}
+            >
+              {options.map((option: { value: string; label: string }) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </MyInput>
+          )}
           <div className="grid grid-cols-2 w-full gap-x-6">
             <Button
               type="submit"

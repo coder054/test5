@@ -5,4 +5,6 @@ export const QUERIES_DASHBOARD = {
   MATCHES_CHART: 'matches-chart',
   MATCHES_TABLE: 'matches-table',
   MATCHES_DATA: 'matches-data',
+  WELLNESS_CHART: 'wellness-chart',
+  WELLNESS_DATA: 'wellness-data',
 }
