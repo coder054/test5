@@ -326,3 +326,15 @@ export interface LeaderBoardType {
   value?: number
   userInfo?: UserInforType
 }
+
+export interface AnalyticsType {
+  count: number
+  chart: AnalyticType[]
+  percentChanged: number
+}
+
+export interface AnalyticType {
+  index: number
+  value: number
+  day: string
+}

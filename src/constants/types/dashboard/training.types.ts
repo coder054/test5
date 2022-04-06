@@ -27,6 +27,18 @@ export type DashboardTrainingType = Partial<{
   averageTrainingTypeOfTotalHours: AverageSessionsType
 }>
 
+export type DashboardTrainingAndMatchType = Partial<{
+  personalTrainingHours: AverageSessionsType
+  averageTrainingHours: AverageSessionsType
+  personalMatchHours: MatchHours
+  averageMatchHours: MatchHours
+  personalTotalHours: TotalHours
+  averageTotalHours: TotalHours
+  trainingCategory: AverageTrainingCategoryType
+  matchResults: MatchResultType
+  dayUsage: DayUsageType
+}>
+
 export interface AverageSessionsType {
   group: number
   personal: number
@@ -44,6 +56,28 @@ export interface TrainingType {
   group: number
   private: number
   team: number
+}
+
+export interface MatchHours {
+  cupMatch: number
+  friendlyMatch: number
+  seriesMatch: number
+}
+
+export interface TotalHours {
+  training: number
+  matches: number
+}
+
+export interface MatchResultType {
+  wins: number
+  draws: number
+  losses: number
+}
+export interface DayUsageType {
+  training: number
+  match: number
+  rest: number
 }
 
 export type LastRangeDateType =

@@ -59,7 +59,7 @@ export const initFirebaseFCM = (token, roleId) => {
         return
       }
 
-      console.log('aaa currentToken',  currentToken );
+      console.log('aaa currentToken', currentToken)
 
       const { data } = await axios.post('/notifications/create-fcm-token', {
         token: currentToken,

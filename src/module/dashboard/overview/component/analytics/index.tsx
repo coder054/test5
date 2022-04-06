@@ -1,5 +1,5 @@
 import { Chart } from 'src/components/chart'
-import { FC, useState } from 'react'
+import { FC, useState, useEffect } from 'react'
 import type { ApexOptions } from 'apexcharts'
 import { alpha, useTheme } from '@mui/material/styles'
 import { DataAnalytic } from 'src/constants/types'
@@ -13,6 +13,22 @@ import {
   SvgIncrement,
   SvgVisitor,
 } from 'src/imports/svgs'
+import { AnalyticItem } from 'src/components'
+import { useQuery } from 'react-query'
+import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
+import {
+  getDashboardFansStat,
+  getDashboardFriendStat,
+  getDashboardVisitorStat,
+  getDashboardVisitStat,
+} from 'src/service/dashboard-overview'
+import { useAtom } from 'jotai'
+import {
+  dashboardFanAtom,
+  dashboardFriendAtom,
+  dashboardVisitAtom,
+  dashboardVisitorAtom,
+} from 'src/atoms/dashboard'
 const cls = require('../../overview.module.css')
 
 interface AnalyticsProps {}
@@ -75,133 +91,53 @@ const arrayIcon = [
   },
 ]
 
-const LineChart = ({ color }: { color?: string }) => {
-  const theme = useTheme()
-
-  const chartOptions: ApexOptions = {
-    chart: {
-      background: 'transparent',
-      toolbar: {
-        show: false,
-      },
-      zoom: {
-        enabled: false,
-      },
-      width: '100%',
-    },
-    colors: [`${color}`],
-    dataLabels: {
-      enabled: false,
-    },
-    fill: {
-      opacity: 1,
-      gradient: {
-        shade: 'light',
-      },
-    },
-    grid: {
-      show: false,
-    },
-    stroke: {
-      curve: 'smooth',
-      width: 3,
-    },
-    theme: {
-      mode: theme.palette.mode,
-    },
-    tooltip: {
-      enabled: false,
-    },
-    xaxis: {
-      labels: {
-        show: false,
-      },
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-    },
-    yaxis: {
-      show: false,
-    },
-  }
-
-  const chartSeries = [{ data: [90, 60, 30, 60, 93, 30, 20, 100, 50] }]
-
-  return (
-    <div className="">
-      <Chart
-        options={chartOptions}
-        series={chartSeries}
-        type="area"
-        // width={262}
-        height={70}
-      />
-    </div>
-  )
-}
-
 export const Analytics = () => {
-  const [dataAnalytics, setDataAnalytics] =
-    useState<DataAnalytic[]>(arrayAnalytics)
+  const [lastDateRange, setLastDateRange] = useState<string>('7')
+  const [visitAtom, setVisitAtom] = useAtom(dashboardVisitAtom)
+  const [visitorAtom, setVisitorAtom] = useAtom(dashboardVisitorAtom)
+  const [fanAtom, setFanAtom] = useAtom(dashboardFanAtom)
+  const [friendAtom, setFriendAtom] = useAtom(dashboardFriendAtom)
+
+  const { isLoading: loadingVisit, data: dataVisit } = useQuery(
+    [QUERIES_DASHBOARD.DASHBOARD_VISIT, lastDateRange],
+    () => getDashboardVisitStat(lastDateRange)
+  )
+
+  const { isLoading: loadingVisitor, data: dataVisitor } = useQuery(
+    [QUERIES_DASHBOARD.DASHBOARD_VISITOR, lastDateRange],
+    () => getDashboardVisitorStat(lastDateRange)
+  )
+
+  const { isLoading: loadingFan, data: dataFan } = useQuery(
+    [QUERIES_DASHBOARD.DASHBOARD_FAN, lastDateRange],
+    () => getDashboardFansStat(lastDateRange)
+  )
+
+  const { isLoading: loadingFriend, data: dataFiend } = useQuery(
+    [QUERIES_DASHBOARD.DASHBOARD_FRIEND, lastDateRange],
+    () => getDashboardFriendStat(lastDateRange)
+  )
+
+  useEffect(() => {
+    dataVisit && setVisitAtom(dataVisit)
+  }, [dataVisit])
+  useEffect(() => {
+    dataVisitor && setVisitorAtom(dataVisitor)
+  }, [dataVisitor])
+  useEffect(() => {
+    dataFan && setFanAtom(dataFan)
+  }, [dataFan])
+  useEffect(() => {
+    dataVisit && setVisitAtom(dataVisit)
+  }, [dataVisit])
 
   return (
     <div className="w-full">
       <Grid container spacing={4}>
-        {dataAnalytics.map((item, index) => (
-          <Grid item md={3} sm={6} xs={12} key={index}>
-            <Card className={`${cls.item} p-[16px]`}>
-              <div className="w-full float-left max-h-[146px]">
-                {arrayIcon.map((item2, index2) => {
-                  if (index === index2) {
-                    return (
-                      <div
-                        className={`${item2.className} w-[24px] h-[24px] relative rounded-full flex items-center float-left`}
-                      >
-                        <div className="absolute left-[6px]">{item2.icon}</div>
-                      </div>
-                    )
-                  } else {
-                    return
-                  }
-                })}
-                <p className="text-[16px] ml-[38px]">{item.title}</p>
-              </div>
-
-              <div className="w-full float-left h-[70px]">
-                <LineChart color={item.color} />
-              </div>
-
-              <div className="flex justify-between w-full items-center">
-                <span className="text-[24px] font-bold">{item.total}</span>
-                <span
-                  className={`order-last text-[12px] ${
-                    item.total > 1000 ? 'text-[#09E099]' : 'text-[#D60C0C]'
-                  }`}
-                >
-                  {item.total > 1000 ? (
-                    <div className="float-left">
-                      <div className="float-left mr-[5.25px] mt-[5px]">
-                        <SvgIncrement />
-                      </div>
-                      +
-                    </div>
-                  ) : (
-                    <div className="float-left">
-                      <div className="float-left mr-[5.25px] mt-[5px]">
-                        <SvgDeincrement />
-                      </div>
-                      -
-                    </div>
-                  )}
-                  {item.percent}%
-                </span>
-              </div>
-            </Card>
-          </Grid>
-        ))}
+        <AnalyticItem loading={loadingVisit} data={dataVisit} />
+        {/* <AnalyticItem loading={loadingVisitor} data={dataVisitor} />
+        <AnalyticItem loading={loadingFan} data={dataFan} />
+        <AnalyticItem loading={loadingFriend} data={dataFiend} /> */}
       </Grid>
     </div>
   )
