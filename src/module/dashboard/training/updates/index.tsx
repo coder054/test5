@@ -13,7 +13,7 @@ import {
   LastRangeDateType,
 } from 'src/constants/types/dashboard/training.types'
 import { flexingFormatDate, upperFirst } from 'src/hooks/functionCommon'
-import { fetchUpdates } from 'src/service/dashboard-training'
+import { fetchUpdates } from 'src/service/dashboard/training.service'
 import SimpleBar from 'simplebar-react'
 import { XIcon } from 'src/components/icons'
 import DiaryUpdate from 'src/module/biography/diary'

@@ -3,7 +3,7 @@ import { useQuery } from 'react-query'
 import { Loading } from 'src/components'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { MatchesTableType } from 'src/constants/types/match.types'
-import { fetchTraining } from 'src/service/dashboard-training'
+import { fetchTraining } from 'src/service/dashboard/training.service'
 import Ticket from '../components/Ticket'
 import { upperFirst } from 'src/hooks/functionCommon'
 
