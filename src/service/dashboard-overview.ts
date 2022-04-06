@@ -1,6 +1,15 @@
 import toast from 'react-hot-toast'
-import { API_GET_LIST_LEADER_BOARD } from 'src/constants/api.constants'
+import {
+  API_GET_DASBOARD_DIARIES_STATISTIC,
+  API_GET_DASHBOARD_FANS_STATS,
+  API_GET_DASHBOARD_FRIENDS_STATS,
+  API_GET_DASHBOARD_VISITOR_STATS,
+  API_GET_DASHBOARD_VISIT_STATS,
+  API_GET_LIST_DIARIES_REPORT,
+  API_GET_LIST_LEADER_BOARD,
+} from 'src/constants/api.constants'
 import { axios } from 'src/utils/axios'
+import { toQueryString } from 'src/utils/common.utils'
 
 export const GetListLeaderBoard = async (
   limit: number,
@@ -18,5 +27,82 @@ export const GetListLeaderBoard = async (
     })
     .catch(() => {
       toast.error('An error has occurred')
+    })
+}
+
+export const GetListDiariesReport = async (
+  limit: number,
+  startAfter: number,
+  sorted: string,
+  dashboardTab: string
+) => {
+  return axios.get(
+    toQueryString(API_GET_LIST_DIARIES_REPORT, {
+      limit: limit,
+      startAfter: startAfter,
+      sorted: sorted,
+      dashboardTab: dashboardTab,
+    })
+  )
+}
+
+export const getDiariesStatistic = async (
+  lastDateRange: string,
+  dashboardTab: string
+) => {
+  return axios
+    .get(
+      toQueryString(API_GET_DASBOARD_DIARIES_STATISTIC, {
+        lastDateRange: lastDateRange,
+        dashboardTab: dashboardTab,
+      })
+    )
+    .then((res) => {
+      return res.data
+    })
+}
+
+export const getDashboardVisitStat = async (lastDateRange: string) => {
+  return axios
+    .get(
+      toQueryString(API_GET_DASHBOARD_VISIT_STATS, {
+        lastDateRange: lastDateRange,
+      })
+    )
+    .then((res) => {
+      return res.data
+    })
+}
+export const getDashboardVisitorStat = async (lastDateRange: string) => {
+  return axios
+    .get(
+      toQueryString(API_GET_DASHBOARD_VISITOR_STATS, {
+        lastDateRange: lastDateRange,
+      })
+    )
+    .then((res) => {
+      return res.data
+    })
+}
+export const getDashboardFansStat = async (lastDateRange: string) => {
+  return axios
+    .get(
+      toQueryString(API_GET_DASHBOARD_FANS_STATS, {
+        lastDateRange: lastDateRange,
+      })
+    )
+    .then((res) => {
+      return res.data
+    })
+}
+export const getDashboardFriendStat = async (lastDateRange: string) => {
+  return axios
+    .get(
+      toQueryString(API_GET_DASHBOARD_FRIENDS_STATS, {
+        lastDateRange: lastDateRange,
+      })
+    )
+    .then((res) => {
+      return res.data
     })
 }

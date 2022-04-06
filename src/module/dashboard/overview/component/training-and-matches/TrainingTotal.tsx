@@ -1,54 +1,39 @@
-import { useState } from 'react'
+import { useAtom } from 'jotai'
+import { dashboardTrainingAndMatchAtom } from 'src/atoms/dashboard'
 import { ChartTotal } from 'src/components/chart-total'
 
 const cls = require('../../overview.module.css')
 
-const ArrayTrainingMatchTotal = [
-  {
-    you: {
-      T: 10,
-      G: 32,
-      P: 120,
-    },
-    avg: {
-      T: 5,
-      G: 30,
-      P: 540,
-    },
-  },
-  {
-    you: {
-      T: 10,
-      G: 40,
-      P: 20,
-    },
-    avg: {
-      T: 5,
-      G: 30,
-      P: 24,
-    },
-  },
-  {
-    you: {
-      T: 10,
-      M: 30,
-    },
-    avg: {
-      T: 5,
-      M: 30,
-    },
-  },
-]
+interface TrainingTotalProps {
+  loading?: boolean
+  ArrayTrainingMatchTotal?: any
+}
 
-export const TrainingTotal = () => {
-  const [trainingTotal, setTrainingTotal] = useState(ArrayTrainingMatchTotal)
+export const TrainingTotal = ({
+  loading,
+  ArrayTrainingMatchTotal,
+}: TrainingTotalProps) => {
+  const [dataTrainingAndMatch, setDataTrainingAndMatch] = useAtom(
+    dashboardTrainingAndMatchAtom
+  )
 
   return (
     <div className="grid grid-cols-3 gap-2">
-      {trainingTotal &&
-        trainingTotal.map((chart, index) => (
-          <ChartTotal chart={chart} index={index + 1} />
-        ))}
+      <ChartTotal
+        personalHours={dataTrainingAndMatch.personalTrainingHours}
+        averageHours={dataTrainingAndMatch.averageTrainingHours}
+        index={1}
+      />
+      <ChartTotal
+        personalHours={dataTrainingAndMatch.personalMatchHours}
+        averageHours={dataTrainingAndMatch.averageMatchHours}
+        index={2}
+      />
+      <ChartTotal
+        personalHours={dataTrainingAndMatch.personalTotalHours}
+        averageHours={dataTrainingAndMatch.averageTotalHours}
+        index={3}
+      />
     </div>
   )
 }

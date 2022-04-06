@@ -35,7 +35,7 @@ export const ChartCircle = ({
     dataLabels: {
       enabled: false,
     },
-    labels: ArrayLabel[index],
+    labels: ArrayLabel,
     legend: {
       show: false,
     },
@@ -44,7 +44,7 @@ export const ChartCircle = ({
     },
   }
 
-  const chartSeries = ArrayPercent[index]
+  const chartSeries = ArrayPercent
 
   return (
     <div>
@@ -66,20 +66,15 @@ export const ChartCircle = ({
           type === 'training' && 'ml-[-12px]'
         )} w-[86px] md:w-[72px] lg:w-[96px] xl:w-[120px]`}
       >
-        <Chart
-          options={chartOptions}
-          series={chartSeries}
-          type="donut"
-          // width={isMobile ? 96 : 100}
-        />
+        <Chart options={chartOptions} series={chartSeries} type="donut" />
       </div>
       <div className="ml-[12px]">
         {type !== 'wellness' &&
           ArrayLabel &&
-          ArrayLabel[index].map(
-            (label, index2) =>
+          Object.values(ArrayLabel).map(
+            (label: string, index2) =>
               ArrayPercent &&
-              ArrayPercent[index].map((percent, index3) => {
+              Object.values(ArrayPercent).map((percent, index3) => {
                 if (index2 === index3) {
                   return (
                     <div className="w-full float-left mb-[4px]">
@@ -90,7 +85,7 @@ export const ChartCircle = ({
                         style={{ color: `${ArrayColor[index][index2]}` }}
                         className="w-4/5 md:w-3/4 ml-[8px] md:ml-[0px] text-[12px] md:text-[14px]"
                       >
-                        {label}
+                        {`${label.charAt(0).toUpperCase()}${label.slice(1)}`}
                       </div>
                     </div>
                   )

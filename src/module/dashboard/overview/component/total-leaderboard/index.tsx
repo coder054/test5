@@ -1,8 +1,8 @@
-import { CircularProgress } from '@mui/material'
 import { useState } from 'react'
-import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
-import { Loading, LoadingCustom, TooltipCustom } from 'src/components'
+import { useQuery } from 'react-query'
+import { LoadingCustom, TooltipCustom } from 'src/components'
 import { LeaderBoard } from 'src/components/leader-board'
+import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import {
   SvgAbove,
   SvgAllowRight,
@@ -13,34 +13,28 @@ import { GetListLeaderBoard } from 'src/service/dashboard-overview'
 
 const cls = require('../../overview.module.css')
 
-interface TotalLeaderBoardProps {}
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-})
-
-export const TotalLeaderBoard = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Component />
-    </QueryClientProvider>
-  )
+interface TotalLeaderBoardProps {
+  lastDateRange?: string
+  setLastDateRange?: Function
 }
 
-const Component = () => {
+export const TotalLeaderBoard = ({ lastDateRange }: TotalLeaderBoardProps) => {
   const [limit, setLimit] = useState<number>(13)
   const [startAfter, setStartAfter] = useState<number>(1)
   const [sorted, setSorted] = useState<string>('asc')
   const [category, setCategory] = useState<string>('HOURS')
-  const [lastDateRange, setLastDateRange] = useState<string>('7')
+  const [dateRange, setdateRange] = useState<string>(lastDateRange)
 
   const { isLoading: loading, data: dataListLeaderBoard } = useQuery(
-    ['leaderBoard', limit, startAfter, sorted, category, lastDateRange],
-    () => GetListLeaderBoard(limit, startAfter, sorted, category, lastDateRange)
+    [
+      QUERIES_DASHBOARD.LEADER_BOARD,
+      limit,
+      startAfter,
+      sorted,
+      category,
+      dateRange,
+    ],
+    () => GetListLeaderBoard(limit, startAfter, sorted, category, dateRange)
   )
 
   const handleChangeShow = () => {
@@ -50,7 +44,6 @@ const Component = () => {
       setSorted('asc')
     }
   }
-  console.log('dataListLeaderBoard', dataListLeaderBoard)
 
   return (
     <div

@@ -5,4 +5,11 @@ export const QUERIES_DASHBOARD = {
   MATCHES_CHART: 'matches-chart',
   MATCHES_TABLE: 'matches-table',
   MATCHES_DATA: 'matches-data',
+  LEADER_BOARD: 'leader-board',
+  MATCH_UPDATE: 'match-update',
+  DIARIES_STATISTIC: 'diaries-statistic',
+  DASHBOARD_VISIT: 'dashboard-visit',
+  DASHBOARD_VISITOR: 'dashboard-visitor',
+  DASHBOARD_FAN: 'dashboard-fan',
+  DASHBOARD_FRIEND: 'dashboard-friend',
 }

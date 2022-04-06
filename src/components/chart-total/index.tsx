@@ -1,67 +1,80 @@
 import { useEffect, useMemo, useState } from 'react'
+import {
+  AverageSessionsType,
+  MatchHours,
+  TotalHours,
+} from 'src/constants/types/dashboard/training.types'
 const cls = require('./chart-total.module.css')
 
 interface ChartTotalProps {
-  chart?: any
+  personalHours?: AverageSessionsType | MatchHours | TotalHours
+  averageHours?: AverageSessionsType | MatchHours | TotalHours
   index?: number
 }
 
-export const ChartTotal = ({ index, chart }: ChartTotalProps) => {
+export const ChartTotal = ({
+  index,
+  personalHours,
+  averageHours,
+}: ChartTotalProps) => {
   const [youPercent, setYouPercent] = useState([])
   const [avgPercent, setAvgPercent] = useState([])
   const [youHeight, setYouHeight] = useState([])
   const [avgHeight, setAvgHeight] = useState([])
 
   const keyYou = useMemo(() => {
-    return Object.keys(Object.values(chart)[0])
-  }, [chart])
+    return Object.keys(averageHours)
+  }, [personalHours])
 
   const keyAvg = useMemo(() => {
-    return Object.keys(Object.values(chart)[1])
-  }, [chart])
+    return Object.keys(averageHours)
+  }, [averageHours])
 
   const valueYou = useMemo(() => {
-    return Object.values(Object.values(chart)[0])
-  }, [chart])
+    return Object.values(personalHours)
+  }, [personalHours])
 
   const valueAvg = useMemo(() => {
-    return Object.values(Object.values(chart)[1])
-  }, [chart])
+    return Object.values(averageHours)
+  }, [averageHours])
 
   const totalYou = useMemo(() => {
     if (valueYou) {
       return valueYou.reduce((a, b) => a + b, 0)
     }
     return 0
-  }, [chart, valueYou])
+  }, [personalHours, valueYou])
 
   const totalAvg = useMemo(() => {
     if (valueAvg) {
       return valueAvg.reduce((a, b) => a + b, 0)
     }
     return 0
-  }, [chart, valueAvg])
+  }, [averageHours, valueAvg])
 
   useEffect(() => {
-    valueYou &&
-      valueYou.forEach((elm) => {
-        const pecent =
-          totalYou >= totalAvg
-            ? Math.round((elm / totalYou) * 100)
-            : Math.round((elm / totalAvg) * 100)
+    if (totalYou || totalAvg) {
+      valueYou &&
+        valueYou.forEach((elm) => {
+          const pecent =
+            totalYou >= totalAvg
+              ? Math.round((elm / totalYou) * 100)
+              : Math.round((elm / totalAvg) * 100)
 
-        setYouPercent((prev) => [...prev, pecent])
-      })
-    valueAvg &&
-      valueAvg.forEach((elm) => {
-        const pecent =
-          totalYou >= totalAvg
-            ? Math.round((elm / totalYou) * 100)
-            : Math.round((elm / totalAvg) * 100)
+          setYouPercent((prev) => [...prev, pecent])
+        })
+      valueAvg &&
+        valueAvg.forEach((elm) => {
+          const pecent =
+            totalYou >= totalAvg
+              ? Math.round((elm / totalYou) * 100)
+              : Math.round((elm / totalAvg) * 100)
 
-        setAvgPercent((prev) => [...prev, pecent])
-      })
-  }, [valueYou, valueAvg, chart])
+          setAvgPercent((prev) => [...prev, pecent])
+        })
+    } else {
+    }
+  }, [valueYou, valueAvg, personalHours, averageHours])
 
   return (
     <div className="mx-auto">
@@ -92,14 +105,22 @@ export const ChartTotal = ({ index, chart }: ChartTotalProps) => {
                 <div className="w-full">
                   {keyYou &&
                     keyYou.map((key, index) => (
-                      <div
-                        style={{
-                          height: `${youPercent[index] * 1.6}px`,
-                        }}
-                        className={`bg-[#4654EA] rounded-[4px] text-[14px] mdtext-[16px] mt-[4px] flex items-center ${cls.minHeight}`}
-                      >
-                        <p className="mx-auto">{key}</p>
-                      </div>
+                      <>
+                        {youPercent[index] ? (
+                          <div
+                            style={{
+                              height: `${youPercent[index] * 1.6}px`,
+                            }}
+                            className={`bg-[#4654EA] rounded-[4px] text-[14px] mdtext-[16px] mt-[4px] flex items-center`}
+                          >
+                            {youPercent[index] >= 8 ? (
+                              <p className="mx-auto">
+                                {key.charAt(0).toUpperCase()}
+                              </p>
+                            ) : null}
+                          </div>
+                        ) : null}
+                      </>
                     ))}
                 </div>
               </div>
@@ -116,14 +137,22 @@ export const ChartTotal = ({ index, chart }: ChartTotalProps) => {
                 <div className="w-full">
                   {keyAvg &&
                     keyAvg.map((key, index) => (
-                      <div
-                        style={{
-                          height: `${avgPercent[index] * 1.6}px`,
-                        }}
-                        className={` ${cls.avg} rounded-[4px] text-[16px] mt-[4px] flex items-center`}
-                      >
-                        <p className="mx-auto">{key}</p>
-                      </div>
+                      <>
+                        {avgPercent[index] ? (
+                          <div
+                            style={{
+                              height: `${avgPercent[index] * 1.6}px`,
+                            }}
+                            className={` ${cls.avg} rounded-[4px] text-[16px] mt-[4px] flex items-center`}
+                          >
+                            {avgPercent[index] >= 8 ? (
+                              <p className="mx-auto">
+                                {key.charAt(0).toUpperCase()}
+                              </p>
+                            ) : null}
+                          </div>
+                        ) : null}
+                      </>
                     ))}
                 </div>
               </div>

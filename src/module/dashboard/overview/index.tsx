@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { SvgFilter } from 'src/imports/svgs'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { LastRangeDateType } from 'src/constants/types/dashboard/training.types'
+import { PeriodFilter } from '../components/PeriodFilter'
 import { Analytics } from './component/analytics'
 import { DreamTeam } from './component/dream-team'
 import { MatchUpdates } from './component/match-update'
@@ -10,18 +10,17 @@ import { TrainingAndMatches } from './component/training-and-matches'
 import { Wellness } from './component/wellness'
 
 export const Overview = () => {
-  const { currentRoleName } = useAuth()
-  const [loading, setLoading] = useState(false)
+  const [range, setRange] = useState<LastRangeDateType>('7')
 
   return (
     <div className="grid grid-cols-12 space-y-7 pb-[108px]">
       <div className="w-full flex flex-row-reverse col-span-12">
-        <div className="cursor-pointer">
-          <SvgFilter />
-        </div>
-        <span className="text-[#09E099] text-[14px] mr-[20px]">
-          2022 - last 30 days
-        </span>
+        <PeriodFilter
+          value={range}
+          onChange={setRange}
+          className="pb-6"
+          label="Filter your Dashboard period"
+        />
       </div>
 
       <div className="col-span-12 row-span-4 md:row-span-2 lg:row-span-1">
@@ -33,11 +32,11 @@ export const Overview = () => {
       </div>
 
       <div className="col-span-12 md:col-span-5 md:row-span-5 md:mt-[20px]">
-        <TotalLeaderBoard />
+        <TotalLeaderBoard lastDateRange={range} setLastDateRange={setRange} />
       </div>
 
       <div className="col-span-12 md:col-span-7 md:row-span-2 md:mt-[20px] md:ml-[20px]">
-        <MatchUpdates />
+        <MatchUpdates lastDateRange={range} setLastDateRange={setRange} />
       </div>
 
       <div className="col-span-12 md:col-span-7 md:row-span-3 mt-[20px] md:ml-[20px]">
@@ -51,8 +50,6 @@ export const Overview = () => {
       <div className="col-span-12 md:col-span-7 md:row-span-1 mt-[20px] md:ml-[20px]">
         <Pain />
       </div>
-
-      <div className=""></div>
     </div>
   )
 }
