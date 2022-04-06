@@ -18,6 +18,7 @@ export const activeChatRoomAtom = atom((get) => {
     }) || {}
   )
 })
+export const notiListAtom = atom([])
 
 export const useActiveRoomId = () => {
   const [activeChatRoomId, setActiveChatRoomId] = useAtom(activeChatRoomIdAtom)
@@ -36,3 +37,5 @@ export const loadingChatRoomsAtom = atom(true)
 // const [activeChatRoom] = useAtom(activeChatRoomAtom)
 // const { activeChatRoomId, setActiveChatRoomId } = useActiveRoomId()
 // const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
+
+// const [notiList, setNotiList] = useAtom(notiListAtom)

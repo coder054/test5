@@ -32,7 +32,7 @@ export const firebaseApp = initializeApp({
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_MEASUREMENT_ID,
 })
 
-export const initFirebaseFCM = (token, roleId) => {
+export const initFirebaseFCM = (token, roleId, notiList, setNotiList) => {
   if (typeof window === 'undefined') {
     return
   }
@@ -59,7 +59,7 @@ export const initFirebaseFCM = (token, roleId) => {
         return
       }
 
-      console.log('aaa currentToken',  currentToken );
+      console.log('aaa currentToken', currentToken)
 
       const { data } = await axios.post('/notifications/create-fcm-token', {
         token: currentToken,
@@ -71,6 +71,7 @@ export const initFirebaseFCM = (token, roleId) => {
 
       onMessage(firebaseMessaging, (payload) => {
         console.log('aaa Message received. ', payload)
+        setNotiList([...notiList.current, payload])
         // ...
       })
     } catch (error) {
