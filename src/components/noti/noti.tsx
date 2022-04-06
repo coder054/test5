@@ -1,3 +1,4 @@
+import * as localforage from 'localforage'
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
@@ -15,43 +16,41 @@ import { isEmpty } from 'lodash'
 
 export const Noti = () => {
   const { token, currentRoleId } = useAuth()
-  const [notiList, setNotiList] = useAtom(notiListAtom)
-  const notiListRef = useRef(notiList)
-
-  useEffect(() => {
-    notiListRef.current = notiList
-  }, [notiList])
 
   useEffect(() => {
     if (!!currentRoleId && !!token) {
-      initFirebaseFCM(token, currentRoleId, notiListRef, setNotiList)
+      initFirebaseFCM(token, currentRoleId)
     }
   }, [currentRoleId, token])
 
   useEffect(() => {
-    console.log('aaa notiList: ', notiList)
-  }, [notiList])
+    const interval = setInterval(async () => {
+      try {
+        if (!window.document.hasFocus()) {
+          return
+        }
+        const notiList: any =
+          JSON.parse(await localforage.getItem('notiList')) || []
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (isEmpty(notiListRef.current)) {
-        return
+        if (isEmpty(notiList)) {
+          return
+        }
+
+        const last = notiList[notiList.length - 1]
+        const first = notiList[0]
+        const noLast = notiList.slice(0, notiList.length - 1)
+
+        const noFirst = notiList.slice(1, notiList.length)
+
+        console.log('aaa first', first)
+
+        await localforage.setItem('notiList', JSON.stringify(noFirst))
+      } catch (error) {
+        notiToast({
+          message: getErrorMessage(error),
+          type: 'error',
+        })
       }
-
-      if (!window.document.hasFocus()) {
-        return
-      }
-      const last = notiListRef.current[notiListRef.current.length - 1]
-      const first = notiListRef.current[0]
-      const noLast = notiListRef.current.slice(
-        0,
-        notiListRef.current.length - 1
-      )
-
-      const noFirst = notiListRef.current.slice(1, notiListRef.current.length)
-      notiListRef.current = noFirst
-      setNotiList(noFirst)
-      console.log('aaa first', first)
     }, 2000)
     return () => {
       clearInterval(interval)

@@ -1,3 +1,4 @@
+import * as localforage from 'localforage'
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
@@ -32,7 +33,7 @@ export const firebaseApp = initializeApp({
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_MEASUREMENT_ID,
 })
 
-export const initFirebaseFCM = (token, roleId, notiList, setNotiList) => {
+export const initFirebaseFCM = (token, roleId) => {
   if (typeof window === 'undefined') {
     return
   }
@@ -69,9 +70,13 @@ export const initFirebaseFCM = (token, roleId, notiList, setNotiList) => {
 
       // Send the token to your server and update the UI if necessary
 
-      onMessage(firebaseMessaging, (payload) => {
+      onMessage(firebaseMessaging, async (payload) => {
         console.log('aaa Message received. ', payload)
-        setNotiList([...notiList.current, payload])
+        const notiList = JSON.parse(await localforage.getItem('notiList')) || []
+        await localforage.setItem(
+          'notiList',
+          JSON.stringify([...notiList, payload])
+        )
         // ...
       })
     } catch (error) {
