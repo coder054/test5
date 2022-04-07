@@ -99,7 +99,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (!!currentRoleId && !!token) {
-      initFirebaseFCM(token, currentRoleId)
+      // initFirebaseFCM(token, currentRoleId)
     }
   }, [currentRoleId, token])
 

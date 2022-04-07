@@ -1,7 +1,7 @@
+import { useAtom } from 'jotai'
 import { useState } from 'react'
+import { dashboardTrainingAndMatchAtom } from 'src/atoms/dashboard'
 import { ChartCircle } from 'src/components/chart-circle'
-
-const cls = require('../../overview.module.css')
 
 const ArrayTrainingMatchDay = [
   {
@@ -28,36 +28,52 @@ const ArrayColor = [
   ['#E85CFF', '#4654EA', '#07E1FF'],
   ['#E85CFF', '#4654EA', '#07E1FF', '#09E099'],
 ]
-const ArrayLabel = [
-  ['Tactital', 'Physical', 'Technical', 'Mental'],
-  ['Wins', 'Draws', 'Losses'],
-  ['Injured', 'Training', 'Match', 'Rest'],
-]
-const ArrayPercent = [
-  [10, 20, 20, 50],
-  [30, 65, 5],
-  [10, 20, 20, 50],
-]
+// const ArrayLabel = [
+//   ['Tactital', 'Physical', 'Technical', 'Mental'],
+//   ['Wins', 'Draws', 'Losses'],
+//   ['Injured', 'Training', 'Match', 'Rest'],
+// ]
+// const ArrayPercent = [
+//   [10, 20, 20, 50],
+//   [30, 65, 5],
+//   [10, 20, 20, 50],
+// ]
 
-export const TrainingCircle = () => {
+interface TrainingCircleProps {
+  loading?: boolean
+  ArrayTrainingMatchDay?: any
+}
+
+export const TrainingCircle = ({
+  loading,
+  ArrayTrainingMatchDay,
+}: TrainingCircleProps) => {
   const [trainingDay, setTrainingDay] = useState(ArrayTrainingMatchDay)
+  const [data, setData] = useAtom(dashboardTrainingAndMatchAtom)
 
   return (
     <div className="grid grid-cols-3 md:gap-4">
-      {trainingDay &&
-        trainingDay.map((chart, index) => {
-          return (
-            <ChartCircle
-              chart={chart}
-              index={index}
-              key={index}
-              type={'training'}
-              ArrayColor={ArrayColor}
-              ArrayLabel={ArrayLabel}
-              ArrayPercent={ArrayPercent}
-            />
-          )
-        })}
+      <ChartCircle
+        index={0}
+        type={'training'}
+        ArrayColor={ArrayColor}
+        ArrayLabel={Object.keys(data.trainingCategory)}
+        ArrayPercent={Object.values(data.trainingCategory)}
+      />
+      <ChartCircle
+        index={1}
+        type={'training'}
+        ArrayColor={ArrayColor}
+        ArrayLabel={Object.keys(data.matchResults)}
+        ArrayPercent={Object.values(data.matchResults)}
+      />
+      <ChartCircle
+        index={2}
+        type={'training'}
+        ArrayColor={ArrayColor}
+        ArrayLabel={Object.keys(data.dayUsage)}
+        ArrayPercent={Object.values(data.dayUsage)}
+      />
     </div>
   )
 }

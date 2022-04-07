@@ -43,3 +43,16 @@ export const API_ACHIEVEMENTS_TROPHY = 'achievements/trophy'
 export const API_CREATE_CAREERS_FUTURE = 'careers/future'
 
 export const API_CREATE_CAREERs_HISTORIC = 'careers/historic'
+
+//dashboard overview
+export const API_GET_LIST_LEADER_BOARD = 'dashboard/get-list-leader-boards'
+
+export const API_GET_LIST_DIARIES_REPORT = 'dashboard/get-list-diaries-report'
+
+export const API_GET_DASBOARD_DIARIES_STATISTIC =
+  'dashboard/get-diaries-statistic'
+
+export const API_GET_DASHBOARD_VISIT_STATS = 'dashboard/get-visits-stats'
+export const API_GET_DASHBOARD_VISITOR_STATS = 'dashboard/get-visitor-stats'
+export const API_GET_DASHBOARD_FANS_STATS = 'dashboard/get-fans-stats'
+export const API_GET_DASHBOARD_FRIENDS_STATS = 'dashboard/get-friends-stats'

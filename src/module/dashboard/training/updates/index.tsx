@@ -38,7 +38,7 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
     fetchUpdates({
       range: range,
       tab: 'TRAINING',
-      limit: 10,
+      limit: 100,
       sorted: sort ? 'desc' : 'asc',
     })
   )
@@ -113,19 +113,25 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
           <p>Hours</p>
         </div>
         {isSuccess && (
-          <>
-            {(responseUpdates.data || []).map((it: DashboardUpdatesType) => (
-              <div
-                onClick={() => handleChooseUpdates(it)}
-                className="text-[15px] font-normal grid grid-cols-4 px-4 py-3 hover:bg-gray-500 cursor-pointer duration-150"
-              >
-                <p>{flexingFormatDate(it.createdAt, 'DD/MM')}</p>
-                <p>{upperFirst(it.training.typeOfTraining)}</p>
-                <p>{upperFirst(it.training.physicallyStrain)}</p>
-                <p>{it.training.hoursOfPractice}</p>
-              </div>
-            ))}
-          </>
+          <SimpleBar style={{ maxHeight: 360 }}>
+            <div>
+              {(responseUpdates.data || []).map((it: DashboardUpdatesType) => (
+                <div
+                  key={it.diaryId}
+                  onClick={() => handleChooseUpdates(it)}
+                  className="text-[15px] font-normal grid grid-cols-4 px-4 py-3 hover:bg-gray-500 cursor-pointer duration-150"
+                >
+                  <p>{flexingFormatDate(it.createdAt, 'DD/MM')}</p>
+                  <p>{upperFirst(it.training.typeOfTraining)}</p>
+                  <p>{upperFirst(it.training.physicallyStrain)}</p>
+                  <p>{it.training.hoursOfPractice}</p>
+                </div>
+              ))}
+              {/* <p className="text-center py-2 cursor-pointer hover:underline duration-150">
+                See more
+              </p> */}
+            </div>
+          </SimpleBar>
         )}
       </div>
     </Loading>

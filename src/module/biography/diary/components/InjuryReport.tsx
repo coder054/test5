@@ -1,9 +1,7 @@
-import { SnackbarOrigin } from '@mui/material/Snackbar'
+import { Snackbar } from '@mui/material'
 import useMouse from '@react-hook/mouse-position'
 import { useAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
-import { Slide, toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { MyInputChips } from 'src/components'
 import { MySlider } from 'src/components/MySlider'
@@ -18,9 +16,6 @@ import { numToScale, scaleToNum } from 'src/hooks/functionCommon'
 import { BodyPart } from './BodyPart'
 import { BooleanOption } from './BooleanOption'
 import { InjurySpot } from './InjurySpot'
-export interface State extends SnackbarOrigin {
-  open: boolean
-}
 
 type InjuryReportProps = {
   onChange?: (value: InjuryType) => void
@@ -49,6 +44,10 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
     leaveDelay: 100,
   })
 
+  const [alert, setAlert] = useState({
+    isOpen: false,
+    message: '',
+  })
   const [side, setSide] = useState<boolean>(true)
   const [response, setResponse] = useState<InjuryType[]>([])
   const [formValues, setFormValues] = useState<InjuryType>(INITIAL_FORM)
@@ -62,7 +61,7 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
     e: React.MouseEvent<HTMLDivElement>,
     key: SPOT_KEY
   ) => {
-    notify(key)
+    handleAlert(key)
     setSpot((prev) => ({
       ...prev,
       x: e.nativeEvent.offsetX,
@@ -71,17 +70,15 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
     }))
   }
 
-  const notify = (key: string) => {
-    toast(`Hey, you've click on ${BODY_PART[key].injuryName} !`, {
-      position: 'bottom-left',
-      autoClose: 1000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      className: 'bg-[#4654EA] text-white w-[500px]',
-      progress: undefined,
-    })
+  const handleAlert = (key: SPOT_KEY) => {
+    setAlert((prev) => ({
+      ...prev,
+      isOpen: true,
+      message: `Hey, you’ve click on ${BODY_PART[key].injuryName}`,
+    }))
+    setTimeout(() => {
+      setAlert((prev) => ({ ...prev, isOpen: false, message: '' }))
+    }, 2000)
   }
 
   useEffect(() => {
@@ -112,7 +109,6 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
         onChange={setSide}
       />
       <div className="flex flex-col items-center space-y-9 my-9">
-        <ToastContainer transition={Slide} limit={0} />
         {side ? (
           // 16 parts of front body
           <div
@@ -335,6 +331,14 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
             }
           />
         </div>
+        <Snackbar
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          open={alert.isOpen}
+          onClose={() =>
+            setAlert((prev) => ({ ...prev, isOpen: false, message: '' }))
+          }
+          message={alert.message}
+        />
       </div>
     </div>
   )

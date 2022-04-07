@@ -63,6 +63,9 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
   const [currentTab, setCurrentTab] = useState('TEAM_TRAINING')
   const [error, setError] = useState<string>('')
 
+  console.log('DIARY: ', diary)
+  console.log('In: ', injuryData)
+
   const { isLoading: isGettingDiary, data: diaryUpdate } = useQuery(
     ['diary', date],
     () => fetchDiary(date, currentRoleName)
@@ -164,7 +167,11 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
             type: filterType(currentTab).toLowerCase(),
           })
     }
-  }, [JSON.stringify(diary), JSON.stringify(submitForm)])
+  }, [
+    JSON.stringify(diary),
+    JSON.stringify(submitForm),
+    JSON.stringify(injurySubmit),
+  ])
 
   const handleDeleteDiary = useCallback(async () => {
     mutateDelete(diary.diaryId)
@@ -225,7 +232,7 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
             onChange={setDate}
             date={date}
           />
-          {isWellness && <Health date={date} />}
+          {(isWellness || !selected) && <Health date={date} />}
           <Tabs value={ITEMS} onChange={setCurrentTab} current={currentTab} />
           {currentTab === 'TEAM_TRAINING' && (
             <Training

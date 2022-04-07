@@ -26,6 +26,7 @@ import { Search as SearchIcon } from '../../icons/search'
 import { Users as UsersIcon } from '../../icons/users'
 import { UpdateDiaryIcon, XIcon } from '../icons'
 import { ModalMui } from '../ModalMui'
+import { Noti } from '../noti/noti'
 import { AccountPopover } from './account-popover'
 import { ContactsPopover } from './contacts-popover'
 import { ContentSearchDialog } from './content-search-dialog'
@@ -452,8 +453,10 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
     authenticated: boolean
   }
 
+  
   return (
     <>
+      <Noti></Noti>
       <DashboardNavbarRoot
         sx={{
           left: {

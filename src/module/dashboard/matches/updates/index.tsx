@@ -31,7 +31,7 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
     fetchUpdates({
       range: range,
       tab: 'MATCH',
-      limit: 10,
+      limit: 100,
       sorted: sort ? 'asc' : 'desc',
     })
   )
@@ -124,29 +124,32 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
             <p className="col-span-2">Min.</p>
             <p className="col-span-1 invisible">Action</p>
           </div>
-          {formValues.map((it) => (
-            <div
-              onClick={() => handleChooseUpdates(it)}
-              className="grid grid-cols-12  text-[16px] font-normal px-4 py-2.5 cursor-pointer hover:bg-gray-500 duration-150"
-            >
-              <p className="col-span-2">
-                {flexingFormatDate(it.createdAt, 'DD/MM')}
-              </p>
-              <p className="col-span-3 flex items-center space-x-4">
-                <img
-                  className="rounded-full w-[25px] h-[25px] object-cover"
-                  src={it.match.opponentClub.logoUrl}
-                />
-                <span>{it.match.opponentClub.clubName}</span>
-              </p>
-              <p className="col-span-2">{`${it.match.result.yourTeam}-${it.match.result.opponents}`}</p>
-              <p className="col-span-2">{countGoal(it.match.events)}</p>
-              <p className="col-span-2">{it.match.length}</p>
-              <p className="col-span-1 invisible">
-                <ChervonRightIcon />
-              </p>
-            </div>
-          ))}
+          <SimpleBar style={{ maxHeight: 360 }}>
+            {formValues.map((it) => (
+              <div
+                key={it.diaryId}
+                onClick={() => handleChooseUpdates(it)}
+                className="grid grid-cols-12  text-[16px] font-normal px-4 py-2.5 cursor-pointer hover:bg-gray-500 duration-150"
+              >
+                <p className="col-span-2">
+                  {flexingFormatDate(it.createdAt, 'DD/MM')}
+                </p>
+                <p className="col-span-3 flex items-center space-x-4">
+                  <img
+                    className="rounded-full w-[25px] h-[25px] object-cover"
+                    src={it.match.opponentClub.logoUrl}
+                  />
+                  <span>{it.match.opponentClub.clubName}</span>
+                </p>
+                <p className="col-span-2">{`${it.match.result.yourTeam}-${it.match.result.opponents}`}</p>
+                <p className="col-span-2">{countGoal(it.match.events)}</p>
+                <p className="col-span-2">{it.match.length}</p>
+                <p className="col-span-1 invisible">
+                  <ChervonRightIcon />
+                </p>
+              </div>
+            ))}
+          </SimpleBar>
         </div>
       </div>
     </Loading>
