@@ -1,12 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
+
 import type { FC } from 'react'
 import PropTypes from 'prop-types'
 import { format, subDays, subHours } from 'date-fns'
 import {
   Avatar,
   Box,
+  CircularProgress,
   IconButton,
-  Link,
   List,
   ListItem,
   ListItemAvatar,
@@ -21,6 +23,11 @@ import { X as XIcon } from '../../icons/x'
 import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
 import { Notification } from '../../types/notification'
 import { Scrollbar } from '../scrollbar'
+import { INoti, useNotiList } from '../noti/NotificationsList'
+import clsx from 'clsx'
+import { axios } from 'src/utils/axios'
+import { notiToast } from '../common/Toast'
+import { getErrorMessage } from 'src/utils/utils'
 
 interface NotificationsPopoverProps {
   anchorEl: null | Element
@@ -31,166 +38,38 @@ interface NotificationsPopoverProps {
 
 const now = new Date()
 
-const data: Notification[] = [
-  {
-    id: '5e8883f1b51cc1956a5a1ec0',
-    author: 'Jie Yang Song',
-    avatar: '/static/mock-images/avatars/avatar-jie_yan_song.png',
-    createdAt: subHours(now, 2).getTime(),
-    job: 'Remote React / React Native Developer',
-    read: true,
-    type: 'job_add',
-  },
-  {
-    id: 'bfb21a370c017acc416757c7',
-    author: 'Jie Yang Song',
-    avatar: '/static/mock-images/avatars/avatar-jie_yan_song.png',
-    createdAt: subHours(now, 2).getTime(),
-    job: 'Senior Golang Backend Engineer',
-    read: false,
-    type: 'job_add',
-  },
-  {
-    id: '20d9df4f23fff19668d7031c',
-    createdAt: subDays(now, 1).getTime(),
-    description: 'Logistics management is now available',
-    read: true,
-    type: 'new_feature',
-  },
-  {
-    id: '5e8883fca0e8612044248ecf',
-    author: 'Jie Yang Song',
-    avatar: '/static/mock-images/avatars/avatar-jie_yan_song.png',
-    company: 'Augmastic Inc',
-    createdAt: subHours(now, 2).getTime(),
-    read: false,
-    type: 'company_created',
-  },
-]
+const getNotificationContent = (
+  notification: INoti,
+  handleClickOne: Function,
+  onClose: Function
+): JSX.Element => {
+  switch (notification.notificationType) {
+    case 'FRIEND_REQUEST':
+      return (
+        <ItemNotification
+          notification={notification}
+          handleClickOne={handleClickOne}
+          onClose={onClose}
+        />
+      )
+    case 'REMIND_ON_DIARY_UPDATE':
+      return null
 
-const getNotificationContent = (notification: Notification): JSX.Element => {
-  switch (notification.type) {
-    case 'job_add':
-      return (
-        <>
-          <ListItemAvatar sx={{ mt: 0.5 }}>
-            <Avatar src={notification.avatar}>
-              <UserCircleIcon fontSize="small" />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary={
-              <Box
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <Typography sx={{ mr: 0.5 }} variant="subtitle2">
-                  {notification.author}
-                </Typography>
-                <Typography sx={{ mr: 0.5 }} variant="body2">
-                  added a new job
-                </Typography>
-                <Link href="/dashboard/jobs" underline="always" variant="body2">
-                  {notification.job}
-                </Link>
-              </Box>
-            }
-            secondary={
-              <Typography color="textSecondary" variant="caption">
-                {format(notification.createdAt, 'MMM dd, h:mm a')}
-              </Typography>
-            }
-            sx={{ my: 0 }}
-          />
-        </>
-      )
-    case 'new_feature':
-      return (
-        <>
-          <ListItemAvatar sx={{ mt: 0.5 }}>
-            <Avatar>
-              <ChatAltIcon fontSize="small" />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary={
-              <Box
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <Typography variant="subtitle2" sx={{ mr: 0.5 }}>
-                  New feature!
-                </Typography>
-                <Typography variant="body2">
-                  {notification.description}
-                </Typography>
-              </Box>
-            }
-            secondary={
-              <Typography color="textSecondary" variant="caption">
-                {format(notification.createdAt, 'MMM dd, h:mm a')}
-              </Typography>
-            }
-            sx={{ my: 0 }}
-          />
-        </>
-      )
-    case 'company_created':
-      return (
-        <>
-          <ListItemAvatar sx={{ mt: 0.5 }}>
-            <Avatar src={notification.avatar}>
-              <UserCircleIcon fontSize="small" />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText
-            primary={
-              <Box
-                sx={{
-                  alignItems: 'center',
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  m: 0,
-                }}
-              >
-                <Typography sx={{ mr: 0.5 }} variant="subtitle2">
-                  {notification.author}
-                </Typography>
-                <Typography variant="body2" sx={{ mr: 0.5 }}>
-                  created
-                </Typography>
-                <Link href="/dashboard/jobs" underline="always" variant="body2">
-                  {notification.company}
-                </Link>
-              </Box>
-            }
-            secondary={
-              <Typography color="textSecondary" variant="caption">
-                {format(notification.createdAt, 'MMM dd, h:mm a')}
-              </Typography>
-            }
-            sx={{ my: 0 }}
-          />
-        </>
-      )
     default:
       return null
   }
 }
 
 export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
+  const { loading, notifications, setNotifications, unreadCount } =
+    useNotiList()
+
   const { anchorEl, onClose, onUpdateUnread, open, ...other } = props
-  const [notifications, setNotifications] = useState<Notification[]>(data)
+  // const [notifications, setNotifications] = useState<Notification[]>(data)
   const unread = useMemo(
     () =>
       notifications.reduce(
-        (acc, notification) => acc + (notification.read ? 0 : 1),
+        (acc, notification) => acc + (notification.notificationStatus ? 0 : 1),
         0
       ),
     [notifications]
@@ -209,10 +88,44 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
     )
   }
 
-  const handleRemoveOne = (notificationId) => {
-    setNotifications((prevState) =>
-      prevState.filter((notification) => notification.id !== notificationId)
-    )
+  const handleRemoveOne = async (notificationId) => {
+    try {
+      await axios.delete(
+        `/notifications/delete-notification?notificationId=${notificationId}`
+      )
+      setNotifications((prevState) =>
+        prevState.filter((notification) => {
+          return notification.notificationId !== notificationId
+        })
+      )
+    } catch (error) {
+      notiToast({
+        message: getErrorMessage(error),
+        type: 'error',
+      })
+    }
+  }
+
+  const handleClickOne = async (notificationId) => {
+    try {
+      await axios.patch(`/notifications/${notificationId}/check-notification`)
+      setNotifications((prevState) =>
+        prevState.map((notification) => {
+          if (notification.notificationId === notificationId) {
+            return Object.assign({}, notification, {
+              notificationStatus: true,
+            })
+          } else {
+            return notification
+          }
+        })
+      )
+    } catch (error) {
+      notiToast({
+        message: getErrorMessage(error),
+        type: 'error',
+      })
+    }
   }
 
   return (
@@ -252,45 +165,59 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
           </IconButton>
         </Tooltip>
       </Box>
-      {notifications.length === 0 ? (
-        <Box sx={{ p: 2 }}>
-          <Typography variant="subtitle2">
-            There are no notifications
-          </Typography>
-        </Box>
+      {loading ? (
+        <div className="flex p-4 items-center justify-center ">
+          <CircularProgress />
+        </div>
       ) : (
-        <Scrollbar sx={{ maxHeight: 400 }}>
-          <List disablePadding>
-            {notifications.map((notification) => (
-              <ListItem
-                divider
-                key={notification.id}
-                sx={{
-                  alignItems: 'flex-start',
-                  '&:hover': {
-                    backgroundColor: 'action.hover',
-                  },
-                  '& .MuiListItemSecondaryAction-root': {
-                    top: '24%',
-                  },
-                }}
-                secondaryAction={
-                  <Tooltip title="Remove">
-                    <IconButton
-                      edge="end"
-                      onClick={() => handleRemoveOne(notification.id)}
-                      size="small"
-                    >
-                      <XIcon sx={{ fontSize: 14 }} />
-                    </IconButton>
-                  </Tooltip>
-                }
-              >
-                {getNotificationContent(notification)}
-              </ListItem>
-            ))}
-          </List>
-        </Scrollbar>
+        <>
+          {notifications.length === 0 ? (
+            <Box sx={{ p: 2 }}>
+              <Typography variant="subtitle2">
+                There are no notifications
+              </Typography>
+            </Box>
+          ) : (
+            <Scrollbar sx={{ maxHeight: 400 }}>
+              <List disablePadding>
+                {notifications.map((notification) => (
+                  <ListItem
+                    divider
+                    key={notification.notificationId}
+                    sx={{
+                      alignItems: 'flex-start',
+                      '&:hover': {
+                        backgroundColor: 'action.hover',
+                      },
+                      '& .MuiListItemSecondaryAction-root': {
+                        top: '24%',
+                      },
+                    }}
+                    secondaryAction={
+                      <Tooltip title="Remove">
+                        <IconButton
+                          edge="end"
+                          onClick={() =>
+                            handleRemoveOne(notification.notificationId)
+                          }
+                          size="small"
+                        >
+                          <XIcon sx={{ fontSize: 14 }} />
+                        </IconButton>
+                      </Tooltip>
+                    }
+                  >
+                    {getNotificationContent(
+                      notification,
+                      handleClickOne,
+                      onClose
+                    )}
+                  </ListItem>
+                ))}
+              </List>
+            </Scrollbar>
+          )}
+        </>
       )}
     </Popover>
   )
@@ -301,4 +228,104 @@ NotificationsPopover.propTypes = {
   onClose: PropTypes.func,
   onUpdateUnread: PropTypes.func,
   open: PropTypes.bool,
+}
+
+const ItemNotification = ({
+  notification,
+  handleClickOne,
+  onClose,
+}: {
+  notification: INoti
+  handleClickOne: Function
+  onClose: Function
+}) => {
+  const renderIcon = () => {
+    switch (notification.notificationType) {
+      case 'FRIEND_REQUEST':
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5  "
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+              clipRule="evenodd"
+            />
+          </svg>
+        )
+        break
+
+      default:
+        return null
+        break
+    }
+  }
+
+  const link = useMemo(() => {
+    switch (notification.notificationType) {
+      case 'FRIEND_REQUEST':
+        return `/${notification.userType === 'PLAYER' ? 'player' : 'coach'}/${
+          notification.username
+        }/zporter`
+        break
+
+      default:
+        return '#'
+        break
+    }
+  }, [])
+
+  return (
+    <div className="w-full ">
+      <Link href={link}>
+        <a
+          onClick={async () => {
+            await handleClickOne(notification.notificationId)
+            onClose()
+          }}
+          className="text-white hover:text-white inline-block font-Inter text-[14px] "
+        >
+          <div
+            className={clsx(
+              ` flex w-full `,
+              notification.notificationStatus === true
+                ? ' text-Grey opacity-80 '
+                : ' text-white '
+            )}
+          >
+            <div className="w-[56px] h-[56px] mr-[12px] relative ">
+              <img
+                src={notification.largeIcon}
+                className="rounded-full w-[56px] h-[56px]  "
+                alt=""
+              />
+              <div className="w-[28px] h-[28px] object-cover rounded-full absolute right-[-6px] bottom-[-6px] flex justify-center items-center bg-[#006699] ">
+                {renderIcon()}
+              </div>
+            </div>
+
+            <div
+              className={clsx(
+                `  `,
+                notification.notificationStatus === true
+                  ? ' text-Grey opacity-80 '
+                  : ' text-white '
+              )}
+            >
+              <h5 className=" ">
+                <span className=" font-bold ">{notification.username} </span>
+                <span className=" ">sent you a friend request.</span>
+              </h5>
+              <div className="font-medium text-[12px] opacity-90 text-[#1876f2]">
+                {format(notification.updatedAt, 'MMM dd, h:mm a')}
+              </div>
+            </div>
+          </div>
+        </a>
+      </Link>
+    </div>
+  )
 }

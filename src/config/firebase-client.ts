@@ -80,7 +80,7 @@ export const initFirebaseFCM = (token, roleId) => {
         // ...
       })
     } catch (error) {
-      alert(getErrorMessage(error))
+      console.log('aaa error config FCM: ', getErrorMessage(error))
     }
   }
 
