@@ -9,12 +9,14 @@ type InjurySpotProps = {
   isDeletable?: boolean
   spot?: PointsType
   level?: number
+  showLevel?: boolean
 }
 
 export const InjurySpot = ({
   spot,
   level,
   isDeletable,
+  showLevel,
   handleDeleteSpot,
 }: InjurySpotProps) => {
   return (
@@ -48,6 +50,11 @@ export const InjurySpot = ({
         {level >= 100 && (
           <span className="absolute w-[46px] h-[46px] rounded-full border-[1px] border-red-500 animate-appear -left-[16px] -top-[16px]"></span>
         )}
+        {showLevel ? (
+          <div className="absolute w-[14px] h-[14px] text-[10px] bg-[#ffffff] rounded-full">
+            {level === 100 ? 99 : level}
+          </div>
+        ) : null}
       </span>
     </div>
   )

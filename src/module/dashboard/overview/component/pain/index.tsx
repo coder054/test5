@@ -4,7 +4,11 @@ import { useQuery } from 'react-query'
 import { Loading, TooltipCustom } from 'src/components'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { DashboardPainType } from 'src/constants/types'
+import { BODY_PART } from 'src/constants/types/diary.types'
+import { scaleToNum } from 'src/hooks/functionCommon'
 import { SvgAllowRight, SvgInfomation } from 'src/imports/svgs'
+import { BodyPart } from 'src/module/biography/diary/components/BodyPart'
+import { InjurySpot } from 'src/module/biography/diary/components/InjurySpot'
 import { getDashboardPain } from 'src/service/dashboard-overview'
 
 interface PainProps {
@@ -21,13 +25,6 @@ export const Pain = ({ lastDateRange }: PainProps) => {
     },
   })
 
-  // const mockDataFront = {
-  //   columnChart: {
-  //     injuryAreaF: [10, 20, 30, 40, 50, 60, 80, 100],
-  //     injuryAreaB: [10, 50, 15, 77, 20, 100, 28, 40],
-  //   },
-  // }
-
   const { isLoading: loading, data: dataPain } = useQuery(
     [QUERIES_DASHBOARD.PAIN_DATA, lastDateRange],
     () => getDashboardPain(lastDateRange)
@@ -37,7 +34,16 @@ export const Pain = ({ lastDateRange }: PainProps) => {
     dataPain && setDataChart(dataPain)
   }, [dataPain])
 
-  console.log('dataChart', dataChart)
+  const getPositon = (position: string): string => {
+    let res = position.charAt(0)
+    for (let i = 1; i < position.length; i++) {
+      if (position[i] === '-') {
+        res += position[i + 1]
+      }
+    }
+
+    return res
+  }
 
   return (
     <Loading isLoading={loading}>
@@ -62,7 +68,33 @@ export const Pain = ({ lastDateRange }: PainProps) => {
               <div className="flex-1">
                 <div className="w-full ml-[35%] mb-[24px]">Front</div>
                 <div className="w-full flex mr-[1.5px]">
-                  <div className="bg-front-body relative w-[214px] h-[440px] mx-auto flex-1 bg-no-repeat bg-center cursor-pointer duration-150"></div>
+                  <div className=" flex-1 ">
+                    <div className="mx-auto bg-front-body relative w-[214px] h-[440px] bg-no-repeat bg-center cursor-pointer duration-150">
+                      {dataChart &&
+                        dataChart.bodyChart.map((item) => {
+                          const keyPositon: string = getPositon(item.injuryArea)
+                          const result = Object.keys(BODY_PART).findIndex(
+                            (item) => item === keyPositon
+                          )
+
+                          let res = null
+                          if (keyPositon.charAt(0) === 'F') {
+                            res = (
+                              <div className="absolute top-0 left-0">
+                                <InjurySpot
+                                  level={item.value * 20}
+                                  spot={Object.values(BODY_PART)[result].spot}
+                                  showLevel
+                                />
+                              </div>
+                            )
+                          }
+
+                          return <>{res}</>
+                        })}
+                    </div>
+                  </div>
+
                   <div className="h-[440px] float-right w-[60px]  flex flex-col mr-[1.5px]">
                     {dataChart?.columnChart.injuryAreaF.map((item) => (
                       <div className="w-full h-[55px] relative">
@@ -93,7 +125,32 @@ export const Pain = ({ lastDateRange }: PainProps) => {
                       </div>
                     ))}
                   </div>
-                  <div className="bg-back-body relative w-[214px] h-[440px] mx-auto flex-1 bg-no-repeat bg-center cursor-pointer duration-150"></div>
+                  <div className="flex-1">
+                    <div className="bg-back-body relative w-[214px] h-[440px] mx-auto bg-no-repeat bg-center cursor-pointer duration-150">
+                      {dataChart &&
+                        dataChart.bodyChart.map((item) => {
+                          const keyPositon: string = getPositon(item.injuryArea)
+                          const result = Object.keys(BODY_PART).findIndex(
+                            (item) => item === keyPositon
+                          )
+
+                          let res = null
+                          if (keyPositon.charAt(0) === 'B') {
+                            res = (
+                              <div className="absolute top-0 left-0">
+                                <InjurySpot
+                                  level={item.value * 20}
+                                  spot={Object.values(BODY_PART)[result].spot}
+                                  showLevel
+                                />
+                              </div>
+                            )
+                          }
+
+                          return <>{res}</>
+                        })}
+                    </div>
+                  </div>
                 </div>
                 <div className="mt-[45px] w-full">
                   <div className="w-[12px] h-[12px] bg-[#D60C0C] rounded-full mt-[6px] mr-[4px] float-left ml-[32px]"></div>
