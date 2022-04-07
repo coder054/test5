@@ -1,3 +1,4 @@
+import * as localforage from 'localforage'
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
@@ -69,8 +70,13 @@ export const initFirebaseFCM = (token, roleId) => {
 
       // Send the token to your server and update the UI if necessary
 
-      onMessage(firebaseMessaging, (payload) => {
+      onMessage(firebaseMessaging, async (payload) => {
         console.log('aaa Message received. ', payload)
+        const notiList = JSON.parse(await localforage.getItem('notiList')) || []
+        await localforage.setItem(
+          'notiList',
+          JSON.stringify([...notiList, payload])
+        )
         // ...
       })
     } catch (error) {

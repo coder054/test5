@@ -171,9 +171,8 @@ export const LineChart = ({ response, isLoading }: LineChartProps) => {
 
   return (
     <div className="bg-defaultBackGround flex flex-col items-center justify-center col-span-7 p-9 rounded-lg">
-      <Loading isLoading={isLoading} className="pt-4">
+      <Loading isLoading={isLoading} className="pt-4 w-full">
         <Chart
-          width={900}
           height={380}
           options={chartOptions}
           series={chartSeries}
