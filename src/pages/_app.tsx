@@ -16,6 +16,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider as ReduxProvider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { Noti } from 'src/components/noti/noti'
 import { QueryParamProvider } from 'src/components/QueryParamsProvider'
 import { AuthConsumer, AuthProvider } from 'src/module/authen/auth/AuthContext'
 import { RTL } from '../components/rtl'
@@ -101,7 +102,13 @@ const App: FC<EnhancedAppProps> = (props) => {
                                 return !auth.initialized ? (
                                   <SplashScreen />
                                 ) : (
-                                  getLayout(<Component {...pageProps} />)
+                                  <>
+                                    <Noti
+                                      token={auth.token}
+                                      currentRoleId={auth.currentRoleId}
+                                    ></Noti>
+                                    {getLayout(<Component {...pageProps} />)}
+                                  </>
                                 )
                               }}
                             </AuthConsumer>
