@@ -2,7 +2,12 @@ const cls = require('../../overview.module.css')
 import { TooltipCustom } from 'src/components'
 import { SvgAllowRight, SvgInfomation } from 'src/imports/svgs'
 
-export const Pain = () => {
+interface PainProps {
+  lastDateRange?: string
+  setLastDateRange?: (lastDate?: string) => void
+}
+
+export const Pain = ({ lastDateRange }: PainProps) => {
   const mockDataFront = {
     columnChart: {
       injuryAreaF: [10, 20, 30, 40, 50, 60, 80, 100],
@@ -28,7 +33,7 @@ export const Pain = () => {
 
       <div className="w-[226px] mobileM:w-[265px] md:w-full overflow-y-auto xl:overflow-hidden">
         <div className="w-[428px] md:w-full">
-          <div className="w-[428px] md:w-full flex justify-between mt-[80px]">
+          <div className="w-[428px] md:w-full flex justify-between mt-[46px]">
             <div className="flex-1">
               <div className="w-full ml-[35%] mb-[24px]">Front</div>
               <div className="w-full flex mr-[1.5px]">

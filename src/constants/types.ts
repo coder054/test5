@@ -338,3 +338,28 @@ export interface AnalyticType {
   value: number
   day: string
 }
+
+export interface ItemChartType {
+  index: number
+  value: number
+  day: string
+}
+
+export interface WellnessType {
+  personalDiaryRoutineChart: ItemChartType[]
+  averageDiaryRoutineChart: ItemChartType[]
+  personalDiaryRoutinePieChart: {
+    veryBad: number
+    bad: number
+    normal: number
+    good: number
+    veryGood: number
+  }
+  averageDiaryRoutinePieChart: {
+    veryBad: number
+    bad: number
+    normal: number
+    good: number
+    veryGood: number
+  }
+}
