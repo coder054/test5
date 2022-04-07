@@ -23,7 +23,7 @@ export const InjurySpot = ({
         style={{ top: spot.y, left: spot.x }}
         className={clsx(
           'absolute bg-red-500 rounded-full duration-150',
-          level === 25 ? 'w-[18px] h-[18px]' : ' w-[14px] h-[14px]'
+          level === 25 ? 'w-[18px] h-[18px]' : 'w-[14px] h-[14px]'
         )}
       >
         <span

@@ -3,6 +3,7 @@ import {
   API_GET_DASBOARD_DIARIES_STATISTIC,
   API_GET_DASHBOARD_FANS_STATS,
   API_GET_DASHBOARD_FRIENDS_STATS,
+  API_GET_DASHBOARD_PAIN,
   API_GET_DASHBOARD_VISITOR_STATS,
   API_GET_DASHBOARD_VISIT_STATS,
   API_GET_DASHBOARD_WELLNESS,
@@ -121,6 +122,16 @@ export const getDashboardWellness = async (
         lastDateRange: lastDateRange,
         diaryRoutine: diaryRoutine,
       })
+    )
+    .then((res) => {
+      return res.data
+    })
+}
+
+export const getDashboardPain = async (lastDateRange: string) => {
+  return axios
+    .get(
+      toQueryString(API_GET_DASHBOARD_PAIN, { lastDateRange: lastDateRange })
     )
     .then((res) => {
       return res.data

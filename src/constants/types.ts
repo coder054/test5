@@ -363,3 +363,17 @@ export interface WellnessType {
     veryGood: number
   }
 }
+
+export interface ItemPainType {
+  injuryArea: string
+  value: number
+  isFront: boolean
+  total: number
+}
+export interface DashboardPainType {
+  bodyChart: ItemPainType[]
+  columnChart: {
+    injuryAreaF: number[]
+    injuryAreaB: number[]
+  }
+}
