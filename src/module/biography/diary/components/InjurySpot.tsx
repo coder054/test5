@@ -9,12 +9,14 @@ type InjurySpotProps = {
   isDeletable?: boolean
   spot?: PointsType
   level?: number
+  showLevel?: boolean
 }
 
 export const InjurySpot = ({
   spot,
   level,
   isDeletable,
+  showLevel,
   handleDeleteSpot,
 }: InjurySpotProps) => {
   return (
@@ -23,7 +25,7 @@ export const InjurySpot = ({
         style={{ top: spot.y, left: spot.x }}
         className={clsx(
           'absolute bg-red-500 rounded-full duration-150',
-          level === 25 ? 'w-[18px] h-[18px]' : ' w-[14px] h-[14px]'
+          level === 25 ? 'w-[18px] h-[18px]' : 'w-[14px] h-[14px]'
         )}
       >
         <span
@@ -48,6 +50,11 @@ export const InjurySpot = ({
         {level >= 100 && (
           <span className="absolute w-[46px] h-[46px] rounded-full border-[1px] border-red-500 animate-appear -left-[16px] -top-[16px]"></span>
         )}
+        {showLevel && level ? (
+          <div className="absolute w-[14px] h-[14px] text-[10px] text-[#ffffff] rounded-full">
+            {level === 100 ? 99 : level}
+          </div>
+        ) : null}
       </span>
     </div>
   )

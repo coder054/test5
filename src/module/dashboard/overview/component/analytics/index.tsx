@@ -31,68 +31,17 @@ import {
 } from 'src/atoms/dashboard'
 const cls = require('../../overview.module.css')
 
-interface AnalyticsProps {}
+interface AnalyticsProps {
+  lastDateRange?: string
+  setLastDateRange?: (lastDate: string) => void
+}
 
-const arrayAnalytics = [
-  {
-    title: 'Visits',
-    total: 2131,
-    percent: 2.2,
-    icon: null,
-    data: [0, 60, 30, 60, 0, 30, 10, 30, 0],
-    color: '#E85CFF',
-  },
-  {
-    title: 'Visitors',
-    total: 213,
-    percent: 2.2,
-    icon: null,
-    data: [0, 60, 30, 60, 0, 30, 10, 30, 0],
-    color: '#4654EA',
-  },
-  {
-    title: 'Fans',
-    total: 1131,
-    percent: 5.2,
-    icon: null,
-    data: [0, 60, 30, 60, 0, 30, 10, 30, 0],
-    color: '#07E1FF',
-  },
-  {
-    title: 'Friends',
-    total: 131,
-    percent: 0.2,
-    icon: null,
-    data: [0, 60, 30, 60, 0, 30, 10, 30, 0],
-    color: '#09E099',
-  },
-]
+export const Analytics = ({
+  lastDateRange,
+  setLastDateRange,
+}: AnalyticsProps) => {
+  const [dateRange, setdateRange] = useState<string>(lastDateRange)
 
-const arrayIcon = [
-  {
-    id: '0',
-    icon: <SvgEye />,
-    className: 'bg-[#E85CFF]',
-  },
-  {
-    id: '1',
-    icon: <SvgVisitor />,
-    className: 'bg-[#4654EA]',
-  },
-  {
-    id: '2',
-    icon: <SvgFan />,
-    className: 'bg-[#07E1FF]',
-  },
-  {
-    id: '3',
-    icon: <SvgAddFriend />,
-    className: 'bg-[#09E099]',
-  },
-]
-
-export const Analytics = () => {
-  const [lastDateRange, setLastDateRange] = useState<string>('7')
   const [visitAtom, setVisitAtom] = useAtom(dashboardVisitAtom)
   const [visitorAtom, setVisitorAtom] = useAtom(dashboardVisitorAtom)
   const [fanAtom, setFanAtom] = useAtom(dashboardFanAtom)
@@ -128,17 +77,56 @@ export const Analytics = () => {
     dataFan && setFanAtom(dataFan)
   }, [dataFan])
   useEffect(() => {
-    dataVisit && setVisitAtom(dataVisit)
-  }, [dataVisit])
+    dataFiend && setFriendAtom(dataFiend)
+  }, [dataFiend])
 
   return (
-    <div className="w-full">
-      <Grid container spacing={4}>
-        <AnalyticItem loading={loadingVisit} data={dataVisit} />
-        {/* <AnalyticItem loading={loadingVisitor} data={dataVisitor} />
-        <AnalyticItem loading={loadingFan} data={dataFan} />
-        <AnalyticItem loading={loadingFriend} data={dataFiend} /> */}
+    <Grid
+      container
+      className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6"
+    >
+      <Grid>
+        <AnalyticItem
+          loading={loadingVisit}
+          data={dataVisit}
+          color="#E85CFF"
+          backgroundColor="bg-[#E85CFF]"
+          title="Visits"
+          icon={<SvgEye />}
+        />
       </Grid>
-    </div>
+      <Grid spacing={4}>
+        <AnalyticItem
+          loading={loadingVisitor}
+          data={dataVisitor}
+          color="#4654EA"
+          backgroundColor="bg-[#4654EA]"
+          title="Visitors"
+          icon={<SvgVisitor />}
+        />
+      </Grid>
+
+      <Grid spacing={4}>
+        <AnalyticItem
+          loading={loadingFan}
+          data={dataFan}
+          color="#07E1FF"
+          backgroundColor="bg-[#07E1FF]"
+          title="Fans"
+          icon={<SvgFan />}
+        />
+      </Grid>
+
+      <Grid spacing={4}>
+        <AnalyticItem
+          loading={loadingFriend}
+          data={dataFiend}
+          color="#09E099"
+          backgroundColor="bg-[#09E099]"
+          title="Friends"
+          icon={<SvgAddFriend />}
+        />
+      </Grid>
+    </Grid>
   )
 }

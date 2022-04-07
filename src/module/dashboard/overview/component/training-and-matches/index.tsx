@@ -1,6 +1,6 @@
 import { Tooltip } from '@material-ui/core'
 import { useQuery } from 'react-query'
-import { LoadingCustom, TooltipCustom } from 'src/components'
+import { Loading, LoadingCustom, TooltipCustom } from 'src/components'
 import { SvgAllowRight, SvgInfomation } from 'src/imports/svgs'
 import { TrainingCircle } from './TrainingCircle'
 import { TrainingTotal } from './TrainingTotal'
@@ -12,8 +12,13 @@ import { dashboardTrainingAndMatchAtom } from 'src/atoms/dashboard'
 
 const cls = require('../../overview.module.css')
 
-export const TrainingAndMatches = () => {
-  const [lastDateRange, setLastDateRange] = useState<string>('7')
+interface MatchUpdatesProps {
+  lastDateRange?: string
+  setLastDateRange?: (lastDate?: string) => void
+}
+
+export const TrainingAndMatches = ({ lastDateRange }: MatchUpdatesProps) => {
+  // const [lastDateRange, setLastDateRange] = useState<string>('7')
   const [dashboardTab, setDashboardTab] = useState<string>('TOTAL')
   const [dataTrainingAndMatch, setDataTrainingAndMatch] = useAtom(
     dashboardTrainingAndMatchAtom
@@ -29,26 +34,24 @@ export const TrainingAndMatches = () => {
   }, [dataDiariesStatistic])
 
   return (
-    <div
-      className={`${cls.item} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[15px] md:pr-[35px] pb-[18px] md:pb-[38px]`}
-    >
-      <div className="flex justify-between">
-        <p className="text-[16px] text-[#ffffff] font-bold">
-          Training & Matches
-        </p>
-        <TooltipCustom
-          title="This is training & matches tootip description"
-          placement="top-end"
-        >
-          <div className="order-list cursor-pointer">
-            <SvgInfomation />
-          </div>
-        </TooltipCustom>
-      </div>
+    <Loading isLoading={loading}>
+      <div
+        className={`${cls.item} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[15px] md:pr-[35px] pb-[18px] md:pb-[38px]`}
+      >
+        <div className="flex justify-between">
+          <p className="text-[16px] text-[#ffffff] font-bold">
+            Training & Matches
+          </p>
+          <TooltipCustom
+            title="This is training & matches tootip description"
+            placement="top-end"
+          >
+            <div className="order-list cursor-pointer">
+              <SvgInfomation />
+            </div>
+          </TooltipCustom>
+        </div>
 
-      {loading ? (
-        <LoadingCustom />
-      ) : (
         <div className="lg:flex w-full min-h-[200px] pt-[44px]">
           <div className="md:flex-1">
             <TrainingTotal />
@@ -57,12 +60,12 @@ export const TrainingAndMatches = () => {
             <TrainingCircle />
           </div>
         </div>
-      )}
 
-      <div className="flex items-center mt-[50px] cursor-pointer">
-        <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>
-        <SvgAllowRight />
+        <div className="flex items-center mt-[50px] cursor-pointer">
+          <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>
+          <SvgAllowRight />
+        </div>
       </div>
-    </div>
+    </Loading>
   )
 }
