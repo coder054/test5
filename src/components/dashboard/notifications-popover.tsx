@@ -1,33 +1,28 @@
-import { useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
-
-import type { FC } from 'react'
-import PropTypes from 'prop-types'
-import { format, subDays, subHours } from 'date-fns'
 import {
-  Avatar,
   Box,
   CircularProgress,
   IconButton,
   List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Popover,
+  ListItem, Popover,
   Tooltip,
-  Typography,
+  Typography
 } from '@mui/material'
-import { ChatAlt as ChatAltIcon } from '../../icons/chat-alt'
+import clsx from 'clsx'
+import { format } from 'date-fns'
+import { useAtom } from 'jotai'
+import Link from 'next/link'
+import PropTypes from 'prop-types'
+import type { FC } from 'react'
+import { useEffect, useMemo } from 'react'
+import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
+import { axios } from 'src/utils/axios'
+import { getErrorMessage } from 'src/utils/utils'
 import { MailOpen as MailOpenIcon } from '../../icons/mail-open'
 import { X as XIcon } from '../../icons/x'
-import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
-import { Notification } from '../../types/notification'
-import { Scrollbar } from '../scrollbar'
-import { INoti, useNotiList } from '../noti/NotificationsList'
-import clsx from 'clsx'
-import { axios } from 'src/utils/axios'
 import { notiToast } from '../common/Toast'
-import { getErrorMessage } from 'src/utils/utils'
+import { INoti, useNotiList } from '../noti/NotificationsList'
+import { Scrollbar } from '../scrollbar'
+
 
 interface NotificationsPopoverProps {
   anchorEl: null | Element
@@ -37,28 +32,6 @@ interface NotificationsPopoverProps {
 }
 
 const now = new Date()
-
-const getNotificationContent = (
-  notification: INoti,
-  handleClickOne: Function,
-  onClose: Function
-): JSX.Element => {
-  switch (notification.notificationType) {
-    case 'FRIEND_REQUEST':
-      return (
-        <ItemNotification
-          notification={notification}
-          handleClickOne={handleClickOne}
-          onClose={onClose}
-        />
-      )
-    case 'REMIND_ON_DIARY_UPDATE':
-      return null
-
-    default:
-      return null
-  }
-}
 
 export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
   const { loading, notifications, setNotifications, unreadCount } =
@@ -207,11 +180,11 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
                       </Tooltip>
                     }
                   >
-                    {getNotificationContent(
-                      notification,
-                      handleClickOne,
-                      onClose
-                    )}
+                    <ItemNotification
+                      notification={notification}
+                      handleClickOne={handleClickOne}
+                      onClose={onClose}
+                    />
                   </ListItem>
                 ))}
               </List>
@@ -239,6 +212,10 @@ const ItemNotification = ({
   handleClickOne: Function
   onClose: Function
 }) => {
+  const [openModalDiaryUpdate, setOpenModalDiaryUpdate] = useAtom(
+    openModalDiaryUpdateAtom
+  )
+
   const renderIcon = () => {
     switch (notification.notificationType) {
       case 'FRIEND_REQUEST':
@@ -257,9 +234,42 @@ const ItemNotification = ({
           </svg>
         )
         break
+      case 'REMIND_ON_DIARY_UPDATE':
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+            />
+          </svg>
+        )
+        break
 
       default:
-        return null
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        )
         break
     }
   }
@@ -270,6 +280,9 @@ const ItemNotification = ({
         return `/${notification.userType === 'PLAYER' ? 'player' : 'coach'}/${
           notification.username
         }/zporter`
+        break
+      case 'REMIND_ON_DIARY_UPDATE':
+        return `#`
         break
 
       default:
@@ -283,6 +296,10 @@ const ItemNotification = ({
       <Link href={link}>
         <a
           onClick={async () => {
+            if (notification.notificationType === 'REMIND_ON_DIARY_UPDATE') {
+              setOpenModalDiaryUpdate(true)
+            }
+
             await handleClickOne(notification.notificationId)
             onClose()
           }}
@@ -316,8 +333,7 @@ const ItemNotification = ({
               )}
             >
               <h5 className=" ">
-                <span className=" font-bold ">{notification.username} </span>
-                <span className=" ">sent you a friend request.</span>
+                <span className=" "> {notification.body} </span>
               </h5>
               <div className="font-medium text-[12px] opacity-90 text-[#1876f2]">
                 {format(notification.updatedAt, 'MMM dd, h:mm a')}
