@@ -101,7 +101,7 @@ export const DashboardDiaryUpdate = () => {
           <p className="col-span-2">Pain</p>
           <p className="col-span-2 invisible">Action</p>
         </div>
-        <div className="space-y-3">
+        <SimpleBar style={{ maxHeight: 350 }}>
           {initial.map((it: DashboardDiaryUpdateType) => (
             <div
               key={it.diaryId}
@@ -143,7 +143,7 @@ export const DashboardDiaryUpdate = () => {
               <p className="col-span-2 invisible">Action</p>
             </div>
           ))}
-        </div>
+        </SimpleBar>
       </div>
     </Loading>
   )
