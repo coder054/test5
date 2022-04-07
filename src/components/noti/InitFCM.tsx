@@ -5,7 +5,7 @@ import { notiToast } from 'src/components/common/Toast'
 import { initFirebaseFCM } from 'src/config/firebase-client'
 import { getErrorMessage } from 'src/utils/utils'
 
-export const Noti = ({ token, currentRoleId }) => {
+export const InitFCM = ({ token, currentRoleId }) => {
   useEffect(() => {
     if (!!currentRoleId && !!token) {
       initFirebaseFCM(token, currentRoleId)
