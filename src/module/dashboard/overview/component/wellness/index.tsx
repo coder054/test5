@@ -3,31 +3,179 @@ import { Chart, TooltipCustom } from 'src/components'
 import { alpha, useTheme } from '@mui/material/styles'
 import { SvgAllowRight, SvgInfomation } from 'src/imports/svgs'
 import { ApexOptions } from 'apexcharts'
-import { useState } from 'react'
-import { Tooltip } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { DetailChart } from './DetailChart'
+import { useQuery } from 'react-query'
+import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
+import { getDashboardWellness } from 'src/service/dashboard-overview'
+import { MatchesTable } from 'src/module/dashboard/matches/table'
+import { WellnessType } from 'src/constants/types'
 
-const data = {
-  series: [
-    {
-      color: '#A2A5AD',
-      data: [35, 42, 62, 223, 103, 180, 29],
-      name: 'Average',
-    },
-    {
-      color: '#4654EA',
-      data: [100, 122, 50, 200, 250, 100, 150],
-      name: 'You',
-    },
-  ],
+// const data = {
+//   series: [
+//     {
+//       color: '#A2A5AD',
+//       data: [35, 42, 62, 223, 103, 180, 29],
+//       name: 'Average',
+//     },
+//     {
+//       color: '#4654EA',
+//       data: [100, 122, 50, 200, 250, 100, 150],
+//       name: 'You',
+//     },
+//   ],
+// }
+
+interface WellnessProps {
+  lastDateRange?: string
+  setLastDateRange?: (lastDate?: string) => void
 }
 
-export const Wellness = () => {
+export const Wellness = ({ lastDateRange }: WellnessProps) => {
   const theme = useTheme()
-
   const [selectedSeries, setSelectedSeries] = useState(['You', 'Average'])
+  const [arrayYou, setArrayYou] = useState<number[]>([])
+  const [arrayAvg, setArrayAvg] = useState<number[]>([])
+  const [dataChart, setDataChart] = useState({
+    series: [
+      {
+        color: '#A2A5AD',
+        data: [0, 0, 0, 0, 0, 0, 0],
+        name: 'Average',
+      },
+      {
+        color: '#4654EA',
+        data: [0, 0, 0, 0, 0, 0, 0],
+        name: 'You',
+      },
+    ],
+  })
+  const [dataWellnesss, setDataWellnesss] = useState<WellnessType>({
+    personalDiaryRoutineChart: [
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+    ],
+    averageDiaryRoutineChart: [
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+      {
+        index: 0,
+        value: 0,
+        day: '',
+      },
+    ],
+    personalDiaryRoutinePieChart: {
+      veryBad: 0,
+      bad: 0,
+      normal: 0,
+      good: 0,
+      veryGood: 0,
+    },
+    averageDiaryRoutinePieChart: {
+      veryBad: 0,
+      bad: 0,
+      normal: 0,
+      good: 0,
+      veryGood: 0,
+    },
+  })
+  const [diaryRoutine, setDiaryRoutine] = useState<string>('energyLevel')
+  const { isLoading: loading, data: dataWellness } = useQuery(
+    [QUERIES_DASHBOARD.WELLNESS_DATA, lastDateRange, diaryRoutine],
+    () => getDashboardWellness(lastDateRange, diaryRoutine)
+  )
 
-  const chartSeries = data.series.filter((item) =>
+  useEffect(() => {
+    dataWellness &&
+      dataWellness.personalDiaryRoutineChart.forEach((element) => {
+        setArrayYou((prev) => [...prev, element.value])
+      })
+
+    dataWellness &&
+      dataWellness.averageDiaryRoutineChart.forEach((element) => {
+        setArrayAvg((prev) => [...prev, element.value])
+      })
+  }, [dataWellness])
+
+  useEffect(() => {
+    setDataChart({
+      series: [
+        {
+          color: '#A2A5AD',
+          data: arrayAvg,
+          name: 'Average',
+        },
+        {
+          color: '#4654EA',
+          data: arrayYou,
+          name: 'You',
+        },
+      ],
+    })
+  }, [arrayAvg, arrayAvg])
+
+  const chartSeries = dataChart.series.filter((item) =>
     selectedSeries.includes(item.name)
   )
 
@@ -113,7 +261,11 @@ export const Wellness = () => {
         </p>
       </div>
 
-      <DetailChart />
+      <DetailChart
+        loading={loading}
+        dataYou={dataWellness?.personalDiaryRoutinePieChart}
+        dataAvg={dataWellness?.averageDiaryRoutinePieChart}
+      />
 
       <div className="flex items-center mt-[50px] cursor-pointer">
         <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>

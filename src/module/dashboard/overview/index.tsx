@@ -18,17 +18,16 @@ export const Overview = () => {
         <PeriodFilter
           value={range}
           onChange={setRange}
-          className="pb-6"
           label="Filter your Dashboard period"
         />
       </div>
 
       <div className="col-span-12 row-span-4 md:row-span-2 lg:row-span-1">
-        <Analytics />
+        <Analytics lastDateRange={range} setLastDateRange={setRange} />
       </div>
 
       <div className="col-span-12">
-        <TrainingAndMatches />
+        <TrainingAndMatches lastDateRange={range} setLastDateRange={setRange} />
       </div>
 
       <div className="col-span-12 md:col-span-5 md:row-span-5 md:mt-[20px]">
@@ -40,15 +39,19 @@ export const Overview = () => {
       </div>
 
       <div className="col-span-12 md:col-span-7 md:row-span-3 mt-[20px] md:ml-[20px]">
-        <DreamTeam dreamTeam />
+        <DreamTeam
+          dreamTeam
+          lastDateRange={range}
+          setLastDateRange={setRange}
+        />
       </div>
 
       <div className="col-span-12 md:col-span-5 md:row-span-1 mt-[20px]">
-        <Wellness />
+        <Wellness lastDateRange={range} setLastDateRange={setRange} />
       </div>
 
       <div className="col-span-12 md:col-span-7 md:row-span-1 mt-[20px] md:ml-[20px]">
-        <Pain />
+        <Pain lastDateRange={range} setLastDateRange={setRange} />
       </div>
     </div>
   )

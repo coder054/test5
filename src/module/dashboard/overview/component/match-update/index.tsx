@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { LoadingCustom, TooltipCustom } from 'src/components'
+import { Loading, LoadingCustom, TooltipCustom } from 'src/components'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { ChevronRight } from 'src/icons/chevron-right'
 import {
@@ -27,7 +27,14 @@ export const MatchUpdates = ({ lastDateRange }: MatchUpdatesProps) => {
   const [dateRange, setdateRange] = useState<string>(lastDateRange)
 
   const { isLoading: loading, data: dataMatchUpdate } = useQuery(
-    [QUERIES_DASHBOARD.MATCH_UPDATE, limit, startAfter, sorted, tab, dateRange],
+    [
+      QUERIES_DASHBOARD.MATCH_UPDATE,
+      limit,
+      startAfter,
+      sorted,
+      tab,
+      lastDateRange,
+    ],
     () => GetListDiariesReport(limit, startAfter, sorted, tab)
   )
 
@@ -40,24 +47,22 @@ export const MatchUpdates = ({ lastDateRange }: MatchUpdatesProps) => {
   }
 
   return (
-    <div
-      className={`${cls.item} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[16px] md:pr-[35px] pb-[16px] md:pb-[38px]`}
-    >
-      <div className="flex justify-between">
-        <p className="text-[16px] text-[#ffffff] font-bold">Match Updates</p>
-        <TooltipCustom
-          title="This is total leaderboard tooltip description"
-          placement="top-end"
-        >
-          <div className="order-list cursor-pointer">
-            <SvgInfomation />
-          </div>
-        </TooltipCustom>
-      </div>
+    <Loading isLoading={loading}>
+      <div
+        className={`${cls.item} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[16px] md:pr-[35px] pb-[16px] md:pb-[38px]`}
+      >
+        <div className="flex justify-between">
+          <p className="text-[16px] text-[#ffffff] font-bold">Match Updates</p>
+          <TooltipCustom
+            title="This is total leaderboard tooltip description"
+            placement="top-end"
+          >
+            <div className="order-list cursor-pointer">
+              <SvgInfomation />
+            </div>
+          </TooltipCustom>
+        </div>
 
-      {loading ? (
-        <LoadingCustom />
-      ) : (
         <div className="w-full mt-[8px]">
           <table className="w-full p-[6px] text-[12px] md:text-[14px]">
             <tr className="bg-[#13161A] text-[#A2A5AD] w-full h-[34px]">
@@ -75,7 +80,7 @@ export const MatchUpdates = ({ lastDateRange }: MatchUpdatesProps) => {
               <td className="w-[20%] md:w-[15%]">Goal/Ass</td>
               <td className="w-[10%] ">Min.</td>
             </tr>
-            {(dataMatchUpdate.data || []).map((item) => (
+            {(dataMatchUpdate?.data || []).map((item) => (
               <tr className="h-[40px]">
                 <td className="md:pl-[4px]">
                   {dayjs(item.createdAt).format('DD/MM')}
@@ -103,12 +108,12 @@ export const MatchUpdates = ({ lastDateRange }: MatchUpdatesProps) => {
             ))}
           </table>
         </div>
-      )}
 
-      <div className="flex items-center mt-[50px] cursor-pointer">
-        <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>
-        <SvgAllowRight />
+        <div className="flex items-center mt-[50px] cursor-pointer">
+          <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>
+          <SvgAllowRight />
+        </div>
       </div>
-    </div>
+    </Loading>
   )
 }

@@ -14,4 +14,5 @@ export const QUERIES_DASHBOARD = {
   DASHBOARD_FRIEND: 'dashboard-friend',
   WELLNESS_CHART: 'wellness-chart',
   WELLNESS_DATA: 'wellness-data',
+  PAIN_DATA: 'pain-data',
 }

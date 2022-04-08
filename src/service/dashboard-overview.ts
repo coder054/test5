@@ -3,8 +3,10 @@ import {
   API_GET_DASBOARD_DIARIES_STATISTIC,
   API_GET_DASHBOARD_FANS_STATS,
   API_GET_DASHBOARD_FRIENDS_STATS,
+  API_GET_DASHBOARD_PAIN,
   API_GET_DASHBOARD_VISITOR_STATS,
   API_GET_DASHBOARD_VISIT_STATS,
+  API_GET_DASHBOARD_WELLNESS,
   API_GET_LIST_DIARIES_REPORT,
   API_GET_LIST_LEADER_BOARD,
 } from 'src/constants/api.constants'
@@ -73,6 +75,7 @@ export const getDashboardVisitStat = async (lastDateRange: string) => {
       return res.data
     })
 }
+
 export const getDashboardVisitorStat = async (lastDateRange: string) => {
   return axios
     .get(
@@ -84,6 +87,7 @@ export const getDashboardVisitorStat = async (lastDateRange: string) => {
       return res.data
     })
 }
+
 export const getDashboardFansStat = async (lastDateRange: string) => {
   return axios
     .get(
@@ -95,12 +99,39 @@ export const getDashboardFansStat = async (lastDateRange: string) => {
       return res.data
     })
 }
+
 export const getDashboardFriendStat = async (lastDateRange: string) => {
   return axios
     .get(
       toQueryString(API_GET_DASHBOARD_FRIENDS_STATS, {
         lastDateRange: lastDateRange,
       })
+    )
+    .then((res) => {
+      return res.data
+    })
+}
+
+export const getDashboardWellness = async (
+  lastDateRange: string,
+  diaryRoutine: string
+) => {
+  return axios
+    .get(
+      toQueryString(API_GET_DASHBOARD_WELLNESS, {
+        lastDateRange: lastDateRange,
+        diaryRoutine: diaryRoutine,
+      })
+    )
+    .then((res) => {
+      return res.data
+    })
+}
+
+export const getDashboardPain = async (lastDateRange: string) => {
+  return axios
+    .get(
+      toQueryString(API_GET_DASHBOARD_PAIN, { lastDateRange: lastDateRange })
     )
     .then((res) => {
       return res.data

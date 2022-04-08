@@ -178,14 +178,15 @@ export const LineChart = ({ range, filter }: LineChartProps) => {
 
   return (
     <div className="bg-defaultBackGround flex flex-col items-center justify-center col-span-7 p-9 rounded-lg">
-      <Loading isLoading={isGettingMatchesChart} className="pt-4">
-        <Chart
-          width={900}
-          height={380}
-          options={chartOptions}
-          series={chartSeries}
-          type="line"
-        />
+      <Loading isLoading={isGettingMatchesChart} className="pt-4 w-full">
+        <div className="w-full">
+          <Chart
+            height={380}
+            options={chartOptions}
+            series={chartSeries}
+            type="line"
+          />
+        </div>
       </Loading>
       <div className="flex justify-center space-x-8">
         {data.series.map((it) => (
