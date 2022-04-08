@@ -80,11 +80,6 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
           icon: <UserCircle fontSize="small" />,
           disabled: isEmpty(infoActiveProfile),
         },
-        {
-          title: t('Development'),
-          path: `/development`,
-          icon: <DevelopmentIcon fontSize="small" />,
-        },
       ],
     },
   ]

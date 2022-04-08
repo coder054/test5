@@ -91,6 +91,7 @@ export const PeriodFilter = ({
 
   useEffect(() => {
     setCurrent(generateInput(value))
+    setLastValue(generateInput(value))
     setCurrentOption(option)
   }, [value, isOpen, option])
 

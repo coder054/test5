@@ -10,9 +10,10 @@ import TrainingChart from './chart'
 import TrainingTable from './table'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import TrainingUpdates from './updates'
+import { DEFAULT_RANGE } from 'src/constants/mocks/common.constants'
 
 const DashBoardTraining = () => {
-  const [range, setRange] = useState<LastRangeDateType>('7')
+  const [range, setRange] = useState<LastRangeDateType>(DEFAULT_RANGE)
   const [, setTraining] = useAtom(dashboardTraining)
 
   const { isLoading: isGettingTraining, data: responseDisplay } = useQuery(

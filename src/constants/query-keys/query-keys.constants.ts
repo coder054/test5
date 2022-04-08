@@ -16,3 +16,10 @@ export const QUERIES_DASHBOARD = {
   WELLNESS_DATA: 'wellness-data',
   PAIN_DATA: 'pain-data',
 }
+
+export const QUERIES_CONTACTS = {
+  CONTACT_TEAM: 'contact-team',
+  CONTACT_TEAM_MEMBER: 'contact-team-member',
+  CONTACT_TEAM_ADMIN: 'contact-team-admin',
+  CONTACT_TEAM_OWNER: 'contact-team-owner',
+}

@@ -13,6 +13,7 @@ import { MatchUpdatesType } from 'src/constants/types/match.types'
 import { flexingFormatDate } from 'src/hooks/functionCommon'
 import DiaryUpdate from 'src/module/biography/diary'
 import { fetchUpdates } from 'src/service/dashboard/training.service'
+import { safeHttpImage } from 'src/utils/utils'
 
 type MatchUpdatesProps = {
   range: string
@@ -137,7 +138,7 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
                 <p className="col-span-3 flex items-center space-x-4">
                   <img
                     className="rounded-full w-[25px] h-[25px] object-cover"
-                    src={it.match.opponentClub.logoUrl}
+                    src={safeHttpImage(it.match.opponentClub.logoUrl)}
                   />
                   <span>{it.match.opponentClub.clubName}</span>
                 </p>
