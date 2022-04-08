@@ -1,5 +1,5 @@
 import { CountryType } from '../types'
-import { MemberType } from './member.typs'
+import { MemberType } from './member.types'
 import { ClubType, TeamType } from './settingsType.type'
 
 export type MatchType = Partial<{

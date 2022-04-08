@@ -3,7 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { API_GET_LIST_CONTACT } from 'src/constants/api.constants'
 import { TeamsType } from 'src/constants/types/contacts.types'
 import { axios } from 'src/utils/axios'
-import { SkeletonContact } from './components/SkeletonContact'
+import SkeletonContact from './components/SkeletonContact'
 
 export const Groups = () => {
   const [count, setCount] = useState<Number>(0)

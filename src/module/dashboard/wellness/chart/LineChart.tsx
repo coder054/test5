@@ -2,11 +2,8 @@ import { useTheme } from '@mui/material/styles'
 import { ApexOptions } from 'apexcharts'
 import clsx from 'clsx'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useQuery } from 'react-query'
 import { Chart, Loading } from 'src/components'
-import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
-import { fetchMatches } from 'src/service/dashboard/matches.service'
-import { MatchesTrainingType } from 'src/constants/types/dashboard/matches.types'
+import { lineChartOptions } from 'src/hooks/functionCommon'
 
 type LineChartInputType = {
   series: { color: string; data: number[]; name: string }[]
@@ -19,8 +16,6 @@ type LineChartProps = {
 }
 
 export const LineChart = ({ response, isLoading }: LineChartProps) => {
-  const theme = useTheme()
-
   const [selectedSeries, setSelectedSeries] = useState(['You', 'Average'])
   const [data, setData] = useState<LineChartInputType>({
     series: [
@@ -55,118 +50,35 @@ export const LineChart = ({ response, isLoading }: LineChartProps) => {
 
   useEffect(() => {
     if (response) {
-      const days = response?.data.personalDiaryRoutineChart?.map((it) => it.day)
-      const personal = response?.data.personalDiaryRoutineChart.map(
-        (it) => it.value
-      )
-      const average = response?.data.averageDiaryRoutineChart.map(
-        (it) => it.value
-      )
       setData((prev) => ({
         ...prev,
-        xaxis: { ...prev.xaxis, dataPoints: days },
+        xaxis: {
+          ...prev.xaxis,
+          dataPoints: response?.data.personalDiaryRoutineChart?.map(
+            (it) => it.day
+          ),
+        },
         series: [
-          { color: '#4654EA', data: personal, name: 'You' },
-          { color: '#A2A5AD', data: average, name: 'Average' },
+          {
+            color: '#4654EA',
+            data: response?.data.personalDiaryRoutineChart.map(
+              (it) => it.value
+            ),
+            name: 'You',
+          },
+          {
+            color: '#A2A5AD',
+            data: response?.data.averageDiaryRoutineChart.map((it) => it.value),
+            name: 'Average',
+          },
         ],
       }))
     }
   }, [JSON.stringify(response)])
 
   const chartOptions: ApexOptions = useMemo(() => {
-    return {
-      chart: {
-        background: 'transparent',
-        stacked: false,
-        toolbar: {
-          show: false,
-        },
-      },
-      colors: chartSeries.map((item) => item.color),
-      dataLabels: {
-        enabled: false,
-      },
-      fill: {
-        opacity: 1,
-      },
-      grid: {
-        borderColor: theme.palette.divider,
-        yaxis: {
-          lines: {
-            show: false,
-          },
-        },
-      },
-      legend: {
-        show: false,
-      },
-      markers: {
-        hover: {
-          size: undefined,
-          sizeOffset: 2,
-        },
-        radius: 2,
-        shape: 'circle',
-        size: 4,
-        strokeWidth: 0,
-      },
-      stroke: {
-        curve: 'smooth',
-        lineCap: 'butt',
-        width: 3,
-      },
-      theme: {
-        mode: theme.palette.mode,
-      },
-      xaxis: {
-        axisBorder: {
-          color: theme.palette.divider,
-        },
-        axisTicks: {
-          color: theme.palette.divider,
-          show: true,
-        },
-        categories: data.xaxis.dataPoints,
-        labels: {
-          style: {
-            colors: theme.palette.text.secondary,
-          },
-        },
-      },
-      yaxis: [
-        {
-          axisBorder: {
-            color: theme.palette.divider,
-            show: true,
-          },
-          axisTicks: {
-            color: theme.palette.divider,
-            show: true,
-          },
-          labels: {
-            style: {
-              colors: theme.palette.text.secondary,
-            },
-          },
-        },
-        {
-          axisTicks: {
-            color: theme.palette.divider,
-            show: true,
-          },
-          axisBorder: {
-            color: theme.palette.divider,
-            show: true,
-          },
-          labels: {
-            style: {
-              colors: theme.palette.text.secondary,
-            },
-          },
-          opposite: true,
-        },
-      ],
-    }
+    const theme = useTheme()
+    return lineChartOptions(chartSeries, data, theme) as ApexOptions
   }, [JSON.stringify(data)])
 
   return (

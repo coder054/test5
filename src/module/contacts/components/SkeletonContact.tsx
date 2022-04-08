@@ -1,6 +1,6 @@
 import { Skeleton } from '@mui/material'
 
-export const SkeletonContact = () => {
+const SkeletonContact = () => {
   const LENGTH = Array(5)
     .fill(0)
     .map(() => ({}))
@@ -28,3 +28,5 @@ export const SkeletonContact = () => {
     </>
   )
 }
+
+export default SkeletonContact
