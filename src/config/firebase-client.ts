@@ -1,10 +1,11 @@
 import * as localforage from 'localforage'
+import querystring from 'query-string'
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
 import { getMessaging, getToken, onMessage } from 'firebase/messaging'
 import { getErrorMessage, parseCookies } from 'src/utils/utils'
-import { axios } from 'src/utils/axios'
+import axiosLib from 'axios'
 import { COOKIE_KEY } from 'src/constants/constants'
 
 // const initFirebaseClient = () => {
@@ -33,7 +34,7 @@ export const firebaseApp = initializeApp({
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_MEASUREMENT_ID,
 })
 
-export const initFirebaseFCM = (token, roleId) => {
+export const initFirebaseFCM = (token, roleId, listRef, setList) => {
   if (typeof window === 'undefined') {
     return
   }
@@ -43,7 +44,7 @@ export const initFirebaseFCM = (token, roleId) => {
     return
   }
 
-  const foo = async () => {
+  const foo = async (token, roleId) => {
     try {
       const firebaseMessaging = getMessaging(firebaseApp)
       // firebaseMessaging.getToken({vapidKey: process.env.NEXT_PUBLIC_FIREBASE_WEB_PUSH_CERTIFICATE});
@@ -62,6 +63,22 @@ export const initFirebaseFCM = (token, roleId) => {
 
       console.log('aaa currentToken', currentToken)
 
+      const axios = axiosLib.create({
+        baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+        headers: {
+          'X-Frame-Options': 'SAMEORIGIN',
+          'Content-type': 'application/json',
+          'XSRF-TOKEN': 'csrfToken',
+        },
+        paramsSerializer: (param) => querystring.stringify(param),
+      })
+
+      //@ts-ignore: Unreachable code error
+      axios.defaults.headers.roleId = roleId
+
+      //@ts-ignore: Unreachable code error
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`
+
       const { data } = await axios.post('/notifications/create-fcm-token', {
         token: currentToken,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -72,11 +89,7 @@ export const initFirebaseFCM = (token, roleId) => {
 
       onMessage(firebaseMessaging, async (payload) => {
         console.log('aaa Message received. ', payload)
-        const notiList = JSON.parse(await localforage.getItem('notiList')) || []
-        await localforage.setItem(
-          'notiList',
-          JSON.stringify([...notiList, payload])
-        )
+        setList([...listRef.current, payload])
         // ...
       })
     } catch (error) {
@@ -84,7 +97,7 @@ export const initFirebaseFCM = (token, roleId) => {
     }
   }
 
-  foo()
+  foo(token, roleId)
 }
 
 console.log('aaa initializeApp')

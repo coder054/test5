@@ -3,18 +3,21 @@ import {
   CircularProgress,
   IconButton,
   List,
-  ListItem, Popover,
+  ListItem,
+  Popover,
   Tooltip,
-  Typography
+  Typography,
 } from '@mui/material'
 import clsx from 'clsx'
 import { format } from 'date-fns'
 import { useAtom } from 'jotai'
+import { get } from 'lodash'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import type { FC } from 'react'
 import { useEffect, useMemo } from 'react'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
+import { checkNotification } from 'src/service/notiService'
 import { axios } from 'src/utils/axios'
 import { getErrorMessage } from 'src/utils/utils'
 import { MailOpen as MailOpenIcon } from '../../icons/mail-open'
@@ -22,7 +25,6 @@ import { X as XIcon } from '../../icons/x'
 import { notiToast } from '../common/Toast'
 import { INoti, useNotiList } from '../noti/NotificationsList'
 import { Scrollbar } from '../scrollbar'
-
 
 interface NotificationsPopoverProps {
   anchorEl: null | Element
@@ -81,7 +83,7 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
 
   const handleClickOne = async (notificationId) => {
     try {
-      await axios.patch(`/notifications/${notificationId}/check-notification`)
+      await checkNotification(notificationId)
       setNotifications((prevState) =>
         prevState.map((notification) => {
           if (notification.notificationId === notificationId) {
@@ -203,7 +205,7 @@ NotificationsPopover.propTypes = {
   open: PropTypes.bool,
 }
 
-const ItemNotification = ({
+export const ItemNotification = ({
   notification,
   handleClickOne,
   onClose,
@@ -303,7 +305,7 @@ const ItemNotification = ({
             await handleClickOne(notification.notificationId)
             onClose()
           }}
-          className="text-white hover:text-white inline-block font-Inter text-[14px] "
+          className="text-white hover:text-white inline-block font-Inter text-[14px "
         >
           <div
             className={clsx(
@@ -336,7 +338,13 @@ const ItemNotification = ({
                 <span className=" "> {notification.body} </span>
               </h5>
               <div className="font-medium text-[12px] opacity-90 text-[#1876f2]">
-                {format(notification.updatedAt, 'MMM dd, h:mm a')}
+                {format(
+                  Number(
+                    get(notification, 'updatedAt') ||
+                      get(notification, 'createdAt')
+                  ),
+                  'MMM dd, h:mm a'
+                )}
               </div>
             </div>
           </div>
