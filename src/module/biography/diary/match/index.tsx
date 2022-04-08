@@ -1,6 +1,6 @@
 import { MenuItem } from '@mui/material'
 import { useAtom } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { Loading, MyDatePicker, MyInput } from 'src/components'
@@ -41,9 +41,10 @@ type FormArrayType = {
 
 type MatchProps = {
   onChange?: (value: MatchType) => void
+  error: (err: string) => void
 }
 
-export const Match = ({ onChange }: MatchProps) => {
+export const Match = ({ onChange, error }: MatchProps) => {
   const { currentRoleName } = useAuth()
   const [diary] = useAtom(diaryAtom)
 
@@ -142,7 +143,21 @@ export const Match = ({ onChange }: MatchProps) => {
     [JSON.stringify(formValues.events), JSON.stringify(formValues.stats)]
   )
 
+  const isFullfill = useMemo(() => {
+    const checking =
+      formValues.stats.reduce((a, b) => a + b.minutesPlayed, 0) > 90
+    if (!checking) {
+      return true
+    }
+    return false
+  }, [JSON.stringify(formValues.stats)])
+
   useEffect(() => {
+    isFullfill
+      ? error(
+          'Your played minutes is over the match length. Please check it before saving'
+        )
+      : error('')
     onChange &&
       onChange({
         ...formValues,

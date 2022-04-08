@@ -9,8 +9,6 @@ type WellnessPieChartProps = {
   isLoading: boolean
 }
 
-const RANGE = ['Very High', 'High', 'Normal', 'Low', 'Very low']
-
 export const PieChart = ({ response, isLoading }: WellnessPieChartProps) => {
   const [initial, setInitial] = useState<WellnessChartType>({
     averageDiaryRoutinePieChart: {
@@ -64,8 +62,9 @@ export const PieChart = ({ response, isLoading }: WellnessPieChartProps) => {
       <div className="grid grid-cols-5 h-full">
         <ChartDonut label="You" value={personalChart} />
         <div className="col-span-3">
-          {Object.keys(initial.personalDiaryRoutinePieChart).map(
-            (key, index) => (
+          {Object.keys(initial.personalDiaryRoutinePieChart)
+            .reverse()
+            .map((key, index) => (
               <div key={index} className="grid grid-cols-3 my-5">
                 <div className="flex justify-center">
                   <p className="text-left w-[20px]">
@@ -76,7 +75,7 @@ export const PieChart = ({ response, isLoading }: WellnessPieChartProps) => {
                   className="text-center"
                   style={{ color: COLOR_CHART[key].color }}
                 >
-                  {RANGE[index]}
+                  {COLOR_CHART[key].label}
                 </p>
                 <div className="flex justify-center">
                   <p className="text-left  w-[20px]">
@@ -84,8 +83,7 @@ export const PieChart = ({ response, isLoading }: WellnessPieChartProps) => {
                   </p>
                 </div>
               </div>
-            )
-          )}
+            ))}
         </div>
         <ChartDonut label="Average" value={averageChart} />
       </div>

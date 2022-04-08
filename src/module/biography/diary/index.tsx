@@ -239,7 +239,10 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
             />
           )}
           {currentTab === 'MATCH' && (
-            <Match onChange={(value) => handleChange('match', value)} />
+            <Match
+              error={setError}
+              onChange={(value) => handleChange('match', value)}
+            />
           )}
           {currentTab === 'GROUP_TRAINING' && (
             <Training
