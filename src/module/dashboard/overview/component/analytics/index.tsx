@@ -69,16 +69,16 @@ export const Analytics = ({
 
   useEffect(() => {
     dataVisit && setVisitAtom(dataVisit)
-  }, [dataVisit])
+  }, [dataVisit, lastDateRange])
   useEffect(() => {
     dataVisitor && setVisitorAtom(dataVisitor)
-  }, [dataVisitor])
+  }, [dataVisitor, lastDateRange])
   useEffect(() => {
     dataFan && setFanAtom(dataFan)
-  }, [dataFan])
+  }, [dataFan, lastDateRange])
   useEffect(() => {
     dataFiend && setFriendAtom(dataFiend)
-  }, [dataFiend])
+  }, [dataFiend, lastDateRange])
 
   return (
     <Grid
@@ -88,7 +88,7 @@ export const Analytics = ({
       <Grid>
         <AnalyticItem
           loading={loadingVisit}
-          data={dataVisit}
+          data={visitAtom}
           color="#E85CFF"
           backgroundColor="bg-[#E85CFF]"
           title="Visits"
@@ -98,7 +98,7 @@ export const Analytics = ({
       <Grid spacing={4}>
         <AnalyticItem
           loading={loadingVisitor}
-          data={dataVisitor}
+          data={visitorAtom}
           color="#4654EA"
           backgroundColor="bg-[#4654EA]"
           title="Visitors"
@@ -109,7 +109,7 @@ export const Analytics = ({
       <Grid spacing={4}>
         <AnalyticItem
           loading={loadingFan}
-          data={dataFan}
+          data={fanAtom}
           color="#07E1FF"
           backgroundColor="bg-[#07E1FF]"
           title="Fans"
@@ -120,7 +120,7 @@ export const Analytics = ({
       <Grid spacing={4}>
         <AnalyticItem
           loading={loadingFriend}
-          data={dataFiend}
+          data={friendAtom}
           color="#09E099"
           backgroundColor="bg-[#09E099]"
           title="Friends"

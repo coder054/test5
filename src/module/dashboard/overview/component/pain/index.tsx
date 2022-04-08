@@ -14,9 +14,10 @@ import { getDashboardPain } from 'src/service/dashboard-overview'
 interface PainProps {
   lastDateRange?: string
   setLastDateRange?: (lastDate?: string) => void
+  setCurrentTab?: (tab?: string) => void
 }
 
-export const Pain = ({ lastDateRange }: PainProps) => {
+export const Pain = ({ lastDateRange, setCurrentTab }: PainProps) => {
   const [dataChart, setDataChart] = useState<DashboardPainType>({
     bodyChart: [],
     columnChart: {
@@ -161,7 +162,12 @@ export const Pain = ({ lastDateRange }: PainProps) => {
           </div>
         </div>
 
-        <div className="flex items-center mt-[54px] cursor-pointer">
+        <div
+          className="flex items-center mt-[54px] cursor-pointer"
+          onClick={() => {
+            setCurrentTab && setCurrentTab('pain')
+          }}
+        >
           <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>
           <SvgAllowRight />
         </div>

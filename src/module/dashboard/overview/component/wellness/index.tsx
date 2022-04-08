@@ -29,9 +29,10 @@ import { WellnessType } from 'src/constants/types'
 interface WellnessProps {
   lastDateRange?: string
   setLastDateRange?: (lastDate?: string) => void
+  setCurrentTab?: (tab?: string) => void
 }
 
-export const Wellness = ({ lastDateRange }: WellnessProps) => {
+export const Wellness = ({ lastDateRange, setCurrentTab }: WellnessProps) => {
   const theme = useTheme()
   const [selectedSeries, setSelectedSeries] = useState(['You', 'Average'])
   const [arrayYou, setArrayYou] = useState<number[]>([])
@@ -147,6 +148,8 @@ export const Wellness = ({ lastDateRange }: WellnessProps) => {
   )
 
   useEffect(() => {
+    setArrayYou([])
+    setArrayAvg([])
     dataWellness &&
       dataWellness.personalDiaryRoutineChart.forEach((element) => {
         setArrayYou((prev) => [...prev, element.value])
@@ -173,7 +176,7 @@ export const Wellness = ({ lastDateRange }: WellnessProps) => {
         },
       ],
     })
-  }, [arrayAvg, arrayAvg])
+  }, [arrayAvg, arrayYou])
 
   const chartSeries = dataChart.series.filter((item) =>
     selectedSeries.includes(item.name)
@@ -267,7 +270,12 @@ export const Wellness = ({ lastDateRange }: WellnessProps) => {
         dataAvg={dataWellness?.averageDiaryRoutinePieChart}
       />
 
-      <div className="flex items-center mt-[50px] cursor-pointer">
+      <div
+        className="flex items-center mt-[50px] cursor-pointer"
+        onClick={() => {
+          setCurrentTab && setCurrentTab('wellness')
+        }}
+      >
         <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>
         <SvgAllowRight />
       </div>
