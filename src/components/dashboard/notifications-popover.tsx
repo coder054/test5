@@ -44,11 +44,20 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
   const unread = useMemo(
     () =>
       notifications.reduce(
-        (acc, notification) => acc + (notification.notificationStatus ? 0 : 1),
+        (acc, notification) =>
+          acc +
+          (notification.notificationStatus === 'false' ||
+          notification.notificationStatus === false
+            ? 1
+            : 0),
         0
       ),
     [notifications]
   )
+
+  useEffect(() => {
+    console.log('aaa unread: ', unread)
+  }, [unread])
 
   useEffect(() => {
     onUpdateUnread?.(unread)
