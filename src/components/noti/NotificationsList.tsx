@@ -1,7 +1,9 @@
 import { CircularProgress } from '@mui/material'
+import { useAtom } from 'jotai'
 import { isEmpty } from 'lodash'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
+import { notificationsAtom } from 'src/atoms/notiAtoms'
 import { checkNotification } from 'src/service/notiService'
 import { axios } from 'src/utils/axios'
 import { getErrorMessage } from 'src/utils/utils'
@@ -135,10 +137,16 @@ export const NotificationsList = () => {
 }
 
 export const useNotiList = () => {
-  const [notifications, setNotifications] = useState<INoti[]>([])
+  // const [notifications, setNotifications] = useState<INoti[]>([])
+  const [notifications, setNotifications] = useAtom(notificationsAtom)
   const [unreadCount, setUnreadCount] = useState(0)
   const [loading, setLoading] = useState(true)
 
+  useEffect(() => {
+    console.log('aaa notifications2: ', notifications)
+  }, [notifications])
+
+  
   const getListNoti = async () => {
     try {
       setLoading(true)
