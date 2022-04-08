@@ -17,6 +17,64 @@ export const SvgFeed = ({ active }: { active: boolean }) => (
   </svg>
 )
 
+export const SvgCloseAdd = () => (
+  <svg
+    width="21"
+    height="21"
+    viewBox="0 0 21 21"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g filter="url(#filter0_d_4493_79691)">
+      <path
+        d="M16.2546 2.3555L12.012 6.59814L16.2546 10.8408L14.8404 12.255L10.5977 8.01236L6.3551 12.255L4.94088 10.8408L9.18352 6.59814L4.94088 2.3555L6.3551 0.94129L10.5977 5.18393L14.8404 0.94129L16.2546 2.3555Z"
+        fill="white"
+      />
+      <path
+        d="M10.9513 5.53748L14.8404 1.6484L15.5475 2.3555L11.6584 6.24459L11.3048 6.59814L11.6584 6.9517L15.5475 10.8408L14.8404 11.5479L10.9513 7.6588L10.5977 7.30525L10.2442 7.6588L6.3551 11.5479L5.64799 10.8408L9.53708 6.9517L9.89063 6.59814L9.53708 6.24459L5.64799 2.3555L6.3551 1.6484L10.2442 5.53748L10.5977 5.89104L10.9513 5.53748Z"
+        stroke="white"
+      />
+    </g>
+    <defs>
+      <filter
+        id="filter0_d_4493_79691"
+        x="0.94043"
+        y="0.941406"
+        width="19.3145"
+        height="19.3135"
+        filterUnits="userSpaceOnUse"
+        color-interpolation-filters="sRGB"
+      >
+        <feFlood flood-opacity="0" result="BackgroundImageFix" />
+        <feColorMatrix
+          in="SourceAlpha"
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+          result="hardAlpha"
+        />
+        <feOffset dy="4" />
+        <feGaussianBlur stdDeviation="2" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix
+          type="matrix"
+          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+        />
+        <feBlend
+          mode="normal"
+          in2="BackgroundImageFix"
+          result="effect1_dropShadow_4493_79691"
+        />
+        <feBlend
+          mode="normal"
+          in="SourceGraphic"
+          in2="effect1_dropShadow_4493_79691"
+          result="shape"
+        />
+      </filter>
+    </defs>
+  </svg>
+)
+
 export const SvgDashboard = ({ active }: { active: boolean }) => (
   <svg
     style={{ display: 'inline' }}

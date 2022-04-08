@@ -11,15 +11,20 @@ import {
   SvgInfomation,
 } from 'src/imports/svgs'
 import { GetListDiariesReport } from 'src/service/dashboard-overview'
+import { safeAvatar } from 'src/utils/utils'
 
 const cls = require('../../overview.module.css')
 
 interface MatchUpdatesProps {
   lastDateRange?: string
   setLastDateRange?: (lastDate?: string) => void
+  setCurrentTab?: (tab?: string) => void
 }
 
-export const MatchUpdates = ({ lastDateRange }: MatchUpdatesProps) => {
+export const MatchUpdates = ({
+  lastDateRange,
+  setCurrentTab,
+}: MatchUpdatesProps) => {
   const [limit, setLimit] = useState<number>(5)
   const [startAfter, setStartAfter] = useState<number>(1)
   const [sorted, setSorted] = useState<string>('asc')
@@ -86,10 +91,10 @@ export const MatchUpdates = ({ lastDateRange }: MatchUpdatesProps) => {
                   {dayjs(item.createdAt).format('DD/MM')}
                 </td>
                 <td>
-                  <div className="flex">
+                  <div className="flex text-[10px] md:text-[14px]">
                     <img
-                      src={item.match.opponentClub.logoUrl}
-                      className="w-[25.6px] h-[26px] mr-2"
+                      src={safeAvatar(item.match.opponentClub.logoUrl)}
+                      className="w-[22px] h-[22px] md:w-[25.6px] md:h-[26px] mr-2"
                     />
                     {item.match.opponentClub.clubName}
                   </div>
@@ -101,7 +106,7 @@ export const MatchUpdates = ({ lastDateRange }: MatchUpdatesProps) => {
                   {item.match.result.opponents}-{item.match.result.yourTeam}
                 </td>
                 <td className="flex justify-between items-center mt-[8px]">
-                  {item.match.events[0].minutes}
+                  {item.match.events[0].minutes || ''}
                   <ChevronRight />
                 </td>
               </tr>
@@ -109,7 +114,12 @@ export const MatchUpdates = ({ lastDateRange }: MatchUpdatesProps) => {
           </table>
         </div>
 
-        <div className="flex items-center mt-[50px] cursor-pointer">
+        <div
+          className="flex items-center mt-[50px] cursor-pointer"
+          onClick={() => {
+            setCurrentTab && setCurrentTab('matches')
+          }}
+        >
           <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>
           <SvgAllowRight />
         </div>
