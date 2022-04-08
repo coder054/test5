@@ -9,6 +9,7 @@ import {
   Tooltip,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import { useAtom } from 'jotai'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import type { FC } from 'react'
@@ -17,6 +18,7 @@ import { isMobile } from 'react-device-detect'
 import { useTranslation } from 'react-i18next'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
+import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
 import DiaryUpdate from 'src/module/biography/diary'
 import { safeAvatar } from 'src/utils/utils'
@@ -26,7 +28,6 @@ import { Search as SearchIcon } from '../../icons/search'
 import { Users as UsersIcon } from '../../icons/users'
 import { UpdateDiaryIcon, XIcon } from '../icons'
 import { ModalMui } from '../ModalMui'
-import { Noti } from '../noti/noti'
 import { AccountPopover } from './account-popover'
 import { ContactsPopover } from './contacts-popover'
 import { ContentSearchDialog } from './content-search-dialog'
@@ -124,11 +125,13 @@ const ContentSearchButton = () => {
 }
 
 const UpdateDiaryButton = () => {
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+  const [openModalDiaryUpdate, setOpenModalDiaryUpdate] = useAtom(
+    openModalDiaryUpdateAtom
+  )
   return (
     <>
       <button
-        onClick={() => setIsOpenModal(true)}
+        onClick={() => setOpenModalDiaryUpdate(true)}
         className="bg-[#4654EA] active:scale-110 duration-150 laptopM:py-2 mobileM:py-[4px] mobileM:px-[8px] laptopM:px-[22px] laptopM:rounded-[8px] mobileM:rounded-[4px] flex items-center laptopM:space-x-2 relative"
       >
         <span className="mobileM:hidden">
@@ -145,14 +148,14 @@ const UpdateDiaryButton = () => {
           width: isMobile ? '100%' : 700,
           overflow: 'auto',
         }}
-        isOpen={isOpenModal}
-        onClose={setIsOpenModal}
+        isOpen={openModalDiaryUpdate}
+        onClose={setOpenModalDiaryUpdate}
       >
         <SimpleBar style={{ maxHeight: 850 }}>
           <div className="relative">
             <button
               type="button"
-              onClick={() => setIsOpenModal(false)}
+              onClick={() => setOpenModalDiaryUpdate(false)}
               className="absolute z-50 right-6 top-5"
             >
               <XIcon />
@@ -453,10 +456,8 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
     authenticated: boolean
   }
 
-  
   return (
     <>
-      <Noti></Noti>
       <DashboardNavbarRoot
         sx={{
           left: {

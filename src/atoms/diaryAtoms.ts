@@ -8,3 +8,6 @@ export const diaryAtom = atom<DiaryType>({
   sleep: 'NORMAL',
   typeOfDiary: 'TRAINING',
 })
+
+export const openModalDiaryUpdateAtom = atom(false)
+// const [openModalDiaryUpdate, setOpenModalDiaryUpdate] = useAtom(openModalDiaryUpdateAtom)

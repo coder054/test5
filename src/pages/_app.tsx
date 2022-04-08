@@ -16,6 +16,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 import { Provider as ReduxProvider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { InitFCM } from 'src/components/noti/InitFCM'
 import { QueryParamProvider } from 'src/components/QueryParamsProvider'
 import { AuthConsumer, AuthProvider } from 'src/module/authen/auth/AuthContext'
 import { RTL } from '../components/rtl'
@@ -23,7 +24,7 @@ import { SplashScreen } from '../components/splash-screen'
 import { gtmConfig } from '../config'
 import {
   SettingsConsumer,
-  SettingsProvider,
+  SettingsProvider
 } from '../contexts/settings-context'
 import '../i18n'
 import { gtm } from '../lib/gtm'
@@ -101,7 +102,13 @@ const App: FC<EnhancedAppProps> = (props) => {
                                 return !auth.initialized ? (
                                   <SplashScreen />
                                 ) : (
-                                  getLayout(<Component {...pageProps} />)
+                                  <>
+                                    <InitFCM
+                                      token={auth.token}
+                                      currentRoleId={auth.currentRoleId}
+                                    ></InitFCM>
+                                    {getLayout(<Component {...pageProps} />)}
+                                  </>
                                 )
                               }}
                             </AuthConsumer>
