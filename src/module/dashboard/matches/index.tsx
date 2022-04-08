@@ -1,6 +1,7 @@
 import { MenuItem } from '@mui/material'
 import { useState } from 'react'
 import { MyInput } from 'src/components'
+import { DEFAULT_RANGE } from 'src/constants/mocks/common.constants'
 import { MatchesTrainingType } from 'src/constants/types/dashboard/matches.types'
 import { LastRangeDateType } from 'src/constants/types/dashboard/training.types'
 import { PeriodFilter } from '../components/PeriodFilter'
@@ -9,7 +10,7 @@ import { MatchesTable } from './table'
 import MatchUpdates from './updates'
 
 const DashboardMatches = () => {
-  const [range, setRange] = useState<LastRangeDateType>('7')
+  const [range, setRange] = useState<LastRangeDateType>(DEFAULT_RANGE)
   const [filterMatch, setFilterMatch] = useState<MatchesTrainingType | string>(
     'netScore'
   )
