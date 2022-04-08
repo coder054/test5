@@ -29,6 +29,7 @@ export enum Body {
 export enum NotificationType {
   FriendRequest = 'FRIEND_REQUEST',
   RemindOnDiaryUpdate = 'REMIND_ON_DIARY_UPDATE',
+  ASK_JOIN_TEAM = 'ASK_JOIN_TEAM',
 }
 
 export enum Title {
