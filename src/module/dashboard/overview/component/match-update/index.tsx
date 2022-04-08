@@ -106,7 +106,7 @@ export const MatchUpdates = ({
                   {item.match.result.opponents}-{item.match.result.yourTeam}
                 </td>
                 <td className="flex justify-between items-center mt-[8px]">
-                  {item.match.events[0].minutes || ''}
+                  {item.match.events[0]?.minutes || ''}
                   <ChevronRight />
                 </td>
               </tr>

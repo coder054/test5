@@ -1,11 +1,11 @@
 export const COLOR_CHART = {
   bad: {
     color: '#E85CFF',
-    label: 'Bad',
+    label: 'Low',
   },
   good: {
     color: '#07E1FF',
-    label: 'Good',
+    label: 'High',
   },
   normal: {
     color: '#09E099',
@@ -13,11 +13,11 @@ export const COLOR_CHART = {
   },
   veryBad: {
     color: '#D60C0C',
-    label: 'Very Bad',
+    label: 'Very Low',
   },
   veryGood: {
     color: '#4654EA',
-    label: 'Very Good',
+    label: 'Very High',
   },
 }
 
