@@ -82,7 +82,7 @@ export const DetailChart = ({
             Normal
           </p>
           <p className="text-[#E85CFF] mb-[9px] text-[10px] lg:text-[12px]">
-            bad
+            Bad
           </p>
           <p className="text-[#D60C0C] mb-[9px] text-[10px] lg:text-[12px]">
             Very bad

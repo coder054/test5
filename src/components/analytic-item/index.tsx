@@ -95,6 +95,7 @@ interface AnalyticItemProps {
   icon?: any
   index?: number
   data?: AnalyticsType
+  lastDateRange?: string
 }
 
 export const AnalyticItem = ({
@@ -105,11 +106,13 @@ export const AnalyticItem = ({
   backgroundColor,
   data,
   index,
+  lastDateRange,
 }: AnalyticItemProps) => {
   const [dataChart, setDataChart] = useState<number[]>([0, 0, 0, 0, 0, 0, 0])
 
   useEffect(() => {
     if (data) {
+      setDataChart([])
       data.chart.forEach((element) => {
         setDataChart((prev) => [...prev, element.value])
       })

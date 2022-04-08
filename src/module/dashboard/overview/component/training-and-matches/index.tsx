@@ -15,10 +15,13 @@ const cls = require('../../overview.module.css')
 interface MatchUpdatesProps {
   lastDateRange?: string
   setLastDateRange?: (lastDate?: string) => void
+  setCurrentTab?: (tab?: string) => void
 }
 
-export const TrainingAndMatches = ({ lastDateRange }: MatchUpdatesProps) => {
-  // const [lastDateRange, setLastDateRange] = useState<string>('7')
+export const TrainingAndMatches = ({
+  lastDateRange,
+  setCurrentTab,
+}: MatchUpdatesProps) => {
   const [dashboardTab, setDashboardTab] = useState<string>('TOTAL')
   const [dataTrainingAndMatch, setDataTrainingAndMatch] = useAtom(
     dashboardTrainingAndMatchAtom
@@ -61,7 +64,12 @@ export const TrainingAndMatches = ({ lastDateRange }: MatchUpdatesProps) => {
           </div>
         </div>
 
-        <div className="flex items-center mt-[50px] cursor-pointer">
+        <div
+          className="flex items-center mt-[50px] cursor-pointer"
+          onClick={() => {
+            setCurrentTab && setCurrentTab('training')
+          }}
+        >
           <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>
           <SvgAllowRight />
         </div>

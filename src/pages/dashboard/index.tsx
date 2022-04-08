@@ -52,7 +52,9 @@ const Dashboard: NextPage = () => {
               ))}
             </Tabs>
             <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />
-            {currentTab === 'overview' && <Overview />}
+            {currentTab === 'overview' && (
+              <Overview setCurrentTab={setCurrentTab} />
+            )}
             {currentTab === 'training' && <DashBoardTraining />}
             {currentTab === 'matches' && <DashboardMatches />}
             {currentTab === 'wellness' && <DashboardWellness />}
