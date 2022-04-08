@@ -6,6 +6,8 @@ const cls = require('../../overview.module.css')
 
 interface DreamTeamProps {
   dreamTeam?: boolean
+  lastDateRange?: string
+  setLastDateRange?: (lastDate?: string) => void
 }
 
 const mockData = [
@@ -77,7 +79,7 @@ const mockData = [
   },
 ]
 
-export const DreamTeam = ({ dreamTeam }: DreamTeamProps) => {
+export const DreamTeam = ({ dreamTeam, lastDateRange }: DreamTeamProps) => {
   return (
     <div
       className={`${cls.item} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[16px] md:pr-[35px] pb-[16px] md:pb-[38px]`}
