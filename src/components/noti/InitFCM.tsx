@@ -11,6 +11,7 @@ import React from 'react'
 import { ItemNotification } from '../dashboard/notifications-popover'
 import toast, { Toaster } from 'react-hot-toast'
 import { checkNotification } from 'src/service/notiService'
+import { axios } from 'src/utils/axios'
 const Alert = React.forwardRef(function Alert(props, ref) {
   //@ts-ignore: Unreachable code error
   return <div className="border p-6 ">haha</div>
@@ -59,11 +60,25 @@ export const InitFCM = ({ token, currentRoleId }) => {
         toast.custom(
           (t) => {
             return (
-              <div className="p-4 bg-[#090734] hover:bg-[#171946] rounded-[8px] border ">
+              <div className="w-[380px] sm:w-[460px] ">
                 <ItemNotification
                   notification={first.data}
-                  handleClickOne={() => {
-                    checkNotification(first.data.notificationId)
+                  handleClickOne={async () => {
+                    await checkNotification(first.data.notificationId)
+                    toast.dismiss(t.id)
+                  }}
+                  handleRemoveOne={async () => {
+                    try {
+                      await axios.delete(
+                        `/notifications/delete-notification?notificationId=${first.data.notificationId}`
+                      )
+                      toast.dismiss(t.id)
+                    } catch (error) {
+                      notiToast({
+                        message: getErrorMessage(error),
+                        type: 'error',
+                      })
+                    }
                   }}
                   onClose={() => {
                     toast.dismiss(t.id)
@@ -74,7 +89,7 @@ export const InitFCM = ({ token, currentRoleId }) => {
           },
           {
             icon: null,
-            duration: 4000000,
+            duration: 4000,
             position: 'bottom-left',
           }
         )

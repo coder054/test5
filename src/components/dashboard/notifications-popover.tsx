@@ -156,38 +156,12 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
             <Scrollbar sx={{ maxHeight: 400 }}>
               <List disablePadding>
                 {notifications.map((notification) => (
-                  <ListItem
-                    divider
-                    key={notification.notificationId}
-                    sx={{
-                      alignItems: 'flex-start',
-                      '&:hover': {
-                        backgroundColor: 'action.hover',
-                      },
-                      '& .MuiListItemSecondaryAction-root': {
-                        top: '24%',
-                      },
-                    }}
-                    secondaryAction={
-                      <Tooltip title="Remove">
-                        <IconButton
-                          edge="end"
-                          onClick={() =>
-                            handleRemoveOne(notification.notificationId)
-                          }
-                          size="small"
-                        >
-                          <XIcon sx={{ fontSize: 14 }} />
-                        </IconButton>
-                      </Tooltip>
-                    }
-                  >
-                    <ItemNotification
-                      notification={notification}
-                      handleClickOne={handleClickOne}
-                      onClose={onClose}
-                    />
-                  </ListItem>
+                  <ItemNotification
+                    notification={notification}
+                    handleClickOne={handleClickOne}
+                    handleRemoveOne={handleRemoveOne}
+                    onClose={onClose}
+                  />
                 ))}
               </List>
             </Scrollbar>
@@ -208,11 +182,13 @@ NotificationsPopover.propTypes = {
 export const ItemNotification = ({
   notification,
   handleClickOne,
+  handleRemoveOne,
   onClose,
 }: {
   notification: INoti
   handleClickOne: Function
   onClose: Function
+  handleRemoveOne: Function
 }) => {
   const [openModalDiaryUpdate, setOpenModalDiaryUpdate] = useAtom(
     openModalDiaryUpdateAtom
@@ -255,6 +231,19 @@ export const ItemNotification = ({
         )
         break
 
+      case 'ASK_JOIN_TEAM':
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
+          </svg>
+        )
+        break
+
       default:
         return (
           <svg
@@ -287,6 +276,10 @@ export const ItemNotification = ({
         return `#`
         break
 
+      case 'ASK_JOIN_TEAM':
+        return `#`
+        break
+
       default:
         return '#'
         break
@@ -294,62 +287,91 @@ export const ItemNotification = ({
   }, [])
 
   return (
-    <div className="w-full ">
-      <Link href={link}>
-        <a
-          onClick={async () => {
-            if (notification.notificationType === 'REMIND_ON_DIARY_UPDATE') {
-              setOpenModalDiaryUpdate(true)
-            }
-
-            await handleClickOne(notification.notificationId)
-            onClose()
-          }}
-          className="text-white hover:text-white inline-block font-Inter text-[14px "
-        >
-          <div
-            className={clsx(
-              ` flex w-full `,
-              notification.notificationStatus === true
-                ? ' text-Grey opacity-80 '
-                : ' text-white '
-            )}
+    <ListItem
+      divider
+      key={notification.notificationId}
+      sx={{
+        alignItems: 'flex-start',
+        '&:hover': {
+          backgroundColor: 'action.hover',
+        },
+        '& .MuiListItemSecondaryAction-root': {
+          top: '24%',
+        },
+      }}
+      secondaryAction={
+        <Tooltip title="Remove">
+          <IconButton
+            edge="end"
+            onClick={() => handleRemoveOne(notification.notificationId)}
+            size="small"
           >
-            <div className="w-[56px] h-[56px] mr-[12px] relative ">
-              <img
-                src={notification.largeIcon}
-                className="rounded-full w-[56px] h-[56px]  "
-                alt=""
-              />
-              <div className="w-[28px] h-[28px] object-cover rounded-full absolute right-[-6px] bottom-[-6px] flex justify-center items-center bg-[#006699] ">
-                {renderIcon()}
-              </div>
-            </div>
+            <XIcon sx={{ fontSize: 14 }} />
+          </IconButton>
+        </Tooltip>
+      }
+    >
+      <div className="w-full ">
+        <Link href={link}>
+          <a
+            onClick={async () => {
+              if (notification.notificationType === 'REMIND_ON_DIARY_UPDATE') {
+                setOpenModalDiaryUpdate(true)
+              }
 
+              await handleClickOne(notification.notificationId)
+              onClose()
+            }}
+            className="text-white hover:text-white inline-block font-Inter text-[14px "
+          >
             <div
               className={clsx(
-                `  `,
+                ` flex w-full `,
                 notification.notificationStatus === true
                   ? ' text-Grey opacity-80 '
                   : ' text-white '
               )}
             >
-              <h5 className=" ">
-                <span className=" "> {notification.body} </span>
-              </h5>
-              <div className="font-medium text-[12px] opacity-90 text-[#1876f2]">
-                {format(
-                  Number(
-                    get(notification, 'updatedAt') ||
-                      get(notification, 'createdAt')
-                  ),
-                  'MMM dd, h:mm a'
+              <div className="w-[56px] h-[56px] mr-[12px] relative ">
+                <img
+                  src={notification.largeIcon}
+                  className="rounded-[8px]"
+                  alt=""
+                />
+                <div className="w-[28px] h-[28px] object-cover rounded-full absolute right-[-6px] bottom-[-6px] flex justify-center items-center bg-[#006699] ">
+                  {renderIcon()}
+                </div>
+              </div>
+
+              <div
+                className={clsx(
+                  `  `,
+                  notification.notificationStatus === true
+                    ? ' text-Grey opacity-80 '
+                    : ' text-white '
                 )}
+              >
+                <div className="font-Inter text-[14px] ">
+                  {notification.title}
+                </div>
+                <div className="font-Inter text-[14px] ">
+                  {notification.body}
+                </div>
+
+                <div className="font-medium text-[12px] opacity-90 text-[#1876f2]">
+                  {format(
+                    Number(
+                      get(notification, 'updatedAt') ||
+                        get(notification, 'createdAt')
+                    ),
+                    'MMM dd, h:mm a'
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </a>
-      </Link>
-    </div>
+          </a>
+        </Link>
+      </div>
+    </ListItem>
   )
 }
