@@ -16,9 +16,13 @@ const cls = require('../../overview.module.css')
 interface TotalLeaderBoardProps {
   lastDateRange?: string
   setLastDateRange?: Function
+  setCurrentTab?: (tab: string) => void
 }
 
-export const TotalLeaderBoard = ({ lastDateRange }: TotalLeaderBoardProps) => {
+export const TotalLeaderBoard = ({
+  lastDateRange,
+  setCurrentTab,
+}: TotalLeaderBoardProps) => {
   const [limit, setLimit] = useState<number>(13)
   const [startAfter, setStartAfter] = useState<number>(1)
   const [sorted, setSorted] = useState<string>('asc')
@@ -92,7 +96,12 @@ export const TotalLeaderBoard = ({ lastDateRange }: TotalLeaderBoardProps) => {
           </table>
         </div>
 
-        <div className="flex items-center mt-[50px] cursor-pointer">
+        <div
+          className="flex items-center mt-[50px] cursor-pointer"
+          onClick={() => {
+            setCurrentTab && setCurrentTab('leaderboards')
+          }}
+        >
           <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>
           <SvgAllowRight />
         </div>

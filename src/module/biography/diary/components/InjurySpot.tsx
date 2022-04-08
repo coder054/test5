@@ -52,7 +52,7 @@ export const InjurySpot = ({
         )}
         {showLevel && level ? (
           <div className="absolute w-[14px] h-[14px] text-[10px] text-[#ffffff] rounded-full">
-            {level === 100 ? 99 : level}
+            {level === 100 ? 99 + '+' : level}
           </div>
         ) : null}
       </span>
