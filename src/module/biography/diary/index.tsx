@@ -63,9 +63,6 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
   const [currentTab, setCurrentTab] = useState('TEAM_TRAINING')
   const [error, setError] = useState<string>('')
 
-  console.log('DIARY: ', diary)
-  console.log('In: ', injuryData)
-
   const { isLoading: isGettingDiary, data: diaryUpdate } = useQuery(
     ['diary', date],
     () => fetchDiary(date, currentRoleName)
@@ -242,7 +239,10 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
             />
           )}
           {currentTab === 'MATCH' && (
-            <Match onChange={(value) => handleChange('match', value)} />
+            <Match
+              error={setError}
+              onChange={(value) => handleChange('match', value)}
+            />
           )}
           {currentTab === 'GROUP_TRAINING' && (
             <Training

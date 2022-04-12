@@ -6,6 +6,7 @@ import { useQuery } from 'react-query'
 import { Chart, Loading } from 'src/components'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { MatchesTrainingType } from 'src/constants/types/dashboard/matches.types'
+import { lineChartOptions } from 'src/hooks/functionCommon'
 import { fetchMatches } from 'src/service/dashboard/matches.service'
 
 type LineChartProps = {
@@ -60,120 +61,37 @@ export const LineChart = ({ range, filter }: LineChartProps) => {
 
   useEffect(() => {
     if (responseMatchesChart) {
-      const days = responseMatchesChart?.data.personalMatchChart?.map(
-        (it) => it.day
-      )
-      const personal = responseMatchesChart?.data.personalMatchChart.map(
-        (it) => it.value
-      )
-      const average = responseMatchesChart?.data.averageMatchChart.map(
-        (it) => it.value
-      )
       setData((prev) => ({
         ...prev,
-        xaxis: { ...prev.xaxis, dataPoints: days },
+        xaxis: {
+          ...prev.xaxis,
+          dataPoints: responseMatchesChart?.data.personalMatchChart?.map(
+            (it) => it.day
+          ),
+        },
         series: [
-          { color: '#4654EA', data: personal, name: 'You' },
-          { color: '#A2A5AD', data: average, name: 'Average' },
+          {
+            color: '#4654EA',
+            data: responseMatchesChart?.data.personalMatchChart.map(
+              (it) => it.value
+            ),
+            name: 'You',
+          },
+          {
+            color: '#A2A5AD',
+            data: responseMatchesChart?.data.averageMatchChart.map(
+              (it) => it.value
+            ),
+            name: 'Average',
+          },
         ],
       }))
     }
   }, [JSON.stringify(responseMatchesChart)])
 
   const chartOptions: ApexOptions = useMemo(() => {
-    return {
-      chart: {
-        background: 'transparent',
-        stacked: false,
-        toolbar: {
-          show: false,
-        },
-      },
-      colors: chartSeries.map((item) => item.color),
-      dataLabels: {
-        enabled: false,
-      },
-      fill: {
-        opacity: 1,
-      },
-      grid: {
-        borderColor: theme.palette.divider,
-        yaxis: {
-          lines: {
-            show: false,
-          },
-        },
-      },
-      legend: {
-        show: false,
-      },
-      markers: {
-        hover: {
-          size: undefined,
-          sizeOffset: 2,
-        },
-        radius: 2,
-        shape: 'circle',
-        size: 4,
-        strokeWidth: 0,
-      },
-      stroke: {
-        curve: 'smooth',
-        lineCap: 'butt',
-        width: 3,
-      },
-      theme: {
-        mode: theme.palette.mode,
-      },
-      xaxis: {
-        axisBorder: {
-          color: theme.palette.divider,
-        },
-        axisTicks: {
-          color: theme.palette.divider,
-          show: true,
-        },
-        categories: data.xaxis.dataPoints,
-        labels: {
-          style: {
-            colors: theme.palette.text.secondary,
-          },
-        },
-      },
-      yaxis: [
-        {
-          axisBorder: {
-            color: theme.palette.divider,
-            show: true,
-          },
-          axisTicks: {
-            color: theme.palette.divider,
-            show: true,
-          },
-          labels: {
-            style: {
-              colors: theme.palette.text.secondary,
-            },
-          },
-        },
-        {
-          axisTicks: {
-            color: theme.palette.divider,
-            show: true,
-          },
-          axisBorder: {
-            color: theme.palette.divider,
-            show: true,
-          },
-          labels: {
-            style: {
-              colors: theme.palette.text.secondary,
-            },
-          },
-          opposite: true,
-        },
-      ],
-    }
+    const theme = useTheme()
+    return lineChartOptions(chartSeries, data, theme) as ApexOptions
   }, [JSON.stringify(data)])
 
   return (

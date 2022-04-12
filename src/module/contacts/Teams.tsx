@@ -3,7 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { API_GET_LIST_CONTACT } from 'src/constants/api.constants'
 import { TeamsType } from 'src/constants/types/contacts.types'
 import { axios } from 'src/utils/axios'
-import { SkeletonContact } from './components/SkeletonContact'
+import SkeletonContact from './components/SkeletonContact'
 import { TeamsCard } from './components/TeamsCard'
 
 export const Teams = () => {
@@ -27,9 +27,7 @@ export const Teams = () => {
   }
 
   const fetchMoreData = async () => {
-    console.log(items.length, count)
-
-    if (items.length >= count) {
+    if (items.length === count) {
       setHasMore(false)
       return
     }
@@ -52,7 +50,7 @@ export const Teams = () => {
         hasMore={hasMore}
         loader={<SkeletonContact />}
       >
-        {(items || []).map((it: any, index: number) => (
+        {(items || []).map((it: TeamsType, index: number) => (
           <TeamsCard team={it} key={index} />
         ))}
       </InfiniteScroll>

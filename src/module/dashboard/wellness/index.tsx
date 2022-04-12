@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from 'react-query'
+import { DEFAULT_RANGE } from 'src/constants/mocks/common.constants'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { LastRangeDateType } from 'src/constants/types/dashboard/training.types'
 import { fetchWellnessChart } from 'src/service/dashboard/wellness.service'
@@ -9,7 +10,7 @@ import { PieChart } from './chart/PieChart'
 import { DashboardDiaryUpdate } from './updates'
 
 const DashboardWellness = () => {
-  const [range, setRange] = useState<LastRangeDateType>('7')
+  const [range, setRange] = useState<LastRangeDateType>(DEFAULT_RANGE)
   const [filterWellness, setFilterWellness] = useState<string>('energyLevel')
 
   const { isLoading: isGettingWellnessChart, data: responseWellnessChart } =

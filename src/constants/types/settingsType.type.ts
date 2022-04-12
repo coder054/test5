@@ -162,7 +162,9 @@ export type TeamType = Partial<{
   teamName: string
   teamNameAsArray: string[]
   createdAt: number
+  clubUrl: string
   clubLogo: string
+  memberType: string
 }>
 
 export type CoachSkillsType = {

@@ -3,7 +3,7 @@ import _ from 'lodash'
 import { useCallback, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { MyInput } from 'src/components'
-import { MemberType } from 'src/constants/types/member.typs'
+import { MemberType } from 'src/constants/types/member.types'
 import { fetchMember } from 'src/service/diary-update'
 
 type InfiniteScrollMemberProps = {
