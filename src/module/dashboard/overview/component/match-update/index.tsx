@@ -106,29 +106,29 @@ export const MatchUpdates = ({
               <td className="w-[10%] ">Min.</td>
             </tr>
             {(dataMatchUpdate?.data || []).map((item) => (
-              <tr className="h-[40px]">
+              <tr className="h-[44px]">
                 <td className="md:pl-[4px]">
-                  {dayjs(item.createdAt).format('DD/MM')}
+                  {dayjs(item?.createdAt).format('DD/MM')}
                 </td>
                 <td>
                   <div className="flex text-[10px] md:text-[14px]">
                     <img
-                      src={safeAvatar(item.match.opponentClub.logoUrl)}
+                      src={safeAvatar(item.match?.opponentClub?.logoUrl)}
                       className="w-[22px] h-[22px] md:w-[25.6px] md:h-[26px] mr-2 rounded-full"
                     />
-                    {item.match.opponentClub.clubName}
+                    {item.match?.opponentClub?.clubName}
                   </div>
                 </td>
                 <td>
-                  {item.match.result.yourTeam}-{item.match.result.opponents}
+                  {item.match?.result?.yourTeam}-{item.match?.result?.opponents}
                 </td>
                 <td>
                   <GoalAssMatch
-                    arrayGoal={item.match.events && item.match.events}
+                    arrayGoal={item.match?.events && item.match?.events}
                   />
                 </td>
                 <td className="flex justify-between items-center mt-[8px]">
-                  {(item.match.length && item.match.length) || ''}
+                  {(item.match?.length && item.match?.length) || ''}
                   <ChevronRight />
                 </td>
               </tr>
