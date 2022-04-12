@@ -26,19 +26,8 @@ const ArrayTrainingMatchDay = [
 const ArrayColor = [
   ['#E85CFF', '#4654EA', '#07E1FF', '#09E099'],
   ['#E85CFF', '#4654EA', '#07E1FF'],
-  ['#E85CFF', '#4654EA', '#07E1FF', '#09E099'],
+  ['#4654EA', '#07E1FF', '#09E099'],
 ]
-// const ArrayLabel = [
-//   ['Tactital', 'Physical', 'Technical', 'Mental'],
-//   ['Wins', 'Draws', 'Losses'],
-//   ['Injured', 'Training', 'Match', 'Rest'],
-// ]
-// const ArrayPercent = [
-//   [10, 20, 20, 50],
-//   [30, 65, 5],
-//   [10, 20, 20, 50],
-// ]
-
 interface TrainingCircleProps {
   loading?: boolean
   ArrayTrainingMatchDay?: any
@@ -48,7 +37,6 @@ export const TrainingCircle = ({
   loading,
   ArrayTrainingMatchDay,
 }: TrainingCircleProps) => {
-  const [trainingDay, setTrainingDay] = useState(ArrayTrainingMatchDay)
   const [data, setData] = useAtom(dashboardTrainingAndMatchAtom)
 
   return (

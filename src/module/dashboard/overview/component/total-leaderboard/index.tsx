@@ -25,7 +25,7 @@ export const TotalLeaderBoard = ({
 }: TotalLeaderBoardProps) => {
   const [limit, setLimit] = useState<number>(13)
   const [startAfter, setStartAfter] = useState<number>(1)
-  const [sorted, setSorted] = useState<string>('asc')
+  const [sorted, setSorted] = useState<string>('desc')
   const [category, setCategory] = useState<string>('HOURS')
   const [dateRange, setdateRange] = useState<string>(lastDateRange)
 
@@ -97,7 +97,7 @@ export const TotalLeaderBoard = ({
         </div>
 
         <div
-          className="flex items-center mt-[50px] cursor-pointer"
+          className="flex items-center mt-[50px] cursor-pointer w-[126px]"
           onClick={() => {
             setCurrentTab && setCurrentTab('leaderboards')
           }}

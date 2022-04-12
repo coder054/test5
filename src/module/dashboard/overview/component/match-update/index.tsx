@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { isEmpty } from 'lodash'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { Loading, LoadingCustom, TooltipCustom } from 'src/components'
@@ -30,6 +31,8 @@ export const MatchUpdates = ({
   const [sorted, setSorted] = useState<string>('asc')
   const [tab, setTab] = useState<string>('MATCH')
   const [dateRange, setdateRange] = useState<string>(lastDateRange)
+  const [goal, setGoal] = useState<number>(0)
+  const [ass, setAss] = useState<number>(0)
 
   const { isLoading: loading, data: dataMatchUpdate } = useQuery(
     [
@@ -49,6 +52,23 @@ export const MatchUpdates = ({
     } else {
       setSorted('asc')
     }
+  }
+  const GoalAssMatch = (arrayGoal: any) => {
+    if (!isEmpty(arrayGoal)) {
+      arrayGoal.arrayGoal &&
+        arrayGoal.arrayGoal.map((item) => {
+          if (item.event === 'GOAL') {
+            setGoal(item.minutes)
+          } else {
+            setAss(item.minutes)
+          }
+        })
+    }
+    return (
+      <div>
+        {goal}/{ass}
+      </div>
+    )
   }
 
   return (
@@ -94,7 +114,7 @@ export const MatchUpdates = ({
                   <div className="flex text-[10px] md:text-[14px]">
                     <img
                       src={safeAvatar(item.match.opponentClub.logoUrl)}
-                      className="w-[22px] h-[22px] md:w-[25.6px] md:h-[26px] mr-2"
+                      className="w-[22px] h-[22px] md:w-[25.6px] md:h-[26px] mr-2 rounded-full"
                     />
                     {item.match.opponentClub.clubName}
                   </div>
@@ -103,10 +123,12 @@ export const MatchUpdates = ({
                   {item.match.result.yourTeam}-{item.match.result.opponents}
                 </td>
                 <td>
-                  {item.match.result.opponents}-{item.match.result.yourTeam}
+                  <GoalAssMatch
+                    arrayGoal={item.match.events && item.match.events}
+                  />
                 </td>
                 <td className="flex justify-between items-center mt-[8px]">
-                  {item.match.events[0].minutes || ''}
+                  {(item.match.length && item.match.length) || ''}
                   <ChevronRight />
                 </td>
               </tr>
@@ -115,7 +137,7 @@ export const MatchUpdates = ({
         </div>
 
         <div
-          className="flex items-center mt-[50px] cursor-pointer"
+          className="flex items-center mt-[50px] cursor-pointer w-[126px]"
           onClick={() => {
             setCurrentTab && setCurrentTab('matches')
           }}
