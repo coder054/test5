@@ -15,7 +15,6 @@ import { MyInput } from 'src/components/MyInput'
 import { API_GET_LIST_CLUB } from 'src/constants/api.constants'
 import { optionAllClub } from 'src/constants/mocks/clubs.constans'
 import { ClubType } from 'src/constants/types/settingsType.type'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
 import { axios } from 'src/utils/axios'
 import { safeHttpImage } from 'src/utils/utils'
 import { NewClubModal } from './NewClubModal'
@@ -46,7 +45,6 @@ export const InfiniteScrollClub = ({
   label,
   isHideAddNewClub = false,
 }: InfiniteScrollClubProps) => {
-  const { currentRoleId } = useAuth()
   const [items, setItems] = useState<any>([])
   const [club, setClub] = useState<string>('')
 
@@ -71,9 +69,6 @@ export const InfiniteScrollClub = ({
       setClub(value)
       setTimeout(async () => {
         const res = await axios.get(API_GET_LIST_CLUB, {
-          headers: {
-            roleId: currentRoleId,
-          },
           params: {
             limit: 10,
             startAfter: 0,
@@ -91,9 +86,6 @@ export const InfiniteScrollClub = ({
   const getListClub = async () => {
     await axios
       .get(API_GET_LIST_CLUB, {
-        headers: {
-          roleId: currentRoleId,
-        },
         params: {
           limit: 10,
           startAfter: items.length,
@@ -186,23 +178,22 @@ export const InfiniteScrollClub = ({
               }
               height={300}
             >
-              {[
-                optionAllClub,
-                ...(items || []),
-              ].map((it: ClubType, index: number) => (
-                <div
-                  className="bg-[#111827] text-gray-400 py-1.5 px-3 cursor-pointer hover:bg-gray-600 duration-150 flex items-center space-x-4"
-                  onClick={() => handleChangeClub(it)}
-                  key={index}
-                >
-                  <img
-                    src={safeHttpImage(it.logoUrl)}
-                    className="w-[30px] h-[30px] rounded-full"
-                    alt="logo"
-                  />
-                  <p>{it.clubName}</p>
-                </div>
-              ))}
+              {[optionAllClub, ...(items || [])].map(
+                (it: ClubType, index: number) => (
+                  <div
+                    className="bg-[#111827] text-gray-400 py-1.5 px-3 cursor-pointer hover:bg-gray-600 duration-150 flex items-center space-x-4"
+                    onClick={() => handleChangeClub(it)}
+                    key={index}
+                  >
+                    <img
+                      src={safeHttpImage(it.logoUrl)}
+                      className="w-[30px] h-[30px] rounded-full"
+                      alt="logo"
+                    />
+                    <p>{it.clubName}</p>
+                  </div>
+                )
+              )}
             </InfiniteScroll>
           </div>
         </div>

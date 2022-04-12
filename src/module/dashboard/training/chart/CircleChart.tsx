@@ -15,7 +15,7 @@ export const TrainingCircleChart = () => {
         .map((it, index) => ({
           color: COLOR[index],
           data: training[type][it],
-          label: upperFirst(it),
+          label: it === 'private' ? 'Personal' : upperFirst(it),
         }))
         .sort((a, b) => b.data - a.data)
     },
@@ -85,8 +85,8 @@ export const TrainingCircleChart = () => {
           type="donut"
         />
         <div className="w-full">
-          {generateData('trainingType').map((it) => (
-            <div className="grid grid-cols-2 my-1">
+          {generateData('trainingType').map((it, index) => (
+            <div key={index} className="grid grid-cols-2 my-1">
               <p className="text-right pr-2">{it.data}%</p>
               <p style={{ color: it.color }} className="text-[14px] pl-2">
                 {it.label}

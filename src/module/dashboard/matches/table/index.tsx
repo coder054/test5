@@ -71,7 +71,7 @@ export const MatchesTable = ({ range }: MatchesTableProps) => {
           <Ticket title="Role" value={formValues.matchStatisticAverage.role} />
           <Ticket
             title="Play time"
-            value={formValues.matchStatisticAverage.averagePlayingTime}
+            value={formValues.matchStatisticAverage.averagePlayingTime + '%'}
           />
           <Ticket
             title="Av. Goals"

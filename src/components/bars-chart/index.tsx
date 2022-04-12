@@ -1,3 +1,4 @@
+import { Tooltip } from '@mui/material'
 import { useMemo } from 'react'
 
 const PERSONAL_BARS =
@@ -42,7 +43,7 @@ const BarsChart = ({ unit, personal, average }: BarsChartType) => {
   const calculateStack = (stack: number, bar: number) => {
     const total = Math.round((stack / bar) * 100)
     if (total < 20) {
-      return 20 + stack
+      return 15 + stack
     }
     if (total > 200) {
       return 200
@@ -66,38 +67,44 @@ const BarsChart = ({ unit, personal, average }: BarsChartType) => {
             {unit && unit}
           </span>
           {personal?.team ? (
-            <span
-              style={{
-                height: calculateStack(personal?.team, mainHeight),
-              }}
-              className={PERSONAL_BARS}
-            >
-              T
-            </span>
+            <Tooltip placement="left" title={personal?.team}>
+              <span
+                style={{
+                  height: calculateStack(personal?.team, mainHeight),
+                }}
+                className={PERSONAL_BARS}
+              >
+                T
+              </span>
+            </Tooltip>
           ) : (
             <></>
           )}
           {personal?.group ? (
-            <span
-              style={{
-                height: calculateStack(personal?.group, mainHeight),
-              }}
-              className={PERSONAL_BARS}
-            >
-              G
-            </span>
+            <Tooltip placement="left" title={personal?.group}>
+              <span
+                style={{
+                  height: calculateStack(personal?.group, mainHeight),
+                }}
+                className={PERSONAL_BARS}
+              >
+                G
+              </span>
+            </Tooltip>
           ) : (
             <></>
           )}
           {personal?.personal ? (
-            <span
-              style={{
-                height: calculateStack(personal?.personal, mainHeight),
-              }}
-              className={PERSONAL_BARS}
-            >
-              P
-            </span>
+            <Tooltip placement="left" title={personal?.personal}>
+              <span
+                style={{
+                  height: calculateStack(personal?.personal, mainHeight),
+                }}
+                className={PERSONAL_BARS}
+              >
+                P
+              </span>
+            </Tooltip>
           ) : (
             <></>
           )}
@@ -110,38 +117,44 @@ const BarsChart = ({ unit, personal, average }: BarsChartType) => {
             {unit && unit}
           </span>
           {average?.team ? (
-            <span
-              style={{
-                height: calculateStack(average?.team, mainHeight),
-              }}
-              className={AVG_BARS}
-            >
-              T
-            </span>
+            <Tooltip placement="right" title={average?.team}>
+              <span
+                style={{
+                  height: calculateStack(average?.team, mainHeight),
+                }}
+                className={AVG_BARS}
+              >
+                T
+              </span>
+            </Tooltip>
           ) : (
             <></>
           )}
           {average?.group ? (
-            <span
-              style={{
-                height: calculateStack(average?.group, mainHeight),
-              }}
-              className={AVG_BARS + 'my-[2px]'}
-            >
-              G
-            </span>
+            <Tooltip placement="right" title={average?.group}>
+              <span
+                style={{
+                  height: calculateStack(average?.group, mainHeight),
+                }}
+                className={AVG_BARS}
+              >
+                G
+              </span>
+            </Tooltip>
           ) : (
             <></>
           )}
           {average?.personal ? (
-            <span
-              style={{
-                height: calculateStack(average?.personal, mainHeight),
-              }}
-              className={AVG_BARS}
-            >
-              P
-            </span>
+            <Tooltip placement="right" title={average?.personal}>
+              <span
+                style={{
+                  height: calculateStack(average?.personal, mainHeight),
+                }}
+                className={AVG_BARS}
+              >
+                P
+              </span>
+            </Tooltip>
           ) : (
             <></>
           )}

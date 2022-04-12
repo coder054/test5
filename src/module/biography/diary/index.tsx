@@ -80,6 +80,9 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
           typeOfDiary: 'TRAINING',
         })
         queryClient.invalidateQueries('diary')
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.TRAINING_DATA)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.MATCHES_DATA)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.WELLNESS_DATA)
       },
       onError: () => {
         toast.error('Please complete all fields')
@@ -93,6 +96,7 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
       onSuccess: () => {
         toast.success('Diary successfully deleted')
         setIsOpenModal(false)
+        onClose(false)
         setDiary({
           eatAndDrink: 'NORMAL',
           energyLevel: 'NORMAL',
@@ -100,6 +104,9 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
           typeOfDiary: 'TRAINING',
         })
         queryClient.invalidateQueries('diary')
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.TRAINING_DATA)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.MATCHES_DATA)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.WELLNESS_DATA)
       },
     }
   )
@@ -115,6 +122,8 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
         onClose(false)
         queryClient.invalidateQueries('diary')
         queryClient.invalidateQueries(QUERIES_DASHBOARD.TRAINING_DATA)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.MATCHES_DATA)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.WELLNESS_DATA)
       },
     }
   )
@@ -128,7 +137,7 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
   }, [JSON.stringify(injuryData), JSON.stringify(submitForm.injuries)])
 
   const isUpdate = useMemo(() => {
-    return !!diary.diaryId
+    return !!diary?.diaryId
   }, [JSON.stringify(diary)])
 
   const filterType = useCallback(
@@ -172,7 +181,7 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
 
   const handleDeleteDiary = useCallback(async () => {
     mutateDelete(diary.diaryId)
-  }, [JSON.stringify(diary.diaryId)])
+  }, [JSON.stringify(diary?.diaryId)])
 
   const handleChange = (type: TypeofDiary, value: any) => {
     setSubmitForm({
@@ -183,16 +192,16 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
   }
 
   useEffect(() => {
-    if (diary.diaryId && diary.typeOfDiary === 'TRAINING') {
+    if (diary?.diaryId && diary.typeOfDiary === 'TRAINING') {
       setCurrentTab(diary.training.typeOfTraining)
     }
-    if (diary.diaryId && diary.typeOfDiary === 'REST') {
+    if (diary?.diaryId && diary.typeOfDiary === 'REST') {
       setCurrentTab(diary.training.typeOfTraining)
     }
-    if (diary.diaryId && diary.typeOfDiary === 'MATCH') {
+    if (diary?.diaryId && diary.typeOfDiary === 'MATCH') {
       setCurrentTab('MATCH')
     }
-    if (diary.diaryId && diary.typeOfDiary === 'CAP') {
+    if (diary?.diaryId && diary.typeOfDiary === 'CAP') {
       setCurrentTab('CAP')
     }
   }, [JSON.stringify(diary)])
@@ -202,13 +211,13 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
   }, [selected])
 
   useEffect(() => {
-    !diary.diaryId && setCurrentTab('TEAM_TRAINING')
-    !diary.diaryId && setIsHaveInjury(false)
-  }, [JSON.stringify(diary.diaryId), JSON.stringify(diaryUpdate)])
+    !diary?.diaryId && setCurrentTab('TEAM_TRAINING')
+    !diary?.diaryId && setIsHaveInjury(false)
+  }, [JSON.stringify(diary?.diaryId), JSON.stringify(diaryUpdate)])
 
   useEffect(() => {
-    diary.injuries?.length > 0 ? setIsHaveInjury(true) : setIsHaveInjury(false)
-  }, [JSON.stringify(diary.injuries)])
+    diary?.injuries?.length > 0 ? setIsHaveInjury(true) : setIsHaveInjury(false)
+  }, [JSON.stringify(diary?.injuries)])
 
   useEffect(() => {
     setError('')
