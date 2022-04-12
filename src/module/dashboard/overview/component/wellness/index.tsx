@@ -271,7 +271,7 @@ export const Wellness = ({ lastDateRange, setCurrentTab }: WellnessProps) => {
       />
 
       <div
-        className="flex items-center mt-[50px] cursor-pointer"
+        className="flex items-center mt-[50px] cursor-pointer w-[126px]"
         onClick={() => {
           setCurrentTab && setCurrentTab('wellness')
         }}

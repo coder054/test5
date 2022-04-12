@@ -146,7 +146,6 @@ export const useNotiList = () => {
     console.log('aaa notifications2: ', notifications)
   }, [notifications])
 
-  
   const getListNoti = async () => {
     try {
       setLoading(true)

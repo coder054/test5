@@ -94,7 +94,6 @@ const SignUpForm = ({ title }: { title: string }) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
     setFormErrors((prev) => ({ ...prev, [type]: '' }))
   }
-  // console.log('formValues', formValues)
 
   const handleSubmit = async (event) => {
     event.preventDefault()

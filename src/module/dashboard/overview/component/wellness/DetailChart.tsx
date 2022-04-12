@@ -24,7 +24,7 @@ export const DetailChart = ({
   const [arrayPercentAvg, setArrayPercentAvg] = useState([0, 0, 0, 0, 0])
 
   const ArrayColor = [['#4654EA', '#07E1FF', '#09E099', '#E85CFF', '#D60C0C']]
-  const ArrayLabel = [['Very good', 'Good', 'Normal', 'Bad', 'Very bad']]
+  const ArrayLabel = ['Very good', 'Good', 'Normal', 'Bad', 'Very bad']
 
   useEffect(() => {
     dataYou &&

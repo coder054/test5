@@ -163,7 +163,7 @@ export const Pain = ({ lastDateRange, setCurrentTab }: PainProps) => {
         </div>
 
         <div
-          className="flex items-center mt-[54px] cursor-pointer"
+          className="flex items-center mt-[54px] cursor-pointer w-[126px]"
           onClick={() => {
             setCurrentTab && setCurrentTab('pain')
           }}
