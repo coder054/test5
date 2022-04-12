@@ -1,7 +1,7 @@
 import { Header } from './Header'
 import { Sidebar } from './Sidebar'
 import Head from 'next/head'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { useRouter } from 'next/router'
 
 export const Layout = ({

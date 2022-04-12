@@ -2,7 +2,7 @@ import { LayoutSignupForm } from 'src/components/layout-update-profile'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { AuthGuard } from 'src/components/authentication/auth-guard'
-import { SignUpFormCoachSkills } from 'src/module/authen/update-profile-coach-skills'
+import { SignUpFormCoachSkills } from 'src/modules/authentication/update-profile-coach-skills'
 
 const SignUpFormCoachSkillsPage = () => {
   const router = useRouter()

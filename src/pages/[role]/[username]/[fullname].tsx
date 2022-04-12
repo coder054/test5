@@ -16,17 +16,17 @@ import {
   IBiographyPlayer,
 } from 'src/constants/types/biography.types'
 import { useScreenWidth } from 'src/hooks/useScreenWidth'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
-import { IInfoClub } from 'src/module/bio/InfoClub'
-import { InfoCoachWithAChart } from 'src/module/bio/InfoCoachWithAChart'
-import { InfoCoachWithCircleImage } from 'src/module/bio/InfoCoachWithCircleImage'
-import { InfoPlayerWithAChart } from 'src/module/bio/InfoPlayerWithAChart'
-import { InfoPlayerWithCircleImage } from 'src/module/bio/InfoPlayerWithCircleImage'
-import { InfoWithImages } from 'src/module/bio/InfoWithImages'
-import { InforWithNumbers } from 'src/module/bio/InfoWithNumbers'
-import { NavigationAndFilter } from 'src/module/bio/NavigationAndFilter'
-import { SocialLinksComponent } from 'src/module/bio/SocialLinksComponent'
-import { TopVideos } from 'src/module/bio/TopVideos'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
+import { IInfoClub } from 'src/modules/biography/InfoClub'
+import { InfoCoachWithAChart } from 'src/modules/biography/InfoCoachWithAChart'
+import { InfoCoachWithCircleImage } from 'src/modules/biography/InfoCoachWithCircleImage'
+import { InfoPlayerWithAChart } from 'src/modules/biography/InfoPlayerWithAChart'
+import { InfoPlayerWithCircleImage } from 'src/modules/biography/InfoPlayerWithCircleImage'
+import { InfoWithImages } from 'src/modules/biography/InfoWithImages'
+import { InforWithNumbers } from 'src/modules/biography/InfoWithNumbers'
+import { NavigationAndFilter } from 'src/modules/biography/NavigationAndFilter'
+import { SocialLinksComponent } from 'src/modules/biography/SocialLinksComponent'
+import { TopVideos } from 'src/modules/biography/TopVideos'
 import { getProfileCoach } from 'src/service/biography-update'
 import { axios } from 'src/utils/axios'
 import { parseCookies } from 'src/utils/utils'
@@ -42,11 +42,6 @@ export const fetcherForEndpointFlip = async (url) => {
   }
   return { error: true }
 }
-
-const tabs = [
-  { label: 'Biography', value: 'biography' },
-  { label: 'Update', value: 'update' },
-]
 
 export default function Biography({
   dataBioPlayer,
@@ -139,7 +134,6 @@ const BioForPlayer = ({
   router: any
 }) => {
   const [playerId, setPlayerId] = useState<string>('')
-  const [tabsBar, setTabsBar] = useState(tabs)
   const [checkTeam, setCheckTeam] = useState<boolean>(false)
   const [teamsPlayer, setTeamsPlayer] = useState<string[]>([])
   const [teamsCoach, setTeamsCoach] = useState<string[]>([])
@@ -235,16 +229,6 @@ const BioForPlayer = ({
 
   useEffect(() => {
     if (currentRoleName === 'COACH') {
-      teamsPlayer.forEach((teamPlayer) => {
-        if (teamsCoach.includes(teamPlayer)) {
-          setTabsBar(tabs)
-        }
-      })
-    }
-  }, [teamsCoach, teamsPlayer, currentRoleName, playerId])
-
-  useEffect(() => {
-    if (currentRoleName === 'COACH') {
       const getCoachProfile = async () => {
         getProfileCoach().then((item) => {
           setTeamsCoach(item.data.teamIds)
@@ -253,14 +237,6 @@ const BioForPlayer = ({
       getCoachProfile()
     }
   }, [])
-
-  useEffect(() => {
-    if (playerId && currentRoleId && playerId === currentRoleId) {
-      setTabsBar(tabs)
-    } else {
-      setTabsBar([{ label: 'Biography', value: 'biography' }])
-    }
-  }, [playerId, currentRoleId, tabs])
 
   return (
     <>
@@ -290,23 +266,6 @@ const BioForPlayer = ({
           }
         />
       </Head>
-      <div className="mobileM:px-[16px] laptopM:px-[60px] pt-[18px]">
-        <Tabs
-          indicatorColor="secondary"
-          //@ts-ignore: Unreachable code error
-          onChange={handleTabsChange}
-          variant="scrollable"
-          scrollButtons="auto"
-          textColor="secondary"
-          value={currentTab}
-          sx={{ display: authenticated ? 'block' : 'none' }}
-        >
-          {tabsBar &&
-            tabsBar.map((tab) => (
-              <Tab key={tab.value} label={tab.label} value={tab.value} />
-            ))}
-        </Tabs>
-      </div>
       {isDesktop && <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />}
       <div className="mobileM:px-[16px] laptopM:px-[60px] laptopM:mb-11">
         {currentTab === 'biography' && (

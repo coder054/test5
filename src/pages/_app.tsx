@@ -18,13 +18,16 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { InitFCM } from 'src/components/noti/InitFCM'
 import { QueryParamProvider } from 'src/components/QueryParamsProvider'
-import { AuthConsumer, AuthProvider } from 'src/module/authen/auth/AuthContext'
+import {
+  AuthConsumer,
+  AuthProvider,
+} from 'src/modules/authentication/auth/AuthContext'
 import { RTL } from '../components/rtl'
 import { SplashScreen } from '../components/splash-screen'
 import { gtmConfig } from '../config'
 import {
   SettingsConsumer,
-  SettingsProvider
+  SettingsProvider,
 } from '../contexts/settings-context'
 import '../i18n'
 import { gtm } from '../lib/gtm'

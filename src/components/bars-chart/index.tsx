@@ -67,7 +67,7 @@ const BarsChart = ({ unit, personal, average }: BarsChartType) => {
             {unit && unit}
           </span>
           {personal?.team ? (
-            <Tooltip placement="left" title={personal?.team}>
+            <Tooltip placement="left" title={`Team: ${personal?.team}h`}>
               <span
                 style={{
                   height: calculateStack(personal?.team, mainHeight),
@@ -81,7 +81,7 @@ const BarsChart = ({ unit, personal, average }: BarsChartType) => {
             <></>
           )}
           {personal?.group ? (
-            <Tooltip placement="left" title={personal?.group}>
+            <Tooltip placement="left" title={`Group: ${personal?.group}h`}>
               <span
                 style={{
                   height: calculateStack(personal?.group, mainHeight),
@@ -95,7 +95,10 @@ const BarsChart = ({ unit, personal, average }: BarsChartType) => {
             <></>
           )}
           {personal?.personal ? (
-            <Tooltip placement="left" title={personal?.personal}>
+            <Tooltip
+              placement="left"
+              title={`Personal: ${personal?.personal}h`}
+            >
               <span
                 style={{
                   height: calculateStack(personal?.personal, mainHeight),
@@ -117,7 +120,7 @@ const BarsChart = ({ unit, personal, average }: BarsChartType) => {
             {unit && unit}
           </span>
           {average?.team ? (
-            <Tooltip placement="right" title={average?.team}>
+            <Tooltip placement="right" title={`Team: ${average?.team}h`}>
               <span
                 style={{
                   height: calculateStack(average?.team, mainHeight),
@@ -131,7 +134,7 @@ const BarsChart = ({ unit, personal, average }: BarsChartType) => {
             <></>
           )}
           {average?.group ? (
-            <Tooltip placement="right" title={average?.group}>
+            <Tooltip placement="right" title={`Group: ${average?.group}h`}>
               <span
                 style={{
                   height: calculateStack(average?.group, mainHeight),
@@ -145,7 +148,10 @@ const BarsChart = ({ unit, personal, average }: BarsChartType) => {
             <></>
           )}
           {average?.personal ? (
-            <Tooltip placement="right" title={average?.personal}>
+            <Tooltip
+              placement="right"
+              title={`Personal: ${average?.personal}h`}
+            >
               <span
                 style={{
                   height: calculateStack(average?.personal, mainHeight),

@@ -4,7 +4,7 @@ import { isEmpty } from 'lodash'
 import PropTypes from 'prop-types'
 import type { FC } from 'react'
 import { useState } from 'react'
-import { IPreviewData } from 'src/module/chat/chatService'
+import { IPreviewData } from 'src/modules/chat/chatService'
 import { getStr } from 'src/utils/utils'
 
 interface ChatMessageProps {

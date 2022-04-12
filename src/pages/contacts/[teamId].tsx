@@ -12,7 +12,7 @@ import {
 } from 'src/constants/query-keys/query-keys.constants'
 import { TeamType } from 'src/constants/types/settingsType.type'
 import { fetchTeam } from 'src/service/contacts/team.service'
-import TeamProfile from 'src/module/contacts/team'
+import TeamProfile from 'src/modules/contacts/team'
 
 const Team: NextPage = () => {
   const router = useRouter()
