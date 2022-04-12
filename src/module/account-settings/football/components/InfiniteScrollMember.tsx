@@ -33,8 +33,8 @@ export const InfiniteScrollMember = ({
 
   const renderInfo = useCallback(
     (value: MemberType) => {
-      return `${value.shirtNumber ? value.shirtNumber : ''}
-    ${value.shirtNumber ? '.' : ''} ${value.firstName} ${value.lastName}`
+      return `${value?.shirtNumber ? value?.shirtNumber : ''}
+    ${value?.shirtNumber ? '.' : ''} ${value?.firstName} ${value?.lastName}`
     },
     [JSON.stringify(value)]
   )

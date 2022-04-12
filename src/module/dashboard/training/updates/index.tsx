@@ -39,7 +39,7 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
       range: range,
       tab: 'TRAINING',
       limit: 100,
-      sorted: sort ? 'desc' : 'asc',
+      sorted: sort ? 'asc' : 'desc',
     })
   )
 
@@ -88,10 +88,12 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
               >
                 <XIcon />
               </button>
-              <DiaryUpdate
-                selected={selectedUpdates}
-                onClose={setIsOpenModal}
-              />
+              {selectedUpdates?.diaryId && (
+                <DiaryUpdate
+                  selected={selectedUpdates}
+                  onClose={setIsOpenModal}
+                />
+              )}
             </div>
           </SimpleBar>
         </ModalMui>
