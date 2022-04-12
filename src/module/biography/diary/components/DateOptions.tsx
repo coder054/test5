@@ -32,7 +32,7 @@ export const DateOptions = ({
   const [diary] = useAtom(diaryAtom)
 
   useEffect(() => {
-    !diary.diaryId && setValue(getDefaultDay(date))
+    !diary?.diaryId && setValue(getDefaultDay(date))
   }, [date, JSON.stringify(diaryUpdate), JSON.stringify(diary)])
 
   useEffect(() => {

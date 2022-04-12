@@ -4,21 +4,21 @@ import { ClubType, TeamType } from './settingsType.type'
 
 export type MatchType = Partial<{
   events: EventType[]
-  country: CountryType
+  country: CountryType | null
   dateTime: string | Date
   length: number
   result: ResultType
-  club: ClubType
+  club: ClubType | null
   arena: string
-  mvp: MvpType
+  mvp: MvpType | null
   review: ReviewType
   typeOfGame: string
-  opponentClub: ClubType
-  opponentTeam: TeamType
+  opponentClub: ClubType | null
+  opponentTeam: TeamType | null
   matchMedia: any[]
   place: string
   stats: StatType[]
-  yourTeam: TeamType
+  yourTeam: TeamType | null
 }>
 
 export type EventType = {
@@ -44,10 +44,10 @@ export type StatType = {
   role: string
 }
 
-export type MvpType = {
+export type MvpType = Partial<{
   yourTeam: MemberType
   opponents: MemberType
-}
+}>
 
 export type MatchesTableType = {
   matchStatisticAverage: {

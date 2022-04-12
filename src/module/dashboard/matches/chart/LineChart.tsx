@@ -20,8 +20,6 @@ type LineChartInputType = {
 }
 
 export const LineChart = ({ range, filter }: LineChartProps) => {
-  const theme = useTheme()
-
   const { isLoading: isGettingMatchesChart, data: responseMatchesChart } =
     useQuery([QUERIES_DASHBOARD.MATCHES_CHART, range, filter], () =>
       fetchMatches({ range: range, type: filter })

@@ -87,7 +87,7 @@ export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
   )
 
   useEffect(() => {
-    diary.training
+    diary?.training
       ? setFormValues(diary.training)
       : setFormValues({
           ...INITITAL_VALUE,
