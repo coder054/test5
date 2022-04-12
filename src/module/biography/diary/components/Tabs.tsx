@@ -22,14 +22,14 @@ export const Tabs = ({ value, onChange, current }: TabsProps) => {
       {value.map((it) => (
         <button
           type="button"
-          disabled={diary.diaryId && currentTab !== it.value}
+          disabled={diary?.diaryId && currentTab !== it.value}
           onClick={() => onChange(it.value)}
           className={clsx(
             '  border-[1px] border-[#64748b] text-[14px] font-medium py-2 px-4 mr-2 mb-2  rounded-full hover:bg-[#09E099]  cursor-pointer duration-150',
             currentTab === it.value
               ? 'bg-[#09E099]'
               : 'bg-[#64748b] bg-opacity-[0.4]',
-            diary.diaryId &&
+            diary?.diaryId &&
               currentTab !== it.value &&
               ' bg-[#202128cc] bg-opacity-0  hover:bg-inherit text-gray-500'
           )}

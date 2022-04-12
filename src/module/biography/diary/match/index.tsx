@@ -39,8 +39,17 @@ type FormArrayType = {
   events: EventType[]
 }
 
+type OnChangeFormType = MatchType & {
+  yourTeam?: string
+  opponentTeam?: string
+  mvp?: {
+    yourTeam?: string | null
+    opponentTeam?: string | null
+  } | null
+}
+
 type MatchProps = {
-  onChange?: (value: MatchType) => void
+  onChange?: (value: OnChangeFormType) => void
   error: (err: string) => void
 }
 
@@ -54,18 +63,18 @@ export const Match = ({ onChange, error }: MatchProps) => {
   )
 
   const [formValues, setFormValues] = useState<MatchType>({
-    club: {},
+    club: null,
     arena: '',
     length: 90,
     country: null,
-    yourTeam: {},
+    yourTeam: null,
     place: 'HOME',
     matchMedia: [],
-    opponentClub: {},
-    opponentTeam: {},
+    opponentClub: null,
+    opponentTeam: null,
     typeOfGame: 'SERIES',
     dateTime: new Date(),
-    events: [{ minutes: 0, event: 'GOAL' }],
+    events: [{ minutes: null, event: '' }],
     stats: [
       {
         minutesPlayed: 90,
@@ -79,19 +88,19 @@ export const Match = ({ onChange, error }: MatchProps) => {
       playerPerformance: 'NORMAL',
       yourReview: '',
     },
-    mvp: {
-      yourTeam: {},
-      opponents: {},
-    },
+    mvp: null,
     result: {
       opponents: 0,
       yourTeam: 0,
     },
   })
 
-  const handleChange = (value: any, type: keyof MatchType) => {
-    setFormValues((prev) => ({ ...prev, [type]: value }))
-  }
+  const handleChange = useCallback(
+    (value: any, type: keyof MatchType) => {
+      setFormValues((prev) => ({ ...prev, [type]: value }))
+    },
+    [JSON.stringify(formValues)]
+  )
 
   const handleChangeReview = useCallback(
     (value: string | number, type: keyof ReviewType) => {
@@ -123,7 +132,7 @@ export const Match = ({ onChange, error }: MatchProps) => {
 
   const handleAddForm = useCallback(
     (type: keyof FormArrayType, initialValue: any) => {
-      if (formValues[type].length < 5) {
+      if (formValues[type].length < (type === 'events' ? 30 : 5)) {
         let arr = [...formValues[type]]
         arr.push(initialValue)
         setFormValues((prev) => ({ ...prev, [type]: arr }))
@@ -143,17 +152,52 @@ export const Match = ({ onChange, error }: MatchProps) => {
     [JSON.stringify(formValues.events), JSON.stringify(formValues.stats)]
   )
 
+  // Variables
+
   const isFullfill = useMemo(() => {
-    const checking =
-      formValues.stats.reduce((a, b) => a + b.minutesPlayed, 0) > 90
-    if (!checking) {
-      return true
+    return (
+      formValues.stats.reduce((a, b) => a + b.minutesPlayed, 0) <=
+      formValues.length
+    )
+  }, [JSON.stringify(formValues.stats), JSON.stringify(formValues.length)])
+
+  const lastStatValue = useMemo(() => {
+    const flag = formValues.stats
+    return {
+      min: flag[flag.length - 1].minutesPlayed,
+      role: flag[flag.length - 1].role,
     }
-    return false
   }, [JSON.stringify(formValues.stats)])
 
+  const lastEventValue = useMemo(() => {
+    const flag = formValues.events
+    return {
+      min: flag[flag.length - 1].minutes,
+      event: flag[flag.length - 1].event,
+    }
+  }, [JSON.stringify(formValues.events)])
+
+  // Handle useEffect
+
   useEffect(() => {
-    isFullfill
+    const getMvpValue = () => {
+      if (formValues.mvp !== null && formValues.mvp?.opponents) {
+        return { opponents: formValues.mvp.opponents.userId }
+      } else if (formValues.mvp !== null && formValues.mvp?.yourTeam) {
+        return { yourTeam: formValues.mvp.yourTeam.userId }
+      } else if (
+        formValues.mvp !== null &&
+        formValues.mvp?.opponents &&
+        formValues.mvp?.yourTeam
+      ) {
+        return {
+          opponents: formValues.mvp.opponents.userId,
+          yourTeam: formValues.mvp.yourTeam.userId,
+        }
+      }
+      return null
+    }
+    !isFullfill
       ? error(
           'Your played minutes is over the match length. Please check it before saving'
         )
@@ -161,19 +205,12 @@ export const Match = ({ onChange, error }: MatchProps) => {
     onChange &&
       onChange({
         ...formValues,
-        /* @ts-ignore */
-        yourTeam: formValues.yourTeam.teamId,
-        /* @ts-ignore */
+        yourTeam: formValues.yourTeam?.teamId,
         opponentTeam: formValues.opponentTeam?.teamId,
-        mvp: {
-          ...formValues.mvp,
-          /* @ts-ignore */
-          yourTeam: formValues.mvp.yourTeam.userId,
-          /* @ts-ignore */
-          opponents: formValues.mvp.opponents?.userId,
-        },
+        mvp: getMvpValue(),
+        events: formValues.events[0].minutes === null ? [] : formValues.events,
       })
-  }, [JSON.stringify(formValues)])
+  }, [JSON.stringify(formValues), isFullfill])
 
   useEffect(() => {
     accountSettings &&
@@ -271,7 +308,7 @@ export const Match = ({ onChange, error }: MatchProps) => {
           <InfiniteScrollTeam
             handleSetTeam={(e) => handleChange(e, 'yourTeam')}
             item={formValues.yourTeam}
-            idClub={formValues.club.clubId}
+            idClub={formValues.club?.clubId}
             label="Your Team"
           />
           <InfiniteScrollClub
@@ -281,7 +318,7 @@ export const Match = ({ onChange, error }: MatchProps) => {
           />
           <InfiniteScrollTeam
             handleSetTeam={(e) => handleChange(e, 'opponentTeam')}
-            idClub={formValues.opponentClub.clubId}
+            idClub={formValues.opponentClub?.clubId}
             item={formValues.opponentTeam}
             label="Opponent Team"
           />
@@ -334,8 +371,8 @@ export const Match = ({ onChange, error }: MatchProps) => {
                   mvp: { ...prev.mvp, yourTeam: e },
                 }))
               }
-              teamId={formValues.yourTeam.teamId}
-              value={formValues.mvp.yourTeam}
+              teamId={formValues.yourTeam?.teamId}
+              value={formValues.mvp ? formValues.mvp.yourTeam : undefined}
               label="Your Team"
             />
             <InfiniteScrollMember
@@ -346,7 +383,7 @@ export const Match = ({ onChange, error }: MatchProps) => {
                 }))
               }
               teamId={formValues.opponentTeam?.teamId}
-              value={formValues.mvp.opponents}
+              value={formValues.mvp ? formValues.mvp.opponents : undefined}
               label="Opponent Team"
             />
           </div>
@@ -397,10 +434,13 @@ export const Match = ({ onChange, error }: MatchProps) => {
                     ))}
                   </MyInput>
                 </div>
-                {index === 0 ? (
+                {index === formValues.stats.length - 1 ? (
                   <span
                     onClick={() =>
-                      handleAddForm('stats', { minutesPlayed: null, role: '' })
+                      handleAddForm('stats', {
+                        minutesPlayed: lastStatValue.min,
+                        role: lastStatValue.role,
+                      })
                     }
                     className="cursor-pointer"
                   >
@@ -425,9 +465,10 @@ export const Match = ({ onChange, error }: MatchProps) => {
               <div key={index} className="flex items-center space-x-2">
                 <div className="flex-1 grid grid-cols-2 gap-x-6">
                   <MyInput
-                    value={item.minutes}
                     select
                     label="Minute"
+                    defaultValue=""
+                    value={item.minutes}
                     onChange={(e) =>
                       handleChangeArrayForm(
                         'events',
@@ -444,6 +485,10 @@ export const Match = ({ onChange, error }: MatchProps) => {
                     ))}
                   </MyInput>
                   <MyInput
+                    select
+                    label="Event"
+                    defaultValue=""
+                    value={item.event}
                     onChange={(e) =>
                       handleChangeArrayForm(
                         'events',
@@ -452,9 +497,6 @@ export const Match = ({ onChange, error }: MatchProps) => {
                         index + ''
                       )
                     }
-                    value={item.event}
-                    select
-                    label="Event"
                   >
                     {EVENT.map((it) => (
                       <MenuItem key={it.key} value={it.key}>
@@ -463,10 +505,13 @@ export const Match = ({ onChange, error }: MatchProps) => {
                     ))}
                   </MyInput>
                 </div>
-                {index === 0 ? (
+                {index === formValues.events.length - 1 ? (
                   <span
                     onClick={() =>
-                      handleAddForm('events', { minutes: null, event: '' })
+                      handleAddForm('events', {
+                        minutes: lastEventValue.min,
+                        event: lastEventValue.event,
+                      })
                     }
                     className="cursor-pointer"
                   >
