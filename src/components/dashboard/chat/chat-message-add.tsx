@@ -7,7 +7,7 @@ import { Avatar, Box, IconButton, TextField, Tooltip } from '@mui/material'
 import { PaperAirplane as PaperAirplaneIcon } from '../../../icons/paper-airplane'
 import { Photograph as PhotographIcon } from '../../../icons/photograph'
 import { PaperClip as PaperClipIcon } from '../../../icons/paper-clip'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { getStr, resizeFile } from 'src/utils/utils'
 import { get } from 'lodash'
 import {
@@ -19,7 +19,7 @@ import {
   IChatMessage,
   newChatMessage,
   fromBase64ToBlob,
-} from 'src/module/chat/chatService'
+} from 'src/modules/chat/chatService'
 import { child, push, ref, serverTimestamp } from 'firebase/database'
 import { useAtom } from 'jotai'
 import { activeChatRoomAtom } from 'src/atoms/chatAtom'

@@ -1,7 +1,5 @@
-import { useRouter } from 'next/router'
 import LogoutIcon from '@mui/icons-material/Logout'
 import {
-  Avatar,
   Box,
   Divider,
   ListItemIcon,
@@ -13,17 +11,14 @@ import {
   Typography,
 } from '@mui/material'
 import clsx from 'clsx'
-import Link from 'next/link'
-import NextLink from 'next/link'
+import { default as Link, default as NextLink } from 'next/link'
+import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import { FC, useState } from 'react'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
-import { Cog as CogIcon } from '../../icons/cog'
-import { SwitchHorizontalOutlined as SwitchHorizontalOutlinedIcon } from '../../icons/switch-horizontal-outlined'
-import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
-import { IPlayerProfile } from './dashboard-navbar'
-import { safeAvatar } from 'src/utils/utils'
 import { ROUTES } from 'src/constants/constants'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
+import { safeAvatar } from 'src/utils/utils'
+import { Cog as CogIcon } from '../../icons/cog'
 
 interface AccountPopoverProps {
   anchorEl: null | Element

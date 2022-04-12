@@ -1,16 +1,14 @@
 import { Box, Container, Divider, Tab, Tabs } from '@mui/material'
 import type { NextPage } from 'next'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { AuthGuard } from 'src/components/authentication/auth-guard'
-import { Account } from 'src/module/account-settings/account/Account'
-import { Football } from 'src/module/account-settings/football/Football'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
-import { Development } from 'src/module/development-module/development-item'
-import { FutureCareer } from 'src/module/development-module/future-career'
-import { HeightAndWeight } from 'src/module/development-module/height-and-weight'
-import { Historic } from 'src/module/development-module/historic'
-import { Skills } from 'src/module/development-module/skills'
-import { Trophies } from 'src/module/development-module/trophies'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
+import { Development } from 'src/modules/development/development-item'
+import { FutureCareer } from 'src/modules/development/future-career'
+import { HeightAndWeight } from 'src/modules/development/height-and-weight'
+import { Historic } from 'src/modules/development/historic'
+import { Skills } from 'src/modules/development/skills'
+import { Trophies } from 'src/modules/development/trophies'
 import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
 
 const tabs = [
@@ -24,7 +22,6 @@ const tabs = [
 
 const DevelopmentPage: NextPage = () => {
   const { currentRoleName, currentRoleId } = useAuth()
-  // const [playerId, setPlayerId] = useState<string>('')
   const [currentTab, setCurrentTab] = useState<string>('skills')
 
   const handleTabsChange = (_, value: string): void => {

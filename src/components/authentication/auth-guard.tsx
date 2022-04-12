@@ -1,10 +1,8 @@
-import { FC, ReactNode, useMemo } from 'react'
-import { useEffect, useState } from 'react'
+import { get, isEmpty, size } from 'lodash'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
-import { get, isEmpty, size } from 'lodash'
-import { ROUTES } from 'src/constants/constants'
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { AlertUpdateProfile } from '../common/AlertUpdateProfile'
 
 interface AuthGuardProps {

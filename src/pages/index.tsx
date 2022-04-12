@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { GuestGuard } from 'src/components/authentication/guest-guard'
-import { Landing } from 'src/module/landing-page/LandingPage'
+import { Landing } from 'src/modules/landing-page/LandingPage'
 
 const LandingPage = () => {
   return (

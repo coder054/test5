@@ -24,7 +24,7 @@ import { Trash as TrashIcon } from '../../../icons/trash'
 import type { Participant } from '../../../types/chat'
 import { useAtom } from 'jotai'
 import { activeChatRoomAtom } from 'src/atoms/chatAtom'
-import { IChatRoom } from 'src/module/chat/chatService'
+import { IChatRoom } from 'src/modules/chat/chatService'
 import { get, isEmpty } from 'lodash'
 
 interface ChatThreadToolbarProps {
