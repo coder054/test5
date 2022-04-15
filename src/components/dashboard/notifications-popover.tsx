@@ -17,6 +17,7 @@ import PropTypes from 'prop-types'
 import type { FC } from 'react'
 import { useEffect, useMemo } from 'react'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
+import { NotificationType } from 'src/constants/types'
 import { checkNotification } from 'src/service/notiService'
 import { axios } from 'src/utils/axios'
 import { getErrorMessage } from 'src/utils/utils'
@@ -276,16 +277,25 @@ export const ItemNotification = ({
 
   const link = useMemo(() => {
     switch (notification.notificationType) {
-      case 'FRIEND_REQUEST':
+      case NotificationType.ACCEPT_JOIN_TEAM:
+      case NotificationType.LEAVE_TEAM:
+      case NotificationType.FOLLOW:
+      case NotificationType.FOLLOW_REQUEST:
+      case NotificationType.REJECT_FOLLOW_REQUEST:
+      case NotificationType.ACCEPTED_FOLLOW_REQUEST:
+      case NotificationType.REJECT_FRIEND_REQUEST:
+      case NotificationType.ACCEPTED_FRIEND_REQUEST:
+      case NotificationType.FRIEND_REQUEST:
         return `/${notification.userType === 'PLAYER' ? 'player' : 'coach'}/${
           notification.username
         }/zporter`
         break
-      case 'REMIND_ON_DIARY_UPDATE':
+      case NotificationType.REMIND_DIARY_UPDATE_LOCAL:
+      case NotificationType.REMIND_ON_DIARY_UPDATE:
         return `#`
         break
 
-      case 'ASK_JOIN_TEAM':
+      case NotificationType.ASK_JOIN_TEAM:
         return `#`
         break
 
@@ -321,6 +331,7 @@ export const ItemNotification = ({
       }
     >
       <div className="w-full ">
+        {/* // here handleClickOnNotiItem */}
         <Link href={link}>
           <a
             onClick={async () => {
@@ -344,7 +355,7 @@ export const ItemNotification = ({
               <div className="w-[56px] h-[56px] mr-[12px] relative ">
                 <img
                   src={notification.largeIcon}
-                  className="rounded-[8px]"
+                  className="rounded-[8px] w-[56px] -[56px] "
                   alt=""
                 />
                 <div className="w-[28px] h-[28px] object-cover rounded-full absolute right-[-6px] bottom-[-6px] flex justify-center items-center bg-[#006699] ">
