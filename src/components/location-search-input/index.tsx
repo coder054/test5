@@ -31,7 +31,7 @@ export const LocationSearchInput = ({
         ?.querySelector(`body`)
         ?.insertAdjacentElement(`beforeend`, gmapScriptEl)
     } catch (error) {
-      console.log('error', error)
+      return
     }
   }, [])
 

@@ -13,14 +13,6 @@ export const InfoWithImages = () => {
   ;[dataStats, setDataStats] = useAtom(dataStatsAtom)
   // const { totalTrophies, totalAwards, totalCaps } = dataStats
 
-  useEffect(() => {
-    // console.log('aaa dataStats: ', dataStats)
-  }, [dataStats])
-
-  useEffect(() => {
-    console.log('aaa dataStats: ', dataStats)
-  }, [dataStats])
-
   if (
     isEmpty(dataStats?.totalCaps) &&
     isEmpty(

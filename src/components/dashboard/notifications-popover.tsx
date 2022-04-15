@@ -58,10 +58,6 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
   )
 
   useEffect(() => {
-    console.log('aaa unread: ', unread)
-  }, [unread])
-
-  useEffect(() => {
     onUpdateUnread?.(unread)
   }, [onUpdateUnread, unread])
 

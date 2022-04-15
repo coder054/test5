@@ -1,5 +1,7 @@
+import clsx from 'clsx'
 import { useRouter } from 'next/router'
 import { ChervonRightIcon } from 'src/components/icons'
+import { CARD } from 'src/constants/mocks/class.constants'
 import { TeamsType } from 'src/constants/types/contacts.types'
 import { safeHttpImage } from 'src/utils/utils'
 
@@ -12,14 +14,16 @@ export const TeamsCard = ({ team }: TeamsCardProps) => {
   return (
     <button
       type="button"
-      onClick={() => router.push(`/contacts/${team.teamId}`)}
-      className="w-full text-left py-3 px-4 cursor-pointer my-3 bg-[#202128cc] hover:bg-gray-600 duration-150 rounded-lg "
+      onClick={() => router.push(`/contacts/team/${team.teamId}`)}
+      className={clsx(CARD.CARD)}
     >
       <div className="flex justify-between items-center space-x-4">
         <div className="flex space-x-4">
           <img
-            className="w-[60px] h-[60px] rounded-lg"
-            src={team?.teamImage ? safeHttpImage(team?.teamImage) : ''}
+            className={clsx(CARD.CARD_AVATAR, 'rounded-lg')}
+            src={
+              team?.teamImage ? safeHttpImage(team?.teamImage) : '/favicon.png'
+            }
           />
           <div className="flex flex-col justify-center space-y-2">
             <p className=" font-semibold text-[18px]">
