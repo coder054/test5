@@ -16,6 +16,7 @@ type MySliderProps = SliderProps & {
   readOnly?: boolean
   labelClass?: string
   isAdjective?: boolean
+  health?: boolean
   onChange?: (value: number) => void
 }
 
@@ -41,6 +42,7 @@ export const MySlider = ({
   isFilter,
   isNumber,
   readOnly,
+  health,
   onChange,
   labelClass,
   isAdjective,
@@ -134,7 +136,18 @@ export const MySlider = ({
           <span className={clsx(handleRange(100))}>Very high</span>
         </div>
       )}
-      {isFilter && (
+      {isFilter && health ? (
+        <div className="flex justify-between text-[#A2A5AD] text-[14px] font-normal">
+          <span>1m</span>
+          <span>3m</span>
+          <span>6m</span>
+          <span>1y</span>
+          <span>1.5y</span>
+          <span>2y</span>
+          <span>3y</span>
+        </div>
+      ) : null}
+      {isFilter && !health ? (
         <div className="flex justify-between text-[#A2A5AD] text-[14px] font-normal">
           <span>7d</span>
           <span>30d</span>
@@ -144,7 +157,7 @@ export const MySlider = ({
           <span>3y</span>
           <span>All</span>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }

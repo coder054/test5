@@ -378,6 +378,27 @@ export interface DashboardPainType {
   }
 }
 
+export interface DashboardHealthUpdateType {
+  healthId: string
+  userId: string
+  weight: number
+  waistSkinsThickness: number
+  height: number
+  updatedAt: number
+  systolicBloodPressure: number
+  diastolicBloodPressure: number
+  date: string
+  breastSkinThickness: number
+  media: string[]
+  thighSkinThickness: number
+  otherDescription: string
+  restingPulse: number
+  createdAt: number
+  maxPulse: number
+  bmi: number
+  fat: number
+}
+
 export const NotificationType = {
   REMIND_DIARY_UPDATE_LOCAL: 'REMIND_DIARY_UPDATE_LOCAL',
 

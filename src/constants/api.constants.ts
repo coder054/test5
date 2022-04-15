@@ -58,3 +58,8 @@ export const API_GET_DASHBOARD_FANS_STATS = 'dashboard/get-fans-stats'
 export const API_GET_DASHBOARD_FRIENDS_STATS = 'dashboard/get-friends-stats'
 export const API_GET_DASHBOARD_WELLNESS = 'dashboard/get-diaries-routine-chart'
 export const API_GET_DASHBOARD_PAIN = 'dashboard/get-injuries-chart'
+
+//dashboard health
+export const API_GET_LIST_HEALTHS = 'dashboard/get-list-healths'
+export const API_GET_HEALTH_CHARTS = 'dashboard/get-health-charts'
+export const API_POST_HEALTH = 'healths'

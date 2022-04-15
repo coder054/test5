@@ -5,9 +5,9 @@ import { MySelect } from 'src/components/MySelect'
 import { API_PLAYER_SETTINGS } from 'src/constants/api.constants'
 import { HeightAndWeightBody, HeightAndWeightType } from 'src/constants/types'
 import { useIncrementNumber } from 'src/hooks/useIncrementNumber'
+import { getProfilePlayer } from 'src/service/dashboard/biography-update'
 import { BackGround } from 'src/modules/account-settings/common-components/Background'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
-import { getProfilePlayer } from 'src/service/biography-update'
 import { axios } from 'src/utils/axios'
 
 export const HeightAndWeight = () => {

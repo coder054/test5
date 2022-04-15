@@ -7,9 +7,9 @@ import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
 import { API_PLAYER_SETTINGS } from 'src/constants/api.constants'
 import { UpdateSkills } from 'src/constants/types'
+import { getProfilePlayer } from 'src/service/dashboard/biography-update'
 import { BackGround } from 'src/modules/account-settings/common-components/Background'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
-import { getProfilePlayer } from 'src/service/biography-update'
 import { axios } from 'src/utils/axios'
 
 type FootBallSkillTypes = {

@@ -18,7 +18,7 @@ import { OptionPlayer } from 'src/modules/authentication/types'
 import {
   createFutureCareer,
   getProfilePlayer,
-} from 'src/service/biography-update'
+} from 'src/service/dashboard/biography-update'
 
 interface FutureCareerProps {
   playerId?: string
