@@ -1,10 +1,8 @@
 import { Form, Space } from 'antd'
 import { MyInput } from 'src/components/MyInput'
 import { MySelect } from 'src/components/MySelect'
-import { OptionType } from 'src/constants/types'
 import { SvgAddSmall, SvgSubSmall } from 'src/imports/svgs'
-import { OptionCoach, OptionPlayer } from 'src/module/authen/types'
-import { useState } from 'react'
+import { OptionCoach, OptionPlayer } from 'src/modules/authentication/types'
 
 interface AddInputProps {
   name: string

@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material'
 import type { Thread } from '../../../types/chat'
-import { IChatRoom } from 'src/module/chat/chatService'
+import { IChatRoom } from 'src/modules/chat/chatService'
 import { isEmpty } from 'lodash'
 
 const formatDistanceLocale = {

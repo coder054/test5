@@ -1,6 +1,6 @@
 import { CircularProgress } from '@mui/material'
 import { useAtom } from 'jotai'
-import { isEmpty } from 'lodash'
+import { chain, isEmpty } from 'lodash'
 import queryString from 'query-string'
 import { useEffect, useState } from 'react'
 import { notificationsAtom } from 'src/atoms/notiAtoms'
@@ -144,6 +144,14 @@ export const useNotiList = () => {
 
   useEffect(() => {
     console.log('aaa notifications2: ', notifications)
+
+    console.log(
+      'aaa notifications types',
+      chain(notifications.map((o) => o.notificationType))
+        .compact()
+        .uniq()
+        .value()
+    )
   }, [notifications])
 
   const getListNoti = async () => {

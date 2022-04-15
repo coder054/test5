@@ -6,7 +6,7 @@ import {
   SwapIcon,
 } from 'src/components/icons'
 import { Text } from 'src/components/Text'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 
 const MENU_CLASS =
   'flex px-[16px] py-[8px] cursor-pointer hover:ml-2 duration-150'

@@ -16,7 +16,7 @@ import {
 } from 'src/imports/svgs'
 import clsx from 'clsx'
 import { LOCAL_STORAGE_KEY, ROUTES } from 'src/constants/constants'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { useEffect, useMemo, useState } from 'react'
 
 export const Sidebar = () => {

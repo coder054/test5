@@ -6,8 +6,6 @@
 @import './components/modal_antd_custom.css';
 /* @import './components/mui_input_custom.css'; */
 
-@import './../module/landing/landing.module.css';
-
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';

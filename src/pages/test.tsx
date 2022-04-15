@@ -3,7 +3,7 @@ import { ItemEventHeadline } from 'src/components/item-event-headline'
 import { Layout } from 'src/components/Layout'
 import { Select } from 'src/components/select'
 import { ItemEventHeadlines } from 'src/constants/item-event-headline'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 
 const Test = () => {
   const { signout } = useAuth()
