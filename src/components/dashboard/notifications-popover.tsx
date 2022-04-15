@@ -18,6 +18,7 @@ import type { FC } from 'react'
 import { useEffect, useMemo } from 'react'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
 import { NotificationType } from 'src/constants/types'
+import { getUrlChatFromChatRoomId } from 'src/modules/chat/chatService'
 import { checkNotification } from 'src/service/notiService'
 import { axios } from 'src/utils/axios'
 import { getErrorMessage, getStr } from 'src/utils/utils'
@@ -204,9 +205,37 @@ export const ItemNotification = ({
     openModalDiaryUpdateAtom
   )
 
+  // here render icon noti
   const renderIcon = () => {
     switch (notification.notificationType) {
-      case 'FRIEND_REQUEST':
+      case NotificationType.SEND_MESSAGE:
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+            />
+          </svg>
+        )
+        break
+
+      case NotificationType.ACCEPT_JOIN_TEAM:
+      case NotificationType.LEAVE_TEAM:
+      case NotificationType.FOLLOW:
+      case NotificationType.FOLLOW_REQUEST:
+      case NotificationType.REJECT_FOLLOW_REQUEST:
+      case NotificationType.ACCEPTED_FOLLOW_REQUEST:
+      case NotificationType.REJECT_FRIEND_REQUEST:
+      case NotificationType.ACCEPTED_FRIEND_REQUEST:
+      case NotificationType.FRIEND_REQUEST:
         return (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -222,7 +251,8 @@ export const ItemNotification = ({
           </svg>
         )
         break
-      case 'REMIND_ON_DIARY_UPDATE':
+      case NotificationType.REMIND_DIARY_UPDATE_LOCAL:
+      case NotificationType.REMIND_ON_DIARY_UPDATE:
         return (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -241,7 +271,7 @@ export const ItemNotification = ({
         )
         break
 
-      case 'ASK_JOIN_TEAM':
+      case NotificationType.ASK_JOIN_TEAM:
         return (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -275,8 +305,13 @@ export const ItemNotification = ({
     }
   }
 
+  // here get link for noti
   const link = useMemo(() => {
     switch (notification.notificationType) {
+      case NotificationType.SEND_MESSAGE:
+        //@ts-ignore: Unreachable code error
+        return getUrlChatFromChatRoomId(notification.chatRoomId)
+        break
       case NotificationType.ACCEPT_JOIN_TEAM:
       case NotificationType.LEAVE_TEAM:
       case NotificationType.FOLLOW:

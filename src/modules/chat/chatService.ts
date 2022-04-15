@@ -1050,3 +1050,7 @@ export const getChatRoomStream = async (
     return { error: true, data: [] }
   }
 }
+
+export const getUrlChatFromChatRoomId = (roomId: string) => {
+  return `/dashboard/chat?roomId=${roomId}`
+}
