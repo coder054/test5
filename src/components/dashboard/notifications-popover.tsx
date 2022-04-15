@@ -378,15 +378,18 @@ export const ItemNotification = ({
                   {notification.body}
                 </div>
 
-                <div className="font-medium text-[12px] opacity-90 text-[#1876f2]">
-                  {format(
-                    Number(
-                      get(notification, 'updatedAt') ||
-                        get(notification, 'createdAt')
-                    ),
-                    'MMM dd, h:mm a'
-                  )}
-                </div>
+                {(getStr(notification, 'updatedAt') ||
+                  getStr(notification, 'createdAt')) && (
+                  <div className="font-medium text-[12px] opacity-90 text-[#1876f2]">
+                    {format(
+                      Number(
+                        get(notification, 'updatedAt') ||
+                          get(notification, 'createdAt')
+                      ),
+                      'MMM dd, h:mm a'
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </a>
