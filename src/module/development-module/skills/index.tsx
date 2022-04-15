@@ -9,7 +9,7 @@ import { API_PLAYER_SETTINGS } from 'src/constants/api.constants'
 import { UpdateSkills } from 'src/constants/types'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
-import { getProfilePlayer } from 'src/service/biography-update'
+import { getProfilePlayer } from 'src/service/dashboard/biography-update'
 import { axios } from 'src/utils/axios'
 
 type FootBallSkillTypes = {

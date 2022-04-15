@@ -377,3 +377,24 @@ export interface DashboardPainType {
     injuryAreaB: number[]
   }
 }
+
+export interface DashboardHealthUpdateType {
+  healthId: string
+  userId: string
+  weight: number
+  waistSkinsThickness: number
+  height: number
+  updatedAt: number
+  systolicBloodPressure: number
+  diastolicBloodPressure: number
+  date: string
+  breastSkinThickness: number
+  media: string[]
+  thighSkinThickness: number
+  otherDescription: string
+  restingPulse: number
+  createdAt: number
+  maxPulse: number
+  bmi: number
+  fat: number
+}

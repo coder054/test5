@@ -3,12 +3,14 @@ import { TextField } from '@mui/material'
 type MyTextAreaProps = {
   placeholder?: string
   value?: string
+  label?: string
   onChange?: any
 }
 
 export const MyTextArea = ({
   placeholder,
   value,
+  label,
   onChange,
 }: MyTextAreaProps) => {
   return (
@@ -35,6 +37,7 @@ export const MyTextArea = ({
       rows={5}
       value={value}
       onChange={onChange}
+      label={label}
     />
   )
 }

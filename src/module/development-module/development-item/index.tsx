@@ -11,7 +11,7 @@ import {
 } from 'src/constants/types'
 import { getStartOfDate, getToday } from 'src/hooks/functionCommon'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
-import { playerCreateDevelopmentNote } from 'src/service/biography-update'
+import { playerCreateDevelopmentNote } from 'src/service/dashboard/biography-update'
 
 interface DevelopmentProps {
   playerId?: string

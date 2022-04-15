@@ -15,6 +15,7 @@ export const QUERIES_DASHBOARD = {
   WELLNESS_CHART: 'wellness-chart',
   WELLNESS_DATA: 'wellness-data',
   PAIN_DATA: 'pain-data',
+  HEALTH_DATA: 'health-data',
 }
 
 export const QUERIES_CONTACTS = {

@@ -19,6 +19,7 @@ import { axios } from 'src/utils/axios'
 
 type InfiniteScrollTeamProps = {
   handleSetTeam?: (value: CurrentTeamType) => void
+  setTeamId?: (teamId: string) => void
   label: string
   idClub?: string
   teamName?: string
@@ -33,6 +34,7 @@ export const InfiniteScrollTeam = ({
   item,
   teamName,
   errorMessage,
+  setTeamId,
 }: InfiniteScrollTeamProps) => {
   const [items, setItems] = useState<any>([])
   const [team, setTeam] = useState<string>('')
@@ -66,6 +68,7 @@ export const InfiniteScrollTeam = ({
           teamName: value.teamName,
         })
       setTeam(value.teamName)
+      setTeamId && setTeamId(value.teamId)
     },
     [team]
   )

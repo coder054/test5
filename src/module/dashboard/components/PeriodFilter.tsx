@@ -18,7 +18,12 @@ type PeriodFilterProps = {
   option?: string
   options?: { value: string; label: string }[]
   optionLabel?: string
+  healthType?: string
+  health?: boolean
   optionChange?: (value: string) => void
+  setCheckFilter?: (filter: boolean) => void
+  setFilterForm?: Function
+  setHealthChartType?: Function
 }
 
 export const PeriodFilter = ({
@@ -29,49 +34,94 @@ export const PeriodFilter = ({
   option,
   options,
   optionLabel,
+  health,
   optionChange,
+  setCheckFilter,
+  children,
+  setFilterForm,
+  healthType,
+  setHealthChartType,
 }: PeriodFilterProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [current, setCurrent] = useState<number>(0)
   const [lastValue, setLastValue] = useState<number>(0)
   const [currentOption, setCurrentOption] = useState<string>('')
+  const date = new Date()
 
   const generateInput = (value: string) => {
-    switch (value) {
-      case '7':
-        return 0
-      case '30':
-        return 10
-      case '90':
-        return 20
-      case '180':
-        return 30
-      case '365':
-        return 40
-      case '1095':
-        return 50
-      case 'All':
-        return 60
+    if (health) {
+      switch (value) {
+        case '1':
+          return 0
+        case '3':
+          return 10
+        case '6':
+          return 20
+        case '12':
+          return 30
+        case '18':
+          return 40
+        case '24':
+          return 50
+        case '36':
+          return 60
+      }
+    } else {
+      switch (value) {
+        case '7':
+          return 0
+        case '30':
+          return 10
+        case '90':
+          return 20
+        case '180':
+          return 30
+        case '365':
+          return 40
+        case '1095':
+          return 50
+        case 'All':
+          return 60
+      }
     }
   }
 
   const generateOutput = useCallback(
     (value: number) => {
-      switch (value) {
-        case 0:
-          return { query: '7', display: '7 days' }
-        case 10:
-          return { query: '30', display: '30 days' }
-        case 20:
-          return { query: '90', display: '90 days' }
-        case 30:
-          return { query: '180', display: '180 days' }
-        case 40:
-          return { query: '365', display: '1 year' }
-        case 50:
-          return { query: '1095', display: '3 years' }
-        case 60:
-          return { query: 'All', display: 'All' }
+      if (health) {
+        switch (value) {
+          case 0:
+            return { query: '1', display: '1 months' }
+          case 10:
+            return { query: '3', display: '3 months' }
+          case 20:
+            return { query: '6', display: '6 months' }
+          case 30:
+            return { query: '12', display: '1 years' }
+          case 40:
+            return { query: '18', display: '1.5 year' }
+          case 50:
+            return { query: '24', display: '2 years' }
+          case 60:
+            return { query: '36', display: '3 years' }
+        }
+      } else {
+        switch (value) {
+          case 0:
+            return { query: '7', display: '7 days' }
+          case 10:
+            return { query: '30', display: '30 days' }
+          case 20:
+            return { query: '90', display: '90 days' }
+          case 30:
+            return { query: '180', display: '180 days' }
+          case 40:
+            return { query: '365', display: '1 year' }
+          case 50:
+            return { query: '1095', display: '3 years' }
+          case 60:
+            return { query: 'All', display: 'All' }
+        }
       }
     },
     [current]
@@ -81,12 +131,34 @@ export const PeriodFilter = ({
     setLastValue(current)
     onChange && onChange(generateOutput(current).query)
     optionChange && optionChange(currentOption)
+    setCheckFilter && setCheckFilter(true)
     setIsOpen(false)
   }
 
   const reset = () => {
     setCurrent(0)
     options && setCurrentOption(options[0].value)
+    setCheckFilter && setCheckFilter(false)
+    setHealthChartType && setHealthChartType('BMI')
+    setFilterForm &&
+      setFilterForm({
+        country: '',
+        ageGroup: '',
+        clubId: '',
+        yourTeams: [''],
+        role: '',
+        category: '',
+        contractedClub: {
+          arena: '',
+          city: '',
+          clubId: '',
+          clubName: '',
+          country: '',
+          logoUrl: '',
+          nickName: '',
+          websiteUrl: null,
+        },
+      })
   }
 
   useEffect(() => {
@@ -102,13 +174,23 @@ export const PeriodFilter = ({
         type="button"
         className="flex items-center space-x-4"
       >
-        <p className="text-[#09E099]">
-          {lastValue !== 60 ? 'Last' : ''} {generateOutput(lastValue)?.display}
-        </p>
+        {!health ? (
+          <p className="text-[#09E099]">
+            {lastValue !== 60 ? 'Last' : ''}{' '}
+            {generateOutput(lastValue)?.display}
+          </p>
+        ) : null}
+        {health ? (
+          <p className="text-[#09E099]">
+            {date.getFullYear()} - {healthType}{' '}
+            {lastValue !== 60 ? 'Development last' : ''}{' '}
+            {generateOutput(lastValue)?.display}
+          </p>
+        ) : null}
         <SvgFilter />
       </button>
       <ModalMui
-        customStyle={{ width: 550 }}
+        customStyle={{ width: 550, top: '50%' }}
         isOpen={isOpen}
         onClose={setIsOpen}
       >
@@ -135,6 +217,7 @@ export const PeriodFilter = ({
               value={current}
               onChange={(e) => setCurrent(e)}
               labelClass="text-[#A2A5AD]"
+              health
             />
           </div>
           {optionLabel && (
@@ -152,6 +235,7 @@ export const PeriodFilter = ({
               ))}
             </MyInput>
           )}
+          {children && children}
           <div className="grid grid-cols-2 w-full gap-x-6">
             <Button
               type="submit"

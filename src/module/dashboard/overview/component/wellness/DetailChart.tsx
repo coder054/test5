@@ -13,12 +13,14 @@ interface DetailChartProps {
   dataAvg?: DataType
   dataYou?: DataType
   loading?: boolean
+  health?: boolean
 }
 
 export const DetailChart = ({
   dataAvg,
   dataYou,
   loading,
+  health,
 }: DetailChartProps) => {
   const [arrayPercentYou, setArrayPercentYou] = useState([0, 0, 0, 0, 0])
   const [arrayPercentAvg, setArrayPercentAvg] = useState([0, 0, 0, 0, 0])
@@ -49,7 +51,11 @@ export const DetailChart = ({
 
   return (
     <Loading isLoading={loading}>
-      <div className="w-full h-[174px] bg-[#13161A] mt-[32px] rounded-[8px] flex pt-[24px] overflow-x-scroll mobileM:overflow-visible">
+      <div
+        className={`w-full  ${
+          health ? ' mt-[84px]' : 'bg-[#13161A] h-[174px] mt-[32px]'
+        } rounded-[8px] flex pt-[24px] overflow-x-scroll mobileM:overflow-visible`}
+      >
         <div className="flex-1">
           <p className="text-center mt-[12px] text-[10px] md:text-[12px] lg:text-[16px]">
             You
@@ -64,34 +70,75 @@ export const DetailChart = ({
             />
           </div>
         </div>
-        <div className="flex-1 max-w-[20px] mobileM:ml-[4px]">
+
+        <div
+          className={`flex-1 ${
+            health ? 'max-w-[30px] mt-[4px]' : 'max-w-[20px]'
+          } mobileM:ml-[4px]`}
+        >
           {arrayPercentYou.map((you) => (
-            <p className="text-[#ffffff] mb-[12px] text-[8px] lg:text-[10px]">
+            <p
+              className={`text-[#ffffff] ${
+                health
+                  ? 'mb-[15px] text-[12px]'
+                  : 'mb-[12px] text-[8px] lg:text-[10px]'
+              }`}
+            >
               {you}%
             </p>
           ))}
         </div>
         <div className="flex-1 text-center ml-[4px] mr-[4px] min-w-[48px]">
-          <p className="text-[#4654EA] mb-[9px] text-[10px] lg:text-[12px]">
+          <p
+            className={`text-[#4654EA] mb-[8px] ${
+              health ? 'text-[16px]' : 'text-[10px] lg:text-[12px]'
+            }`}
+          >
             Very good
           </p>
-          <p className="text-[#07E1FF] mb-[9px] text-[10px] lg:text-[12px]">
+          <p
+            className={`text-[#07E1FF] mb-[9px] ${
+              health ? 'text-[16px]' : 'text-[10px] lg:text-[12px]'
+            }`}
+          >
             Good
           </p>
-          <p className="text-[#09E099] mb-[9px] text-[10px] lg:text-[12px]">
+          <p
+            className={`text-[#09E099] mb-[9px] ${
+              health ? 'text-[16px]' : 'text-[10px] lg:text-[12px]'
+            }`}
+          >
             Normal
           </p>
-          <p className="text-[#E85CFF] mb-[9px] text-[10px] lg:text-[12px]">
+          <p
+            className={`text-[#E85CFF] mb-[9px] ${
+              health ? 'text-[16px]' : 'text-[10px] lg:text-[12px]'
+            }`}
+          >
             Bad
           </p>
-          <p className="text-[#D60C0C] mb-[9px] text-[10px] lg:text-[12px]">
+          <p
+            className={`text-[#D60C0C] mb-[9px] ${
+              health ? 'text-[16px]' : 'text-[10px] lg:text-[12px]'
+            }`}
+          >
             Very bad
           </p>
         </div>
-        <div className="flex-1 max-w-[20px]">
-          {arrayPercentAvg.map((you) => (
-            <p className="text-[#ffffff] mb-[12px] text-[8px] lg:text-[10px]">
-              {you}%
+        <div
+          className={`flex-1 ${
+            health ? 'max-w-[30px] mt-[4px]' : 'max-w-[20px]'
+          } mobileM:ml-[4px]`}
+        >
+          {arrayPercentAvg.map((avg) => (
+            <p
+              className={`text-[#ffffff] ${
+                health
+                  ? 'mb-[15px] text-[12px]'
+                  : 'mb-[12px] text-[8px] lg:text-[10px]'
+              }`}
+            >
+              {avg}%
             </p>
           ))}
         </div>

@@ -21,7 +21,7 @@ import {
   getDashboardFriendStat,
   getDashboardVisitorStat,
   getDashboardVisitStat,
-} from 'src/service/dashboard-overview'
+} from 'src/service/dashboard/dashboard-overview'
 import { useAtom } from 'jotai'
 import {
   dashboardFanAtom,

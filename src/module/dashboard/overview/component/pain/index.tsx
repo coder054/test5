@@ -9,7 +9,7 @@ import { scaleToNum } from 'src/hooks/functionCommon'
 import { SvgAllowRight, SvgInfomation } from 'src/imports/svgs'
 import { BodyPart } from 'src/module/biography/diary/components/BodyPart'
 import { InjurySpot } from 'src/module/biography/diary/components/InjurySpot'
-import { getDashboardPain } from 'src/service/dashboard-overview'
+import { getDashboardPain } from 'src/service/dashboard/dashboard-overview'
 
 interface PainProps {
   lastDateRange?: string

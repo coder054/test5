@@ -7,7 +7,7 @@ import { HeightAndWeightBody, HeightAndWeightType } from 'src/constants/types'
 import { useIncrementNumber } from 'src/hooks/useIncrementNumber'
 import { BackGround } from 'src/module/account-settings/common-components/Background'
 import { useAuth } from 'src/module/authen/auth/AuthContext'
-import { getProfilePlayer } from 'src/service/biography-update'
+import { getProfilePlayer } from 'src/service/dashboard/biography-update'
 import { axios } from 'src/utils/axios'
 
 export const HeightAndWeight = () => {
