@@ -14,16 +14,15 @@ const verifyIdToken = (token: string) => {
           privateKey: firebasePrivateKey,
         }),
       })
-    } catch (error) {
-      console.log('error', { error })
+    } catch (_error) {
+      return
     }
   }
 
   return admin
     .auth()
     .verifyIdToken(token)
-    .catch((error) => {
-      console.log('error', { error })
+    .catch((_error) => {
       return null
     })
 }
@@ -32,7 +31,6 @@ export const loadIdToken = async (req: any): Promise<string | null> => {
   if (!req.cookies.token) return null
   const decoded = await verifyIdToken(req.cookies.token)
   if (!decoded) return null
-  console.log('aaa decoded: ', decoded)
   return decoded.uid
 }
 

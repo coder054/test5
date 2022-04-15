@@ -80,14 +80,6 @@ export const InitFCM = ({ token, currentRoleId }) => {
   }, [currentRoleId, token])
 
   useEffect(() => {
-    console.log('aaa notifications1: ', notifications)
-  }, [notifications])
-
-  useEffect(() => {
-    console.log('aaa list: ', list)
-  }, [list])
-
-  useEffect(() => {
     const interval = setInterval(async () => {
       return
       try {
@@ -145,10 +137,6 @@ export const InitFCM = ({ token, currentRoleId }) => {
             position: 'bottom-left',
           }
         )
-        // toast('cusseess')
-
-        console.log('aaa first', first)
-
         setList(noFirst)
       } catch (error) {
         notiToast({

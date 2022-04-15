@@ -1,8 +1,5 @@
 self.addEventListener('notificationclick', function (event) {
-  console.log('aaa On notification click: ', event)
-
   event.notification.close()
-
   // This looks to see if the current is already open and
   // focuses if it is
   event.waitUntil(
@@ -48,16 +45,11 @@ firebase.initializeApp({
 const messaging = firebase.messaging()
 
 messaging.onBackgroundMessage(function (payload) {
-  console.log(
-    'aaa 3 [firebase-messaging-sw.js] Received background message ',
-    payload
-  )
   // Customize notification here
   // const notificationTitle = 'Background Message Title'
   // const notificationOptions = {
   //   body: 'Background Message body.',
   //   icon: 'https://images.unsplash.com/photo-1645877409345-0389b63d382d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzOXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60',
   // }
-
   // self.registration.showNotification(notificationTitle, notificationOptions)
 })

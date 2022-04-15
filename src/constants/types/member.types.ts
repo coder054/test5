@@ -9,6 +9,7 @@ export type MemberType = Partial<{
   currentTeams: string[]
   lastName: string
   faceImage: string
+  fullName: string
   username: string
   type: string
   userId: string

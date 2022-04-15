@@ -82,7 +82,7 @@ export const MySelectCountry = ({
             label={label}
             inputProps={{
               ...params.inputProps,
-              autoComplete: 'new-password',
+              autoComplete: 'off',
             }}
           />
         )}

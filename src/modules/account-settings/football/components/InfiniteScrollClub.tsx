@@ -110,7 +110,7 @@ export const InfiniteScrollClub = ({
   }
 
   useEffect(() => {
-    value && setClub(value.clubName)
+    value ? setClub(value.clubName) : setClub('')
   }, [JSON.stringify(value)])
 
   useEffect(() => {

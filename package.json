@@ -106,6 +106,7 @@
     "react-icons": "^4.3.1",
     "react-image-file-resizer": "^0.4.7",
     "react-infinite-scroll-component": "^6.1.0",
+    "react-intersection-observer": "^8.33.1",
     "react-markdown": "^5.0.3",
     "react-otp-input": "^2.4.0",
     "react-places-autocomplete": "^7.3.0",

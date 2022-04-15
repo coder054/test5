@@ -6,10 +6,10 @@ import { SortIcon } from 'src/components/icons'
 import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
 import { MemberType } from 'src/constants/types/member.types'
 import { fetchTeamMember } from 'src/service/contacts/team.service'
-import SkeletonContact from '../components/SkeletonContact'
-import { MemberCard } from './components/MemberCard'
+import SkeletonContact from '../../components/SkeletonContact'
+import { MemberCard } from '../../team/components/MemberCard'
 
-const TeamMember = () => {
+const TeamOwner = () => {
   const router = useRouter()
   const { teamId } = router.query
   const [initial, setIninital] = useState({
@@ -17,15 +17,15 @@ const TeamMember = () => {
     data: [],
   })
   const [sort, setSort] = useState<boolean>(false)
-  const { isLoading: isGettingMember, data: responseDisplay } = useQuery(
-    [QUERIES_CONTACTS.CONTACT_TEAM_MEMBER, teamId],
+  const { isLoading: isGettingAdmin, data: responseDisplay } = useQuery(
+    [QUERIES_CONTACTS.CONTACT_TEAM_OWNER, teamId],
     () =>
       fetchTeamMember({
         teamId: teamId,
         limit: 100,
         startAfter: '1',
         sort: sort ? 'desc' : 'asc',
-        tab: 'MEMBER',
+        tab: 'OWNER',
       })
   )
 
@@ -43,7 +43,7 @@ const TeamMember = () => {
       <div className="flex justify-between items-center">
         <div className="flex space-x-3 items-center">
           <p className="text-[#09E099] font-medium">
-            {isGettingMember ? (
+            {isGettingAdmin ? (
               <CircularProgress color="primary" size={20} />
             ) : (
               initial.count
@@ -57,7 +57,7 @@ const TeamMember = () => {
           <SortIcon />
         </button>
       </div>
-      {isGettingMember ? (
+      {isGettingAdmin ? (
         <SkeletonContact />
       ) : (
         <>
@@ -69,4 +69,4 @@ const TeamMember = () => {
     </div>
   )
 }
-export default TeamMember
+export default TeamOwner

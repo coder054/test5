@@ -77,7 +77,7 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
         <p className="text-[18px] font-bold">Match Updates</p>
         <div>
           <ModalMui
-            customStyle={{
+            sx={{
               padding: 0,
               top: '50%',
               width: isMobile ? '100%' : 700,

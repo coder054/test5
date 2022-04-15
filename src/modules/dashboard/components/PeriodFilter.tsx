@@ -189,11 +189,7 @@ export const PeriodFilter = ({
         ) : null}
         <SvgFilter />
       </button>
-      <ModalMui
-        customStyle={{ width: 550, top: '50%' }}
-        isOpen={isOpen}
-        onClose={setIsOpen}
-      >
+      <ModalMui sx={{ width: 550 }} isOpen={isOpen} onClose={setIsOpen}>
         <div className="flex flex-col items-center space-y-4 p-2 relative">
           <button
             type="button"

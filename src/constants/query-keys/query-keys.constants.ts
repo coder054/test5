@@ -23,4 +23,9 @@ export const QUERIES_CONTACTS = {
   CONTACT_TEAM_MEMBER: 'contact-team-member',
   CONTACT_TEAM_ADMIN: 'contact-team-admin',
   CONTACT_TEAM_OWNER: 'contact-team-owner',
+  CONTACT_GROUP: 'contact-group',
+  CONTACT_GROUP_MEMBER: 'contact-group-member',
+  CONTACT_GROUP_ADMIN: 'contact-group-admin',
+  CONTACT_GROUP_OWNER: 'contact-group-owner',
+  CONTACT_FANS: 'contact-fans',
 }

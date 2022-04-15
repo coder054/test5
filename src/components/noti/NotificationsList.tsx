@@ -142,18 +142,6 @@ export const useNotiList = () => {
   const [unreadCount, setUnreadCount] = useState(0)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    console.log('aaa notifications2: ', notifications)
-
-    console.log(
-      'aaa notifications types',
-      chain(notifications.map((o) => o.notificationType))
-        .compact()
-        .uniq()
-        .value()
-    )
-  }, [notifications])
-
   const getListNoti = async () => {
     try {
       setLoading(true)

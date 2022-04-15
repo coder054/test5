@@ -23,6 +23,7 @@ import PropTypes from 'prop-types'
 import { axios } from 'src/utils/axios'
 import { IUsersSearch } from 'src/constants/types/searchUsers.types'
 import { getStr, truncateStr } from 'src/utils/utils'
+import toast from 'react-hot-toast'
 
 interface ContentSearchProps {
   onClose?: () => void
@@ -95,8 +96,8 @@ export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
           error: false,
           data,
         }
-      } catch (error) {
-        console.log('aaa getMembersWithKeyword error', error)
+      } catch (_err) {
+        toast.error('An error occurred')
         return {
           error: true,
           data: null,
@@ -109,7 +110,6 @@ export const ContentSearchDialog: FC<ContentSearchProps> = (props) => {
       setIsLoading(false)
       return
     }
-    console.log('aaa data', data)
     setUsers(data)
     setIsLoading(false)
     setShowResults(true)

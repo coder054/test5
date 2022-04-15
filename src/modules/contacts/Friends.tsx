@@ -69,10 +69,6 @@ export const Friends = () => {
     return Math.floor(len / LIMIT) + 1
   }, [items.length])
 
-  useEffect(() => {
-    console.log('aaa countryName: ', countryName)
-  }, [countryName])
-
   const clubId = useMemo(() => {
     return getStr(contractedClub, 'clubId')
   }, [contractedClub])

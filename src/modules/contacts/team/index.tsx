@@ -2,9 +2,9 @@ import { Divider, Tab, Tabs } from '@mui/material'
 import { useState } from 'react'
 import { TeamType } from 'src/constants/types/settingsType.type'
 import { safeHttpImage } from 'src/utils/utils'
-import TeamAdmin from './TeamAdmin'
-import TeamOwner from './TeamOwner'
-import TeamMember from './TeamMember'
+import TeamAdmin from './tabs/TeamAdmin'
+import TeamOwner from './tabs/TeamOwner'
+import TeamMember from './tabs/TeamMember'
 
 const tabs = [
   { label: 'Members', value: 'members' },
