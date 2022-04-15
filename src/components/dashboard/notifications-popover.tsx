@@ -374,7 +374,11 @@ export const ItemNotification = ({
                 setOpenModalDiaryUpdate(true)
               }
 
-              await handleClickOne(notification.notificationId)
+              if (
+                notification.notificationType !== NotificationType.SEND_MESSAGE
+              ) {
+                await handleClickOne(notification.notificationId)
+              }
               onClose()
             }}
             className="text-white hover:text-white inline-block font-Inter text-[14px "
