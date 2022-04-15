@@ -19,7 +19,7 @@ import {
 import { useList } from 'react-firebase-hooks/database'
 import { firebaseApp } from 'src/config/firebase-client'
 import { useEffect, useMemo, useState } from 'react'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import {
   fromChatMessageToTypesMessage,
   getChatRoomStream,
@@ -33,7 +33,7 @@ import {
   IChatRoom,
   IChatUser,
   queryTabAll,
-} from 'src/module/chat/chatService'
+} from 'src/modules/chat/chatService'
 import { AVATAR_DEFAULT, LOCAL_STORAGE_KEY } from 'src/constants/constants'
 
 import { chain, isEmpty, shuffle } from 'lodash'

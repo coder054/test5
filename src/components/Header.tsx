@@ -13,7 +13,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { DropdownUser } from './specific/DropdownUser'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 
 export const Header = () => {
   const { authenticated } = useAuth()

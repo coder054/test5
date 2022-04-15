@@ -2,7 +2,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { LayoutLanding } from 'src/components/layout-landing/layout-landing'
 import { requireNotAuth } from 'src/config/firebase-admin'
-import { SignUp } from 'src/module/authen/signup/signup'
+import { SignUp } from 'src/modules/authentication/signup/signup'
 
 export default function () {
   const router = useRouter()

@@ -49,13 +49,13 @@ import { UploadImage } from 'src/components/upload-image'
 import { axios } from 'src/utils/axios'
 import { Loading } from 'src/components/loading/loading'
 import { getStr, truncateStr } from 'src/utils/utils'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { chain, isEmpty } from 'lodash'
 import {
   createGroupChatRoom,
   ERoomType,
   updateMessageStatus,
-} from 'src/module/chat/chatService'
+} from 'src/modules/chat/chatService'
 import CircularProgress from '@material-ui/core/CircularProgress'
 
 interface ChatSidebarProps {

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import type { FC, ReactNode } from 'react'
 import { useEffect, useMemo, useState } from 'react'
 import { ROUTES } from 'src/constants/constants'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 
 interface GuestGuardProps {
   children: ReactNode

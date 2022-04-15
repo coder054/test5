@@ -17,9 +17,11 @@ import PropTypes from 'prop-types'
 import type { FC } from 'react'
 import { useEffect, useMemo } from 'react'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
+import { NotificationType } from 'src/constants/types'
+import { getUrlChatFromChatRoomId } from 'src/modules/chat/chatService'
 import { checkNotification } from 'src/service/notiService'
 import { axios } from 'src/utils/axios'
-import { getErrorMessage } from 'src/utils/utils'
+import { getErrorMessage, getStr } from 'src/utils/utils'
 import { MailOpen as MailOpenIcon } from '../../icons/mail-open'
 import { X as XIcon } from '../../icons/x'
 import { notiToast } from '../common/Toast'
@@ -203,9 +205,49 @@ export const ItemNotification = ({
     openModalDiaryUpdateAtom
   )
 
+  // here render icon noti
   const renderIcon = () => {
     switch (notification.notificationType) {
-      case 'FRIEND_REQUEST':
+      case NotificationType.LIKE_POST:
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+          </svg>
+        )
+
+      case NotificationType.SEND_MESSAGE:
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+            />
+          </svg>
+        )
+        break
+
+      case NotificationType.ACCEPT_JOIN_TEAM:
+      case NotificationType.LEAVE_TEAM:
+      case NotificationType.FOLLOW:
+      case NotificationType.FOLLOW_REQUEST:
+      case NotificationType.REJECT_FOLLOW_REQUEST:
+      case NotificationType.ACCEPTED_FOLLOW_REQUEST:
+      case NotificationType.REJECT_FRIEND_REQUEST:
+      case NotificationType.ACCEPTED_FRIEND_REQUEST:
+      case NotificationType.FRIEND_REQUEST:
         return (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -221,7 +263,8 @@ export const ItemNotification = ({
           </svg>
         )
         break
-      case 'REMIND_ON_DIARY_UPDATE':
+      case NotificationType.REMIND_DIARY_UPDATE_LOCAL:
+      case NotificationType.REMIND_ON_DIARY_UPDATE:
         return (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -240,7 +283,7 @@ export const ItemNotification = ({
         )
         break
 
-      case 'ASK_JOIN_TEAM':
+      case NotificationType.ASK_JOIN_TEAM:
         return (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -274,18 +317,32 @@ export const ItemNotification = ({
     }
   }
 
+  // here get link for noti
   const link = useMemo(() => {
     switch (notification.notificationType) {
-      case 'FRIEND_REQUEST':
+      case NotificationType.SEND_MESSAGE:
+        //@ts-ignore: Unreachable code error
+        return getUrlChatFromChatRoomId(notification.chatRoomId)
+        break
+      case NotificationType.ACCEPT_JOIN_TEAM:
+      case NotificationType.LEAVE_TEAM:
+      case NotificationType.FOLLOW:
+      case NotificationType.FOLLOW_REQUEST:
+      case NotificationType.REJECT_FOLLOW_REQUEST:
+      case NotificationType.ACCEPTED_FOLLOW_REQUEST:
+      case NotificationType.REJECT_FRIEND_REQUEST:
+      case NotificationType.ACCEPTED_FRIEND_REQUEST:
+      case NotificationType.FRIEND_REQUEST:
         return `/${notification.userType === 'PLAYER' ? 'player' : 'coach'}/${
           notification.username
         }/zporter`
         break
-      case 'REMIND_ON_DIARY_UPDATE':
+      case NotificationType.REMIND_DIARY_UPDATE_LOCAL:
+      case NotificationType.REMIND_ON_DIARY_UPDATE:
         return `#`
         break
 
-      case 'ASK_JOIN_TEAM':
+      case NotificationType.ASK_JOIN_TEAM:
         return `#`
         break
 
@@ -321,6 +378,7 @@ export const ItemNotification = ({
       }
     >
       <div className="w-full ">
+        {/* // here handleClickOnNotiItem */}
         <Link href={link}>
           <a
             onClick={async () => {
@@ -328,7 +386,11 @@ export const ItemNotification = ({
                 setOpenModalDiaryUpdate(true)
               }
 
-              await handleClickOne(notification.notificationId)
+              if (
+                notification.notificationType !== NotificationType.SEND_MESSAGE
+              ) {
+                await handleClickOne(notification.notificationId)
+              }
               onClose()
             }}
             className="text-white hover:text-white inline-block font-Inter text-[14px "
@@ -344,7 +406,7 @@ export const ItemNotification = ({
               <div className="w-[56px] h-[56px] mr-[12px] relative ">
                 <img
                   src={notification.largeIcon}
-                  className="rounded-[8px]"
+                  className="rounded-[8px] w-[56px] -[56px] "
                   alt=""
                 />
                 <div className="w-[28px] h-[28px] object-cover rounded-full absolute right-[-6px] bottom-[-6px] flex justify-center items-center bg-[#006699] ">
@@ -367,15 +429,18 @@ export const ItemNotification = ({
                   {notification.body}
                 </div>
 
-                <div className="font-medium text-[12px] opacity-90 text-[#1876f2]">
-                  {format(
-                    Number(
-                      get(notification, 'updatedAt') ||
-                        get(notification, 'createdAt')
-                    ),
-                    'MMM dd, h:mm a'
-                  )}
-                </div>
+                {(getStr(notification, 'updatedAt') ||
+                  getStr(notification, 'createdAt')) && (
+                  <div className="font-medium text-[12px] opacity-90 text-[#1876f2]">
+                    {format(
+                      Number(
+                        get(notification, 'updatedAt') ||
+                          get(notification, 'createdAt')
+                      ),
+                      'MMM dd, h:mm a'
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </a>

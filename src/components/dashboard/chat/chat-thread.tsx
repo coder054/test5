@@ -47,8 +47,8 @@ import {
   IPreviewData,
   newChatMessage,
   getPreviewData,
-} from 'src/module/chat/chatService'
-import { useAuth } from 'src/module/authen/auth/AuthContext'
+} from 'src/modules/chat/chatService'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 
 interface ChatThreadProps {}
 

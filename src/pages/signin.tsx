@@ -1,8 +1,6 @@
 import Head from 'next/head'
 import { GuestGuard } from 'src/components/authentication/guest-guard'
-import { LayoutLanding } from 'src/components/layout-landing/layout-landing'
-import { requireNotAuth } from 'src/config/firebase-admin'
-import SignIn from 'src/module/authen/singin'
+import SignIn from 'src/modules/authentication/singin'
 
 const SignInPage = () => {
   return (
@@ -17,7 +15,3 @@ const SignInPage = () => {
 }
 
 export default SignInPage
-// export const getServerSideProps: any = async ({ req, res }) => {
-//   await requireNotAuth(req as any, res as any)
-//   return { props: {} }
-// }

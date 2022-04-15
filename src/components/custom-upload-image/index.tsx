@@ -61,13 +61,12 @@ export const CustomUploadImage = ({
 
   return (
     <div>
-      <p className="text-base text-[#FFFFFF]">{title}</p>
+      <p className="text-base text-[#FFFFFF] md:absolute">{title}</p>
       <div
         style={{ width: width, height: height }}
-        className={`${cls.uploadImage} ${className} cursor-pointer rounded-[8px] mt-[12px] text-center relative`}
+        className={`${cls.uploadImage} ${className} md:top-[36px] cursor-pointer rounded-[8px] mt-[12px] text-center relative`}
       >
         {url && url ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={url}
             style={{ width: width, height: height - 4 }}
