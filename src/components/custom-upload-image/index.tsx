@@ -45,7 +45,6 @@ export const CustomUploadImage = ({
         )
         setProgress(prog)
       },
-      (err) => console.log(err),
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setUrl(url)
@@ -61,7 +60,7 @@ export const CustomUploadImage = ({
 
   return (
     <div>
-      <p className="text-base text-[#FFFFFF] md:absolute">{title}</p>
+      {title && <p className="text-base text-[#FFFFFF] md:absolute">{title}</p>}
       <div
         style={{ width: width, height: height }}
         className={`${cls.uploadImage} ${className} md:top-[36px] cursor-pointer rounded-[8px] mt-[12px] text-center relative`}

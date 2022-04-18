@@ -139,18 +139,6 @@ const BioForPlayer = ({
   const [teamsCoach, setTeamsCoach] = useState<string[]>([])
 
   useEffect(() => {
-    console.log('aaa dataBio: ', dataBioPlayer)
-    // console.log('aaa dataBio2', {
-    //   friendStatus,
-    //   followStatus,
-    //   isConfirmBox,
-    //   isFollowed,
-    //   isPublic,
-    //   userId,
-    // })
-  }, [dataBioPlayer])
-
-  useEffect(() => {
     dataBioPlayer.userId && setPlayerId(dataBioPlayer.userId)
     dataBioPlayer.teamIds && setTeamsPlayer(dataBioPlayer.teamIds)
   }, [dataBioPlayer])
@@ -367,29 +355,6 @@ const BioForCoach = ({
   ])
 
   useEffect(() => {
-    // console.log('IdCoach: ', dataBioCoach.userId)
-    const {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    } = dataBioCoach
-    console.log('aaa dataBio: ', dataBioCoach)
-    console.log('aaa dataBio2', {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    })
-  }, [dataBioCoach])
-  useEffect(() => {
-    console.log('Coach: ', dataBioCoach)
-    console.log('IdCoach: ', dataBioCoach.userId)
-
     dataBioCoach.userId && setPlayerId(dataBioCoach.userId)
   }, [dataBioCoach])
 

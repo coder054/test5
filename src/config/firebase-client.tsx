@@ -47,9 +47,8 @@ export const initFirebaseFCM = (
   if (typeof window === 'undefined') {
     return
   }
-  console.log('aaa haha')
+
   if (!token || !roleId) {
-    console.log('aaa no token or no roleId')
     return
   }
 
@@ -64,13 +63,8 @@ export const initFirebaseFCM = (
       })
 
       if (!currentToken) {
-        console.log(
-          'aaa No registration token available. Request permission to generate one.'
-        )
         return
       }
-
-      console.log('aaa currentToken', currentToken)
 
       const axios = axiosLib.create({
         baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -92,12 +86,10 @@ export const initFirebaseFCM = (
         token: currentToken,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       })
-      console.log('aaa complete init fcm')
 
       // Send the token to your server and update the UI if necessary
 
       onMessage(firebaseMessaging, async (payload) => {
-        console.log('aaa Message received. ', payload)
         setList([...listRef.current, payload])
         setNotifications((prev) => {
           return [payload.data, ...prev]
@@ -195,15 +187,13 @@ export const initFirebaseFCM = (
           }
         )
       })
-    } catch (error) {
-      console.log('aaa error config FCM: ', getErrorMessage(error))
+    } catch (_error) {
+      return
     }
   }
 
   foo(token, roleId)
 }
-
-console.log('aaa initializeApp')
 
 export const storage = getStorage()
 

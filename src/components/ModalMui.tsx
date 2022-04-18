@@ -14,21 +14,16 @@ const style = {
 }
 
 type MyModalProps = {
-  customStyle?: CSSObject
+  sx?: CSSObject
   isOpen: boolean
   onClose: (value: boolean) => void
   children: React.ReactElement
 }
 
-export const ModalMui = ({
-  isOpen,
-  onClose,
-  children,
-  customStyle,
-}: MyModalProps) => {
+export const ModalMui = ({ isOpen, onClose, children, sx }: MyModalProps) => {
   return (
     <Modal open={isOpen} onClose={() => onClose(false)}>
-      <Box sx={{ ...style, ...customStyle }}>{children}</Box>
+      <Box sx={{ ...style, ...sx }}>{children}</Box>
     </Modal>
   )
 }

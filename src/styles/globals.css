@@ -260,3 +260,29 @@
 .apexcharts-legend-series {
   margin-left: 24px !important;
 }
+
+.simplebar-scrollbar:before {
+  background: #fff !important;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #13161a;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
