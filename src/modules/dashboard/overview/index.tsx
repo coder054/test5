@@ -21,7 +21,6 @@ export const Overview = ({ setCurrentTab }: OverviewProps) => {
   const [range, setRange] = useState<LastRangeDateType>('30')
   const [add, setAdd] = useState<boolean>(true)
   const router = useRouter()
-
   return (
     <div className="grid grid-cols-12 space-y-7 pb-[108px]">
       <div className="w-full flex flex-row-reverse col-span-12">

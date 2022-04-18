@@ -399,6 +399,22 @@ export interface DashboardHealthUpdateType {
   fat: number
 }
 
+export interface DashboardGoalUpdateType {
+  typeOfPost: string
+  userType: string
+  updatedAt: number
+  description: string
+  createdAt: number
+  headline: string
+  deadline: string
+  mediaLinks: string[]
+  category: string
+  userId: string
+  personalGoalId: string
+  deadlineUnix: number
+  progress: number
+}
+
 export const NotificationType = {
   REMIND_DIARY_UPDATE_LOCAL: 'REMIND_DIARY_UPDATE_LOCAL',
 

@@ -213,7 +213,7 @@ export const PeriodFilter = ({
               value={current}
               onChange={(e) => setCurrent(e)}
               labelClass="text-[#A2A5AD]"
-              health
+              health={health}
             />
           </div>
           {optionLabel && (
