@@ -69,7 +69,7 @@ export const TotalLeaderBoard = ({
           </TooltipCustom>
         </div>
         {dataListLeaderBoard && (
-          <LeaderBoard listMasterLeaderBoard={dataListLeaderBoard} />
+          <LeaderBoard listMasterLeaderBoard={dataListLeaderBoard.data} />
         )}
 
         <div className="w-full mt-[40px]">

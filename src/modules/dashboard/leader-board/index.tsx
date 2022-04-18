@@ -220,7 +220,7 @@ export const LeaderBoards = () => {
             > */}
             {!isEmpty(items) ? (
               /* @ts-ignore */
-              items.data?.map((item, index) => (
+              (items?.data || []).map((item, index) => (
                 <tr className="h-[40px] w-full hover:bg-[#474747]">
                   <td className="pl-[14px]">{index + 1}</td>
                   <td>{item?.userInfo?.fullName}</td>

@@ -60,7 +60,11 @@ export const ItemLeaderBoard = ({
             </div>
           ) : (
             <div
-              className={`w-[24px] md:w-[32px] h-[24px] md:h-[32px] absolute left-[-6px] 
+              className={`${number === 1 ? 'bg-[#4654EA]' : ''} ${
+                number === 2 ? 'bg-[#09E099]' : ''
+              } ${
+                number === 3 ? 'bg-[#07E1FF]' : ''
+              } w-[24px] md:w-[32px] h-[24px] md:h-[32px] absolute left-[-6px] 
               bottom-[8px] md:bottom-[-6px] rounded-full text-[20px] md:text-[24px] font-bold
               `}
             >
