@@ -1,12 +1,17 @@
 import type { AppBarProps } from '@mui/material'
+import { isEmpty } from 'lodash'
 import {
   AppBar,
   Badge,
   Box,
+  Button,
   ButtonBase,
+  Dialog,
+  DialogContent,
   IconButton,
   Toolbar,
   Tooltip,
+  Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { useAtom } from 'jotai'
@@ -19,6 +24,7 @@ import { useTranslation } from 'react-i18next'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
+import { openModalResponGroupAtom } from 'src/atoms/notiAtoms'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import DiaryUpdate from 'src/modules/update-diary'
 import { safeAvatar } from 'src/utils/utils'
@@ -151,6 +157,7 @@ const UpdateDiaryButton = () => {
         isOpen={openModalDiaryUpdate}
         onClose={setOpenModalDiaryUpdate}
       >
+        {/* @ts-ignore: Unreachable code error */}
         <SimpleBar style={{ maxHeight: 850 }}>
           <div className="relative">
             <button
@@ -217,6 +224,7 @@ const NotificationsButton = () => {
 
   return (
     <>
+      <ModalResponseGroup />
       <Tooltip title="Notifications">
         <IconButton ref={anchorRef} sx={{ ml: 1 }} onClick={handleOpenPopover}>
           <Badge color="error" badgeContent={unread}>
@@ -525,4 +533,78 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
 
 DashboardNavbar.propTypes = {
   onOpenSidebar: PropTypes.func,
+}
+
+export const ModalResponseGroup = (props) => {
+  const [openModalResponGroup, setOpenModalResponGroup] = useAtom(
+    openModalResponGroupAtom
+  )
+  return (
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      onClose={() => {
+        setOpenModalResponGroup({})
+      }}
+      open={!isEmpty(openModalResponGroup)}
+    >
+      <Box
+        sx={{
+          alignItems: 'center',
+          backgroundColor: 'primary.main',
+          color: 'primary.contrastText',
+          display: 'flex',
+          justifyContent: 'space-between',
+          px: 3,
+          py: 2,
+        }}
+      >
+        <Typography variant="h6">Zporter</Typography>
+        <IconButton
+          color="inherit"
+          onClick={() => {
+            setOpenModalResponGroup({})
+          }}
+        >
+          <XIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      <DialogContent
+        sx={{
+          height: 500,
+        }}
+      >
+        {/*  */}
+
+        <div className="h-[16px] "></div>
+
+        {/*  */}
+      </DialogContent>
+
+      <div className="flex mt-4 px-[24px] mb-[20px] ">
+        <Button
+          onClick={() => {
+            setOpenModalResponGroup({})
+          }}
+          fullWidth
+          size="large"
+          sx={{ mr: 2 }}
+          variant="outlined"
+        >
+          No
+        </Button>
+        <Button
+          onClick={async () => {
+            setOpenModalResponGroup({})
+          }}
+          fullWidth
+          size="large"
+          variant="contained"
+        >
+          Yes
+        </Button>
+      </div>
+    </Dialog>
+  )
 }

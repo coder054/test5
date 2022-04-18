@@ -1,10 +1,17 @@
 import {
   Box,
+  Button,
   CircularProgress,
+  Dialog,
+  DialogContent,
+  FormControl,
   IconButton,
+  InputLabel,
   List,
   ListItem,
+  MenuItem,
   Popover,
+  Select,
   Tooltip,
   Typography,
 } from '@mui/material'
@@ -15,16 +22,21 @@ import { get } from 'lodash'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import type { FC } from 'react'
-import { useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
+import { openModalResponGroupAtom } from 'src/atoms/notiAtoms'
+import { notiToast } from 'src/components/common/Toast'
+import { MySelectCountry } from 'src/components/MySelectCountry'
+import { optionAllClub } from 'src/constants/mocks/clubs.constans'
+import { optionAllCountry } from 'src/constants/mocks/countries.constants'
 import { NotificationType } from 'src/constants/types'
+import { XIcon } from 'src/icons/x'
+import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
 import { getUrlChatFromChatRoomId } from 'src/modules/chat/chatService'
 import { checkNotification } from 'src/service/notiService'
 import { axios } from 'src/utils/axios'
 import { getErrorMessage, getStr } from 'src/utils/utils'
 import { MailOpen as MailOpenIcon } from '../../icons/mail-open'
-import { X as XIcon } from '../../icons/x'
-import { notiToast } from '../common/Toast'
 import { INoti, useNotiList } from '../noti/NotificationsList'
 import { Scrollbar } from '../scrollbar'
 
@@ -201,6 +213,8 @@ export const ItemNotification = ({
     openModalDiaryUpdateAtom
   )
 
+  const [, setOpenModalResponGroup] = useAtom(openModalResponGroupAtom)
+
   // here render icon noti
   const renderIcon = () => {
     switch (notification.notificationType) {
@@ -375,11 +389,21 @@ export const ItemNotification = ({
     >
       <div className="w-full ">
         {/* // here handleClickOnNotiItem */}
+
         <Link href={link}>
           <a
             onClick={async () => {
               if (notification.notificationType === 'REMIND_ON_DIARY_UPDATE') {
                 setOpenModalDiaryUpdate(true)
+              } else if (
+                notification.notificationType ===
+                NotificationType.INVITE_MEMBER_GROUP
+              ) {
+                setOpenModalResponGroup({
+                  //@ts-ignore: Unreachable code error
+                  idGroup: notification.groupId,
+                  img: notification.largeIcon,
+                })
               }
 
               if (
