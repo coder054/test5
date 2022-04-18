@@ -140,7 +140,7 @@ export const AnalyticItem = ({
             <span className="text-[24px] font-bold">{data?.count}</span>
             <span
               className={`order-last text-[12px] ${
-                data?.count > 0 ? 'text-[#09E099]' : 'text-[#D60C0C]'
+                data?.percentChanged > 0 ? 'text-[#09E099]' : 'text-[#D60C0C]'
               }`}
             >
               {data?.percentChanged > 0 ? (

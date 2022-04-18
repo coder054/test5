@@ -20,7 +20,6 @@ export const AlertUpdateProfile = ({ isRoleNull }) => {
     } else {
       setIsRouteUpdateProfile(false)
     }
-    console.log('aaa path', path)
   }, [get(router, 'asPath')])
 
   const open2 = useMemo(() => {

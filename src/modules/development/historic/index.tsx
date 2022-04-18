@@ -20,7 +20,7 @@ import { OptionPlayer } from 'src/modules/authentication/types'
 import {
   createCareerHistoric,
   getProfilePlayer,
-} from 'src/service/biography-update'
+} from 'src/service/dashboard/biography-update'
 
 interface HistoricProps {
   playerId?: string

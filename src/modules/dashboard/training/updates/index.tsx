@@ -70,7 +70,7 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
     >
       <div className="p-10">
         <ModalMui
-          customStyle={{
+          sx={{
             padding: 0,
             top: '50%',
             width: isMobile ? '100%' : 700,

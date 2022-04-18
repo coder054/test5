@@ -10,8 +10,8 @@ import {
   PlayerCreateDevelopmentNoteType,
 } from 'src/constants/types'
 import { getStartOfDate, getToday } from 'src/hooks/functionCommon'
+import { playerCreateDevelopmentNote } from 'src/service/dashboard/biography-update'
 import { BackGround } from 'src/modules/account-settings/common-components/Background'
-import { playerCreateDevelopmentNote } from 'src/service/biography-update'
 
 interface DevelopmentProps {
   playerId?: string

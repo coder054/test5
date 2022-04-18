@@ -18,9 +18,12 @@ import {
 import { TrophiesAndAwardsType } from 'src/constants/types'
 import { ClubType } from 'src/constants/types/settingsType.type'
 import { getToday } from 'src/hooks/functionCommon'
+import {
+  createTrophies,
+  getProfilePlayer,
+} from 'src/service/dashboard/biography-update'
 import { BackGround } from 'src/modules/account-settings/common-components/Background'
 import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
-import { createTrophies, getProfilePlayer } from 'src/service/biography-update'
 
 interface FormValuesType {
   personalAward: string

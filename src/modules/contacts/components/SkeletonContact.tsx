@@ -1,21 +1,22 @@
 import { Skeleton } from '@mui/material'
+import { Fragment } from 'react'
 
 const SkeletonContact = () => {
-  const LENGTH = Array(5)
+  const LENGTH = Array(10)
     .fill(0)
     .map(() => ({}))
   return (
-    <>
+    <Fragment>
       {LENGTH.map((_, index) => (
         <div
           key={index}
-          className="min-h-[82px] w-full flex space-x-5 items-center bg-[#202128cc] rounded-lg p-4 my-5"
+          className="min-h-[82px] w-full flex space-x-5 items-center bg-[#202128cc] rounded-lg  py-3.5 px-4 mb-5"
         >
           <span>
             <Skeleton
               variant="rectangular"
-              width={50}
-              height={50}
+              width={60}
+              height={60}
               sx={{ borderRadius: 1 }}
             />
           </span>
@@ -25,7 +26,7 @@ const SkeletonContact = () => {
           </span>
         </div>
       ))}
-    </>
+    </Fragment>
   )
 }
 

@@ -16,6 +16,7 @@ import {
   IBiographyPlayer,
 } from 'src/constants/types/biography.types'
 import { useScreenWidth } from 'src/hooks/useScreenWidth'
+import { getProfileCoach } from 'src/service/dashboard/biography-update'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { IInfoClub } from 'src/modules/biography/InfoClub'
 import { InfoCoachWithAChart } from 'src/modules/biography/InfoCoachWithAChart'
@@ -27,7 +28,6 @@ import { InforWithNumbers } from 'src/modules/biography/InfoWithNumbers'
 import { NavigationAndFilter } from 'src/modules/biography/NavigationAndFilter'
 import { SocialLinksComponent } from 'src/modules/biography/SocialLinksComponent'
 import { TopVideos } from 'src/modules/biography/TopVideos'
-import { getProfileCoach } from 'src/service/biography-update'
 import { axios } from 'src/utils/axios'
 import { parseCookies } from 'src/utils/utils'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
@@ -137,18 +137,6 @@ const BioForPlayer = ({
   const [checkTeam, setCheckTeam] = useState<boolean>(false)
   const [teamsPlayer, setTeamsPlayer] = useState<string[]>([])
   const [teamsCoach, setTeamsCoach] = useState<string[]>([])
-
-  useEffect(() => {
-    console.log('aaa dataBio: ', dataBioPlayer)
-    // console.log('aaa dataBio2', {
-    //   friendStatus,
-    //   followStatus,
-    //   isConfirmBox,
-    //   isFollowed,
-    //   isPublic,
-    //   userId,
-    // })
-  }, [dataBioPlayer])
 
   useEffect(() => {
     dataBioPlayer.userId && setPlayerId(dataBioPlayer.userId)
@@ -367,29 +355,6 @@ const BioForCoach = ({
   ])
 
   useEffect(() => {
-    // console.log('IdCoach: ', dataBioCoach.userId)
-    const {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    } = dataBioCoach
-    console.log('aaa dataBio: ', dataBioCoach)
-    console.log('aaa dataBio2', {
-      friendStatus,
-      followStatus,
-      isConfirmBox,
-      isFollowed,
-      isPublic,
-      userId,
-    })
-  }, [dataBioCoach])
-  useEffect(() => {
-    console.log('Coach: ', dataBioCoach)
-    console.log('IdCoach: ', dataBioCoach.userId)
-
     dataBioCoach.userId && setPlayerId(dataBioCoach.userId)
   }, [dataBioCoach])
 

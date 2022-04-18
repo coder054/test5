@@ -61,14 +61,6 @@ export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
     ...other
   } = props
 
-  useEffect(() => {
-    console.log('aaa contractedClub: ', contractedClub)
-  }, [contractedClub])
-
-  useEffect(() => {
-    console.log('aaa country: ', country)
-  }, [country])
-
   const setSelectedClub = (value) => {
     setContractedClub
   }

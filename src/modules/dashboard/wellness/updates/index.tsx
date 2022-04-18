@@ -54,7 +54,7 @@ export const DashboardDiaryUpdate = () => {
     >
       <div className="space-y-6">
         <ModalMui
-          customStyle={{
+          sx={{
             padding: 0,
             top: '50%',
             width: isMobile ? '100%' : 700,

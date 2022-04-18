@@ -62,3 +62,48 @@ export type TeamsType = {
   usernames: string[]
   memberType: string
 }
+
+export type GroupType = {
+  userImages: string[]
+  createdBy: string
+  updatedAt: number
+  createdAt: number
+  groupNameAsArray: string[]
+  groupImage: string
+  name: string
+  isPrivate: boolean
+  groupId: string
+  usernames: string[]
+  userIds: string[]
+  memberType: string
+}
+
+export type ContactsTabType =
+  | 'ALL'
+  | 'GROUPS'
+  | 'FANS'
+  | 'TEAM'
+  | 'FOLLOWERS'
+  | 'FRIENDS'
+  | 'BLOCKED'
+  | 'TEAMMATES'
+  | 'FAMILY'
+
+export type QueriesContactsType = Partial<{
+  limit: number
+  sorted: 'asc' | 'desc'
+  startAfter: number
+  tab: ContactsTabType
+  country?: string
+  clubId: string
+  teamId: string
+  role: string
+  search: string
+}>
+
+export type InfiniteInitialType = {
+  count: number
+  isLoading: boolean
+  isSearching: boolean
+  hasMore: boolean
+}

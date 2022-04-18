@@ -7,24 +7,9 @@ import { useEffect, useState } from 'react'
 import { DetailChart } from './DetailChart'
 import { useQuery } from 'react-query'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
-import { getDashboardWellness } from 'src/service/dashboard-overview'
+import { getDashboardWellness } from 'src/service/dashboard/dashboard-overview'
 import { MatchesTable } from 'src/modules/dashboard/matches/table'
 import { WellnessType } from 'src/constants/types'
-
-// const data = {
-//   series: [
-//     {
-//       color: '#A2A5AD',
-//       data: [35, 42, 62, 223, 103, 180, 29],
-//       name: 'Average',
-//     },
-//     {
-//       color: '#4654EA',
-//       data: [100, 122, 50, 200, 250, 100, 150],
-//       name: 'You',
-//     },
-//   ],
-// }
 
 interface WellnessProps {
   lastDateRange?: string
@@ -250,8 +235,8 @@ export const Wellness = ({ lastDateRange, setCurrentTab }: WellnessProps) => {
         <p className="text-[#A2A5AD] text-[12px] absolute top-[24px]">
           Very good
         </p>
-        <div className={`${cls.borderLine} absolute w-full top-[200px]`}></div>
-        <div className="w-full -ml-[18px]">
+        <div className={`${cls.borderLine} absolute w-full top-[186px]`}></div>
+        <div className="w-full -ml-[18px] absolute top-[24px]">
           <Chart
             height={400}
             options={chartOptions}
@@ -259,7 +244,7 @@ export const Wellness = ({ lastDateRange, setCurrentTab }: WellnessProps) => {
             type="line"
           />
         </div>
-        <p className="text-[#A2A5AD] text-[12px] mb-[4px] absolute bottom-[16px]">
+        <p className="text-[#A2A5AD] text-[12px] mb-[4px] absolute bottom-[-8px]">
           Very bad
         </p>
       </div>
@@ -269,7 +254,6 @@ export const Wellness = ({ lastDateRange, setCurrentTab }: WellnessProps) => {
         dataYou={dataWellness?.personalDiaryRoutinePieChart}
         dataAvg={dataWellness?.averageDiaryRoutinePieChart}
       />
-
       <div
         className="flex items-center mt-[50px] cursor-pointer w-[126px]"
         onClick={() => {

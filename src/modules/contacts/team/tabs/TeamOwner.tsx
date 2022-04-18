@@ -6,8 +6,10 @@ import { SortIcon } from 'src/components/icons'
 import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
 import { MemberType } from 'src/constants/types/member.types'
 import { fetchTeamMember } from 'src/service/contacts/team.service'
-import SkeletonContact from '../components/SkeletonContact'
-import { MemberCard } from './components/MemberCard'
+import { Counter } from '../../components/Counter'
+import SkeletonContact from '../../components/SkeletonContact'
+import { Sort } from '../../components/Sort'
+import { MemberCard } from '../components/MemberCard'
 
 const TeamOwner = () => {
   const router = useRouter()
@@ -16,8 +18,8 @@ const TeamOwner = () => {
     count: 0,
     data: [],
   })
-  const [sort, setSort] = useState<boolean>(false)
-  const { isLoading: isGettingAdmin, data: responseDisplay } = useQuery(
+  const [sort, setSort] = useState<string>('asc')
+  const { isLoading: isGettingOwner, data: responseDisplay } = useQuery(
     [QUERIES_CONTACTS.CONTACT_TEAM_OWNER, teamId],
     () =>
       fetchTeamMember({
@@ -42,22 +44,15 @@ const TeamOwner = () => {
     <div>
       <div className="flex justify-between items-center">
         <div className="flex space-x-3 items-center">
-          <p className="text-[#09E099] font-medium">
-            {isGettingAdmin ? (
-              <CircularProgress color="primary" size={20} />
-            ) : (
-              initial.count
-            )}
-          </p>
-          <p className="text-[#A2A5AD] font-normal">
-            {initial.count === 1 ? 'Member' : 'Members'}
-          </p>
+          <Counter
+            count={initial.count}
+            label="Owner"
+            isLoading={isGettingOwner}
+          />
         </div>
-        <button onClick={() => setSort(!sort)}>
-          <SortIcon />
-        </button>
+        <Sort value={sort} onChange={(value) => setSort(value)} />
       </div>
-      {isGettingAdmin ? (
+      {isGettingOwner ? (
         <SkeletonContact />
       ) : (
         <>

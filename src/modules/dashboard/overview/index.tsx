@@ -11,6 +11,7 @@ import { ButtonAdd } from 'src/components/ButtonAdd'
 import { Wellness } from './component/wellness'
 import { PopupAdd } from 'src/components/popup-add'
 import { useRouter } from 'next/router'
+import { ButtonAddPopup } from 'src/components'
 
 interface OverviewProps {
   setCurrentTab?: (tab: string) => void
@@ -20,7 +21,6 @@ export const Overview = ({ setCurrentTab }: OverviewProps) => {
   const [range, setRange] = useState<LastRangeDateType>('30')
   const [add, setAdd] = useState<boolean>(true)
   const router = useRouter()
-
   return (
     <div className="grid grid-cols-12 space-y-7 pb-[108px]">
       <div className="w-full flex flex-row-reverse col-span-12">
@@ -82,53 +82,8 @@ export const Overview = ({ setCurrentTab }: OverviewProps) => {
           setCurrentTab={setCurrentTab}
         />
       </div>
-      {add ? (
-        <div
-          className=""
-          onClick={() => {
-            setAdd(false)
-          }}
-        >
-          <ButtonAdd />
-        </div>
-      ) : (
-        <div
-          onClick={() => {
-            setAdd(true)
-          }}
-        >
-          <PopupAdd>
-            <div className="w-full h-full bg-[#13161A] rounded-[7px]">
-              <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center">
-                <p className="ml-[12px]">Diary update</p>
-              </div>
-              <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center ">
-                <p className="ml-[32px]">- Training update</p>
-              </div>
-              <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center ">
-                <p className="ml-[32px]">- Match update</p>
-              </div>
-              <div
-                className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center "
-                onClick={() => {
-                  router.push('/development')
-                }}
-              >
-                <p className="ml-[12px]">Development update</p>
-              </div>
-              <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center ">
-                <p className="ml-[12px]">Goal update</p>
-              </div>
-              <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center ">
-                <p className="ml-[12px]">Height & Weight update</p>
-              </div>
-              <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center ">
-                <p className="ml-[12px]">Health update</p>
-              </div>
-            </div>
-          </PopupAdd>
-        </div>
-      )}
+
+      <ButtonAddPopup />
     </div>
   )
 }

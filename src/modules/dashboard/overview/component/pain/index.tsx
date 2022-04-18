@@ -7,9 +7,9 @@ import { DashboardPainType } from 'src/constants/types'
 import { BODY_PART } from 'src/constants/types/diary.types'
 import { scaleToNum } from 'src/hooks/functionCommon'
 import { SvgAllowRight, SvgInfomation } from 'src/imports/svgs'
+import { getDashboardPain } from 'src/service/dashboard/dashboard-overview'
 import { BodyPart } from 'src/modules/update-diary/components/BodyPart'
 import { InjurySpot } from 'src/modules/update-diary/components/InjurySpot'
-import { getDashboardPain } from 'src/service/dashboard-overview'
 
 interface PainProps {
   lastDateRange?: string

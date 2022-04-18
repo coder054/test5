@@ -11,7 +11,7 @@ import {
   SvgBelow,
   SvgInfomation,
 } from 'src/imports/svgs'
-import { GetListDiariesReport } from 'src/service/dashboard-overview'
+import { GetListDiariesReport } from 'src/service/dashboard/dashboard-overview'
 import { safeAvatar } from 'src/utils/utils'
 
 const cls = require('../../overview.module.css')
@@ -53,6 +53,7 @@ export const MatchUpdates = ({
       setSorted('asc')
     }
   }
+
   const GoalAssMatch = (arrayGoal: any) => {
     if (!isEmpty(arrayGoal)) {
       arrayGoal.arrayGoal &&

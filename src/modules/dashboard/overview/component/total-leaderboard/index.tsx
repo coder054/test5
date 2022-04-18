@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { Loading, LoadingCustom, TooltipCustom } from 'src/components'
@@ -9,7 +10,7 @@ import {
   SvgBelow,
   SvgInfomation,
 } from 'src/imports/svgs'
-import { GetListLeaderBoard } from 'src/service/dashboard-overview'
+import { GetListLeaderBoard } from 'src/service/dashboard/dashboard-overview'
 
 const cls = require('../../overview.module.css')
 
@@ -68,7 +69,7 @@ export const TotalLeaderBoard = ({
           </TooltipCustom>
         </div>
         {dataListLeaderBoard && (
-          <LeaderBoard master listMasterLeaderBoard={dataListLeaderBoard} />
+          <LeaderBoard listMasterLeaderBoard={dataListLeaderBoard.data} />
         )}
 
         <div className="w-full mt-[40px]">
@@ -84,13 +85,13 @@ export const TotalLeaderBoard = ({
               <td className="w-[35%]">Team</td>
               <td className="w-[10%]">Index</td>
             </tr>
-            {dataListLeaderBoard &&
-              dataListLeaderBoard?.map((item, index) => (
+            {!isEmpty(dataListLeaderBoard) &&
+              dataListLeaderBoard.data?.map((item, index) => (
                 <tr className="h-[40px]">
                   <td className="pl-[4px]">{index + 1}</td>
-                  <td>{item.userInfo.fullName}</td>
-                  <td>{item.userInfo.clubName}</td>
-                  <td>{item.value}</td>
+                  <td>{item?.userInfo?.fullName}</td>
+                  <td>{item?.userInfo?.clubName}</td>
+                  <td>{item?.value}</td>
                 </tr>
               ))}
           </table>

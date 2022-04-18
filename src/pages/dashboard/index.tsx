@@ -2,8 +2,16 @@ import { Box, Container, Divider, Tab, Tabs } from '@mui/material'
 import type { NextPage } from 'next'
 import { useState } from 'react'
 import { AuthGuard } from 'src/components/authentication/auth-guard'
+import { Development } from 'src/modules/dashboard/development-dashboard'
+import { Health } from 'src/modules/dashboard/health'
+import { LeaderBoards } from 'src/modules/dashboard/leader-board'
+// import { Development } from 'src/module/dashboard/development'
+// import { Health } from 'src/module/dashboard/health'
+// import { LeaderBoards } from 'src/module/dashboard/leader-board'
+// import { Pain } from 'src/module/dashboard/pain'
 import DashboardMatches from 'src/modules/dashboard/matches'
 import { Overview } from 'src/modules/dashboard/overview'
+import { Pain } from 'src/modules/dashboard/pain'
 import DashBoardTraining from 'src/modules/dashboard/training'
 import DashboardWellness from 'src/modules/dashboard/wellness'
 import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
@@ -58,6 +66,10 @@ const Dashboard: NextPage = () => {
             {currentTab === 'training' && <DashBoardTraining />}
             {currentTab === 'matches' && <DashboardMatches />}
             {currentTab === 'wellness' && <DashboardWellness />}
+            {currentTab === 'health' && <Health />}
+            {currentTab === 'development' && <Development />}
+            {currentTab === 'pain' && <Pain />}
+            {currentTab === 'leaderboards' && <LeaderBoards />}
           </Container>
         </Box>
       </>

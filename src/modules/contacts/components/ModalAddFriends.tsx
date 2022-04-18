@@ -44,10 +44,6 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
 
   const limit = 30
 
-  useEffect(() => {
-    console.log('aaa items: ', items)
-  }, [items])
-
   const resetModal = () => {
     setListChecked([])
     setCount(0)
@@ -74,15 +70,9 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
     }
   }, [open])
 
-  useEffect(() => {
-    console.log('aaa listChecked: ', listChecked)
-  }, [listChecked])
-
   const fetchMoreData = async (items, search) => {
     // a fake async api call like which sends
     // 20 more records in 1.5 secs
-
-    console.log('aaa search', search)
     try {
       setLoading(true)
       const params: any = {
@@ -109,27 +99,17 @@ export const ModalAddFriends: FC<ContentSearchProps> = (props) => {
   }
 
   const usersSafe = useMemo(() => {
-    console.log('aaa users', users)
     return users || []
   }, [users])
-
-  useEffect(() => {
-    console.log('aaa items: ', items)
-  }, [items])
 
   const aa = useMemo(() => {
     if (isEmpty(items)) {
       return []
     }
-
     //@ts-ignore: Unreachable code error
     const arr = items.map((o) => getStr(o, 'userId'))
     return chain(arr).compact().uniq().value()
   }, [items])
-
-  useEffect(() => {
-    console.log('aaa aa: ', aa)
-  }, [aa])
 
   return (
     <Dialog
