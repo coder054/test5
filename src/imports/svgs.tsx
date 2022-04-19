@@ -203,7 +203,7 @@ export const SvgSupport = ({ active }: { active: boolean }) => (
   </svg>
 )
 
-export const SvgClockGoal = () => (
+export const SvgClockGoal = ({ color }: { color: string }) => (
   <svg
     width="24"
     height="25"
@@ -213,7 +213,7 @@ export const SvgClockGoal = () => (
   >
     <path
       d="M12 2.5C6.486 2.5 2 6.986 2 12.5C2 18.014 6.486 22.5 12 22.5C17.514 22.5 22 18.014 22 12.5C22 6.986 17.514 2.5 12 2.5ZM15.293 17.207L11 12.914V6.5H13V12.086L16.707 15.793L15.293 17.207Z"
-      fill="#FF9607"
+      fill={color}
     />
   </svg>
 )

@@ -5,6 +5,7 @@ type MyTextAreaProps = {
   value?: string
   label?: string
   onChange?: any
+  disabled?: boolean
 }
 
 export const MyTextArea = ({
@@ -12,14 +13,15 @@ export const MyTextArea = ({
   value,
   label,
   onChange,
+  disabled,
 }: MyTextAreaProps) => {
   return (
     <TextField
       sx={{
         '& .MuiOutlinedInput-root': {
-          '& legend': {
-            display: 'none',
-          },
+          // '& legend': {
+          //   display: 'none',
+          // },
           '& textarea::placeholder': {
             color: '#6B7280',
             fontWeight: '400',
@@ -38,6 +40,8 @@ export const MyTextArea = ({
       value={value}
       onChange={onChange}
       label={label}
+      variant="outlined"
+      disabled={disabled}
     />
   )
 }

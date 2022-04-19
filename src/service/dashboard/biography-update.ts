@@ -43,13 +43,13 @@ export const coachUpdatePlayerSkills = async (
   return response
 }
 
-export const getListDevelopmentNotes = async () => {
-  const response = await axios.get(
-    `${API_GET_LIST_DEVELOPMENT_NOTES}?limit=10&sorted=asc`
-  )
+// export const getListDevelopmentNotes = async () => {
+//   const response = await axios.get(
+//     `${API_GET_LIST_DEVELOPMENT_NOTES}?limit=10&sorted=asc`
+//   )
 
-  return response
-}
+//   return response
+// }
 
 export const playerCreateDevelopmentNote = async (body: any) => {
   const response = await axios.post(API_PLAYER_CREATE_DEVELOPMENT_NOTE, body)
