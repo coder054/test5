@@ -59,3 +59,11 @@ export const TypeOfTeamTrophyOption: OptionType[] = [
   { label: 'Cup', value: 'CUP' },
   { label: 'Other', value: 'OTHER' },
 ]
+
+export const CategoryOptions: OptionType[] = [
+  { label: 'Technics', value: 'TECHNICS' },
+  { label: 'Tactics', value: 'TACTICS' },
+  { label: 'Physics', value: 'PHYSICS' },
+  { label: 'Mental', value: 'MENTAL' },
+  { label: 'Other', value: 'OTHER' },
+]

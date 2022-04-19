@@ -22,17 +22,14 @@ export const API_GET_LIST_CONTACT = 'contact-groups/get-list-contacts'
 //API Biography & update
 export const API_GET_BIOGRAPHY_PLAYER = 'biographies/player'
 
-export const API_GET_LIST_DEVELOPMENT_NOTES =
-  'dashboard/get-list-development-notes'
-
-export const API_PLAYER_CREATE_DEVELOPMENT_NOTE =
-  'development-talk/player/create-development-note'
+// export const API_PLAYER_CREATE_DEVELOPMENT_NOTE =
+//   'development-talk/player/create-development-note'
 
 export const API_COACH_COMMENT_DEVELOPMENT_NOTE =
   'development-talk/coach/comment-development-note'
 
-export const API_PLAYER_UPDATE_DEVELOPMENT_NOTE =
-  'development-talk/player/update-development-note'
+// export const API_PLAYER_UPDATE_DEVELOPMENT_NOTE =
+//   'development-talk/player/update-development-note'
 
 export const API_DIARY = 'diaries'
 
@@ -67,5 +64,27 @@ export const API_POST_HEALTH = 'healths'
 //dashboard development
 export const API_GET_DEVELOPMENT_TALK_CHART =
   'dashboard/get-development-talk-chart'
+
 export const API_GET_PLAYER_GOAL_UPDATE =
   'dashboard/player/get-list-personal-goals'
+
+export const API_GET_LIST_DEVELOPMENT_NOTES =
+  'dashboard/get-list-development-notes'
+
+export const API_PLAYER_CREATE_DEVELOPMENT_NOTE =
+  'development-talk/player/create-development-note'
+
+export const API_PLAYER_UPDATE_DEVELOPMENT_NOTE =
+  'development-talk/player/update-development-note'
+
+export const API_PLAYER_REMOVE_DEVELOPMENT_NOTE =
+  'development-talk/delete-development-note'
+
+export const API_POST_CREATE_PERSONAL_GOAL =
+  'achievements/player/create-personal-goal'
+
+export const API_PATCH_UPDATE_PERSONAL_GOAL =
+  'achievements/player/update-personal-goal'
+
+export const API_PATCH_DELETE_PERSONAL_GOAL =
+  'achievements/player/delete-personal-goal'

@@ -12,6 +12,7 @@ import { HealthChartOption } from '../constants-dashboard'
 import { getDevelopmentTalkChart } from 'src/service/dashboard/development.service'
 import { ListGoal } from './component/list-goal'
 import SimpleBar from 'simplebar-react'
+import { ListDevelopment } from './component/list-development'
 const cls = require('../overview/overview.module.css')
 
 export const Development = () => {
@@ -172,16 +173,19 @@ export const Development = () => {
       </div>
 
       <div className={`col-span-5 ${cls.item}`}>
-        <SimpleBar style={{ maxHeight: 450 }}>
-          <div className=" p-[16px] md:p-[32px]">
-            <p>Goal updates</p>
+        <p className="pt-[32px] pl-[32px]">Goal updates</p>
+        <SimpleBar style={{ maxHeight: 410 }}>
+          <div className="pl-[16px] md:pl-[32px] pb-[16px] md:pb-[32px] pr-[16px] md:pr-[32px]">
             <ListGoal />
           </div>
         </SimpleBar>
       </div>
 
-      <div className={`col-span-7 ml-[20px] p-[16px] md:p-[32px] ${cls.item}`}>
-        <p>Development updates</p>
+      <div className={`col-span-7 ml-[20px] ${cls.item} max-h-[523px]`}>
+        <p className="pt-[32px] pl-[32px]">Development updates</p>
+        <div className="mt-[24px] pl-[16px] md:pl-[32px] pb-[16px] md:pb-[32px] pr-[16px] md:pr-[32px]">
+          <ListDevelopment />
+        </div>
       </div>
 
       <ButtonAddPopup />

@@ -146,7 +146,7 @@ export interface DevelopmentNoteType {
     playerContent: string
     coachComment: string
   }
-  playerNotedAt?: number
+  playerNotedAt?: string | Date
   coachDevelopmentProgress?: string
   devTalkId?: string
 }
@@ -407,7 +407,7 @@ export interface DashboardGoalUpdateType {
   createdAt: number
   headline: string
   deadline: string
-  mediaLinks: string[]
+  mediaLinks: any
   category: string
   userId: string
   personalGoalId: string

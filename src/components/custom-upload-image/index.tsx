@@ -45,6 +45,7 @@ export const CustomUploadImage = ({
         )
         setProgress(prog)
       },
+      function error(err) {},
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setUrl(url)
