@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
-import { openModalResponGroupAtom } from 'src/atoms/notiAtoms'
+import { dataModalResponseGroupAtom } from 'src/atoms/notiAtoms'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import DiaryUpdate from 'src/modules/update-diary'
 import { getErrorMessage, safeAvatar } from 'src/utils/utils'
@@ -538,17 +538,17 @@ DashboardNavbar.propTypes = {
 }
 
 export const ModalResponseGroup = (props) => {
-  const [openModalResponGroup, setOpenModalResponGroup] = useAtom(
-    openModalResponGroupAtom
+  const [dataModalResponseGroup, setDataModalResponseGroup] = useAtom(
+    dataModalResponseGroupAtom
   )
   return (
     <Dialog
       fullWidth
       maxWidth="sm"
       onClose={() => {
-        setOpenModalResponGroup({})
+        setDataModalResponseGroup({})
       }}
-      open={!isEmpty(openModalResponGroup)}
+      open={!isEmpty(dataModalResponseGroup)}
     >
       <Box
         sx={{
@@ -565,7 +565,7 @@ export const ModalResponseGroup = (props) => {
         <IconButton
           color="inherit"
           onClick={() => {
-            setOpenModalResponGroup({})
+            setDataModalResponseGroup({})
           }}
         >
           <XIcon fontSize="small" />
@@ -580,7 +580,8 @@ export const ModalResponseGroup = (props) => {
         {/*  */}
 
         <img
-          src={openModalResponGroup.img}
+          //@ts-ignore: Unreachable code error
+          src={dataModalResponseGroup.img}
           className=" w-[320px] h-auto block mx-auto "
           alt=""
         />
@@ -597,7 +598,8 @@ export const ModalResponseGroup = (props) => {
           onClick={async () => {
             try {
               const { data } = await axios.delete(
-                `/groups/${openModalResponGroup.idGroup}/leave-group`
+                //@ts-ignore: Unreachable code error
+                `/groups/${dataModalResponseGroup.idGroup}/leave-group`
               )
               notiToast({
                 message: 'Leave group',
@@ -618,7 +620,7 @@ export const ModalResponseGroup = (props) => {
               }
             }
 
-            setOpenModalResponGroup({})
+            setDataModalResponseGroup({})
           }}
           fullWidth
           size="large"
@@ -629,7 +631,7 @@ export const ModalResponseGroup = (props) => {
         </Button>
         <Button
           onClick={async () => {
-            setOpenModalResponGroup({})
+            setDataModalResponseGroup({})
           }}
           fullWidth
           size="large"

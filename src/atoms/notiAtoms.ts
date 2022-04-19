@@ -2,7 +2,7 @@ import { atom } from 'jotai'
 
 export const notificationsAtom = atom([])
 // const [notifications, setNotifications] = useAtom(notificationsAtom)
-export const openModalResponGroupAtom = atom({})
+export const dataModalResponseGroupAtom = atom({})
 
 
-// const [openModalResponGroup, setOpenModalResponGroup] = useAtom(openModalResponGroupAtom)
+// const [dataModalResponseGroup, setDataModalResponseGroup] = useAtom(dataModalResponseGroupAtom)

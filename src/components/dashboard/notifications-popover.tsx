@@ -24,7 +24,7 @@ import PropTypes from 'prop-types'
 import type { FC } from 'react'
 import { useState, useEffect, useMemo } from 'react'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
-import { openModalResponGroupAtom } from 'src/atoms/notiAtoms'
+import { dataModalResponseGroupAtom } from 'src/atoms/notiAtoms'
 import { notiToast } from 'src/components/common/Toast'
 import { MySelectCountry } from 'src/components/MySelectCountry'
 import { optionAllClub } from 'src/constants/mocks/clubs.constans'
@@ -213,7 +213,7 @@ export const ItemNotification = ({
     openModalDiaryUpdateAtom
   )
 
-  const [, setOpenModalResponGroup] = useAtom(openModalResponGroupAtom)
+  const [, setDataModalResponseGroup] = useAtom(dataModalResponseGroupAtom)
 
   // here render icon noti
   const renderIcon = () => {
@@ -399,7 +399,7 @@ export const ItemNotification = ({
                 notification.notificationType ===
                 NotificationType.INVITE_MEMBER_GROUP
               ) {
-                setOpenModalResponGroup({
+                setDataModalResponseGroup({
                   //@ts-ignore: Unreachable code error
                   idGroup: notification.groupId,
                   img: notification.largeIcon,
