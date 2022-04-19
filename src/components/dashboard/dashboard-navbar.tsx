@@ -27,7 +27,7 @@ import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
 import { openModalResponGroupAtom } from 'src/atoms/notiAtoms'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import DiaryUpdate from 'src/modules/update-diary'
-import { safeAvatar } from 'src/utils/utils'
+import { getErrorMessage, safeAvatar } from 'src/utils/utils'
 import { Bell as BellIcon } from '../../icons/bell'
 import { Menu as MenuIcon } from '../../icons/menu'
 import { Search as SearchIcon } from '../../icons/search'
@@ -39,6 +39,8 @@ import { ContactsPopover } from './contacts-popover'
 import { ContentSearchDialog } from './content-search-dialog'
 import { LanguagePopover } from './language-popover'
 import { NotificationsPopover } from './notifications-popover'
+import { notiToast } from '../common/Toast'
+import { axios } from 'src/utils/axios'
 
 interface DashboardNavbarProps extends AppBarProps {
   onOpenSidebar?: () => void
@@ -54,15 +56,15 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   ...(theme.palette.mode === 'light'
     ? {
-        boxShadow: theme.shadows[3],
-      }
+      boxShadow: theme.shadows[3],
+    }
     : {
-        backgroundColor: theme.palette.background.paper,
-        borderBottomColor: theme.palette.divider,
-        borderBottomStyle: 'solid',
-        borderBottomWidth: 1,
-        boxShadow: 'none',
-      }),
+      backgroundColor: theme.palette.background.paper,
+      borderBottomColor: theme.palette.divider,
+      borderBottomStyle: 'solid',
+      borderBottomWidth: 1,
+      boxShadow: 'none',
+    }),
 }))
 
 const LanguageButton = () => {
@@ -577,14 +579,45 @@ export const ModalResponseGroup = (props) => {
       >
         {/*  */}
 
+        <img
+          src={openModalResponGroup.img}
+          className=" w-[320px] h-auto block mx-auto "
+          alt=""
+        />
         <div className="h-[16px] "></div>
+        <div className="font-Inter text-center ">
+          #Heltra added you to be a member of New group Is that correct?
+        </div>
 
         {/*  */}
       </DialogContent>
 
       <div className="flex mt-4 px-[24px] mb-[20px] ">
         <Button
-          onClick={() => {
+          onClick={async () => {
+            try {
+              const { data } = await axios.delete(
+                `/groups/${openModalResponGroup.idGroup}/leave-group`
+              )
+              notiToast({
+                message: 'Leave group',
+                type: 'success',
+              })
+            } catch (error) {
+              let statusCode = error?.response?.data?.statusCode
+              if (statusCode === 404) {
+                notiToast({
+                  message: 'You are not already in the group.',
+                  type: 'error',
+                })
+              } else {
+                notiToast({
+                  message: getErrorMessage(error),
+                  type: 'error',
+                })
+              }
+            }
+
             setOpenModalResponGroup({})
           }}
           fullWidth
