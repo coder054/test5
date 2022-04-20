@@ -106,7 +106,7 @@ export const NoteModal = ({
       },
       onError: (err: any) => {
         if (err.response.status === 405) {
-          toast.error(err.response.data.message)
+          toast.error('You created development for this day.')
         }
       },
     }
