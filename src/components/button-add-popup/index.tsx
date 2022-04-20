@@ -6,6 +6,8 @@ import { ButtonAdd } from 'src/components/ButtonAdd'
 import { PopupAdd } from 'src/components/popup-add'
 import { GoalModal } from 'src/modules/dashboard/development-dashboard/component/modal/goal-modal'
 import { NoteModal } from 'src/modules/dashboard/development-dashboard/component/modal/note-modal'
+import DiaryUpdate from 'src/modules/update-diary'
+import { XIcon } from '../icons'
 import { ModalMui } from '../ModalMui'
 
 interface ButtonAddPopupProps {}
@@ -14,6 +16,8 @@ export const ButtonAddPopup = () => {
   const [add, setAdd] = useState<boolean>(true)
   const [openModalGoal, setOpenModalGoal] = useState<boolean>(false)
   const [openModalNote, setOpenModalNote] = useState<boolean>(false)
+  const [openModalDiaryUpdate, setOpenModalDiaryUpdate] =
+    useState<boolean>(false)
   const router = useRouter()
   return (
     <div>
@@ -34,7 +38,12 @@ export const ButtonAddPopup = () => {
         >
           <PopupAdd>
             <div className="w-full h-full bg-[#13161A] rounded-[7px]">
-              <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center">
+              <div
+                className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center"
+                onClick={() => {
+                  setOpenModalDiaryUpdate(true)
+                }}
+              >
                 <p className="ml-[12px]">Diary update</p>
               </div>
               <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center ">
@@ -69,6 +78,32 @@ export const ButtonAddPopup = () => {
           </PopupAdd>
         </div>
       )}
+
+      <ModalMui
+        sx={{
+          padding: 0,
+          top: '50%',
+          width: isMobile ? '100%' : 700,
+          overflow: 'auto',
+        }}
+        isOpen={openModalDiaryUpdate}
+        onClose={setOpenModalDiaryUpdate}
+      >
+        {/* @ts-ignore: Unreachable code error */}
+        <SimpleBar style={{ maxHeight: 850 }}>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setOpenModalDiaryUpdate(false)}
+              className="absolute z-50 right-6 top-5"
+            >
+              <XIcon />
+            </button>
+            <DiaryUpdate />
+          </div>
+        </SimpleBar>
+      </ModalMui>
+
       <ModalMui
         sx={{
           padding: 0,

@@ -36,7 +36,6 @@ export const CustomUploadImage = ({
     if (!file) return
     const storageRef = ref(storage, `/files/${file.name}`)
     const uploadTask = uploadBytesResumable(storageRef, file)
-
     uploadTask.on(
       'state_changed',
       (snapshot) => {
