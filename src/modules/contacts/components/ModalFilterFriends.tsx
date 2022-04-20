@@ -65,6 +65,7 @@ export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
     setContractedClub
   }
 
+  // here Modal Filter Friend
   return (
     <Dialog
       fullWidth

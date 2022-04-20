@@ -49,7 +49,7 @@ type MyDatePickerProps = {
   className?: string
   label: string
   errorMessage?: string
-  value?: Date | string | null
+  value?: Date | string | null | number
   isNextable?: boolean
   onChange?: (value: string) => void
   maxDate?: any
@@ -70,7 +70,7 @@ export const MyDatePicker = ({
   readOnly,
   ...rest
 }: MyDatePickerProps) => {
-  const [currentValue, setCurrentValue] = useState<string | Date>()
+  const [currentValue, setCurrentValue] = useState<string | Date | number>()
 
   useEffect(() => {
     setCurrentValue(value)

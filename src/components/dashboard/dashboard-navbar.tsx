@@ -1,12 +1,17 @@
 import type { AppBarProps } from '@mui/material'
+import { isEmpty } from 'lodash'
 import {
   AppBar,
   Badge,
   Box,
+  Button,
   ButtonBase,
+  Dialog,
+  DialogContent,
   IconButton,
   Toolbar,
   Tooltip,
+  Typography,
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { useAtom } from 'jotai'
@@ -19,9 +24,10 @@ import { useTranslation } from 'react-i18next'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
+import { dataModalResponseGroupAtom } from 'src/atoms/notiAtoms'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import DiaryUpdate from 'src/modules/update-diary'
-import { safeAvatar } from 'src/utils/utils'
+import { getErrorMessage, safeAvatar } from 'src/utils/utils'
 import { Bell as BellIcon } from '../../icons/bell'
 import { Menu as MenuIcon } from '../../icons/menu'
 import { Search as SearchIcon } from '../../icons/search'
@@ -33,6 +39,8 @@ import { ContactsPopover } from './contacts-popover'
 import { ContentSearchDialog } from './content-search-dialog'
 import { LanguagePopover } from './language-popover'
 import { NotificationsPopover } from './notifications-popover'
+import { notiToast } from '../common/Toast'
+import { axios } from 'src/utils/axios'
 
 interface DashboardNavbarProps extends AppBarProps {
   onOpenSidebar?: () => void
@@ -48,15 +56,15 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   ...(theme.palette.mode === 'light'
     ? {
-        boxShadow: theme.shadows[3],
-      }
+      boxShadow: theme.shadows[3],
+    }
     : {
-        backgroundColor: theme.palette.background.paper,
-        borderBottomColor: theme.palette.divider,
-        borderBottomStyle: 'solid',
-        borderBottomWidth: 1,
-        boxShadow: 'none',
-      }),
+      backgroundColor: theme.palette.background.paper,
+      borderBottomColor: theme.palette.divider,
+      borderBottomStyle: 'solid',
+      borderBottomWidth: 1,
+      boxShadow: 'none',
+    }),
 }))
 
 const LanguageButton = () => {
@@ -151,6 +159,7 @@ const UpdateDiaryButton = () => {
         isOpen={openModalDiaryUpdate}
         onClose={setOpenModalDiaryUpdate}
       >
+        {/* @ts-ignore: Unreachable code error */}
         <SimpleBar style={{ maxHeight: 850 }}>
           <div className="relative">
             <button
@@ -217,6 +226,7 @@ const NotificationsButton = () => {
 
   return (
     <>
+      <ModalResponseGroup />
       <Tooltip title="Notifications">
         <IconButton ref={anchorRef} sx={{ ml: 1 }} onClick={handleOpenPopover}>
           <Badge color="error" badgeContent={unread}>
@@ -525,4 +535,111 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
 
 DashboardNavbar.propTypes = {
   onOpenSidebar: PropTypes.func,
+}
+
+export const ModalResponseGroup = (props) => {
+  const [dataModalResponseGroup, setDataModalResponseGroup] = useAtom(
+    dataModalResponseGroupAtom
+  )
+  return (
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      onClose={() => {
+        setDataModalResponseGroup({})
+      }}
+      open={!isEmpty(dataModalResponseGroup)}
+    >
+      <Box
+        sx={{
+          alignItems: 'center',
+          backgroundColor: 'primary.main',
+          color: 'primary.contrastText',
+          display: 'flex',
+          justifyContent: 'space-between',
+          px: 3,
+          py: 2,
+        }}
+      >
+        <Typography variant="h6">Zporter</Typography>
+        <IconButton
+          color="inherit"
+          onClick={() => {
+            setDataModalResponseGroup({})
+          }}
+        >
+          <XIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      <DialogContent
+        sx={{
+          height: 500,
+        }}
+      >
+        {/*  */}
+
+        <img
+          //@ts-ignore: Unreachable code error
+          src={dataModalResponseGroup.img}
+          className=" w-[320px] h-auto block mx-auto "
+          alt=""
+        />
+        <div className="h-[16px] "></div>
+        <div className="font-Inter text-center ">
+          #Heltra added you to be a member of New group Is that correct?
+        </div>
+
+        {/*  */}
+      </DialogContent>
+
+      <div className="flex mt-4 px-[24px] mb-[20px] ">
+        <Button
+          onClick={async () => {
+            try {
+              const { data } = await axios.delete(
+                //@ts-ignore: Unreachable code error
+                `/groups/${dataModalResponseGroup.idGroup}/leave-group`
+              )
+              notiToast({
+                message: 'Leave group',
+                type: 'success',
+              })
+            } catch (error) {
+              let statusCode = error?.response?.data?.statusCode
+              if (statusCode === 404) {
+                notiToast({
+                  message: 'You are not already in the group.',
+                  type: 'error',
+                })
+              } else {
+                notiToast({
+                  message: getErrorMessage(error),
+                  type: 'error',
+                })
+              }
+            }
+
+            setDataModalResponseGroup({})
+          }}
+          fullWidth
+          size="large"
+          sx={{ mr: 2 }}
+          variant="outlined"
+        >
+          No
+        </Button>
+        <Button
+          onClick={async () => {
+            setDataModalResponseGroup({})
+          }}
+          fullWidth
+          size="large"
+          variant="contained"
+        >
+          Yes
+        </Button>
+      </div>
+    </Dialog>
+  )
 }
