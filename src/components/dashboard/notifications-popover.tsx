@@ -24,7 +24,10 @@ import PropTypes from 'prop-types'
 import type { FC } from 'react'
 import { useState, useEffect, useMemo } from 'react'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
-import { dataModalResponseGroupAtom } from 'src/atoms/notiAtoms'
+import {
+  dataModalResponseGroupAtom,
+  dataModalResponseTeamAtom,
+} from 'src/atoms/notiAtoms'
 import { notiToast } from 'src/components/common/Toast'
 import { MySelectCountry } from 'src/components/MySelectCountry'
 import { optionAllClub } from 'src/constants/mocks/clubs.constans'
@@ -214,6 +217,7 @@ export const ItemNotification = ({
   )
 
   const [, setDataModalResponseGroup] = useAtom(dataModalResponseGroupAtom)
+  const [, setDataModalResponseTeam] = useAtom(dataModalResponseTeamAtom)
 
   // here render icon noti
   const renderIcon = () => {
@@ -403,6 +407,19 @@ export const ItemNotification = ({
                   //@ts-ignore: Unreachable code error
                   idGroup: notification.groupId,
                   img: notification.largeIcon,
+                  body: notification.body,
+                  title: notification.title,
+                })
+              } else if (
+                notification.notificationType ===
+                NotificationType.INVITE_MEMBER_TEAM
+              ) {
+                setDataModalResponseTeam({
+                  //@ts-ignore: Unreachable code error
+                  idTeam: notification.teamId,
+                  img: notification.largeIcon,
+                  body: notification.body,
+                  title: notification.title,
                 })
               }
 
