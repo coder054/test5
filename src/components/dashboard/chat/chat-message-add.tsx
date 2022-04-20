@@ -63,10 +63,6 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
     }
   }
 
-  // useEffect(() => {
-  //   console.log('aaa videoThumbnail: ', videoThumbnail)
-  // }, [videoThumbnail])
-
   return (
     <Box
       sx={{
@@ -147,7 +143,6 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
             renderThumbnail={false}
             videoUrl={videoUrl}
             thumbnailHandler={async (thumbnail) => {
-              // console.log('aaa thumbnail', thumbnail)
               const blob = await fromBase64ToBlob(thumbnail)
               //@ts-ignore: Unreachable code error
               const imageResized: string = await resizeFile(blob)

@@ -144,14 +144,6 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
     }
   }, [messages])
 
-  // useEffect(() => {
-  //   console.log('aaa activeChatRoom: ', activeChatRoom)
-  // }, [activeChatRoom])
-
-  // useEffect(() => {
-  //   console.log('aaa error: ', error)
-  // }, [error])
-
   useEffect(() => {
     // Scroll to bottom of the messages after loading the thread
     if (!isEmpty(messages) && messagesRef?.current) {
