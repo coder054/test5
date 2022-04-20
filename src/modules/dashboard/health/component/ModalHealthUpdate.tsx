@@ -377,7 +377,7 @@ export const ModalHealthUpdate = ({
           <div className="w-full flex mt-[24px]">
             <div className="flex-1 " onClick={handleSave}>
               <Button
-                loading
+                // loading
                 text="Save"
                 className="w-[148px] h-[48px] justify-between bg-[#4654EA] hover:bg-[#6470f3] rounded-[8px]"
               />
