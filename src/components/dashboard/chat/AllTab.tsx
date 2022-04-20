@@ -81,18 +81,5 @@ export const AllTab = () => {
     })()
   }, [snapshots, currentRoleId])
 
-  // const onlyShow = useMemo(() => {
-  //   if (isEmpty(results)) {
-  //     return []
-  //   }
-  //   return results.filter((o) => o.isShowChatRoom)
-  // }, [results])
-
-  // useEffect(() => {}, [onlyShow])
-
-  // useEffect(() => {
-  //   console.log('aaa chatRooms: ', onlyShow)
-  //   setChatRooms(onlyShow)
-  // }, [onlyShow])
   return null
 }

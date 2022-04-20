@@ -19,10 +19,6 @@ export const ChatMessages: FC<ChatMessagesProps> = (props) => {
 
   const { messages, participants, arrUsers, ...other } = props
 
-  // useEffect(() => {
-  //   console.log('aaa arrUsers: ', arrUsers)
-  // }, [arrUsers])
-
   const getUserOfMessage = useCallback(
     (createdBy) => {
       if (isEmpty(arrUsers) || !createdBy) {
