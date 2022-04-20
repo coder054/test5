@@ -1,9 +1,9 @@
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
+import { storage } from 'src/config/firebase-client'
 import { SvgCamera } from 'src/imports/svgs'
 const cls = require('./upload-image.module.css')
-import { storage } from 'src/config/firebase-client'
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-import clsx from 'clsx'
 
 interface UploadImageProps {
   title?: string
@@ -41,7 +41,7 @@ export const UploadImage = ({
         setProgress(prog)
       },
       (_err) => {
-        return
+        toast.error('Something went wrong!')
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {

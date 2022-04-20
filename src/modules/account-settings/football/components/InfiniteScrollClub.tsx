@@ -7,7 +7,7 @@ import {
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import clsx from 'clsx'
-import { useCallback, useEffect, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { ArrowBackIcon } from 'src/components/icons'
@@ -75,6 +75,7 @@ export const InfiniteScrollClub = ({
             clubName: value,
           },
         })
+
         if (res.status === 200) {
           setItems(res.data)
         }
@@ -97,7 +98,7 @@ export const InfiniteScrollClub = ({
         setItems(arr)
       })
       .catch(() => {
-        toast.error('An error has occurred')
+        toast.error('Something went wrong')
       })
   }
 
@@ -118,13 +119,8 @@ export const InfiniteScrollClub = ({
   }, [])
 
   return (
-    <>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+    <Fragment>
+      <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
           <div className="flex items-center pb-7">
             <button onClick={handleClose} className="mr-16 scale-105 ">
@@ -186,9 +182,8 @@ export const InfiniteScrollClub = ({
                     key={index}
                   >
                     <img
-                      src={safeHttpImage(it.logoUrl)}
-                      className="w-[30px] h-[30px] rounded-full"
-                      alt="logo"
+                      src={safeHttpImage(it.logoUrl) ?? '/favicon.png'}
+                      className="w-[30px] h-[30px] object-cover object-center rounded-full"
                     />
                     <p>{it.clubName}</p>
                   </div>
@@ -198,6 +193,6 @@ export const InfiniteScrollClub = ({
           </div>
         </div>
       </ClickAwayListener>
-    </>
+    </Fragment>
   )
 }

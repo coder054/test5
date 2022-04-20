@@ -64,7 +64,7 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
   )
 
   useEffect(() => {
-    isError && toast.error('An error has occurred')
+    isError && toast.error('Something went wrong')
     responseUpdates && setFormValues(responseUpdates.data)
   }, [JSON.stringify(responseUpdates)])
 

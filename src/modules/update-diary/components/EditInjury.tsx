@@ -104,7 +104,7 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
         AlertSpot.success(data.data)
       },
       onError: () => {
-        AlertSpot.error('An error has occurred')
+        AlertSpot.error('Something went wrong')
       },
     }
   )
@@ -125,7 +125,7 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
         onClose && onClose(false)
       },
       onError: () => {
-        AlertSpot.error('An error has occurred')
+        AlertSpot.error('Something went wrong')
       },
     }
   )
