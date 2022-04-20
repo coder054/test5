@@ -56,6 +56,7 @@ export const Form5: FC = () => (
           </Grid>
           <Grid item md={6} xs={12}>
             <Autocomplete
+              //@ts-ignore: Unreachable code error
               getOptionLabel={(option): string => option.text}
               options={countries}
               renderInput={(params): JSX.Element => (
