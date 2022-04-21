@@ -27,6 +27,7 @@ import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
 import {
   dataModalResponseGroupAtom,
   dataModalResponseTeamAtom,
+  dataModalResponseDeleteFromTeamAtom,
 } from 'src/atoms/notiAtoms'
 import { notiToast } from 'src/components/common/Toast'
 import { MySelectCountry } from 'src/components/MySelectCountry'
@@ -218,6 +219,9 @@ export const ItemNotification = ({
 
   const [, setDataModalResponseGroup] = useAtom(dataModalResponseGroupAtom)
   const [, setDataModalResponseTeam] = useAtom(dataModalResponseTeamAtom)
+  const [, setDataModalResponseDeleteFromTeam] = useAtom(
+    dataModalResponseDeleteFromTeamAtom
+  )
 
   // here render icon noti
   const renderIcon = () => {
@@ -420,6 +424,25 @@ export const ItemNotification = ({
                   img: notification.largeIcon,
                   body: notification.body,
                   title: notification.title,
+                })
+              } else if (
+                notification.notificationType ===
+                NotificationType.DELETE_MEMBER_TEAM
+              ) {
+                setDataModalResponseDeleteFromTeam({
+                  //@ts-ignore: Unreachable code error
+                  teamId: notification.teamId,
+                  img: notification.largeIcon,
+                  body: notification.body,
+                  title: notification.title,
+                  confirmType: getStr(notification, 'nextNotificationType'),
+                  memberConfirm: getStr(notification, 'memberConfirm'),
+
+                  memberId:
+                    getStr(notification, 'memberConfirm') === 'ADMIN'
+                      ? notification.senderId
+                      : null,
+                  oldMemberType: getStr(notification, 'oldMemberType'),
                 })
               }
 
