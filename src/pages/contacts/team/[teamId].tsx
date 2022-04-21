@@ -29,7 +29,7 @@ const Team: NextPage = () => {
   })
 
   const { isLoading: isGettingTeam, data: responseDisplay } = useQuery(
-    [QUERIES_CONTACTS.CONTACT_TEAM, teamId],
+    [QUERIES_CONTACTS.CONTACT_TEAM_PROFILE, teamId],
     () => fetchTeam({ teamId: teamId })
   )
 

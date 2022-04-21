@@ -7,10 +7,8 @@ import { DashboardLayout } from 'src/components/dashboard/dashboard-layout'
 import { requireAuth } from 'src/config/firebase-admin'
 import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
 import { GroupType } from 'src/constants/types/contacts.types'
-import { TeamType } from 'src/constants/types/settingsType.type'
 import GroupProfile from 'src/modules/contacts/group'
 import { fetchGroup } from 'src/service/contacts/group.service'
-import { fetchTeam } from 'src/service/contacts/team.service'
 
 const Group: NextPage = () => {
   const router = useRouter()
@@ -32,7 +30,7 @@ const Group: NextPage = () => {
   })
 
   const { isLoading: isGettingGroup, data: responseDisplay } = useQuery(
-    [QUERIES_CONTACTS.CONTACT_GROUP_OWNER, groupId],
+    [QUERIES_CONTACTS.CONTACT_GROUP_PROFILE, groupId],
     () => fetchGroup({ groupId: groupId })
   )
 

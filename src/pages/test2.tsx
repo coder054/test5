@@ -92,7 +92,7 @@ const Test = () => {
       //@ts-ignore: Unreachable code error
       window.confirmationResult = confirmationResult
     } catch (error) {
-      toast.error('An error has occurred')
+      toast.error('Something went wrong')
     }
   }
 
@@ -106,7 +106,7 @@ const Test = () => {
       const result = await window.confirmationResult.confirm(code)
       const user = result.user
     } catch (error) {
-      toast.error('An error has occurred')
+      toast.error('Something went wrong')
     }
   }
 

@@ -13,13 +13,16 @@ import {
 } from 'src/constants/types/contacts.types'
 import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
-import { GroupCard } from '../group/components/GroupCard'
-import { FilterTeam } from '../team/components/Filter'
-import { TeamsCard } from '../team/components/TeamCard'
-import { MemberCard } from '../team/components/MemberCard'
-import { Counter } from './Counter'
-import SkeletonContact from './SkeletonContact'
-import { Sort } from './Sort'
+import { GroupCard } from '../../group/components/cards/GroupCard'
+import { FilterTeam } from '../../team/components/Filter'
+import { TeamCard } from '../../team/components/TeamCard'
+import SkeletonContact from '../card-template/SkeletonContact'
+import { FanCard } from '../cards/FanCard'
+import { FollowerCard } from '../cards/FollowerCard'
+import { TeammateCard } from '../cards/TeammateCard'
+import { BlockedMemberCard } from '../cards/BlockedMemberCard'
+import { Counter } from '../Counter'
+import { Sort } from '../Sort'
 
 type FetchingTemplateProps = {
   tab: ContactsTabType
@@ -46,7 +49,7 @@ export default function FetchingTemplate({
     country: '',
     clubId: '',
     teamId: '',
-    role: 'PLAYER',
+    role: '',
     search: '',
   })
 
@@ -111,10 +114,12 @@ export default function FetchingTemplate({
           </span>
           <p className="text-[25px] font-normal">{filterLabel}</p>
           <FilterTeam
+            tab={tab}
             onChange={(value) => {
               setIsOpenModal(false)
               setQueries((prev) => ({
                 ...prev,
+                ...value,
                 clubId: value.clubId,
                 country: value.countryName,
               }))
@@ -122,7 +127,7 @@ export default function FetchingTemplate({
           />
         </div>
       </ModalMui>
-      <div className="flex justify-end">
+      <div className="flex justify-end mt-2">
         <div className="w-1/3">
           <SearchField
             label={searchLabel}
@@ -131,7 +136,7 @@ export default function FetchingTemplate({
           />
         </div>
       </div>
-      <div className="flex items-center justify-between mt-3 mb-2">
+      <div className="flex items-center justify-between py-4">
         <Counter label={countLabel} count={count} withPlace={queries.country} />
         <div className="flex space-x-4">
           <Sort
@@ -143,7 +148,7 @@ export default function FetchingTemplate({
           </button>
         </div>
       </div>
-      <div className="pr-4 h-[calc(100vh-230px)] overflow-y-auto">
+      <div className="pr-4 h-[calc(100vh-250px)] overflow-y-auto">
         {isFetching && !data ? (
           <SkeletonContact />
         ) : (
@@ -152,9 +157,12 @@ export default function FetchingTemplate({
               <Fragment key={index}>
                 {page.data.map((item: any, index: number) => (
                   <Fragment key={index}>
-                    {tab === 'TEAM' && <TeamsCard team={item} />}
+                    {tab === 'TEAM' && <TeamCard team={item} />}
                     {tab === 'GROUPS' && <GroupCard group={item} />}
-                    {tab === 'FANS' && <MemberCard member={item} />}
+                    {tab === 'FANS' && <FanCard member={item} />}
+                    {tab === 'FOLLOWERS' && <FollowerCard member={item} />}
+                    {tab === 'TEAMMATES' && <TeammateCard member={item} />}
+                    {tab === 'BLOCKED' && <BlockedMemberCard member={item} />}
                   </Fragment>
                 ))}
               </Fragment>

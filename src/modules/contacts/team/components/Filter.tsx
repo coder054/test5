@@ -1,25 +1,31 @@
+import { MenuItem } from '@material-ui/core'
 import { useAtom } from 'jotai'
+import { Fragment } from 'react'
 import { ATOM_FILTER_CONTACT } from 'src/atoms/filter-contact'
+import { MyInput } from 'src/components'
 import { Button } from 'src/components/Button'
 import { MySelectCountry } from 'src/components/MySelectCountry'
+import { ContactsTabType } from 'src/constants/types/contacts.types'
 import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
 
 type FilterProps = {
   onChange?: (value: { clubId: string; countryName: string }) => void
+  tab?: ContactsTabType
 }
 
-export const FilterTeam = ({ onChange }: FilterProps) => {
+export const FilterTeam = ({ onChange, tab }: FilterProps) => {
   const [initial, setInitial] = useAtom(ATOM_FILTER_CONTACT)
 
   const submit = () => {
     onChange({
-      clubId: initial.club !== null ? initial.club.clubId : '',
-      countryName: initial.country !== null ? initial.country.name : '',
+      ...initial,
+      clubId: initial.club?.clubId ?? '',
+      countryName: initial.country?.name ?? '',
     })
   }
 
   const reset = () => {
-    setInitial({ club: null, country: null })
+    setInitial({ club: null, country: null, role: '' })
   }
 
   return (
@@ -39,6 +45,22 @@ export const FilterTeam = ({ onChange }: FilterProps) => {
             setInitial((prev) => ({ ...prev, club: value }))
           }
         />
+        {['FOLLOWERS', 'FANS', 'FRIENDS', 'TEAMMATES', 'ALL'].includes(tab) && (
+          <Fragment>
+            <MyInput
+              onChange={(_, value) => {
+                setInitial((prev) => ({ ...prev, role: value.props.value }))
+              }}
+              select
+              label="Role"
+              value={initial.role}
+            >
+              <MenuItem value={null}>All</MenuItem>
+              <MenuItem value="COACH">Coaches</MenuItem>
+              <MenuItem value="PLAYER">Players</MenuItem>
+            </MyInput>
+          </Fragment>
+        )}
       </div>
       <div className="grid grid-cols-2 w-full gap-x-6">
         <Button

@@ -8,46 +8,60 @@ import { XIcon } from 'src/components/icons'
 import { ModalMui } from 'src/components/ModalMui'
 import { MySwitchButton } from 'src/components/MySwitchButton'
 import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
-import { createGroup } from 'src/service/contacts/group.service'
-import { InfiniteMembers } from '../../components/InfiniteMembers'
-
-type CreateGroupModalProps = {
-  isClose: (value: string) => void
-}
+import { createGroup, editGroup } from 'src/service/contacts/group.service'
+import { FetchingAllMembers } from '../../components/fetchs/FetchingAllMembers'
+import { GroupType } from 'src/constants/types/contacts.types'
+import { FetchingLimitMembers } from 'src/modules/contacts/components/fetchs/FetchingLimitMembers'
+import { useRouter } from 'next/router'
+import { TeamType } from 'src/constants/types/settingsType.type'
+import { editTeam } from 'src/service/contacts/team.service'
 
 type FormValuesType = {
-  name: string
-  groupImage: string
+  teamName: string
+  teamImage: string
   memberIds: string[]
   isPrivate: boolean
 }
 
-export default function CreateGroupModal({ isClose }: CreateGroupModalProps) {
+interface EditTeamProps {
+  isClose: (value: string) => void
+  initialValue: TeamType
+}
+
+export default function EditTeamModal({
+  isClose,
+  initialValue,
+}: EditTeamProps) {
+  const router = useRouter()
+  const { teamId } = router.query
   const queryClient = useQueryClient()
   const [isOpen, setIsOpen] = useState<boolean>(true)
   const [formValues, setFormValues] = useState<FormValuesType>({
-    name: '',
-    groupImage: '',
+    teamName: '',
+    teamImage: '',
     memberIds: [],
     isPrivate: false,
   })
 
-  const { mutate: mutateCreate, isLoading: isCreating } = useMutation(
-    createGroup,
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(QUERIES_CONTACTS.CONTACT_GROUP)
-        toast.success('Group successfully created')
-        isClose('')
-      },
-      onError: () => {
-        toast.error('An error has occurred')
-      },
-    }
-  )
+  useEffect(() => {
+    initialValue && setFormValues(initialValue as FormValuesType)
+  }, [JSON.stringify(initialValue)])
+
+  const { mutate: mutateEdit, isLoading: isCreating } = useMutation(editTeam, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(QUERIES_CONTACTS.CONTACT_TEAM_PROFILE)
+      queryClient.invalidateQueries(QUERIES_CONTACTS.CONTACT_TEAM_MEMBER)
+      toast.success('Team successfully edited')
+      setIsOpen(false)
+      isClose('')
+    },
+    onError: () => {
+      toast.error('Something went wrong')
+    },
+  })
 
   const onSubmit = useCallback(() => {
-    mutateCreate({ data: formValues })
+    mutateEdit({ data: formValues, teamId })
   }, [JSON.stringify(formValues)])
 
   const handleChangeForm = useCallback(
@@ -75,15 +89,18 @@ export default function CreateGroupModal({ isClose }: CreateGroupModalProps) {
         >
           <XIcon />
         </button>
-        <p className="text-[24px] font-medium pb-6">Create New Group</p>
+        <p className="text-[24px] font-medium pb-6">Edit Group</p>
         <div className="space-y-6 w-full">
           <MyInput
+            defaultValue={initialValue?.teamName}
             label="Group name"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              handleChangeForm('name', e.target.value)
+              handleChangeForm('teamName', e.target.value)
             }
           />
-          <InfiniteMembers
+          <FetchingLimitMembers
+            tab="MEMBER"
+            endpoint={`teams/${teamId}/search-team-member`}
             onChange={(value) => handleChangeForm('memberIds', value)}
           />
           <div className="pb-6">
@@ -95,8 +112,10 @@ export default function CreateGroupModal({ isClose }: CreateGroupModalProps) {
               className="border-[2px] border-gray-700 hover:border-white  duration-150"
               textClass="pt-8 px-24 font-medium"
               iconClass="pt-24"
-              value={formValues.groupImage}
-              setImage={(value: any) => handleChangeForm('groupImage', value)}
+              value={formValues.teamImage}
+              setImage={(value: any) => {
+                handleChangeForm('teamImage', value)
+              }}
             />
           </div>
           <div className="flex items-center">
@@ -108,10 +127,10 @@ export default function CreateGroupModal({ isClose }: CreateGroupModalProps) {
           </div>
           <Button
             type="submit"
-            label="Create"
+            label="Save"
             onClick={onSubmit}
             isLoading={isCreating}
-            isDisabled={formValues.name === ''}
+            isDisabled={formValues.teamName === ''}
             className="bg-[#4654EA] px-24 py-2.5 rounded-lg"
           />
         </div>

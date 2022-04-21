@@ -63,7 +63,7 @@ export type TeamsType = {
   memberType: string
 }
 
-export type GroupType = {
+export type GroupType = Partial<{
   userImages: string[]
   createdBy: string
   updatedAt: number
@@ -76,7 +76,7 @@ export type GroupType = {
   usernames: string[]
   userIds: string[]
   memberType: string
-}
+}>
 
 export type ContactsTabType =
   | 'ALL'
@@ -89,16 +89,29 @@ export type ContactsTabType =
   | 'TEAMMATES'
   | 'FAMILY'
 
+export type GroupTabType = 'MEMBER' | 'REQUEST' | 'ADMIN' | 'OWNER' | 'BLOCK'
+
 export type QueriesContactsType = Partial<{
   limit: number
   sorted: 'asc' | 'desc'
-  startAfter: number
+  startAfter: number | string
   tab: ContactsTabType
   country?: string
   clubId: string
   teamId: string
   role: string
   search: string
+}>
+
+export type QueriesContactMemberType = Partial<{
+  groupId: string
+  limit: number
+  name: string
+  startAfter: number
+  sorted: 'asc' | 'desc'
+  userIdQuery: string
+  tab: GroupTabType
+  memberType: GroupTabType
 }>
 
 export type InfiniteInitialType = {

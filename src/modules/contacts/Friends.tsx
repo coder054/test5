@@ -14,10 +14,10 @@ import { SearchIcon } from 'src/icons/search'
 import { axios } from 'src/utils/axios'
 import { getErrorMessage, getStr } from 'src/utils/utils'
 import { useDebounce } from 'use-debounce'
-import { FriendsCard } from './components/FriendsCard'
-import { ModalAcceptFriends } from './components/ModalAcceptFriends'
-import { ModalAddFriends } from './components/ModalAddFriends'
-import { ModalFilterFriends } from './components/ModalFilterFriends'
+import { FriendsCard } from './components/cards/FriendCard'
+import { ModalAcceptFriends } from './components/modals/ModalAcceptFriends'
+import { ModalAddFriends } from './components/modals/ModalAddFriends'
+import { ModalFilterFriends } from './components/modals/ModalFilterFriends'
 
 export const Friends = () => {
   const [totalFriend, setTotalFriend] = useState<Number>(0)
