@@ -3,14 +3,19 @@ import { Fragment } from 'react'
 import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
 import { Friends } from 'src/modules/contacts/Friends'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
-import CreateNew from './components/CreateGroup'
-import FetchingTemplate from './components/FetchingTemplate'
+import CreateNew from './components/modals/ModalCreateGroup'
+import FetchingTemplate from './components/fetchs/FetchingTemplate'
+import FetchingContactAll from './components/fetchs/FetchingContactAll'
 
 const tabs = [
   { label: 'Friends', value: 'friends' },
-  { label: 'Teams', value: 'teams' },
   { label: 'Groups', value: 'groups' },
+  { label: 'Teams', value: 'teams' },
+  { label: 'All', value: 'all' },
+  { label: 'Followers', value: 'followers' },
   { label: 'Fans', value: 'fans' },
+  { label: 'Teammates', value: 'teammates' },
+  { label: 'Blocked', value: 'blocked' },
 ]
 
 const Contacts = () => {
@@ -43,7 +48,7 @@ const Contacts = () => {
           <FetchingTemplate
             queryKey={QUERIES_CONTACTS.CONTACT_TEAM}
             tab="TEAM"
-            countLabel="team"
+            countLabel="Team"
             searchLabel="Search team"
             filterLabel="Filter your Teams"
           />
@@ -55,7 +60,7 @@ const Contacts = () => {
           <FetchingTemplate
             queryKey={QUERIES_CONTACTS.CONTACT_GROUP}
             tab="GROUPS"
-            countLabel="group"
+            countLabel="Group"
             searchLabel="Search group"
             filterLabel="Filter your Groups"
           />
@@ -66,9 +71,45 @@ const Contacts = () => {
         <FetchingTemplate
           queryKey={QUERIES_CONTACTS.CONTACT_FANS}
           tab="FANS"
-          countLabel="fan"
+          countLabel="Fan"
           searchLabel="Search fan"
           filterLabel="Filter your Fans"
+        />
+      )}
+      {currentTab === 'followers' && (
+        <FetchingTemplate
+          queryKey={QUERIES_CONTACTS.CONTACT_FOLLOWERS}
+          tab="FOLLOWERS"
+          countLabel="Folower"
+          searchLabel="Search your Followers"
+          filterLabel="Filter your Followers"
+        />
+      )}
+      {currentTab === 'teammates' && (
+        <FetchingTemplate
+          queryKey={QUERIES_CONTACTS.CONTACT_TEAMMATES}
+          tab="TEAMMATES"
+          countLabel="Teammate"
+          searchLabel="Search your Teammates"
+          filterLabel="Filter your Teammates"
+        />
+      )}
+      {currentTab === 'blocked' && (
+        <FetchingTemplate
+          queryKey={QUERIES_CONTACTS.CONTACT_BLOCKED}
+          tab="BLOCKED"
+          countLabel="Blocked account"
+          searchLabel="Search your Teammates"
+          filterLabel="Filter your Teammates"
+        />
+      )}
+      {currentTab === 'all' && (
+        <FetchingContactAll
+          queryKey={QUERIES_CONTACTS.CONTACT_ALL}
+          tab="ALL"
+          countLabel="Member"
+          searchLabel="Search your Members"
+          filterLabel="Filter your Members"
         />
       )}
     </div>

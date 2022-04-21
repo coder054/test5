@@ -61,7 +61,7 @@ export const BasicDetail = ({ getSettings }) => {
           })
           .catch(() => {
             setIsLoading(false)
-            toast.error('An error has occurred, try to refesh the page')
+            toast.error('Something went wrong, try to refesh the page')
           })
       })
       .catch(() => {

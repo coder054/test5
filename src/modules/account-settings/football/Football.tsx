@@ -110,7 +110,7 @@ export const Football = () => {
       })
       .catch(() => {
         setIsLoading(false)
-        toast.error('An error has occurred')
+        toast.error('Something went wrong')
       })
   }
 

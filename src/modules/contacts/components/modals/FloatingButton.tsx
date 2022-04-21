@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React, { Fragment, useState } from 'react'
 import { FloatingAdd, FloatingRemove } from 'src/components/icons'
 
@@ -12,10 +13,16 @@ export default function FloatingButton({ children }: FloatingButtonProps) {
       {isOpen ? (
         <button
           onClick={() => setIsOpen(false)}
-          className="active:scale-90 duration-150 fixed bottom-5 right-5"
+          className={clsx(
+            'active:scale-90 duration-150 fixed bottom-5 right-5'
+          )}
         >
           <span className="relative">
-            <div className="absolute text-left w-[246px] bg-[#13161A] border-2 border-gray-600 rounded-lg -top-20 -left-52 py-1.5 ">
+            <div
+              className={clsx(
+                'absolute text-left w-[246px] bg-[#13161A] border-2 border-gray-600 rounded-lg -bottom-11 -left-52 py-1.5 '
+              )}
+            >
               {children}
             </div>
             <FloatingRemove />

@@ -60,7 +60,7 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
           .reduce((a: string[], b: string[]) => [...a].concat([...b]), [])
       )
     }
-    if (isError) toast.error('An error has occurred')
+    if (isError) toast.error('Something went wrong')
   }, [JSON.stringify(responseUpdates)])
 
   return (

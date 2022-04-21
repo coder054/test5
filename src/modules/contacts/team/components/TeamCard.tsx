@@ -1,43 +1,81 @@
-import clsx from 'clsx'
 import { useRouter } from 'next/router'
-import { ChervonRightIcon } from 'src/components/icons'
-import { CARD } from 'src/constants/mocks/class.constants'
+import { useMemo, useState } from 'react'
+import toast from 'react-hot-toast'
+import { useMutation, useQueryClient } from 'react-query'
+import { ChervonRightIcon, TrashCanIcon } from 'src/components/icons'
+import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
 import { TeamsType } from 'src/constants/types/contacts.types'
-import { safeHttpImage } from 'src/utils/utils'
+import { deleteTeam } from 'src/service/contacts/team.service'
+import Card from '../../components/card-template'
+import DropdownButton from '../../components/card-template/DropdownButton'
+import ConfirmModal from '../../components/modals/ModalDelete'
 
 type TeamsCardProps = {
   team?: TeamsType
 }
 
-export const TeamsCard = ({ team }: TeamsCardProps) => {
+export const TeamCard = ({ team }: TeamsCardProps) => {
   const router = useRouter()
+  const queryClient = useQueryClient()
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
+
+  const HIGHEST_ROLE = useMemo(() => {
+    return team.memberType === 'OWNER'
+  }, [team.memberType])
+
+  const handleDeleteTeam = () => {
+    mutateDelete({ teamId: team.teamId })
+  }
+
+  const { mutate: mutateDelete, isLoading: isDeleting } = useMutation(
+    deleteTeam,
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(QUERIES_CONTACTS.CONTACT_TEAM)
+        toast.success('Team successfully deleted')
+        setIsOpenModal(false)
+      },
+      onError: () => {
+        toast.error('Something went wrong')
+      },
+    }
+  )
+
   return (
-    <button
-      type="button"
-      onClick={() => router.push(`/contacts/team/${team.teamId}`)}
-      className={clsx(CARD.CARD)}
-    >
-      <div className="flex justify-between items-center space-x-4">
-        <div className="flex space-x-4">
-          <img
-            className={clsx(CARD.CARD_AVATAR, 'rounded-lg')}
-            src={
-              team?.teamImage ? safeHttpImage(team?.teamImage) : '/favicon.png'
-            }
-          />
-          <div className="flex flex-col justify-center space-y-2">
-            <p className=" font-semibold text-[18px]">
-              {team.clubName} - {team.teamName}
-            </p>
-            <p className=" text-[#A2A5AD] font-normal text-[12px] laptopM:text-[14px]">
-              {team.usernames.map((name) => name).join(', ')}
-            </p>
-          </div>
-        </div>
-        <div>
-          <ChervonRightIcon />
-        </div>
-      </div>
-    </button>
+    <Card
+      avatar={team?.teamImage}
+      name={`${team.clubName} - ${team.teamName}`}
+      users={team.usernames}
+      commonOptions={
+        <button
+          type="button"
+          onClick={() => router.push(`/contacts/team/${team.teamId}`)}
+        >
+          <ChervonRightIcon className="w-[25px] h-[25px] active:scale-125 duration-150" />
+        </button>
+      }
+      dropdownOptions={
+        HIGHEST_ROLE && (
+          <>
+            <DropdownButton
+              onClick={() => setIsOpenModal(true)}
+              label="Delete team"
+              labelClass="text-[#D60C0C]"
+              icon={<TrashCanIcon className="w-[20px] h-[20px]" />}
+            />
+            <ConfirmModal
+              label="Delete team"
+              content="Are you sure you want to delete this team?"
+              actionLabel="Delete"
+              isOpen={isOpenModal}
+              onClose={setIsOpenModal}
+              isLoading={isDeleting}
+              onSubmit={handleDeleteTeam}
+              icon={<TrashCanIcon className="w-[60px] h-[60px]" />}
+            />
+          </>
+        )
+      }
+    />
   )
 }

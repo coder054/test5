@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import React, { Fragment, useState } from 'react'
-import CreateGroupModal from '../group/components/CreateGroupModal'
-import FloatingButton from './FloatingButton'
+import FloatingButton from '../../../components/modals/FloatingButton'
+import CreateGroupModal from './CreateGroupModal'
 
 const BUTTON =
   'px-4 py-1.5 hover:bg-gray-400 duration-150 block w-full text-left'
@@ -9,19 +9,23 @@ const BUTTON =
 const OPTIONS = [
   {
     value: 'group',
-    label: 'Create New Group',
+    label: 'Edit group',
   },
   {
-    value: 'club',
+    value: 'member',
     label: 'Create New Club',
   },
   {
-    value: 'team',
+    value: 'admin',
+    label: 'Create a Team in a Club',
+  },
+  {
+    value: 'owner',
     label: 'Create a Team in a Club',
   },
 ]
 
-export default function CreateNew() {
+export default function EditAction() {
   const [current, setCurrent] = useState<string>('')
   return (
     <Fragment>

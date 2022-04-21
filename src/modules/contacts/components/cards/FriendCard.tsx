@@ -240,7 +240,7 @@ export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
 
       <div className="flex lg:hidden w-full my-5 items-center ">
         <img
-          className=" w-[45px] h-[45px] sm:w-[55px] sm:h-[55px] rounded-lg inline-block mr-[8px]"
+          className=" w-[45px] h-[45px] sm:w-[55px] sm:h-[55px] rounded-lg object-cover object-center inline-block mr-[8px]"
           src={user?.faceImage ? user?.faceImage : imgAvatar}
           alt="Profile Image"
         />

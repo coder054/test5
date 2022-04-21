@@ -2,43 +2,44 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { ClickAwayListener, InputAdornment } from '@mui/material'
 import clsx from 'clsx'
 import { debounce } from 'lodash'
-import {
-  ChangeEvent,
-  Fragment,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import { ChangeEvent, Fragment, useEffect, useMemo, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
-import { Loading } from 'src/components'
 import { MiniLoading } from 'src/components/mini-loading'
 import { MyInput } from 'src/components/MyInput'
-import { API_GET_LIST_CONTACT } from 'src/constants/api.constants'
-import { QueriesContactsType } from 'src/constants/types/contacts.types'
+import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
+import {
+  GroupTabType,
+  QueriesContactMemberType,
+  QueriesContactsType,
+} from 'src/constants/types/contacts.types'
 import { MemberType } from 'src/constants/types/member.types'
 import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
-import { Counter } from './Counter'
-import MemberCard from './MemberCard'
-import MemberChip from './MemberChip'
+import MemberCard from '../cards/MemberCard'
+import { Counter } from '../Counter'
+import MemberChip from '../MemberChip'
 
-type InfiniteMembers = {
+type FetchingLimitMembersProps = {
+  tab: GroupTabType
+  endpoint?: string
   onChange: (value: string[]) => void
 }
 
-export const InfiniteMembers = ({ onChange }: InfiniteMembers) => {
+export const FetchingLimitMembers = ({
+  onChange,
+  endpoint,
+  tab,
+}: FetchingLimitMembersProps) => {
   const [selectedMembers, setSelectedMembers] = useState<MemberType[]>([])
   const [isOpenOption, setIsOpenOption] = useState<boolean>(false)
   const [count, setCount] = useState<number>(0)
-  const [queries, setQueries] = useState<QueriesContactsType>({
+  const [queries, setQueries] = useState<QueriesContactMemberType>({
     limit: 10,
     sorted: 'asc',
     startAfter: 1,
-    tab: 'ALL',
-    role: 'PLAYER',
-    search: '',
+    memberType: tab,
+    name: '',
   })
 
   const SELECTED_LIST = useMemo(() => {
@@ -48,10 +49,10 @@ export const InfiniteMembers = ({ onChange }: InfiniteMembers) => {
   const { ref, inView } = useInView()
   const { data, isFetching, isFetchingNextPage, fetchNextPage } =
     useInfiniteQuery(
-      ['projects', queries],
+      [QUERIES_CONTACTS.CONTACT_SEARCH_GROUP_MEMBER, queries],
       async ({ pageParam = '' }) => {
         const res = await axios.get(
-          toQueryString(API_GET_LIST_CONTACT, {
+          toQueryString(endpoint, {
             ...queries,
             startAfter: pageParam,
           })
@@ -61,7 +62,7 @@ export const InfiniteMembers = ({ onChange }: InfiniteMembers) => {
       {
         getNextPageParam: (lastPage, page) => {
           if (
-            page.length < Math.round(lastPage.count / 10) &&
+            page.length < Math.ceil(lastPage.count / 10) &&
             lastPage.data.length !== 0
           ) {
             return lastPage.data[lastPage.data.length - 1].firstName
@@ -83,7 +84,7 @@ export const InfiniteMembers = ({ onChange }: InfiniteMembers) => {
   }
 
   const handleChange = debounce(
-    (type: keyof QueriesContactsType, value: string) => {
+    (type: keyof QueriesContactMemberType, value: string) => {
       setQueries((prev) => ({ ...prev, [type]: value }))
     },
     500
@@ -122,7 +123,7 @@ export const InfiniteMembers = ({ onChange }: InfiniteMembers) => {
           <MyInput
             label="Add new members"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              handleChange('search', e.target.value)
+              handleChange('name', e.target.value)
             }
             onClick={() => setIsOpenOption(true)}
             InputProps={{
