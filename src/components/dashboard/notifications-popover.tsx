@@ -505,7 +505,7 @@ export const ItemNotification = ({
                 className={clsx(
                   ` grow-0 w-[235px]  `,
                   notification.notificationStatus === true
-                    ? ' text-Grey opacity-88 '
+                    ? ' text-Grey '
                     : ' text-white '
                 )}
               >
