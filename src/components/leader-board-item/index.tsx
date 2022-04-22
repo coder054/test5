@@ -93,7 +93,7 @@ export const ItemLeaderBoard = ({
               master ? 'text-[14px] md:text-[18px]' : 'text-[14px]'
             }`}
           >
-            {infor && infor.fullName}
+            {infor && tabLeaderBoard ? infor.username : infor.fullName}
           </p>
           <p className="text-[10px] md:text-[12px] text-[#A2A5AD]">
             {infor && infor.clubName}

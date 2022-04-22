@@ -220,6 +220,10 @@ export const ModalHealthUpdate = ({
     setIsOpenModalDelete(true)
   }
 
+  const handleGoBack = () => {
+    setIsOpenModal && setIsOpenModal(false)
+  }
+
   const handleConfirmDelete = () => {
     try {
       RemoveHealth(item.healthId && item.healthId)
@@ -238,8 +242,10 @@ export const ModalHealthUpdate = ({
       </div>
 
       <div className="w-full grid grid-cols-4 mt-[24px]">
-        <p className="text-[18px] font-bold col-span-1">Health update</p>
-        <div className="col-span-3 space-y-[24px]">
+        <p className="text-[18px] font-bold col-span-0 lg:col-span-1">
+          Health update
+        </p>
+        <div className="col-span-4 lg:col-span-3 space-y-[24px]">
           <div className="bg-[#13161A] rounded-[8px]">
             <p className="text-sm p-[10px]">
               Control and update your health data frequently to make sure you
@@ -418,7 +424,7 @@ export const ModalHealthUpdate = ({
             </div>
             {!create && (
               <>
-                <div className="flex-1">
+                <div className="flex-1" onClick={handleGoBack}>
                   <Button
                     text="Go Back"
                     className="w-[148px] h-[48px] justify-between text-[#10B981] rounded-[8px] border-[1px] border-[#10B981]"
