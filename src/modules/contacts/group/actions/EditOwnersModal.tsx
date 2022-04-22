@@ -49,7 +49,7 @@ export default function EditOwners({ isClose }: EditOwnerModalProps) {
           <XIcon />
         </button>
         <p className="flex justify-center text-[24px] font-medium pb-6">
-          Edit Members
+          Edit Owners
         </p>
         <FetchingLimitMembers
           tab="OWNER"

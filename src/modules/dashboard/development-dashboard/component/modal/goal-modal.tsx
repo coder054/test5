@@ -2,12 +2,14 @@ import { MenuItem } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { ReactNode, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useMutation, useQuery } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Button, MyDatePicker, MyInput } from 'src/components'
 import { XIcon } from 'src/components/icons'
 import { ListImageVideo } from 'src/components/list-image-video'
+import { ModalMui } from 'src/components/ModalMui'
 import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
+import { PopupConfirmDelete } from 'src/components/popup-confirm-delete'
 import { UploadMutilImageVideo } from 'src/components/upload-mutil-image-video'
 import { CategoryOptions } from 'src/constants/options'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
@@ -24,7 +26,6 @@ import {
 interface GoalModalProps {
   setIsOpenModal?: (open: boolean) => void
   setOpenModalGoal?: (open: boolean) => void
-  setCheckUpdate?: (check: boolean) => void
   item?: DashboardGoalUpdateType
   update?: boolean
   create?: boolean
@@ -33,7 +34,6 @@ interface GoalModalProps {
 
 export const GoalModal = ({
   item,
-  setCheckUpdate,
   setIsOpenModal,
   setOpenModalGoal,
   update,
@@ -45,12 +45,15 @@ export const GoalModal = ({
   const [showUrl, setShowUrl] = useState('')
   const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false)
   const [isOpenModal, setIsOpenModalImg] = useState<boolean>(false)
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false)
+
+  const queryClient = useQueryClient()
   const [formValues, setFormValues] = useState<DashboardGoalUpdateType>({
     typeOfPost: '',
     userType: '',
     updatedAt: 0,
     description: '',
-    createdAt: dayjs(new Date()).unix() * 1000,
+    createdAt: dayjs(new Date()).format('YYYY/MM/DD'),
     headline: '',
     deadline: '',
     mediaLinks: [],
@@ -66,9 +69,9 @@ export const GoalModal = ({
     updatePersonalGoal,
     {
       onSuccess: (res) => {
-        setIsOpenModal(false)
         toast.success(res.data.message)
-        setCheckUpdate(true)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.UPDATE_PERSONAL_GOAL)
+        setIsOpenModal(false)
       },
     }
   )
@@ -78,11 +81,9 @@ export const GoalModal = ({
     createPersonalGoal,
     {
       onSuccess: (res) => {
-        console.log('res create:', res)
-
-        setIsOpenModal(false)
         toast.success(res.data.message)
-        setCheckUpdate(true)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.UPDATE_PERSONAL_GOAL)
+        setIsOpenModal(false)
       },
     }
   )
@@ -93,9 +94,9 @@ export const GoalModal = ({
     {
       onSuccess: (res) => {
         if (res.status === 200) {
-          setIsOpenModal(false)
           toast.success(res.data.message)
-          setCheckUpdate(true)
+          queryClient.invalidateQueries(QUERIES_DASHBOARD.UPDATE_PERSONAL_GOAL)
+          setIsOpenModal(false)
         }
       },
     }
@@ -162,6 +163,10 @@ export const GoalModal = ({
   }
 
   const handleRemove = () => {
+    setIsOpenModalDelete(true)
+  }
+
+  const handleConfirmDelete = () => {
     try {
       removePersonal(formValues.personalGoalId)
     } catch (error) {}
@@ -180,7 +185,7 @@ export const GoalModal = ({
       </div>
 
       <div className="w-full grid grid-cols-4 mt-[12px] mb-[12px]">
-        <p className="text-[18px] font-bold col-span-1">Health update</p>
+        <p className="text-[18px] font-bold col-span-1">Goal update</p>
         <div className="col-span-3 space-y-[24px]">
           <MyInput
             label="Headline"
@@ -285,6 +290,12 @@ export const GoalModal = ({
           </div>
         </div>
       </div>
+      <ModalMui isOpen={isOpenModalDelete} onClose={setIsOpenModalDelete}>
+        <PopupConfirmDelete
+          handleConfirmDelete={handleConfirmDelete}
+          setIsOpenModal={setIsOpenModalDelete}
+        />
+      </ModalMui>
     </div>
   )
 }

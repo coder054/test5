@@ -3,9 +3,9 @@ import { Fragment } from 'react'
 import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
 import { Friends } from 'src/modules/contacts/Friends'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
-import CreateNew from './components/modals/ModalCreateGroup'
-import FetchingTemplate from './components/fetchs/FetchingTemplate'
 import FetchingContactAll from './components/fetchs/FetchingContactAll'
+import FetchingTemplate from './components/fetchs/FetchingTemplate'
+import CreateNew from './components/modals/ModalCreateGroup'
 
 const tabs = [
   { label: 'Friends', value: 'friends' },

@@ -387,7 +387,7 @@ export interface DashboardHealthUpdateType {
   updatedAt: number
   systolicBloodPressure: number
   diastolicBloodPressure: number
-  date: string
+  date: string | number | Date
   breastSkinThickness: number
   media: string[]
   thighSkinThickness: number
@@ -404,7 +404,7 @@ export interface DashboardGoalUpdateType {
   userType: string
   updatedAt: number
   description: string
-  createdAt: number
+  createdAt: number | string | Date
   headline: string
   deadline: string
   mediaLinks: any

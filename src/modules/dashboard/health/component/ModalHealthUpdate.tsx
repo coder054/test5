@@ -3,52 +3,62 @@ import TextArea from 'antd/lib/input/TextArea'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import { Button, ModalShowImage, MyDatePicker, MyInput } from 'src/components'
 import { CloseIcon, XIcon } from 'src/components/icons'
 import { ListImageVideo } from 'src/components/list-image-video'
 import { ModalShowVideo } from 'src/components/modal-show-video'
+import { ModalMui } from 'src/components/ModalMui'
 import { MyModal } from 'src/components/MyModal'
 import { MySelect } from 'src/components/MySelect'
 import { MyTextArea } from 'src/components/MyTextarea'
+import { PopupConfirmDelete } from 'src/components/popup-confirm-delete'
 import { UploadMutilImageVideo } from 'src/components/upload-mutil-image-video'
+import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { DashboardHealthUpdateType } from 'src/constants/types'
 import { useIncrementNumber } from 'src/hooks/useIncrementNumber'
-import { postHealth, removeHealth } from 'src/service/dashboard/health.service'
+import {
+  createHealth,
+  postHealth,
+  removeHealth,
+} from 'src/service/dashboard/health.service'
 
 interface ModalHealthUpdateProps {
   setIsOpenModal?: (open: boolean) => void
   setCheckUpdate?: (check: boolean) => void
   item?: DashboardHealthUpdateType
+  create?: boolean
 }
 
 export const ModalHealthUpdate = ({
   item,
+  create,
   setCheckUpdate,
   setIsOpenModal,
 }: ModalHealthUpdateProps) => {
+  const queryClient = useQueryClient()
   const [arrayFile, setArrayFile] = useState([])
   const [medias, setMedias] = useState([])
   const [showUrl, setShowUrl] = useState('')
   const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false)
-  const [isOpenModal, setIsOpenModalImg] = useState<boolean>(false)
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false)
   const [formValues, setFormValues] = useState<DashboardHealthUpdateType>({
     healthId: '',
     userId: '',
-    weight: 0,
-    waistSkinsThickness: 0,
-    height: 0,
+    weight: 65,
+    waistSkinsThickness: 12,
+    height: 165,
     updatedAt: 0,
-    systolicBloodPressure: 0,
-    diastolicBloodPressure: 0,
-    date: '',
-    breastSkinThickness: 0,
+    systolicBloodPressure: 120,
+    diastolicBloodPressure: 80,
+    date: dayjs(new Date()).format('YYYY/MM/DD'),
+    breastSkinThickness: 12,
     media: [''],
-    thighSkinThickness: 0,
+    thighSkinThickness: 12,
     otherDescription: '',
-    restingPulse: 0,
+    restingPulse: 64,
     createdAt: 0,
-    maxPulse: 0,
+    maxPulse: 200,
     bmi: 0,
     fat: 0,
   })
@@ -105,12 +115,23 @@ export const ModalHealthUpdate = ({
     meanSure: 'mmHg',
   })
 
+  const { mutate: CreateHealth } = useMutation(createHealth, {
+    onSuccess: (res) => {
+      if (res.status === 201) {
+        toast.success(res.data.message)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.HEALTH_DATA)
+        setIsOpenModal(false)
+      }
+    },
+  })
+
   const { mutate: PostHealth, isLoading: loadingHealth } = useMutation(
     postHealth,
     {
       onSuccess: (res) => {
         if (res.status === 200) {
           toast.success(res.data.message)
+          queryClient.invalidateQueries(QUERIES_DASHBOARD.HEALTH_DATA)
           setLoadingUpdate(false)
           setIsOpenModal(false)
           setCheckUpdate(true)
@@ -122,6 +143,7 @@ export const ModalHealthUpdate = ({
     onSuccess: (res) => {
       if (res.status === 200) {
         toast.success(res.data.message)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.HEALTH_DATA)
         setIsOpenModal(false)
         setCheckUpdate(true)
       }
@@ -173,12 +195,20 @@ export const ModalHealthUpdate = ({
       media: medias,
     }
 
-    try {
-      PostHealth({
-        docId: item.healthId && item.healthId,
-        body: { ...valuePost },
-      })
-    } catch (error) {}
+    if (create) {
+      try {
+        CreateHealth({
+          body: { ...valuePost },
+        })
+      } catch (error) {}
+    } else {
+      try {
+        PostHealth({
+          docId: item.healthId && item.healthId,
+          body: { ...valuePost },
+        })
+      } catch (error) {}
+    }
 
     loadingUpdate &&
       setTimeout(() => {
@@ -187,6 +217,10 @@ export const ModalHealthUpdate = ({
   }
 
   const handleDelete = () => {
+    setIsOpenModalDelete(true)
+  }
+
+  const handleConfirmDelete = () => {
     try {
       RemoveHealth(item.healthId && item.healthId)
     } catch (error) {}
@@ -224,6 +258,7 @@ export const ModalHealthUpdate = ({
             label="Height"
             value={formValues.height}
             onChange={(e) => handleChangeForm('height', e.target.value)}
+            defaultValue={'165'}
           >
             {heightOptions.map((i, index) => (
               <MenuItem key={index} value={i.value}>
@@ -371,7 +406,6 @@ export const ModalHealthUpdate = ({
           <ListImageVideo
             arrayFile={arrayFile}
             setArrayFile={setArrayFile}
-            setIsOpenModal={setIsOpenModalImg}
             handleShow={handleShow}
           />
           <div className="w-full flex mt-[24px]">
@@ -382,21 +416,31 @@ export const ModalHealthUpdate = ({
                 className="w-[148px] h-[48px] justify-between bg-[#4654EA] hover:bg-[#6470f3] rounded-[8px]"
               />
             </div>
-            <div className="flex-1">
-              <Button
-                text="Go Back"
-                className="w-[148px] h-[48px] justify-between text-[#10B981] rounded-[8px] border-[1px] border-[#10B981]"
-              />
-            </div>
-            <div className="flex-1" onClick={handleDelete}>
-              <Button
-                text="Delete"
-                className="w-[148px] h-[48px] justify-between bg-[#D60C0C] hover:bg-[#eb4848] text-[#ffffff] rounded-[8px]"
-              />
-            </div>
+            {!create && (
+              <>
+                <div className="flex-1">
+                  <Button
+                    text="Go Back"
+                    className="w-[148px] h-[48px] justify-between text-[#10B981] rounded-[8px] border-[1px] border-[#10B981]"
+                  />
+                </div>
+                <div className="flex-1" onClick={handleDelete}>
+                  <Button
+                    text="Delete"
+                    className="w-[148px] h-[48px] justify-between bg-[#D60C0C] hover:bg-[#eb4848] text-[#ffffff] rounded-[8px]"
+                  />
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
+      <ModalMui isOpen={isOpenModalDelete} onClose={setIsOpenModalDelete}>
+        <PopupConfirmDelete
+          handleConfirmDelete={handleConfirmDelete}
+          setIsOpenModal={setIsOpenModalDelete}
+        />
+      </ModalMui>
     </div>
   )
 }
