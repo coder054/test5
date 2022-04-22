@@ -364,6 +364,10 @@ export const ItemNotification = ({
         return `/contacts/team/${notification.teamId}`
         break
 
+      case NotificationType.UPGRADE_GROUP_MEMBER_TYPE:
+        return `/contacts/group/${notification.groupId}`
+        break
+
       case NotificationType.ASK_JOIN_TEAM:
         return `#`
         break
