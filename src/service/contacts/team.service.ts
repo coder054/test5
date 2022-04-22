@@ -54,7 +54,7 @@ export const requestToJoinTeam = async (teamId: string | string[]) => {
 }
 
 export const cancelRequestJoinTeam = async (teamId: string | string[]) => {
-  return await axios.delete(`teans/${teamId}/cancel-request-join-team`)
+  return await axios.delete(`teams/${teamId}/cancel-request-join-team`)
 }
 
 export const joinTeam = async ({ teamId }: { teamId: string | string[] }) => {

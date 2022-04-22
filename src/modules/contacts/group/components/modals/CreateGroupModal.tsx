@@ -49,8 +49,8 @@ export default function CreateGroupModal({
   const { mutate: mutateCreate, isLoading: isCreating } = useMutation(
     createGroup,
     {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(QUERIES_CONTACTS.CONTACT_GROUP)
+      onSuccess: () => {
+        queryClient.invalidateQueries(QUERIES_CONTACTS.CONTACT_GROUP)
         toast.success('Group successfully created')
         isClose('')
       },

@@ -49,7 +49,7 @@ export default function EditAdmins({ isClose }: EditAdminModalProps) {
           <XIcon />
         </button>
         <p className="flex justify-center text-[24px] font-medium pb-6">
-          Edit Members
+          Edit Admins
         </p>
         <FetchingLimitMembers
           tab="ADMIN"

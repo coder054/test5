@@ -18,6 +18,7 @@ import SkeletonContact from '../card-template/SkeletonContact'
 import { Sort } from '../Sort'
 import { FilterTeam } from '../../team/components/Filter'
 import { MemberCard } from '../../team/components/MemberCard'
+import { AllMemberCard } from '../cards/AllMemberCard'
 
 type FetchingTemplateProps = {
   tab: ContactsTabType
@@ -154,7 +155,7 @@ export default function FetchingContactAll({
             {(data?.pages || []).map((page, index) => (
               <Fragment key={index}>
                 {page.data.map((item: any, index: number) => (
-                  <MemberCard key={index} member={item} />
+                  <AllMemberCard key={index} member={item} />
                 ))}
               </Fragment>
             ))}
