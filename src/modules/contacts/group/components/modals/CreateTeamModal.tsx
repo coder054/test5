@@ -84,11 +84,11 @@ export default function CreateTeamModal({ isClose }: CreateGroupModalProps) {
         >
           <XIcon />
         </button>
-        <p className="text-[24px] font-medium pb-6">Create New Group</p>
+        <p className="text-[24px] font-medium pb-6">Create New Team</p>
         <div className="space-y-6 w-full">
           <MyInput label="Club name" defaultValue={club?.clubName} isDisabled />
           <MyInput
-            label="Group name"
+            label="Team name"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleChangeForm('teamName', e.target.value)
             }
@@ -110,7 +110,7 @@ export default function CreateTeamModal({ isClose }: CreateGroupModalProps) {
             />
           </div>
           <div className="flex items-center">
-            <p className="16px font-semibold">Private group</p>
+            <p className="16px font-semibold">Private team</p>
             <MySwitchButton
               onChange={(_, value) => handleChangeForm('isPrivate', value)}
               name="messageUpdates"

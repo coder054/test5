@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
 import { QueryParamsAtom } from 'src/atoms/QueryParams'
 import { Button } from 'src/components/Button'
+import { ModalMui } from 'src/components/ModalMui'
 import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
 import { GroupType } from 'src/constants/types/contacts.types'
 import {
@@ -14,16 +15,14 @@ import {
   requestToJoinGroup,
 } from 'src/service/contacts/group.service'
 import { safeHttpImage } from 'src/utils/utils'
-import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 import FloatingButton from '../components/modals/FloatingButton'
 import DeleteGroup from './actions/DeleteGroup'
-import LeaveGroup from './actions/LeaveGroup'
 import EditAdmins from './actions/EditAdminsModal'
 import EditGroupModal from './actions/EditGroupModal'
 import EditMembers from './actions/EditMembersModal'
 import EditOwners from './actions/EditOwnersModal'
+import LeaveGroup from './actions/LeaveGroup'
 import GroupMember from './GroupMember'
-import { ModalMui } from 'src/components/ModalMui'
 
 const tabs = [
   { label: 'Members', value: 'members' },

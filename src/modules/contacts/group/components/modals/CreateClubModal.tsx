@@ -68,7 +68,7 @@ export default function CreateClubModal({ isClose }: CreateGroupClubProps) {
         >
           <XIcon />
         </button>
-        <p className="text-[24px] font-medium pb-6">Create New Group</p>
+        <p className="text-[24px] font-medium pb-6">Create New Club</p>
         <div className="space-y-6 w-full">
           <MyInput
             label="Club name"
