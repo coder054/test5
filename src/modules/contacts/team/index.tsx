@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
 import { QueryParamsAtom } from 'src/atoms/QueryParams'
 import { Button } from 'src/components/Button'
+import { ModalMui } from 'src/components/ModalMui'
 import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
 import { TeamType } from 'src/constants/types/settingsType.type'
 import {
@@ -14,15 +15,14 @@ import {
   requestToJoinTeam,
 } from 'src/service/contacts/team.service'
 import { safeHttpImage } from 'src/utils/utils'
-import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 import FloatingButton from '../components/modals/FloatingButton'
-import EditAdmins from './actions/EditAdminsModal'
 import DeleteTeam from './actions/DeleteTeam'
+import EditAdmins from './actions/EditAdminsModal'
 import EditMembers from './actions/EditMembersModal'
+import EditOwners from './actions/EditOwnersModal'
 import EditTeamModal from './actions/EditTeamModal'
 import LeaveTeam from './actions/LeaveTeam'
 import TeamMembers from './components/TeamMembers'
-import EditOwners from './actions/EditOwnersModal'
 
 const tabs = [
   { label: 'Members', value: 'members' },
@@ -72,10 +72,13 @@ const TeamProfile = ({ team }: TeamProfileProps) => {
   const queryClient = useQueryClient()
   const [_, setQuery] = useAtom(QueryParamsAtom)
   const [currentModal, setCurrentModal] = useState<string>('')
-  const [currentTab, setCurrentTab] = useQueryParam(
-    'g',
-    withDefault(StringParam, 'members')
-  )
+  const [isOpenBackground, setIsOpenBackground] = useState<boolean>(false)
+  // const [currentTab, setCurrentTab] = useQueryParam(
+  //   'g',
+  //   withDefault(StringParam, 'members')
+  // )
+
+  const [currentTab, setCurrentTab] = useState<string>('members')
 
   useEffect(() => {
     setQuery(currentTab)
@@ -111,7 +114,8 @@ const TeamProfile = ({ team }: TeamProfileProps) => {
     }
   )
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: React.MouseEvent<HTMLInputElement>) => {
+    event.stopPropagation()
     if (REQUEST_STATUS.value === 'join') {
       mutateRequest(teamId)
     }
@@ -144,6 +148,8 @@ const TeamProfile = ({ team }: TeamProfileProps) => {
     return ['OWNER', 'ADMIN'].includes(team.memberType)
   }, [team.memberType])
 
+  console.log('TEAM: ', team.memberType, ROLE_RIGHTS)
+
   const ROLE_TABS = useMemo(() => {
     if (['MEMBER', 'PENDING', 'NOT_A_MEMBER'].includes(team.memberType)) {
       return tabs.filter((tab) => !['blocked', 'requested'].includes(tab.value))
@@ -168,7 +174,27 @@ const TeamProfile = ({ team }: TeamProfileProps) => {
 
   return (
     <Fragment>
-      <div className="relative">
+      <ModalMui
+        isOpen={isOpenBackground}
+        sx={{
+          top: '50%',
+          width: '80%',
+          height: '80%',
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+        onClose={setIsOpenBackground}
+      >
+        <img
+          className="max-w-full h-full items-center"
+          src={team.teamImage ? safeHttpImage(team.teamImage) : '/favicon.png'}
+        />
+      </ModalMui>
+      <button
+        type="button"
+        onClick={() => setIsOpenBackground(true)}
+        className="relative block w-full"
+      >
         <img
           className="w-full h-[400px] object-cover object-center"
           src={team.teamImage ? safeHttpImage(team.teamImage) : '/favicon.png'}
@@ -188,15 +214,15 @@ const TeamProfile = ({ team }: TeamProfileProps) => {
                 type="button"
                 label={REQUEST_STATUS?.label}
               />
-              <Button
+              {/* <Button
                 className="text-[#09E099] h-[50px] border-2 border-[#09E099] w-[220px] rounded-lg"
                 type="button"
                 label="Follow"
-              />
+              /> */}
             </div>
           )}
         </div>
-      </div>
+      </button>
       <Fragment>
         {currentModal === 'owner' && <EditOwners isClose={setCurrentModal} />}
         {currentModal === 'admin' && <EditAdmins isClose={setCurrentModal} />}

@@ -15,6 +15,7 @@ interface CardProps {
   rounded?: boolean
   commonOptions?: ReactElement
   dropdownOptions?: ReactElement
+  onClick?: () => void
 }
 
 export default function Card({
@@ -25,6 +26,7 @@ export default function Card({
   city,
   club,
   rounded,
+  onClick,
   commonOptions,
   dropdownOptions,
 }: CardProps) {
@@ -33,15 +35,17 @@ export default function Card({
   const id = open ? 'simple-popover' : undefined
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
     setAnchorEl(event.currentTarget)
   }
 
-  const handleClose = () => {
+  const handleClose = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
     setAnchorEl(null)
   }
 
   return (
-    <div className={clsx(CARD.CARD)}>
+    <button type="button" className={clsx(CARD.CARD)} onClick={onClick}>
       <div className="grid grid-cols-12 gap-x-11">
         <div className="flex space-x-4 col-span-4">
           <img
@@ -90,6 +94,6 @@ export default function Card({
           )}
         </div>
       </div>
-    </div>
+    </button>
   )
 }

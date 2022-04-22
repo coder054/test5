@@ -56,9 +56,10 @@ const reduceChildRoutes = ({
   item: Item
   path: string
 }): Array<JSX.Element> => {
+  const getPath = path.split('?')[0]
   const key = `${item.title}-${depth}`
   const partialMatch = path.includes(item.path)
-  const exactMatch = path === item.path
+  const exactMatch = getPath.includes(item.path)
 
   if (item.children) {
     acc.push(
