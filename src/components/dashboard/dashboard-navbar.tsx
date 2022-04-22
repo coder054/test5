@@ -1,4 +1,5 @@
 import type { AppBarProps } from '@mui/material'
+import queryString from 'query-string'
 import { isEmpty } from 'lodash'
 import {
   AppBar,
@@ -24,7 +25,12 @@ import { useTranslation } from 'react-i18next'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
-import { dataModalResponseGroupAtom } from 'src/atoms/notiAtoms'
+import {
+  dataModalResponseGroupAtom,
+  dataModalResponseTeamAtom,
+  dataModalResponseDeleteFromTeamAtom,
+  dataModalResponseNotWantToBeDeletedFromTeamAtom,
+} from 'src/atoms/notiAtoms'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import DiaryUpdate from 'src/modules/update-diary'
 import { getErrorMessage, safeAvatar } from 'src/utils/utils'
@@ -56,15 +62,15 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   ...(theme.palette.mode === 'light'
     ? {
-      boxShadow: theme.shadows[3],
-    }
+        boxShadow: theme.shadows[3],
+      }
     : {
-      backgroundColor: theme.palette.background.paper,
-      borderBottomColor: theme.palette.divider,
-      borderBottomStyle: 'solid',
-      borderBottomWidth: 1,
-      boxShadow: 'none',
-    }),
+        backgroundColor: theme.palette.background.paper,
+        borderBottomColor: theme.palette.divider,
+        borderBottomStyle: 'solid',
+        borderBottomWidth: 1,
+        boxShadow: 'none',
+      }),
 }))
 
 const LanguageButton = () => {
@@ -227,6 +233,9 @@ const NotificationsButton = () => {
   return (
     <>
       <ModalResponseGroup />
+      <ModalResponseTeam />
+      <ModalResponseDeleteFromTeam />
+      <ModalResponseNotWantToBeDeletedFromTeam />
       <Tooltip title="Notifications">
         <IconButton ref={anchorRef} sx={{ ml: 1 }} onClick={handleOpenPopover}>
           <Badge color="error" badgeContent={unread}>
@@ -587,7 +596,15 @@ export const ModalResponseGroup = (props) => {
         />
         <div className="h-[16px] "></div>
         <div className="font-Inter text-center ">
-          #Heltra added you to be a member of New group Is that correct?
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseGroup.title}
+          </div>
+
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseGroup.body}
+          </div>
         </div>
 
         {/*  */}
@@ -632,6 +649,379 @@ export const ModalResponseGroup = (props) => {
         <Button
           onClick={async () => {
             setDataModalResponseGroup({})
+          }}
+          fullWidth
+          size="large"
+          variant="contained"
+        >
+          Yes
+        </Button>
+      </div>
+    </Dialog>
+  )
+}
+
+export const ModalResponseTeam = (props) => {
+  const [dataModalResponseTeam, setDataModalResponseTeam] = useAtom(
+    dataModalResponseTeamAtom
+  )
+  return (
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      onClose={() => {
+        setDataModalResponseTeam({})
+      }}
+      open={!isEmpty(dataModalResponseTeam)}
+    >
+      <Box
+        sx={{
+          alignItems: 'center',
+          backgroundColor: 'primary.main',
+          color: 'primary.contrastText',
+          display: 'flex',
+          justifyContent: 'space-between',
+          px: 3,
+          py: 2,
+        }}
+      >
+        <Typography variant="h6">Zporter</Typography>
+        <IconButton
+          color="inherit"
+          onClick={() => {
+            setDataModalResponseTeam({})
+          }}
+        >
+          <XIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      <DialogContent
+        sx={{
+          height: 500,
+        }}
+      >
+        {/*  */}
+
+        <img
+          //@ts-ignore: Unreachable code error
+          src={dataModalResponseTeam.img}
+          className=" w-[320px] h-auto block mx-auto "
+          alt=""
+        />
+        <div className="h-[16px] "></div>
+        <div className="font-Inter text-center ">
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseTeam.title}
+          </div>
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseTeam.body}
+          </div>
+        </div>
+
+        {/*  */}
+      </DialogContent>
+
+      <div className="flex mt-4 px-[24px] mb-[20px] ">
+        <Button
+          onClick={async () => {
+            try {
+              const { data } = await axios.delete(
+                //@ts-ignore: Unreachable code error
+                `/teams/${dataModalResponseTeam.idTeam}/leave-team`
+              )
+              notiToast({
+                message: 'Leave team',
+                type: 'success',
+              })
+            } catch (error) {
+              let statusCode = error?.response?.data?.statusCode
+              if (statusCode === 404) {
+                notiToast({
+                  message: 'You are not already in the team.',
+                  type: 'error',
+                })
+              } else {
+                notiToast({
+                  message: getErrorMessage(error),
+                  type: 'error',
+                })
+              }
+            }
+
+            setDataModalResponseTeam({})
+          }}
+          fullWidth
+          size="large"
+          sx={{ mr: 2 }}
+          variant="outlined"
+        >
+          No
+        </Button>
+        <Button
+          onClick={async () => {
+            setDataModalResponseTeam({})
+          }}
+          fullWidth
+          size="large"
+          variant="contained"
+        >
+          Yes
+        </Button>
+      </div>
+    </Dialog>
+  )
+}
+
+export const ModalResponseDeleteFromTeam = (props) => {
+  const [dataModalResponseDeleteFromTeam, setDataModalResponseDeleteFromTeam] =
+    useAtom(dataModalResponseDeleteFromTeamAtom)
+  return (
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      onClose={() => {
+        setDataModalResponseDeleteFromTeam({})
+      }}
+      open={!isEmpty(dataModalResponseDeleteFromTeam)}
+    >
+      <Box
+        sx={{
+          alignItems: 'center',
+          backgroundColor: 'primary.main',
+          color: 'primary.contrastText',
+          display: 'flex',
+          justifyContent: 'space-between',
+          px: 3,
+          py: 2,
+        }}
+      >
+        <Typography variant="h6">Zporter</Typography>
+        <IconButton
+          color="inherit"
+          onClick={() => {
+            setDataModalResponseDeleteFromTeam({})
+          }}
+        >
+          <XIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      <DialogContent
+        sx={{
+          height: 500,
+        }}
+      >
+        {/*  */}
+
+        <img
+          //@ts-ignore: Unreachable code error
+          src={dataModalResponseDeleteFromTeam.img}
+          className=" w-[320px] h-auto block mx-auto "
+          alt=""
+        />
+        <div className="h-[16px] "></div>
+        <div className="font-Inter text-center ">
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseDeleteFromTeam.title}
+          </div>
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseDeleteFromTeam.body}
+          </div>
+        </div>
+
+        {/*  */}
+      </DialogContent>
+
+      <div className="flex mt-4 px-[24px] mb-[20px] ">
+        <Button
+          onClick={() => {
+            setDataModalResponseDeleteFromTeam({})
+          }}
+          fullWidth
+          size="large"
+          sx={{ mr: 2 }}
+          variant="outlined"
+        >
+          No
+        </Button>
+        <Button
+          onClick={async () => {
+            try {
+              const {
+                teamId,
+                memberId,
+                memberConfirm,
+                oldMemberType,
+                confirmType,
+              } = dataModalResponseDeleteFromTeam as any
+
+              const params = {
+                teamId,
+                memberId,
+                memberConfirm,
+                oldMemberType,
+                confirmType,
+              }
+
+              const { data } = await axios.post(
+                `/teams/confirm-block-or-delete-in-a-team?${queryString.stringify(
+                  params
+                )}`
+              )
+              notiToast({
+                message: data,
+                type: 'success',
+              })
+            } catch (error) {
+              let statusCode = error?.response?.data?.statusCode
+              if (statusCode === 404) {
+                notiToast({
+                  message: 'You are not already in the team.',
+                  type: 'error',
+                })
+              } else {
+                notiToast({
+                  message: getErrorMessage(error),
+                  type: 'error',
+                })
+              }
+            }
+            setDataModalResponseDeleteFromTeam({})
+          }}
+          fullWidth
+          size="large"
+          variant="contained"
+        >
+          Yes
+        </Button>
+      </div>
+    </Dialog>
+  )
+}
+export const ModalResponseNotWantToBeDeletedFromTeam = (props) => {
+  const [
+    dataModalResponseNotWantToBeDeletedFromTeam,
+    setDataModalResponseNotWantToBeDeletedFromTeam,
+  ] = useAtom(dataModalResponseNotWantToBeDeletedFromTeamAtom)
+  return (
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      onClose={() => {
+        setDataModalResponseNotWantToBeDeletedFromTeam({})
+      }}
+      open={!isEmpty(dataModalResponseNotWantToBeDeletedFromTeam)}
+    >
+      <Box
+        sx={{
+          alignItems: 'center',
+          backgroundColor: 'primary.main',
+          color: 'primary.contrastText',
+          display: 'flex',
+          justifyContent: 'space-between',
+          px: 3,
+          py: 2,
+        }}
+      >
+        <Typography variant="h6">Zporter</Typography>
+        <IconButton
+          color="inherit"
+          onClick={() => {
+            setDataModalResponseNotWantToBeDeletedFromTeam({})
+          }}
+        >
+          <XIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      <DialogContent
+        sx={{
+          height: 500,
+        }}
+      >
+        {/*  */}
+
+        <img
+          //@ts-ignore: Unreachable code error
+          src={dataModalResponseNotWantToBeDeletedFromTeam.img}
+          className=" w-[320px] h-auto block mx-auto "
+          alt=""
+        />
+        <div className="h-[16px] "></div>
+        <div className="font-Inter text-center ">
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseNotWantToBeDeletedFromTeam.title}
+          </div>
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseNotWantToBeDeletedFromTeam.body}
+          </div>
+        </div>
+
+        {/*  */}
+      </DialogContent>
+
+      <div className="flex mt-4 px-[24px] mb-[20px] ">
+        <Button
+          onClick={() => {
+            setDataModalResponseNotWantToBeDeletedFromTeam({})
+          }}
+          fullWidth
+          size="large"
+          sx={{ mr: 2 }}
+          variant="outlined"
+        >
+          No
+        </Button>
+        <Button
+          onClick={async () => {
+            try {
+              const {
+                teamId,
+                memberId,
+                memberConfirm,
+                oldMemberType,
+                confirmType,
+              } = dataModalResponseNotWantToBeDeletedFromTeam as any
+
+              const params = {
+                teamId,
+                memberId,
+                memberConfirm,
+                oldMemberType,
+                confirmType,
+              }
+
+              const { data } = await axios.post(
+                `/teams/confirm-block-or-delete-in-a-team?${queryString.stringify(
+                  params
+                )}`
+              )
+              notiToast({
+                message: data,
+                type: 'success',
+              })
+            } catch (error) {
+              let statusCode = error?.response?.data?.statusCode
+              if (statusCode === 404) {
+                notiToast({
+                  message: 'You are not already in the team.',
+                  type: 'error',
+                })
+              } else {
+                notiToast({
+                  message: getErrorMessage(error),
+                  type: 'error',
+                })
+              }
+            }
+            setDataModalResponseNotWantToBeDeletedFromTeam({})
           }}
           fullWidth
           size="large"

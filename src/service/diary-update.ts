@@ -16,7 +16,7 @@ export const fetchDiary = async (date?: string | Date, roleName?: string) => {
       return res.data
     })
     .catch(() => {
-      toast.error('An error has occurred')
+      toast.error('Something went wrong')
     })
 }
 
@@ -27,7 +27,7 @@ export const fetchMember = async (teamId: string) => {
       return res.data
     })
     .catch(() => {
-      toast.error('An error has occurred')
+      toast.error('Something went wrong')
     })
 }
 
@@ -38,7 +38,7 @@ export const fetchSettings = async (roleName?: string) => {
       return res.data
     })
     .catch(() => {
-      toast.error('An error has occurred')
+      toast.error('Something went wrong')
     })
 }
 
@@ -60,7 +60,7 @@ export const createDiary = async ({
 export const deleteDiary = async (id: string) => {
   return await axios
     .delete(`diaries/delete-diary/${id}`)
-    .catch(() => toast.error('An error has occurred'))
+    .catch(() => toast.error('Something went wrong'))
 }
 
 export const updateDiary = async ({

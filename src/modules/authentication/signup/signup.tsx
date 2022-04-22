@@ -118,7 +118,7 @@ export const SignUp = () => {
       //@ts-ignore: Unreachable code error
       window.confirmationResult = confirmationResult
     } catch (error) {
-      toast.error('An error has occurred')
+      toast.error('Something went wrong')
     }
   }
 
@@ -134,7 +134,7 @@ export const SignUp = () => {
       updateEmail(user, email)
       updatePassword(user, password)
     } catch (error) {
-      toast.error('An error has occurred')
+      toast.error('Something went wrong')
     }
   }
 
@@ -258,11 +258,11 @@ export const SignUp = () => {
 
                     await sendPhone(phoneFormPhoneSignUp)
                   } catch (error) {
-                    toast.error('An error has occurred')
+                    toast.error('Something went wrong')
                   }
                 }}
                 onFinishFailed={(errorInfo: any) => {
-                  toast.error('An error has occurred')
+                  toast.error('Something went wrong')
                   return
                 }}
               >

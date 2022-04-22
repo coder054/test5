@@ -24,7 +24,11 @@ import PropTypes from 'prop-types'
 import type { FC } from 'react'
 import { useState, useEffect, useMemo } from 'react'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
-import { dataModalResponseGroupAtom } from 'src/atoms/notiAtoms'
+import {
+  dataModalResponseGroupAtom,
+  dataModalResponseTeamAtom,
+  dataModalResponseDeleteFromTeamAtom,
+} from 'src/atoms/notiAtoms'
 import { notiToast } from 'src/components/common/Toast'
 import { MySelectCountry } from 'src/components/MySelectCountry'
 import { optionAllClub } from 'src/constants/mocks/clubs.constans'
@@ -214,6 +218,10 @@ export const ItemNotification = ({
   )
 
   const [, setDataModalResponseGroup] = useAtom(dataModalResponseGroupAtom)
+  const [, setDataModalResponseTeam] = useAtom(dataModalResponseTeamAtom)
+  const [, setDataModalResponseDeleteFromTeam] = useAtom(
+    dataModalResponseDeleteFromTeamAtom
+  )
 
   // here render icon noti
   const renderIcon = () => {
@@ -352,6 +360,10 @@ export const ItemNotification = ({
         return `#`
         break
 
+      case NotificationType.UPGRADE_TEAM_MEMBER_TYPE:
+        return `/contacts/team/${notification.teamId}`
+        break
+
       case NotificationType.ASK_JOIN_TEAM:
         return `#`
         break
@@ -403,6 +415,57 @@ export const ItemNotification = ({
                   //@ts-ignore: Unreachable code error
                   idGroup: notification.groupId,
                   img: notification.largeIcon,
+                  body: notification.body,
+                  title: notification.title,
+                })
+              } else if (
+                notification.notificationType ===
+                NotificationType.INVITE_MEMBER_TEAM
+              ) {
+                setDataModalResponseTeam({
+                  //@ts-ignore: Unreachable code error
+                  idTeam: notification.teamId,
+                  img: notification.largeIcon,
+                  body: notification.body,
+                  title: notification.title,
+                })
+              } else if (
+                notification.notificationType ===
+                NotificationType.DELETE_MEMBER_TEAM
+              ) {
+                setDataModalResponseDeleteFromTeam({
+                  //@ts-ignore: Unreachable code error
+                  teamId: notification.teamId,
+                  img: notification.largeIcon,
+                  body: notification.body,
+                  title: notification.title,
+                  confirmType: getStr(notification, 'nextNotificationType'),
+                  memberConfirm: getStr(notification, 'memberConfirm'),
+
+                  memberId:
+                    getStr(notification, 'memberConfirm') === 'ADMIN'
+                      ? notification.senderId
+                      : null,
+                  oldMemberType: getStr(notification, 'oldMemberType'),
+                })
+              } else if (
+                notification.notificationType ===
+                NotificationType.MEMBER_CONFIRM_DELETE_MEMBER_TEAM
+              ) {
+                setDataModalResponseDeleteFromTeam({
+                  //@ts-ignore: Unreachable code error
+                  teamId: notification.teamId,
+                  img: notification.largeIcon,
+                  body: notification.body,
+                  title: notification.title,
+                  confirmType: getStr(notification, 'nextNotificationType'),
+                  memberConfirm: getStr(notification, 'memberConfirm'),
+
+                  memberId:
+                    getStr(notification, 'memberConfirm') === 'ADMIN'
+                      ? notification.senderId
+                      : null,
+                  oldMemberType: getStr(notification, 'oldMemberType'),
                 })
               }
 

@@ -1,8 +1,9 @@
+import clsx from 'clsx'
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage'
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { storage } from 'src/config/firebase-client'
 import { SvgCamera } from 'src/imports/svgs'
-import clsx from 'clsx'
 const cls = require('./upload-image.module.css')
 
 interface UploadImageProps {
@@ -31,6 +32,7 @@ export const CustomUploadImage = ({
 }: UploadImageProps) => {
   const [progress, setProgress] = useState<number>(0)
   const [url, setUrl] = useState<string>('')
+
   const handleChangeUpload = (event) => {
     const file = event.target.files[0]
     if (!file) return
@@ -38,13 +40,12 @@ export const CustomUploadImage = ({
     const uploadTask = uploadBytesResumable(storageRef, file)
     uploadTask.on(
       'state_changed',
-      (snapshot) => {
-        const prog = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        )
-        setProgress(prog)
-      },
-      function error(err) {},
+      // (snapshot) => {
+      //   const prog = Math.round(
+      //     (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      //   )
+      //   setProgress(prog)
+      // },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setUrl(url)

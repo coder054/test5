@@ -90,7 +90,7 @@ export const InfiniteScrollTeam = ({
               setItems(res.data)
             })
             .catch(() => {
-              toast.error('An error has occurred')
+              toast.error('Something went wrong')
             })
         }, 500)
     },
@@ -115,7 +115,7 @@ export const InfiniteScrollTeam = ({
         }
       })
       .catch(() => {
-        toast.error('An error has occurred')
+        toast.error('Something went wrong')
       })
   }
 
