@@ -46,11 +46,9 @@ export const TeamCard = ({ team }: TeamsCardProps) => {
       avatar={team?.teamImage}
       name={`${team.clubName} - ${team.teamName}`}
       users={team.usernames}
+      onClick={() => router.push(`/contacts/team/${team.teamId}`)}
       commonOptions={
-        <button
-          type="button"
-          onClick={() => router.push(`/contacts/team/${team.teamId}`)}
-        >
+        <button type="button">
           <ChervonRightIcon className="w-[25px] h-[25px] active:scale-125 duration-150" />
         </button>
       }
@@ -58,7 +56,10 @@ export const TeamCard = ({ team }: TeamsCardProps) => {
         HIGHEST_ROLE && (
           <>
             <DropdownButton
-              onClick={() => setIsOpenModal(true)}
+              onClick={(e) => {
+                e.stopPropagation()
+                setIsOpenModal(true)
+              }}
               label="Delete team"
               labelClass="text-[#D60C0C]"
               icon={<TrashCanIcon className="w-[20px] h-[20px]" />}

@@ -21,9 +21,11 @@ export default function EditMembers({ isClose }: EditMembersModalProps) {
 
   const { mutate: mutateEdit, isLoading: isEditing } = useMutation(editMember, {
     onSuccess: () => {
+      // setTimeout(() => {
       queryClient.invalidateQueries(QUERIES_CONTACTS.CONTACT_GROUP_MEMBER)
       toast.success('Members successfully edited')
       isClose('')
+      // }, 1000)
     },
     onError: () => {
       toast.error('Something went wrong')

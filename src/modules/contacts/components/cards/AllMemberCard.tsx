@@ -23,17 +23,15 @@ export const AllMemberCard = ({ member }: AllMemberCardProps) => {
         roles={member.favoriteRoles}
         city={member.city}
         club={member.clubName}
+        onClick={() =>
+          router.push(
+            `/${currentRoleName.toLowerCase()}/${member.username}/${
+              member.fullName
+            }`
+          )
+        }
         commonOptions={
-          <button
-            type="button"
-            onClick={() =>
-              router.push(
-                `/${currentRoleName.toLowerCase()}/${member.username}/${
-                  member.fullName
-                }`
-              )
-            }
-          >
+          <button type="button">
             <ChervonRightIcon className="w-[25px] h-[25px] active:scale-125 duration-150" />
           </button>
         }
