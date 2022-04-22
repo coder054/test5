@@ -139,7 +139,9 @@ export const Development = () => {
         />
       </div>
 
-      <div className={`${cls.item} col-span-7 h-[460px] p-[16px] md:p-[32px]`}>
+      <div
+        className={`${cls.item} col-span-12 lg:col-span-7 h-[460px] p-[16px] md:p-[32px]`}
+      >
         <Loading isLoading={loading}>
           <div className="w-full h-[400px] relative">
             <p className="text-[#A2A5AD] text-[12px] absolute top-[24px]">20</p>
@@ -161,7 +163,9 @@ export const Development = () => {
         </Loading>
       </div>
 
-      <div className={`col-span-5 ml-[20px] p-[16px] md:p-[32px] ${cls.item}`}>
+      <div
+        className={` col-span-12 lg:col-span-5 lg:ml-[20px] p-[16px] md:p-[32px] ${cls.item}`}
+      >
         <Loading isLoading={loading}>
           <DetailChart
             health
@@ -172,7 +176,7 @@ export const Development = () => {
         </Loading>
       </div>
 
-      <div className={`col-span-5 ${cls.item}`}>
+      <div className={` col-span-12 lg:col-span-5 ${cls.item}`}>
         <p className="pt-[32px] pl-[32px]">Goal updates</p>
         <SimpleBar style={{ maxHeight: 410 }}>
           <div className="pl-[16px] md:pl-[32px] pb-[16px] md:pb-[32px] pr-[16px] md:pr-[32px]">
@@ -181,7 +185,9 @@ export const Development = () => {
         </SimpleBar>
       </div>
 
-      <div className={`col-span-7 ml-[20px] ${cls.item} max-h-[523px]`}>
+      <div
+        className={` col-span-12 lg:col-span-7 ml-[20px] ${cls.item} max-h-[523px]`}
+      >
         <p className="pt-[32px] pl-[32px]">Development updates</p>
         <div className="mt-[24px] pl-[16px] md:pl-[32px] pb-[16px] md:pb-[32px] pr-[16px] md:pr-[32px]">
           <ListDevelopment />

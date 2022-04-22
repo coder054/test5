@@ -290,6 +290,10 @@ export const NoteModal = ({
     setIsOpenModalDelete(true)
   }
 
+  const handleGoback = () => {
+    setIsOpenModal && setIsOpenModal(false)
+  }
+
   const handleConfirmDelete = () => {
     try {
       RemoveNote(item.devTalkId)
@@ -485,7 +489,7 @@ export const NoteModal = ({
             </div>
             {update ? (
               <>
-                <div className="flex-1">
+                <div className="flex-1" onClick={handleGoback}>
                   <Button
                     text="Go Back"
                     className="w-[148px] h-[48px] justify-between text-[#10B981] rounded-[8px] border-[1px] border-[#10B981]"

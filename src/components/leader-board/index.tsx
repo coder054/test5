@@ -31,7 +31,7 @@ export const LeaderBoard = ({
         } `}
       >
         <div className="flex-1">
-          <div className="w-[54px] md:w-[68px] mx-auto">
+          <div className="w-[54px] md:w-[168px] mx-auto">
             <ItemLeaderBoard
               master
               number={2}
