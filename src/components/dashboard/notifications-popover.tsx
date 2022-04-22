@@ -444,6 +444,25 @@ export const ItemNotification = ({
                       : null,
                   oldMemberType: getStr(notification, 'oldMemberType'),
                 })
+              } else if (
+                notification.notificationType ===
+                NotificationType.MEMBER_CONFIRM_DELETE_MEMBER_TEAM
+              ) {
+                setDataModalResponseDeleteFromTeam({
+                  //@ts-ignore: Unreachable code error
+                  teamId: notification.teamId,
+                  img: notification.largeIcon,
+                  body: notification.body,
+                  title: notification.title,
+                  confirmType: getStr(notification, 'nextNotificationType'),
+                  memberConfirm: getStr(notification, 'memberConfirm'),
+
+                  memberId:
+                    getStr(notification, 'memberConfirm') === 'ADMIN'
+                      ? notification.senderId
+                      : null,
+                  oldMemberType: getStr(notification, 'oldMemberType'),
+                })
               }
 
               if (
