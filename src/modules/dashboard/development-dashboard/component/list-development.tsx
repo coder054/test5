@@ -1,9 +1,14 @@
 import dayjs from 'dayjs'
-import { ReactNode, useEffect, useState } from 'react'
+import { Fragment, ReactNode, useEffect, useState } from 'react'
 import { isMobile } from 'react-device-detect'
+import { useInView } from 'react-intersection-observer'
+import { useInfiniteQuery } from 'react-query'
 import SimpleBar from 'simplebar-react'
+import { MiniLoading } from 'src/components/mini-loading'
 import { ModalMui } from 'src/components/ModalMui'
+import { ASC, DESC } from 'src/constants/constants'
 import { COLOR_DIARY } from 'src/constants/mocks/colors.constants'
+import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { DevelopmentNoteType } from 'src/constants/types'
 import { ChevronRight } from 'src/icons/chevron-right'
 import { SvgAbove, SvgBelow } from 'src/imports/svgs'
@@ -11,11 +16,11 @@ import { getListDevelopmentNotes } from 'src/service/dashboard/development.servi
 import { NoteModal } from './modal/note-modal'
 
 export const ListDevelopment = () => {
+  const { ref, inView } = useInView()
   const [limit, setLimit] = useState<number>(10)
   const [startAfter, setStartAfter] = useState<number>(null)
-  const [sorted, setSorted] = useState<string>('desc')
+  const [sorted, setSorted] = useState<string>(DESC)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
-  const [checkUpdate, setCheckUpdate] = useState<boolean>(false)
   const [items, setItems] = useState<DevelopmentNoteType[]>([
     {
       shortTermGoal: {
@@ -101,19 +106,40 @@ export const ListDevelopment = () => {
     devTalkId: '',
   })
 
+  const {
+    isLoading: loading,
+    data: dataNotes,
+    isFetchingNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery(
+    [QUERIES_DASHBOARD.NOTE_DATA, limit, startAfter, sorted],
+    async ({ pageParam = startAfter }) => {
+      const res = await getListDevelopmentNotes(limit, pageParam, sorted)
+
+      return res.data
+    },
+    {
+      getNextPageParam: (lastPage) => {
+        if (lastPage.length !== 0) {
+          return lastPage[lastPage.length - 1].createdAt
+        } else {
+          return undefined
+        }
+      },
+    }
+  )
+
   useEffect(() => {
-    getListDevelopmentNotes(limit, startAfter, sorted).then((res) => {
-      if (res.status === 200) {
-        setItems(res.data)
-      }
-    })
-  }, [limit, startAfter, sorted, checkUpdate])
+    if (inView) {
+      fetchNextPage()
+    }
+  }, [inView])
 
   const handleChangeShow = () => {
-    if (sorted === 'asc') {
-      setSorted('desc')
+    if (sorted === ASC) {
+      setSorted(DESC)
     } else {
-      setSorted('asc')
+      setSorted(ASC)
     }
   }
 
@@ -156,29 +182,40 @@ export const ListDevelopment = () => {
         <p className="cursor-pointer col-span-2" onClick={handleChangeShow}>
           <span className="ml-[12px] float-left">Date</span>{' '}
           <div className="mt-[3px]">
-            {sorted === 'asc' ? <SvgAbove /> : <SvgBelow />}
+            {sorted === ASC ? <SvgAbove /> : <SvgBelow />}
           </div>
         </p>
         <p className="col-span-5">You</p>
         <p className="col-span-5">Coach</p>
       </div>
       <SimpleBar style={{ maxHeight: 350 }}>
-        {items &&
-          items.map((item, index) => (
-            <div
-              key={index}
-              className="h-[44px] grid grid-cols-12 text-[12px] md:text-[14px] items-center cursor-pointer hover:bg-gray-500"
-              onClick={() => handleOnClick(item)}
-            >
-              <p className="md:pl-[12px] col-span-2">
-                {dayjs(item?.createdAt).format('DD/MM')}
-              </p>
+        {(dataNotes?.pages || []).map((page, indexNote) => (
+          <Fragment key={indexNote}>
+            {(page || []).map((item, index) => (
+              <div
+                key={index}
+                className="h-[44px] grid grid-cols-12 text-[12px] md:text-[14px] items-center cursor-pointer hover:bg-gray-500"
+                onClick={() => handleOnClick(item)}
+              >
+                <p className="md:pl-[12px] col-span-2">
+                  {dayjs(item?.createdAt).format('DD/MM')}
+                </p>
 
-              {displayShow(item.playerDevelopmentProgress, false)}
+                {displayShow(item.playerDevelopmentProgress, false)}
 
-              {displayShow(item.coachDevelopmentProgress, true)}
-            </div>
-          ))}
+                {displayShow(item.coachDevelopmentProgress, true)}
+              </div>
+            ))}
+          </Fragment>
+        ))}
+        <p
+          className="flex justify-center py-2 font-semibold text-[16px] h-[12px]"
+          ref={ref}
+        >
+          {isFetchingNextPage ? (
+            <MiniLoading color="#09E099" size={18} />
+          ) : null}
+        </p>
       </SimpleBar>
       <ModalMui
         sx={{
@@ -195,7 +232,6 @@ export const ListDevelopment = () => {
             setIsOpenModal={setIsOpenModal}
             item={note && note}
             update
-            setCheckUpdate={setCheckUpdate}
           />
         </SimpleBar>
       </ModalMui>

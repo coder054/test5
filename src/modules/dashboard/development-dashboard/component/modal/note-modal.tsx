@@ -1,37 +1,24 @@
-import { MenuItem } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { ReactNode, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useMutation, useQuery } from 'react-query'
-import { Button, MyDatePicker, MyInput } from 'src/components'
+import { useMutation, useQueryClient } from 'react-query'
+import { Button, MyDatePicker } from 'src/components'
 import { XIcon } from 'src/components/icons'
-import { ListImageVideo } from 'src/components/list-image-video'
+import { ModalMui } from 'src/components/ModalMui'
 import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
-import { UploadMutilImageVideo } from 'src/components/upload-mutil-image-video'
-import { CategoryOptions } from 'src/constants/options'
+import { PopupConfirmDelete } from 'src/components/popup-confirm-delete'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
-import {
-  DashboardGoalUpdateType,
-  DevelopmentNoteType,
-} from 'src/constants/types'
-import {
-  emotionlToNum,
-  getToday,
-  numToEmotional,
-  numToScale,
-} from 'src/hooks/functionCommon'
+import { DevelopmentNoteType } from 'src/constants/types'
+import { emotionlToNum, numToEmotional } from 'src/hooks/functionCommon'
 import {
   createDevelopmentNote,
   removeDevelopmentNote,
   updateDevelopmentNote,
-  updatePersonalGoal,
-  UpdatePersonalGoalType,
 } from 'src/service/dashboard/development.service'
 
 interface NoteModalProps {
   setIsOpenModal?: (open: boolean) => void
-  setCheckUpdate?: (check: boolean) => void
   item?: DevelopmentNoteType
   create?: boolean
   update?: boolean
@@ -61,17 +48,17 @@ interface FormValues {
 
 export const NoteModal = ({
   item,
-  setCheckUpdate,
   setIsOpenModal,
   update,
   create,
   clock,
 }: NoteModalProps) => {
+  const queryClient = useQueryClient()
   const [arrayFile, setArrayFile] = useState([])
   const [medias, setMedias] = useState([])
-  const [showUrl, setShowUrl] = useState('')
   const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false)
-  const [isOpenModal, setIsOpenModalImg] = useState<boolean>(false)
+  const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false)
+
   const [formValues, setFormValues] = useState<FormValues>({
     strengthPlayer: '',
     strengthCoach: '',
@@ -94,14 +81,14 @@ export const NoteModal = ({
   })
 
   const { isLoading: loadingCreate, mutate: createNote } = useMutation(
-    [QUERIES_DASHBOARD.UPDATE_PERSONAL_GOAL],
+    [QUERIES_DASHBOARD.NOTE_DATA],
     createDevelopmentNote,
     {
       onSuccess: (res) => {
         if (res.status === 200) {
-          setIsOpenModal(false)
           toast.success(res.data.message)
-          setCheckUpdate(true)
+          queryClient.invalidateQueries(QUERIES_DASHBOARD.NOTE_DATA)
+          setIsOpenModal(false)
         }
       },
       onError: (err: any) => {
@@ -113,14 +100,14 @@ export const NoteModal = ({
   )
 
   const { isLoading: loading, mutate: UpdateNote } = useMutation(
-    [QUERIES_DASHBOARD.UPDATE_PERSONAL_GOAL],
+    [QUERIES_DASHBOARD.NOTE_DATA],
     updateDevelopmentNote,
     {
       onSuccess: (res) => {
         if (res.status === 200) {
-          setIsOpenModal(false)
           toast.success('update note successfuly!')
-          setCheckUpdate(true)
+          queryClient.invalidateQueries(QUERIES_DASHBOARD.NOTE_DATA)
+          setIsOpenModal(false)
         }
       },
       onError: (err: any) => {
@@ -137,9 +124,9 @@ export const NoteModal = ({
     {
       onSuccess: (res) => {
         if (res.status === 200) {
-          setIsOpenModal(false)
           toast.success('removed note!')
-          setCheckUpdate(true)
+          queryClient.invalidateQueries(QUERIES_DASHBOARD.NOTE_DATA)
+          setIsOpenModal(false)
         }
       },
     }
@@ -300,6 +287,10 @@ export const NoteModal = ({
   }
 
   const handleRemove = () => {
+    setIsOpenModalDelete(true)
+  }
+
+  const handleConfirmDelete = () => {
     try {
       RemoveNote(item.devTalkId)
     } catch (error) {}
@@ -511,6 +502,12 @@ export const NoteModal = ({
           </div>
         </div>
       </div>
+      <ModalMui isOpen={isOpenModalDelete} onClose={setIsOpenModalDelete}>
+        <PopupConfirmDelete
+          handleConfirmDelete={handleConfirmDelete}
+          setIsOpenModal={setIsOpenModalDelete}
+        />
+      </ModalMui>
     </div>
   )
 }

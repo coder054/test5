@@ -1,17 +1,22 @@
 import { isEmpty } from 'lodash'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useQuery } from 'react-query'
+import { useInView } from 'react-intersection-observer'
+import { useInfiniteQuery, useQuery } from 'react-query'
+import SimpleBar from 'simplebar-react'
 import { Loading, LoadingCustom } from 'src/components'
 import { ButtonAdd } from 'src/components/ButtonAdd'
 import { LeaderBoard } from 'src/components/leader-board'
+import { MiniLoading } from 'src/components/mini-loading'
 import { MySelect } from 'src/components/MySelect'
 import { MySelectCountry } from 'src/components/MySelectCountry'
 import { PopupAdd } from 'src/components/popup-add'
 import { API_GET_LIST_LEADER_BOARD } from 'src/constants/api.constants'
+import { ASC, DESC } from 'src/constants/constants'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { LastRangeDateType } from 'src/constants/types/dashboard/training.types'
+import { Country } from 'src/constants/types/diary.types'
 import { ClubType } from 'src/constants/types/settingsType.type'
 import { SvgAbove, SvgBelow } from 'src/imports/svgs'
 import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
@@ -21,32 +26,37 @@ import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
 import { PeriodFilter } from '../components/PeriodFilter'
 import { AgeOfGroup, CategoryFilter, RoleFilter } from '../constants-dashboard'
+import { FilterLeaderboard } from './filter-leaderboard'
 const cls = require('../overview/overview.module.css')
 
 interface FilterForm {
-  country: string
+  country: Country
   ageGroup: string
   clubId: string
   yourTeams: string[]
   role: string
   category: string
   contractedClub: ClubType
+  teamId: string
 }
 
 export const LeaderBoards = () => {
   const [add, setAdd] = useState<boolean>(true)
   const [range, setRange] = useState<LastRangeDateType>('30')
   const [limit, setLimit] = useState<number>(10)
-  const [sorted, setSorted] = useState<string>('desc')
-  const [items, setItems] = useState([])
+  const [sorted, setSorted] = useState<string>(DESC)
   const [startAfter, setStartAfter] = useState<number>(1)
   const [count, setCount] = useState<Number>(0)
-  const [hasMore, setHasMore] = useState<boolean>(true)
-  const [checkFilter, setCheckFilter] = useState<boolean>(false)
-  const [teamId, setTeamId] = useState<string>('')
 
   const [filterForm, setFilterForm] = useState<FilterForm>({
-    country: '',
+    country: {
+      flag: '',
+      name: '',
+      alpha3Code: '',
+      alpha2Code: '',
+      region: '',
+      phoneCode: '',
+    },
     ageGroup: '',
     clubId: '',
     yourTeams: [''],
@@ -62,179 +72,136 @@ export const LeaderBoards = () => {
       nickName: '',
       websiteUrl: null,
     },
+    teamId: '',
   })
 
-  const handleChangeForm = (type: keyof FilterForm, value: string) => {
-    setFilterForm((prev) => ({ ...prev, [type]: value }))
-    setCheckFilter(false)
-  }
-
-  const setSelectedClub = (value: ClubType) => {
-    setFilterForm((prev) => ({
-      ...prev,
-      contractedClub: value,
-      clubId: value.clubId,
-      yourClub: value.clubName,
-    }))
-    setCheckFilter(false)
-  }
-
-  const setSelectedTeam = (value: string, index?: string) => {
-    let newArr = [...(filterForm.yourTeams || [])]
-    /* @ts-ignore */
-    newArr[+index] = value.teamName
-    setFilterForm((prev) => ({ ...prev, yourTeams: newArr }))
-    setCheckFilter(false)
-  }
-
-  const getListLeaderBoard = async (startAfter: number) => {
-    const res = await axios.get(
-      toQueryString(API_GET_LIST_LEADER_BOARD, {
-        limit: limit,
-        startAfter: startAfter,
-        sorted: sorted,
-        lastDateRange: range,
-        country: filterForm.country,
-        ageGroup: filterForm.ageGroup,
-        clubId: filterForm.clubId,
-        teamId: teamId,
-        role: filterForm.role,
-        category: filterForm.category || 'HOURS',
-      })
-    )
-    if (res.status === 200) {
-      setItems(res.data)
-    }
-  }
-
   const handleChangeShow = () => {
-    if (sorted === 'asc') {
-      setSorted('desc')
+    if (sorted === ASC) {
+      setSorted(DESC)
     } else {
-      setSorted('asc')
+      setSorted(ASC)
     }
   }
 
+  const { ref, inView } = useInView()
+  const {
+    data,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    isLoading: loading,
+  } = useInfiniteQuery(
+    [
+      QUERIES_DASHBOARD.LEADER_BOARD,
+      sorted,
+      limit,
+      startAfter,
+      range,
+      JSON.stringify(filterForm),
+    ],
+    async ({ pageParam = 1 }) => {
+      const res = await axios.get(
+        toQueryString(API_GET_LIST_LEADER_BOARD, {
+          limit: limit,
+          startAfter: pageParam,
+          sorted: sorted,
+          lastDateRange: range,
+          country: filterForm.country.name,
+          ageGroup: filterForm.ageGroup,
+          clubId: filterForm.clubId,
+          teamId: filterForm.teamId,
+          role: filterForm.role === 'All' ? '' : filterForm.role,
+          category: filterForm.category || 'HOURS',
+        })
+      )
+
+      return res.data
+    },
+    {
+      getNextPageParam: (lastPage, page) => {
+        if (
+          page.length < Math.ceil(lastPage.count / 10) &&
+          lastPage.data.length !== 0
+        ) {
+          return lastPage.nextPage
+        } else {
+          return undefined
+        }
+      },
+    }
+  )
+
   useEffect(() => {
-    getListLeaderBoard(startAfter)
-  }, [sorted])
-
-  // useEffect(() => {
-  //   getListLeaderBoard(startAfter)
-  // }, [startAfter])
+    data && setCount(data.pages[0].count)
+  }, [JSON.stringify(data)])
 
   useEffect(() => {
-    checkFilter && getListLeaderBoard(1)
-  }, [sorted, range, checkFilter])
-
-  // console.log('item:', items)
-  // const fetchMoreData = async () => {
-  //   if (items.length % 10 !== 0) {
-  //     setHasMore(false)
-  //     return
-  //   }
-  //   setHasMore(true)
-  //   setStartAfter((startAfter) => startAfter + 1)
-  //   // await getListLeaderBoard(startAfter)
-  // }
+    if (inView) {
+      fetchNextPage()
+    }
+  }, [inView])
 
   return (
-    <Loading isLoading={false}>
+    <Loading isLoading={loading}>
       <>
         <div className="w-full flex flex-row-reverse col-span-12">
-          <PeriodFilter
+          <FilterLeaderboard
             value={range}
             onChange={setRange}
             label="Filter leaderboard"
-            setFilterForm={setFilterForm}
-            setCheckFilter={setCheckFilter}
-          >
-            <div className="w-full pb-[12px] space-y-[24px]">
-              <MySelectCountry
-                label="Country"
-                value={filterForm.country}
-                onChange={(_, value) => handleChangeForm('country', value)}
-              />
-              <MySelect
-                label="Age of group"
-                arrOption={AgeOfGroup}
-                value={filterForm.ageGroup}
-                onChange={(e) => handleChangeForm('ageGroup', e.target.value)}
-              />
-              <InfiniteScrollClub
-                label="Club"
-                value={filterForm.contractedClub}
-                handleSetClub={setSelectedClub}
-              />
-              <InfiniteScrollTeam
-                label="Team"
-                /* @ts-ignore */
-                handleSetTeam={(value) => setSelectedTeam(value, 0)}
-                idClub={filterForm.contractedClub.clubId}
-                setTeamId={setTeamId}
-              />
-              <MySelect
-                label="Role"
-                arrOption={RoleFilter}
-                value={filterForm.role}
-                onChange={(e) => handleChangeForm('role', e.target.value)}
-              />
-              <MySelect
-                label="Category"
-                arrOption={CategoryFilter}
-                value={filterForm.category}
-                onChange={(e) => handleChangeForm('category', e.target.value)}
-              />
-            </div>
-          </PeriodFilter>
+            setFilterFormLeader={setFilterForm}
+          />
         </div>
 
-        {!isEmpty(items) ? (
+        {data?.pages[0]?.data ? (
           <LeaderBoard
             master
-            /* @ts-ignore */
-            listMasterLeaderBoard={items.data}
+            listMasterLeaderBoard={data?.pages[0]?.data && data?.pages[0]?.data}
             tabLeaderBoard
           />
         ) : null}
 
         <div className={`${cls.item} p-[32px] mt-[40px] mb-[100px]`}>
-          <table className="w-full p-[6px] text-[12px] md:text-[14px]">
-            <tr className="bg-[#13161A] text-[#A2A5AD] w-full h-[34px]">
-              <td className="w-[15%] cursor-pointer" onClick={handleChangeShow}>
-                <span className="float-left ml-[14px]">Nr</span>{' '}
-                <div className="mt-[3px]">
-                  {sorted === 'asc' ? <SvgAbove /> : <SvgBelow />}
-                </div>
-              </td>
-              <td className="w-[40%]">Name</td>
-              <td className="w-[35%]">Team</td>
-              <td className="w-[10%]">Index</td>
-            </tr>
-            {/* <InfiniteScroll
-              dataLength={items.length}
-              hasMore={hasMore}
-              loader={<LoadingCustom />}
-              next={fetchMoreData}
-              className="w-full"
-            > */}
-            {!isEmpty(items) ? (
-              /* @ts-ignore */
-              (items?.data || []).map((item, index) => (
-                <tr className="h-[40px] w-full hover:bg-[#474747]">
-                  <td className="pl-[14px]">{index + 1}</td>
-                  <td>{item?.userInfo?.fullName}</td>
-                  <td>{item?.userInfo?.clubName}</td>
-                  <td>{item?.value}</td>
-                </tr>
-              ))
-            ) : (
-              <div className="text-center w-full">
-                <p>no data</p>
+          <div className="bg-[#13161A] text-[#A2A5AD] w-full h-[34px] grid grid-cols-12 items-center">
+            <p className="cursor-pointer col-span-2" onClick={handleChangeShow}>
+              <span className="ml-[12px] float-left">Nr</span>{' '}
+              <div className="mt-[3px]">
+                {sorted === 'asc' ? <SvgAbove /> : <SvgBelow />}
               </div>
-            )}
-            {/* </InfiniteScroll> */}
-          </table>
+            </p>
+            <p className="col-span-4">Name</p>
+            <p className="col-span-3">Team level</p>
+            <p className="col-span-3">Index</p>
+          </div>
+          <Fragment>
+            <SimpleBar style={{ maxHeight: 420 }}>
+              {(data?.pages || []).map((page, indexOrigin) => (
+                <Fragment key={indexOrigin}>
+                  {page.data.map((item, index) => (
+                    <div
+                      className="h-[44px] grid grid-cols-12 text-[12px] md:text-[14px] items-center cursor-pointer hover:bg-gray-500"
+                      key={index}
+                    >
+                      <p className="pl-[12px] col-span-2">
+                        {indexOrigin * 10 + index + 1}
+                      </p>
+                      <p className="col-span-4">{item?.userInfo?.fullName}</p>
+                      <p className="col-span-3">{item?.userInfo?.clubName}</p>
+                      <p className="col-span-3">{item?.value}</p>
+                    </div>
+                  ))}
+                </Fragment>
+              ))}
+              <p
+                className="flex justify-center py-2 font-semibold text-[16px] h-[12px]"
+                ref={ref}
+              >
+                {isFetchingNextPage ? (
+                  <MiniLoading color="#09E099" size={18} />
+                ) : null}
+              </p>
+            </SimpleBar>
+          </Fragment>
         </div>
         {add ? (
           <div

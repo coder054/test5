@@ -143,34 +143,31 @@ export const PainModal = ({
   const handleChangeForm = (type: keyof PainUpdateType, value: string) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
-  // console.log('item:', item)
 
   const handleSave = () => {
-    setLoadingUpdate(true)
-    const valueUpdate: PainUpdateType = {
-      description: formValues.description,
-      treatment: formValues.treatment,
-      painLevel: numToEmotional(+formValues.painLevel) || 'NORMAL',
-      injuryTags: tags,
-      injuryMedia: medias,
-      injuryPosition: {
-        x: 0,
-        y: 0,
-      },
-      createdAt: new Date().toISOString(),
-      isFront: true,
-      injuryArea: formValues.injuryArea,
-    }
-    console.log('valueUpdate:', valueUpdate)
-
-    try {
-      // UpdatePersonal({ body: { ...valueUpdate } })
-    } catch (error) {}
-
-    loadingUpdate &&
-      setTimeout(() => {
-        setLoadingUpdate(false)
-      }, 1000)
+    // setLoadingUpdate(true)
+    // const valueUpdate: PainUpdateType = {
+    //   description: formValues.description,
+    //   treatment: formValues.treatment,
+    //   painLevel: numToEmotional(+formValues.painLevel) || 'NORMAL',
+    //   injuryTags: tags,
+    //   injuryMedia: medias,
+    //   injuryPosition: {
+    //     x: 0,
+    //     y: 0,
+    //   },
+    //   createdAt: new Date().toISOString(),
+    //   isFront: true,
+    //   injuryArea: formValues.injuryArea,
+    // }
+    // console.log('valueUpdate:', valueUpdate)
+    // try {
+    //   UpdatePersonal({ body: { ...valueUpdate } })
+    // } catch (error) {}
+    // loadingUpdate &&
+    //   setTimeout(() => {
+    //     setLoadingUpdate(false)
+    //   }, 1000)
   }
 
   const handleRemove = () => {
@@ -181,7 +178,7 @@ export const PainModal = ({
 
   return (
     <div className="p-[32px] w-full">
-      <div
+      {/* <div
         className="flex flex-row-reverse cursor-pointer"
         onClick={() => {
           setIsOpenModal && setIsOpenModal(false)
@@ -261,7 +258,7 @@ export const PainModal = ({
             </>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -18,3 +18,5 @@ export const INITIAL_INJURY = {
 }
 
 export const injuryAtom = atom<InjuryType>(INITIAL_INJURY)
+
+export const checkUpdateInjuryAtom = atom<boolean>(false)

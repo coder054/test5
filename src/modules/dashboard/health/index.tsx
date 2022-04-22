@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react'
 import { PeriodFilter } from '../components/PeriodFilter'
-import { alpha, useTheme } from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { useQuery } from 'react-query'
-import { getDashboardWellness } from 'src/service/dashboard/dashboard-overview'
 import { ApexOptions } from 'apexcharts'
 import { ButtonAddPopup, Chart, Loading } from 'src/components'
 import { DetailChart } from '../overview/component/wellness/DetailChart'
 import { HealthUpdates } from './component/HealthUpdates'
 import { getHealthChart } from 'src/service/dashboard/health.service'
-import { MySelect } from 'src/components/MySelect'
 import { HealthChartOption } from '../constants-dashboard'
 const cls = require('../overview/overview.module.css')
 

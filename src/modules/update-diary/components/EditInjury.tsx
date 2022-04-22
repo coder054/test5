@@ -2,11 +2,11 @@ import useMouse from '@react-hook/mouse-position'
 import { useAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
 import { toast as AlertSpot } from 'react-hot-toast'
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
-import { injuryAtom } from 'src/atoms/injuryAtom'
+import { checkUpdateInjuryAtom, injuryAtom } from 'src/atoms/injuryAtom'
 import { MyInputChips } from 'src/components'
 import { Button } from 'src/components/Button'
 import { MyButton } from 'src/components/MyButton'
@@ -25,6 +25,9 @@ import { ModalMui } from 'src/components/ModalMui'
 import { BodyPart } from './BodyPart'
 import { BooleanOption } from './BooleanOption'
 import { InjurySpot } from './InjurySpot'
+import { UploadMutilImageVideo } from 'src/components/upload-mutil-image-video'
+import { ListImageVideo } from 'src/components/list-image-video'
+import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 
 type EditInjuryProps = {
   onClose: (value: boolean) => void
@@ -51,6 +54,10 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
   const [side, setSide] = useState<boolean>(true)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [formValues, setFormValues] = useState<InjuryType>(INITIAL_FORM)
+  const queryClient = useQueryClient()
+
+  const [arrayFile, setArrayFile] = useState([])
+  const [medias, setMedias] = useState([])
 
   const parentRef = useRef(null)
   const mouse = useMouse(parentRef, {
@@ -94,17 +101,15 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
     deleteInjury,
     {
       onSuccess: (data) => {
+        AlertSpot.success(data.data)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.LIST_PAIN)
+        setIsOpenModal(false)
+        onClose && onClose(false)
         let newArr = [...diary.injuries]
         setDiary((prev) => ({
           ...prev,
           injuries: newArr.filter((it) => it.injuryId !== injury.injuryId),
         }))
-        setIsOpenModal(false)
-        onClose && onClose(false)
-        AlertSpot.success(data.data)
-      },
-      onError: () => {
-        AlertSpot.error('An error has occurred')
       },
     }
   )
@@ -112,7 +117,11 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
   const { mutate: mutateUpdate, isLoading: isUpdating } = useMutation(
     updateInjury,
     {
-      onSuccess: () => {
+      onSuccess: (res) => {
+        AlertSpot.success('Injury successfully updated')
+        onClose && onClose(false)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.LIST_PAIN)
+
         let newArr = [...diary.injuries]
         setDiary((prev) => ({
           ...prev,
@@ -120,12 +129,6 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
             return item.injuryId === injury.injuryId ? formValues : item
           }),
         }))
-
-        AlertSpot.success('Injury successfully updated')
-        onClose && onClose(false)
-      },
-      onError: () => {
-        AlertSpot.error('An error has occurred')
       },
     }
   )
@@ -142,9 +145,25 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
     mutateUpdate({
       diaryId: injury.diaryId,
       injuryId: injury.injuryId,
-      data: { ...formValues, createdAt: new Date(formValues.createdAt) },
+      data: {
+        ...formValues,
+        createdAt: new Date(formValues.createdAt),
+        injuryMedia: medias,
+      },
     })
   }
+
+  useEffect(() => {
+    setMedias([])
+    arrayFile &&
+      arrayFile.map((item) => {
+        if (item.includes('mp4')) {
+          setMedias((prev) => [...prev, { type: 'VIDEO', url: item }])
+        } else {
+          setMedias((prev) => [...prev, { type: 'IMAGE', url: item }])
+        }
+      })
+  }, [arrayFile])
 
   useEffect(() => {
     setFormValues((prev) => ({
@@ -337,6 +356,17 @@ export const EditInjury = ({ onClose }: EditInjuryProps) => {
             }
             placeholder="Injury description (Describe your injury in text)"
           />
+
+          <>
+            <UploadMutilImageVideo
+              image
+              arrayFiles={arrayFile}
+              setArrayFiles={setArrayFile}
+            />
+
+            <ListImageVideo arrayFile={arrayFile} setArrayFile={setArrayFile} />
+          </>
+
           <MySlider
             label="Pain level"
             onChange={(e) =>

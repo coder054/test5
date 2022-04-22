@@ -98,7 +98,7 @@ export const AgeOfGroup: OptionType[] = [
 export const RoleFilter: OptionType[] = [
   {
     label: 'All',
-    value: '',
+    value: 'All',
   },
   {
     label: 'GK - Goalkeeper',
