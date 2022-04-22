@@ -25,6 +25,7 @@ export interface INoti {
   notificationType: NotificationType
   largeIcon: string
   notificationId: string
+  teamId?: string
 }
 
 export enum Body {
