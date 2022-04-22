@@ -107,7 +107,7 @@ export const LeaderBoards = () => {
           sorted: sorted,
           lastDateRange: range,
           country: filterForm.country.name,
-          ageGroup: filterForm.ageGroup,
+          ageGroup: filterForm.ageGroup === 'ALL' ? '' : filterForm.ageGroup,
           clubId: filterForm.clubId,
           teamId: filterForm.teamId,
           role: filterForm.role === 'All' ? '' : filterForm.role,
