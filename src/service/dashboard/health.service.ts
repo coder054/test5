@@ -1,5 +1,6 @@
 import {
   API_GET_HEALTH_CHARTS,
+  API_GET_LIST_HEALTHS,
   API_POST_HEALTH,
 } from 'src/constants/api.constants'
 import { DashboardHealthUpdateType } from 'src/constants/types'
@@ -20,6 +21,24 @@ export const getHealthChart = async (
     .then((res) => {
       return res.data
     })
+}
+
+export const getListHealth = async (
+  limit: number,
+  startAfter: number,
+  sorted: string
+) => {
+  return axios.get(
+    toQueryString(API_GET_LIST_HEALTHS, {
+      limit: limit,
+      startAfter: startAfter,
+      sorted: sorted,
+    })
+  )
+}
+
+export const createHealth = async ({ body }: { body: any }) => {
+  return axios.post(API_POST_HEALTH, body)
 }
 
 export const postHealth = async ({

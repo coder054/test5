@@ -17,7 +17,7 @@ const cls = require('../overview/overview.module.css')
 
 export const Development = () => {
   const theme = useTheme()
-  const [range, setRange] = useState<string>('30')
+  const [range, setRange] = useState<string>('180')
   const [selectedSeries, setSelectedSeries] = useState(['You', 'Average'])
 
   const [arrayYou, setArrayYou] = useState<number[]>([0, 0, 0, 0, 0, 0, 0])
