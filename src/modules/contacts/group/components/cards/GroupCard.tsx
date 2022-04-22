@@ -47,18 +47,19 @@ export const GroupCard = ({ group }: GroupCardProps) => {
         name={group.name}
         users={group.usernames}
         avatar={group.groupImage}
+        onClick={() => router.push(`/contacts/group/${group.groupId}`)}
         commonOptions={
-          <button
-            type="button"
-            onClick={() => router.push(`/contacts/group/${group.groupId}`)}
-          >
+          <button type="button">
             <ChervonRightIcon className="w-[25px] h-[25px] active:scale-125 duration-150" />
           </button>
         }
         dropdownOptions={
           HIGHEST_ROLE && (
             <DropdownButton
-              onClick={() => setIsOpenModal(true)}
+              onClick={(e) => {
+                setIsOpenModal(true)
+                e.stopPropagation()
+              }}
               label="Delete group"
               labelClass="text-[#D60C0C]"
               icon={<TrashCanIcon className="w-[20px] h-[20px]" />}

@@ -159,17 +159,15 @@ export const MemberCard = ({
         roles={member.favoriteRoles}
         city={member.city}
         club={member.clubName}
+        onClick={() =>
+          router.push(
+            `/${currentRoleName.toLowerCase()}/${member.username}/${
+              member.fullName
+            }`
+          )
+        }
         commonOptions={
-          <button
-            type="button"
-            onClick={() =>
-              router.push(
-                `/${currentRoleName.toLowerCase()}/${member.username}/${
-                  member.fullName
-                }`
-              )
-            }
-          >
+          <button type="button">
             <ChervonRightIcon className="w-[25px] h-[25px] active:scale-125 duration-150" />
           </button>
         }
@@ -177,27 +175,30 @@ export const MemberCard = ({
           !IS_PERSONAL && (
             <Fragment>
               <DropdownButton
-                onClick={() =>
+                onClick={(e) => {
+                  e.stopPropagation()
                   setGroupModal((prev) => ({ ...prev, delete: true }))
-                }
+                }}
                 label="Delete member"
                 labelClass="text-[#D60C0C]"
                 icon={<TrashCanIcon className="w-[20px] h-[20px]" />}
               />
               {isBlocked ? (
                 <DropdownButton
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.stopPropagation()
                     setGroupModal((prev) => ({ ...prev, unblock: true }))
-                  }
+                  }}
                   label="Unblock"
                   labelClass="text-white"
                   icon={<UnblockIcon className="w-[20px] h-[20px]" />}
                 />
               ) : (
                 <DropdownButton
-                  onClick={() =>
+                  onClick={(e) => {
+                    e.stopPropagation()
                     setGroupModal((prev) => ({ ...prev, block: true }))
-                  }
+                  }}
                   label="Block member"
                   labelClass="text-[#D60C0C]"
                   icon={<BlockIcon className="w-[20px] h-[20px]" />}

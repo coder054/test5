@@ -138,7 +138,8 @@ const GroupProfile = ({ group }: GroupProfileProps) => {
     }
   )
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation()
     if (REQUEST_STATUS.value === 'join') {
       mutateRequest(groupId)
     }
@@ -214,11 +215,11 @@ const GroupProfile = ({ group }: GroupProfileProps) => {
                 type="button"
                 label={REQUEST_STATUS?.label}
               />
-              <Button
+              {/* <Button
                 className="text-[#09E099] h-[50px] border-2 border-[#09E099] w-[220px] rounded-lg"
                 type="button"
                 label="Follow"
-              />
+              /> */}
             </div>
           )}
         </div>
