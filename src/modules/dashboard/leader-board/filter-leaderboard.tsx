@@ -74,7 +74,7 @@ export const FilterLeaderboard = ({
       phoneCode: '+46',
       region: 'Europe',
     },
-    ageGroup: 'ADULT',
+    ageGroup: 'ALL',
     clubId: '',
     yourTeams: [''],
     role: 'All',
