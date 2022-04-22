@@ -31,6 +31,7 @@ import {
   dataModalResponseDeleteFromTeamAtom,
   dataModalResponseNotWantToBeDeletedFromTeamAtom,
   dataModalResponseAskJoinGroupAtom,
+  dataModalResponseAskJoinTeamAtom,
 } from 'src/atoms/notiAtoms'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import DiaryUpdate from 'src/modules/update-diary'
@@ -238,6 +239,7 @@ const NotificationsButton = () => {
       <ModalResponseDeleteFromTeam />
       <ModalResponseNotWantToBeDeletedFromTeam />
       <ModalResponseAskJoinGroup />
+      <ModalResponseAskJoinTeam />
       <Tooltip title="Notifications">
         <IconButton ref={anchorRef} sx={{ ml: 1 }} onClick={handleOpenPopover}>
           <Badge color="error" badgeContent={unread}>
@@ -876,7 +878,7 @@ export const ModalResponseDeleteFromTeam = (props) => {
                 )}`
               )
               notiToast({
-                message: data,
+                message: data || 'Success',
                 type: 'success',
               })
             } catch (error) {
@@ -1006,7 +1008,7 @@ export const ModalResponseNotWantToBeDeletedFromTeam = (props) => {
                 )}`
               )
               notiToast({
-                message: data,
+                message: data || 'Success',
                 type: 'success',
               })
             } catch (error) {
@@ -1109,14 +1111,14 @@ export const ModalResponseAskJoinGroup = (props) => {
               }
 
               const { data } = await axios.patch(
-                `/group?${queryString.stringify(params)}`,
+                `/groups?${queryString.stringify(params)}`,
                 {
                   //@ts-ignore: Unreachable code error
                   memberIds: [dataModalResponseAskJoinGroup.senderId],
                 }
               )
               notiToast({
-                message: data,
+                message: data || 'Success',
                 type: 'success',
               })
             } catch (error) {
@@ -1153,14 +1155,14 @@ export const ModalResponseAskJoinGroup = (props) => {
               }
 
               const { data } = await axios.patch(
-                `/group?${queryString.stringify(params)}`,
+                `/groups?${queryString.stringify(params)}`,
                 {
                   //@ts-ignore: Unreachable code error
                   memberIds: [dataModalResponseAskJoinGroup.senderId],
                 }
               )
               notiToast({
-                message: data,
+                message: data || 'Success',
                 type: 'success',
               })
             } catch (error) {
@@ -1178,6 +1180,161 @@ export const ModalResponseAskJoinGroup = (props) => {
               }
             } finally {
               setDataModalResponseAskJoinGroup({})
+            }
+          }}
+          fullWidth
+          size="large"
+          variant="contained"
+        >
+          Yes
+        </Button>
+      </div>
+    </Dialog>
+  )
+}
+
+export const ModalResponseAskJoinTeam = (props) => {
+  const [dataModalResponseAskJoinTeam, setDataModalResponseAskJoinTeam] =
+    useAtom(dataModalResponseAskJoinTeamAtom)
+  return (
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      onClose={() => {
+        setDataModalResponseAskJoinTeam({})
+      }}
+      open={!isEmpty(dataModalResponseAskJoinTeam)}
+    >
+      <Box
+        sx={{
+          alignItems: 'center',
+          backgroundColor: 'primary.main',
+          color: 'primary.contrastText',
+          display: 'flex',
+          justifyContent: 'space-between',
+          px: 3,
+          py: 2,
+        }}
+      >
+        <Typography variant="h6">Zporter</Typography>
+        <IconButton
+          color="inherit"
+          onClick={() => {
+            setDataModalResponseAskJoinTeam({})
+          }}
+        >
+          <XIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      <DialogContent
+        sx={{
+          height: 500,
+        }}
+      >
+        {/*  */}
+
+        <img
+          //@ts-ignore: Unreachable code error
+          src={dataModalResponseAskJoinTeam.img}
+          className=" w-[320px] h-auto block mx-auto "
+          alt=""
+        />
+        <div className="h-[16px] "></div>
+        <div className="font-Inter text-center ">
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseAskJoinTeam.title}
+          </div>
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseAskJoinTeam.body}
+          </div>
+        </div>
+
+        {/*  */}
+      </DialogContent>
+
+      <div className="flex mt-4 px-[24px] mb-[20px] ">
+        <Button
+          onClick={async () => {
+            try {
+              const params = {
+                //@ts-ignore: Unreachable code error
+                teamId: dataModalResponseAskJoinTeam.teamId,
+                status: 'REJECTED',
+              }
+
+              const { data } = await axios.patch(
+                `/teams?${queryString.stringify(params)}`,
+                {
+                  //@ts-ignore: Unreachable code error
+                  memberIds: [dataModalResponseAskJoinTeam.senderId],
+                }
+              )
+              notiToast({
+                message: data || 'Success',
+                type: 'success',
+              })
+            } catch (error) {
+              let statusCode = error?.response?.data?.statusCode
+              if (statusCode === 404) {
+                notiToast({
+                  message: 'Already in the team.',
+                  type: 'error',
+                })
+              } else {
+                notiToast({
+                  message: getErrorMessage(error),
+                  type: 'error',
+                })
+              }
+            } finally {
+              setDataModalResponseAskJoinTeam({})
+            }
+          }}
+          fullWidth
+          size="large"
+          sx={{ mr: 2 }}
+          variant="outlined"
+        >
+          No
+        </Button>
+        <Button
+          onClick={async () => {
+            try {
+              const params = {
+                //@ts-ignore: Unreachable code error
+                teamId: dataModalResponseAskJoinTeam.teamId,
+                status: 'ACCEPTED',
+              }
+
+              const { data } = await axios.patch(
+                `/teams?${queryString.stringify(params)}`,
+                {
+                  //@ts-ignore: Unreachable code error
+                  memberIds: [dataModalResponseAskJoinTeam.senderId],
+                }
+              )
+              notiToast({
+                message: data || 'Success',
+                type: 'success',
+              })
+            } catch (error) {
+              let statusCode = error?.response?.data?.statusCode
+              if (statusCode === 404) {
+                notiToast({
+                  message: 'Already in the team.',
+                  type: 'error',
+                })
+              } else {
+                notiToast({
+                  message: getErrorMessage(error),
+                  type: 'error',
+                })
+              }
+            } finally {
+              setDataModalResponseAskJoinTeam({})
             }
           }}
           fullWidth
