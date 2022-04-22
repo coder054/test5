@@ -3,6 +3,10 @@ import { OptionType } from 'src/constants/types'
 export const AgeOfGroup: OptionType[] = [
   {
     label: 'All',
+    value: 'ALL',
+  },
+  {
+    label: 'Adult',
     value: 'ADULT',
   },
   {
