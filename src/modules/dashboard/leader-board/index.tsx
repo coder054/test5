@@ -170,7 +170,7 @@ export const LeaderBoards = () => {
               </div>
             </p>
             <p className="col-span-4">Name</p>
-            <p className="col-span-3">Team level</p>
+            <p className="col-span-3">Club</p>
             <p className="col-span-3">Index</p>
           </div>
           <Fragment>
@@ -185,7 +185,9 @@ export const LeaderBoards = () => {
                       <p className="pl-[12px] col-span-2">
                         {indexOrigin * 10 + index + 1}
                       </p>
-                      <p className="col-span-4">{item?.userInfo?.fullName}</p>
+                      <p className="col-span-4">
+                        {item?.userInfo?.firstName} {item?.userInfo?.lastName}
+                      </p>
                       <p className="col-span-3">{item?.userInfo?.clubName}</p>
                       <p className="col-span-3">{item?.value}</p>
                     </div>

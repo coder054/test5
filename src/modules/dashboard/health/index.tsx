@@ -154,7 +154,9 @@ export const Health = () => {
         />
       </div>
 
-      <div className={`${cls.item} col-span-7 h-[460px] p-[16px] md:p-[32px]`}>
+      <div
+        className={`${cls.item} col-span-12 lg:col-span-7 h-[460px] p-[16px] md:p-[32px]`}
+      >
         <Loading isLoading={loading}>
           <div className="w-full h-[400px] relative">
             <p className="text-[#A2A5AD] text-[12px] absolute top-[24px]">20</p>
@@ -176,7 +178,9 @@ export const Health = () => {
         </Loading>
       </div>
 
-      <div className={`col-span-5 ml-[20px] p-[16px] md:p-[32px] ${cls.item}`}>
+      <div
+        className={`col-span-12 lg:col-span-5 lg:ml-[20px] p-[16px] md:p-[32px] ${cls.item} overflow-x-auto lg:overflow-hidden`}
+      >
         <Loading isLoading={loading}>
           <DetailChart
             health

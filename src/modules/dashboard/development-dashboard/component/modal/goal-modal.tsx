@@ -55,7 +55,7 @@ export const GoalModal = ({
     description: '',
     createdAt: dayjs(new Date()).format('YYYY/MM/DD'),
     headline: '',
-    deadline: '',
+    deadline: dayjs(new Date()).format('YYYY/MM/DD'),
     mediaLinks: [],
     category: '',
     userId: '',
@@ -84,6 +84,11 @@ export const GoalModal = ({
         toast.success(res.data.message)
         queryClient.invalidateQueries(QUERIES_DASHBOARD.UPDATE_PERSONAL_GOAL)
         setIsOpenModal(false)
+      },
+      onError: (err: any) => {
+        if (err.response.status === 400) {
+          toast.error('Category must be a valid enum value.')
+        }
       },
     }
   )
@@ -142,6 +147,13 @@ export const GoalModal = ({
         UpdatePersonal({ body: { ...valueUpdate } })
       } catch (error) {}
     } else if (create) {
+      if (
+        dayjs(formValues.deadline).unix() * 1000 <
+        dayjs(new Date()).unix() * 1000
+      ) {
+        toast.error('Deadline must be greater than now')
+        return
+      }
       const valuePost: CreatePersonalGoalType = {
         headline: formValues.headline,
         category: formValues.category,
@@ -164,6 +176,10 @@ export const GoalModal = ({
 
   const handleRemove = () => {
     setIsOpenModalDelete(true)
+  }
+
+  const handleGoback = () => {
+    setIsOpenModal && setIsOpenModal(false)
   }
 
   const handleConfirmDelete = () => {
@@ -273,7 +289,7 @@ export const GoalModal = ({
             </div>
             {!create ? (
               <>
-                <div className="flex-1">
+                <div className="flex-1" onClick={handleGoback}>
                   <Button
                     text="Go Back"
                     className="w-[148px] h-[48px] justify-between text-[#10B981] rounded-[8px] border-[1px] border-[#10B981]"
