@@ -486,14 +486,14 @@ export const ItemNotification = ({
               className={clsx(
                 ` flex w-full `,
                 notification.notificationStatus === true
-                  ? ' text-Grey opacity-80 '
+                  ? ' text-Grey opacity-88 '
                   : ' text-white '
               )}
             >
-              <div className="w-[56px] h-[56px] mr-[12px] relative ">
+              <div className="grow-0 mr-[12px] h-[56px] relative ">
                 <img
                   src={notification.largeIcon}
-                  className="rounded-[8px] w-[56px] -[56px] "
+                  className="rounded-full w-[56px] h-[56px] object-cover block "
                   alt=""
                 />
                 <div className="w-[28px] h-[28px] object-cover rounded-full absolute right-[-6px] bottom-[-6px] flex justify-center items-center bg-[#006699] ">
@@ -503,9 +503,9 @@ export const ItemNotification = ({
 
               <div
                 className={clsx(
-                  `  `,
+                  ` grow-0 w-[235px]  `,
                   notification.notificationStatus === true
-                    ? ' text-Grey opacity-80 '
+                    ? ' text-Grey opacity-88 '
                     : ' text-white '
                 )}
               >
