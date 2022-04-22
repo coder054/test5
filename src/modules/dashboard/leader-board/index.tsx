@@ -50,18 +50,18 @@ export const LeaderBoards = () => {
 
   const [filterForm, setFilterForm] = useState<FilterForm>({
     country: {
-      flag: '',
-      name: '',
-      alpha3Code: '',
-      alpha2Code: '',
-      region: '',
-      phoneCode: '',
+      alpha2Code: 'SE',
+      alpha3Code: 'SWE',
+      flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
+      name: 'Sweden',
+      phoneCode: '+46',
+      region: 'Europe',
     },
-    ageGroup: '',
+    ageGroup: 'ALL',
     clubId: '',
     yourTeams: [''],
-    role: '',
-    category: '',
+    role: 'All',
+    category: 'HOURS',
     contractedClub: {
       arena: '',
       city: '',
