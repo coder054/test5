@@ -170,8 +170,12 @@ export const Development = () => {
           <DetailChart
             health
             loading={loading}
-            dataYou={dataHealthChart?.data?.personalDiaryRoutinePieChart}
-            dataAvg={dataHealthChart?.data?.averageDiaryRoutinePieChart}
+            dataYou={
+              dataHealthChart?.data?.personalDevTalkRoutine?.devProgressPercent
+            }
+            dataAvg={
+              dataHealthChart?.data?.coachDevTalkRoutine?.devProgressPercent
+            }
           />
         </Loading>
       </div>
