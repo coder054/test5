@@ -32,7 +32,7 @@ export const Health = ({ date }: HealthType) => {
         }
         isAdjective
         step={25}
-        value={emotionlToNum(diary.energyLevel)}
+        value={emotionlToNum(diary?.energyLevel)}
         labelClass="text-[#A2A5AD]"
       />
       <MySlider
@@ -45,7 +45,7 @@ export const Health = ({ date }: HealthType) => {
         }
         isAdjective
         step={25}
-        value={emotionlToNum(diary.sleep)}
+        value={emotionlToNum(diary?.sleep)}
         labelClass="text-[#A2A5AD]"
       />
       <MySlider
@@ -58,7 +58,7 @@ export const Health = ({ date }: HealthType) => {
         }
         isAdjective
         step={25}
-        value={emotionlToNum(diary.eatAndDrink)}
+        value={emotionlToNum(diary?.eatAndDrink)}
         labelClass="text-[#A2A5AD]"
       />
     </div>

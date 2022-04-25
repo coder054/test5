@@ -36,6 +36,9 @@ const INITITAL_VALUE = {
 
 export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
   const [diary] = useAtom(diaryAtom)
+
+  console.log(diary)
+
   const [formValues, setFormValues] = useState<FormValuesType>({
     ...INITITAL_VALUE,
     typeOfTraining: currentTab,
@@ -93,7 +96,7 @@ export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
           ...INITITAL_VALUE,
           typeOfTraining: currentTab,
         })
-  }, [JSON.stringify(diary)])
+  }, [JSON.stringify(diary?.training)])
 
   const isFullfill = useMemo(() => {
     return (

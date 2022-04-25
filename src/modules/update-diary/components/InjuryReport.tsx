@@ -96,7 +96,7 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
 
   useEffect(() => {
     setFormValues(INITIAL_FORM)
-    diary.injuries && setResponse(diary.injuries)
+    diary?.injuries && setResponse(diary.injuries)
   }, [JSON.stringify(diary?.injuries), JSON.stringify(diaryUpdate)])
 
   return (
