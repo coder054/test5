@@ -544,7 +544,7 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
 
   res.setHeader(
     'Cache-Control',
-    'public, s-maxage=10, stale-while-revalidate=20'
+    'public, s-maxage=1, stale-while-revalidate=1'
   )
   const uid = await loadIdToken(req as any)
 
