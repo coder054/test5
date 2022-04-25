@@ -15,6 +15,7 @@ import { Pain } from 'src/modules/dashboard/pain'
 import DashBoardTraining from 'src/modules/dashboard/training'
 import DashboardWellness from 'src/modules/dashboard/wellness'
 import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
+import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 
 const tabs = [
   { label: 'Overview', value: 'overview' },
@@ -28,52 +29,39 @@ const tabs = [
 ]
 
 const Dashboard: NextPage = () => {
-  const [currentTab, setCurrentTab] = useState<string>('overview')
+  const [currentTab, setCurrentTab] = useQueryParam(
+    'd',
+    withDefault(StringParam, 'overview')
+  )
 
   const handleTabsChange = (_, value: string): void => {
     setCurrentTab(value)
   }
 
   return (
-    <h1 className="text-white">
-      <>
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            py: 1,
-            px: 2,
-          }}
-        >
-          <Container maxWidth="xl">
-            <Tabs
-              indicatorColor="secondary"
-              onChange={handleTabsChange}
-              variant="scrollable"
-              scrollButtons="auto"
-              textColor="secondary"
-              value={currentTab}
-              sx={{ mt: 3 }}
-            >
-              {tabs.map((tab) => (
-                <Tab key={tab.value} label={tab.label} value={tab.value} />
-              ))}
-            </Tabs>
-            <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />
-            {currentTab === 'overview' && (
-              <Overview setCurrentTab={setCurrentTab} />
-            )}
-            {currentTab === 'training' && <DashBoardTraining />}
-            {currentTab === 'matches' && <DashboardMatches />}
-            {currentTab === 'wellness' && <DashboardWellness />}
-            {currentTab === 'health' && <Health />}
-            {currentTab === 'development' && <Development />}
-            {currentTab === 'pain' && <Pain />}
-            {currentTab === 'leaderboards' && <LeaderBoards />}
-          </Container>
-        </Box>
-      </>
-    </h1>
+    <div className="laptopM:px-12 mobileM:px-4">
+      <Tabs
+        indicatorColor="secondary"
+        onChange={handleTabsChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        textColor="secondary"
+        value={currentTab}
+        sx={{ mt: 3 }}
+      >
+        {tabs.map((tab) => (
+          <Tab key={tab.value} label={tab.label} value={tab.value} />
+        ))}
+      </Tabs>
+      {currentTab === 'overview' && <Overview setCurrentTab={setCurrentTab} />}
+      {currentTab === 'training' && <DashBoardTraining />}
+      {currentTab === 'matches' && <DashboardMatches />}
+      {currentTab === 'wellness' && <DashboardWellness />}
+      {currentTab === 'health' && <Health />}
+      {currentTab === 'development' && <Development />}
+      {currentTab === 'pain' && <Pain />}
+      {currentTab === 'leaderboards' && <LeaderBoards />}
+    </div>
   )
 }
 
