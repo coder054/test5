@@ -1,6 +1,7 @@
 import { CardNews } from 'src/components/card-news'
 import { Loading } from 'src/components/loading/loading'
-import { Tabs } from 'src/components/Tabs'
+import { Tab, Tabs } from '@mui/material'
+
 import {
   API_GET_LIST_NEWS_POST,
   API_LIKE_POST,
@@ -10,25 +11,23 @@ import { useEffect, useState } from 'react'
 import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
 import { get } from 'lodash'
-
-enum Tab {
-  TopStories = 'TopStories',
-  Latest = 'Latest',
-  Zportster = 'Zportster',
-  Leaderbords = 'Leaderbords',
-  Test = 'Test',
-}
+import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 
 const tabs = [
-  { text: Tab.TopStories },
-  { text: Tab.Latest },
-  { text: Tab.Zportster },
-  { text: Tab.Leaderbords },
-  { text: Tab.Test },
+  { label: 'All', value: 'all' },
+  { label: 'News', value: 'news' },
+  { label: 'Friends', value: 'friends' },
+  { label: 'Teammates', value: 'teammates' },
+  { label: 'Yours', value: 'yours' },
+  { label: 'Family', value: 'family' },
+  { label: 'Saved', value: 'saved' },
 ]
 
 const News = () => {
-  const [tab, setTab] = useState(Tab.Latest)
+  const [currentTab, setCurrentTab] = useQueryParam(
+    't',
+    withDefault(StringParam, 'news')
+  )
   const [loading, setLoading] = useState<boolean>(true)
   const [news, setNews] = useState<NewsType[]>([])
   const params = {
@@ -73,9 +72,25 @@ const News = () => {
     }
   }
 
+  const handleTabsChange = (_, value: string): void => {
+    setCurrentTab(value)
+  }
+
   return (
     <div className="w-full">
-      <Tabs tab={tab} setTab={setTab} tabs={tabs} />
+      <Tabs
+        sx={{ mb: 3 }}
+        value={currentTab}
+        onChange={handleTabsChange}
+        indicatorColor="secondary"
+        variant="scrollable"
+        scrollButtons="auto"
+        textColor="secondary"
+      >
+        {tabs.map((tab) => (
+          <Tab key={tab.value} label={tab.label} value={tab.value}></Tab>
+        ))}
+      </Tabs>
       {loading && (
         <div className="w-[48px] m-auto">
           <Loading />
@@ -85,15 +100,12 @@ const News = () => {
         className="md:grid md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 md:gap-y-6 md:gap-x-2 mobileM:gap-x-10 2xl:gap-x-2
         flex flex-col items-center"
       >
-        {!loading && news ? (
+        {news &&
           (news || [])?.map((item: NewsType, index) => (
             <div key={index} className="mb-[24px] md:mb-[0px]">
               <CardNews card={item} handleFavorite={handleFavorite} />
             </div>
-          ))
-        ) : (
-          <p>No data</p>
-        )}
+          ))}
       </div>
     </div>
   )
