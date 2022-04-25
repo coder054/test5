@@ -57,7 +57,7 @@ export const SignUpFormPlayer = () => {
     currentTeams: [],
     yourTeams: [''],
     shirtNumber: '8',
-    favoriteRoles: [''],
+    favoriteRoles: ['CM'],
     length: '160',
     weight: '60',
     contractedClub: {
@@ -269,7 +269,8 @@ export const SignUpFormPlayer = () => {
           <div key={index} className="flex items-center mt-[24px] w-[470px]">
             <div className="w-[430px]">
               <InfiniteScrollTeam
-                label="Your Team(s)"
+                // label="Your Team(s)"
+                placeholder="Your Team(s)"
                 idClub={formValues.contractedClub.clubId}
                 /* @ts-ignore */
                 handleSetTeam={(value) => setSelectedTeam(value, index + '')}

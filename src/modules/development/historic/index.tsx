@@ -163,6 +163,13 @@ export const Historic = ({ playerId }: HistoricProps) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
+    if (!formValues.league) {
+      toast.error('Required fields League must be filled in.')
+      setTimeout(() => {
+        setLoading(false)
+      }, 1000)
+      return
+    }
     const valueHistoric: HistoricCareerType = {
       season: formValues.season,
       fromTime: formValues.fromDate,

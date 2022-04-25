@@ -58,6 +58,24 @@ export const Development = ({
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
+
+    if (
+      !formValues.strengths &&
+      !formValues.weaknesses &&
+      !formValues.developedSkill &&
+      !formValues.skills &&
+      !formValues.way &&
+      !formValues.shortTerm &&
+      !formValues.longTerm &&
+      !formValues.comment
+    ) {
+      toast.error('You need fill at least 1 field!')
+      setTimeout(() => {
+        setLoading(false)
+      }, 1000)
+      return
+    }
+
     let developmentProgress = ''
     if (+formValues.progress === 0) {
       developmentProgress = 'VERY_BAD'
@@ -119,7 +137,11 @@ export const Development = ({
           window.scroll(0, 0)
         }
       })
-    } catch (error) {}
+    } catch (error) {
+      if (error.response.status === 405) {
+        toast.error('You created development for this day!')
+      }
+    }
     setTimeout(() => {
       setLoading(false)
     }, 1000)

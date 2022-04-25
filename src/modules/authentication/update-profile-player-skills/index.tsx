@@ -205,9 +205,9 @@ export const SignUpFormPlayerSkills = () => {
 
       <div className="absolute z-20 w-full bottom-12">
         <div className="mx-auto w-11/12 md:w-5/6 lg:w-2/3 grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-2">
-          <ItemSkills className="w-[372px] h-[513px]">
+          <ItemSkills className="w-[372px] h-[532px]">
             <>
-              <p className="text-[24px] text-[#FFFFFF] mb-[48px]">
+              <p className="text-[24px] text-[#FFFFFF] mb-[12px]">
                 Update your profile - player skills
               </p>
               <Comments
@@ -217,7 +217,7 @@ export const SignUpFormPlayerSkills = () => {
                     text: 'Honestly now, how’s your football skills, specialities and attributes compared to peers in your age? Let’s start with an overall view.',
                   },
                 ]}
-                className="mb-[20px]"
+                className="mb-[12px]"
               />
               <div>
                 {Object.keys(footBallSkills).map((skill: string) => (
@@ -237,7 +237,7 @@ export const SignUpFormPlayerSkills = () => {
             </>
           </ItemSkills>
 
-          <ItemSkills className="w-[372px] h-[513px]">
+          <ItemSkills className="w-[372px] h-[532px]">
             <Comments
               listComment={[
                 {
@@ -245,7 +245,7 @@ export const SignUpFormPlayerSkills = () => {
                   text: 'And to be a bit more detailed, so we can build you a radar chart.',
                 },
               ]}
-              className="mb-[30px]"
+              className="mb-[40px]"
             />
             <div className="-space-y-2">
               {Object.keys(radarCharts).map((radar: string) => (
@@ -255,7 +255,7 @@ export const SignUpFormPlayerSkills = () => {
                   step={1}
                   labelClass="text-[#A2A5AD]"
                   label={_.upperFirst(radar)}
-                  value={footBallSkills[radar]}
+                  value={radarCharts[radar]}
                   onChange={(e) =>
                     handleChangeRadar(radar as keyof RadarChartType, e)
                   }
@@ -263,7 +263,7 @@ export const SignUpFormPlayerSkills = () => {
               ))}
             </div>
           </ItemSkills>
-          <ItemSkills className="w-[372px] h-[513px]">
+          <ItemSkills className="w-[372px] h-[532px]">
             <Comments
               listComment={[
                 {
