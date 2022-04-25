@@ -168,7 +168,9 @@ export const Pain = ({ lastDateRange, setCurrentTab }: PainProps) => {
             setCurrentTab && setCurrentTab('pain')
           }}
         >
-          <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>
+          <p className="text-[12px] text-[#09E099] mr-[11px]">
+            See all updates
+          </p>
           <SvgAllowRight />
         </div>
       </div>

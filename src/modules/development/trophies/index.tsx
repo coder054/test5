@@ -45,7 +45,7 @@ export const Trophies = () => {
   const [images, setImages] = useState([])
   const [formValues, setFormValues] = useState<FormValuesType>({
     personalAward: 'AWARD',
-    typeOfAward: 'MVP',
+    typeOfAward: 'POM',
     name: '',
     country: {
       alpha2Code: '',

@@ -70,7 +70,9 @@ export const TrainingAndMatches = ({
             setCurrentTab && setCurrentTab('training')
           }}
         >
-          <p className="text-[12px] text-[#09E099] mr-[11px]">See all update</p>
+          <p className="text-[12px] text-[#09E099] mr-[11px]">
+            See all updates
+          </p>
           <SvgAllowRight />
         </div>
       </div>

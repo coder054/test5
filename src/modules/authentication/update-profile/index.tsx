@@ -297,7 +297,7 @@ const SignUpForm = ({ title }: { title: string }) => {
           </div>
         </div>
 
-        <div className="mt-[40px]" onClick={handleSubmit}>
+        <div className="mt-[54px]" onClick={handleSubmit}>
           <Button
             loading={loading}
             className="active:bg-[#293af8] h-[48px] w-[300px] md:w-[470px] bg-[#4654EA] text-[15px] text-[#FFFFFF] font-semibold hover:bg-[#5b67f3]"

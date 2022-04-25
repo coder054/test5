@@ -15,9 +15,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import OtpInput from 'react-otp-input'
+import { MyInput } from 'src/components'
 import { TabPanel, Tabs } from 'src/components/Tabs'
 import { auth } from 'src/config/firebase-client'
 import { API_SIGNIN_WITH_USERNAME } from 'src/constants/api.constants'
+import { ROUTES } from 'src/constants/constants'
 import { axios } from 'src/utils/axios'
 import { useAuth } from '../auth/AuthContext'
 const cls = require('./signin.module.css')
@@ -130,7 +132,7 @@ const SignIn = () => {
           </div>
 
           <div className="mb-[32px] font-Roboto text-[14px] leading-[22px] px-[14px] ">
-            <span className="text-white  ">
+            <span className="text-white">
               Now verify your mobile phone number by adding the 6 digit code we
               sent to&nbsp;
             </span>
@@ -138,7 +140,14 @@ const SignIn = () => {
             <span className="text-[#00e09d] ">
               {phoneFormPhoneSignIn}.&nbsp;
             </span>
-            <span className="underline text-white">Wrong number?</span>
+            <span
+              className="underline text-white cursor-pointer hover:text-[#00e09d]"
+              onClick={() => {
+                window.location.href = ROUTES.SIGNIN
+              }}
+            >
+              Wrong number?
+            </span>
           </div>
 
           <div className="w-[300px] md:w-[372px] mx-auto">
@@ -207,13 +216,13 @@ const SignIn = () => {
                 >
                   <div className="flex items-center">
                     <div>
-                      <Typography variant="h4">Log in</Typography>
+                      <Typography variant="h4">Sign in</Typography>
                       <Typography
                         color="textSecondary"
                         sx={{ mt: 1 }}
                         variant="body2"
                       >
-                        Log in on the internal platform
+                        Sign in on the internal platform
                       </Typography>
                     </div>
                     <div className="grow "></div>
@@ -267,7 +276,7 @@ const SignIn = () => {
                   <Divider sx={{ my: 3 }} />
                   <Link href="/signup">
                     <a className="text-DefaultTextColor hover:underline  ">
-                      Create new account
+                      Sign up
                     </a>
                   </Link>
 
@@ -322,7 +331,7 @@ const FormEmailLogin = () => {
         name="email"
         type="email"
       />
-      <TextField
+      {/* <TextField
         fullWidth
         value={pass}
         onChange={(e) => {
@@ -332,10 +341,20 @@ const FormEmailLogin = () => {
         margin="normal"
         name="password"
         type="password"
+      /> */}
+      <MyInput
+        name={'password'}
+        label="Password"
+        password
+        value={pass}
+        onChange={(e) => {
+          setPass(e.target.value)
+        }}
+        className="mt-[20px] mb-[24px]"
       />
       <Box sx={{ mt: 2 }}>
         <Button fullWidth size="large" type="submit" variant="contained">
-          Log In
+          Sign in
         </Button>
       </Box>
     </form>

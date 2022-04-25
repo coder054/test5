@@ -21,6 +21,7 @@ type InfiniteScrollTeamProps = {
   handleSetTeam?: (value: CurrentTeamType) => void
   setTeamId?: (teamId: string) => void
   label: string
+  placeholder?: string
   idClub?: string
   teamName?: string
   item?: CurrentTeamType
@@ -34,6 +35,7 @@ export const InfiniteScrollTeam = ({
   item,
   teamName,
   errorMessage,
+  placeholder,
   setTeamId,
 }: InfiniteScrollTeamProps) => {
   const [items, setItems] = useState<any>([])
@@ -152,6 +154,7 @@ export const InfiniteScrollTeam = ({
             ),
           }}
           errorMessage={errorMessage}
+          placeholder={placeholder}
         />
         <div
           className={clsx('absolute w-full z-50', !isOpenOption && 'hidden')}
