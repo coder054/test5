@@ -57,7 +57,7 @@ export const PieChart = ({ response, isLoading }: WellnessPieChartProps) => {
   return (
     <Loading
       isLoading={isLoading}
-      className="col-span-5 bg-defaultBackGround rounded-lg p-8 flex items-center"
+      className="col-span-5 bg-defaultBackGround rounded-lg laptopM:p-8 mobileM:p-2 flex items-center"
     >
       <div className="grid grid-cols-5 h-full">
         <ChartDonut label="You" value={personalChart} />
@@ -65,7 +65,7 @@ export const PieChart = ({ response, isLoading }: WellnessPieChartProps) => {
           {Object.keys(initial.personalDiaryRoutinePieChart)
             .reverse()
             .map((key, index) => (
-              <div key={index} className="grid grid-cols-3 my-5">
+              <div key={index} className="text-[13px] grid grid-cols-3 my-5">
                 <div className="flex justify-center">
                   <p className="text-left w-[20px]">
                     {initial.personalDiaryRoutinePieChart[key]}%
@@ -78,7 +78,7 @@ export const PieChart = ({ response, isLoading }: WellnessPieChartProps) => {
                   {COLOR_CHART[key].label}
                 </p>
                 <div className="flex justify-center">
-                  <p className="text-left  w-[20px]">
+                  <p className="text-left w-[20px]">
                     {initial.averageDiaryRoutinePieChart[key]}%
                   </p>
                 </div>

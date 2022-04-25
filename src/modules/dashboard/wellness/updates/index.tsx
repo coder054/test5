@@ -4,7 +4,7 @@ import { isMobile } from 'react-device-detect'
 import { useQuery } from 'react-query'
 import SimpleBar from 'simplebar-react'
 import { Loading } from 'src/components'
-import { XIcon } from 'src/components/icons'
+import { ChervonRightIcon, XIcon } from 'src/components/icons'
 import { ArrowDownIcon } from 'src/components/icons/ArrowDownIcon'
 import { ModalMui } from 'src/components/ModalMui'
 import { COLOR_DIARY } from 'src/constants/mocks/colors.constants'
@@ -50,20 +50,20 @@ export const DashboardDiaryUpdate = () => {
   return (
     <Loading
       isLoading={isGettingUpdates}
-      className="bg-defaultBackGround p-8 rounded-lg"
+      className="bg-defaultBackGround laptopM:p-8 mobileM:p-2 rounded-lg"
     >
-      <div className="space-y-6">
+      <div>
         <ModalMui
           sx={{
             padding: 0,
             top: '50%',
-            width: isMobile ? '100%' : 700,
+            width: isMobile ? '100%' : 800,
             overflow: 'auto',
           }}
           isOpen={isOpenModal}
           onClose={setIsOpenModal}
         >
-          <SimpleBar style={{ maxHeight: 850 }}>
+          <div className="h-[850px] overflow-y-auto">
             <div className="relative">
               <button
                 type="button"
@@ -78,14 +78,16 @@ export const DashboardDiaryUpdate = () => {
                 isWellness={true}
               />
             </div>
-          </SimpleBar>
+          </div>
         </ModalMui>
-        <p className="text-[18px] font-bold">Diary Updates</p>
-        <div className="grid grid-cols-12 bg-[#13161A] text-[#A2A5AD] text-[16px] font-medium  px-4 py-2">
-          <p className="col-span-2">
+        <p className="text-[18px] laptopM:text-left mobileM:text-center font-bold laptopM:mb-0 mobileM:mb-4">
+          Diary Updates
+        </p>
+        <div className="grid grid-cols-6 text-left bg-[#13161A] text-[#A2A5AD] laptopM:text-[16px] mobileM:text-[13px] font-medium  px-4 py-2">
+          <p>
             <button
               onClick={() => setSort(!sort)}
-              className="flex items-center space-x-4"
+              className="flex items-center laptopM:space-x-4"
             >
               <p>Date</p>
               <span
@@ -95,42 +97,30 @@ export const DashboardDiaryUpdate = () => {
               </span>
             </button>
           </p>
-          <p className="col-span-2">Energy</p>
-          <p className="col-span-2">Sleep</p>
-          <p className="col-span-2">Eat</p>
-          <p className="col-span-2">Pain</p>
-          <p className="col-span-2 invisible">Action</p>
+          <p>Energy</p>
+          <p>Sleep</p>
+          <p>Eat</p>
+          <p>Pain</p>
+          <p className="invisible">Action</p>
         </div>
-        <SimpleBar style={{ maxHeight: 350 }}>
+        <div className="h-[350px] overflow-y-auto">
           {initial.map((it: DashboardDiaryUpdateType) => (
-            <div
+            <button
               key={it.diaryId}
               onClick={() => handleChooseUpdates(it)}
-              className="grid grid-cols-12  text-[16px] font-normal px-4 py-2.5 cursor-pointer hover:bg-gray-500 duration-150"
+              className="grid w-full grid-cols-6 text-left laptopM:text-[16px] mobileM:text-[13px] font-normal mobileM:pl-4 laptopM:px-4 py-2.5 hover:bg-gray-500 duration-150"
             >
-              <p className="col-span-2">
-                {flexingFormatDate(it.createdAt, 'DD/MM')}
-              </p>
-              <p
-                className="col-span-2"
-                style={{ color: COLOR_DIARY[it.energyLevel].color }}
-              >
+              <p>{flexingFormatDate(it.createdAt, 'DD/MM')}</p>
+              <p style={{ color: COLOR_DIARY[it.energyLevel].color }}>
                 {COLOR_DIARY[it.energyLevel].label}
               </p>
-              <p
-                className="col-span-2"
-                style={{ color: COLOR_DIARY[it.sleep].color }}
-              >
+              <p style={{ color: COLOR_DIARY[it.sleep].color }}>
                 {COLOR_DIARY[it.sleep].label}
               </p>
-              <p
-                className="col-span-2"
-                style={{ color: COLOR_DIARY[it.eatAndDrink].color }}
-              >
+              <p style={{ color: COLOR_DIARY[it.eatAndDrink].color }}>
                 {COLOR_DIARY[it.eatAndDrink].label}
               </p>
               <p
-                className="col-span-2"
                 style={{
                   color:
                     it.painLevel === 'No'
@@ -140,10 +130,12 @@ export const DashboardDiaryUpdate = () => {
               >
                 {it.painLevel === 'No' ? 'No' : COLOR_DIARY[it.painLevel].label}
               </p>
-              <p className="col-span-2 invisible">Action</p>
-            </div>
+              <span>
+                <ChervonRightIcon className="w-[25px] h-[25px]" />
+              </span>
+            </button>
           ))}
-        </SimpleBar>
+        </div>
       </div>
     </Loading>
   )

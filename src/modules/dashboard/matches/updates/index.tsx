@@ -71,10 +71,12 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
   return (
     <Loading
       isLoading={isGettingUpdates}
-      className="p-8 bg-defaultBackGround rounded-lg"
+      className="laptopM:p-8 mobileM:p-2 bg-defaultBackGround rounded-lg"
     >
-      <div className=" space-y-6">
-        <p className="text-[18px] font-bold">Match Updates</p>
+      <div className="space-y-6">
+        <p className="text-[18px] font-bold mobileM:text-center laptopM:text-left">
+          Match Updates
+        </p>
         <div>
           <ModalMui
             sx={{
@@ -86,27 +88,25 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
             isOpen={isOpenModal}
             onClose={setIsOpenModal}
           >
-            <SimpleBar style={{ maxHeight: 850 }}>
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setIsOpenModal(false)}
-                  className="absolute z-50 right-6 top-5"
-                >
-                  <XIcon />
-                </button>
-                <DiaryUpdate
-                  selected={selectedUpdates}
-                  onClose={setIsOpenModal}
-                />
-              </div>
-            </SimpleBar>
+            <div className="relative h-[850px] overflow-y-auto">
+              <button
+                type="button"
+                onClick={() => setIsOpenModal(false)}
+                className="absolute z-50 right-6 top-5"
+              >
+                <XIcon />
+              </button>
+              <DiaryUpdate
+                selected={selectedUpdates}
+                onClose={setIsOpenModal}
+              />
+            </div>
           </ModalMui>
-          <div className="grid grid-cols-12 bg-[#13161A] text-[#A2A5AD] text-[16px] font-medium  px-4 py-2">
+          <div className="bg-[#13161A] text-[#A2A5AD] laptopM:text-[16px] mobileM:text-[13px] font-medium grid grid-cols-12 laptopM:p-4 mobileM:py-2 mobileM:pl-2">
             <p className="col-span-2">
               <button
                 onClick={() => setSort(!sort)}
-                className="flex items-center space-x-4"
+                className="flex items-center laptopM:space-x-4"
               >
                 <p>Date</p>
                 <span
@@ -125,32 +125,34 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
             <p className="col-span-2">Min.</p>
             <p className="col-span-1 invisible">Action</p>
           </div>
-          <SimpleBar style={{ maxHeight: 360 }}>
+          <div className="h-[400px] overflow-y-auto">
             {formValues.map((it) => (
-              <div
+              <button
                 key={it.diaryId}
                 onClick={() => handleChooseUpdates(it)}
-                className="grid grid-cols-12  text-[16px] font-normal px-4 py-2.5 cursor-pointer hover:bg-gray-500 duration-150"
+                className="w-full grid grid-cols-12 items-center laptopM:py-3 text-left laptopM:text-[16px] mobileM:text-[13px] font-normal laptopM:px-4 mobileM:pl-2 mobileM:py-2 hover:bg-gray-500 duration-150"
               >
                 <p className="col-span-2">
                   {flexingFormatDate(it.createdAt, 'DD/MM')}
                 </p>
-                <p className="col-span-3 flex items-center space-x-4">
+                <p className="col-span-3 flex items-center mobileM:pl-4 laptopM:pl-0 space-x-4">
                   <img
                     className="rounded-full w-[25px] h-[25px] object-cover"
                     src={safeHttpImage(it.match.opponentClub.logoUrl)}
                   />
-                  <span>{it.match.opponentClub.clubName}</span>
+                  <span className="mobileM:hidden laptopM:block">
+                    {it.match.opponentClub.clubName}
+                  </span>
                 </p>
                 <p className="col-span-2">{`${it.match.result.yourTeam}-${it.match.result.opponents}`}</p>
                 <p className="col-span-2">{countGoal(it.match.events)}</p>
                 <p className="col-span-2">{it.match.length}</p>
-                <p className="col-span-1 invisible">
-                  <ChervonRightIcon />
+                <p className="col-span-1">
+                  <ChervonRightIcon className="w-[25px] h-[25px]" />
                 </p>
-              </div>
+              </button>
             ))}
-          </SimpleBar>
+          </div>
         </div>
       </div>
     </Loading>

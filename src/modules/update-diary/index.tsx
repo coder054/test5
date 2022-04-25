@@ -33,6 +33,7 @@ import { Tabs } from './components/Tabs'
 import { Health } from './health'
 import { Match } from './match'
 import { Training } from './training'
+import { useRouter } from 'next/router'
 
 const ITEMS = [
   { label: 'Team Training', value: 'TEAM_TRAINING' },
@@ -52,6 +53,7 @@ type DiaryUpdateProps = {
 }
 
 const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
+  const router = useRouter()
   const queryClient = useQueryClient()
   const { currentRoleName } = useAuth()
   const [diary, setDiary] = useAtom(diaryAtom)
@@ -60,6 +62,9 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [isHaveInjury, setIsHaveInjury] = useState<boolean>(false)
   const [injuryData, setInjuryData] = useState<InjuryType>(null)
+
+  console.log('Injury: ', injuryData)
+
   const [currentTab, setCurrentTab] = useState('TEAM_TRAINING')
   const [error, setError] = useState<string>('')
 
@@ -83,6 +88,11 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
         queryClient.invalidateQueries(QUERIES_DASHBOARD.TRAINING_DATA)
         queryClient.invalidateQueries(QUERIES_DASHBOARD.MATCHES_DATA)
         queryClient.invalidateQueries(QUERIES_DASHBOARD.WELLNESS_DATA)
+        onClose(false)
+        router.push({
+          pathname: '/dashboard',
+          query: { d: handleNavigate(currentTab) },
+        })
       },
       onError: () => {
         toast.error('Please complete all fields')
@@ -107,6 +117,10 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
         queryClient.invalidateQueries(QUERIES_DASHBOARD.TRAINING_DATA)
         queryClient.invalidateQueries(QUERIES_DASHBOARD.MATCHES_DATA)
         queryClient.invalidateQueries(QUERIES_DASHBOARD.WELLNESS_DATA)
+        router.push({
+          pathname: '/dashboard',
+          query: { d: handleNavigate(currentTab) },
+        })
       },
     }
   )
@@ -119,7 +133,6 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
         if (injuryData.injuryArea) {
           setDiary((prev) => ({ ...prev, injuries: data.data }))
         }
-        onClose(false)
         queryClient.invalidateQueries('diary')
         queryClient.invalidateQueries(QUERIES_DASHBOARD.TRAINING_DATA)
         queryClient.invalidateQueries(QUERIES_DASHBOARD.MATCHES_DATA)
@@ -148,6 +161,15 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
     },
     [currentTab]
   )
+
+  const handleNavigate = (type: string) => {
+    if (type.includes('TRAINING')) {
+      return 'training'
+    } else if (type === 'CAP' || type === 'MATCH') {
+      return 'matches'
+    }
+    return 'overview'
+  }
 
   const handleSubmit = useCallback(async () => {
     const requestData = {
@@ -316,14 +338,24 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
             </div>
           </ModalMui>
         </div>
-        <div className="grid grid-cols-2 gap-x-9 pt-3">
+        <div className="flex justify-between gap-x-4 pt-3">
           <Button
             type="submit"
             isLoading={isCreating || isUpdating}
             label={isUpdate ? 'Save & Update' : 'Save'}
             onClick={handleSubmit}
-            className={clsx('bg-[#4654EA] w-full py-3  rounded-[8px]')}
+            className={clsx('bg-[#4654EA] w-full py-3 rounded-[8px]')}
           />
+          {isHaveInjury && injuryData?.injuryArea && (
+            <Button
+              type="button"
+              isLoading={isCreating || isUpdating}
+              label="Save & Add another injury"
+              onClick={handleSubmit}
+              labelClass="text-[#09E099]"
+              className="border-2 border-[#09E099] w-full py-[9px] px-2 rounded-[8px]"
+            />
+          )}
           <Button
             type="button"
             label="Delete Diary"

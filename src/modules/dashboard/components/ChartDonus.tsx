@@ -1,4 +1,5 @@
 import type { ApexOptions } from 'apexcharts'
+import { isMobile } from 'react-device-detect'
 import { Chart } from 'src/components'
 
 type ChartDonusProps = {
@@ -36,7 +37,7 @@ const ChartDonut = ({ value, label }: ChartDonusProps) => {
     <div className="flex justify-center flex-col items-center space-y-4 ">
       <p className="text-[18px] font-normal">{label}</p>
       <Chart
-        height={120}
+        height={isMobile ? 90 : 120}
         options={chartOptions}
         series={chartSeries}
         type="donut"
