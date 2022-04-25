@@ -57,8 +57,8 @@ export const MatchesTable = ({ range }: MatchesTableProps) => {
       isLoading={isGettingMatches}
       className="col-span-5 bg-defaultBackGround rounded-lg"
     >
-      <div className="flex laptopM:flex-col space-y-9 p-8">
-        <div className="flex-1 grid grid-cols-4 gap-y-6">
+      <div className="flex flex-col laptopM:space-y-9 mobileM:space-y-3 laptopM:p-8 mobileM:p-4">
+        <div className="flex-1 grid laptopM:grid-cols-4 mobileM:grid-cols-3 laptopM:gap-y-6 mobileM:gap-2">
           <Ticket title="Ser/Cup/Fri" value={totalMatch} />
           <Ticket
             title="Av. Points"
@@ -86,14 +86,16 @@ export const MatchesTable = ({ range }: MatchesTableProps) => {
             value={formValues.matchStatisticAverage.averageCard}
           />
         </div>
-        <p className="font-bold text-[18px]">Matches</p>
+        <p className="font-bold text-[18px] mobileM:text-center laptopM:text-left">
+          Matches
+        </p>
         <div className="flex justify-between">
           {Object.keys(formValues.matchInTotalStatistic).map((it: string) => (
-            <div className="flex flex-col space-y-4 items-center justify-center">
-              <p className="text-[#A2A5AD] font-normal text-[16px]">
+            <div className="flex flex-col space-y-4 items-center laptopM:justify-start">
+              <p className="w-full grid grid-cols-12 items-center py-3 text-left laptopM:text-[16px] mobileM:text-[14px] font-normal px-4 duration-150">
                 {upperFirst(it)}
               </p>
-              <p className="text-[24px] font-medium">
+              <p className="laptopM:text-[24px] mobileM:text-[18px] font-medium">
                 {formValues.matchInTotalStatistic[it]}
               </p>
             </div>

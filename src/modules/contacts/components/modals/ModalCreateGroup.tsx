@@ -30,7 +30,7 @@ export default function CreateNew() {
       {current === 'group' && <CreateGroupModal isClose={setCurrent} />}
       {current === 'club' && <CreateClubModal isClose={setCurrent} />}
       {current === 'team' && <CreateTeamModal isClose={setCurrent} />}
-      <FloatingButton>
+      <FloatingButton onClose={!!current}>
         <Fragment>
           {OPTIONS.map((option) => (
             <button

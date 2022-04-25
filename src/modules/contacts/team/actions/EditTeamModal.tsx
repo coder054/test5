@@ -89,7 +89,7 @@ export default function EditTeamModal({
         >
           <XIcon />
         </button>
-        <p className="text-[24px] font-medium pb-6">Edit Group</p>
+        <p className="text-[24px] font-medium pb-6">Edit Team</p>
         <div className="space-y-6 w-full">
           <MyInput
             defaultValue={initialValue?.teamName}

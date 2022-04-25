@@ -5,8 +5,10 @@ import { dashboardTags } from 'src/atoms/dashboardTrainingAtom'
 export const TrainingTags = () => {
   const [tags] = useAtom(dashboardTags)
   return (
-    <div className="flex flex-col items-start space-y-8">
-      <p className="font-bold text-[17px]">Practice Tag Cloud</p>
+    <div className="flex flex-col laptopM:items-start mobileM:items-center space-y-8">
+      <p className="font-bold text-[17px] mobileM:text-center">
+        Practice Tag Cloud
+      </p>
       <div className="flex flex-wrap  ">
         {tags.map((tag, index) => (
           <span

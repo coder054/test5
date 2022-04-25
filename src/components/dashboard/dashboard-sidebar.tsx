@@ -54,7 +54,7 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
       items: [
         {
           title: t('Feed'),
-          path: '/dashboard/news',
+          path: '/feed',
           icon: <Newspaper fontSize="small" />,
         },
         {
@@ -69,7 +69,7 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
         },
         {
           title: t('Messages'),
-          path: `/dashboard/chat`,
+          path: `/chat`,
           icon: <MessagesIcon fontSize="small" />,
         },
         {

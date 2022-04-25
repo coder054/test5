@@ -30,7 +30,7 @@ const DashBoardTraining = () => {
       <PeriodFilter
         value={range}
         onChange={setRange}
-        className="pb-6"
+        className="py-4"
         label="Filter training period"
       />
       <div>
