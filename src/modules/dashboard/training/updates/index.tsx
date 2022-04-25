@@ -6,18 +6,18 @@ import { toast } from 'react-hot-toast'
 import { useQuery } from 'react-query'
 import { dashboardTags } from 'src/atoms/dashboardTrainingAtom'
 import { Loading } from 'src/components'
+import { XIcon } from 'src/components/icons'
 import { ArrowDownIcon } from 'src/components/icons/ArrowDownIcon'
 import { ModalMui } from 'src/components/ModalMui'
+import { COLOR_DIARY } from 'src/constants/mocks/colors.constants'
+import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import {
   DashboardUpdatesType,
   LastRangeDateType,
 } from 'src/constants/types/dashboard/training.types'
 import { flexingFormatDate, upperFirst } from 'src/hooks/functionCommon'
-import { fetchUpdates } from 'src/service/dashboard/training.service'
-import SimpleBar from 'simplebar-react'
-import { XIcon } from 'src/components/icons'
 import DiaryUpdate from 'src/modules/update-diary'
-import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
+import { fetchUpdates } from 'src/service/dashboard/training.service'
 
 type TrainingUpdateProps = {
   range: LastRangeDateType
@@ -68,7 +68,7 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
       isLoading={isGettingUpdates}
       className="bg-defaultBackGround rounded-lg w-full"
     >
-      <div className="p-10">
+      <div className="laptopM:p-10 mobileM:p-4">
         <ModalMui
           sx={{
             padding: 0,
@@ -79,7 +79,7 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
           isOpen={isOpenModal}
           onClose={setIsOpenModal}
         >
-          <SimpleBar style={{ maxHeight: 850 }}>
+          <div className="laptopM:h-[850px] mobileM:h-screen overflow-y-auto">
             <div className="relative">
               <button
                 type="button"
@@ -95,13 +95,15 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
                 />
               )}
             </div>
-          </SimpleBar>
+          </div>
         </ModalMui>
-        <p className="font-bold text-[17px] mb-7">Training updates</p>
-        <div className="bg-[#13161A] text-[#A2A5AD] text-[16px] font-medium grid grid-cols-4 px-4 py-2">
+        <p className="font-bold text-[17px] mb-7 mobileM:text-center laptopM:text-left">
+          Training updates
+        </p>
+        <div className="bg-[#13161A] text-[#A2A5AD] laptopM:text-[16px] mobileM:text-[13px] font-medium grid laptopM:grid-cols-4 mobileM:grid-cols-5 px-4 py-2">
           <button
             onClick={() => setSort(!sort)}
-            className="flex items-center space-x-4"
+            className="flex items-center laptopM:space-x-4"
           >
             <p>Date</p>
             <span
@@ -110,30 +112,34 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
               <ArrowDownIcon />
             </span>
           </button>
-          <p>Category</p>
+          <p className="mobileM:col-span-2 laptopM:col-span-1">Category</p>
           <p>Strain</p>
           <p>Hours</p>
         </div>
         {isSuccess && (
-          <SimpleBar style={{ maxHeight: 360 }}>
-            <div>
-              {(responseUpdates.data || []).map((it: DashboardUpdatesType) => (
-                <div
-                  key={it.diaryId}
-                  onClick={() => handleChooseUpdates(it)}
-                  className="text-[15px] font-normal grid grid-cols-4 px-4 py-3 hover:bg-gray-500 cursor-pointer duration-150"
+          <div className="laptopM:h-[360px] mobileM:h-[360px] overflow-y-auto">
+            {(responseUpdates.data || []).map((it: DashboardUpdatesType) => (
+              <button
+                key={it.diaryId}
+                onClick={() => handleChooseUpdates(it)}
+                className="w-full laptopM:text-[16px] mobileM:text-[13px] font-normal grid laptopM:grid-cols-4 mobileM:grid-cols-6 laptopM:px-4 laptopM:py-3 hover:bg-gray-500 duration-150 mobileM:text-left mobileM:pl-4 mobileM:py-2"
+              >
+                <p>{flexingFormatDate(it.createdAt, 'DD/MM')}</p>
+                <p className="mobileM:col-span-2 laptopM:col-span-1">
+                  {upperFirst(it.training.typeOfTraining)}
+                </p>
+                <p
+                  style={{
+                    color: COLOR_DIARY[it.training.physicallyStrain].color,
+                  }}
+                  className="mobileM:col-span-2 laptopM:col-span-1"
                 >
-                  <p>{flexingFormatDate(it.createdAt, 'DD/MM')}</p>
-                  <p>{upperFirst(it.training.typeOfTraining)}</p>
-                  <p>{upperFirst(it.training.physicallyStrain)}</p>
-                  <p>{it.training.hoursOfPractice}</p>
-                </div>
-              ))}
-              {/* <p className="text-center py-2 cursor-pointer hover:underline duration-150">
-                See more
-              </p> */}
-            </div>
-          </SimpleBar>
+                  {upperFirst(it.training.physicallyStrain)}
+                </p>
+                <p>{it.training.hoursOfPractice}</p>
+              </button>
+            ))}
+          </div>
         )}
       </div>
     </Loading>

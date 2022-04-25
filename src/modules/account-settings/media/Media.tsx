@@ -138,7 +138,7 @@ export const Media = () => {
         <div className="space-y-7">
           <div
             className={clsx(
-              'sm:flex sm:justify-between sm:pb-2',
+              'sm:flex sm:justify-between sm:pb-2 laptopM:mb-12',
               isMobile && 'space-y-4'
             )}
           >
@@ -229,7 +229,7 @@ export const Media = () => {
             text="Add photo"
             width={'100%'}
             height={160}
-            className="border-[2px] border-gray-700 hover:border-white  duration-150"
+            className="border-[2px] border-gray-700 hover:border-white laptopM:mb-12  duration-150"
             textClass="pt-8 px-9 font-medium"
             iconClass="pt-[45px]"
             setImage={(value) => handleChangeImage(value, 'teamImage')}

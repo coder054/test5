@@ -6,15 +6,15 @@ export const TrainingBarsChart = () => {
   const [training] = useAtom(dashboardTraining)
 
   return (
-    <div className="flex space-x-20 justify-center">
-      <div className="flex flex-col items-center">
+    <div className="flex laptopM:space-x-20 mobileM:space-x-10 justify-center">
+      <div className="flex flex-col space-y-4 items-center">
         <p className="font-bold text-[17px]">Session</p>
         <BarsChart
           personal={training?.personalSessions}
           average={training?.averageSessions}
         />
       </div>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col space-y-4 items-center">
         <p className="font-bold text-[17px]">Hours</p>
         <BarsChart
           unit="h"

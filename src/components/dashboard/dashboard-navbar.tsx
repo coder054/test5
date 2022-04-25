@@ -1,6 +1,4 @@
 import type { AppBarProps } from '@mui/material'
-import queryString from 'query-string'
-import { isEmpty } from 'lodash'
 import {
   AppBar,
   Badge,
@@ -16,30 +14,33 @@ import {
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { useAtom } from 'jotai'
+import { isEmpty } from 'lodash'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import queryString from 'query-string'
 import type { FC } from 'react'
 import { useRef, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { useTranslation } from 'react-i18next'
-import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
 import {
-  dataModalResponseGroupAtom,
-  dataModalResponseTeamAtom,
-  dataModalResponseDeleteFromTeamAtom,
-  dataModalResponseNotWantToBeDeletedFromTeamAtom,
   dataModalResponseAskJoinGroupAtom,
   dataModalResponseAskJoinTeamAtom,
+  dataModalResponseDeleteFromTeamAtom,
+  dataModalResponseGroupAtom,
+  dataModalResponseNotWantToBeDeletedFromTeamAtom,
+  dataModalResponseTeamAtom,
 } from 'src/atoms/notiAtoms'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import DiaryUpdate from 'src/modules/update-diary'
+import { axios } from 'src/utils/axios'
 import { getErrorMessage, safeAvatar } from 'src/utils/utils'
 import { Bell as BellIcon } from '../../icons/bell'
 import { Menu as MenuIcon } from '../../icons/menu'
 import { Search as SearchIcon } from '../../icons/search'
 import { Users as UsersIcon } from '../../icons/users'
+import { notiToast } from '../common/Toast'
 import { UpdateDiaryIcon, XIcon } from '../icons'
 import { ModalMui } from '../ModalMui'
 import { AccountPopover } from './account-popover'
@@ -47,8 +48,6 @@ import { ContactsPopover } from './contacts-popover'
 import { ContentSearchDialog } from './content-search-dialog'
 import { LanguagePopover } from './language-popover'
 import { NotificationsPopover } from './notifications-popover'
-import { notiToast } from '../common/Toast'
-import { axios } from 'src/utils/axios'
 
 interface DashboardNavbarProps extends AppBarProps {
   onOpenSidebar?: () => void
@@ -161,25 +160,22 @@ const UpdateDiaryButton = () => {
         sx={{
           padding: 0,
           top: '50%',
-          width: isMobile ? '100%' : 700,
+          width: isMobile ? '100%' : 800,
           overflow: 'auto',
         }}
         isOpen={openModalDiaryUpdate}
         onClose={setOpenModalDiaryUpdate}
       >
-        {/* @ts-ignore: Unreachable code error */}
-        <SimpleBar style={{ maxHeight: 850 }}>
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setOpenModalDiaryUpdate(false)}
-              className="absolute z-50 right-6 top-5"
-            >
-              <XIcon />
-            </button>
-            <DiaryUpdate />
-          </div>
-        </SimpleBar>
+        <div className="relative h-[850px] overflow-y-auto">
+          <button
+            type="button"
+            onClick={() => setOpenModalDiaryUpdate(false)}
+            className="absolute z-50 right-6 top-5"
+          >
+            <XIcon />
+          </button>
+          <DiaryUpdate onClose={setOpenModalDiaryUpdate} />
+        </div>
       </ModalMui>
     </>
   )

@@ -23,7 +23,7 @@ const DashboardWellness = () => {
       <PeriodFilter
         value={range}
         onChange={setRange}
-        className="pb-6"
+        className="py-4"
         option={filterWellness}
         optionChange={setFilterWellness}
         label="Filter matches"

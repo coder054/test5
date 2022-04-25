@@ -17,7 +17,7 @@ const TrainingTable = () => {
     option: boolean
   ) => {
     return (
-      <div className="text-[15px] font-normal grid grid-cols-5 p-4">
+      <div className="laptopM:text-[15px] mobileM:text-[13px] font-normal grid grid-cols-5 laptopM:p-4 mobileM:py-2 mobileM:pl-2">
         <p>-{type}</p>
         <p>
           {ses}
@@ -35,15 +35,15 @@ const TrainingTable = () => {
 
   return (
     <div className="bg-defaultBackGround rounded-lg w-full">
-      <div className="p-10">
-        <div className="bg-[#13161A] text-[#A2A5AD] text-[16px] font-medium grid grid-cols-5 px-4 py-2">
+      <div className="laptopM:p-10 mobileM:p-4">
+        <div className="bg-[#13161A] text-[#A2A5AD] laptopM:text-[16px] mobileM:text-[13px] font-medium grid grid-cols-5 laptopM:p-4 mobileM:py-2 mobileM:pl-2">
           <p>Type</p>
           <p>Ses.</p>
           <p>Avg.</p>
           <p>Hours</p>
           <p>Avg.</p>
         </div>
-        <div className="text-[15px] font-normal grid grid-cols-5 p-4">
+        <div className="laptopM:text-[15px] mobileM:text-[13px] font-normal grid grid-cols-5 laptopM:p-4 mobileM:py-2 mobileM:pl-2">
           <p>Training</p>
           <p>{sum(training.personalSessions)}</p>
           <p>{sum(training.averageSessions)}</p>
