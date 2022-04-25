@@ -24,7 +24,7 @@ export const InjuryList = ({ diaryUpdate }: InjuryList) => {
   }
 
   useEffect(() => {
-    setFormValues(diary.injuries)
+    setFormValues(diary?.injuries)
   }, [JSON.stringify(diary?.injuries)])
 
   return (

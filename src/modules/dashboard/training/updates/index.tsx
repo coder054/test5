@@ -73,7 +73,7 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
           sx={{
             padding: 0,
             top: '50%',
-            width: isMobile ? '100%' : 700,
+            width: isMobile ? '100%' : 800,
             overflow: 'auto',
           }}
           isOpen={isOpenModal}

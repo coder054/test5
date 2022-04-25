@@ -292,14 +292,7 @@ export const SignUp = () => {
                 <Form.Item
                   className="mt-[24px]"
                   name={'emailFormPhoneSignUp'}
-                  rules={[
-                    {
-                      required: true,
-                      message: 'Required fields must be filled in.',
-                      max: 255,
-                    },
-                    { type: 'email', message: 'Email is wrong format.' },
-                  ]}
+                  rules={[{ type: 'email', message: 'Email is wrong format.' }]}
                 >
                   <MyInput
                     fullWidth
