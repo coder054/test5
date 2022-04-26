@@ -1,19 +1,18 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { MyInput } from 'src/components'
 import { Button } from 'src/components/Button'
 import { CustomUploadImage } from 'src/components/custom-upload-image'
 import { XIcon } from 'src/components/icons'
 import { ModalMui } from 'src/components/ModalMui'
-import { MySwitchButton } from 'src/components/MySwitchButton'
+import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
+import { ClubType } from 'src/constants/types/settingsType.type'
+import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { createTeam, NewTeamType } from 'src/service/contacts/group.service'
-import { FetchingAllMembers } from '../../../components/fetchs/FetchingAllMembers'
-import { useQuery } from 'react-query'
 import { fetchSettings } from 'src/service/users/settings'
-import { ClubType } from 'src/constants/types/settingsType.type'
-import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
+import { FetchingAllMembers } from '../../../components/fetchs/FetchingAllMembers'
 
 type CreateGroupModalProps = {
   isClose: (value: string) => void
@@ -23,7 +22,6 @@ export default function CreateTeamModal({ isClose }: CreateGroupModalProps) {
   const queryClient = useQueryClient()
   const { currentRoleName } = useAuth()
   const [isOpen, setIsOpen] = useState<boolean>(true)
-
   const [club, setClub] = useState<ClubType>(null)
 
   const [formValues, setFormValues] = useState<NewTeamType>({
@@ -46,17 +44,19 @@ export default function CreateTeamModal({ isClose }: CreateGroupModalProps) {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(QUERIES_CONTACTS.CONTACT_TEAM)
-        toast.success('Group successfully created')
+        toast.success('Team successfully created')
         isClose('')
       },
       onError: () => {
-        toast.error('Something went wrong')
+        toast.error('Team already exist in the club')
       },
     }
   )
 
   const onSubmit = useCallback(() => {
-    mutateCreate({ data: formValues, clubId: club?.clubId })
+    if (formValues.teamName.length < 2) {
+      toast.error('Team name at least 2 characters')
+    } else mutateCreate({ data: formValues, clubId: club?.clubId })
   }, [JSON.stringify(formValues), JSON.stringify(club?.clubId)])
 
   const handleChangeForm = useCallback(
@@ -86,7 +86,12 @@ export default function CreateTeamModal({ isClose }: CreateGroupModalProps) {
         </button>
         <p className="text-[24px] font-medium pb-6">Create New Team</p>
         <div className="space-y-6 w-full">
-          <MyInput label="Club name" defaultValue={club?.clubName} isDisabled />
+          {/* <MyInput label="Club name" defaultValue={club?.clubName} isDisabled /> */}
+          <InfiniteScrollClub
+            label="Your Club"
+            value={club}
+            handleSetClub={setClub}
+          />
           <MyInput
             label="Team name"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -107,13 +112,6 @@ export default function CreateTeamModal({ isClose }: CreateGroupModalProps) {
               iconClass="pt-24"
               value={formValues.teamImage}
               setImage={(value: any) => handleChangeForm('teamImage', value)}
-            />
-          </div>
-          <div className="flex items-center">
-            <p className="16px font-semibold">Private team</p>
-            <MySwitchButton
-              onChange={(_, value) => handleChangeForm('isPrivate', value)}
-              name="messageUpdates"
             />
           </div>
           <Button

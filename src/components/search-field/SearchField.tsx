@@ -15,7 +15,7 @@ const SearchField = ({ onChange, label, isLoading }: SearchFieldProps) => {
     <TextField
       name={label}
       onChange={(e) => {
-        onChange(e.target.value)
+        onChange(e.target.value.trim())
         setIsHasValue(e.target.value)
       }}
       fullWidth
