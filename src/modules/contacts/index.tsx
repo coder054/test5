@@ -80,7 +80,7 @@ const Contacts = () => {
         <FetchingTemplate
           queryKey={QUERIES_CONTACTS.CONTACT_FOLLOWERS}
           tab="FOLLOWERS"
-          countLabel="Folower"
+          countLabel="Follower"
           searchLabel="Search your Followers"
           filterLabel="Filter your Followers"
         />

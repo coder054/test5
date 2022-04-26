@@ -9,7 +9,7 @@ import { ContactsTabType } from 'src/constants/types/contacts.types'
 import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
 
 type FilterProps = {
-  onChange?: (value: { clubId: string; countryName: string }) => void
+  onChange?: (value: { clubId: string; country: string; role: string }) => void
   tab?: ContactsTabType
 }
 
@@ -18,14 +18,25 @@ export const FilterTeam = ({ onChange, tab }: FilterProps) => {
 
   const submit = () => {
     onChange({
-      ...initial,
       clubId: initial.club?.clubId ?? '',
-      countryName: initial.country?.name ?? '',
+      country: initial.country?.name ?? '',
+      role: initial.role,
     })
   }
 
   const reset = () => {
-    setInitial({ club: null, country: null, role: '' })
+    setInitial({
+      club: null,
+      country: {
+        name: 'Sweden',
+        alpha2Code: 'SE',
+        alpha3Code: 'SWE',
+        region: 'Europe',
+        flag: 'https://res.cloudinary.com/zporter-media-cloud/image/upload/v1626939466/country-flags/SWE.png',
+        phoneCode: '+46',
+      },
+      role: '',
+    })
   }
 
   return (

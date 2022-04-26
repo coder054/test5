@@ -42,7 +42,7 @@ export default function FetchingContactAll({
     sorted: 'asc',
     startAfter: '',
     tab: tab,
-    country: '',
+    country: 'Sweden',
     clubId: '',
     teamId: '',
     role: '',
@@ -120,7 +120,6 @@ export default function FetchingContactAll({
                 ...prev,
                 ...value,
                 clubId: value.clubId,
-                country: value.countryName,
               }))
             }}
           />

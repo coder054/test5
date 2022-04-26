@@ -1,6 +1,6 @@
-import { Switch } from '@mui/material'
+import { Switch, SwitchProps } from '@mui/material'
 
-type MySwitchButtonProps = {
+type MySwitchButtonProps = SwitchProps & {
   checked?: boolean
   name?: string
   onChange?: any
@@ -10,6 +10,7 @@ export const MySwitchButton = ({
   onChange,
   checked,
   name,
+  ...rest
 }: MySwitchButtonProps) => {
   return (
     <Switch
@@ -19,6 +20,7 @@ export const MySwitchButton = ({
       sx={{
         '& > .MuiSwitch-track': { backgroundColor: '#fff' },
       }}
+      {...rest}
     />
   )
 }

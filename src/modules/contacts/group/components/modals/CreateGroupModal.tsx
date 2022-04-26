@@ -34,7 +34,7 @@ export default function CreateGroupModal({
     name: '',
     groupImage: '',
     memberIds: [],
-    isPrivate: false,
+    isPrivate: true,
   })
 
   useEffect(() => {
@@ -120,7 +120,7 @@ export default function CreateGroupModal({
             <p className="16px font-semibold">Private group</p>
             <MySwitchButton
               onChange={(_, value) => handleChangeForm('isPrivate', value)}
-              name="messageUpdates"
+              defaultChecked={formValues.isPrivate}
             />
           </div>
           <Button
