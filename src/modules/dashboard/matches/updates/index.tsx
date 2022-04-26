@@ -102,7 +102,7 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
               />
             </div>
           </ModalMui>
-          <div className="bg-[#13161A] text-[#A2A5AD] laptopM:text-[16px] mobileM:text-[13px] font-medium grid grid-cols-12 laptopM:p-4 mobileM:py-2 mobileM:pl-2">
+          <div className="bg-[#13161A] text-[#A2A5AD] laptopM:text-[16px] mobileM:text-[13px] font-medium grid grid-cols-12 px-4 py-2 mobileM:pl-2">
             <p className="col-span-2">
               <button
                 onClick={() => setSort(!sort)}

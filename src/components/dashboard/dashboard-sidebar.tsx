@@ -106,8 +106,6 @@ export const DashboardSidebar: FC<DashboardSidebarProps> = (props) => {
     }
   }
 
-  console.log('bb: ', router.asPath)
-
   useEffect(
     handlePathChange,
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -80,7 +80,7 @@ export const DashboardDiaryUpdate = () => {
             </div>
           </div>
         </ModalMui>
-        <p className="text-[18px] laptopM:text-left mobileM:text-center font-bold laptopM:mb-0 mobileM:mb-4">
+        <p className="text-[18px] laptopM:text-left mobileM:text-center font-bold laptopM:mb-0 mobileM:mb-4 laptopM:pb-4">
           Diary Updates
         </p>
         <div className="grid grid-cols-6 text-left bg-[#13161A] text-[#A2A5AD] laptopM:text-[16px] mobileM:text-[13px] font-medium  px-4 py-2">

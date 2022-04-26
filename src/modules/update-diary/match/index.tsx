@@ -374,6 +374,7 @@ export const Match = ({ onChange, error }: MatchProps) => {
               teamId={formValues.yourTeam?.teamId}
               value={formValues.mvp ? formValues.mvp.yourTeam : undefined}
               label="Your Team"
+              playerOnly
             />
             <InfiniteScrollMember
               onChange={(e) =>
@@ -385,6 +386,7 @@ export const Match = ({ onChange, error }: MatchProps) => {
               teamId={formValues.opponentTeam?.teamId}
               value={formValues.mvp ? formValues.mvp.opponents : undefined}
               label="Opponent Team"
+              playerOnly
             />
           </div>
         </div>

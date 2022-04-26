@@ -181,7 +181,7 @@ export const getPreviousDate = (date: string | Date) => {
   }
 }
 
-export const lineChartOptions = (series: any, data: any, theme: any) => {
+export const lineChartOptions = (series: any, theme: any) => {
   return {
     chart: {
       background: 'transparent',
@@ -191,83 +191,33 @@ export const lineChartOptions = (series: any, data: any, theme: any) => {
       },
     },
     colors: series.map((item) => item.color),
-    dataLabels: {
-      enabled: false,
-    },
     fill: {
       opacity: 1,
     },
+    legend: {
+      show: true,
+    },
+    stroke: {
+      curve: 'smooth',
+      lineCap: 'butt',
+      width: 2,
+    },
+    theme: {
+      mode: theme.palette.mode,
+    },
     grid: {
-      borderColor: theme.palette.divider,
+      xaxis: {
+        lines: {
+          show: false,
+          offsetX: 0,
+          offsetY: 0,
+        },
+      },
       yaxis: {
         lines: {
           show: false,
         },
       },
     },
-    legend: {
-      show: false,
-    },
-    markers: {
-      hover: {
-        size: undefined,
-        sizeOffset: 2,
-      },
-      radius: 2,
-      shape: 'circle',
-      size: 4,
-      strokeWidth: 0,
-    },
-    stroke: {
-      curve: 'smooth',
-      lineCap: 'butt',
-      width: 3,
-    },
-    theme: {
-      mode: theme.palette.mode,
-    },
-    xaxis: {
-      axisBorder: {
-        color: theme.palette.divider,
-      },
-      axisTicks: {
-        color: theme.palette.divider,
-        show: true,
-      },
-      categories: data.xaxis.dataPoints,
-      labels: {
-        style: {
-          colors: theme.palette.text.secondary,
-        },
-      },
-    },
-    yaxis: [
-      {
-        axisBorder: {
-          color: theme.palette.divider,
-          show: true,
-        },
-        axisTicks: {
-          color: theme.palette.divider,
-          show: true,
-        },
-      },
-      {
-        axisTicks: {
-          color: theme.palette.divider,
-          show: true,
-        },
-        axisBorder: {
-          color: theme.palette.divider,
-          show: true,
-        },
-        labels: {
-          style: {
-            colors: theme.palette.text.secondary,
-          },
-        },
-        opposite: true,
-      },
-    ],
   }
 }
