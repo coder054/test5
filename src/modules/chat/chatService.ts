@@ -937,7 +937,7 @@ export const getPreviewData = async (
 export const getChatRoomStream = async (
   snapshots: DataSnapshot[],
   userId: string
-) => {
+): Promise<{ error: boolean; data: any }> => {
   try {
     let a1 = snapshots
       .filter((o) => {
@@ -991,19 +991,20 @@ export const getChatRoomStream = async (
 
       /// ================================================================
       /// Conversation 2 people
+      // here Conversation 2 people
       if (!chatRoom.isGroup) {
         let memberIdsList: string[] = chatRoom.memberIds || []
 
-        let id: string = memberIdsList[memberIdsList.indexOf(userId)]
-
+        // let id: string = memberIdsList[memberIdsList.indexOf(userId)]
+        let id: string = memberIdsList.find((o) => o !== userId)
         let chatUser: IChatUser = await getChatUser(id)
-
         let chatRoomImage = chatUser?.faceImage || ''
 
         return Object.assign({}, chatRoom, {
           lastMessageContent: lastMessageContent,
-          chatRoomName:
-            `${chatUser?.firstName || ''} ${chatUser?.lastName || ''}` + 'aaa2',
+          chatRoomName: `${chatUser?.firstName || ''} ${
+            chatUser?.lastName || ''
+          }`,
           chatRoomImage: chatRoomImage,
           unReadMessageNumber: unReadMessageNumber,
           userName: chatUser?.username,
