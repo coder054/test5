@@ -2,13 +2,11 @@ import { Fragment, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
 import { CardNews, Loading } from 'src/components'
-import { ListItemSlick } from 'src/components/list-item-slick'
+import { CardFeed } from 'src/components/card-feeds'
 import { MiniLoading } from 'src/components/mini-loading'
-import { API_GET_LIST_NEWS_POST } from 'src/constants/api.constants'
 import { ASC, DESC } from 'src/constants/constants'
 import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
-import { axios } from 'src/utils/axios'
-import { toQueryString } from 'src/utils/common.utils'
+import { getListPosts } from 'src/service/feed/yours.service'
 
 export const TabYours = () => {
   const [limit, setLimit] = useState<number>(12)
@@ -24,13 +22,14 @@ export const TabYours = () => {
   } = useInfiniteQuery(
     [QUERIES_FEED.FEED_NEW_POST],
     async ({ pageParam = startAfter }) => {
-      const res = await axios.get(
-        toQueryString(API_GET_LIST_NEWS_POST, {
-          limit: limit,
-          sorted: sorted,
-          startAfter: pageParam,
-        })
-      )
+      const res = await getListPosts({
+        limit: limit,
+        startAfter: pageParam,
+        sorted: sorted,
+        feedTab: 'yours',
+      })
+
+      console.log('res.data', res.data)
 
       return res.data
     },
@@ -59,7 +58,7 @@ export const TabYours = () => {
             <Fragment>
               {(page || []).map((item, index) => (
                 <div key={index} className="mb-[24px] md:mb-[0px]">
-                  <CardNews card={item} />
+                  <CardFeed card={item} />
                 </div>
               ))}
             </Fragment>

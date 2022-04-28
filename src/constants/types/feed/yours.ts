@@ -1,0 +1,274 @@
+// export interface CardFeedType {
+//   userInfo?: {
+//     email?: string
+//     isActive?: boolean
+//     birthCountry?: {
+//       flag?: string
+//       phoneCode?: string
+//       alpha3Code?: string
+//       region?: string
+//       name?: string
+//       alpha2Code?: string
+//     }
+//     fullName?: string
+//     clubId?: string
+//     firstName?: string
+//     fcmToken?: string[]
+//     city?: string
+//     favoriteRoles?: string[]
+//     currentTeams?: string[]
+//     lastName?: string
+//     faceImage?: string
+//     username?: string
+//     type?: string
+//     userId?: string
+//     teamIds?: string[]
+//     isOnline?: boolean
+//     clubName?: string
+//     timezone?: string
+//     lastActive?: number
+//     birthDay?: string
+//     createdAt?: number
+//     updatedAt?: number
+//     shirtNumber?: number
+//     gender?: string
+//     weight?: number
+//     height?: number
+//     fatherHeight?: number
+//     motherHeight?: number
+//     age?: number
+//     isPublic?: true
+//     notificationOn?: true
+//     notificationOptions?: {
+//       inviteUpdates?: true
+//       feedUpdates?: true
+//       profileAndDiaryUpdates?: true
+//       messageUpdates?: true
+//     }
+//   }
+//   postId?: string
+//   typeOfPost?: string
+//   typeOfDiary?: string
+//   isSaved?: boolean
+//   isLiked?: boolean
+//   location?: string
+//   userId?: string
+//   friendTags?: FriendTagsType[]
+//   text?: string
+//   headline?: string
+//   mediaLinks?: {
+//     type?: string
+//     url?: string
+//     uniqueKey?: string
+//   }[]
+//   updatedAt?: number
+//   createdAt?: number
+// }
+
+export interface FriendTagsType {
+  isActive?: boolean
+  birthCountry?: {
+    alpha2Code?: string
+    alpha3Code?: string
+    flag?: string
+    name?: string
+    region?: string
+  }
+  fullName?: string
+  clubId?: string
+  firstName?: string
+  fcmToken?: []
+  favoriteRoles?: []
+  currentTeams?: []
+  lastName?: string
+  faceImage?: string
+  username?: string
+  type?: string
+  userId?: string
+  teamIds?: []
+  isOnline?: boolean
+  clubName?: string
+  timezone?: string
+  lastActive?: number
+  birthDay?: string
+  createdAt?: number
+  updatedAt?: number
+  shirtNumber?: null
+  gender?: string
+  weight?: number
+  height?: number
+  fatherHeight?: number
+  motherHeight?: number
+  age?: number
+  isPublic?: boolean
+  notificationOn?: boolean
+  notificationOptions?: {
+    feedUpdates?: boolean
+    inviteUpdates?: boolean
+    messageUpdates?: boolean
+    profileAndDiaryUpdates?: boolean
+  }
+}
+
+export interface CardFeedType {
+  postId?: string
+  typeOfPost?: string
+  isSaved?: boolean
+  isLiked?: boolean
+  userId?: string
+  typeOfDiary?: string
+  updatedAt?: number
+  energyLevel?: string
+  eatAndDrink?: string
+  sleep?: string
+  training?: Training
+  createdAt?: number
+  injuries?: any[]
+  sleepChart?: number[]
+  eatChart?: number[]
+  energyChart?: number[]
+  trainingCategory?: TrainingCategory
+  injuriesTrending?: any[]
+  injuryTags?: any[]
+  injuryPain?: string
+  diaryType?: string
+  // userInfo?:               UserInfo;
+  averagePainColumnChart?: AveragePainColumnChart
+  userInfo?: {
+    email?: string
+    isActive?: boolean
+    birthCountry?: {
+      flag?: string
+      phoneCode?: string
+      alpha3Code?: string
+      region?: string
+      name?: string
+      alpha2Code?: string
+    }
+    fullName?: string
+    clubId?: string
+    firstName?: string
+    fcmToken?: string[]
+    city?: string
+    favoriteRoles?: string[]
+    currentTeams?: string[]
+    lastName?: string
+    faceImage?: string
+    username?: string
+    type?: string
+    userId?: string
+    teamIds?: string[]
+    isOnline?: boolean
+    clubName?: string
+    timezone?: string
+    lastActive?: number
+    birthDay?: string
+    createdAt?: number
+    updatedAt?: number
+    shirtNumber?: number
+    gender?: string
+    weight?: number
+    height?: number
+    fatherHeight?: number
+    motherHeight?: number
+    age?: number
+    isPublic?: true
+    notificationOn?: true
+    notificationOptions?: {
+      inviteUpdates?: true
+      feedUpdates?: true
+      profileAndDiaryUpdates?: true
+      messageUpdates?: true
+    }
+  }
+  location?: string
+  friendTags?: FriendTagsType[]
+  text?: string
+  headline?: string
+  mediaLinks?: {
+    type?: string
+    url?: string
+    uniqueKey?: string
+  }[]
+}
+
+export interface AveragePainColumnChart {
+  injuryAreaF: number[]
+  injuryAreaB: number[]
+}
+
+export interface Training {
+  physicallyStrain: string
+  teamReview: string
+  hoursOfPractice: number
+  tactics: number
+  trainingMedia: any[]
+  typeOfTraining: string
+  practiceTags: any[]
+  yourPerformance: string
+  teamPerformance: string
+  technics: number
+  teamPhysicallyStrain: string
+  trainingReview: string
+  mental: number
+  yourPhysicallyStrain: string
+  physics: number
+}
+
+export interface TrainingCategory {
+  technical: number
+  tactics: number
+  mental: number
+  physical: number
+}
+
+export interface UserInfo {
+  email: string
+  isActive: boolean
+  birthCountry: BirthCountry
+  fullName: string
+  clubId: string
+  firstName: string
+  fcmToken: string[]
+  city: string
+  favoriteRoles: string[]
+  currentTeams: string[]
+  lastName: string
+  faceImage: string
+  username: string
+  type: string
+  userId: string
+  teamIds: string[]
+  isOnline: boolean
+  clubName: string
+  timezone: string
+  lastActive: number
+  birthDay: Date
+  createdAt: number
+  updatedAt: number
+  shirtNumber: number
+  gender: string
+  weight: number
+  height: number
+  fatherHeight: number
+  motherHeight: number
+  age: number
+  isPublic: boolean
+  notificationOn: boolean
+  notificationOptions: NotificationOptions
+}
+
+export interface BirthCountry {
+  region: string
+  alpha3Code: string
+  name: string
+  alpha2Code: string
+  flag: string
+}
+
+export interface NotificationOptions {
+  messageUpdates: boolean
+  profileAndDiaryUpdates: boolean
+  inviteUpdates: boolean
+  feedUpdates: boolean
+}

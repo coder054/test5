@@ -70,6 +70,7 @@ export const ChartCircle = ({
       </div>
       <div className="ml-[12px]">
         {type !== 'wellness' &&
+          type !== 'feed' &&
           ArrayLabel &&
           Object.values(ArrayLabel).map(
             (label: string, index2) =>

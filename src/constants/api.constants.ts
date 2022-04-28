@@ -100,3 +100,7 @@ export const API_GET_LIST_NEWS_POST_OF_PROVIDER =
   'feed/get-list-news-post-of-provider'
 
 export const API_CREATE_PLAIN_POST = 'feed/create-plain-post'
+
+//feed yours
+export const API_GET_LIST_POSTS = 'feed/get-list-posts'
+export const API_SAVE_POST = 'feed/save-post'
