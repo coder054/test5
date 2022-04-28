@@ -685,6 +685,21 @@ export const SvgNews = ({ active }: { active: boolean }) => (
   </svg>
 )
 
+export const SvgSave = ({ fill }: { fill: string }) => (
+  <svg
+    width="12"
+    height="16"
+    viewBox="0 0 12 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M10.166 0.5H1.83268C0.916016 0.5 0.174349 1.25 0.174349 2.16667L0.166016 15.5L5.99935 13L11.8327 15.5V2.16667C11.8327 1.25 11.0827 0.5 10.166 0.5Z"
+      fill={fill ? fill : 'white'}
+    />
+  </svg>
+)
+
 export const IconClock = () => (
   <svg
     width="12"
