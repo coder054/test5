@@ -11,11 +11,13 @@ declare const window: any
 interface LocationSearchInputProps {
   errorMessage?: string
   setCity?: Function
+  feed?: boolean
 }
 
 export const LocationSearchInput = ({
   setCity,
   errorMessage,
+  feed,
 }: LocationSearchInputProps) => {
   const [address, setAddress] = useState('')
   const [gmapsLoaded, setGmapsLoaded] = useState<boolean>(false)
@@ -60,7 +62,9 @@ export const LocationSearchInput = ({
                 <MyInput
                   {...getInputProps({})}
                   name={'city'}
-                  label="City where you are living in today"
+                  label={
+                    feed ? 'Location' : 'City where you are living in today'
+                  }
                   className="mt-[24px]"
                 />
 

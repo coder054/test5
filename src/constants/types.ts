@@ -415,6 +415,15 @@ export interface DashboardGoalUpdateType {
   progress: number
 }
 
+export interface NewProviderType {
+  providerId: string
+  name: string
+  logo: string
+  region: string
+  typeOfProvider: string
+  isFollowed: boolean
+}
+
 export const NotificationType = {
   REMIND_DIARY_UPDATE_LOCAL: 'REMIND_DIARY_UPDATE_LOCAL',
 

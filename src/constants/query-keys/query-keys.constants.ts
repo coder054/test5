@@ -46,3 +46,13 @@ export const QUERIES_CONTACTS = {
   CONTACT_BLOCKED: 'contact-blocked',
   CONTACT_ALL: 'contact-all',
 }
+
+export const QUERIES_FEED = {
+  FEED_NEW_PROVIDER: 'new-providers',
+  FEED_NEW_POST: 'new-post',
+  FEED_NEW_POST_OF_PROVIDER: 'new-post-of-provider',
+  FEED_CREATE_PLAIN_POST: 'create-plain-post',
+  FEED_SUBSCRIBE_PROVIDER: 'subscribe-provider',
+  FEED_LIKE_POST: 'like-post',
+  FEED_UNLIKE_POST: 'unlike-post',
+}

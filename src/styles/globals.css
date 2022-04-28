@@ -286,3 +286,24 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.slick-prev {
+  background-image: url(/feed/prev.svg) !important;
+  left: unset !important;
+  left: 12px !important;
+}
+
+.slick-list {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  margin-left: 54px !important;
+}
+
+.slick-next {
+  background-image: url(/feed/next.svg) !important;
+  left: unset !important;
+  right: 12px !important;
+}
