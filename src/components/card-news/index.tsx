@@ -1,11 +1,16 @@
 import { Carousel, notification } from 'antd'
 import { NewsType } from 'src/constants/types'
 import {
+  SvgBlock,
   SvgClock,
+  SvgClose,
   SvgComment,
+  SvgCopyLink,
   SvgEuro,
   SvgFavorite,
   SvgShare,
+  SvgUnfollow,
+  SvgX,
 } from 'src/imports/svgs'
 import { Text } from '../Text'
 const cls = require('./card-news.module.css')
@@ -20,9 +25,17 @@ import {
   formatRelative,
   subDays,
 } from 'date-fns'
+import { ClickAwayListener } from '@mui/material'
+import { isMobile } from 'react-device-detect'
+import { ModalMui } from '../ModalMui'
+import ConfirmModal from 'src/modules/contacts/components/modals/ModalDelete'
+import toast from 'react-hot-toast'
+import { useMutation, useQueryClient } from 'react-query'
+import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
+import { likePost, subscribeProvider } from 'src/service/feed/news.service'
 
 interface CardNewsType {
-  card?: NewsType
+  card?: any
   handleFavorite?: (postId: string, typeOfPost: string, status: string) => void
 }
 
@@ -34,7 +47,10 @@ const contentStyle: any = {
 }
 
 export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
+  const queryClient = useQueryClient()
   const [play, setPlay] = useState<boolean>(false)
+  const [openOption, setOpenOption] = useState<boolean>(false)
+  const [openModalUnfollow, setOpenModalUnfollow] = useState<boolean>(false)
 
   const CarouselProps = {
     Infinity: true,
@@ -44,13 +60,62 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
     draggable: true,
   }
 
+  const { isLoading: loadingSubscribe, mutate: subScribe } = useMutation(
+    [QUERIES_FEED.FEED_SUBSCRIBE_PROVIDER],
+    subscribeProvider,
+    {
+      onSuccess: (res) => {
+        toast.success(res.data)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_PROVIDER)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST)
+        setOpenOption(false)
+      },
+    }
+  )
+
+  const { mutate: like } = useMutation(
+    [QUERIES_FEED.FEED_LIKE_POST],
+    likePost,
+    {
+      onSuccess: (res) => {
+        toast.success(res.data)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_OF_PROVIDER)
+      },
+    }
+  )
+
   const handleClickFavorite = async (postId: string, typeOfPost: string) => {
-    handleFavorite &&
-      handleFavorite(postId, typeOfPost, card?.isLiked ? 'unlike' : 'like')
+    if (!card?.isLiked) {
+      like({ postId: postId, typeOfPost: typeOfPost, query: 'like' })
+    } else if (card?.isLiked) {
+      like({ postId: postId, typeOfPost: typeOfPost, query: 'unlike' })
+    }
   }
 
   const handlePlayVideo = () => {
     setPlay(!play)
+  }
+
+  const handleOption = () => {
+    if (!openOption) {
+      setOpenOption(true)
+    } else {
+      setOpenOption(false)
+    }
+  }
+
+  const handleUnfollow = () => {
+    setOpenModalUnfollow(true)
+  }
+
+  const handleConfirmUnfollow = () => {
+    if (!card?.providerId) {
+      toast.error('provider id not found')
+      setOpenModalUnfollow(false)
+      return
+    }
+    subScribe(card?.providerId)
   }
 
   return (
@@ -59,9 +124,9 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
         padding: '24px 0px 32px',
         backdropFilter: 'blur(68px)',
       }}
-      className="rounded-[8px] bg-[#202128cc] w-[310px] md:w-[347px] relative"
+      className="rounded-[8px] bg-[#202128cc] w-[310px] md:w-[500px] relative"
     >
-      <div className=" flex px-5 items-center mb-5 ">
+      <div className="flex px-5 items-center mb-5 relative">
         {card?.providerInfo?.logo && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -73,12 +138,12 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
 
         <div className=" ">
           <Text name="body1" className="text-white ">
-            {`#${card?.providerInfo?.name as string}`}
+            {`#${(card?.providerInfo?.name as string) || ''}`}
           </Text>
-          <div className=" ">
+          <div className="text-Grey ">
             <SvgClock />
             {card?.createdAt && (
-              <Text name="Caption" className="text-Grey inline-block ">
+              <Text name="Caption" className=" inline-block ">
                 {`${formatDistanceToNowStrict(card?.createdAt as number)} ${
                   card?.providerInfo?.region ? '-' : ''
                 } ${card?.providerInfo?.region || ''}`}
@@ -89,19 +154,52 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
 
         <div className="spacer flex-grow "></div>
 
-        <svg
-          className="cursor-pointer"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6C10 7.1 10.9 8 12 8ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10ZM12 16C10.9 16 10 16.9 10 18C10 19.1 10.9 20 12 20C13.1 20 14 19.1 14 18C14 16.9 13.1 16 12 16Z"
-            fill="white"
-          />
-        </svg>
+        <div onClick={handleOption}>
+          <svg
+            className="cursor-pointer"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6C10 7.1 10.9 8 12 8ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10ZM12 16C10.9 16 10 16.9 10 18C10 19.1 10.9 20 12 20C13.1 20 14 19.1 14 18C14 16.9 13.1 16 12 16Z"
+              fill="white"
+            />
+          </svg>
+        </div>
+        {openOption && (
+          <ClickAwayListener
+            onClickAway={() => {
+              setOpenOption(false)
+            }}
+          >
+            <div
+              className="w-[158px] absolute right-[8px] top-[34px] z-20 bg-[#484A4D] text-[16px] 
+               rounded-[7px]"
+            >
+              <div
+                className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
+                onClick={handleUnfollow}
+              >
+                <SvgUnfollow />{' '}
+                <span className="ml-[8px] text-[#D60C0C] font-bold">
+                  Unfollow
+                </span>
+              </div>
+              <div
+                className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
+                onClick={() => {
+                  navigator.clipboard.writeText(card?.link as string)
+                  toast.success('Copy successfully!')
+                }}
+              >
+                <SvgCopyLink /> <span className="ml-[10px]">Copy link</span>
+              </div>
+            </div>
+          </ClickAwayListener>
+        )}
       </div>
 
       <Carousel
@@ -115,7 +213,7 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
                 <div className={`${cls.image} flex-1`}>
                   {item.type === 'IMAGE' ? (
                     // eslint-disable-next-line @next/next/no-img-element
-                    <img src={item.url} alt="" className="" />
+                    <img src={item?.url} alt="" className="" />
                   ) : null}
                   {item.type === 'VIDEO' ? (
                     <div
@@ -124,7 +222,7 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
                       } w-[347px] h-[195px] object-fill cursor-pointer flex justify-between items-center relative`}
                       onClick={handlePlayVideo}
                     >
-                      <ReactPlayer url={item.url} controls />
+                      <ReactPlayer url={item?.url} controls />
                     </div>
                   ) : null}
                 </div>
@@ -132,58 +230,53 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
             </div>
           ))}
       </Carousel>
-      <Link href={card?.link as string}>
-        <a target={'_blank'}>
-          <p
-            className={`${cls.lineClamp} text-white mb-[25px] px-5 mt-[20px]`}
-            dangerouslySetInnerHTML={{ __html: card?.excerptText as string }}
-          ></p>
-        </a>
-      </Link>
 
-      <div className="flex px-5 ">
-        <div
-          className="hover:scale-125 duration-150"
-          onClick={() =>
-            handleClickFavorite(
-              card?.postId as string,
-              card?.typeOfPost as string
-            )
-          }
-        >
-          <SvgFavorite active={card?.isLiked} />
+      <p
+        className={`${cls.lineClamp} text-white mb-[25px] px-5 mt-[20px]`}
+        dangerouslySetInnerHTML={{ __html: card?.excerptText as string }}
+      ></p>
+
+      <div className="flex px-5">
+        <div className="flex-1 float-left ">
+          <div className="flex float-left">
+            <div
+              className="hover:scale-110 duration-150"
+              onClick={() =>
+                handleClickFavorite(
+                  card?.postId as string,
+                  card?.typeOfPost as string
+                )
+              }
+            >
+              <SvgFavorite active={card?.isLiked} />
+            </div>
+            <Text name="Body2" className="text-Grey ">
+              {card?.countLikes as number}
+            </Text>
+          </div>
+
+          <div className="flex ml-[66px]">
+            <Text name="Body2" className="text-Grey mr-1 ">
+              {card?.countComments as number}
+            </Text>
+            <SvgComment />
+          </div>
         </div>
-        <Text name="Body2" className="text-Grey ">
-          {card?.countLikes as number}
-        </Text>
 
-        <div className="spacer flex-grow "></div>
-        <div
-          className="hover:scale-125 duration-150"
-          onClick={() => {
-            navigator.clipboard.writeText(card?.link as string)
-            notification.open({
-              message: '',
-              description: 'Copy successfully.',
-              style: {
-                backgroundColor: '#09E099',
-                color: '#FFFFFF',
-              },
-              duration: 3,
-            })
-          }}
-        >
+        <div className="flex-row-reverse hover:scale-110 duration-150">
           <SvgShare />
         </div>
-
-        <div className="spacer flex-grow "></div>
-        <Text name="Body2" className="text-Grey mr-1 ">
-          {card?.countComments as number}
-        </Text>
-        <div className="hover:scale-125 duration-150">
-          <SvgComment />
-        </div>
       </div>
+
+      <ConfirmModal
+        label="Unfollow"
+        content="Are you sure you want to unfollow this news provider?"
+        icon={<SvgBlock />}
+        actionLabel="Unfollow"
+        isOpen={openModalUnfollow}
+        onClose={setOpenModalUnfollow}
+        onSubmit={handleConfirmUnfollow}
+      />
     </div>
   )
 }
