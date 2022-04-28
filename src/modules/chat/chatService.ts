@@ -31,6 +31,7 @@ import { firebaseApp } from 'src/config/firebase-client'
 import { chain, isEmpty, get as getLodash, shuffle } from 'lodash'
 import { AVATAR_DEFAULT, LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import axios from 'axios'
+import { getErrorMessage } from 'src/utils/utils'
 
 export const database = getDatabase(firebaseApp)
 export const dbRef = ref(database)
@@ -936,7 +937,7 @@ export const getPreviewData = async (
 export const getChatRoomStream = async (
   snapshots: DataSnapshot[],
   userId: string
-) => {
+): Promise<{ error: boolean; data: any }> => {
   try {
     let a1 = snapshots
       .filter((o) => {
@@ -990,19 +991,20 @@ export const getChatRoomStream = async (
 
       /// ================================================================
       /// Conversation 2 people
+      // here Conversation 2 people
       if (!chatRoom.isGroup) {
         let memberIdsList: string[] = chatRoom.memberIds || []
 
-        let id: string = memberIdsList[memberIdsList.indexOf(userId)]
-
+        // let id: string = memberIdsList[memberIdsList.indexOf(userId)]
+        let id: string = memberIdsList.find((o) => o !== userId)
         let chatUser: IChatUser = await getChatUser(id)
-
         let chatRoomImage = chatUser?.faceImage || ''
 
         return Object.assign({}, chatRoom, {
           lastMessageContent: lastMessageContent,
-          chatRoomName:
-            `${chatUser?.firstName || ''} ${chatUser?.lastName || ''}` + 'aaa2',
+          chatRoomName: `${chatUser?.firstName || ''} ${
+            chatUser?.lastName || ''
+          }`,
           chatRoomImage: chatRoomImage,
           unReadMessageNumber: unReadMessageNumber,
           userName: chatUser?.username,
@@ -1053,4 +1055,42 @@ export const getChatRoomStream = async (
 
 export const getUrlChatFromChatRoomId = (roomId: string) => {
   return `/dashboard/chat?roomId=${roomId}`
+}
+
+export const findRoomChatByMemberIds = async (
+  receiverId: string,
+  senderId: string // current role id
+): Promise<string> => {
+  let roomId: string
+  let memberIds = [senderId, receiverId]
+  try {
+    let dataSnapshot = await get(
+      query(
+        ref(database, '/chatRooms/'),
+        orderByChild('isGroup'),
+        equalTo(false)
+      )
+    )
+
+    if (dataSnapshot.exists) {
+      const list = Object.values(dataSnapshot.val())
+
+      let find: any = list.find((o) => {
+        //@ts-ignore: Unreachable code error
+        return o.memberIds.every((item) => memberIds.includes(item))
+      })
+      if (!isEmpty(find)) {
+        return find.chatRoomId || ''
+      }
+    } else {
+      return ''
+    }
+
+    // if (chatUser) {
+    //   return Object.assign({}, chatUser, { userId })
+    // }
+  } catch (error) {
+    // alert(getErrorMessage(error))
+    return ''
+  }
 }

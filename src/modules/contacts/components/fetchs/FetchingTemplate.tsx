@@ -46,7 +46,7 @@ export default function FetchingTemplate({
     sorted: 'asc',
     startAfter: 1,
     tab: tab,
-    country: '',
+    country: 'Sweden',
     clubId: '',
     teamId: '',
     role: '',
@@ -120,8 +120,6 @@ export default function FetchingTemplate({
               setQueries((prev) => ({
                 ...prev,
                 ...value,
-                clubId: value.clubId,
-                country: value.countryName,
               }))
             }}
           />

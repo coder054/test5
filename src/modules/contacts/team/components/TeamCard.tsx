@@ -41,9 +41,11 @@ export const TeamCard = ({ team }: TeamsCardProps) => {
     }
   )
 
+  console.log(team)
+
   return (
     <Card
-      avatar={team?.teamImage}
+      avatar={team?.clubUrl}
       name={`${team.clubName} - ${team.teamName}`}
       users={team.usernames}
       onClick={() => router.push(`/contacts/team/${team.teamId}`)}

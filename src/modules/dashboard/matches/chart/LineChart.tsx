@@ -20,6 +20,7 @@ type LineChartInputType = {
 }
 
 export const LineChart = ({ range, filter }: LineChartProps) => {
+  const theme = useTheme()
   const { isLoading: isGettingMatchesChart, data: responseMatchesChart } =
     useQuery([QUERIES_DASHBOARD.MATCHES_CHART, range, filter], () =>
       fetchMatches({ range: range, type: filter })
@@ -43,15 +44,6 @@ export const LineChart = ({ range, filter }: LineChartProps) => {
       dataPoints: [],
     },
   })
-
-  const handleChange = useCallback(
-    (name: string): void => {
-      if (selectedSeries.includes(name)) {
-        setSelectedSeries(selectedSeries.filter((it) => it !== name))
-      } else setSelectedSeries([...selectedSeries, name])
-    },
-    [JSON.stringify(selectedSeries)]
-  )
 
   const chartSeries = data.series.filter((item) =>
     selectedSeries.includes(item.name)
@@ -88,8 +80,7 @@ export const LineChart = ({ range, filter }: LineChartProps) => {
   }, [JSON.stringify(responseMatchesChart)])
 
   const chartOptions: ApexOptions = useMemo(() => {
-    const theme = useTheme()
-    return lineChartOptions(chartSeries, data, theme) as ApexOptions
+    return lineChartOptions(chartSeries, theme) as ApexOptions
   }, [JSON.stringify(data)])
 
   return (
@@ -104,26 +95,6 @@ export const LineChart = ({ range, filter }: LineChartProps) => {
           />
         </div>
       </Loading>
-      <div className="flex justify-center space-x-8">
-        {data.series.map((it) => (
-          <button
-            key={it.name}
-            style={{ color: it.color }}
-            onClick={() => handleChange(it.name)}
-            className={clsx(
-              'flex items-center space-x-2',
-              !selectedSeries.some((visible) => visible === it.name) &&
-                'opacity-50'
-            )}
-          >
-            <span
-              style={{ backgroundColor: it.color }}
-              className="w-3 h-3 rounded-full block"
-            ></span>
-            <p>{it.name}</p>
-          </button>
-        ))}
-      </div>
     </div>
   )
 }

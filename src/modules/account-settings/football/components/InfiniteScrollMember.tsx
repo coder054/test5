@@ -1,6 +1,6 @@
 import { CircularProgress, MenuItem } from '@mui/material'
 import _ from 'lodash'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { MyInput } from 'src/components'
 import { MemberType } from 'src/constants/types/member.types'
@@ -11,6 +11,7 @@ type InfiniteScrollMemberProps = {
   value?: MemberType
   teamId?: string
   onChange?: (value: MemberType) => void
+  playerOnly?: boolean
 }
 
 export const InfiniteScrollMember = ({
@@ -18,6 +19,7 @@ export const InfiniteScrollMember = ({
   label,
   teamId,
   onChange,
+  playerOnly,
 }: InfiniteScrollMemberProps) => {
   const { isLoading, data: members } = useQuery(
     ['members', teamId],
@@ -39,6 +41,13 @@ export const InfiniteScrollMember = ({
     [JSON.stringify(value)]
   )
 
+  const RESPONSE = useMemo(() => {
+    if (playerOnly) {
+      return members?.filter((member: MemberType) => member.type !== 'COACH')
+    }
+    return members
+  }, [JSON.stringify(members)])
+
   useEffect(() => {
     value && setMember(value)
   }, [JSON.stringify(value)])
@@ -59,7 +68,7 @@ export const InfiniteScrollMember = ({
       value={_.isEmpty(member) ? '' : renderInfo(member)}
       label={label}
     >
-      {(members || [])?.map((it: MemberType, index: number) => (
+      {(RESPONSE || [])?.map((it: MemberType, index: number) => (
         <MenuItem
           key={index}
           value={renderInfo(it)}

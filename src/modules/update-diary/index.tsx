@@ -63,14 +63,28 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
   const [isHaveInjury, setIsHaveInjury] = useState<boolean>(false)
   const [injuryData, setInjuryData] = useState<InjuryType>(null)
 
-  console.log('Injury: ', injuryData)
-
   const [currentTab, setCurrentTab] = useState('TEAM_TRAINING')
   const [error, setError] = useState<string>('')
 
   const { isLoading: isGettingDiary, data: diaryUpdate } = useQuery(
     ['diary', date],
     () => fetchDiary(date, currentRoleName)
+  )
+
+  const { mutate: mutateCreateInjury, isLoading: isAddingInjury } = useMutation(
+    createDiary,
+    {
+      onSuccess: (data) => {
+        toast.success('Add injury successfully')
+        if (injuryData.injuryArea) {
+          setDiary((prev) => ({
+            ...prev,
+            diaryId: data.data.diaryId,
+            injuries: data.data.injuries,
+          }))
+        }
+      },
+    }
   )
 
   const { mutate: mutateCreate, isLoading: isCreating } = useMutation(
@@ -133,7 +147,6 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
         if (injuryData.injuryArea) {
           setDiary((prev) => ({ ...prev, injuries: data.data }))
         }
-        queryClient.invalidateQueries('diary')
         queryClient.invalidateQueries(QUERIES_DASHBOARD.TRAINING_DATA)
         queryClient.invalidateQueries(QUERIES_DASHBOARD.MATCHES_DATA)
         queryClient.invalidateQueries(QUERIES_DASHBOARD.WELLNESS_DATA)
@@ -155,7 +168,7 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
 
   const filterType = useCallback(
     (currentTab: string) => {
-      if (currentTab.includes('TRAINING') || currentTab === 'REST_DAY') {
+      if (currentTab?.includes('TRAINING') || currentTab === 'REST_DAY') {
         return 'TRAINING'
       } else return currentTab
     },
@@ -171,13 +184,32 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
     return 'overview'
   }
 
-  const handleSubmit = useCallback(async () => {
-    const requestData = {
+  const requestData = useMemo(() => {
+    return {
       ...diary,
       ...submitForm,
       createdAt: getPreviousDate(date),
       injuries: injurySubmit,
+      typeOfDiary: currentTab === 'REST_DAY' ? 'REST' : submitForm.typeOfDiary,
     }
+  }, [
+    JSON.stringify(diary),
+    JSON.stringify(submitForm),
+    JSON.stringify(injurySubmit),
+  ])
+
+  const handleAddInjury = async () => {
+    if (isUpdate) {
+      handleSubmit()
+    } else
+      mutateCreateInjury({
+        roleName: currentRoleName,
+        data: requestData,
+        type: filterType(currentTab).toLowerCase(),
+      })
+  }
+
+  const handleSubmit = useCallback(async () => {
     if (error) {
       toast.error(error)
     } else {
@@ -186,16 +218,17 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
         ? mutateUpdate({
             roleName: currentRoleName,
             data: requestData,
-            type: filterType(currentTab).toLowerCase(),
+            type: filterType(currentTab)?.toLowerCase(),
             diaryId: diary.diaryId,
           })
         : mutateCreate({
             roleName: currentRoleName,
             data: requestData,
-            type: filterType(currentTab).toLowerCase(),
+            type: filterType(currentTab)?.toLowerCase(),
           })
     }
   }, [
+    currentTab,
     JSON.stringify(diary),
     JSON.stringify(submitForm),
     JSON.stringify(injurySubmit),
@@ -215,10 +248,10 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
 
   useEffect(() => {
     if (diary?.diaryId && diary.typeOfDiary === 'TRAINING') {
-      setCurrentTab(diary.training.typeOfTraining)
+      setCurrentTab(diary.training?.typeOfTraining)
     }
     if (diary?.diaryId && diary.typeOfDiary === 'REST') {
-      setCurrentTab(diary.training.typeOfTraining)
+      setCurrentTab(diary.training?.typeOfTraining)
     }
     if (diary?.diaryId && diary.typeOfDiary === 'MATCH') {
       setCurrentTab('MATCH')
@@ -226,7 +259,7 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
     if (diary?.diaryId && diary.typeOfDiary === 'CAP') {
       setCurrentTab('CAP')
     }
-  }, [JSON.stringify(diary)])
+  }, [JSON.stringify(diary?.typeOfDiary)])
 
   useEffect(() => {
     selected ? setDate(getStartOfDate(selected.createdAt)) : setDate(getToday())
@@ -338,7 +371,7 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
             </div>
           </ModalMui>
         </div>
-        <div className="flex justify-between gap-x-4 pt-3">
+        <div className="mobileM:flex mobileM:flex-col laptopM:grid laptopM:grid-cols-3 mobileM:space-y-4 laptopM:space-y-0 gap-x-4 pt-3">
           <Button
             type="submit"
             isLoading={isCreating || isUpdating}
@@ -349,9 +382,9 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
           {isHaveInjury && injuryData?.injuryArea && (
             <Button
               type="button"
-              isLoading={isCreating || isUpdating}
+              isLoading={isAddingInjury || isUpdating}
               label="Save & Add another injury"
-              onClick={handleSubmit}
+              onClick={handleAddInjury}
               labelClass="text-[#09E099]"
               className="border-2 border-[#09E099] w-full py-[9px] px-2 rounded-[8px]"
             />
