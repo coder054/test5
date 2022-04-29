@@ -490,7 +490,7 @@ export const queryTabAll = (chatRoom: IChatRoom, userId: string): boolean => {
   /// Display chat room that this user request to send message
   return (
     (chatRoom.memberIds || []).includes(userId) &&
-    // !!chatRoom.lastMessageId &&
+    !!chatRoom.lastMessageId &&
     (!chatRoom.requestedUID || chatRoom.requestedUID === userId)
   )
 }
@@ -1041,6 +1041,67 @@ export const getChatRoomStream = async (
         chatRoomImage: chatRoomImage,
         deletedDate: deletedDate,
         isShowChatRoom: isShowChatRoom,
+      })
+    })
+    const results1 = await Promise.all(promises)
+    return {
+      error: false,
+      data: results1,
+    }
+  } catch (error) {
+    return { error: true, data: [] }
+  }
+}
+
+export const getRequestedChatRoomStream = async (
+  snapshots: DataSnapshot[],
+  userId: string
+): Promise<{ error: boolean; data: any }> => {
+  try {
+    let a1 = snapshots
+      .filter((o) => {
+        const chatRoom: IChatRoom = o.val()
+        let c1 = (chatRoom.memberIds || []).includes(userId)
+        let c2 = chatRoom.lastMessageId !== null
+        let c3 = chatRoom.requestedUID !== userId
+        return c1 && c2 && c3
+      })
+      .reverse()
+    const promises = a1.map(async (o) => {
+      let chatRoom: IChatRoom = o.val()
+
+      let deletedDate: number = getDeleteChatRoomDate(chatRoom, userId) // done
+
+      /// ================================================================
+      /// Count unread message
+      let unReadMessageNumber: number = await getNumberUnreadMessageIdsInRoom(
+        chatRoom.chatRoomId,
+        deletedDate,
+        userId
+      ) // done
+
+      let lastMessageContent: string = ''
+      lastMessageContent = await getMessageContent(
+        chatRoom.chatRoomId,
+        chatRoom.lastMessageId || '',
+        userId
+      ) // done
+
+      let memberIdsList: string[] = chatRoom.memberIds || []
+
+      // let id: string = memberIdsList[memberIdsList.indexOf(userId)]
+      let id: string = memberIdsList.find((o) => o !== userId)
+      let chatUser: IChatUser = await getChatUser(id)
+      let chatRoomImage = chatUser?.faceImage || ''
+
+      return Object.assign({}, chatRoom, {
+        lastMessageContent: lastMessageContent,
+        chatRoomName: `${chatUser?.firstName || ''} ${
+          chatUser?.lastName || ''
+        }`,
+        chatRoomImage: chatRoomImage,
+        unReadMessageNumber: unReadMessageNumber,
+        userName: chatUser?.username,
       })
     })
     const results1 = await Promise.all(promises)
