@@ -18,10 +18,12 @@ export const InfoPlayerWithCircleImage = ({
   dataBio,
   currentRoleId,
   signupForm,
+  feedPost,
 }: {
   dataBio: IBiographyPlayer
   currentRoleId?: string
   signupForm?: boolean
+  feedPost?: boolean
 }) => {
   const [fakeRelation, setFakeRelation] = useState({
     followStatus: null,
@@ -118,7 +120,7 @@ export const InfoPlayerWithCircleImage = ({
       </div>
       <div className="h-[24px] "></div>
 
-      <div className="w-[316px]  mx-auto flex justify-center gap-x-[24px] mb-[24px] ">
+      <div className="w-[316px] mx-auto flex justify-center gap-x-[24px] mb-[24px]">
         <div className=" flex flex-col justify-between">
           <div className="h-[45px] ">
             <div className="text-white text-[18px] leading-[24px] text-right whitespace-nowrap">
@@ -280,7 +282,11 @@ export const InfoPlayerWithCircleImage = ({
         </div>
       </div>
 
-      <div className="mx-auto max-w-[466px] flex justify-between mb-[24px] px-[24px] ">
+      <div
+        className={`mx-auto max-w-[466px] flex justify-between ${
+          feedPost ? 'mb-[4px]' : 'mb-[24px]'
+        } px-[24px]`}
+      >
         {/*  */}
         <div className=" flex items-center gap-x-[8px]">
           <svg
@@ -351,26 +357,33 @@ export const InfoPlayerWithCircleImage = ({
         {/*  */}
       </div>
 
-      {!signupForm && dataBio?.userId !== currentRoleId && authenticated && (
-        <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px] ">
-          <FriendButton
-            setFakeRelation={setFakeRelation}
-            friendStatus={relations.friendStatus}
-            userId={dataBio.userId}
-          />
+      {!signupForm &&
+        !feedPost &&
+        dataBio?.userId !== currentRoleId &&
+        authenticated && (
+          <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px] ">
+            <FriendButton
+              setFakeRelation={setFakeRelation}
+              friendStatus={relations.friendStatus}
+              userId={dataBio.userId}
+            />
 
-          <FollowButton
-            setFakeRelation={setFakeRelation}
-            followStatus={relations.followStatus}
-            isFollowed={relations.isFollowed}
-            userId={dataBio.userId}
-            relations={relations}
-          />
-        </div>
-      )}
+            <FollowButton
+              setFakeRelation={setFakeRelation}
+              followStatus={relations.followStatus}
+              isFollowed={relations.isFollowed}
+              userId={dataBio.userId}
+              relations={relations}
+            />
+          </div>
+        )}
 
-      {signupForm && dataBio?.summary && (
-        <div className="mx-auto max-w-[466px] text-white text-[14px] leading-[22px] ">
+      {(signupForm || feedPost) && dataBio?.summary && (
+        <div
+          className={`mx-auto max-w-[466px] text-white text-[14px] leading-[22px] ${
+            feedPost ? 'ml-[24px]' : ''
+          }`}
+        >
           {dataBio?.summary}
         </div>
       )}

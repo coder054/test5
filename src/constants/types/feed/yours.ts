@@ -1,70 +1,3 @@
-// export interface CardFeedType {
-//   userInfo?: {
-//     email?: string
-//     isActive?: boolean
-//     birthCountry?: {
-//       flag?: string
-//       phoneCode?: string
-//       alpha3Code?: string
-//       region?: string
-//       name?: string
-//       alpha2Code?: string
-//     }
-//     fullName?: string
-//     clubId?: string
-//     firstName?: string
-//     fcmToken?: string[]
-//     city?: string
-//     favoriteRoles?: string[]
-//     currentTeams?: string[]
-//     lastName?: string
-//     faceImage?: string
-//     username?: string
-//     type?: string
-//     userId?: string
-//     teamIds?: string[]
-//     isOnline?: boolean
-//     clubName?: string
-//     timezone?: string
-//     lastActive?: number
-//     birthDay?: string
-//     createdAt?: number
-//     updatedAt?: number
-//     shirtNumber?: number
-//     gender?: string
-//     weight?: number
-//     height?: number
-//     fatherHeight?: number
-//     motherHeight?: number
-//     age?: number
-//     isPublic?: true
-//     notificationOn?: true
-//     notificationOptions?: {
-//       inviteUpdates?: true
-//       feedUpdates?: true
-//       profileAndDiaryUpdates?: true
-//       messageUpdates?: true
-//     }
-//   }
-//   postId?: string
-//   typeOfPost?: string
-//   typeOfDiary?: string
-//   isSaved?: boolean
-//   isLiked?: boolean
-//   location?: string
-//   userId?: string
-//   friendTags?: FriendTagsType[]
-//   text?: string
-//   headline?: string
-//   mediaLinks?: {
-//     type?: string
-//     url?: string
-//     uniqueKey?: string
-//   }[]
-//   updatedAt?: number
-//   createdAt?: number
-// }
-
 export interface FriendTagsType {
   isActive?: boolean
   birthCountry?: {
@@ -190,6 +123,7 @@ export interface CardFeedType {
     url?: string
     uniqueKey?: string
   }[]
+  bioInfo: BioInfoType
 }
 
 export interface AveragePainColumnChart {
@@ -271,4 +205,73 @@ export interface NotificationOptions {
   profileAndDiaryUpdates: boolean
   inviteUpdates: boolean
   feedUpdates: boolean
+}
+
+//
+
+export interface BioInfoType {
+  age: number
+  bestFoot: string
+  bioUrl: string
+  birthDay: string
+  bodyImageUrl: string
+  circleCompleted: number
+  contractedUntil: string
+  countryFlagUrl: string
+  createdAt: number
+  currentClubIconUrl: string
+  estMarketValue: number
+  faceImageUrl: string
+  firstName: string
+  height: number
+  isPublic: boolean
+  lastName: string
+  lastUpdatedDate: Date
+  leftFoot: number
+  playerRadarSkills: PlayerRadarSkills
+  position: string
+  radarUpdatedByCoach: PlayerRadarSkills
+  rightFoot: number
+  socialLinks: SocialLinks
+  specialities: string[]
+  starRating: number
+  summary: string
+  teamIds: string[]
+  topVideoLinks: TopVideoLink[]
+  typeOfPost: string
+  updatedAt: number
+  userId: string
+  userRole: string
+  username: string
+  weight: number
+  postId: string
+  fanCount: number
+  followCount: number
+  friendCount: number
+}
+
+export interface PlayerRadarSkills {
+  attacking: number
+  defending: number
+  dribbling: number
+  heading: number
+  pace: number
+  passing: number
+  shooting: number
+  tackling: number
+}
+
+export interface SocialLinks {
+  facebook: string
+  instagram: string
+  tiktok: string
+  twitter: string
+  veoHighlites: string
+  youtube: string
+}
+
+export interface TopVideoLink {
+  source: string
+  thumbnailUrl: string
+  url: string
 }

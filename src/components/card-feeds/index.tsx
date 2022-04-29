@@ -34,6 +34,7 @@ import {
 } from './constants'
 import { ListFriend } from './component/list-friend'
 import { CardDiaryTraining } from './component/diary-training'
+import { SharedBiography } from './component/shared-biography'
 
 interface CardYourType {
   card?: CardFeedType
@@ -141,7 +142,7 @@ export const CardFeed = ({ card }: CardYourType) => {
       }
 
       case shared_biographies: {
-        return <p>bio</p>
+        return <SharedBiography card={card} />
       }
 
       case remind_update_diaries: {
@@ -166,7 +167,7 @@ export const CardFeed = ({ card }: CardYourType) => {
           <img
             src={card?.userInfo?.faceImage as string}
             alt=""
-            className="w-[48px] h-[48px] object-cover mr-[12px]"
+            className="w-[48px] h-[48px] object-cover mr-[12px] rounded-full"
           ></img>
         )}
 

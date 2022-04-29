@@ -311,3 +311,7 @@
 .slick-dots {
   bottom: -64px !important;
 }
+
+.slick-list {
+  margin-left: 16px !important;
+}
