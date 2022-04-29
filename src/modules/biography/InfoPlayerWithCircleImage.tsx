@@ -41,27 +41,27 @@ export const InfoPlayerWithCircleImage = ({
         followStatus:
           fakeRelation.followStatus !== null
             ? fakeRelation.followStatus
-            : dataBio.followStatus,
+            : dataBio?.followStatus,
         friendStatus:
           fakeRelation.friendStatus !== null
             ? fakeRelation.friendStatus
-            : dataBio.friendStatus,
+            : dataBio?.friendStatus,
         isConfirmBox:
           fakeRelation.isConfirmBox !== null
             ? fakeRelation.isConfirmBox
-            : dataBio.isConfirmBox,
+            : dataBio?.isConfirmBox,
         isFollowed:
           fakeRelation.isFollowed !== null
             ? fakeRelation.isFollowed
-            : dataBio.isFollowed,
+            : dataBio?.isFollowed,
         isPublic:
           fakeRelation.isPublic !== null
             ? fakeRelation.isPublic
-            : dataBio.isPublic,
+            : dataBio?.isPublic,
         fanCount:
           fakeRelation.fanCount !== null
             ? fakeRelation.fanCount
-            : dataBio.fanCount,
+            : dataBio?.fanCount,
       }
     )
   }, [fakeRelation, dataBio])
