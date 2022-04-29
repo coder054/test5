@@ -1,37 +1,27 @@
-import queryString from 'query-string'
+import axios from 'axios'
 import {
-  ref,
-  getDatabase,
-  query,
-  orderByChild,
+  child,
+  DataSnapshot,
   equalTo,
   get,
-  child,
-  startAt,
-  onValue,
-  limitToFirst,
-  limitToLast,
-  orderByKey,
-  orderByValue,
-  startAfter,
-  update,
+  getDatabase,
+  orderByChild,
+  query,
+  ref,
   serverTimestamp,
-  push,
-  DataSnapshot,
+  startAfter,
+  startAt,
+  update,
 } from 'firebase/database'
 import {
+  getDownloadURL,
   ref as storageLibRef,
   uploadBytes,
-  getDownloadURL,
 } from 'firebase/storage'
-import { storage } from 'src/config/firebase-client'
-
-import { firebaseApp } from 'src/config/firebase-client'
-
-import { chain, isEmpty, get as getLodash, shuffle } from 'lodash'
-import { AVATAR_DEFAULT, LOCAL_STORAGE_KEY } from 'src/constants/constants'
-import axios from 'axios'
-import { getErrorMessage } from 'src/utils/utils'
+import { get as getLodash, isEmpty, shuffle } from 'lodash'
+import queryString from 'query-string'
+import { firebaseApp, storage } from 'src/config/firebase-client'
+import { AVATAR_DEFAULT } from 'src/constants/constants'
 
 export const database = getDatabase(firebaseApp)
 export const dbRef = ref(database)
