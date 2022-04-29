@@ -32,7 +32,11 @@ export const CardPlainPost = ({ mediaLinks }: CardRssNewsProps) => {
               <div className={`${cls.image} flex-1`}>
                 {item.type === 'IMAGE' ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={item?.url} alt="" className="" />
+                  <img
+                    src={item?.url}
+                    alt=""
+                    className="object-cover w-full h-[195px]"
+                  />
                 ) : null}
                 {item.type === 'VIDEO' ? (
                   <div

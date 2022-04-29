@@ -22,3 +22,7 @@ export const getListPosts = async ({
     })
   )
 }
+
+export const getBioGraphyPlayer = async (username: string) => {
+  return axios.get(`/biographies/player?username=${username}`)
+}

@@ -19,7 +19,7 @@ var settings = {
 }
 
 export const CardDiaryTraining = ({ card }: CardDiaryTrainingProps) => {
-  console.log('card traning:', card)
+  // console.log('card traning:', card)
   const optionTraining = [
     {
       index: '1',
