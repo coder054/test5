@@ -71,6 +71,7 @@ export const ModalAcceptFriends: FC<ContentSearchProps> = (props) => {
         sorted: 'asc',
         status: 'requested',
         type: 'friends',
+        startAfter: 1
       }
 
       const { data } = await axios.get(
