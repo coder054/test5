@@ -731,8 +731,33 @@ export const createChatRoom = async (
       )
     }
 
+    alert(chatRoomRef.key)
     return chatRoomRef.key
-  } catch (error) {}
+  } catch (error) {
+    alert(3)
+  }
+}
+
+export const createRequestChat = async (
+  chatRoomRef,
+  senderId: string,
+  receiverId: string,
+  updatedAt: any,
+  requested: boolean
+) => {
+  try {
+    const updates = {}
+    updates[`/${requestedChatRoomsNode}/${chatRoomRef.key}`] = {
+      memberIds: [senderId, receiverId],
+      requested: true,
+      updatedAt: updatedAt,
+      chatRoomId: chatRoomRef.key,
+      requestedUID: requested ? senderId : null,
+    }
+    await update(dbRef, updates)
+  } catch (error) {
+    alert(2)
+  }
 }
 
 export const createGroupChatRoom = async (

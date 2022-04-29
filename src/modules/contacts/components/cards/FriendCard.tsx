@@ -13,7 +13,10 @@ import { getErrorMessage, getStr, truncateStr } from 'src/utils/utils'
 import { ModalMui } from 'src/components/ModalMui'
 import { notiToast } from 'src/components/common/Toast'
 import { axios } from 'src/utils/axios'
-import { findRoomChatByMemberIds } from 'src/modules/chat/chatService'
+import {
+  createChatRoom,
+  findRoomChatByMemberIds,
+} from 'src/modules/chat/chatService'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { useRouter } from 'next/router'
 
@@ -372,6 +375,14 @@ export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
                   currentRoleId
                 )
                 debugger
+                if (!chatRoomId) {
+                  chatRoomId = await createChatRoom(
+                    user.isRelationship,
+                    user.userId,
+                    currentRoleId
+                  )
+                  debugger
+                }
                 if (!chatRoomId) {
                   debugger
                   return
