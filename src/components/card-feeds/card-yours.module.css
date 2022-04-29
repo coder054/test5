@@ -1,0 +1,29 @@
+.ant-carousel .slick-dots li.slick-active button {
+  background: #ffffff !important;
+  opacity: 1;
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  margin-left: 4px;
+}
+
+.ant-carousel .slick-dots li button {
+  background: #818389 !important;
+  opacity: 1;
+  width: 6px !important;
+  height: 6px !important;
+  border-radius: 3px !important;
+  margin-left: 4px;
+}
+
+.ant-carousel .slick-dots li {
+  width: 14px !important;
+}
+
+.lineClamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  /* min-height: 72px; */
+}

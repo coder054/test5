@@ -55,4 +55,5 @@ export const QUERIES_FEED = {
   FEED_SUBSCRIBE_PROVIDER: 'subscribe-provider',
   FEED_LIKE_POST: 'like-post',
   FEED_UNLIKE_POST: 'unlike-post',
+  FEED_SAVE_POST: 'save-post',
 }

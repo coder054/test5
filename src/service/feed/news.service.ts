@@ -4,6 +4,7 @@ import {
   API_GET_LIST_NEWS_POST_OF_PROVIDER,
   API_GET_LIST_NEWS_PROVIDERS,
   API_LIKE_POST,
+  API_SAVE_POST,
 } from 'src/constants/api.constants'
 import { PostFeed } from 'src/modules/feed/component/modal/types'
 import { axios } from 'src/utils/axios'
@@ -84,5 +85,17 @@ export const likePost = async ({
       typeOfPost: typeOfPost,
       query: query,
     })
+  )
+}
+
+export const savePost = async ({
+  postId,
+  typeOfPost,
+}: {
+  postId: string
+  typeOfPost: string
+}) => {
+  return axios.post(
+    toQueryString(API_SAVE_POST, { postId: postId, typeOfPost: typeOfPost })
   )
 }
