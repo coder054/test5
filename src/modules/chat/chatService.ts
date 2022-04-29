@@ -6,6 +6,7 @@ import {
   get,
   getDatabase,
   orderByChild,
+  push,
   query,
   ref,
   serverTimestamp,
@@ -701,9 +702,37 @@ export const updateLastMessageTime = async (
 export const createChatRoom = async (
   requested: boolean,
   receiverId: string,
-  userId: string
+  senderId: string
 ): Promise<string> => {
-  return ''
+  try {
+    const chatRoomRef = push(child(dbRef, chatRoomsNode))
+    const updatedAt = serverTimestamp()
+
+    /////////////////////////
+    const updates = {}
+    updates[`/${chatRoomsNode}/${chatRoomRef.key}`] = {
+      memberIds: [senderId, receiverId],
+      requested: requested,
+      updatedAt,
+      chatRoomId: chatRoomRef.key,
+      requestedUID: requested ? senderId : null,
+    }
+    await update(dbRef, updates)
+
+    /////////////////////////
+
+    if (requested) {
+      await createRequestChat(
+        chatRoomRef,
+        senderId,
+        receiverId,
+        updatedAt,
+        requested
+      )
+    }
+
+    return chatRoomRef.key
+  } catch (error) {}
 }
 
 export const createGroupChatRoom = async (

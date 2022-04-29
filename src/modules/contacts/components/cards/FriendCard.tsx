@@ -371,9 +371,12 @@ export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
                   user.userId,
                   currentRoleId
                 )
+                debugger
                 if (!chatRoomId) {
+                  debugger
                   return
                 }
+                debugger
                 if (typeof window !== 'undefined') {
                   window.open(`/chat?roomId=${chatRoomId}`, '_ blank')
                   // router.push(`/chat?roomId=${chatRoomId}`)
