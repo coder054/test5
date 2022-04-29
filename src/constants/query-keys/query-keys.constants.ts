@@ -56,4 +56,5 @@ export const QUERIES_FEED = {
   FEED_LIKE_POST: 'like-post',
   FEED_UNLIKE_POST: 'unlike-post',
   FEED_SAVE_POST: 'save-post',
+  FEED_SHARED_BIOGRAPHY_POST: 'shared-biography-post',
 }
