@@ -1,45 +1,13 @@
-import type { NextPage } from 'next'
-import {
-  ref,
-  getDatabase,
-  query,
-  orderByChild,
-  equalTo,
-  get,
-  child,
-  startAt,
-  onValue,
-  limitToFirst,
-  limitToLast,
-  orderByKey,
-  orderByValue,
-  startAfter,
-} from 'firebase/database'
-import { useList } from 'react-firebase-hooks/database'
-import { firebaseApp } from 'src/config/firebase-client'
-import { useEffect, useMemo, useState } from 'react'
-import { useAuth } from 'src/modules/authentication/auth/AuthContext'
-import {
-  fromChatMessageToTypesMessage,
-  getChatRoomStream,
-  getChatUser,
-  getDeleteChatRoomDate,
-  getMessageContent,
-  getMessageNumber,
-  getNumberUnreadMessageIdsInRoom,
-  getUnreadMessageIdsInRoom,
-  IChatMessage,
-  IChatRoom,
-  IChatUser,
-  _queryUnreadMessage,
-} from 'src/modules/chat/chatService'
-import { AVATAR_DEFAULT, LOCAL_STORAGE_KEY } from 'src/constants/constants'
-
-import { chain, isEmpty, shuffle } from 'lodash'
-import React from 'react'
-import { getErrorMessage } from 'src/utils/utils'
-import { chatRoomsAtom, loadingChatRoomsAtom } from 'src/atoms/chatAtom'
+import { getDatabase, orderByChild, query, ref } from 'firebase/database'
 import { useAtom } from 'jotai'
+import { isEmpty } from 'lodash'
+import { useEffect, useState } from 'react'
+import { useList } from 'react-firebase-hooks/database'
+import { chatRoomsAtom, loadingChatRoomsAtom } from 'src/atoms/chatAtom'
+import { firebaseApp } from 'src/config/firebase-client'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
+import { getChatRoomStream } from 'src/modules/chat/chatService'
+import { getErrorMessage } from 'src/utils/utils'
 
 const database = getDatabase(firebaseApp)
 const dbRef = ref(getDatabase())
