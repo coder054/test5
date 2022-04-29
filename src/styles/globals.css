@@ -307,3 +307,7 @@
   left: unset !important;
   right: 12px !important;
 }
+
+.slick-dots {
+  bottom: -64px !important;
+}
