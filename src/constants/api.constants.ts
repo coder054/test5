@@ -4,7 +4,6 @@ export const API_UPDATE_PROFILE_PLAYER = 'users/player'
 export const API_UPDATE_PROFILE_COACH = 'users/coach'
 
 // API News
-export const API_GET_LIST_NEWS_POST = 'feed/get-list-news-post'
 export const API_LIKE_POST = 'feed/like-post'
 
 // API Account & settings
@@ -91,3 +90,17 @@ export const API_PATCH_DELETE_PERSONAL_GOAL =
 //dashboard pain
 export const API_GET_GET_LIST_INJURY_REPORT =
   'dashboard/get-list-injuries-report'
+
+// feed news
+export const API_GET_LIST_NEWS_PROVIDERS = 'feed/get-list-news-providers'
+
+export const API_GET_LIST_NEWS_POST = 'feed/get-list-news-post'
+
+export const API_GET_LIST_NEWS_POST_OF_PROVIDER =
+  'feed/get-list-news-post-of-provider'
+
+export const API_CREATE_PLAIN_POST = 'feed/create-plain-post'
+
+//feed yours
+export const API_GET_LIST_POSTS = 'feed/get-list-posts'
+export const API_SAVE_POST = 'feed/save-post'

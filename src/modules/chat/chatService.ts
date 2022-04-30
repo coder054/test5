@@ -1,36 +1,27 @@
-import queryString from 'query-string'
+import axios from 'axios'
 import {
-  ref,
-  getDatabase,
-  query,
-  orderByChild,
+  child,
+  DataSnapshot,
   equalTo,
   get,
-  child,
-  startAt,
-  onValue,
-  limitToFirst,
-  limitToLast,
-  orderByKey,
-  orderByValue,
-  startAfter,
-  update,
+  getDatabase,
+  orderByChild,
+  query,
+  ref,
   serverTimestamp,
-  push,
-  DataSnapshot,
+  startAfter,
+  startAt,
+  update,
 } from 'firebase/database'
 import {
+  getDownloadURL,
   ref as storageLibRef,
   uploadBytes,
-  getDownloadURL,
 } from 'firebase/storage'
-import { storage } from 'src/config/firebase-client'
-
-import { firebaseApp } from 'src/config/firebase-client'
-
-import { chain, isEmpty, get as getLodash, shuffle } from 'lodash'
-import { AVATAR_DEFAULT, LOCAL_STORAGE_KEY } from 'src/constants/constants'
-import axios from 'axios'
+import { get as getLodash, isEmpty, shuffle } from 'lodash'
+import queryString from 'query-string'
+import { firebaseApp, storage } from 'src/config/firebase-client'
+import { AVATAR_DEFAULT } from 'src/constants/constants'
 
 export const database = getDatabase(firebaseApp)
 export const dbRef = ref(database)
@@ -489,7 +480,7 @@ export const queryTabAll = (chatRoom: IChatRoom, userId: string): boolean => {
   /// Display chat room that this user request to send message
   return (
     (chatRoom.memberIds || []).includes(userId) &&
-    // !!chatRoom.lastMessageId &&
+    !!chatRoom.lastMessageId &&
     (!chatRoom.requestedUID || chatRoom.requestedUID === userId)
   )
 }
@@ -936,7 +927,7 @@ export const getPreviewData = async (
 export const getChatRoomStream = async (
   snapshots: DataSnapshot[],
   userId: string
-) => {
+): Promise<{ error: boolean; data: any }> => {
   try {
     let a1 = snapshots
       .filter((o) => {
@@ -990,19 +981,20 @@ export const getChatRoomStream = async (
 
       /// ================================================================
       /// Conversation 2 people
+      // here Conversation 2 people
       if (!chatRoom.isGroup) {
         let memberIdsList: string[] = chatRoom.memberIds || []
 
-        let id: string = memberIdsList[memberIdsList.indexOf(userId)]
-
+        // let id: string = memberIdsList[memberIdsList.indexOf(userId)]
+        let id: string = memberIdsList.find((o) => o !== userId)
         let chatUser: IChatUser = await getChatUser(id)
-
         let chatRoomImage = chatUser?.faceImage || ''
 
         return Object.assign({}, chatRoom, {
           lastMessageContent: lastMessageContent,
-          chatRoomName:
-            `${chatUser?.firstName || ''} ${chatUser?.lastName || ''}` + 'aaa2',
+          chatRoomName: `${chatUser?.firstName || ''} ${
+            chatUser?.lastName || ''
+          }`,
           chatRoomImage: chatRoomImage,
           unReadMessageNumber: unReadMessageNumber,
           userName: chatUser?.username,
@@ -1051,6 +1043,105 @@ export const getChatRoomStream = async (
   }
 }
 
+export const getRequestedChatRoomStream = async (
+  snapshots: DataSnapshot[],
+  userId: string
+): Promise<{ error: boolean; data: any }> => {
+  try {
+    let a1 = snapshots
+      .filter((o) => {
+        const chatRoom: IChatRoom = o.val()
+        let c1 = (chatRoom.memberIds || []).includes(userId)
+        let c2 = chatRoom.lastMessageId !== null
+        let c3 = chatRoom.requestedUID !== userId
+        return c1 && c2 && c3
+      })
+      .reverse()
+    const promises = a1.map(async (o) => {
+      let chatRoom: IChatRoom = o.val()
+
+      let deletedDate: number = getDeleteChatRoomDate(chatRoom, userId) // done
+
+      /// ================================================================
+      /// Count unread message
+      let unReadMessageNumber: number = await getNumberUnreadMessageIdsInRoom(
+        chatRoom.chatRoomId,
+        deletedDate,
+        userId
+      ) // done
+
+      let lastMessageContent: string = ''
+      lastMessageContent = await getMessageContent(
+        chatRoom.chatRoomId,
+        chatRoom.lastMessageId || '',
+        userId
+      ) // done
+
+      let memberIdsList: string[] = chatRoom.memberIds || []
+
+      // let id: string = memberIdsList[memberIdsList.indexOf(userId)]
+      let id: string = memberIdsList.find((o) => o !== userId)
+      let chatUser: IChatUser = await getChatUser(id)
+      let chatRoomImage = chatUser?.faceImage || ''
+
+      return Object.assign({}, chatRoom, {
+        lastMessageContent: lastMessageContent,
+        chatRoomName: `${chatUser?.firstName || ''} ${
+          chatUser?.lastName || ''
+        }`,
+        chatRoomImage: chatRoomImage,
+        unReadMessageNumber: unReadMessageNumber,
+        userName: chatUser?.username,
+      })
+    })
+    const results1 = await Promise.all(promises)
+    return {
+      error: false,
+      data: results1,
+    }
+  } catch (error) {
+    return { error: true, data: [] }
+  }
+}
+
 export const getUrlChatFromChatRoomId = (roomId: string) => {
   return `/dashboard/chat?roomId=${roomId}`
+}
+
+export const findRoomChatByMemberIds = async (
+  receiverId: string,
+  senderId: string // current role id
+): Promise<string> => {
+  let roomId: string
+  let memberIds = [senderId, receiverId]
+  try {
+    let dataSnapshot = await get(
+      query(
+        ref(database, '/chatRooms/'),
+        orderByChild('isGroup'),
+        equalTo(false)
+      )
+    )
+
+    if (dataSnapshot.exists) {
+      const list = Object.values(dataSnapshot.val())
+
+      let find: any = list.find((o) => {
+        //@ts-ignore: Unreachable code error
+        return o.memberIds.every((item) => memberIds.includes(item))
+      })
+      if (!isEmpty(find)) {
+        return find.chatRoomId || ''
+      }
+    } else {
+      return ''
+    }
+
+    // if (chatUser) {
+    //   return Object.assign({}, chatUser, { userId })
+    // }
+  } catch (error) {
+    // alert(getErrorMessage(error))
+    return ''
+  }
 }

@@ -13,6 +13,9 @@ import { getErrorMessage, getStr, truncateStr } from 'src/utils/utils'
 import { ModalMui } from 'src/components/ModalMui'
 import { notiToast } from 'src/components/common/Toast'
 import { axios } from 'src/utils/axios'
+import { findRoomChatByMemberIds } from 'src/modules/chat/chatService'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
+import { useRouter } from 'next/router'
 
 type FriendsCardProps = {
   user?: FriendsType
@@ -20,6 +23,8 @@ type FriendsCardProps = {
 }
 
 export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
+  const router = useRouter()
+  const { currentRoleId } = useAuth()
   const [isActive, setIsActive] = useState<boolean>(false)
   const [isOpenModalDelete, setIsOpenModalDelete] = useState(false)
   const [isOpenModalBlock, setIsOpenModalBlock] = useState(false)
@@ -361,8 +366,18 @@ export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
           </div>
           <div className="flex justify-end gap-x-[20px]">
             <svg
-              onClick={() => {
-                alert('coming soon')
+              onClick={async () => {
+                let chatRoomId = await findRoomChatByMemberIds(
+                  user.userId,
+                  currentRoleId
+                )
+                if (!chatRoomId) {
+                  return
+                }
+                if (typeof window !== 'undefined') {
+                  window.open(`/chat?roomId=${chatRoomId}`, '_ blank')
+                  // router.push(`/chat?roomId=${chatRoomId}`)
+                }
               }}
               className="cursor-pointer"
               width="24"

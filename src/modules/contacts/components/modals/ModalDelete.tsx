@@ -6,7 +6,7 @@ import clsx from 'clsx'
 
 interface ConfirmModalProps {
   label: string
-  content: string
+  content: string | ReactElement
   icon: ReactElement
   actionLabel: string
   isOpen: boolean
@@ -14,6 +14,7 @@ interface ConfirmModalProps {
   isLoading?: boolean
   onSubmit: () => void
   actionLabelClass?: string
+  followNews?: boolean
 }
 
 export default function ConfirmModal({
@@ -26,6 +27,7 @@ export default function ConfirmModal({
   isLoading,
   actionLabel,
   actionLabelClass,
+  followNews,
 }: ConfirmModalProps) {
   return (
     <ModalMui sx={{ width: 600 }} isOpen={isOpen} onClose={onClose}>
@@ -46,7 +48,11 @@ export default function ConfirmModal({
               type="button"
               label="Cancel"
               onClick={() => onClose(false)}
-              className="py-3 block w-full rounded-lg bg-[#4654EA]"
+              className={`py-3 block w-full rounded-lg ${
+                followNews
+                  ? 'border border-[#09E099] text-[#09E099]'
+                  : 'bg-[#4654EA]'
+              }`}
             />
             <Button
               type="submit"

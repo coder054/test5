@@ -1,64 +1,50 @@
-import { Carousel, notification } from 'antd'
-import { NewsType } from 'src/constants/types'
 import {
   SvgBlock,
   SvgClock,
-  SvgClose,
   SvgComment,
   SvgCopyLink,
-  SvgEuro,
   SvgFavorite,
+  SvgSave,
   SvgShare,
   SvgUnfollow,
-  SvgX,
 } from 'src/imports/svgs'
 import { Text } from '../Text'
-const cls = require('./card-news.module.css')
+const cls = require('./card-yours.module.css')
 import ReactPlayer from 'react-player'
-import { useState } from 'react'
-import Link from 'next/link'
-import {
-  format,
-  formatDistance,
-  formatDistanceToNow,
-  formatDistanceToNowStrict,
-  formatRelative,
-  subDays,
-} from 'date-fns'
+import { ReactElement, useState } from 'react'
+import { formatDistanceToNowStrict } from 'date-fns'
 import { ClickAwayListener } from '@mui/material'
-import { isMobile } from 'react-device-detect'
-import { ModalMui } from '../ModalMui'
 import ConfirmModal from 'src/modules/contacts/components/modals/ModalDelete'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
 import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
-import { likePost, subscribeProvider } from 'src/service/feed/news.service'
+import {
+  likePost,
+  savePost,
+  subscribeProvider,
+} from 'src/service/feed/news.service'
+import { CardFeedType } from 'src/constants/types/feed/yours'
+import { CardPlainPost } from './component/plain-post'
+import {
+  diaries,
+  plain_posts,
+  remind_update_diaries,
+  shared_biographies,
+  TRAINING,
+} from './constants'
+import { ListFriend } from './component/list-friend'
+import { CardDiaryTraining } from './component/diary-training'
+import { SharedBiography } from './component/shared-biography'
 
-interface CardNewsType {
-  card?: any
-  handleFavorite?: (postId: string, typeOfPost: string, status: string) => void
+interface CardYourType {
+  card?: CardFeedType
 }
 
-const contentStyle: any = {
-  height: '195px',
-  color: '#fff',
-  textAlign: 'center',
-  background: '#000000',
-}
-
-export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
+export const CardFeed = ({ card }: CardYourType) => {
   const queryClient = useQueryClient()
   const [play, setPlay] = useState<boolean>(false)
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [openModalUnfollow, setOpenModalUnfollow] = useState<boolean>(false)
-
-  const CarouselProps = {
-    Infinity: true,
-    dots: true,
-    dotClass: cls.dot,
-    swipeToSlide: true,
-    draggable: true,
-  }
 
   const { isLoading: loadingSubscribe, mutate: subScribe } = useMutation(
     [QUERIES_FEED.FEED_SUBSCRIBE_PROVIDER],
@@ -85,6 +71,26 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
     }
   )
 
+  //save post
+  const { mutate: save } = useMutation(
+    [QUERIES_FEED.FEED_SAVE_POST],
+    savePost,
+    {
+      onSuccess: (res) => {
+        toast.success(res.data)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST)
+      },
+    }
+  )
+
+  const handleSave = () => {
+    if (!card?.isSaved) {
+      save({ postId: card?.postId, typeOfPost: card?.typeOfPost })
+    } else if (card?.isSaved) {
+      save({ postId: card?.postId, typeOfPost: card?.typeOfPost })
+    }
+  }
+
   const handleClickFavorite = async (postId: string, typeOfPost: string) => {
     if (!card?.isLiked) {
       like({ postId: postId, typeOfPost: typeOfPost, query: 'like' })
@@ -109,13 +115,42 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
     setOpenModalUnfollow(true)
   }
 
-  const handleConfirmUnfollow = () => {
-    if (!card?.providerId) {
-      toast.error('provider id not found')
-      setOpenModalUnfollow(false)
-      return
+  // const handleConfirmUnfollow = () => {
+  //   if (!card?.providerId) {
+  //     toast.error('provider id not found')
+  //     setOpenModalUnfollow(false)
+  //     return
+  //   }
+  //   subScribe(card?.providerId)
+  // }
+
+  const handleTypeOfPost = (
+    typeOfPost: string,
+    typeOfDiary: string
+  ): ReactElement => {
+    switch (typeOfPost) {
+      case diaries: {
+        if (typeOfDiary && typeOfDiary === TRAINING) {
+          return <CardDiaryTraining card={card} />
+        } else {
+          return <p>match</p>
+        }
+      }
+
+      case plain_posts: {
+        return <CardPlainPost mediaLinks={card?.mediaLinks} />
+      }
+
+      case shared_biographies: {
+        return <SharedBiography card={card} />
+      }
+
+      case remind_update_diaries: {
+        return <p>remain update diary</p>
+      }
     }
-    subScribe(card?.providerId)
+
+    return null
   }
 
   return (
@@ -127,26 +162,28 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
       className="rounded-[8px] bg-[#202128cc] w-[310px] md:w-[500px] relative"
     >
       <div className="flex px-5 items-center mb-5 relative">
-        {card?.providerInfo?.logo && (
+        {card?.userInfo?.faceImage && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={card?.providerInfo?.logo as string}
+            src={card?.userInfo?.faceImage as string}
             alt=""
-            className="w-[48px] h-[48px] object-cover mr-[12px]"
+            className="w-[48px] h-[48px] object-cover mr-[12px] rounded-full"
           ></img>
         )}
 
         <div className=" ">
           <Text name="body1" className="text-white ">
-            {`#${(card?.providerInfo?.name as string) || ''}`}
+            {`#${
+              card?.userInfo?.firstName + ' ' + card?.userInfo?.lastName || ''
+            }`}
           </Text>
           <div className="text-Grey ">
             <SvgClock />
             {card?.createdAt && (
               <Text name="Caption" className=" inline-block ">
                 {`${formatDistanceToNowStrict(card?.createdAt as number)} ${
-                  card?.providerInfo?.region ? '-' : ''
-                } ${card?.providerInfo?.region || ''}`}
+                  card?.userInfo?.city ? '-' : ''
+                } ${card?.userInfo?.city || ''}`}
               </Text>
             )}
           </div>
@@ -191,7 +228,7 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
               <div
                 className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
                 onClick={() => {
-                  navigator.clipboard.writeText(card?.link as string)
+                  // navigator.clipboard.writeText(card?.link as string)
                   toast.success('Copy successfully!')
                 }}
               >
@@ -202,39 +239,21 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
         )}
       </div>
 
-      <Carousel
-        className={`h-[195px] bg-slate-200 ${cls.carouse}`}
-        {...CarouselProps}
-      >
-        {card?.mediaLinks &&
-          card?.mediaLinks.map((item, index) => (
-            <div key={index} className="h-[195px]">
-              <div style={contentStyle} className="flex w-full">
-                <div className={`${cls.image} flex-1`}>
-                  {item.type === 'IMAGE' ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={item?.url} alt="" className="" />
-                  ) : null}
-                  {item.type === 'VIDEO' ? (
-                    <div
-                      className={`${
-                        play ? '' : 'opacity-70'
-                      } w-[347px] h-[195px] object-fill cursor-pointer flex justify-between items-center relative`}
-                      onClick={handlePlayVideo}
-                    >
-                      <ReactPlayer url={item?.url} controls />
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          ))}
-      </Carousel>
+      {handleTypeOfPost(card?.typeOfPost, card?.typeOfDiary || '')}
 
       <p
         className={`${cls.lineClamp} text-white mb-[25px] px-5 mt-[20px]`}
-        dangerouslySetInnerHTML={{ __html: card?.excerptText as string }}
+        dangerouslySetInnerHTML={{ __html: card?.text as string }}
       ></p>
+
+      {card?.typeOfPost &&
+        card?.typeOfPost === plain_posts &&
+        card?.friendTags.length > 0 && (
+          <div className="w-full pl-[20px] pr-[20px]">
+            <p>Friends tag:</p>
+            <ListFriend listFriend={card?.friendTags} />
+          </div>
+        )}
 
       <div className="flex px-5">
         <div className="flex-1 float-left ">
@@ -250,25 +269,31 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
             >
               <SvgFavorite active={card?.isLiked} />
             </div>
-            <Text name="Body2" className="text-Grey ">
-              {card?.countLikes as number}
-            </Text>
+            {/* <Text name="Body2" className="text-Grey ">
+              {card?.userInfo?.age as number}
+            </Text> */}
           </div>
 
-          <div className="flex ml-[66px]">
-            <Text name="Body2" className="text-Grey mr-1 ">
-              {card?.countComments as number}
-            </Text>
+          <div className="flex ml-[32px]">
+            {/* <Text name="Body2" className="text-Grey mr-1 ">
+              {card?.userInfo?.age as number}
+            </Text> */}
             <SvgComment />
           </div>
         </div>
 
-        <div className="flex-row-reverse hover:scale-110 duration-150">
+        <div className="flex-row-reverse hover:scale-110 duration-150 pr-[16px]">
           <SvgShare />
+        </div>
+        <div
+          className="flex-row-reverse hover:scale-110 duration-150 mt-[2px] cursor-pointer"
+          onClick={handleSave}
+        >
+          <SvgSave fill={`${card?.isSaved ? '#09E099' : ''}`} />
         </div>
       </div>
 
-      <ConfirmModal
+      {/* <ConfirmModal
         label="Unfollow"
         content="Are you sure you want to unfollow this news provider?"
         icon={<SvgBlock />}
@@ -276,7 +301,7 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
         isOpen={openModalUnfollow}
         onClose={setOpenModalUnfollow}
         onSubmit={handleConfirmUnfollow}
-      />
+      /> */}
     </div>
   )
 }

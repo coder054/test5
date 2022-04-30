@@ -25,5 +25,5 @@
   -webkit-line-clamp: 3;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  min-height: 72px;
+  /* min-height: 72px; */
 }
