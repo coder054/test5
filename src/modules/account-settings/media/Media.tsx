@@ -3,16 +3,19 @@ import { useAtom } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import toast from 'react-hot-toast'
+import { useMutation, useQueryClient } from 'react-query'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
 import { CustomUploadImage } from 'src/components/custom-upload-image'
 import { MinusIcon, PlusIcon } from 'src/components/icons'
 import { MyButton } from 'src/components/MyButton'
 import { MyInput } from 'src/components/MyInput'
+import { QUERIES_SETTINGS } from 'src/constants/query-keys/query-keys.constants'
 import {
   MediaType,
   SocialLinksType,
 } from 'src/constants/types/settingsType.type'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
+import { updateSettings } from 'src/service/users/settings.service'
 import { axios } from 'src/utils/axios'
 import {
   detectURLName,
@@ -29,9 +32,8 @@ const addNewForm = {
 
 export const Media = () => {
   const { currentRoleName } = useAuth()
-
-  const [account, setAccount] = useAtom(settingsAtom)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const queryClient = useQueryClient()
+  const [account] = useAtom(settingsAtom)
   const [socialForm, setSocialForm] = useState<SocialLinksType>({
     facebook: '',
     instagram: '',
@@ -72,7 +74,17 @@ export const Media = () => {
     setMediaForm((prev) => ({ ...prev, videoLinks: newArr }))
   }
 
-  const handleSubmit = async () => {
+  const { mutate: mutateUpdate, isLoading } = useMutation(updateSettings, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(QUERIES_SETTINGS.SETTINGS)
+      toast.success('Successfully updated')
+    },
+    onError: () => {
+      toast.error('Something went wrong')
+    },
+  })
+
+  const handleSubmit = () => {
     const reformMediaForm = mediaForm.videoLinks?.map((link) => ({
       source: detectValidURL(link.url) ? detectURLName(link.url) : '',
       url: link.url,
@@ -84,20 +96,10 @@ export const Media = () => {
       media: { ...mediaForm, videoLinks: reformMediaForm },
       socialLinks: { ...socialForm },
     }
-    setIsLoading(true)
-    await axios
-      .patch(`users/${currentRoleName.toLowerCase()}/settings`, {
-        ...data,
-      })
-      .then(() => {
-        setAccount({ ...account, ...data })
-        toast.success('Successfully updated')
-        setIsLoading(false)
-      })
-      .catch(() => {
-        setIsLoading(false)
-        toast.error('Something went wrong')
-      })
+    mutateUpdate({
+      data,
+      currentRoleName,
+    })
   }
 
   const handleChangeMediaForm = useCallback(

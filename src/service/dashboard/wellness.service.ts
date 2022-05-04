@@ -21,14 +21,17 @@ export const fetchWellnessChart = async ({
 export const fetchWellnessUpdate = async ({
   limit,
   sorted,
+  startAfter,
 }: {
   limit: number
   sorted: string
+  startAfter: number
 }) => {
   return axios.get(
     toQueryString('dashboard/get-list-diaries-routine-report', {
-      limit: limit,
-      sorted: sorted,
+      limit,
+      sorted,
+      startAfter,
     })
   )
 }

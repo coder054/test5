@@ -55,7 +55,6 @@ export const MySelectCountry = ({
   errorMessage?: string
   onChange?: any
   isShowOptionAll?: boolean
-  [rest: string]: any
 }) => {
   return (
     <div className={clsx('relative', className)} {...rest}>
@@ -107,6 +106,7 @@ export const MySelectCountry = ({
             {option.name}
           </Box>
         )}
+        {...rest}
       />
 
       {errorMessage && (

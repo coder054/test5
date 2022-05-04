@@ -130,7 +130,7 @@ export const InfiniteScrollTeam = ({
   }
 
   useEffect(() => {
-    idClub && getListTeam()
+    idClub && isOpenOption && getListTeam()
   }, [idClub])
 
   return (

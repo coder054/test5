@@ -3,7 +3,11 @@ import { useAtom } from 'jotai'
 import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useList } from 'react-firebase-hooks/database'
-import { chatRoomsAtom, loadingChatRoomsAtom } from 'src/atoms/chatAtom'
+import {
+  chatRoomsAtom,
+  listRoomIdOpenFromOtherPagesAtom,
+  loadingChatRoomsAtom,
+} from 'src/atoms/chatAtom'
 import { firebaseApp } from 'src/config/firebase-client'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { getChatRoomStream } from 'src/modules/chat/chatService'
@@ -12,6 +16,8 @@ const database = getDatabase(firebaseApp)
 const dbRef = ref(getDatabase())
 
 export const AllTab = () => {
+  const [listRoomIdOpenFromOtherPages, setListRoomIdOpenFromOtherPages] =
+    useAtom(listRoomIdOpenFromOtherPagesAtom)
   const { currentRoleId } = useAuth()
 
   const [results, setResults] = useState<any>(null)
@@ -36,7 +42,8 @@ export const AllTab = () => {
         }
         const { data, error } = await getChatRoomStream(
           snapshots,
-          currentRoleId
+          currentRoleId,
+          listRoomIdOpenFromOtherPages
         )
 
         setChatRooms(data.filter((o) => o.isShowChatRoom))

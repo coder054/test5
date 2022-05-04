@@ -13,9 +13,15 @@ import { getErrorMessage, getStr, truncateStr } from 'src/utils/utils'
 import { ModalMui } from 'src/components/ModalMui'
 import { notiToast } from 'src/components/common/Toast'
 import { axios } from 'src/utils/axios'
-import { findRoomChatByMemberIds } from 'src/modules/chat/chatService'
+import {
+  createChatRoom,
+  findRoomChatByMemberIds,
+  getUrlChatFromChatRoomId,
+} from 'src/modules/chat/chatService'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { useRouter } from 'next/router'
+import { useAtom } from 'jotai'
+import { listRoomIdOpenFromOtherPagesAtom } from 'src/atoms/chatAtom'
 
 type FriendsCardProps = {
   user?: FriendsType
@@ -23,6 +29,8 @@ type FriendsCardProps = {
 }
 
 export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
+  const [listRoomIdOpenFromOtherPages, setListRoomIdOpenFromOtherPages] =
+    useAtom(listRoomIdOpenFromOtherPagesAtom)
   const router = useRouter()
   const { currentRoleId } = useAuth()
   const [isActive, setIsActive] = useState<boolean>(false)
@@ -372,10 +380,20 @@ export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
                   currentRoleId
                 )
                 if (!chatRoomId) {
-                  return
+                  chatRoomId = await createChatRoom(
+                    !user.isRelationship,
+                    user.userId,
+                    currentRoleId,
+                    false
+                  )
                 }
-                if (typeof window !== 'undefined') {
-                  window.open(`/chat?roomId=${chatRoomId}`, '_ blank')
+
+                if (typeof window !== 'undefined' && !!chatRoomId) {
+                  setListRoomIdOpenFromOtherPages((prev) => [
+                    ...prev,
+                    chatRoomId,
+                  ])
+                  window.open(getUrlChatFromChatRoomId(chatRoomId), '_ blank')
                   // router.push(`/chat?roomId=${chatRoomId}`)
                 }
               }}

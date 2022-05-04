@@ -184,7 +184,7 @@ export const SocialProfile: NextPage = () => {
                   Pending
                 </Button>
               )}
-              <NextLink href="/dashboard/chat" passHref>
+              <NextLink href="/chat" passHref>
                 <Button
                   component="a"
                   size="small"

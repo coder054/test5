@@ -6,6 +6,7 @@ import {
   get,
   getDatabase,
   orderByChild,
+  push,
   query,
   ref,
   serverTimestamp,
@@ -22,6 +23,7 @@ import { get as getLodash, isEmpty, shuffle } from 'lodash'
 import queryString from 'query-string'
 import { firebaseApp, storage } from 'src/config/firebase-client'
 import { AVATAR_DEFAULT } from 'src/constants/constants'
+import { getErrorMessage } from 'src/utils/utils'
 
 export const database = getDatabase(firebaseApp)
 export const dbRef = ref(database)
@@ -468,8 +470,24 @@ export const getMessageContent = async (
   return content
 }
 
-export const queryTabAll = (chatRoom: IChatRoom, userId: string): boolean => {
-  // userId: roleId
+export const queryTabAll = (
+  chatRoom: IChatRoom,
+  userId: string,
+  listRoomIdOpenFromOtherPages: string[]
+): boolean => {
+  const params = new Proxy(new URLSearchParams(window.location.search), {
+    //@ts-ignore: Unreachable code error
+    get: (searchParams, prop) => searchParams.get(prop),
+  })
+  //@ts-ignore: Unreachable code error
+  let roomId = params.roomId // "some_value"
+
+  if (
+    listRoomIdOpenFromOtherPages.includes(chatRoom.chatRoomId) ||
+    roomId === chatRoom.chatRoomId
+  ) {
+    return true
+  }
 
   if ((chatRoom.blockedByUIDs || []).includes(userId)) {
     return false
@@ -701,9 +719,64 @@ export const updateLastMessageTime = async (
 export const createChatRoom = async (
   requested: boolean,
   receiverId: string,
-  userId: string
+  senderId: string,
+  isGroup: boolean
 ): Promise<string> => {
-  return ''
+  try {
+    const chatRoomRef = push(child(dbRef, chatRoomsNode))
+    const updatedAt = serverTimestamp()
+
+    /////////////////////////
+    const updates = {}
+    updates[`/${chatRoomsNode}/${chatRoomRef.key}`] = {
+      memberIds: [senderId, receiverId],
+      requested: requested,
+      updatedAt,
+      chatRoomId: chatRoomRef.key,
+      requestedUID: requested ? senderId : null,
+      isGroup,
+    }
+    await update(dbRef, updates)
+
+    /////////////////////////
+
+    if (requested) {
+      await createRequestChat(
+        chatRoomRef,
+        senderId,
+        receiverId,
+        updatedAt,
+        requested,
+        isGroup
+      )
+    }
+
+    return chatRoomRef.key
+  } catch (error) {
+    alert(getErrorMessage(error))
+  }
+}
+
+export const createRequestChat = async (
+  chatRoomRef,
+  senderId: string,
+  receiverId: string,
+  updatedAt: any,
+  requested: boolean,
+  isGroup: boolean
+) => {
+  try {
+    const updates = {}
+    updates[`/${requestedChatRoomsNode}/${chatRoomRef.key}`] = {
+      memberIds: [senderId, receiverId],
+      requested: true,
+      updatedAt: updatedAt,
+      chatRoomId: chatRoomRef.key,
+      requestedUID: requested ? senderId : null,
+      isGroup,
+    }
+    await update(dbRef, updates)
+  } catch (error) {}
 }
 
 export const createGroupChatRoom = async (
@@ -926,13 +999,16 @@ export const getPreviewData = async (
 }
 export const getChatRoomStream = async (
   snapshots: DataSnapshot[],
-  userId: string
+  userId: string,
+  listRoomIdOpenFromOtherPages: string[]
 ): Promise<{ error: boolean; data: any }> => {
   try {
+    console.log('aaa window', window)
+
     let a1 = snapshots
       .filter((o) => {
         const chatRoom = o.val()
-        return queryTabAll(chatRoom, userId)
+        return queryTabAll(chatRoom, userId, listRoomIdOpenFromOtherPages)
       })
       .reverse()
     const promises = a1.map(async (o) => {
@@ -1105,7 +1181,7 @@ export const getRequestedChatRoomStream = async (
 }
 
 export const getUrlChatFromChatRoomId = (roomId: string) => {
-  return `/dashboard/chat?roomId=${roomId}`
+  return `/chat?roomId=${roomId}`
 }
 
 export const findRoomChatByMemberIds = async (
@@ -1125,13 +1201,17 @@ export const findRoomChatByMemberIds = async (
 
     if (dataSnapshot.exists) {
       const list = Object.values(dataSnapshot.val())
-
+      let a1 = memberIds
       let find: any = list.find((o) => {
         //@ts-ignore: Unreachable code error
-        return o.memberIds.every((item) => memberIds.includes(item))
+        return o.memberIds.every((item) => {
+          return memberIds.includes(item)
+        })
       })
       if (!isEmpty(find)) {
         return find.chatRoomId || ''
+      } else {
+        return ''
       }
     } else {
       return ''

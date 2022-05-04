@@ -1,16 +1,19 @@
-import { Box, Container, Divider, Tab, Tabs } from '@mui/material'
+import { Tab, Tabs } from '@mui/material'
 import { useAtom } from 'jotai'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
+import { useQuery } from 'react-query'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
+import { QUERIES_SETTINGS } from 'src/constants/query-keys/query-keys.constants'
 import { Account } from 'src/modules/account-settings/account/Account'
-import { Football } from 'src/modules/account-settings/football/Football'
+import { FootballPlayer } from 'src/modules/account-settings/football/FootballPlayer'
 import { Health } from 'src/modules/account-settings/health/Health'
 import { Media } from 'src/modules/account-settings/media/Media'
 import { Profile } from 'src/modules/account-settings/profile/Profiile'
 import { Settings } from 'src/modules/account-settings/settings/Settings'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
-import { axios } from 'src/utils/axios'
+import { fetchSettings } from 'src/service/diary-update'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
+import FootballCoach from './football/FootballCoach'
 
 const tabs = [
   { label: 'Account', value: 'account' },
@@ -22,57 +25,53 @@ const tabs = [
 ]
 
 export const AccountSettings = () => {
-  const [, setSettings] = useAtom(settingsAtom)
   const { currentRoleName } = useAuth()
+  const [, setSettings] = useAtom(settingsAtom)
   const [currentTab, setCurrentTab] = useQueryParam(
     'type',
     withDefault(StringParam, 'account')
   )
+
+  const { data } = useQuery([QUERIES_SETTINGS.SETTINGS], () =>
+    fetchSettings(currentRoleName)
+  )
+
   const handleTabsChange = (_, value: string): void => {
     setCurrentTab(value)
   }
 
-  const getSettings = async () => {
-    const res = await axios.get(`users/${currentRoleName.toString()}-profile`)
-    if (res.status === 200) {
-      setSettings(res.data)
-    }
-  }
-
   useEffect(() => {
-    getSettings()
-  }, [])
+    data && setSettings(data)
+  }, [JSON.stringify(data)])
 
   return (
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8,
-      }}
-    >
-      <Container maxWidth="md">
+    <div className="flex flex-col justify-center mb-8 mobileM:mx-4 laptopM:mx-auto">
+      <div className="flex justify-start mb-4">
         <Tabs
-          indicatorColor="secondary"
+          value={currentTab}
           onChange={handleTabsChange}
           variant="scrollable"
           scrollButtons="auto"
+          indicatorColor="secondary"
           textColor="secondary"
-          value={currentTab}
           sx={{ mt: 3 }}
         >
           {tabs.map((tab) => (
             <Tab key={tab.value} label={tab.label} value={tab.value} />
           ))}
         </Tabs>
-        <Divider sx={{ mb: 3, borderBottomWidth: 0 }} />
-        {currentTab === 'account' && <Account getSettings={getSettings} />}
-        {currentTab === 'settings' && <Settings />}
-        {currentTab === 'profile' && <Profile getSettings={getSettings} />}
-        {currentTab === 'media' && <Media />}
-        {currentTab === 'health' && <Health />}
-        {currentTab === 'football' && <Football />}
-      </Container>
-    </Box>
+      </div>
+      {currentTab === 'account' && <Account />}
+      {currentTab === 'settings' && <Settings />}
+      {currentTab === 'profile' && <Profile />}
+      {currentTab === 'media' && <Media />}
+      {currentTab === 'health' && <Health />}
+      {currentTab === 'football' && (
+        <Fragment>
+          {currentRoleName === 'PLAYER' && <FootballPlayer />}
+          {currentRoleName === 'COACH' && <FootballCoach />}
+        </Fragment>
+      )}
+    </div>
   )
 }
