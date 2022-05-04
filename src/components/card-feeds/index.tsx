@@ -242,7 +242,9 @@ export const CardFeed = ({ card }: CardYourType) => {
       {handleTypeOfPost(card?.typeOfPost, card?.typeOfDiary || '')}
 
       <p
-        className={`${cls.lineClamp} text-white mb-[25px] px-5 mt-[20px]`}
+        className={`${cls.lineClamp} ${
+          card?.typeOfDiary === plain_posts ? 'mb-[25px] ' : ''
+        } text-white px-5 mt-[20px]`}
         dangerouslySetInnerHTML={{ __html: card?.text as string }}
       ></p>
 
