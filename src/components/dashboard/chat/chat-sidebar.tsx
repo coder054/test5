@@ -101,6 +101,10 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
   const [searchResults, setSearchResults] = useState<Contact[]>([])
   const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'))
 
+  useEffect(() => {
+    console.log('aaa chatRooms: ', chatRooms)
+  }, [chatRooms])
+
   const handleGroupClick = (): void => {
     // <TextField
     //     autoFocus

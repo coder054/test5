@@ -3,7 +3,11 @@ import { useAtom } from 'jotai'
 import { isEmpty } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useList } from 'react-firebase-hooks/database'
-import { chatRoomsAtom, loadingChatRoomsAtom } from 'src/atoms/chatAtom'
+import {
+  chatRoomsAtom,
+  listRoomIdOpenFromOtherPagesAtom,
+  loadingChatRoomsAtom,
+} from 'src/atoms/chatAtom'
 import { firebaseApp } from 'src/config/firebase-client'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { getChatRoomStream } from 'src/modules/chat/chatService'
@@ -22,6 +26,8 @@ export const UnreadTab = () => {
   )
   const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
   const [, setLoadingChatRooms] = useAtom(loadingChatRoomsAtom)
+  const [listRoomIdOpenFromOtherPages, setListRoomIdOpenFromOtherPages] =
+    useAtom(listRoomIdOpenFromOtherPagesAtom)
 
   // useEffect(() => {
   //   if (isEmpty(snapshots) || isEmpty(currentRoleId)) {
@@ -121,7 +127,8 @@ export const UnreadTab = () => {
         }
         const { data, error } = await getChatRoomStream(
           snapshots,
-          currentRoleId
+          currentRoleId,
+          listRoomIdOpenFromOtherPages
         )
 
         setChatRooms(

@@ -4,6 +4,8 @@ import { useEffect } from 'react'
 import { useQueryParam, StringParam } from 'use-query-params'
 
 export const chatRoomsAtom = atom([])
+export const listRoomIdOpenFromOtherPagesAtom = atom([])
+
 const activeChatRoomIdAtom = atom('')
 
 export const activeChatRoomAtom = atom((get) => {
@@ -39,3 +41,7 @@ export const loadingChatRoomsAtom = atom(true)
 // const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
 
 // const [notiList, setNotiList] = useAtom(notiListAtom)
+
+// const [listRoomIdOpenFromOtherPages, setListRoomIdOpenFromOtherPages] = useAtom(
+//   listRoomIdOpenFromOtherPagesAtom
+// )
