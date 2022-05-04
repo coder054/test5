@@ -34,7 +34,6 @@ import { Scrollbar } from '../../scrollbar'
 import { ChatContactSearch } from './chat-contact-search'
 import { ChatThreadItem } from './chat-thread-item'
 import { TabPanel, Tabs } from 'src/components/Tabs'
-import { ETabChat, tabsChat } from 'src/pages/dashboard/chat'
 import { useAtom } from 'jotai'
 import {
   activeChatRoomAtom,
@@ -57,6 +56,7 @@ import {
   updateMessageStatus,
 } from 'src/modules/chat/chatService'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import { ETabChat, tabsChat } from 'src/pages/chat'
 
 interface ChatSidebarProps {
   tab: any
@@ -148,44 +148,6 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
     } catch (err) {
       console.error(err)
     }
-  }
-
-  const handleSearchFocus = (): void => {
-    setIsSearchFocused(true)
-  }
-
-  const handleSearchSelect = (result: any): void => {
-    setIsSearchFocused(false)
-    setSearchQuery('')
-
-    if (!mdUp) {
-      onClose?.()
-    }
-
-    router.push(`/dashboard/chat?threadKey=${result.id}`)
-  }
-
-  const handleSelectThread = (threadId: string): void => {
-    const thread = threads.byId[threadId]
-    let threadKey
-
-    if (thread.type === 'GROUP') {
-      threadKey = thread.id
-    } else {
-      // We hardcode the current user ID because the mocked that is not in sync
-      // with the auth provider.
-      // When implementing this app with a real database, replace this
-      // ID with the ID from Auth Context.
-      threadKey = thread.participantIds.find(
-        (participantId) => participantId !== '5e86809283e28b96d2d38537'
-      )
-    }
-
-    if (!mdUp) {
-      onClose?.()
-    }
-
-    router.push(`/dashboard/chat?threadKey=${threadKey}`)
   }
 
   // content of sidebar chat
@@ -576,7 +538,7 @@ const ModalCreateGroup = ({ open, setOpen }) => {
                   ERoomType.GROUP
                 )
                 setTimeout(() => {
-                  router.push(`/dashboard/chat?roomId=${data.groupId}`)
+                  router.push(`/chat?roomId=${data.groupId}`)
                 }, 200)
               } catch (error) {}
             }}
