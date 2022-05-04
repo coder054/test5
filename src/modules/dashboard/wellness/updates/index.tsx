@@ -1,11 +1,12 @@
 import clsx from 'clsx'
-import { useEffect, useState } from 'react'
+import { debounce } from 'lodash'
+import { Fragment, useEffect, useState } from 'react'
 import { isMobile } from 'react-device-detect'
-import { useQuery } from 'react-query'
-import SimpleBar from 'simplebar-react'
-import { Loading } from 'src/components'
+import { useInView } from 'react-intersection-observer'
+import { useInfiniteQuery } from 'react-query'
 import { ChervonRightIcon, XIcon } from 'src/components/icons'
 import { ArrowDownIcon } from 'src/components/icons/ArrowDownIcon'
+import { MiniLoading } from 'src/components/mini-loading'
 import { ModalMui } from 'src/components/ModalMui'
 import { COLOR_DIARY } from 'src/constants/mocks/colors.constants'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
@@ -24,19 +25,39 @@ type DashboardDiaryUpdateType = {
 }
 
 export const DashboardDiaryUpdate = () => {
-  const [sort, setSort] = useState<boolean>(false)
-  const [initial, setInitial] = useState<DashboardDiaryUpdateType[]>([])
+  const [queries, setQueries] = useState({
+    limit: 10,
+    sorted: 'asc',
+    startAfter: null,
+  })
+  const { ref, inView } = useInView()
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [selectedUpdates, setSelectedUpdates] = useState(undefined)
 
-  const { isLoading: isGettingUpdates, data: responseUpdates } = useQuery(
-    [QUERIES_DASHBOARD.WELLNESS_DATA, sort],
-    () =>
-      fetchWellnessUpdate({
-        limit: 10,
-        sorted: sort ? 'asc' : 'desc',
-      })
-  )
+  const { data, isSuccess, isFetching, isError, fetchNextPage } =
+    useInfiniteQuery(
+      [QUERIES_DASHBOARD.WELLNESS_DATA, queries],
+      async ({ pageParam = null }) =>
+        fetchWellnessUpdate({
+          ...queries,
+          startAfter: pageParam,
+        }),
+      {
+        getNextPageParam: (lastPage) => {
+          if (lastPage.data.length < queries.limit) {
+            return undefined
+          }
+          return lastPage.data[lastPage.data.length - 1].createdAt
+        },
+      }
+    )
+
+  const handleSort = debounce(() => {
+    setQueries((prev) => ({
+      ...prev,
+      sorted: prev.sorted === 'asc' ? 'desc' : 'asc',
+    }))
+  }, 500)
 
   const handleChooseUpdates = (value: any) => {
     setSelectedUpdates(value)
@@ -44,14 +65,13 @@ export const DashboardDiaryUpdate = () => {
   }
 
   useEffect(() => {
-    responseUpdates && setInitial(responseUpdates.data)
-  }, [JSON.stringify(responseUpdates)])
+    if (inView) {
+      fetchNextPage()
+    }
+  }, [inView])
 
   return (
-    <Loading
-      isLoading={isGettingUpdates}
-      className="bg-defaultBackGround laptopM:p-8 mobileM:p-2 rounded-lg"
-    >
+    <div className="bg-defaultBackGround laptopM:p-8 mobileM:p-2 rounded-lg">
       <div>
         <ModalMui
           sx={{
@@ -84,59 +104,76 @@ export const DashboardDiaryUpdate = () => {
           Diary Updates
         </p>
         <div className="grid grid-cols-6 text-left bg-[#13161A] text-[#A2A5AD] laptopM:text-[16px] mobileM:text-[13px] font-medium  px-4 py-2">
-          <p>
-            <button
-              onClick={() => setSort(!sort)}
-              className="flex items-center laptopM:space-x-4"
+          <button
+            onClick={handleSort}
+            className="w-full flex items-center laptopM:space-x-4"
+          >
+            <p>Date</p>
+            <span
+              className={clsx(
+                'scale-150 duration-150',
+                queries.sorted === 'desc' && 'rotate-180'
+              )}
             >
-              <p>Date</p>
-              <span
-                className={clsx('scale-150 duration-150', sort && 'rotate-180')}
-              >
-                <ArrowDownIcon />
-              </span>
-            </button>
-          </p>
+              <ArrowDownIcon />
+            </span>
+          </button>
+
           <p>Energy</p>
           <p>Sleep</p>
           <p>Eat</p>
           <p>Pain</p>
           <p className="invisible">Action</p>
         </div>
-        <div className="h-[350px] overflow-y-auto">
-          {initial.map((it: DashboardDiaryUpdateType) => (
-            <button
-              key={it.diaryId}
-              onClick={() => handleChooseUpdates(it)}
-              className="grid w-full grid-cols-6 text-left laptopM:text-[16px] mobileM:text-[13px] font-normal mobileM:pl-4 laptopM:px-4 py-2.5 hover:bg-gray-500 duration-150"
-            >
-              <p>{flexingFormatDate(it.createdAt, 'DD/MM')}</p>
-              <p style={{ color: COLOR_DIARY[it.energyLevel].color }}>
-                {COLOR_DIARY[it.energyLevel].label}
-              </p>
-              <p style={{ color: COLOR_DIARY[it.sleep].color }}>
-                {COLOR_DIARY[it.sleep].label}
-              </p>
-              <p style={{ color: COLOR_DIARY[it.eatAndDrink].color }}>
-                {COLOR_DIARY[it.eatAndDrink].label}
-              </p>
-              <p
-                style={{
-                  color:
-                    it.painLevel === 'No'
-                      ? 'white'
-                      : COLOR_DIARY[it.painLevel].color,
-                }}
-              >
-                {it.painLevel === 'No' ? 'No' : COLOR_DIARY[it.painLevel].label}
-              </p>
-              <span>
-                <ChervonRightIcon className="w-[25px] h-[25px]" />
-              </span>
-            </button>
-          ))}
-        </div>
+        {isSuccess && (
+          <div className="h-[350px] overflow-y-auto">
+            {data.pages.map((page, index) => (
+              <Fragment key={index}>
+                {page.data.map((it: DashboardDiaryUpdateType) => (
+                  <button
+                    key={it.diaryId}
+                    onClick={() => handleChooseUpdates(it)}
+                    className="grid w-full grid-cols-6 text-left laptopM:text-[16px] mobileM:text-[13px] font-normal mobileM:pl-4 laptopM:px-4 py-2.5 hover:bg-gray-500 duration-150"
+                  >
+                    <p>{flexingFormatDate(it.createdAt, 'DD/MM')}</p>
+                    <p style={{ color: COLOR_DIARY[it.energyLevel].color }}>
+                      {COLOR_DIARY[it.energyLevel].label}
+                    </p>
+                    <p style={{ color: COLOR_DIARY[it.sleep].color }}>
+                      {COLOR_DIARY[it.sleep].label}
+                    </p>
+                    <p style={{ color: COLOR_DIARY[it.eatAndDrink].color }}>
+                      {COLOR_DIARY[it.eatAndDrink].label}
+                    </p>
+                    <p
+                      style={{
+                        color:
+                          it.painLevel === 'No'
+                            ? 'white'
+                            : COLOR_DIARY[it.painLevel].color,
+                      }}
+                    >
+                      {it.painLevel === 'No'
+                        ? 'No'
+                        : COLOR_DIARY[it.painLevel].label}
+                    </p>
+                    <span>
+                      <ChervonRightIcon className="w-[25px] h-[25px]" />
+                    </span>
+                  </button>
+                ))}
+              </Fragment>
+            ))}
+            <div className="flex justify-center py-2 " ref={ref}>
+              {isFetching ? (
+                <MiniLoading color="#09E099" size={18} />
+              ) : (
+                <p className="italic">Nothing more to load</p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
-    </Loading>
+    </div>
   )
 }

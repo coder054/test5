@@ -1,5 +1,4 @@
 import { InputAdornment } from '@mui/material'
-import { notification } from 'antd'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -19,10 +18,16 @@ type HealthTypes = {
 
 export const Health = () => {
   const [account, setAccount] = useAtom(settingsAtom)
-  const { currentRoleName, currentRoleId } = useAuth()
+  const { currentRoleName } = useAuth()
 
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [formValues, setFormValues] = useState<HealthTypes>()
+  const [formValues, setFormValues] = useState<HealthTypes>({
+    height: '',
+    leftFootLength: '',
+    rightFootLength: '',
+    weight: '',
+  })
+
   const handleChange = (type: keyof HealthTypes, value: string) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
@@ -59,10 +64,10 @@ export const Health = () => {
   useEffect(() => {
     account &&
       setFormValues({
-        rightFootLength: account.health.rightFootLength.toString(),
-        leftFootLength: account.health.leftFootLength.toString(),
-        weight: account.health.weight.value.toString(),
-        height: account.health.height.value.toString(),
+        rightFootLength: account.health?.rightFootLength.toString(),
+        leftFootLength: account.health?.leftFootLength.toString(),
+        weight: account.health?.weight.value.toString(),
+        height: account.health?.height.value.toString(),
       })
   }, [account])
 
@@ -72,6 +77,7 @@ export const Health = () => {
         <div className="space-y-7">
           <MyInput
             label="Weight"
+            defaultValue=""
             value={formValues?.weight}
             onChange={(e) => handleChange('weight', e.target.value)}
             InputProps={{
@@ -80,6 +86,7 @@ export const Health = () => {
           />
           <MyInput
             label="Height"
+            defaultValue=""
             value={formValues?.height}
             onChange={(e) => handleChange('height', e.target.value)}
             InputProps={{
@@ -89,6 +96,7 @@ export const Health = () => {
           <div className="grid grid-cols-2 gap-x-6">
             <MyInput
               label="Left foot"
+              defaultValue=""
               value={formValues?.leftFootLength}
               onChange={(e) => handleChange('leftFootLength', e.target.value)}
               InputProps={{
@@ -99,6 +107,7 @@ export const Health = () => {
             />
             <MyInput
               label="Right foot"
+              defaultValue=""
               value={formValues?.rightFootLength}
               onChange={(e) => handleChange('rightFootLength', e.target.value)}
               InputProps={{

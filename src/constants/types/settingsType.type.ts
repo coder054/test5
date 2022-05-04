@@ -15,19 +15,19 @@ export type ContractedClubType = Partial<{
   websiteUrl: string | null
 }>
 
-export type CoachCareerType = {
+export type CoachCareerType = Partial<{
   clubId: string
   contractedClub: ContractedClubType
   contractedFrom: string
   contractedUntil: string
-  currentTeams: string[]
+  currentTeams: CurrentTeamType[]
   expLevel: string
   highestCoachingEducation: string
   managementStyle: string
   managementType: string
   role: string
   summary: string
-}
+}>
 
 export type CurrentTeamType = Partial<{
   clubId: string

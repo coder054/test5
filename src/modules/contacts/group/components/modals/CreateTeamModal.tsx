@@ -6,12 +6,15 @@ import { Button } from 'src/components/Button'
 import { CustomUploadImage } from 'src/components/custom-upload-image'
 import { XIcon } from 'src/components/icons'
 import { ModalMui } from 'src/components/ModalMui'
-import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
+import {
+  QUERIES_CONTACTS,
+  QUERIES_SETTINGS,
+} from 'src/constants/query-keys/query-keys.constants'
 import { ClubType } from 'src/constants/types/settingsType.type'
 import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { createTeam, NewTeamType } from 'src/service/contacts/group.service'
-import { fetchSettings } from 'src/service/users/settings'
+import { fetchSettings } from 'src/service/users/settings.service'
 import { FetchingAllMembers } from '../../../components/fetchs/FetchingAllMembers'
 
 type CreateGroupModalProps = {
@@ -31,7 +34,7 @@ export default function CreateTeamModal({ isClose }: CreateGroupModalProps) {
     isPrivate: false,
   })
 
-  const { data } = useQuery(['settings'], () =>
+  const { data } = useQuery([QUERIES_SETTINGS.SETTINGS], () =>
     fetchSettings({ roleName: currentRoleName })
   )
 

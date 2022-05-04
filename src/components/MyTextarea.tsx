@@ -1,6 +1,6 @@
-import { TextField } from '@mui/material'
+import { TextField, TextFieldProps } from '@mui/material'
 
-type MyTextAreaProps = {
+type MyTextAreaProps = TextFieldProps & {
   placeholder?: string
   value?: string
   label?: string
@@ -14,6 +14,7 @@ export const MyTextArea = ({
   label,
   onChange,
   disabled,
+  ...rest
 }: MyTextAreaProps) => {
   return (
     <TextField
@@ -42,6 +43,7 @@ export const MyTextArea = ({
       label={label}
       variant="outlined"
       disabled={disabled}
+      {...rest}
     />
   )
 }

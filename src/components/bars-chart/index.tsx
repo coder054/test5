@@ -56,7 +56,7 @@ const BarsChart = ({ unit, personal, average }: BarsChartType) => {
       return PERSONAL_HEIGHT
     }
     return AVERAGE_HEIGHT
-  }, [])
+  }, [PERSONAL_HEIGHT, AVERAGE_HEIGHT])
 
   return (
     <div className="flex flex-col items-center space-y-6">

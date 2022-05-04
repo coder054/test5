@@ -41,8 +41,6 @@ export const TeamCard = ({ team }: TeamsCardProps) => {
     }
   )
 
-  console.log(team)
-
   return (
     <Card
       avatar={team?.clubUrl}

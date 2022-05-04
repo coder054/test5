@@ -13,12 +13,11 @@ import {
 } from 'src/constants/types/contacts.types'
 import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
-import { Counter } from '../Counter'
-import SkeletonContact from '../card-template/SkeletonContact'
-import { Sort } from '../Sort'
 import { FilterTeam } from '../../team/components/Filter'
-import { MemberCard } from '../../team/components/MemberCard'
+import SkeletonContact from '../card-template/SkeletonContact'
 import { AllMemberCard } from '../cards/AllMemberCard'
+import { Counter } from '../Counter'
+import { Sort } from '../Sort'
 
 type FetchingTemplateProps = {
   tab: ContactsTabType
