@@ -351,17 +351,16 @@ export const InfoPlayerWithCircleImage = ({
             <div className="text-[14px] leading-[22px] text-white ">
               {dataBio?.followCount}
             </div>
-            <div className="text-Grey text-[12px] leading-[20px] ">Follows</div>
+            <div className="text-Grey text-[12px] leading-[20px]">Follows</div>
           </div>
         </div>
-        {/*  */}
       </div>
 
       {!signupForm &&
         !feedPost &&
         dataBio?.userId !== currentRoleId &&
         authenticated && (
-          <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px] ">
+          <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px]">
             <FriendButton
               setFakeRelation={setFakeRelation}
               friendStatus={relations.friendStatus}
