@@ -54,8 +54,6 @@ export const MemberCard = ({
     return isKeyMember || isAdminPage
   }, [member.userId])
 
-  console.log(IS_PERSONAL)
-
   const [groupModal, setGroupModal] = useState<GroupModalType>({
     block: false,
     delete: false,

@@ -9,11 +9,14 @@ import { DetailProfile } from './components/DetailProfile'
 import { useAtom } from 'jotai'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
 import toast from 'react-hot-toast'
+import { useMutation, useQueryClient } from 'react-query'
+import { QUERIES_SETTINGS } from 'src/constants/query-keys/query-keys.constants'
+import { updateSettings } from 'src/service/users/settings.service'
+import _ from 'lodash'
 
-export const Profile = ({ getSettings }) => {
-  const { currentRoleName, currentRoleId, updateUserRoles } = useAuth()
-  const [account, setAccount] = useAtom(settingsAtom)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+export const Profile = () => {
+  const queryClient = useQueryClient()
+  const { currentRoleName } = useAuth()
   const [submitForm, setSubmitForm] = useState<ProfileType>({
     birthCountry: {
       alpha2Code: '',
@@ -35,29 +38,29 @@ export const Profile = ({ getSettings }) => {
     region: '',
   })
 
+  console.log(submitForm)
+
   const handleFormChange = (data: ProfileType) => {
     setSubmitForm((prev) => ({ ...prev, ...data }))
   }
 
+  const { mutate: mutateUpdate, isLoading } = useMutation(updateSettings, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(QUERIES_SETTINGS.SETTINGS)
+      toast.success('Successfully updated')
+    },
+    onError: () => {
+      toast.error('Something went wrong')
+    },
+  })
+
   const handleSubmit = async () => {
-    setIsLoading(true)
-    await axios
-      .patch(`users/${currentRoleName}/settings`, {
-        profile: {
-          ...submitForm,
-        },
-      })
-      .then(() => {
-        setAccount({ ...account, profile: { ...submitForm } })
-        setIsLoading(false)
-        toast.success('Successfully updated')
-        updateUserRoles()
-        getSettings()
-      })
-      .catch(() => {
-        setIsLoading(false)
-        toast.error('Something went wrong')
-      })
+    mutateUpdate({
+      data: {
+        profile: submitForm,
+      },
+      currentRoleName,
+    })
   }
 
   return (

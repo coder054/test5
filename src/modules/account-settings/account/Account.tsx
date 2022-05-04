@@ -2,10 +2,10 @@ import clsx from 'clsx'
 import { BasicDetail } from './components/BasicDetail'
 import { Terms } from './components/Terms'
 
-export const Account = ({ getSettings }) => {
+export const Account = () => {
   return (
     <div className={clsx('space-y-6')}>
-      <BasicDetail getSettings={getSettings} />
+      <BasicDetail />
       <Terms />
     </div>
   )

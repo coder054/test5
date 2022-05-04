@@ -8,7 +8,7 @@ export const TrainingBarsChart = () => {
   return (
     <div className="flex laptopM:space-x-20 mobileM:space-x-10 justify-center">
       <div className="flex flex-col space-y-4 items-center">
-        <p className="font-bold text-[17px]">Session</p>
+        <p className="font-bold text-[17px]">Sessions</p>
         <BarsChart
           personal={training?.personalSessions}
           average={training?.averageSessions}

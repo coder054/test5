@@ -91,8 +91,8 @@ export const MatchesTable = ({ range }: MatchesTableProps) => {
         </p>
         <div className="flex justify-between">
           {Object.keys(formValues.matchInTotalStatistic).map((it: string) => (
-            <div className="flex flex-col space-y-4 items-center laptopM:justify-start">
-              <p className="w-full grid grid-cols-12 items-center py-3 text-left laptopM:text-[16px] mobileM:text-[14px] font-normal px-4 duration-150">
+            <div className="text-center space-y-4">
+              <p className="text-center laptopM:text-[16px] mobileM:text-[14px] font-normal duration-150">
                 {upperFirst(it)}
               </p>
               <p className="laptopM:text-[24px] mobileM:text-[18px] font-medium">
