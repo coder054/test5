@@ -1,6 +1,6 @@
 import { ApexOptions } from 'apexcharts'
 import { useAtom } from 'jotai'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { dashboardTraining } from 'src/atoms/dashboardTrainingAtom'
 import { Chart } from 'src/components'
 import { upperFirst } from 'src/hooks/functionCommon'

@@ -68,7 +68,6 @@ export const DynamicFields = ({
                     ) : (
                       <MyInput
                         label={label}
-                        name={name}
                         className="w-[270px] md:w-[430px]"
                       />
                     )}

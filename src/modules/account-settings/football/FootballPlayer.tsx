@@ -1,6 +1,7 @@
 import { useAtom } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
+import { useMutation, useQueryClient } from 'react-query'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
 import { MinusIcon, PlusIcon } from 'src/components/icons'
 import { MyButton } from 'src/components/MyButton'
@@ -8,13 +9,14 @@ import { MyCustomSelect } from 'src/components/MyCustomSelect'
 import { MyDatePicker } from 'src/components/MyDatePicker'
 import { MyInput } from 'src/components/MyInput'
 import { POSITION } from 'src/constants/mocks/position.constants'
+import { QUERIES_SETTINGS } from 'src/constants/query-keys/query-keys.constants'
 import {
   ClubType,
   CurrentTeamType,
   PlayerCareerType,
 } from 'src/constants/types/settingsType.type'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
-import { axios } from 'src/utils/axios'
+import { updateSettings } from 'src/service/users/settings.service'
 import { BackGround } from '../common-components/Background'
 import { InfiniteScrollClub } from './components/InfiniteScrollClub'
 import { InfiniteScrollTeam } from './components/InfiniteScrollTeam'
@@ -25,12 +27,10 @@ type FormArrayType = {
   favoriteRoles: string[]
 }
 
-const COMMON_CLASS = 'cursor-pointer'
-
-export const Football = () => {
-  const [account, setAccount] = useAtom(settingsAtom)
+export const FootballPlayer = () => {
+  const queryClient = useQueryClient()
   const { currentRoleName } = useAuth()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [account] = useAtom(settingsAtom)
   const [formValues, setFormValues] = useState<PlayerCareerType>({
     teamCalendarLinks: [],
     favoriteRoles: [],
@@ -89,7 +89,7 @@ export const Football = () => {
   const handleRemoveForm = useCallback(
     (type: keyof FormArrayType, i: number) => {
       /* @ts-ignore */
-      const arr = formValues[type].filter((_, index) => {
+      const arr = formValues[type].filter((_, index: number) => {
         return [i].indexOf(index) == -1
       })
       setFormValues((prev) => ({ ...prev, [type]: arr }))
@@ -97,21 +97,21 @@ export const Football = () => {
     [JSON.stringify(formValues)]
   )
 
-  const handleSubmit = async () => {
-    setIsLoading(true)
-    await axios
-      .patch(`users/${currentRoleName}/settings`, {
-        playerCareer: formValues,
-      })
-      .then(() => {
-        setAccount({ ...account, playerCareer: formValues })
-        setIsLoading(false)
-        toast.success('Successfully updated')
-      })
-      .catch(() => {
-        setIsLoading(false)
-        toast.error('Something went wrong')
-      })
+  const { mutate: mutateUpdate, isLoading } = useMutation(updateSettings, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(QUERIES_SETTINGS.SETTINGS)
+      toast.success('Successfully updated')
+    },
+    onError: () => {
+      toast.error("Can't leave. Please assigned owner to others")
+    },
+  })
+
+  const handleSubmit = () => {
+    mutateUpdate({
+      data: { playerCareer: formValues },
+      currentRoleName: currentRoleName,
+    })
   }
 
   useEffect(() => {
@@ -119,7 +119,7 @@ export const Football = () => {
       setFormValues({
         ...account.playerCareer,
         currentTeams:
-          account.playerCareer?.currentTeams.length === 0
+          account.playerCareer?.currentTeams?.length === 0
             ? [
                 {
                   clubId: '',
@@ -131,11 +131,11 @@ export const Football = () => {
               ]
             : account.playerCareer?.currentTeams,
         favoriteRoles:
-          account.playerCareer?.favoriteRoles.length === 0
+          account.playerCareer?.favoriteRoles?.length === 0
             ? ['']
             : account.playerCareer?.favoriteRoles,
         teamCalendarLinks:
-          account.playerCareer?.teamCalendarLinks.length === 0
+          account.playerCareer?.teamCalendarLinks?.length === 0
             ? ['']
             : account.playerCareer?.teamCalendarLinks,
       })
@@ -169,7 +169,7 @@ export const Football = () => {
                       teamName: '',
                     })
                   }
-                  className={COMMON_CLASS}
+                  className="cursor-pointer"
                 >
                   <PlusIcon />
                 </span>
@@ -177,7 +177,7 @@ export const Football = () => {
               {index !== 0 && (
                 <span
                   onClick={() => handleRemoveForm('currentTeams', index)}
-                  className={COMMON_CLASS}
+                  className="cursor-pointer"
                 >
                   <MinusIcon />
                 </span>
@@ -191,7 +191,7 @@ export const Football = () => {
                 value={item}
                 key={index}
                 label="Your Team(s) web calendar link"
-                onChange={(e) =>
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   handleChangeForm(
                     'teamCalendarLinks',
                     e.target.value,
@@ -202,7 +202,7 @@ export const Football = () => {
               {index === 0 && (
                 <span
                   onClick={() => handleAddForm('teamCalendarLinks', '')}
-                  className={COMMON_CLASS}
+                  className="cursor-pointer"
                 >
                   <PlusIcon />
                 </span>
@@ -210,7 +210,7 @@ export const Football = () => {
               {index !== 0 && (
                 <span
                   onClick={() => handleRemoveForm('teamCalendarLinks', index)}
-                  className={COMMON_CLASS}
+                  className="cursor-pointer"
                 >
                   <MinusIcon />
                 </span>
@@ -220,7 +220,9 @@ export const Football = () => {
           <MyInput
             label="Shirtnumber"
             value={formValues.shirtNumber}
-            onChange={(e) => handleChangeForm('shirtNumber', e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              handleChangeForm('shirtNumber', e.target.value)
+            }
           />
           {(formValues.favoriteRoles || []).map((item, index) => (
             <div key={index} className="flex items-center space-x-3">
@@ -237,7 +239,7 @@ export const Football = () => {
               {index === 0 && (
                 <span
                   onClick={() => handleAddForm('favoriteRoles', '')}
-                  className={COMMON_CLASS}
+                  className="cursor-pointer"
                 >
                   <PlusIcon />
                 </span>
@@ -245,7 +247,7 @@ export const Football = () => {
               {index !== 0 && (
                 <span
                   onClick={() => handleRemoveForm('favoriteRoles', index)}
-                  className={COMMON_CLASS}
+                  className="cursor-pointer"
                 >
                   <MinusIcon />
                 </span>

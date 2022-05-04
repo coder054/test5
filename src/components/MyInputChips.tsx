@@ -49,7 +49,7 @@ export const MyInputChips = ({
   useEffect(() => {
     value && setChips(value)
     value && setTags && setTags(value)
-  }, [value])
+  }, [JSON.stringify(value)])
 
   return (
     <div>
@@ -57,6 +57,7 @@ export const MyInputChips = ({
       <div className="flex flex-wrap  items-center py-3">
         {chips.map((chip) => (
           <Chip
+            key={chip}
             size="medium"
             label={`#${chip}`}
             onDelete={() => handleDelete(chip)}

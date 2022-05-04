@@ -1,6 +1,7 @@
 import { notification } from 'antd'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
 import { MySwitchButton } from 'src/components/MySwitchButton'
 import { NotificationsType } from 'src/constants/types/settingsType.type'
@@ -10,7 +11,7 @@ import { BackGround } from '../../common-components/Background'
 import { Item } from '../../common-components/ItemSwitch'
 
 export const Notifications = () => {
-  const { currentRoleName, currentRoleId } = useAuth()
+  const { currentRoleName } = useAuth()
   const [account, setAccount] = useAtom(settingsAtom)
 
   const [switchAll, setSwitchAll] = useState<boolean | undefined>(false)
@@ -45,17 +46,9 @@ export const Notifications = () => {
       ...data,
     })
     await axios
-      .patch(
-        `users/${currentRoleName.toLowerCase()}/settings`,
-        {
-          settings: { ...account.settings, notificationOptions: { ...data } },
-        },
-        {
-          headers: {
-            roleId: currentRoleId,
-          },
-        }
-      )
+      .patch(`users/${currentRoleName.toLowerCase()}/settings`, {
+        settings: { ...account.settings, notificationOptions: { ...data } },
+      })
       .then(() => {
         setAccount({
           ...account,
@@ -63,10 +56,7 @@ export const Notifications = () => {
         })
       })
       .catch(() => {
-        notification['error']({
-          message: 'Error',
-          description: '',
-        })
+        toast.error('Something went wrong')
       })
   }
 
