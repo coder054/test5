@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { ChatAlt2 as ChatAlt2Icon } from './../../../icons/chat-alt2'
 import { chain, get, isEmpty } from 'lodash'
 import { useAtom } from 'jotai'
 import {
@@ -9,7 +10,7 @@ import {
 import type { FC } from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import { Box, Divider } from '@mui/material'
+import { Box, Divider, Avatar, Typography } from '@mui/material'
 import {
   addMessage,
   getThread,
@@ -244,22 +245,51 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
       {...props}
     >
       <ChatThreadToolbar participants={participants} />
-      <Box
-        sx={{
-          backgroundColor: 'background.default',
-          flexGrow: 1,
-          overflow: 'hidden',
-        }}
-      >
-        <Scrollbar ref={messagesRef} sx={{ maxHeight: '100%' }}>
-          {/* @ts-ignore: Unreachable code error */}
-          <ChatMessages
-            arrUsers={arrUsers}
-            messages={messages}
-            participants={[]}
-          />
-        </Scrollbar>
-      </Box>
+
+      {activeChatRoom.lastMessageContent === '' ? (
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            flexGrow: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            overflow: 'hidden',
+          }}
+        >
+          <Avatar
+            sx={{
+              backgroundColor: 'primary.main',
+              color: 'primary.contrastText',
+              height: 56,
+              width: 56,
+            }}
+          >
+            <ChatAlt2Icon fontSize="small" />
+          </Avatar>
+          <Typography color="textSecondary" sx={{ mt: 2 }} variant="subtitle1">
+            Send your first message!
+          </Typography>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            backgroundColor: 'background.default',
+            flexGrow: 1,
+            overflow: 'hidden',
+          }}
+        >
+          <Scrollbar ref={messagesRef} sx={{ maxHeight: '100%' }}>
+            {/* @ts-ignore: Unreachable code error */}
+            <ChatMessages
+              arrUsers={arrUsers}
+              messages={messages}
+              participants={[]}
+            />
+          </Scrollbar>
+        </Box>
+      )}
+
       <Divider />
       <ChatMessageAdd disabled={false} onSend={handleSendMessage} />
     </Box>
