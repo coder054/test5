@@ -1,5 +1,6 @@
 import { useTheme } from '@mui/material'
 import { ApexOptions } from 'apexcharts'
+import { useEffect, useState } from 'react'
 import { Chart } from 'src/components/chart'
 import { BODY_PART } from 'src/constants/types/diary.types'
 import { CardFeedType } from 'src/constants/types/feed/yours'
@@ -11,6 +12,15 @@ interface LineChartProps {
 
 const LineChart = ({ dataChart }: LineChartProps) => {
   const theme = useTheme()
+  const [data, setData] = useState(dataChart)
+
+  const chartSeries = [{ data: data }]
+
+  useEffect(() => {
+    if (data.length === 1) {
+      setData([0, ...data])
+    }
+  }, [])
 
   const chartOptions: ApexOptions = {
     chart: {
@@ -57,8 +67,6 @@ const LineChart = ({ dataChart }: LineChartProps) => {
     },
   }
 
-  const chartSeries = [{ data: [1, 2] }]
-
   return (
     <Chart
       options={chartOptions}
@@ -92,7 +100,7 @@ export const ItemInjuries = ({ card }: ItemInjuriesProps) => {
         {card?.injuries[0]?.isFront ? (
           <div
             className="mx-auto bg-front-body relative w-[214px] h-[440px] bg-no-repeat 
-            bg-center cursor-pointer duration-150 scale-50 -top-[100px]"
+            bg-center cursor-pointer duration-150 scale-50 -top-[108px]"
           >
             {card?.injuries &&
               card?.injuries.map((item) => {
@@ -120,7 +128,7 @@ export const ItemInjuries = ({ card }: ItemInjuriesProps) => {
         ) : (
           <div
             className="bg-back-body relative w-[214px] h-[440px] mx-auto 
-            bg-no-repeat bg-center cursor-pointer duration-150"
+            bg-no-repeat bg-center cursor-pointer duration-150 scale-50 -top-[108px]"
           >
             {card?.injuries &&
               card?.injuries.map((item) => {

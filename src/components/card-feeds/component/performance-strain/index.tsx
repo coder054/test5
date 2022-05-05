@@ -6,12 +6,16 @@ interface PerformaneStrainProps {
   performance?: MatchType
   playerPerformance?: string
   teamPerformance?: string
+  yourPhysicallyStrain?: string
+  teamPhysicallyStrain?: string
 }
 
 export const PerformaneStrain = ({
   performance,
   teamPerformance,
   playerPerformance,
+  teamPhysicallyStrain,
+  yourPhysicallyStrain,
 }: PerformaneStrainProps) => {
   return (
     <div className="w-full flex text-[14px] mt-[8px]">
@@ -48,11 +52,13 @@ export const PerformaneStrain = ({
         <div className="w-full mt-[12px]">
           <div
             className={`bg-[#FF9607] ${
-              emotionlToNum(playerPerformance) ? 'border border-[#A2A5AD]' : ''
+              emotionlToNum(yourPhysicallyStrain)
+                ? 'border border-[#A2A5AD]'
+                : ''
             }`}
             style={{
               height: 8,
-              width: emotionlToNum(playerPerformance) || 0,
+              width: emotionlToNum(yourPhysicallyStrain) || 0,
             }}
           ></div>
         </div>
@@ -60,11 +66,13 @@ export const PerformaneStrain = ({
         <div className="w-full mt-[24px]">
           <div
             className={`bg-[#FF9607] ${
-              emotionlToNum(teamPerformance) ? 'border border-[#A2A5AD]' : ''
+              emotionlToNum(teamPhysicallyStrain)
+                ? 'border border-[#A2A5AD]'
+                : ''
             }`}
             style={{
               height: 8,
-              width: emotionlToNum(teamPerformance) || 0,
+              width: emotionlToNum(teamPhysicallyStrain) || 0,
             }}
           ></div>
         </div>
