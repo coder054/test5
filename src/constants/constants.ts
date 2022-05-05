@@ -53,3 +53,11 @@ export const DESC = 'desc'
 export const REACT_QUERY_KEYS = {
   contacts_group_create_message: 'contacts_group_create_message',
 }
+export const settings = {
+  dots: true,
+  infinite: false,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: false,
+}

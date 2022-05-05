@@ -17,6 +17,7 @@ import { flexingFormatDate } from 'src/hooks/functionCommon'
 import DiaryUpdate from 'src/modules/update-diary'
 import { fetchUpdates } from 'src/service/dashboard/training.service'
 import { safeHttpImage } from 'src/utils/utils'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 
 interface MatchUpdatesProps {
   range: string
@@ -32,6 +33,7 @@ type QueryType = {
 
 const MatchUpdates = ({ range }: MatchUpdatesProps) => {
   const { ref, inView } = useInView()
+  const { currentRoleName } = useAuth()
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [selectedUpdates, setSelectedUpdates] = useState(undefined)
 
@@ -160,6 +162,7 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
                 <Fragment key={index}>
                   {page.data.map((it) => (
                     <button
+                      disabled={currentRoleName === 'COACH'}
                       key={it.diaryId}
                       onClick={() => handleChooseUpdates(it)}
                       className="w-full grid grid-cols-12 items-center laptopM:py-3 text-left laptopM:text-[16px] mobileM:text-[13px] font-normal laptopM:px-4 mobileM:pl-2 mobileM:py-2 hover:bg-gray-500 duration-150"

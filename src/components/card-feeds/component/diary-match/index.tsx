@@ -1,22 +1,22 @@
-import { ChartCircle } from 'src/components/chart-circle'
 import { CardFeedType } from 'src/constants/types/feed/yours'
 import Slider from 'react-slick'
-import { ItemTraining } from './item/item-training'
 import { settings } from 'src/constants/constants'
-import { useQuery } from 'react-query'
-import { getDiaryById } from 'src/service/feed/yours.service'
-import { ItemLineChart } from './item/item-line-chart'
-import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
-import { ItemInjuries } from './item/item-injuries'
+import { ItemMatch } from './item/item-match'
 import { isEmpty } from 'lodash'
+import { useQuery } from 'react-query'
+import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
+import { getDiaryById } from 'src/service/feed/yours.service'
+import { ItemLineChart } from '../diary-training/item/item-line-chart'
+import { ItemInjuries } from '../diary-training/item/item-injuries'
 
 const cls = require('../../card-yours.module.css')
 
-interface CardDiaryTrainingProps {
+interface CardDiaryMatchProps {
   card: CardFeedType
 }
 
-export const CardDiaryTraining = ({ card }: CardDiaryTrainingProps) => {
+export const CardDiaryMatch = ({ card }: CardDiaryMatchProps) => {
+  // console.log('card traning:', card)
   const { isLoading, data } = useQuery(
     [QUERIES_FEED.FEED_GET_DIARY_BY_ID],
     () => getDiaryById(card?.postId),
@@ -25,13 +25,11 @@ export const CardDiaryTraining = ({ card }: CardDiaryTrainingProps) => {
     }
   )
 
-  // console.log('diary:', data)
   return (
-    <Slider {...settings} className={`h-[235px]  ${cls.carouse}`}>
-      <div className="h-[225px]">
-        <ItemTraining card={card && card} />
+    <Slider {...settings} className={`min-h-[235px]  ${cls.carouse}`}>
+      <div className="h-[235px]">
+        <ItemMatch card={card && card} />
       </div>
-
       {!isEmpty(data?.data?.eatChart) ||
       !isEmpty(data?.data?.energyChart) ||
       !isEmpty(data?.data?.sleepChart) ? (

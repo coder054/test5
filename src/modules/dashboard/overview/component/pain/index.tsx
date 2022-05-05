@@ -8,8 +8,8 @@ import { BODY_PART } from 'src/constants/types/diary.types'
 import { scaleToNum } from 'src/hooks/functionCommon'
 import { SvgAllowRight, SvgInfomation } from 'src/imports/svgs'
 import { getDashboardPain } from 'src/service/dashboard/dashboard-overview'
-import { BodyPart } from 'src/modules/update-diary/components/BodyPart'
-import { InjurySpot } from 'src/modules/update-diary/components/InjurySpot'
+import { BodyPart } from 'src/modules/update-diary/player/components/BodyPart'
+import { InjurySpot } from 'src/modules/update-diary/player/components/InjurySpot'
 
 interface PainProps {
   lastDateRange?: string

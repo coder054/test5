@@ -309,9 +309,21 @@
 }
 
 .slick-dots {
-  bottom: -64px !important;
+  top: 251px !important;
 }
 
 .slick-list {
   margin-left: 16px !important;
+}
+
+.slick-dots li button:before {
+  color: #706f6f !important;
+}
+
+.slick-dots li.slick-active button:before {
+  color: #ffffff !important;
+}
+
+.slick-track {
+  height: 238px !important;
 }
