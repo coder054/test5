@@ -74,6 +74,22 @@ export function emotionlToNum(str: string) {
       return
   }
 }
+export function emotionlToStar(str: string) {
+  switch (str) {
+    case 'VERY_BAD':
+      return 1
+    case 'BAD':
+      return 2
+    case 'NORMAL':
+      return 3
+    case 'GOOD':
+      return 4
+    case 'VERY_GOOD':
+      return 5
+    default:
+      return
+  }
+}
 
 export function scaleToNum(str: string) {
   switch (str) {

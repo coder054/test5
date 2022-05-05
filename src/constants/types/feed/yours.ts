@@ -43,6 +43,7 @@ export interface FriendTagsType {
   }
 }
 
+/////
 export interface CardFeedType {
   postId?: string
   typeOfPost?: string
@@ -56,16 +57,22 @@ export interface CardFeedType {
   sleep?: string
   training?: Training
   createdAt?: number
-  injuries?: any[]
+  injuries?: {
+    injuryArea: string
+    value: number
+    isFront: boolean
+    total: number
+    description: string
+  }[]
+
   sleepChart?: number[]
   eatChart?: number[]
   energyChart?: number[]
   trainingCategory?: TrainingCategory
   injuriesTrending?: any[]
-  injuryTags?: any[]
+  injuryTags?: string[]
   injuryPain?: string
   diaryType?: string
-  // userInfo?:               UserInfo;
   averagePainColumnChart?: AveragePainColumnChart
   userInfo?: {
     email?: string
@@ -114,6 +121,7 @@ export interface CardFeedType {
       messageUpdates?: true
     }
   }
+
   location?: string
   friendTags?: FriendTagsType[]
   text?: string
@@ -123,7 +131,72 @@ export interface CardFeedType {
     url?: string
     uniqueKey?: string
   }[]
+
   bioInfo: BioInfoType
+  matchStats?: MatchStats
+  match?: MatchType
+  content?: string
+  data?: {
+    day: number
+    type: string
+  }[]
+
+  transferId?: string
+  transferInfo?: TransferInfoType
+}
+
+export interface TransferInfoType {
+  newClub: {
+    clubLogo: string
+    clubName: string
+    from: string
+    to: string
+  }
+
+  oldClub: {
+    clubName: string
+    clubLogo: string
+    from: string
+    to: string
+  }
+  transferFee: string
+  typeOfPost: string
+  updatedAt: number
+  userId: string
+}
+
+export interface MatchType {
+  arena: string
+  club: any
+  country: any
+  dateTime: string
+  events: any
+  length: number
+  matchMedia: any
+  mvp: any
+  opponentClub: any
+  place: string
+  result: { opponents: number; yourTeam: number }
+  review: any
+  stats: { minutesPlayed: number; role: string }[]
+  typeOfGame: string
+  yourTeam: {
+    clubId: string
+    clubLogo: string
+    clubName: string
+    teamId: string
+    teamImage: string
+    teamName: string
+  }
+}
+
+export interface MatchStats {
+  assists: number
+  goals: number
+  playingTime: number
+  redCard: number
+  role: string
+  yellowCard: number
 }
 
 export interface AveragePainColumnChart {

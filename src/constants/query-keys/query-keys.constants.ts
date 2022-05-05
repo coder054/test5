@@ -50,6 +50,10 @@ export const QUERIES_CONTACTS = {
 export const QUERIES_FEED = {
   FEED_NEW_PROVIDER: 'new-providers',
   FEED_NEW_POST: 'new-post',
+  FEED_NEW_POST_FRIENDS: 'new-post-friends',
+  FEED_NEW_POST_ALL: 'new-post-all',
+  FEED_GET_DIARY_BY_ID: 'feed-get-diary-by-id',
+  FEED_NEW_POST_YOURS: 'new-post-yours',
   FEED_NEW_POST_OF_PROVIDER: 'new-post-of-provider',
   FEED_CREATE_PLAIN_POST: 'create-plain-post',
   FEED_SUBSCRIBE_PROVIDER: 'subscribe-provider',
