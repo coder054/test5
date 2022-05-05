@@ -56,6 +56,9 @@ export const CardFeed = ({ card }: CardYourType) => {
         toast.success(res.data)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_PROVIDER)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_YOURS)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_FRIENDS)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_ALL)
         setOpenOption(false)
       },
     }
@@ -69,6 +72,9 @@ export const CardFeed = ({ card }: CardYourType) => {
         toast.success(res.data)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_OF_PROVIDER)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_YOURS)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_FRIENDS)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_ALL)
       },
     }
   )
@@ -81,6 +87,9 @@ export const CardFeed = ({ card }: CardYourType) => {
       onSuccess: (res) => {
         toast.success(res.data)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_YOURS)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_FRIENDS)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_ALL)
       },
     }
   )

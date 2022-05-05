@@ -323,3 +323,7 @@
 .slick-dots li.slick-active button:before {
   color: #ffffff !important;
 }
+
+.slick-track {
+  height: 238px !important;
+}

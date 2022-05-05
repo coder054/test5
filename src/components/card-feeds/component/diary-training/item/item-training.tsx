@@ -123,6 +123,8 @@ export const ItemTraining = ({ card }: ItemTrainingProps) => {
         performance={card?.match}
         playerPerformance={card?.training?.yourPerformance}
         teamPerformance={card?.training?.teamPerformance}
+        yourPhysicallyStrain={card?.training?.yourPhysicallyStrain}
+        teamPhysicallyStrain={card?.training?.teamPhysicallyStrain}
       />
     </div>
   )
