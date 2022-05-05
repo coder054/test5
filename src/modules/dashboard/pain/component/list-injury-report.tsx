@@ -10,7 +10,7 @@ import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants
 import { InjuryType } from 'src/constants/types/diary.types'
 import { ChevronRight } from 'src/icons/chevron-right'
 import { SvgAbove, SvgBelow } from 'src/imports/svgs'
-import { EditInjuryArea } from 'src/modules/update-diary/components/EditInjuryArea'
+import { EditInjuryArea } from 'src/modules/update-diary/player/components/EditInjuryArea'
 import { getListInjuryReport } from 'src/service/dashboard/pain.service'
 import { ASC, DESC } from 'src/constants/constants'
 import { MiniLoading } from 'src/components/mini-loading'
