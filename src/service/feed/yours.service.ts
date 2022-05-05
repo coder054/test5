@@ -26,3 +26,9 @@ export const getListPosts = async ({
 export const getBioGraphyPlayer = async (username: string) => {
   return axios.get(`/biographies/player?username=${username}`)
 }
+
+export const getDiaryById = async (diaryId: string) => {
+  return axios.get(
+    toQueryString(`/diaries/${diaryId}/get-diary-by-id`, { diaryId: diaryId })
+  )
+}

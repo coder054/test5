@@ -20,7 +20,7 @@ export const TabYours = () => {
     isFetchingNextPage,
     fetchNextPage,
   } = useInfiniteQuery(
-    [QUERIES_FEED.FEED_NEW_POST],
+    [QUERIES_FEED.FEED_NEW_POST_YOURS],
     async ({ pageParam = startAfter }) => {
       const res = await getListPosts({
         limit: limit,
@@ -29,7 +29,7 @@ export const TabYours = () => {
         feedTab: 'yours',
       })
 
-      console.log('res.data', res.data)
+      // console.log('data ::', res.data)
 
       return res.data
     },
@@ -63,14 +63,16 @@ export const TabYours = () => {
               ))}
             </Fragment>
           ))}
-        <p
-          className="flex justify-center py-2 font-semibold text-[16px] h-[12px] text-center"
-          ref={ref}
-        >
-          {isFetchingNextPage ? (
-            <MiniLoading color="#09E099" size={24} />
-          ) : null}
-        </p>
+        <div className="w-full">
+          <p
+            className="flex justify-center py-2 font-semibold text-[16px] w-[36px] h-[36px] text-center mx-auto"
+            ref={ref}
+          >
+            {isFetchingNextPage ? (
+              <MiniLoading color="#09E099" size={24} />
+            ) : null}
+          </p>
+        </div>
       </div>
     </Loading>
   )

@@ -277,6 +277,20 @@ export const SvgBelow = () => (
   </svg>
 )
 
+export const SvgTransfer = () => (
+  <svg
+    width="28"
+    height="28"
+    viewBox="0 0 28 28"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M13.9993 0.666748L11.6493 3.01675L20.9493 12.3334H0.666016V15.6667H20.9493L11.6493 24.9834L13.9993 27.3334L27.3327 14.0001L13.9993 0.666748Z"
+      fill="#A2A5AD"
+    />
+  </svg>
+)
 export const SvgAllowRight = () => (
   <svg
     width="18"

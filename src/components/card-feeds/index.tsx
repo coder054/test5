@@ -1,5 +1,4 @@
 import {
-  SvgBlock,
   SvgClock,
   SvgComment,
   SvgCopyLink,
@@ -10,11 +9,9 @@ import {
 } from 'src/imports/svgs'
 import { Text } from '../Text'
 const cls = require('./card-yours.module.css')
-import ReactPlayer from 'react-player'
 import { ReactElement, useState } from 'react'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { ClickAwayListener } from '@mui/material'
-import ConfirmModal from 'src/modules/contacts/components/modals/ModalDelete'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
 import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
@@ -26,6 +23,7 @@ import {
 import { CardFeedType } from 'src/constants/types/feed/yours'
 import { CardPlainPost } from './component/plain-post'
 import {
+  club_transfer_histories,
   diaries,
   plain_posts,
   remind_update_diaries,
@@ -35,6 +33,10 @@ import {
 import { ListFriend } from './component/list-friend'
 import { CardDiaryTraining } from './component/diary-training'
 import { SharedBiography } from './component/shared-biography'
+import dayjs from 'dayjs'
+import { CardDiaryMatch } from './component/diary-match'
+import { RemainDiaryUpdate } from './component/remain-diary-update'
+import { ClubTransferHistories } from './component/club-transfer-histories'
 
 interface CardYourType {
   card?: CardFeedType
@@ -133,7 +135,7 @@ export const CardFeed = ({ card }: CardYourType) => {
         if (typeOfDiary && typeOfDiary === TRAINING) {
           return <CardDiaryTraining card={card} />
         } else {
-          return <p>match</p>
+          return <CardDiaryMatch card={card} />
         }
       }
 
@@ -146,7 +148,11 @@ export const CardFeed = ({ card }: CardYourType) => {
       }
 
       case remind_update_diaries: {
-        return <p>remain update diary</p>
+        return <RemainDiaryUpdate card={card} />
+      }
+
+      case club_transfer_histories: {
+        return <ClubTransferHistories card={card} />
       }
     }
 
@@ -156,7 +162,7 @@ export const CardFeed = ({ card }: CardYourType) => {
   return (
     <div
       style={{
-        padding: '24px 0px 32px',
+        padding: '24px 0px 24px',
         backdropFilter: 'blur(68px)',
       }}
       className="rounded-[8px] bg-[#202128cc] w-[310px] md:w-[500px] relative"
@@ -183,7 +189,9 @@ export const CardFeed = ({ card }: CardYourType) => {
               <Text name="Caption" className=" inline-block ">
                 {`${formatDistanceToNowStrict(card?.createdAt as number)} ${
                   card?.userInfo?.city ? '-' : ''
-                } ${card?.userInfo?.city || ''}`}
+                } ${card?.userInfo?.birthCountry?.alpha2Code}/${
+                  card?.userInfo?.city || ''
+                } /${dayjs(card?.createdAt).format('YYYY')}`}
               </Text>
             )}
           </div>
