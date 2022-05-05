@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
-import { Loading, TooltipCustom } from 'src/components'
+import { Loading } from 'src/components'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { DashboardPainType } from 'src/constants/types'
 import { BODY_PART } from 'src/constants/types/diary.types'
-import { scaleToNum } from 'src/hooks/functionCommon'
-import { SvgAllowRight, SvgInfomation } from 'src/imports/svgs'
 import { getDashboardPain } from 'src/service/dashboard/dashboard-overview'
 import { BodyPart } from 'src/modules/update-diary/player/components/BodyPart'
 import { InjurySpot } from 'src/modules/update-diary/player/components/InjurySpot'
@@ -47,9 +45,6 @@ export const InjuryChart = ({
 
     return res
   }
-
-  // console.log('dataChart:', dataChart)
-  // console.log('dataPain:', dataPain)
 
   return (
     <Loading isLoading={loading}>

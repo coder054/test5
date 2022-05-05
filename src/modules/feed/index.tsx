@@ -1,6 +1,8 @@
 import { Tab, Tabs } from '@mui/material'
 import { ButtonAddFeed } from 'src/components/button-add-popup/button-add-feed'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
+import { TabAll } from './component/all'
+import { TabFriends } from './component/friends'
 import { TabNews } from './component/news'
 import { TabYours } from './component/yours'
 
@@ -40,7 +42,9 @@ const News = () => {
         ))}
       </Tabs>
 
+      {currentTab === 'all' && <TabAll />}
       {currentTab === 'news' && <TabNews />}
+      {currentTab === 'friends' && <TabFriends />}
       {currentTab === 'yours' && <TabYours />}
 
       <ButtonAddFeed />

@@ -14,7 +14,7 @@ export const SharedBiography = ({ card }: SharedBiographyProps) => {
     () => getBioGraphyPlayer(card?.bioInfo?.username),
     {
       onSuccess: (res) => {
-        console.log('res bio:', res)
+        // console.log('res bio:', res)
       },
     }
   )
