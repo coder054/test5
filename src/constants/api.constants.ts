@@ -30,20 +30,14 @@ export const API_COACH_COMMENT_DEVELOPMENT_NOTE =
 //   'development-talk/player/update-development-note'
 
 export const API_DIARY = 'diaries'
-
 export const API_GET_DIARY = 'get-diary-by-query'
-
 export const API_ACHIEVEMENTS_TROPHY = 'achievements/trophy'
-
 export const API_CREATE_CAREERS_FUTURE = 'careers/future'
-
 export const API_CREATE_CAREERs_HISTORIC = 'careers/historic'
 
 //dashboard overview
 export const API_GET_LIST_LEADER_BOARD = 'dashboard/get-list-leader-boards'
-
 export const API_GET_LIST_DIARIES_REPORT = 'dashboard/get-list-diaries-report'
-
 export const API_GET_DASBOARD_DIARIES_STATISTIC =
   'dashboard/get-diaries-statistic'
 

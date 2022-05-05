@@ -220,7 +220,7 @@ export const Match = ({ onChange, error }: MatchProps) => {
           {
             minutesPlayed: 90,
             role:
-              accountSettings.playerCareer.favoriteRoles.length > 0
+              accountSettings.playerCareer.favoriteRoles?.length > 0
                 ? accountSettings.playerCareer.favoriteRoles[0]
                 : '',
           },
@@ -540,11 +540,11 @@ export const Match = ({ onChange, error }: MatchProps) => {
             }
             isAdjective
             step={25}
-            value={emotionlToNum(formValues.review.teamPerformance)}
+            value={emotionlToNum(formValues.review?.teamPerformance)}
             labelClass="text-[#A2A5AD]"
           />
           <MyTextArea
-            value={formValues.review.teamReview}
+            value={formValues.review?.teamReview}
             onChange={(e) => handleChangeReview(e.target.value, 'teamReview')}
             placeholder="Your Teams game review (Describe what you’re team did well and what you’re team could have done better)"
           />
@@ -555,7 +555,7 @@ export const Match = ({ onChange, error }: MatchProps) => {
             }
             isScale
             step={25}
-            value={scaleToNum(formValues.review.physicallyStrain)}
+            value={scaleToNum(formValues.review?.physicallyStrain)}
             labelClass="text-[#A2A5AD]"
           />
           <MySlider
@@ -565,11 +565,11 @@ export const Match = ({ onChange, error }: MatchProps) => {
             }
             isAdjective
             step={25}
-            value={emotionlToNum(formValues.review.playerPerformance)}
+            value={emotionlToNum(formValues.review?.playerPerformance)}
             labelClass="text-[#A2A5AD]"
           />
           <MyTextArea
-            value={formValues.review.yourReview}
+            value={formValues.review?.yourReview}
             onChange={(e) => handleChangeReview(e.target.value, 'yourReview')}
             placeholder="Your game review (Describe what you did well and what you could have done better)"
           />

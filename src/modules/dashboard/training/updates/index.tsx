@@ -21,7 +21,7 @@ import {
 import { flexingFormatDate, upperFirst } from 'src/hooks/functionCommon'
 import DiaryUpdate from 'src/modules/update-diary'
 import { fetchUpdates } from 'src/service/dashboard/training.service'
-
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 interface TrainingUpdateProps {
   range: LastRangeDateType
 }
@@ -37,8 +37,10 @@ type QueryType = {
 const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
   const { ref, inView } = useInView()
   const [, setTags] = useAtom(dashboardTags)
+  const { currentRoleName } = useAuth()
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
-  const [selectedUpdates, setSelectedUpdates] = useState(undefined)
+  const [selectedUpdates, setSelectedUpdates] =
+    useState<DashboardUpdatesType>(undefined)
 
   const [queries, setQueries] = useState<QueryType>({
     range: range,
@@ -158,6 +160,7 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
               <Fragment key={index}>
                 {page.data.map((item: DashboardUpdatesType) => (
                   <button
+                    disabled={currentRoleName === 'COACH'}
                     key={item.diaryId}
                     onClick={() => handleChooseUpdates(item)}
                     className="w-full laptopM:text-[16px] mobileM:text-[13px] font-normal grid laptopM:grid-cols-4 mobileM:grid-cols-6 laptopM:px-4 laptopM:py-3 hover:bg-gray-500 duration-150 mobileM:text-left mobileM:pl-4 mobileM:py-2"

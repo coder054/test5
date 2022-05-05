@@ -132,11 +132,11 @@ export const Cap = ({ onChange }: CapProps) => {
     const initialValues = {
       ...diary.cap,
       events:
-        diary.cap?.events.length === 0
+        diary.cap?.events?.length === 0
           ? [{ minutes: 0, event: '' }]
           : diary.cap?.events,
       stats:
-        diary.cap?.stats.length === 0
+        diary.cap?.stats?.length === 0
           ? [{ minutesPlayed: 0, role: '' }]
           : diary.cap?.stats,
     }
@@ -279,7 +279,7 @@ export const Cap = ({ onChange }: CapProps) => {
       <div className="space-y-3">
         <p className="text-[#A2A5AD] font-normal text-[16px]">Your stats</p>
         <div className="space-y-9">
-          {formValues.stats.map((item, index) => (
+          {(formValues.stats || []).map((item, index) => (
             <div key={index} className="flex items-center space-x-2">
               <div className="flex-1 grid grid-cols-2 gap-x-6">
                 <MyInput
@@ -345,7 +345,7 @@ export const Cap = ({ onChange }: CapProps) => {
       <div className="space-y-3">
         <p className="text-[#A2A5AD] font-normal text-[16px]">Your events</p>
         <div className="space-y-9">
-          {formValues.events.map((item, index) => (
+          {(formValues.events || []).map((item, index) => (
             <div key={index} className="flex items-center space-x-2">
               <div className="flex-1 grid grid-cols-2 gap-x-6">
                 <MyInput
@@ -417,11 +417,11 @@ export const Cap = ({ onChange }: CapProps) => {
           }
           isAdjective
           step={25}
-          value={emotionlToNum(formValues.review.teamPerformance)}
+          value={emotionlToNum(formValues.review?.teamPerformance)}
           labelClass="text-[#A2A5AD]"
         />
         <MyTextArea
-          value={formValues.review.teamReview}
+          value={formValues.review?.teamReview}
           onChange={(e) => handleChangeReview(e.target.value, 'teamReview')}
           placeholder="Your Teams game review (Describe what you’re team did well and what you’re team could have done better)"
         />
@@ -432,7 +432,7 @@ export const Cap = ({ onChange }: CapProps) => {
           }
           isScale
           step={25}
-          value={scaleToNum(formValues.review.physicallyStrain)}
+          value={scaleToNum(formValues.review?.physicallyStrain)}
           labelClass="text-[#A2A5AD]"
         />
         <MySlider
@@ -442,11 +442,11 @@ export const Cap = ({ onChange }: CapProps) => {
           }
           isAdjective
           step={25}
-          value={emotionlToNum(formValues.review.playerPerformance)}
+          value={emotionlToNum(formValues.review?.playerPerformance)}
           labelClass="text-[#A2A5AD]"
         />
         <MyTextArea
-          value={formValues.review.yourReview}
+          value={formValues.review?.yourReview}
           onChange={(e) => handleChangeReview(e.target.value, 'yourReview')}
           placeholder="Your game review (Describe what you did well and what you could have done better)"
         />
