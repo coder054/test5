@@ -50,7 +50,7 @@ export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
   } = props
 
   const setSelectedClub = (value) => {
-    setContractedClub
+    setContractedClub(value)
   }
 
   // here Modal Filter Friend

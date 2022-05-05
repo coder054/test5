@@ -49,3 +49,7 @@ export const LIMIT = 20
 
 export const ASC = 'asc'
 export const DESC = 'desc'
+
+export const REACT_QUERY_KEYS = {
+  contacts_group_create_message: 'contacts_group_create_message',
+}
