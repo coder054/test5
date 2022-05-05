@@ -1,7 +1,9 @@
+import { MenuItem, TextField } from '@mui/material'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
+import { MyInput } from 'src/components'
 import { MyCustomSelect } from 'src/components/MyCustomSelect'
 import { MySelectCountry } from 'src/components/MySelectCountry'
 import { CountryType } from 'src/constants/types/settingsType.type'
@@ -31,7 +33,7 @@ export const Language = () => {
       name: '',
       region: '',
     },
-    language: '',
+    language: 'english',
     public: null,
   })
 
@@ -56,10 +58,9 @@ export const Language = () => {
           },
         })
         setFormValues((prev) => ({ ...prev, [type]: value }))
-        toast.success('Notification changed')
       })
       .catch(() => {
-        toast.error('Error')
+        toast.error('Something went wrong')
       })
   }
 
@@ -78,12 +79,9 @@ export const Language = () => {
   return (
     <BackGround label="Language" contentClass="xl:w-[400px]">
       <div className="space-y-7">
-        <MyCustomSelect
-          label="Language"
-          val={formValues.language}
-          onChange={(_, value) => handleChangeForm('language', value)}
-          arrOptions={['English']}
-        />
+        <TextField select fullWidth label="Languague" defaultValue="english">
+          <MenuItem value="english">English</MenuItem>
+        </TextField>
         <MySelectCountry
           label="Country"
           value={formValues.country}

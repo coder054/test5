@@ -54,7 +54,7 @@ export const DetailProfile = ({ onFormChange }: DetailProfileProps) => {
     account &&
       setFormValues((prev) => ({
         ...prev,
-        email: account.profile?.email,
+        email: account.account?.email,
         phone: account.profile?.phone,
         postNumber: account.profile?.postNumber,
         region: account.profile?.region,

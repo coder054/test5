@@ -3,7 +3,7 @@ import { ApexOptions } from 'apexcharts'
 import { Chart } from 'src/components/chart'
 import { BODY_PART } from 'src/constants/types/diary.types'
 import { CardFeedType } from 'src/constants/types/feed/yours'
-import { InjurySpot } from 'src/modules/update-diary/components/InjurySpot'
+import { InjurySpot } from 'src/modules/update-diary/player/components/InjurySpot'
 
 interface LineChartProps {
   dataChart: number[]

@@ -2,6 +2,7 @@ export const QUERIES_DASHBOARD = {
   TRAINING_CHART: 'training-chart',
   TRAINING_TABLE: 'training-table',
   TRAINING_DATA: 'training-data',
+  TRAINING_UPDATE: 'training-update',
   MATCHES_CHART: 'matches-chart',
   MATCHES_TABLE: 'matches-table',
   MATCHES_DATA: 'matches-data',
@@ -61,4 +62,12 @@ export const QUERIES_FEED = {
   FEED_UNLIKE_POST: 'unlike-post',
   FEED_SAVE_POST: 'save-post',
   FEED_SHARED_BIOGRAPHY_POST: 'shared-biography-post',
+}
+
+export const QUERIES_SETTINGS = {
+  SETTINGS: 'settings',
+}
+
+export const QUERIES_CLUBS = {
+  CLUBS: 'clubs',
 }

@@ -5,7 +5,8 @@ import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants
 import { DashboardPainType } from 'src/constants/types'
 import { BODY_PART } from 'src/constants/types/diary.types'
 import { getDashboardPain } from 'src/service/dashboard/dashboard-overview'
-import { InjurySpot } from 'src/modules/update-diary/components/InjurySpot'
+import { BodyPart } from 'src/modules/update-diary/player/components/BodyPart'
+import { InjurySpot } from 'src/modules/update-diary/player/components/InjurySpot'
 
 interface InjuryChartProps {
   lastDateRange?: string

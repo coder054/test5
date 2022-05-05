@@ -4,33 +4,21 @@ import {
   Checkbox,
   Dialog,
   DialogContent,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Typography,
-  Select,
-  MenuItem,
   FormControl,
+  IconButton,
   InputLabel,
+  MenuItem,
+  Select,
+  Typography,
 } from '@mui/material'
-import { chain, isEmpty } from 'lodash'
 import PropTypes from 'prop-types'
-import queryString from 'query-string'
 import type { FC } from 'react'
-import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import { notiToast } from 'src/components/common/Toast'
-import { Loading } from 'src/components/loading/loading'
-import { IUsersSearch } from 'src/constants/types/searchUsers.types'
-import { SearchIcon } from 'src/icons/search'
-import { XIcon } from 'src/icons/x'
-import { axios } from 'src/utils/axios'
-import { getErrorMessage, getStr, truncateStr } from 'src/utils/utils'
-import { useDebounce } from 'use-debounce'
+import { Fragment, useRef } from 'react'
 import { MySelectCountry } from 'src/components/MySelectCountry'
-import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
-import { optionAllCountry } from 'src/constants/mocks/countries.constants'
 import { optionAllClub } from 'src/constants/mocks/clubs.constans'
+import { XIcon } from 'src/icons/x'
+import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
+import { getStr, truncateStr } from 'src/utils/utils'
 
 interface ContentSearchProps {
   onClose?: () => void
@@ -105,7 +93,6 @@ export const ModalFilterFriends: FC<ContentSearchProps> = (props) => {
         >
           <div className="mb-[24px] ">
             <MySelectCountry
-              defauleValue={optionAllCountry}
               isShowOptionAll={true}
               label="Select Country"
               onChange={(_, value) => {

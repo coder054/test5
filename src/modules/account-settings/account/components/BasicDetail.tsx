@@ -1,3 +1,4 @@
+import { MenuItem } from '@mui/material'
 import * as firebase from 'firebase/auth'
 import { signInWithEmailAndPassword, User } from 'firebase/auth'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
@@ -13,8 +14,9 @@ import { auth } from 'src/config/firebase-client'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import * as Yup from 'yup'
 import { BackGround } from '../../common-components/Background'
-
-type InitialValuesType = {
+import { useQueryClient } from 'react-query'
+import { QUERIES_SETTINGS } from 'src/constants/query-keys/query-keys.constants'
+interface InitialValuesType {
   username?: string
   newPassword: string
   userProfile: string
@@ -22,7 +24,8 @@ type InitialValuesType = {
   verifyPassword: string
 }
 
-export const BasicDetail = ({ getSettings }) => {
+export const BasicDetail = () => {
+  const queryClient = useQueryClient()
   const { currentUser, currentRoleName, updateUserRoles } = useAuth()
 
   const [account] = useAtom(settingsAtom)
@@ -57,7 +60,7 @@ export const BasicDetail = ({ getSettings }) => {
             setIsLoading(false)
             toast.success('Password changed')
             updateUserRoles()
-            getSettings()
+            queryClient.invalidateQueries(QUERIES_SETTINGS.SETTINGS)
           })
           .catch(() => {
             setIsLoading(false)
@@ -78,7 +81,7 @@ export const BasicDetail = ({ getSettings }) => {
         username: account?.username,
         userProfile: _.upperFirst(currentRoleName.toLowerCase()),
       }))
-  }, [account])
+  }, [JSON.stringify(account)])
 
   return (
     <BackGround label="Basic detail" contentClass="xl:w-[400px]">
@@ -91,16 +94,19 @@ export const BasicDetail = ({ getSettings }) => {
         {() => (
           <Form className="space-y-7">
             <Field
-              as={MyCustomSelect}
-              fullWidth
+              select
+              disabled
+              as={MyInput}
               name="userProfle"
               label="User profile"
               value={initialValues.userProfile}
-              arrOptions={['Coach', 'Player']}
-            />
+            >
+              <MenuItem value="Coach">Coach</MenuItem>
+              <MenuItem value="Player">Player</MenuItem>
+            </Field>
             <Field
+              disabled
               as={MyInput}
-              fullWidth
               name="username"
               label="Username"
               placeholder="Enter your username"
@@ -108,7 +114,6 @@ export const BasicDetail = ({ getSettings }) => {
             <Field
               as={MyInput}
               password
-              fullWidth
               name="newPassword"
               label="New password"
               placeholder="Enter your new password"
@@ -124,7 +129,6 @@ export const BasicDetail = ({ getSettings }) => {
             <Field
               as={MyInput}
               password
-              fullWidth
               name="confirmPassword"
               label="Confirm password"
               placeholder="Confirm your password"
@@ -133,7 +137,6 @@ export const BasicDetail = ({ getSettings }) => {
             <Field
               as={MyInput}
               password
-              fullWidth
               name="verifyPassword"
               label="Verify password"
               placeholder="Verify your old password"

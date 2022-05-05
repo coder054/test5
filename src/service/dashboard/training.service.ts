@@ -25,18 +25,21 @@ export const fetchUpdates = async ({
   tab,
   limit,
   sorted,
+  startAfter,
 }: {
+  startAfter: number
   range: LastRangeDateType
   tab: DashboardTabType
   limit: number
-  sorted: string
+  sorted: 'asc' | 'desc'
 }) => {
   return axios.get(
     toQueryString('dashboard/get-list-diaries-report', {
       lastDateRange: range,
       dashboardTab: tab,
-      limit: limit,
-      sorted: sorted,
+      startAfter,
+      sorted,
+      limit,
     })
   )
 }
