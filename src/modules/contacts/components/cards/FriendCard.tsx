@@ -17,6 +17,7 @@ import {
   createChatRoom,
   findRoomChatByMemberIds,
   getUrlChatFromChatRoomId,
+  goToChatPage,
 } from 'src/modules/chat/chatService'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { useRouter } from 'next/router'
@@ -284,9 +285,7 @@ export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
 
         <div className="flex gap-x-[8px] items-center">
           <svg
-            onClick={() => {
-              alert('coming soon')
-            }}
+            onClick={goToChatPage.bind(null, user, currentRoleId)}
             className="cursor-pointer "
             width="18"
             height="18"
@@ -374,29 +373,7 @@ export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
           </div>
           <div className="flex justify-end gap-x-[20px]">
             <svg
-              onClick={async () => {
-                let chatRoomId = await findRoomChatByMemberIds(
-                  user.userId,
-                  currentRoleId
-                )
-                if (!chatRoomId) {
-                  chatRoomId = await createChatRoom(
-                    !user.isRelationship,
-                    user.userId,
-                    currentRoleId,
-                    false
-                  )
-                }
-
-                if (typeof window !== 'undefined' && !!chatRoomId) {
-                  setListRoomIdOpenFromOtherPages((prev) => [
-                    ...prev,
-                    chatRoomId,
-                  ])
-                  window.open(getUrlChatFromChatRoomId(chatRoomId), '_ blank')
-                  // router.push(`/chat?roomId=${chatRoomId}`)
-                }
-              }}
+              onClick={goToChatPage.bind(null, user, currentRoleId)}
               className="cursor-pointer"
               width="24"
               height="24"
