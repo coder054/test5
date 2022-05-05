@@ -1,78 +1,70 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
-import queryString from 'query-string'
-import Popover from '@mui/material/Popover'
-import { useDebounce } from 'use-debounce'
-import type { ChangeEvent, FC, MutableRefObject } from 'react'
-import { useRouter } from 'next/router'
-import NextLink from 'next/link'
-import PropTypes from 'prop-types'
+import CircularProgress from '@material-ui/core/CircularProgress'
+import type { Theme } from '@mui/material'
 import {
-  Drawer,
-  List,
-  Typography,
-  useMediaQuery,
   Box,
   Button,
-  Container,
+  Checkbox,
+  Drawer,
   IconButton,
   InputAdornment,
-  Paper,
-  TextField,
+  List,
   Modal,
   Switch,
-  Checkbox,
+  TextField,
+  Typography,
+  useMediaQuery,
 } from '@mui/material'
-
-import { Search as SearchIcon } from '../../../icons/search'
-
-import type { Theme } from '@mui/material'
+import Popover from '@mui/material/Popover'
 import { styled } from '@mui/material/styles'
-import { chatApi } from '../../../__fake-api__/chat-api'
-import { Plus as PlusIcon } from '../../../icons/plus'
-import { X as XIcon } from '../../../icons/x'
-import { useSelector } from '../../../store'
-import type { Contact } from '../../../types/chat'
-import { Scrollbar } from '../../scrollbar'
-import { ChatContactSearch } from './chat-contact-search'
-import { ChatThreadItem } from './chat-thread-item'
-import { TabPanel, Tabs } from 'src/components/Tabs'
 import { useAtom } from 'jotai'
+import { chain, get, isEmpty, upperCase } from 'lodash'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import PropTypes from 'prop-types'
+import queryString from 'query-string'
+import type { ChangeEvent, FC, MutableRefObject } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useQuery } from 'react-query'
 import {
   activeChatRoomAtom,
   chatRoomsAtom,
   loadingChatRoomsAtom,
   useActiveRoomId,
 } from 'src/atoms/chatAtom'
-import { AllTab } from './AllTab'
-import { UnreadTab } from './UnreadTab'
-import { RequestsTab } from './RequestsTab'
-import { UploadImage } from 'src/components/upload-image'
-import { axios } from 'src/utils/axios'
 import { Loading } from 'src/components/loading/loading'
-import { getStr, truncateStr } from 'src/utils/utils'
+import { TabPanel, Tabs } from 'src/components/Tabs'
+import { UploadImage } from 'src/components/upload-image'
+import { REACT_QUERY_KEYS } from 'src/constants/constants'
+import { optionAllClub } from 'src/constants/mocks/clubs.constans'
+import {
+  optionAllCountry,
+  optionSweden,
+} from 'src/constants/mocks/countries.constants'
+import { imgAvatar } from 'src/imports/images'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
-import { chain, get, isEmpty, upperCase } from 'lodash'
 import {
   createGroupChatRoom,
   ERoomType,
   getChatRoomIdOrCreateIfNotExisted,
   getUrlChatFromChatRoomId,
-  goToChatPage,
   updateMessageStatus,
 } from 'src/modules/chat/chatService'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import { ETabChat, tabsChat } from 'src/pages/chat'
-import { imgAvatar } from 'src/imports/images'
-import { REACT_QUERY_KEYS } from 'src/constants/constants'
-import { useQuery } from 'react-query'
-import {
-  optionAllCountry,
-  optionSweden,
-} from 'src/constants/mocks/countries.constants'
-import Link from 'next/link'
 import { ModalFilterFriends } from 'src/modules/contacts/components/modals/ModalFilterFriends'
-import { optionAllClub } from 'src/constants/mocks/clubs.constans'
-import _ from 'src/pages/aaa/1'
+import { ETabChat, tabsChat } from 'src/pages/chat'
+import { axios } from 'src/utils/axios'
+import { getStr, truncateStr } from 'src/utils/utils'
+import { useDebounce } from 'use-debounce'
+import { Plus as PlusIcon } from '../../../icons/plus'
+import { Search as SearchIcon } from '../../../icons/search'
+import { X as XIcon } from '../../../icons/x'
+import { useSelector } from '../../../store'
+import type { Contact } from '../../../types/chat'
+import { chatApi } from '../../../__fake-api__/chat-api'
+import { Scrollbar } from '../../scrollbar'
+import { AllTab } from './AllTab'
+import { ChatThreadItem } from './chat-thread-item'
+import { RequestsTab } from './RequestsTab'
+import { UnreadTab } from './UnreadTab'
 
 interface ChatSidebarProps {
   tab: any
@@ -121,6 +113,13 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
   useEffect(() => {
     console.log('aaa chatRooms: ', chatRooms)
   }, [chatRooms])
+
+  useEffect(() => {
+    setAnchorEl(null)
+  }, [openModalCreateMessage])
+  useEffect(() => {
+    setAnchorEl(null)
+  }, [openModalCreateGroup])
 
   const handlePersonClick = (): void => {
     // <TextField
@@ -660,6 +659,7 @@ const ListContacts = ({ isLoading, error, data, setOpen }) => {
   const router = useRouter()
   const users = isEmpty(get(data, 'data')) ? [] : get(data, 'data')
   const { currentRoleId } = useAuth()
+  const [chatRooms, setChatRooms] = useAtom(chatRoomsAtom)
 
   useEffect(() => {
     console.log('aaa users: ', users)
@@ -721,6 +721,36 @@ const ListContacts = ({ isLoading, error, data, setOpen }) => {
                       return
                     }
                     setOpen(false)
+
+                    if (
+                      !chatRooms
+                        .map((chatRoom) => chatRoom.chatRoomId)
+                        .includes(chatRoomId)
+                    ) {
+                      let aaaaa = user
+                      debugger
+                      setChatRooms((prev) => {
+                        return [
+                          {
+                            chatRoomId: chatRoomId,
+                            chatRoomImage: user.faceImage,
+                            chatRoomName: `${user.firstName} ${user.lastName}`,
+                            deletedDate: 0,
+                            isGroup: false,
+                            isShowChatRoom: true,
+                            lastMessageContent: '',
+                            lastMessageId: null,
+                            memberIds: [currentRoleId, user.userId],
+                            requested: false,
+                            unReadMessageNumber: 0,
+                            updatedAt: +new Date(),
+                            userName: user.username,
+                          },
+                          ...prev,
+                        ]
+                      })
+                    }
+
                     router.push(getUrlChatFromChatRoomId(chatRoomId))
                   }}
                   className="cursor-pointer "
