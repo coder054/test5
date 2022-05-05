@@ -13,6 +13,7 @@ import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants
 import { flexingFormatDate } from 'src/hooks/functionCommon'
 import DiaryUpdate from 'src/modules/update-diary'
 import { fetchWellnessUpdate } from 'src/service/dashboard/wellness.service'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 
 type DashboardDiaryUpdateType = {
   eatAndDrink: string
@@ -31,6 +32,7 @@ export const DashboardDiaryUpdate = () => {
     startAfter: null,
   })
   const { ref, inView } = useInView()
+  const { currentRoleName } = useAuth()
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [selectedUpdates, setSelectedUpdates] = useState(undefined)
 
@@ -95,7 +97,7 @@ export const DashboardDiaryUpdate = () => {
               <DiaryUpdate
                 selected={selectedUpdates}
                 onClose={setIsOpenModal}
-                isWellness={true}
+                isWellness
               />
             </div>
           </div>
@@ -131,19 +133,42 @@ export const DashboardDiaryUpdate = () => {
               <Fragment key={index}>
                 {page.data.map((it: DashboardDiaryUpdateType) => (
                   <button
+                    disabled={currentRoleName === 'COACH'}
                     key={it.diaryId}
                     onClick={() => handleChooseUpdates(it)}
                     className="grid w-full grid-cols-6 text-left laptopM:text-[16px] mobileM:text-[13px] font-normal mobileM:pl-4 laptopM:px-4 py-2.5 hover:bg-gray-500 duration-150"
                   >
                     <p>{flexingFormatDate(it.createdAt, 'DD/MM')}</p>
-                    <p style={{ color: COLOR_DIARY[it.energyLevel].color }}>
-                      {COLOR_DIARY[it.energyLevel].label}
+                    <p
+                      style={{
+                        color: it?.energyLevel
+                          ? COLOR_DIARY[it?.energyLevel].color
+                          : 'unset',
+                      }}
+                    >
+                      {it?.energyLevel
+                        ? COLOR_DIARY[it?.energyLevel].label
+                        : ''}
                     </p>
-                    <p style={{ color: COLOR_DIARY[it.sleep].color }}>
-                      {COLOR_DIARY[it.sleep].label}
+                    <p
+                      style={{
+                        color: it?.sleep
+                          ? COLOR_DIARY[it?.sleep].color
+                          : 'unset',
+                      }}
+                    >
+                      {it?.sleep ? COLOR_DIARY[it?.sleep].label : ''}
                     </p>
-                    <p style={{ color: COLOR_DIARY[it.eatAndDrink].color }}>
-                      {COLOR_DIARY[it.eatAndDrink].label}
+                    <p
+                      style={{
+                        color: it?.eatAndDrink
+                          ? COLOR_DIARY[it?.eatAndDrink].color
+                          : 'unset',
+                      }}
+                    >
+                      {it?.eatAndDrink
+                        ? COLOR_DIARY[it?.eatAndDrink].label
+                        : ''}
                     </p>
                     <p
                       style={{

@@ -44,18 +44,18 @@ const CssTextField = styled(TextField)({
   },
 })
 
-type MyDatePickerProps = {
-  size?: 'small' | 'medium'
-  className?: string
+type MyDatePickerProps = Partial<{
+  size: 'small' | 'medium'
+  className: string
   label: string
-  errorMessage?: string
-  value?: Date | string | null | number
-  isNextable?: boolean
-  onChange?: (value: string) => void
-  maxDate?: any
-  minDate?: any
-  readOnly?: boolean
-}
+  errorMessage: string
+  value: Date | string | null | number
+  isNextable: boolean
+  onChange: (value: string) => void
+  maxDate: any
+  minDate: any
+  readOnly: boolean
+}>
 
 export const MyDatePicker = ({
   className,

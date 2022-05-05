@@ -381,3 +381,53 @@ export type PointsType = {
   y: number
   name?: string
 }
+
+export interface CoachDiaryType {
+  typeOfDiary: string
+  createdAt: Date
+  training: CoachTrainingType
+  teamId: string
+}
+
+export interface CoachTrainingType {
+  physicallyStrain: string
+  hoursOfPractice: number
+  technics: number
+  tactics: number
+  physics: number
+  mental: number
+  practiceTags: string[]
+  typeOfTraining: string
+  trainingMedia: Media[]
+}
+
+export interface Welcome {
+  energyLevel: string
+  eatAndDrink: string
+  sleep: string
+  typeOfDiary: string
+  userType: string
+  cap: Cap
+  createdAt: Date
+}
+
+export interface CoachCapType {
+  dateTime: Date
+  country: Country
+  typeOfGame: string
+  length: number
+  place: string
+  typeOfCap: string
+  yourTeam: string
+  opponentCountry: Country
+  opponentTeam: string
+  arena: string
+  result: Result
+  review: Review
+  capMedia: Media[]
+}
+
+export interface Media {
+  type: string
+  url: string
+}
