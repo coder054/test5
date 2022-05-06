@@ -25,6 +25,7 @@ import { CardPlainPost } from './component/plain-post'
 import {
   club_transfer_histories,
   diaries,
+  MATCH,
   plain_posts,
   remind_update_diaries,
   shared_biographies,
@@ -208,21 +209,24 @@ export const CardFeed = ({ card }: CardYourType) => {
 
         <div className="spacer flex-grow "></div>
 
-        <div onClick={handleOption}>
-          <svg
-            className="cursor-pointer"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6C10 7.1 10.9 8 12 8ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10ZM12 16C10.9 16 10 16.9 10 18C10 19.1 10.9 20 12 20C13.1 20 14 19.1 14 18C14 16.9 13.1 16 12 16Z"
-              fill="white"
-            />
-          </svg>
-        </div>
+        {card?.typeOfPost !== remind_update_diaries && (
+          <div onClick={handleOption}>
+            <svg
+              className="cursor-pointer"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6C10 7.1 10.9 8 12 8ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10ZM12 16C10.9 16 10 16.9 10 18C10 19.1 10.9 20 12 20C13.1 20 14 19.1 14 18C14 16.9 13.1 16 12 16Z"
+                fill="white"
+              />
+            </svg>
+          </div>
+        )}
+
         {openOption && (
           <ClickAwayListener
             onClickAway={() => {
@@ -268,13 +272,13 @@ export const CardFeed = ({ card }: CardYourType) => {
       {card?.typeOfPost &&
         card?.typeOfPost === plain_posts &&
         card?.friendTags.length > 0 && (
-          <div className="w-full pl-[20px] pr-[20px]">
+          <div className="w-full pl-[20px] pr-[20px] h-[100px]">
             <p>Friends tag:</p>
             <ListFriend listFriend={card?.friendTags} />
           </div>
         )}
 
-      <div className="flex px-5">
+      <div className="flex px-5 mt-[4px]">
         <div className="flex-1 float-left ">
           <div className="flex float-left">
             <div
@@ -311,16 +315,6 @@ export const CardFeed = ({ card }: CardYourType) => {
           <SvgSave fill={`${card?.isSaved ? '#09E099' : ''}`} />
         </div>
       </div>
-
-      {/* <ConfirmModal
-        label="Unfollow"
-        content="Are you sure you want to unfollow this news provider?"
-        icon={<SvgBlock />}
-        actionLabel="Unfollow"
-        isOpen={openModalUnfollow}
-        onClose={setOpenModalUnfollow}
-        onSubmit={handleConfirmUnfollow}
-      /> */}
     </div>
   )
 }

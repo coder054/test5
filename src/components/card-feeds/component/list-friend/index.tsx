@@ -1,5 +1,6 @@
 import { FriendTagsType } from 'src/constants/types/feed/yours'
 import Slider from 'react-slick'
+const cls = require('./list-friend.module.css')
 
 var settings = {
   dots: true,
@@ -18,10 +19,10 @@ export const ListFriend = ({ listFriend }: ListFriendProps) => {
   // console.log('listFriend', listFriend)
 
   return (
-    <Slider {...settings}>
+    <Slider {...settings} className="h-[80px]">
       {listFriend &&
         (listFriend || []).map((item) => (
-          <div className="h-[88px] flex justify-between items-center ">
+          <div className={`h-[88px] flex justify-between items-center `}>
             <div className="w-[40px] text-center truncate">
               <img src={item.faceImage} className="w-[40px] h-[40px]"></img>
               <span className="mt-[4px]" title={item?.clubName}>
