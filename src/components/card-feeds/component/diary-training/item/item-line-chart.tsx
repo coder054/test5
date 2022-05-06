@@ -137,7 +137,7 @@ export const ItemLineChart = ({ card, loading }: ItemLineChartProps) => {
         <p className="text-[#A2A5AD] text-[12px] absolute top-[4px]">
           Very good
         </p>
-        <div className="w-full -ml-[18px]">
+        <div className="w-full -ml-[18px] pointer-events-none">
           <Chart
             height={195}
             options={chartOptions}

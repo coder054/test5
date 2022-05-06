@@ -1,5 +1,5 @@
 import { MatchType } from 'src/constants/types/feed/yours'
-import { safeAvatar } from 'src/utils/utils'
+import { safeHttpImage } from 'src/utils/utils'
 
 interface ResultMatchProps {
   stat: MatchType
@@ -14,7 +14,7 @@ export const ResultMatch = ({ stat }: ResultMatchProps) => {
             {stat?.yourTeam?.clubName}
           </span>
           <img
-            src={safeAvatar(stat?.yourTeam?.clubLogo)}
+            src={safeHttpImage(stat?.yourTeam?.clubLogo)}
             className="w-[24px] h-[24px] rounded-full ml-[16px]"
           ></img>
         </div>
@@ -27,7 +27,7 @@ export const ResultMatch = ({ stat }: ResultMatchProps) => {
         </div>
         <div className="col-span-3 flex justify-center">
           <img
-            src={safeAvatar(stat?.opponentClub?.logoUrl)}
+            src={safeHttpImage(stat?.opponentClub?.logoUrl)}
             className="w-[24px] h-[24px] rounded-full mr-[16px]"
           ></img>
           <span className="pr-[46px] w-[150px]">

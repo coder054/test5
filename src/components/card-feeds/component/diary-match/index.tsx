@@ -30,7 +30,7 @@ export const CardDiaryMatch = ({ card }: CardDiaryMatchProps) => {
       <div className="h-[235px]">
         <ItemMatch card={card && card} />
       </div>
-      {!isEmpty(data?.data?.eatChart) ||
+      {/* {!isEmpty(data?.data?.eatChart) ||
       !isEmpty(data?.data?.energyChart) ||
       !isEmpty(data?.data?.sleepChart) ? (
         <div className="h-[225px]">
@@ -42,7 +42,7 @@ export const CardDiaryMatch = ({ card }: CardDiaryMatchProps) => {
         <div className="h-[225px]">
           <ItemInjuries card={data?.data} />
         </div>
-      ) : null}
+      ) : null} */}
     </Slider>
   )
 }
