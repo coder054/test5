@@ -19,7 +19,7 @@ const tabs = [
 const News = () => {
   const [currentTab, setCurrentTab] = useQueryParam(
     't',
-    withDefault(StringParam, 'news')
+    withDefault(StringParam, 'all')
   )
 
   const handleTabsChange = (_, value: string): void => {

@@ -10,28 +10,6 @@ interface ItemTrainingProps {
 
 export const ItemTraining = ({ card }: ItemTrainingProps) => {
   const [arrayColor, setArrayColor] = useState<string[]>([])
-  // console.log(
-  //   'Object.keys(card?.trainingCategory)',
-  //   Object.values(card?.trainingCategory)
-  // )
-
-  // const handleColor = (array: string[]) => {
-  //   array &&
-  //     array.map((item) => {
-  //       if (item === 'physical') {
-  //         setArrayColor((prev) => [...prev, '#E85CFF'])
-  //       } else if (item === 'technical') {
-  //         setArrayColor((prev) => [...prev, '#4654EA'])
-  //       } else if (item === 'mental') {
-  //         setArrayColor((prev) => [...prev, '#07E1FF'])
-  //       } else if (item === 'tactics') {
-  //         setArrayColor((prev) => [...prev, '#09E099'])
-  //       }
-  //     })
-
-  //   return arrayColor
-  // }
-
   const handleTimeOfPractice = (time: number): string => {
     return `${Math.floor(time / 1)}h ${(time - Math.floor(time / 1)) * 6}min`
   }
@@ -54,8 +32,7 @@ export const ItemTraining = ({ card }: ItemTrainingProps) => {
             <ChartCircle
               index={0}
               type={'feed'}
-              ArrayColor={[['#E85CFF', '#4654EA', '#07E1FF', '#09E099']]}
-              // ArrayColor={handleColor(Object.keys(card?.trainingCategory))}
+              ArrayColor={[['#4654EA', '#09E099', '#07E1FF', '#E85CFF']]}
               ArrayLabel={Object.keys(card?.trainingCategory)}
               ArrayPercent={Object.values(card?.trainingCategory)}
             />

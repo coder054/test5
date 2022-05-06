@@ -56,8 +56,11 @@ export const ModalFeed = ({ setIsOpenModal }: ModalFeedProps) => {
     createPlainPost,
     {
       onSuccess: (res) => {
-        toast.success(res.data)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_FRIENDS)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_ALL)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_YOURS)
+        toast.success(res.data)
         setIsOpenModal(false)
       },
     }

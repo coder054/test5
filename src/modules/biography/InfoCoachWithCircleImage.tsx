@@ -386,7 +386,8 @@ export const InfoCoachWithCircleImage = ({
         </div>
       )}
 
-      {signupForm && dataBio?.summary && (
+      {/* {signupForm && dataBio?.summary && ( */}
+      {dataBio?.summary && (
         <div className="mx-auto max-w-[466px] text-white text-[14px] leading-[22px] ">
           {dataBio?.summary}
         </div>

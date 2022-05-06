@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import ReactPlayer from 'react-player'
+import Slider from 'react-slick'
+import { settings } from 'src/constants/constants'
+import { safeAvatar } from 'src/utils/utils'
 const cls = require('../../card-yours.module.css')
 
 const contentStyle: any = {
@@ -24,25 +27,25 @@ export const CardPlainPost = ({ mediaLinks }: CardRssNewsProps) => {
   }
 
   return (
-    <div>
+    <Slider className="max-h-[195px]" {...settings}>
       {mediaLinks &&
         mediaLinks.map((item, index) => (
-          <div key={index} className="h-[195px]">
+          <div key={index} className="max-h-[195px] pr-[16px]">
             <div style={contentStyle} className="flex w-full">
               <div className={`${cls.image} flex-1`}>
                 {item.type === 'IMAGE' ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={item?.url}
+                    src={safeAvatar(item?.url)}
                     alt=""
-                    className="object-cover w-full h-[195px]"
+                    className="object-cover w-full max-h-[195px]"
                   />
                 ) : null}
                 {item.type === 'VIDEO' ? (
                   <div
                     className={`${
                       play ? '' : 'opacity-70'
-                    } w-[347px] h-[195px] object-fill cursor-pointer flex justify-between items-center relative`}
+                    } w-[347px] max-h-[195px] object-fill cursor-pointer flex justify-between items-center relative`}
                     onClick={handlePlayVideo}
                   >
                     <ReactPlayer url={item?.url} controls />
@@ -52,6 +55,6 @@ export const CardPlainPost = ({ mediaLinks }: CardRssNewsProps) => {
             </div>
           </div>
         ))}
-    </div>
+    </Slider>
   )
 }
