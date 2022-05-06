@@ -499,7 +499,7 @@ export const queryTabAll = (
   /// Display chat room that this user request to send message
   return (
     (chatRoom.memberIds || []).includes(userId) &&
-    !!chatRoom.lastMessageId &&
+    // !!chatRoom.lastMessageId &&
     (!chatRoom.requestedUID || chatRoom.requestedUID === userId)
   )
 }
