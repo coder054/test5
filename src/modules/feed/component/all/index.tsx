@@ -29,8 +29,6 @@ export const TabAll = () => {
         feedTab: 'all',
       })
 
-      // console.log('data all::', res.data)
-
       return res.data
     },
     {

@@ -1,6 +1,6 @@
 import { CardFeedType } from 'src/constants/types/feed/yours'
-import { SvgAllowRight, SvgTransfer } from 'src/imports/svgs'
-import { safeAvatar } from 'src/utils/utils'
+import { SvgTransfer } from 'src/imports/svgs'
+import { safeHttpImage } from 'src/utils/utils'
 
 interface ClubTransferHistoriesProps {
   card: CardFeedType
@@ -13,7 +13,7 @@ export const ClubTransferHistories = ({ card }: ClubTransferHistoriesProps) => {
         <p className="text-[14px] text-[#A2A5AD]">From</p>
         <img
           alt=""
-          src={safeAvatar(card?.transferInfo?.oldClub?.clubLogo)}
+          src={safeHttpImage(card?.transferInfo?.oldClub?.clubLogo)}
           className="w-[164px] h-[164px] rounded-full object-cover mx-auto mt-[8px]"
         ></img>
         <p className="text-[16px] mt-[8px]">
@@ -41,7 +41,7 @@ export const ClubTransferHistories = ({ card }: ClubTransferHistoriesProps) => {
         <p className="text-[14px] text-[#A2A5AD]">To</p>
         <img
           alt=""
-          src={safeAvatar(card?.transferInfo?.newClub?.clubLogo)}
+          src={safeHttpImage(card?.transferInfo?.newClub?.clubLogo)}
           className="w-[164px] h-[164px] rounded-full object-cover mx-auto mt-[8px]"
         ></img>
         <p className="text-[16px] mt-[8px]">
