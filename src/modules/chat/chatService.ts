@@ -23,6 +23,7 @@ import { get as getLodash, isEmpty, shuffle } from 'lodash'
 import queryString from 'query-string'
 import { firebaseApp, storage } from 'src/config/firebase-client'
 import { AVATAR_DEFAULT } from 'src/constants/constants'
+import { FriendsType } from 'src/constants/types/contacts.types'
 import { getErrorMessage } from 'src/utils/utils'
 
 export const database = getDatabase(firebaseApp)
@@ -498,7 +499,7 @@ export const queryTabAll = (
   /// Display chat room that this user request to send message
   return (
     (chatRoom.memberIds || []).includes(userId) &&
-    !!chatRoom.lastMessageId &&
+    // !!chatRoom.lastMessageId &&
     (!chatRoom.requestedUID || chatRoom.requestedUID === userId)
   )
 }
@@ -1223,5 +1224,37 @@ export const findRoomChatByMemberIds = async (
   } catch (error) {
     // alert(getErrorMessage(error))
     return ''
+  }
+}
+
+export const getChatRoomIdOrCreateIfNotExisted = async (
+  user: FriendsType,
+  currentRoleId: string
+): Promise<string> => {
+  try {
+    let chatRoomId = await findRoomChatByMemberIds(user.userId, currentRoleId)
+    if (!chatRoomId) {
+      chatRoomId = await createChatRoom(
+        !user.isRelationship,
+        user.userId,
+        currentRoleId,
+        false
+      )
+    }
+    return chatRoomId
+  } catch (error) {
+    alert(getErrorMessage(error))
+    return ''
+  }
+}
+
+export const goToChatPage = async (
+  user: FriendsType,
+  currentRoleId: string
+) => {
+  let chatRoomId = await getChatRoomIdOrCreateIfNotExisted(user, currentRoleId)
+
+  if (typeof window !== 'undefined' && !!chatRoomId) {
+    window.open(getUrlChatFromChatRoomId(chatRoomId), '_ blank')
   }
 }

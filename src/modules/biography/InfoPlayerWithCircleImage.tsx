@@ -377,7 +377,8 @@ export const InfoPlayerWithCircleImage = ({
           </div>
         )}
 
-      {(signupForm || feedPost) && dataBio?.summary && (
+      {/* {(signupForm || feedPost) && dataBio?.summary && ( */}
+      {dataBio?.summary && (
         <div
           className={`mx-auto max-w-[466px] text-white text-[14px] leading-[22px] ${
             feedPost ? 'ml-[24px]' : ''
