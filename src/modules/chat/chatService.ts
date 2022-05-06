@@ -538,12 +538,7 @@ export const getMessageNumber = async (
     if (isEmpty(messageMap)) {
       return 0
     }
-    for (let i = 0; i < messageMap.length; i++) {
-      number++
-      if (number >= 1) {
-        return number
-      }
-    }
+    return Object.values(messageMap).length
   }
 
   return number
