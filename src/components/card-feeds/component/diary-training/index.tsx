@@ -24,6 +24,7 @@ export const CardDiaryTraining = ({ card }: CardDiaryTrainingProps) => {
       onSuccess: (res) => {},
     }
   )
+  // console.log('data', data)
 
   return (
     <Slider {...settings} className={`h-[235px] ${cls.carouse}`}>
