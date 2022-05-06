@@ -25,9 +25,8 @@ export const CardDiaryTraining = ({ card }: CardDiaryTrainingProps) => {
     }
   )
 
-  // console.log('diary:', data)
   return (
-    <Slider {...settings} className={`h-[235px]  ${cls.carouse}`}>
+    <Slider {...settings} className={`h-[235px] ${cls.carouse}`}>
       <div className="h-[225px]">
         <ItemTraining card={card && card} />
       </div>
