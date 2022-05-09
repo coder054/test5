@@ -20,7 +20,7 @@ import {
 export const APP_FEATURE_2 = [
   {
     icon: <ZStarIcon />,
-    title: 'ZTAR OF THE MACTCH',
+    title: 'ZTAR OF THE MATCH',
     content: 'Coaches, team mates and opponents votes for Ztar of the match',
   },
   {

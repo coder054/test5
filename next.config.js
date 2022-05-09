@@ -10,6 +10,9 @@ const withTM = require('next-transpile-modules')([
 ])
 
 module.exports = withTM({
+  images: {
+    formats: ['image/webp'],
+  },
   reactStrictMode: true,
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     // Important: return the modified config

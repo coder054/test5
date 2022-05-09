@@ -28,7 +28,7 @@ export const AppFeature = ({
       <p className={clsx('text-[24px] font-bold', titleColor)}>{title}</p>
       <span
         className={clsx(
-          'text-gray-400 font-semibold tracking-[1px] text-center',
+          'font-semibold tracking-[1px] text-center',
           isDesktop && 'w-[280px] text-[16px]',
           isMobile && 'w-[170px] text-[14px]',
           contentColor

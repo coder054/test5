@@ -79,6 +79,7 @@ module.exports = {
     screens: {
       mobileM: '375px',
       mobileL: '414px',
+      tabletM: '1024px',
       laptopM: '1440px',
       ...defaultTheme.screens,
       max_sm: { max: '640px' },

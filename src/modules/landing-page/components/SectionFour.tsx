@@ -18,11 +18,11 @@ import {
 
 export const SectionFour = () => {
   return (
-    <div className="bg-white laptopM:h-[1980px] mobileM:h-[2180px] mobileL:h-[2100px]">
+    <div className="bg-white laptopM:h-[1980px] mobileM:h-[2180px] tabletM:h-[1800px] mobileL:h-[2100px] tabletM:px-12">
       <div className="mobileM:w-full laptopM:w-[1320px] laptopM:py-32 laptopM:mx-auto mobileM:px-[30px] relative">
         <div className="flex justify-between">
           {isDesktop && <Image src={GROUP} />}
-          <div className={clsx('space-y-4 w-[400px] pt-28')}>
+          <div className={clsx('space-y-4 w-[400px] pt-28 ')}>
             <span className="text-center font-semibold text-[#17C78D] text-[14px] tracking-[2px]">
               TESTIMONIAL
             </span>
