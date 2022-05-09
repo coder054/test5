@@ -52,7 +52,7 @@ import {
 import { ModalFilterFriends } from 'src/modules/contacts/components/modals/ModalFilterFriends'
 import { ETabChat, tabsChat } from 'src/pages/chat'
 import { axios } from 'src/utils/axios'
-import { getStr, truncateStr } from 'src/utils/utils'
+import { getErrorMessage, getStr, truncateStr } from 'src/utils/utils'
 import { useDebounce } from 'use-debounce'
 import { Plus as PlusIcon } from '../../../icons/plus'
 import { Search as SearchIcon } from '../../../icons/search'
@@ -715,7 +715,8 @@ const ListContacts = ({ isLoading, error, data, setOpen }) => {
                   onClick={async () => {
                     let chatRoomId = await getChatRoomIdOrCreateIfNotExisted(
                       user,
-                      currentRoleId
+                      currentRoleId,
+                      false
                     )
                     if (!chatRoomId) {
                       return
@@ -727,8 +728,6 @@ const ListContacts = ({ isLoading, error, data, setOpen }) => {
                         .map((chatRoom) => chatRoom.chatRoomId)
                         .includes(chatRoomId)
                     ) {
-                      let aaaaa = user
-                      debugger
                       setChatRooms((prev) => {
                         return [
                           {
@@ -996,7 +995,7 @@ const ModalCreateGroup = ({ open, setOpen }) => {
                 setOpen(false)
                 resetModalAddGroup()
 
-                await createGroupChatRoom(
+                const [, error] = await createGroupChatRoom(
                   data.groupId,
                   name,
                   false,
@@ -1007,6 +1006,12 @@ const ModalCreateGroup = ({ open, setOpen }) => {
                   imageUrl,
                   ERoomType.GROUP
                 )
+
+                if (error) {
+                  alert(getErrorMessage(error))
+                  return
+                }
+
                 setTimeout(() => {
                   router.push(`/chat?roomId=${data.groupId}`)
                 }, 200)

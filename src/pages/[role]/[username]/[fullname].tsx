@@ -542,10 +542,7 @@ const BioForCoach = ({
 export const getServerSideProps: any = async ({ req, res, query }) => {
   // const roleId =
 
-  res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=1, stale-while-revalidate=1'
-  )
+  res.setHeader('Cache-Control', 'public, s-maxage=1, stale-while-revalidate=1')
   const uid = await loadIdToken(req as any)
 
   const fullname = query.fullname // not use

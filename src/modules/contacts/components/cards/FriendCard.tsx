@@ -285,7 +285,7 @@ export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
 
         <div className="flex gap-x-[8px] items-center">
           <svg
-            onClick={goToChatPage.bind(null, user, currentRoleId)}
+            onClick={goToChatPage.bind(null, user, currentRoleId, false)}
             className="cursor-pointer "
             width="18"
             height="18"
@@ -373,7 +373,7 @@ export const FriendsCard = ({ user, refreshListContact }: FriendsCardProps) => {
           </div>
           <div className="flex justify-end gap-x-[20px]">
             <svg
-              onClick={goToChatPage.bind(null, user, currentRoleId)}
+              onClick={goToChatPage.bind(null, user, currentRoleId, false)}
               className="cursor-pointer"
               width="24"
               height="24"
