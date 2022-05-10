@@ -1282,7 +1282,24 @@ export const goToChatPage = async (
   }
 }
 
-const updateChatRoomMemberIds = async (chatRoomId, memberIds: string[]) => {
+export const getMemberIdsOfAChatRoom = async (
+  roomId: string
+): Promise<string[]> => {
+  try {
+    const snapshot = await get(
+      child(dbRef, `${chatRoomsNode}/${roomId}/${memberIdsNode}`)
+    )
+    let target = snapshot.val()
+    return isEmpty(target) ? [] : target
+  } catch (error) {
+    return []
+  }
+}
+
+export const updateChatRoomMemberIds = async (
+  chatRoomId,
+  memberIds: string[]
+) => {
   try {
     const updates = {}
     updates[`/${chatRoomsNode}/${chatRoomId}/memberIds`] = memberIds

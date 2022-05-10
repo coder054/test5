@@ -11,10 +11,14 @@ import {
   addTeamChatRoom,
   findRoomById,
   findRoomChatByMemberIds,
+  getMemberIdsOfAChatRoom,
   getUrlChatFromChatRoomId,
   goToChatPage,
+  updateChatRoomMemberIds,
 } from 'src/modules/chat/chatService'
 import { deleteTeam } from 'src/service/contacts/team.service'
+import { axios } from 'src/utils/axios'
+import { isEqualArraysNoOrder } from 'src/utils/utils'
 import Card from '../../components/card-template'
 import DropdownButton from '../../components/card-template/DropdownButton'
 import ConfirmModal from '../../components/modals/ModalDelete'
@@ -91,6 +95,11 @@ export const TeamCard = ({ team }: TeamsCardProps) => {
                   )
                   if (error) {
                     return
+                  }
+                } else {
+                  let memberIds = await getMemberIdsOfAChatRoom(team.teamId)
+                  if (!isEqualArraysNoOrder(memberIds, team.userIds)) {
+                    updateChatRoomMemberIds(team.teamId, team.userIds)
                   }
                 }
                 if (typeof window !== 'undefined' && !!roomId) {
