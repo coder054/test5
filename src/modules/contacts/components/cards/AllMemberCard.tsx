@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { Fragment } from 'react'
 import { ChervonRightIcon } from 'src/components/icons'
 import { MemberType } from 'src/constants/types/member.types'
-import { useAuth } from 'src/modules/authentication/auth/AuthContext'
+import { getBioUrl } from 'src/utils/utils'
 import Card from '../../components/card-template'
 
 type AllMemberCardProps = {
@@ -11,8 +11,6 @@ type AllMemberCardProps = {
 
 export const AllMemberCard = ({ member }: AllMemberCardProps) => {
   const router = useRouter()
-
-  const { currentRoleName } = useAuth()
 
   return (
     <Fragment>
@@ -24,11 +22,7 @@ export const AllMemberCard = ({ member }: AllMemberCardProps) => {
         city={member.city}
         club={member.clubName}
         onClick={() =>
-          router.push(
-            `/${currentRoleName.toLowerCase()}/${member.username}/${
-              member.fullName
-            }`
-          )
+          router.push(getBioUrl(member.type, member.username, member.fullName))
         }
         commonOptions={
           <button type="button">

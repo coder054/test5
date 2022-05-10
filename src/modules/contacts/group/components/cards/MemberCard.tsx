@@ -12,12 +12,12 @@ import {
 import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
 import { GroupTabType } from 'src/constants/types/contacts.types'
 import { MemberType } from 'src/constants/types/member.types'
-import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import {
   blockGroupMember,
   deleteGroupMember,
   unblockGroupMember,
 } from 'src/service/contacts/group.service'
+import { getBioUrl } from 'src/utils/utils'
 import Card from '../../../components/card-template'
 import DropdownButton from '../../../components/card-template/DropdownButton'
 import ConfirmModal from '../../../components/modals/ModalDelete'
@@ -43,7 +43,6 @@ export const MemberCard = ({
 }: MemberCardProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const { currentRoleName } = useAuth()
   const { groupId } = router.query
 
   const IS_PERSONAL = useMemo(() => {
@@ -160,11 +159,7 @@ export const MemberCard = ({
         city={member.city}
         club={member.clubName}
         onClick={() =>
-          router.push(
-            `/${currentRoleName.toLowerCase()}/${member.username}/${
-              member.fullName
-            }`
-          )
+          router.push(getBioUrl(member.type, member.username, member.fullName))
         }
         commonOptions={
           <button type="button">

@@ -1,23 +1,22 @@
 import { useRouter } from 'next/router'
+import { Fragment, useCallback, useState } from 'react'
+import toast from 'react-hot-toast'
+import { useMutation, useQueryClient } from 'react-query'
 import {
   ChervonRightIcon,
   TrashCanIcon,
   UnblockIcon,
 } from 'src/components/icons'
-import { MemberType } from 'src/constants/types/member.types'
-import { useAuth } from 'src/modules/authentication/auth/AuthContext'
-import Card from '../card-template'
-import { Fragment, useCallback, useState } from 'react'
-import DropdownButton from '../card-template/DropdownButton'
-import ConfirmModal from '../modals/ModalDelete'
-import { useMutation, useQueryClient } from 'react-query'
-import toast from 'react-hot-toast'
 import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
-import { unblockTeamMember } from 'src/service/contacts/team.service'
+import { MemberType } from 'src/constants/types/member.types'
 import {
   removeRelationship,
   unblockFriend,
 } from 'src/service/contacts/friend.service'
+import { getBioUrl } from 'src/utils/utils'
+import Card from '../card-template'
+import DropdownButton from '../card-template/DropdownButton'
+import ConfirmModal from '../modals/ModalDelete'
 
 type FanCardProps = {
   member: MemberType
@@ -31,7 +30,6 @@ interface GroupModalType {
 export const BlockedMemberCard = ({ member }: FanCardProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const { currentRoleName } = useAuth()
 
   const [groupModal, setGroupModal] = useState<GroupModalType>({
     delete: false,
@@ -83,11 +81,7 @@ export const BlockedMemberCard = ({ member }: FanCardProps) => {
       city={member.city}
       club={member.clubName}
       onClick={() =>
-        router.push(
-          `/${currentRoleName.toLowerCase()}/${member.username}/${
-            member.fullName
-          }`
-        )
+        router.push(getBioUrl(member.type, member.username, member.fullName))
       }
       commonOptions={
         <button type="button">

@@ -224,3 +224,9 @@ export const isEqualArraysNoOrder = (arr1: string[], arr2: string[]) => {
     chain(arr2).compact().uniq().sortBy().value()
   )
 }
+
+export const getBioUrl = (role: string, username: string, fullname: string) => {
+  return `/${
+    equalStr(role, 'PLAYER') ? 'player' : 'coach'
+  }/${username}/fullname`
+}

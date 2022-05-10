@@ -19,6 +19,7 @@ import {
   deleteTeamMember,
   unblockTeamMember,
 } from 'src/service/contacts/team.service'
+import { getBioUrl } from 'src/utils/utils'
 import Card from '../../components/card-template'
 import DropdownButton from '../../components/card-template/DropdownButton'
 import ConfirmModal from '../../components/modals/ModalDelete'
@@ -44,7 +45,7 @@ export const MemberCard = ({
 }: MemberCardProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const { currentRoleName, currentRoleId } = useAuth()
+  const { currentRoleId } = useAuth()
   const { teamId } = router.query
 
   const IS_PERSONAL = useMemo(() => {
@@ -165,11 +166,7 @@ export const MemberCard = ({
         city={member.city}
         club={member.clubName}
         onClick={() =>
-          router.push(
-            `/${currentRoleName.toLowerCase()}/${member.username}/${
-              member.fullName
-            }`
-          )
+          router.push(getBioUrl(member.type, member.username, member.fullName))
         }
         commonOptions={
           <div
