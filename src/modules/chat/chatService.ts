@@ -1324,3 +1324,16 @@ export const getUserInfo = async (userId: string): Promise<IChatUser> => {
     return null
   }
 }
+
+export const deleteChatRoom = async (chatRoomId: string, userId: string) => {
+  try {
+    const updates = {}
+    updates[`/${chatRoomsNode}/${chatRoomId}/${deletedAtNode}`] = {
+      [userId]: serverTimestamp(),
+    }
+    await update(dbRef, updates)
+    return { error: false }
+  } catch (error) {
+    return { error: getErrorMessage(error) }
+  }
+}

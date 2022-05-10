@@ -1,12 +1,8 @@
-import { useRef, useState, useMemo, useEffect } from 'react'
-import axiosLib from 'axios'
-import type { FC } from 'react'
-import PropTypes from 'prop-types'
-import { formatDistanceToNowStrict } from 'date-fns'
 import {
   Avatar,
   AvatarGroup,
   Box,
+  Button,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -15,30 +11,33 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { Archive as ArchiveIcon } from '../../../icons/archive'
-import { Bell as BellIcon } from '../../../icons/bell'
-import { Ban as BanIcon } from '../../../icons/ban'
-import { Camera as CameraIcon } from '../../../icons/camera'
-import { Phone as PhoneIcon } from '../../../icons/phone'
+import { formatDistanceToNowStrict } from 'date-fns'
+import { useAtom } from 'jotai'
+import { isEmpty } from 'lodash'
+import Link from 'next/link'
+import PropTypes from 'prop-types'
+import type { FC } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import toast from 'react-hot-toast'
+import { activeChatRoomAtom } from 'src/atoms/chatAtom'
+import { ModalMui } from 'src/components/ModalMui'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
+import {
+  deleteChatRoom,
+  ERoomType,
+  getUserInfo,
+  IChatRoom,
+} from 'src/modules/chat/chatService'
+import {
+  equalStr,
+  getBioUrl,
+  getErrorMessage,
+  getGroupUrl,
+  getTeamUrl,
+} from 'src/utils/utils'
 import { DotsHorizontal as DotsHorizontalIcon } from '../../../icons/dots-horizontal'
 import { Trash as TrashIcon } from '../../../icons/trash'
 import type { Participant } from '../../../types/chat'
-import { useAtom } from 'jotai'
-import { activeChatRoomAtom } from 'src/atoms/chatAtom'
-import { ERoomType, getUserInfo, IChatRoom } from 'src/modules/chat/chatService'
-import { get, isEmpty } from 'lodash'
-import {
-  equalStr,
-  getGroupUrl,
-  getTeamUrl,
-  parseCookies,
-  getErrorMessage,
-  getBioUrl,
-} from 'src/utils/utils'
-import Link from 'next/link'
-import { axios } from 'src/utils/axios'
-import { COOKIE_KEY } from 'src/constants/constants'
-import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 
 interface ChatThreadToolbarProps {
   participants: Participant[]
@@ -49,10 +48,8 @@ export const ChatThreadToolbar: FC<ChatThreadToolbarProps> = (props) => {
   const [activeChatRoom] = useAtom(activeChatRoomAtom) as unknown as [
     activeChatRoom: IChatRoom
   ]
-
-  useEffect(() => {
-    console.log('aaa activeChatRoom: ', activeChatRoom)
-  }, [activeChatRoom])
+  const { currentRoleId } = useAuth()
+  const [modalDelete, setModalDelete] = useState(false)
 
   const moreRef = useRef<HTMLButtonElement | null>(null)
   const [openMenu, setOpenMenu] = useState<boolean>(false)
@@ -150,81 +147,136 @@ export const ChatThreadToolbar: FC<ChatThreadToolbarProps> = (props) => {
   }
 
   return (
-    <Box
-      sx={{
-        alignItems: 'center',
-        backgroundColor: 'background.paper',
-        borderBottomColor: 'divider',
-        borderBottomStyle: 'solid',
-        borderBottomWidth: 1,
-        display: 'flex',
-        flexShrink: 0,
-        minHeight: 64,
-        px: 2,
-        py: 1,
-      }}
-      {...other}
-    >
+    <>
+      {/*  */}
+      <ModalMui
+        sx={{ width: 700, top: '50%' }}
+        isOpen={modalDelete}
+        onClose={() => {
+          setModalDelete(false)
+        }}
+        showXIcon
+      >
+        <>
+          <div className="text-[18px] font-Inter mb-10 2xl:mb-20 ">
+            Are you sure you want to delete all Messages?
+          </div>
+          <div className="flex ">
+            <Button
+              onClick={() => {
+                setModalDelete(false)
+              }}
+              fullWidth
+              size="large"
+              sx={{ mr: 2 }}
+              variant="outlined"
+            >
+              No, Cancel
+            </Button>
+            <Button
+              onClick={async () => {
+                const { error } = await deleteChatRoom(
+                  activeChatRoom.chatRoomId,
+                  currentRoleId
+                )
+                if (error) {
+                  toast.error(error)
+                } else {
+                  toast.success('Deleted')
+                  setModalDelete(false)
+                }
+              }}
+              fullWidth
+              size="large"
+              variant="contained"
+            >
+              Yes, Delete
+            </Button>
+          </div>
+        </>
+      </ModalMui>
+      {/*  */}
       <Box
         sx={{
           alignItems: 'center',
+          backgroundColor: 'background.paper',
+          borderBottomColor: 'divider',
+          borderBottomStyle: 'solid',
+          borderBottomWidth: 1,
           display: 'flex',
+          flexShrink: 0,
+          minHeight: 64,
+          px: 2,
+          py: 1,
         }}
+        {...other}
       >
-        <AvatarGroup
-          max={2}
+        <Box
           sx={{
-            ...(imagesChatRoom.length > 1 && {
-              '& .MuiAvatar-root': {
-                height: 30,
-                width: 30,
-                '&:nth-of-type(2)': {
-                  mt: '10px',
-                },
-              },
-            }),
+            alignItems: 'center',
+            display: 'flex',
           }}
         >
-          {imagesChatRoom.map((imgUrl) => (
-            <Avatar key={imgUrl} src={imgUrl} />
-          ))}
-        </AvatarGroup>
+          <AvatarGroup
+            max={2}
+            sx={{
+              ...(imagesChatRoom.length > 1 && {
+                '& .MuiAvatar-root': {
+                  height: 30,
+                  width: 30,
+                  '&:nth-of-type(2)': {
+                    mt: '10px',
+                  },
+                },
+              }),
+            }}
+          >
+            {imagesChatRoom.map((imgUrl) => (
+              <Avatar key={imgUrl} src={imgUrl} />
+            ))}
+          </AvatarGroup>
 
-        <Box sx={{ ml: 2 }}>
-          <Typography variant="subtitle2">
-            {activeChatRoom.chatRoomName}
-          </Typography>
-          {recipients.length === 1 && (
-            <Typography color="textSecondary" variant="caption">
-              Last active{' '}
-              {formatDistanceToNowStrict(recipients[0].lastActivity, {
-                addSuffix: true,
-              })}
+          <Box sx={{ ml: 2 }}>
+            <Typography variant="subtitle2">
+              {activeChatRoom.chatRoomName}
             </Typography>
-          )}
+            {recipients.length === 1 && (
+              <Typography color="textSecondary" variant="caption">
+                Last active{' '}
+                {formatDistanceToNowStrict(recipients[0].lastActivity, {
+                  addSuffix: true,
+                })}
+              </Typography>
+            )}
+          </Box>
         </Box>
+        <Box sx={{ flexGrow: 1 }} />
+        <Tooltip title="More options">
+          <IconButton onClick={handleMenuOpen} ref={moreRef}>
+            <DotsHorizontalIcon fontSize="small" />
+          </IconButton>
+        </Tooltip>
+        <Menu
+          anchorEl={moreRef.current}
+          keepMounted
+          onClose={handleMenuClose}
+          open={openMenu}
+        >
+          <MenuItem>{renderItemChatProfile()}</MenuItem>
+          <MenuItem
+            onClick={() => {
+              setModalDelete(true)
+              handleMenuClose()
+            }}
+          >
+            <ListItemIcon>
+              <TrashIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Remove all messages" />
+          </MenuItem>
+        </Menu>
       </Box>
-      <Box sx={{ flexGrow: 1 }} />
-      <Tooltip title="More options">
-        <IconButton onClick={handleMenuOpen} ref={moreRef}>
-          <DotsHorizontalIcon fontSize="small" />
-        </IconButton>
-      </Tooltip>
-      <Menu
-        anchorEl={moreRef.current}
-        keepMounted
-        onClose={handleMenuClose}
-        open={openMenu}
-      >
-        <MenuItem>{renderItemChatProfile()}</MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <TrashIcon fontSize="small" />
-          </ListItemIcon>
-          <ListItemText primary="Remove all messages" />
-        </MenuItem>
-      </Menu>
-    </Box>
+    </>
   )
 }
 
