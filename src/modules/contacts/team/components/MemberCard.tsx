@@ -13,6 +13,7 @@ import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
 import { GroupTabType } from 'src/constants/types/contacts.types'
 import { MemberType } from 'src/constants/types/member.types'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
+import { goToChatPage } from 'src/modules/chat/chatService'
 import {
   blockTeamMember,
   deleteTeamMember,
@@ -43,7 +44,7 @@ export const MemberCard = ({
 }: MemberCardProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
-  const { currentRoleName } = useAuth()
+  const { currentRoleName, currentRoleId } = useAuth()
   const { teamId } = router.query
 
   const IS_PERSONAL = useMemo(() => {
@@ -171,9 +172,37 @@ export const MemberCard = ({
           )
         }
         commonOptions={
-          <button type="button">
-            <ChervonRightIcon className="w-[25px] h-[25px] active:scale-125 duration-150" />
-          </button>
+          <div
+            onClick={(e) => {
+              e.stopPropagation()
+            }}
+            className="  flex gap-x-[16px]  "
+          >
+            {member.isRelationship && (
+              <button
+                className=" p-2"
+                type="button"
+                onClick={goToChatPage.bind(null, member, currentRoleId, false)}
+              >
+                <svg
+                  className="cursor-pointer  "
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z"
+                    fill="white"
+                  />
+                </svg>
+              </button>
+            )}
+            <button type="button">
+              <ChervonRightIcon className="w-[25px] h-[25px] active:scale-125 duration-150" />
+            </button>
+          </div>
         }
         dropdownOptions={
           IS_PERSONAL && (

@@ -26,6 +26,7 @@ export type MemberType = Partial<{
   isPublic: boolean
   notificationOn: boolean
   notificationOptions: NotificationOptions
+  isRelationship?: boolean
 }>
 
 export interface BirthCountry {
