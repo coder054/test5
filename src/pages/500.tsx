@@ -23,7 +23,7 @@ const ServerError: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Error: Server Error | Material Kit Pro</title>
+        <title>Error: Server Error | Zporter</title>
       </Head>
       <Box
         component="main"
