@@ -8,19 +8,17 @@ import { SignUp } from 'src/modules/authentication/signup/signup'
 export default function () {
   const router = useRouter()
   return (
-    <GuestGuard>
-      <LayoutLanding authen>
-        <Head>
-          <title>Zporter</title>
-          <link rel="icon" type="image/png" href="/favicon.png" />
-        </Head>
-        <SignUp />
-      </LayoutLanding>
-    </GuestGuard>
+    <LayoutLanding authen>
+      <Head>
+        <title>Zporter</title>
+        <link rel="icon" type="image/png" href="/favicon.png" />
+      </Head>
+      <SignUp />
+    </LayoutLanding>
   )
 }
 
-// export const getServerSideProps: any = async ({ req, res }) => {
-//   await requireNotAuth(req as any, res as any)
-//   return { props: {} }
-// }
+export const getServerSideProps: any = async ({ req, res }) => {
+  // await requireNotAuth(req as any, res as any)
+  return { props: {} }
+}
