@@ -390,6 +390,10 @@ export const ChatSidebar: FC<ChatSidebarProps> = (props) => {
 
   return (
     <>
+      <ModalCreateMessage
+        open={openModalCreateMessage}
+        setOpen={setOpenModalCreateMessage}
+      />
       <ModalCreateGroup
         open={openModalCreateGroup}
         setOpen={setOpenModalCreateGroup}
