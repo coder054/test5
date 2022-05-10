@@ -165,6 +165,14 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
     }
   }, [messages])
 
+  useEffect(() => {
+    let inputSendMessage = document.getElementById('inputSendMessage')
+    if (isEmpty(inputSendMessage)) {
+      return
+    }
+    inputSendMessage.focus()
+  }, [document.getElementById('inputSendMessage')])
+
   // If we have the thread, we use its ID to add a new message
   // Otherwise we use the recipients IDs. When using participant IDs, it means that we have to
   // get the thread.
