@@ -1314,3 +1314,13 @@ export const findRoomById = async (chatRoomId: string): Promise<boolean> => {
   const snapshot = await get(child(dbRef, `${chatRoomsNode}/${chatRoomId}`))
   return snapshot.exists()
 }
+
+export const getUserInfo = async (userId: string): Promise<IChatUser> => {
+  try {
+    const snapshot = await get(child(dbRef, `${usersNode}/${userId}`))
+    let target = snapshot.val()
+    return isEmpty(target) ? null : target
+  } catch (error) {
+    return null
+  }
+}

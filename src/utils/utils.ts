@@ -238,3 +238,11 @@ export const getBioUrl = (
     equalStr(role, 'PLAYER') ? 'player' : 'coach'
   }/${username}/${firstLastName}`
 }
+
+export const getTeamUrl = (teamId: string) => {
+  return `/contacts/team/${teamId}`
+}
+
+export const getGroupUrl = (groupId: string) => {
+  return `/contacts/group/${groupId}`
+}
