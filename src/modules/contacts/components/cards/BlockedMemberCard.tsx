@@ -81,7 +81,14 @@ export const BlockedMemberCard = ({ member }: FanCardProps) => {
       city={member.city}
       club={member.clubName}
       onClick={() =>
-        router.push(getBioUrl(member.type, member.username, member.fullName))
+        router.push(
+          getBioUrl(
+            member.type,
+            member.username,
+            member.firstName,
+            member.lastName
+          )
+        )
       }
       commonOptions={
         <button type="button">

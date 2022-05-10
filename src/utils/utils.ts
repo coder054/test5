@@ -225,8 +225,16 @@ export const isEqualArraysNoOrder = (arr1: string[], arr2: string[]) => {
   )
 }
 
-export const getBioUrl = (role: string, username: string, fullname: string) => {
+export const getBioUrl = (
+  role: string,
+  username: string,
+  firstName: string,
+  lastName: string
+) => {
+  const firstLastName =
+    `${firstName}.${lastName}`.replace(/\s/g, '').toLowerCase() || 'zporter'
+
   return `/${
     equalStr(role, 'PLAYER') ? 'player' : 'coach'
-  }/${username}/fullname`
+  }/${username}/${firstLastName}`
 }
