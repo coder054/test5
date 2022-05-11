@@ -22,8 +22,8 @@ import {
   StatType,
 } from 'src/constants/types/match.types'
 import {
-  emotionlToNum,
-  numToEmotional,
+  emotionToNum,
+  numToEmotion,
   numToScale,
   scaleToNum,
 } from 'src/hooks/functionCommon'
@@ -413,11 +413,11 @@ export const Cap = ({ onChange }: CapProps) => {
         <MySlider
           label="How was your Team performance?"
           onChange={(e) =>
-            handleChangeReview(numToEmotional(e), 'teamPerformance')
+            handleChangeReview(numToEmotion(e), 'teamPerformance')
           }
           isAdjective
           step={25}
-          value={emotionlToNum(formValues.review?.teamPerformance)}
+          value={emotionToNum(formValues.review?.teamPerformance)}
           labelClass="text-[#A2A5AD]"
         />
         <MyTextArea
@@ -438,11 +438,11 @@ export const Cap = ({ onChange }: CapProps) => {
         <MySlider
           label="How was your match performance? "
           onChange={(e) =>
-            handleChangeReview(numToEmotional(e), 'playerPerformance')
+            handleChangeReview(numToEmotion(e), 'playerPerformance')
           }
           isAdjective
           step={25}
-          value={emotionlToNum(formValues.review?.playerPerformance)}
+          value={emotionToNum(formValues.review?.playerPerformance)}
           labelClass="text-[#A2A5AD]"
         />
         <MyTextArea

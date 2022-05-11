@@ -117,7 +117,7 @@ export const Header = () => {
         </>
       ) : (
         <div className=" animate-appear  ">
-          <Link href="/signin">
+          <Link href="/sign-in">
             <a>
               <button className="w-[224px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue mr-[26px]">
                 Sign In

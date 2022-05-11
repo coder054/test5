@@ -2,6 +2,7 @@ import { Snackbar } from '@mui/material'
 import useMouse from '@react-hook/mouse-position'
 import { useAtom } from 'jotai'
 import { useEffect, useRef, useState } from 'react'
+import { isMobile } from 'react-device-detect'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { MyInputChips } from 'src/components'
 import { MySlider } from 'src/components/MySlider'
@@ -39,6 +40,7 @@ const INITIAL_FORM = {
 export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
   const [diary] = useAtom(diaryAtom)
   const parentRef = useRef(null)
+
   const mouse = useMouse(parentRef, {
     enterDelay: 100,
     leaveDelay: 100,
@@ -51,6 +53,7 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
   const [side, setSide] = useState<boolean>(true)
   const [response, setResponse] = useState<InjuryType[]>([])
   const [formValues, setFormValues] = useState<InjuryType>(INITIAL_FORM)
+  console.log('FORM :', formValues)
   const [spot, setSpot] = useState<PointsType>({
     x: null,
     y: null,
@@ -86,7 +89,10 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
       ...prev,
       isFront: side,
       injuryArea: BODY_PART[spot.name]?.injuryArea,
-      injuryPosition: { x: mouse.x, y: mouse.y },
+      injuryPosition: {
+        x: isMobile ? BODY_PART[spot.name]?.spot.x : mouse.x,
+        y: isMobile ? BODY_PART[spot.name]?.spot.y : mouse.y,
+      },
     }))
   }, [JSON.stringify(spot)])
 
@@ -102,7 +108,11 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
   return (
     <div>
       <BooleanOption
-        label="Point the mark where your pain is"
+        label={
+          isMobile
+            ? 'Double click to point the mark where your pain is'
+            : 'Point the mark where your pain is'
+        }
         first="Front"
         second="Back"
         value={side}

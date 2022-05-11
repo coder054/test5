@@ -1,38 +1,24 @@
-import { Carousel, notification } from 'antd'
-import { NewsType } from 'src/constants/types'
+import { ClickAwayListener } from '@mui/material'
+import { Carousel } from 'antd'
+import { formatDistanceToNowStrict } from 'date-fns'
+import { useState } from 'react'
+import toast from 'react-hot-toast'
+import ReactPlayer from 'react-player'
+import { useMutation, useQueryClient } from 'react-query'
+import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
 import {
   SvgBlock,
   SvgClock,
-  SvgClose,
   SvgComment,
   SvgCopyLink,
-  SvgEuro,
   SvgFavorite,
   SvgShare,
   SvgUnfollow,
-  SvgX,
 } from 'src/imports/svgs'
+import ConfirmModal from 'src/modules/contacts/components/modals/ModalDelete'
+import { likePost, subscribeProvider } from 'src/service/feed/news.service'
 import { Text } from '../Text'
 const cls = require('./card-news.module.css')
-import ReactPlayer from 'react-player'
-import { useState } from 'react'
-import Link from 'next/link'
-import {
-  format,
-  formatDistance,
-  formatDistanceToNow,
-  formatDistanceToNowStrict,
-  formatRelative,
-  subDays,
-} from 'date-fns'
-import { ClickAwayListener } from '@mui/material'
-import { isMobile } from 'react-device-detect'
-import { ModalMui } from '../ModalMui'
-import ConfirmModal from 'src/modules/contacts/components/modals/ModalDelete'
-import toast from 'react-hot-toast'
-import { useMutation, useQueryClient } from 'react-query'
-import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
-import { likePost, subscribeProvider } from 'src/service/feed/news.service'
 
 interface CardNewsType {
   card?: any

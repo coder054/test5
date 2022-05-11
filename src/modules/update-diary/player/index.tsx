@@ -280,9 +280,11 @@ const PlayerDiary = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
 
   return (
     <Loading isLoading={isGettingDiary}>
-      <div className="space-y-5 p-9">
-        <div className="w-full flex flex-col items-center space-y-2 pb-3">
-          <DiaryUpdateIcon />
+      <div className="space-y-5 mobileM:p-4 tabletM:p-9">
+        <div className="w-full flex tabletM:flex-col tabletM:items-center space-y-2 pb-3">
+          <span className="mobileM:hidden tabletM:block">
+            <DiaryUpdateIcon />
+          </span>
           <p className="text-[24px] font-medium text-white">Diary Update</p>
         </div>
         <div className="space-y-9">
