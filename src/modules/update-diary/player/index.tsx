@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { diaryAtom } from 'src/atoms/diaryAtoms'
+import { dateAtom, diaryAtom } from 'src/atoms/diaryAtoms'
 import { Loading } from 'src/components'
 import { Button } from 'src/components/Button'
 import { DiaryUpdateIcon } from 'src/components/icons/DiaryUpdateIcon'
@@ -58,7 +58,9 @@ const PlayerDiary = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
   const { currentRoleName } = useAuth()
   const [diary, setDiary] = useAtom(diaryAtom)
   const [submitForm, setSubmitForm] = useState<DiaryType>({})
-  const [date, setDate] = useState<string | Date>(getToday())
+  // const [date, setDate] = useState<string | Date>(getToday())
+  const [date, setDate] = useAtom(dateAtom)
+
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [isHaveInjury, setIsHaveInjury] = useState<boolean>(false)
   const [injuryData, setInjuryData] = useState<InjuryType>(null)

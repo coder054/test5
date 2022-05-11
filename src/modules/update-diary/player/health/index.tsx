@@ -12,6 +12,7 @@ export const Health = ({ date }: HealthType) => {
   const [diary, setDiary] = useAtom(diaryAtom)
 
   useEffect(() => {
+    // debugger
     setDiary({
       eatAndDrink: 'NORMAL',
       energyLevel: 'NORMAL',
