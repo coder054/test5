@@ -1,4 +1,4 @@
-import { MenuItem } from '@mui/material'
+import { MenuItem, TextField } from '@mui/material'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
@@ -45,13 +45,8 @@ export const DateOptions = ({
   }, [JSON.stringify(isSelected), JSON.stringify(diaryUpdate)])
 
   return (
-    <div className="mobileL:grid mobileL:grid-cols-2 mobileL:gap-x-20 mobileM:flex mobileM:flex-col-reverse mobileM:gap-y-4">
-      <MyInput
-        sx={{
-          '& fieldset': {
-            padding: '12px 12px 12px 12px',
-          },
-        }}
+    <div className="grid tabletM:grid-cols-2 mobileM:grid-cols-3 gap-x-8">
+      <TextField
         size="small"
         label="Period"
         select
@@ -82,19 +77,23 @@ export const DateOptions = ({
             )}`}
           </MenuItem>
         ))}
-      </MyInput>
-      <MyDatePicker
-        label="Date"
-        size="small"
-        readOnly={!!isSelected}
-        isNextable={!isSelected}
-        maxDate={dayjs(isSelected ? isSelected.createdAt : getToday()).toDate()}
-        minDate={dayjs(isSelected ? isSelected.createdAt : new Date())
-          .add(-7, 'day')
-          .toDate()}
-        value={date}
-        onChange={onChange}
-      />
+      </TextField>
+      <div className="mobileM:col-span-2 tabletM:col-span-1">
+        <MyDatePicker
+          label="Date"
+          size="small"
+          readOnly={!!isSelected}
+          isNextable={!isSelected}
+          maxDate={dayjs(
+            isSelected ? isSelected.createdAt : getToday()
+          ).toDate()}
+          minDate={dayjs(isSelected ? isSelected.createdAt : new Date())
+            .add(-7, 'day')
+            .toDate()}
+          value={date}
+          onChange={onChange}
+        />
+      </div>
     </div>
   )
 }

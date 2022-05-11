@@ -6,7 +6,6 @@ import { requireNotAuth } from 'src/config/firebase-admin'
 import { SignUp } from 'src/modules/authentication/signup/signup'
 
 export default function () {
-  const router = useRouter()
   return (
     <LayoutLanding authen>
       <Head>

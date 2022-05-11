@@ -1,5 +1,4 @@
 // import { auth } from 'src/config/firebase-client'
-import { notification } from 'antd'
 import {
   confirmPasswordReset,
   createUserWithEmailAndPassword,
@@ -14,10 +13,11 @@ import { get, isEmpty, size } from 'lodash'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { useCookies } from 'react-cookie'
+import toast from 'react-hot-toast'
 import { settingsAtom } from 'src/atoms/accountAndSettings'
 import { signingOutAtom } from 'src/atoms/UIAtoms'
-import { auth, initFirebaseFCM } from 'src/config/firebase-client'
-import { COOKIE_KEY, LOCAL_STORAGE_KEY, ROUTES } from 'src/constants/constants'
+import { auth } from 'src/config/firebase-client'
+import { COOKIE_KEY, LOCAL_STORAGE_KEY } from 'src/constants/constants'
 import { axios } from 'src/utils/axios'
 import {
   getStr,
@@ -130,74 +130,42 @@ export function AuthProvider({ children }) {
     return userRoles.find((o) => o.role === currentRoleName) || {}
   }, [currentRoleName, userRoles])
 
-  const signin = (email: string, password: string) => {
-    signInWithEmailAndPassword(auth, email, password)
+  const signin = async (email: string, password: string) => {
+    await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         setCurrentUser(userCredential.user)
       })
       .catch((error) => {
         if (error.message === 'Firebase: Error (auth/wrong-password).') {
-          notification['error']({
-            message: 'Your password invalid.',
-            description: '',
-          })
+          toast.error('The password you entered is incorrect.')
         } else if (error.message === 'Firebase: Error (auth/user-not-found).') {
-          notification['error']({
-            message: 'Your account does not exist.',
-            description: '',
-          })
+          toast.error('Your account does not exist.')
         } else {
-          notification['error']({
-            message: 'Login Fail. Please check your email or your password.',
-            description: '',
-          })
+          toast.error('Login Fail. Please check your email or your password.')
         }
       })
   }
 
-  const SignInCustomToken = (token: string) => {
-    signInWithCustomToken(auth, token)
-      .then((userCredential) => {})
-      .catch((error) => {
-        notification['error']({
-          message: 'Login failed',
-          description: '',
-        })
-      })
+  const SignInCustomToken = async (token: string) => {
+    return await signInWithCustomToken(auth, token)
   }
 
   const SignUpWithEmailAndPassword = (email: string, password: string) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then(() => {
-        notification.open({
-          message: '',
-          description: 'Signup success. Please check your email.',
-          style: {
-            backgroundColor: '#09E099',
-            color: '#FFFFFF',
-          },
-          duration: 3,
-        })
+        toast.success('Signup success. Please check your email.')
       })
-      .catch((error) => {
-        notification.open({
-          message: '',
-          description: 'Email already in use.',
-          style: {
-            backgroundColor: '#ff4d4f',
-            color: '#FFFFFF',
-          },
-          duration: 3,
-        })
+      .catch(() => {
+        toast.error('Email already in use.')
       })
   }
 
   const ForgotPassword = (oobCode: string, newPassword: string) => {
     confirmPasswordReset(auth, oobCode, newPassword)
       .then(() => {
-        window.location.href = '/signin'
+        window.location.href = '/sign-in'
       })
-      .catch((error) => {})
+      .catch(() => {})
   }
 
   //logout
@@ -206,7 +174,9 @@ export function AuthProvider({ children }) {
       .then(() => {
         setSigningOut(true)
       })
-      .catch((error) => {})
+      .catch((error) => {
+        toast.error('Something went wrong')
+      })
   }
 
   const ResetPassword = (email: string) => {
@@ -214,17 +184,8 @@ export function AuthProvider({ children }) {
       .then(() => {
         setCheckEmail(true)
       })
-      .catch((error) => {
-        notification.open({
-          message: '',
-          description: 'Email not found',
-          className: 'custom-class',
-          style: {
-            backgroundColor: '#ff4d4f',
-            color: '#FFFFFF',
-          },
-          duration: 3,
-        })
+      .catch(() => {
+        toast.error('Email not found')
       })
   }
 
@@ -239,9 +200,6 @@ export function AuthProvider({ children }) {
   }
 
   useEffect(() => {
-    let initT = +new Date()
-    // console.log('aaa initT', initT)
-
     const unsubscribeToken = onIdTokenChanged(auth, async (user) => {
       setUpdatingAuthInfo(true)
       if (!user) {
@@ -279,18 +237,13 @@ export function AuthProvider({ children }) {
             ) {
               setCurrentRoleName('PLAYER')
             } else {
-              //@ts-ignore: Unreachable code error
               setCurrentRoleName(cookieCurrentRoleName)
             }
           }
         }
 
         setUserRoles(respUserRoles.data)
-        ///////////////////////////////// userRoles /////////////////////////////////
       }
-      // const doneT = +new Date()
-      // console.log('aaa doneT', doneT)
-      // console.log('aaa doneT - initT', doneT - initT)
       setTimeout(() => {
         setUpdatingAuthInfo(false)
         setInitialized(true)

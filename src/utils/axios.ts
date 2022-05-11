@@ -34,7 +34,7 @@ axios.interceptors.response.use(
       // cookies.remove('token')
       signOut(auth)
       setTimeout(() => {
-        window.location.href = '/signin'
+        window.location.href = '/sign-in'
       }, 200)
     }
     return Promise.reject(error)

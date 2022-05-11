@@ -48,7 +48,7 @@ export const requireAuth = async (req: any, res: any) => {
   const uid = await loadIdToken(req as any)
 
   if (!uid) {
-    res.setHeader('location', '/signin')
+    res.setHeader('location', '/sign-in')
     res.statusCode = 302
     res.end()
   }

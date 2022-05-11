@@ -208,7 +208,7 @@ const SignUpForm = ({ title }: { title: string }) => {
           await signout()
         }}
       >
-        <GoBack label="Sign in form" goBack="/signin" />
+        <GoBack label="Sign in form" goBack="/sign-in" />
       </div>
       <div
         className={`w-[320px] mobileM:w-[365px] md:w-[480px] rounded-[8px] pt-[48px] pb-[48px] lg:right-[5%] xl:right-[10%] 

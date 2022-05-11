@@ -15,7 +15,7 @@ export const Layout = ({
   const router = useRouter()
 
   // if (!currentUser && router.pathname !== '/test2') {
-  //   router.push('/signin')
+  //   router.push('/sign-in')
   //   return null
   // }
 

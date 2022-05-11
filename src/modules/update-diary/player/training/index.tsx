@@ -1,9 +1,22 @@
 import { useAtom } from 'jotai'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  ChangeEvent,
+} from 'react'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { MyInputChips } from 'src/components'
 import { MySlider } from 'src/components/MySlider'
-import { numToScale, scaleToNum } from 'src/hooks/functionCommon'
+import { MyTextArea } from 'src/components/MyTextarea'
+import {
+  emotionToNum,
+  numToEmotion,
+  numToScale,
+  scaleToNum,
+} from 'src/hooks/functionCommon'
 
 type FormValuesType = Partial<{
   hoursOfPractice: number
@@ -15,6 +28,10 @@ type FormValuesType = Partial<{
   technics: number
   trainingMedia: { url: string; type: string }[]
   typeOfTraining: string | string[]
+  yourPerformance: string
+  teamReview: string
+  teamPerformance: string
+  trainingReview: string
 }>
 
 type TrainingProps = {
@@ -36,9 +53,6 @@ const INITITAL_VALUE = {
 
 export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
   const [diary] = useAtom(diaryAtom)
-
-  console.log(diary)
-
   const [formValues, setFormValues] = useState<FormValuesType>({
     ...INITITAL_VALUE,
     typeOfTraining: currentTab,
@@ -121,7 +135,7 @@ export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
   }, [JSON.stringify(formValues)])
 
   return (
-    <div className="space-y-4">
+    <div className="mobileM:space-y-3 tabletM:space-y-4">
       <MySlider
         label="How physically strain, was it?"
         onChange={(e) =>
@@ -187,8 +201,62 @@ export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
         label="Practice tags"
         labelClass="text-[#A2A5AD]"
         value={formValues.practiceTags}
-        setTags={(e) => setFormValues((prev) => ({ ...prev, practiceTags: e }))}
+        setTags={(e: string[]) =>
+          setFormValues((prev) => ({ ...prev, practiceTags: e }))
+        }
       />
+      <p className="text-[18px] pt-6 font-normal">Your training review</p>
+      <div className="space-y-9">
+        <MySlider
+          label="How was your training performance?"
+          onChange={(e) =>
+            setFormValues((prev) => ({
+              ...prev,
+              yourPerformance: numToEmotion(e),
+            }))
+          }
+          isAdjective
+          step={25}
+          value={emotionToNum(formValues.yourPerformance)}
+          labelClass="text-[#A2A5AD]"
+        />
+        <MyTextArea
+          label="Your training review"
+          value={formValues.trainingReview}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setFormValues((prev) => ({
+              ...prev,
+              trainingReview: e.target.value,
+            }))
+          }
+          placeholder="Your Teams game review (Describe what you’re team did well and what you’re team could have done better)"
+        />
+        <MySlider
+          label="How was your Teams performance?"
+          onChange={(e) =>
+            setFormValues((prev) => ({
+              ...prev,
+              teamPerformance: numToEmotion(e),
+            }))
+          }
+          isScale
+          step={25}
+          value={emotionToNum(formValues.teamPerformance)}
+          labelClass="text-[#A2A5AD]"
+        />
+
+        <MyTextArea
+          label="Your Teams training review"
+          value={formValues.teamReview}
+          onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            setFormValues((prev) => ({
+              ...prev,
+              teamReview: e.target.value,
+            }))
+          }
+          placeholder="Your game review (Describe what you did well and what you could have done better)"
+        />
+      </div>
     </div>
   )
 }

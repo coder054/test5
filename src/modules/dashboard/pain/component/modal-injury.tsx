@@ -13,11 +13,7 @@ import { CategoryOptions } from 'src/constants/options'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { DashboardGoalUpdateType } from 'src/constants/types'
 import { InjuryReportType } from 'src/constants/types/dashboard/pain.types'
-import {
-  emotionlToNum,
-  getToday,
-  numToEmotional,
-} from 'src/hooks/functionCommon'
+import { emotionToNum, getToday, numToEmotion } from 'src/hooks/functionCommon'
 import {
   createPersonalGoal,
   CreatePersonalGoalType,
@@ -149,7 +145,7 @@ export const PainModal = ({
     // const valueUpdate: PainUpdateType = {
     //   description: formValues.description,
     //   treatment: formValues.treatment,
-    //   painLevel: numToEmotional(+formValues.painLevel) || 'NORMAL',
+    //   painLevel: numToEmotion(+formValues.painLevel) || 'NORMAL',
     //   injuryTags: tags,
     //   injuryMedia: medias,
     //   injuryPosition: {
@@ -219,7 +215,7 @@ export const PainModal = ({
               step={25}
               value={
                 typeof formValues.painLevel !== 'number'
-                  ? emotionlToNum(formValues.painLevel)
+                  ? emotionToNum(formValues.painLevel)
                   : formValues.painLevel
               }
               onChange={(e) => handleChangeForm('painLevel', e)}
