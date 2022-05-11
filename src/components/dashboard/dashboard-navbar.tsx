@@ -168,12 +168,13 @@ const UpdateDiaryButton = () => {
           padding: 0,
           top: '50%',
           width: isMobile ? '100%' : 800,
+          height: isMobile ? '100%' : 'auto',
           overflow: 'auto',
         }}
         isOpen={openModalDiaryUpdate}
         onClose={setOpenModalDiaryUpdate}
       >
-        <div className="relative h-[850px] overflow-y-auto">
+        <div className="relative tabletM:h-[850px] mobileM:h-screen overflow-y-auto mobileM:py-2 mobileM:pb-24 tabletM:pb-0 tabletM:py-0">
           <button
             type="button"
             onClick={() => setOpenModalDiaryUpdate(false)}
@@ -518,8 +519,8 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
           <Box sx={{ flexGrow: 1 }} />
 
           {!authenticated ? (
-            <div className=" animate-appear flex ">
-              <Link href="/signin">
+            <div className=" animate-appear  ">
+              <Link href="/sign-in">
                 <a>
                   <button
                     className="

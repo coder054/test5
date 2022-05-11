@@ -205,7 +205,7 @@ export const SignUp = () => {
     return (
       <div className="autofill2 w-screen h-screen md:flex md:items-center float-left">
         <div className="absolute top-[10px] md:top-[18px] lg:top-[24px] left-[32px] md:left-[40px]">
-          <GoBack label="Sign up with SMS" goBack="/signin" />
+          <GoBack label="Sign up with SMS" goBack="/sign-in" />
         </div>
         <LogoBigSize className="absolute left-[18%] md:left-[68%] lg:left-[56%] mt-[42px]" />
         <div className="w-full h-full flex items-center">
@@ -548,7 +548,7 @@ export const SignUp = () => {
 
             <div className="w-full h-[1px] bg-[#818389] mt-[24px]"></div>
 
-            <Link href="/signin">
+            <Link href="/sign-in">
               <a className="text-[#4654EA] underline mt-[24px] block cursor-pointer">
                 Already have an account?
               </a>
@@ -634,7 +634,7 @@ export const SignUp = () => {
             </button>
 
             <div className="h-[1px] bg-Stroke mb-[24px] "></div>
-            {/* <Link href="/signin"> */}
+            {/* <Link href="/sign-in"> */}
             <a
               className="text-Blue text-[14px] md:text-[16px] leading-[175%] border-b-[1px] border-Blue"
               onClick={() => {

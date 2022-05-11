@@ -60,7 +60,7 @@ export const Landing = () => {
             'flex justify-between  mt-[30px]',
             isDesktop && 'max-w-[1320px] mx-auto',
             isTablet && 'px-11',
-            isMobile && 'mr-[10px]'
+            isMobile && 'mx-[14px]'
           )}
         >
           <Logo />

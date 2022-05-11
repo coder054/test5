@@ -12,7 +12,7 @@ export const Logo = styled((props: LogoProps) => {
 
   const color = variant === 'light' ? '#C1C4D6' : '#5048E5'
 
-  return <Image width={200} src={imgLogo} alt="" />
+  return <Image src={imgLogo} alt="" />
 })``
 
 Logo.defaultProps = {

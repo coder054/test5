@@ -32,7 +32,7 @@ export const AuthGuard: FC<AuthGuardProps> = (props) => {
       if (!authenticated) {
         router.push({
           // pathname: '/authentication/login',
-          pathname: '/signin',
+          pathname: '/sign-in',
           // query: { returnUrl: router.asPath },
         })
       } else {

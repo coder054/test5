@@ -2,7 +2,7 @@ import { useAtom } from 'jotai'
 import { useEffect } from 'react'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { MySlider } from 'src/components/MySlider'
-import { emotionlToNum, numToEmotional } from 'src/hooks/functionCommon'
+import { emotionToNum, numToEmotion } from 'src/hooks/functionCommon'
 
 type HealthType = {
   date: string | Date
@@ -22,18 +22,18 @@ export const Health = ({ date }: HealthType) => {
   }, [date])
 
   return (
-    <div className="space-y-9">
+    <div className="mobileM:space-y-3 tabletM:space-y-9">
       <MySlider
         label="How is your energy level?"
         onChange={(e) =>
           setDiary((prev) => ({
             ...prev,
-            energyLevel: numToEmotional(e),
+            energyLevel: numToEmotion(e),
           }))
         }
         isAdjective
         step={25}
-        value={emotionlToNum(diary?.energyLevel)}
+        value={emotionToNum(diary?.energyLevel)}
         labelClass="text-[#A2A5AD]"
       />
       <MySlider
@@ -41,12 +41,12 @@ export const Health = ({ date }: HealthType) => {
         onChange={(e) =>
           setDiary((prev) => ({
             ...prev,
-            sleep: numToEmotional(e),
+            sleep: numToEmotion(e),
           }))
         }
         isAdjective
         step={25}
-        value={emotionlToNum(diary?.sleep)}
+        value={emotionToNum(diary?.sleep)}
         labelClass="text-[#A2A5AD]"
       />
       <MySlider
@@ -54,12 +54,12 @@ export const Health = ({ date }: HealthType) => {
         onChange={(e) =>
           setDiary((prev) => ({
             ...prev,
-            eatAndDrink: numToEmotional(e),
+            eatAndDrink: numToEmotion(e),
           }))
         }
         isAdjective
         step={25}
-        value={emotionlToNum(diary?.eatAndDrink)}
+        value={emotionToNum(diary?.eatAndDrink)}
         labelClass="text-[#A2A5AD]"
       />
     </div>

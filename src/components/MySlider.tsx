@@ -71,15 +71,8 @@ export const MySlider = ({
   }
 
   return (
-    <div>
-      <p
-        className={clsx(
-          'laptopM:text-[16px] mobileM:text-[14px] font-normal',
-          labelClass
-        )}
-      >
-        {label}
-      </p>
+    <div className="tabletM:text-[15px] mobileM:text-[12px] ">
+      <p className={clsx('font-normal', labelClass)}>{label}</p>
       <CustomSlider
         step={step}
         value={value}
@@ -109,7 +102,7 @@ export const MySlider = ({
       )}
       {isPoint && (
         <div className="flex justify-end">
-          <p className="text-[#A2A5AD] text-[16px]">
+          <p className="text-[#A2A5AD]">
             {value}
             {unit}
           </p>
@@ -117,11 +110,11 @@ export const MySlider = ({
       )}
       {isNumber && (
         <div className="flex justify-end">
-          <p className="text-[#A2A5AD] text-[16px]">{value}</p>
+          <p className="text-[#A2A5AD]">{value}</p>
         </div>
       )}
       {isAdjective && (
-        <div className="flex justify-between text-[#A2A5AD] text-[14px] font-normal">
+        <div className="flex justify-between text-[#A2A5AD] font-normal">
           <span className={clsx(handleRange(0))}>Very bad</span>
           <span className={clsx(handleRange(25))}>Bad</span>
           <span className={clsx(handleRange(50))}>Normal</span>
@@ -130,7 +123,7 @@ export const MySlider = ({
         </div>
       )}
       {isScale && (
-        <div className="flex justify-between text-[#A2A5AD] text-[14px] font-normal">
+        <div className="flex justify-between text-[#A2A5AD] font-normal">
           <span className={clsx(handleRange(0))}>Very low</span>
           <span className={clsx(handleRange(25))}>Low</span>
           <span className={clsx(handleRange(50))}>Normal</span>
@@ -139,7 +132,7 @@ export const MySlider = ({
         </div>
       )}
       {goal && (
-        <div className="flex justify-between text-[#A2A5AD] text-[14px] font-normal">
+        <div className="flex justify-between text-[#A2A5AD] font-normal">
           <span className={clsx(handleRange(0))}>0%</span>
           <span className={clsx(handleRange(25))}>25%</span>
           <span className={clsx(handleRange(50))}>50%</span>
@@ -148,7 +141,7 @@ export const MySlider = ({
         </div>
       )}
       {isFilter && !health ? (
-        <div className="flex justify-between text-[#A2A5AD] text-[14px] font-normal">
+        <div className="flex justify-between text-[#A2A5AD] font-normal">
           <span>7d</span>
           <span>30d</span>
           <span>90d</span>
@@ -159,11 +152,10 @@ export const MySlider = ({
         </div>
       ) : null}
       {isFilter && health ? (
-        <div className="flex justify-between text-[#A2A5AD] text-[14px] font-normal">
+        <div className="flex justify-between text-[#A2A5AD]  font-normal">
           <span>1m</span>
           <span>3m</span>
           <span>6m</span>
-          <span>1y</span>
           <span>1.5y</span>
           <span>2y</span>
           <span>3y</span>
