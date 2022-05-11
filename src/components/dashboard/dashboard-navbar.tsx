@@ -508,11 +508,20 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
             <MenuIcon fontSize="small" />
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
+
           {!authenticated ? (
-            <div className=" animate-appear  ">
+            <div className=" animate-appear flex ">
               <Link href="/signin">
                 <a>
-                  <button className="w-[224px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue mr-[26px]">
+                  <button
+                    className="
+                    w-[140px] xl:w-[224px]
+                    h-[40px] xl:h-[45px]
+                    text-[14px] xl:text-[16px]
+                    mr-[8px] xl:mr-[26px]
+                    rounded-[8px]  text-white font-Inter bg-Blue flex justify-center items-center font-medium
+                  "
+                  >
                     Sign In
                   </button>
                 </a>
@@ -520,7 +529,14 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
 
               <Link href="/signup">
                 <a>
-                  <button className="w-[224px] h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent text-Green border border-Green ">
+                  <button
+                    className="
+                  w-[140px] xl:w-[224px]
+                  h-[40px] xl:h-[45px]
+                  text-[14px] xl:text-[16px]
+                  rounded-[8px]
+                  text-white font-Inter bg-transparent text-Green border border-Green flex justify-center items-center font-medium "
+                  >
                     Sign Up
                   </button>
                 </a>
