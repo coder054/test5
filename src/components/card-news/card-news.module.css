@@ -27,3 +27,10 @@
   -webkit-box-orient: vertical;
   min-height: 72px;
 }
+
+.carouse {
+  background: #202128cc !important;
+}
+
+.slick-track {
+}

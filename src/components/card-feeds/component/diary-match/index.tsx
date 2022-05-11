@@ -26,23 +26,10 @@ export const CardDiaryMatch = ({ card }: CardDiaryMatchProps) => {
   )
 
   return (
-    <Slider {...settings} className={`min-h-[235px]  ${cls.carouse}`}>
+    <Slider {...settings} className={`min-h-[235px] ml-[20px] ${cls.carouse}`}>
       <div className="h-[235px]">
         <ItemMatch card={card && card} />
       </div>
-      {/* {!isEmpty(data?.data?.eatChart) ||
-      !isEmpty(data?.data?.energyChart) ||
-      !isEmpty(data?.data?.sleepChart) ? (
-        <div className="h-[225px]">
-          <ItemLineChart card={data?.data && data?.data} loading={isLoading} />
-        </div>
-      ) : null}
-
-      {!isEmpty(data?.data?.injuries) ? (
-        <div className="h-[225px]">
-          <ItemInjuries card={data?.data} />
-        </div>
-      ) : null} */}
     </Slider>
   )
 }

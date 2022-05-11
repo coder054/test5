@@ -23,6 +23,7 @@ export const ItemTraining = ({ card }: ItemTrainingProps) => {
 
     return result
   }
+  // console.log('Object.values', Object.values(card?.trainingCategory)[0])
 
   return (
     <div className="cursor-pointer">

@@ -13,7 +13,7 @@ import { getListNewPostOfProvider } from 'src/service/feed/news.service'
 
 export const NewsCategory = () => {
   const [loading, setLoading] = useState<boolean>(true)
-  const [limit, setLimit] = useState<number>(12)
+  const [limit, setLimit] = useState<number>(8)
   const [sorted, setSorted] = useState<string>(DESC)
   const [startAfter, setStartAfter] = useState<number>(1)
   const { ref, inView } = useInView()
@@ -37,7 +37,7 @@ export const NewsCategory = () => {
       }),
     {
       getNextPageParam: (lastPage, page) => {
-        if (lastPage.length === 12) {
+        if (lastPage.length === 8 || lastPage.length === 9) {
           return page.length + 1
         } else {
           return undefined
@@ -51,6 +51,7 @@ export const NewsCategory = () => {
       fetchNextPage()
     }
   }, [inView])
+  console.log('dataNewsOfProvider', dataNewsOfProvider)
 
   return (
     <div className="w-full mt-[24px] space-y-6">

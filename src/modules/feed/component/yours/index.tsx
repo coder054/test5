@@ -9,7 +9,7 @@ import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
 import { getListPosts } from 'src/service/feed/yours.service'
 
 export const TabYours = () => {
-  const [limit, setLimit] = useState<number>(12)
+  const [limit, setLimit] = useState<number>(8)
   const [sorted, setSorted] = useState<string>(DESC)
   const [startAfter, setStartAfter] = useState<number>(1)
   const { ref, inView } = useInView()
@@ -29,13 +29,13 @@ export const TabYours = () => {
         feedTab: 'yours',
       })
 
-      // console.log('data ::', res.data)
+      // console.log('data:', res.data[1])
 
       return res.data
     },
     {
       getNextPageParam: (lastPage, page) => {
-        if (lastPage.length === 12) {
+        if (lastPage.length === 8 || lastPage.length === 9) {
           return page.length + 1
         } else {
           return undefined
@@ -52,17 +52,19 @@ export const TabYours = () => {
 
   return (
     <Loading isLoading={loadingNews}>
-      <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-10 pt-[12px]">
-        {dataNews?.pages &&
-          (dataNews?.pages || [])?.map((page, indexPage) => (
-            <Fragment>
-              {(page || []).map((item, index) => (
-                <div key={index} className="mb-[24px] md:mb-[0px]">
-                  <CardFeed card={item} />
-                </div>
-              ))}
-            </Fragment>
-          ))}
+      <>
+        <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-10 pt-[12px]">
+          {dataNews?.pages &&
+            (dataNews?.pages || [])?.map((page, indexPage) => (
+              <Fragment>
+                {(page || []).map((item, index) => (
+                  <div key={index} className="mb-[24px] md:mb-[0px]">
+                    <CardFeed card={item} />
+                  </div>
+                ))}
+              </Fragment>
+            ))}
+        </div>
         <div className="w-full">
           <p
             className="flex justify-center py-2 font-semibold text-[16px] w-[36px] h-[36px] text-center mx-auto"
@@ -73,7 +75,7 @@ export const TabYours = () => {
             ) : null}
           </p>
         </div>
-      </div>
+      </>
     </Loading>
   )
 }

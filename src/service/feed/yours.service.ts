@@ -1,4 +1,7 @@
-import { API_GET_LIST_POSTS } from 'src/constants/api.constants'
+import {
+  API_CRM_CREATE_SUPPORT_TICKET,
+  API_GET_LIST_POSTS,
+} from 'src/constants/api.constants'
 import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
 
@@ -31,4 +34,12 @@ export const getDiaryById = async (diaryId: string) => {
   return axios.get(
     toQueryString(`/diaries/${diaryId}/get-diary-by-id`, { diaryId: diaryId })
   )
+}
+
+export const crmCreateSupportTicket = async (body: {
+  priority: string
+  subject: string
+  content: string
+}) => {
+  return axios.post(API_CRM_CREATE_SUPPORT_TICKET, body)
 }

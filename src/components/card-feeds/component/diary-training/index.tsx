@@ -17,22 +17,21 @@ interface CardDiaryTrainingProps {
 }
 
 export const CardDiaryTraining = ({ card }: CardDiaryTrainingProps) => {
-  const { isLoading, data } = useQuery(
-    [QUERIES_FEED.FEED_GET_DIARY_BY_ID],
-    () => getDiaryById(card?.postId),
-    {
-      onSuccess: (res) => {},
-    }
-  )
-  // console.log('data', data)
+  // const { isLoading, data } = useQuery(
+  //   [QUERIES_FEED.FEED_GET_DIARY_BY_ID, card?.postId],
+  //   () => getDiaryById(card?.postId),
+  //   {
+  //     onSuccess: (res) => {},
+  //   }
+  // )
 
   return (
-    <Slider {...settings} className={`h-[235px] ${cls.carouse}`}>
+    <Slider {...settings} className={`h-[235px] ${cls.carouse} ml-[20px]`}>
       <div className="h-[225px]">
         <ItemTraining card={card && card} />
       </div>
 
-      {!isEmpty(data?.data?.eatChart) ||
+      {/* {!isEmpty(data?.data?.eatChart) ||
       !isEmpty(data?.data?.energyChart) ||
       !isEmpty(data?.data?.sleepChart) ? (
         <div className="h-[225px]">
@@ -44,7 +43,7 @@ export const CardDiaryTraining = ({ card }: CardDiaryTrainingProps) => {
         <div className="h-[225px]">
           <ItemInjuries card={data?.data} />
         </div>
-      ) : null}
+      ) : null} */}
     </Slider>
   )
 }
