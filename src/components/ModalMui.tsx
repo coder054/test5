@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import { CSSObject } from '@mui/system'
+import { isMobile } from 'react-device-detect'
 import { XIcon } from 'src/components/icons'
 
 const style = {
@@ -15,7 +16,7 @@ const style = {
     xs: 2,
     xl: 4,
   },
-  maxWidth: 'calc(100vw - 32px)',
+  maxWidth: isMobile ? '100vw' : 'calc(100vw - 32px)',
 }
 
 type MyModalProps = {
