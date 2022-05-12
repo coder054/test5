@@ -188,8 +188,9 @@ export const CardFeed = ({ card }: CardYourType) => {
       style={{
         padding: '24px 0px 24px',
         backdropFilter: 'blur(68px)',
+        width: 'calc(100% - 32px)',
       }}
-      className="rounded-[8px] bg-[#202128cc] w-[310px] md:w-[500px] relative"
+      className="rounded-[8px] bg-[#202128cc] max-w-[500px] relative border border-green-600 "
     >
       <div className="flex px-5 items-center mb-5 relative">
         {card?.userInfo?.faceImage && (
