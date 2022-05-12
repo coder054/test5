@@ -77,7 +77,7 @@ export const DashboardDiaryUpdate = () => {
       <div>
         <ModalMui
           sx={{
-            padding: 0,
+            p: { xs: 0, xl: 0 },
             top: '50%',
             width: isMobile ? '100%' : 800,
             overflow: 'auto',

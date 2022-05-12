@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { isDesktop } from 'react-device-detect'
+import { isDesktop, isMobile } from 'react-device-detect'
 import { MyButton } from 'src/components/MyButton'
 import { APP_FEATURE_3 } from 'src/constants/mocks/app-feature.constants'
 import { ARROW, IT_FREE } from 'src/imports/images'
@@ -17,7 +17,11 @@ export const SectionThree = () => {
       {isDesktop ? (
         <div className="relative">
           <img
-            src="/assets/landing-page/Landing-4.png"
+            src={
+              isMobile
+                ? '/assets/landing-page/Landing-4-min.png'
+                : '/assets/landing-page/Landing-4.png'
+            }
             className={clsx('w-full')}
           />
           <div className="w-full h-[690px] bg-gradient-to-b from-white absolute top-0"></div>
@@ -87,7 +91,7 @@ export const SectionThree = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-landing-four w-full bg-cover bg-center mobileM:h-[700px] tabletM:h-[500px] relative">
+        <div className="bg-landing-four-mb w-full bg-cover bg-center mobileM:h-[700px] tabletM:h-[500px] relative">
           <div className="w-full h-[190px] bg-gradient-to-b from-white absolute top-0 z-10"></div>
           <div className="absolute w-full mobileM:top-[190px] mobileL:top-[180px] flex flex-col items-center z-20">
             <div

@@ -23,22 +23,24 @@ export default function FloatingButton({
         <button
           onClick={() => setIsOpen(false)}
           className={clsx(
-            'active:scale-90 duration-150 fixed bottom-5 right-5 '
+            'active:scale-90 duration-150 fixed bottom-14 right-5'
           )}
         >
           <span className="relative">
             <div
               className={clsx(
-                'absolute text-left w-[246px] bg-[#13161A] border-2 border-gray-600 rounded-lg -bottom-11 -left-52 py-1.5 '
+                'absolute text-left w-[246px] bg-[#13161A] border-2 border-gray-600 rounded-lg bottom-10 -left-[245px] py-1.5 '
               )}
             >
               {children}
             </div>
-            <FloatingRemove />
+            <span className="relative">
+              <FloatingRemove />
+            </span>
           </span>
         </button>
       ) : (
-        <button className="active:scale-90 duration-150 fixed bottom-5 right-5 hover:opacity-90">
+        <button className="active:scale-90 duration-150 fixed bottom-14 right-5 hover:opacity-90">
           <FloatingAdd onClick={() => setIsOpen(true)} />
         </button>
       )}
