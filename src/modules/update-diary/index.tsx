@@ -10,6 +10,8 @@ interface DiaryUpdateProps {
 }
 
 const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
+  // console.log('selected', selected)
+
   const { currentRoleName } = useAuth()
   switch (currentRoleName) {
     case 'PLAYER':

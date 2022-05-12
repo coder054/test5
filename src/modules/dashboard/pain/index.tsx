@@ -36,6 +36,14 @@ export const Pain = () => {
       </div>
 
       <div className={`${cls.item} col-span-12 p-[16px] md:p-[32px]`}>
+        <div className="text-center">
+          <p className="text-[#09E099] text-[18px]">Track your pains!</p>
+          <p className="text-[#A2A5AD]">Limit your injurys!</p>
+          <p className="text-[#A2A5AD]">
+            Track and compare your injurys with your peers.
+          </p>
+          <p className="text-[#A2A5AD]">To avoid future injurys.</p>
+        </div>
         <InjuryChart lastDateRange={range} />
       </div>
 

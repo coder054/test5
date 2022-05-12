@@ -1,6 +1,5 @@
 import { ChartCircle } from 'src/components/chart-circle'
 import { CardFeedType } from 'src/constants/types/feed/yours'
-import Slider from 'react-slick'
 import { ItemTraining } from './item/item-training'
 import { settings } from 'src/constants/constants'
 import { useQuery } from 'react-query'
@@ -9,41 +8,54 @@ import { ItemLineChart } from './item/item-line-chart'
 import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
 import { ItemInjuries } from './item/item-injuries'
 import { isEmpty } from 'lodash'
-
-const cls = require('../../card-yours.module.css')
+import { useState } from 'react'
+import { ModalMui } from 'src/components/ModalMui'
+import { isMobile } from 'react-device-detect'
+import { XIcon } from 'src/components/icons'
+import SimpleBar from 'simplebar-react'
+import { ModalDiaryTraining } from './item/modal-diary-training'
 
 interface CardDiaryTrainingProps {
   card: CardFeedType
 }
 
 export const CardDiaryTraining = ({ card }: CardDiaryTrainingProps) => {
-  // const { isLoading, data } = useQuery(
-  //   [QUERIES_FEED.FEED_GET_DIARY_BY_ID, card?.postId],
-  //   () => getDiaryById(card?.postId),
-  //   {
-  //     onSuccess: (res) => {},
-  //   }
-  // )
+  const [openModal, setOpenModal] = useState<boolean>(false)
 
   return (
-    <Slider {...settings} className={`h-[235px] ${cls.carouse} ml-[20px]`}>
-      <div className="h-[225px]">
+    <div>
+      <div
+        className="h-[225px] pl-[20px]"
+        onClick={() => {
+          setOpenModal(true)
+        }}
+      >
         <ItemTraining card={card && card} />
       </div>
 
-      {/* {!isEmpty(data?.data?.eatChart) ||
-      !isEmpty(data?.data?.energyChart) ||
-      !isEmpty(data?.data?.sleepChart) ? (
-        <div className="h-[225px]">
-          <ItemLineChart card={data?.data && data?.data} loading={isLoading} />
-        </div>
-      ) : null}
-
-      {!isEmpty(data?.data?.injuries) ? (
-        <div className="h-[225px]">
-          <ItemInjuries card={data?.data} />
-        </div>
-      ) : null} */}
-    </Slider>
+      <ModalMui
+        sx={{
+          padding: 0,
+          top: '50%',
+          width: isMobile ? '100%' : 900,
+          overflow: 'auto',
+        }}
+        isOpen={openModal}
+        onClose={setOpenModal}
+      >
+        <SimpleBar style={{ maxHeight: 850 }}>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setOpenModal(false)}
+              className="absolute z-50 right-6 top-5"
+            >
+              <XIcon />
+            </button>
+            <ModalDiaryTraining card={card} />
+          </div>
+        </SimpleBar>
+      </ModalMui>
+    </div>
   )
 }

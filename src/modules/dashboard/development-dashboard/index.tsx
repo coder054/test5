@@ -140,8 +140,20 @@ export const Development = () => {
       </div>
 
       <div
-        className={`${cls.item} col-span-12 lg:col-span-7 h-[460px] p-[16px] md:p-[32px]`}
+        className={`${cls.item} col-span-12 lg:col-span-7 h-[500px] p-[16px] md:p-[32px]`}
       >
+        <div className="text-center text-[#A2A5AD]">
+          <p className="text-[#09E099] text-[18px]">Your Development Trend</p>
+          <p>
+            <span className="text-[#09E099]">
+              To get best possible support,
+            </span>
+            <span className="text-[#A2A5AD]">
+              {' '}
+              run frequent development talks with your Coaches!
+            </span>
+          </p>
+        </div>
         <Loading isLoading={loading}>
           <div className="w-full h-[400px] relative">
             <p className="text-[#A2A5AD] text-[12px] absolute top-[24px]">20</p>

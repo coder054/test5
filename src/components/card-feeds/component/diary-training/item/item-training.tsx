@@ -1,15 +1,14 @@
 import { ChartCircle } from 'src/components/chart-circle'
 import { CardFeedType } from 'src/constants/types/feed/yours'
 import dayjs from 'dayjs'
-import { useState } from 'react'
 import { PerformaneStrain } from '../../performance-strain'
+import { FEED_YOURS } from 'src/constants/mocks/common.constants'
 
 interface ItemTrainingProps {
   card: CardFeedType
 }
 
 export const ItemTraining = ({ card }: ItemTrainingProps) => {
-  const [arrayColor, setArrayColor] = useState<string[]>([])
   const handleTimeOfPractice = (time: number): string => {
     return `${Math.floor(time / 1)}h ${(time - Math.floor(time / 1)) * 6}min`
   }
@@ -23,7 +22,6 @@ export const ItemTraining = ({ card }: ItemTrainingProps) => {
 
     return result
   }
-  // console.log('Object.values', Object.values(card?.trainingCategory)[0])
 
   return (
     <div className="cursor-pointer">
@@ -39,7 +37,9 @@ export const ItemTraining = ({ card }: ItemTrainingProps) => {
             />
           </div>
           <div className="float-left w-[140px] h-full ml-[24px]">
-            <p className="mt-[40px]">Team Training</p>
+            <p className="mt-[40px]">
+              {FEED_YOURS[card?.training?.typeOfTraining || '']?.value}
+            </p>
             <p className="text-[#A2A5AD] text-[12px] mt-[2px]">
               {dayjs(card?.createdAt).format('YYYY/MM/DD')}
             </p>

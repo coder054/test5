@@ -5,6 +5,8 @@ export const FEED_YOURS = {
     value: 'Team Training',
   },
   MATCH: { value: 'Match' },
+  GROUP_TRAINING: { value: 'Group Training' },
+  PERSONAL_TRAINING: { value: 'Personal Training' },
 }
 export const COACHING_EDUCATION = [
   'UEFA A',

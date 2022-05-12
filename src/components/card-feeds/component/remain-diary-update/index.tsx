@@ -56,25 +56,23 @@ export const RemainDiaryUpdate = ({ card }: RemainDiaryUpdateProps) => {
         sx={{
           padding: 0,
           top: '50%',
-          width: isMobile ? '100%' : 700,
+          width: isMobile ? '100%' : 800,
+          height: isMobile ? '100%' : 'auto',
           overflow: 'auto',
         }}
         isOpen={openModalDiary}
         onClose={setOpenModalDiary}
       >
-        {/* @ts-ignore: Unreachable code error */}
-        <SimpleBar style={{ maxHeight: 850 }}>
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setOpenModalDiary(false)}
-              className="absolute z-50 right-6 top-5"
-            >
-              <XIcon />
-            </button>
-            <DiaryUpdate />
-          </div>
-        </SimpleBar>
+        <div className="relative tabletM:h-[850px] mobileM:h-screen overflow-y-auto mobileM:py-2 mobileM:pb-24 tabletM:pb-0 tabletM:py-0">
+          <button
+            type="button"
+            onClick={() => setOpenModalDiary(false)}
+            className="absolute z-50 right-6 top-5"
+          >
+            <XIcon />
+          </button>
+          <DiaryUpdate onClose={setOpenModalDiary} />
+        </div>
       </ModalMui>
     </div>
   )

@@ -6,6 +6,8 @@ import SimpleBar from 'simplebar-react'
 import { ButtonAdd } from 'src/components/ButtonAdd'
 import { PopupAdd } from 'src/components/popup-add'
 import { ModalFeed } from 'src/modules/feed/component/modal/modal-feed'
+import DiaryUpdate from 'src/modules/update-diary'
+import { XIcon } from '../icons'
 import { ModalMui } from '../ModalMui'
 
 interface ButtonAddFeedProps {}
@@ -87,6 +89,29 @@ export const ButtonAddFeed = () => {
         <SimpleBar style={{ maxHeight: 850 }}>
           <ModalFeed setIsOpenModal={setOpenModalFeed} />
         </SimpleBar>
+      </ModalMui>
+
+      <ModalMui
+        sx={{
+          padding: 0,
+          top: '50%',
+          width: isMobile ? '100%' : 800,
+          height: isMobile ? '100%' : 'auto',
+          overflow: 'auto',
+        }}
+        isOpen={openModalDiaryUpdate}
+        onClose={setOpenModalDiaryUpdate}
+      >
+        <div className="relative tabletM:h-[850px] mobileM:h-screen overflow-y-auto mobileM:py-2 mobileM:pb-24 tabletM:pb-0 tabletM:py-0">
+          <button
+            type="button"
+            onClick={() => setOpenModalDiaryUpdate(false)}
+            className="absolute z-50 right-6 top-5"
+          >
+            <XIcon />
+          </button>
+          <DiaryUpdate onClose={setOpenModalDiaryUpdate} />
+        </div>
       </ModalMui>
     </div>
   )

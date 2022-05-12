@@ -140,7 +140,7 @@ export interface CardFeedType {
     day: number
     type: string
   }[]
-
+  originalDiaryId?: string
   transferId?: string
   transferInfo?: TransferInfoType
   lastDateRange?: string

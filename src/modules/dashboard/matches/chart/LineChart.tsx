@@ -85,6 +85,14 @@ export const LineChart = ({ range, filter }: LineChartProps) => {
 
   return (
     <div className="bg-defaultBackGround flex flex-col items-center justify-center col-span-7 laptopM:p-9 mobileM:py-4 rounded-lg">
+      <div className="text-center">
+        <p className="text-[#09E099] text-[18px]">
+          Matches are the best training!
+        </p>
+        <p className="text-[#A2A5AD]">
+          The matches Dashboard compares yours Match facts with your peers.
+        </p>
+      </div>
       <Loading isLoading={isGettingMatchesChart} className="pt-4 w-full">
         <div className="w-full">
           <Chart
