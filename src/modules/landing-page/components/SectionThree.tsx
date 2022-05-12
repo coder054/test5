@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { isDesktop } from 'react-device-detect'
+import { isDesktop, isMobile } from 'react-device-detect'
 import { MyButton } from 'src/components/MyButton'
 import { APP_FEATURE_3 } from 'src/constants/mocks/app-feature.constants'
 import { ARROW, IT_FREE } from 'src/imports/images'
@@ -17,7 +17,11 @@ export const SectionThree = () => {
       {isDesktop ? (
         <div className="relative">
           <img
-            src="/assets/landing-page/Landing-4.png"
+            src={
+              isMobile
+                ? '/assets/landing-page/Landing-4-min.png'
+                : '/assets/landing-page/Landing-4.png'
+            }
             className={clsx('w-full')}
           />
           <div className="w-full h-[690px] bg-gradient-to-b from-white absolute top-0"></div>

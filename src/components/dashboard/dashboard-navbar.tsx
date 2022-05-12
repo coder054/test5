@@ -152,12 +152,12 @@ const UpdateDiaryButton = () => {
     openModalDiaryUpdateAtom
   )
   return (
-    <>
+    <div>
       <button
         onClick={() => setOpenModalDiaryUpdate(true)}
-        className="bg-[#4654EA] active:scale-110 duration-150 laptopM:py-2 mobileM:py-[4px] mobileM:px-[8px] laptopM:px-[22px] laptopM:rounded-[8px] mobileM:rounded-[4px] flex items-center laptopM:space-x-2 relative"
+        className="bg-[#4654EA] active:opacity-75 duration-150 laptopM:py-2 mobileM:py-[4px] mobileM:px-[8px] laptopM:px-[22px] laptopM:rounded-[8px] mobileM:rounded-[4px] flex items-center laptopM:space-x-2 relative"
       >
-        <span className="mobileM:hidden">
+        <span className="mobileM:hidden tabletM:block">
           <UpdateDiaryIcon />
         </span>
         <span className="text-white mobileM:text-[13px] laptopM:text-[14px] font-semibold">
@@ -166,7 +166,7 @@ const UpdateDiaryButton = () => {
       </button>
       <ModalMui
         sx={{
-          padding: 0,
+          p: { xl: 0, xs: 0 },
           top: '50%',
           width: isMobile ? '100%' : 800,
           height: isMobile ? '100%' : 'auto',
@@ -186,7 +186,7 @@ const UpdateDiaryButton = () => {
           <DiaryUpdate onClose={setOpenModalDiaryUpdate} />
         </div>
       </ModalMui>
-    </>
+    </div>
   )
 }
 
@@ -1528,7 +1528,7 @@ export const ModalResponseMatch = (props) => {
 
         <img
           //@ts-ignore: Unreachable code error
-          src={dataModalResponseMatch.img}
+          src={dataModalResponseMatch?.img}
           className=" w-[320px] h-auto block mx-auto "
           alt=""
         />
@@ -1536,11 +1536,11 @@ export const ModalResponseMatch = (props) => {
         <div className="font-Inter text-center ">
           <div className=" ">
             {/* @ts-ignore: Unreachable code error */}
-            {dataModalResponseMatch.title}
+            {dataModalResponseMatch?.title}
           </div>
           <div className=" ">
             {/* @ts-ignore: Unreachable code error */}
-            {dataModalResponseMatch.body}
+            {dataModalResponseMatch?.body}
           </div>
         </div>
 
