@@ -328,7 +328,33 @@
   height: 238px !important;
 }
 
-.slick-prev:before,
 .slick-next:before {
   display: none;
+}
+
+.react-tel-input > .special-label {
+  background-color: #111827 !important;
+  padding: 0 8px !important;
+}
+
+.react-tel-input > .form-control {
+  border-radius: 8px !important;
+  border: 2px solid #2d3748 !important;
+}
+
+.react-tel-input > .form-control:focus {
+  border: 2px solid #7582eb !important;
+  box-shadow: 0 0 0 1px #1976d2 !important;
+}
+
+.react-tel-input .country-list > li:hover {
+  background-color: #2d3748 !important;
+}
+
+.react-tel-input .country-list .country.highlight {
+  background-color: rgb(107 114 128) !important;
+}
+
+.react-tel-input .country-list .country .dial-code {
+  color: #ffffff !important;
 }

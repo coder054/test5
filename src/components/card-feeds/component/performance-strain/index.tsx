@@ -1,6 +1,6 @@
 import Rating from '@mui/material/Rating'
 import { MatchType } from 'src/constants/types/feed/yours'
-import { emotionlToNum, emotionlToStar } from 'src/hooks/functionCommon'
+import { emotionToNum, emotionlToStar } from 'src/hooks/functionCommon'
 
 interface PerformaneStrainProps {
   performance?: MatchType
@@ -52,13 +52,13 @@ export const PerformaneStrain = ({
         <div className="w-full mt-[12px]">
           <div
             className={`bg-[#FF9607] ${
-              emotionlToNum(yourPhysicallyStrain)
+              emotionToNum(yourPhysicallyStrain)
                 ? 'border border-[#A2A5AD]'
                 : ''
             }`}
             style={{
               height: 8,
-              width: emotionlToNum(yourPhysicallyStrain) || 0,
+              width: emotionToNum(yourPhysicallyStrain) || 0,
             }}
           ></div>
         </div>
@@ -66,13 +66,13 @@ export const PerformaneStrain = ({
         <div className="w-full mt-[24px]">
           <div
             className={`bg-[#FF9607] ${
-              emotionlToNum(teamPhysicallyStrain)
+              emotionToNum(teamPhysicallyStrain)
                 ? 'border border-[#A2A5AD]'
                 : ''
             }`}
             style={{
               height: 8,
-              width: emotionlToNum(teamPhysicallyStrain) || 0,
+              width: emotionToNum(teamPhysicallyStrain) || 0,
             }}
           ></div>
         </div>

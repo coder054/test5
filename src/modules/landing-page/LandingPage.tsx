@@ -2,13 +2,15 @@ import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { isDesktop, isMobile } from 'react-device-detect'
+import { isDesktop, isMobile, isTablet } from 'react-device-detect'
 import { Button } from 'src/components'
 import {
+  AppStoreSvg,
   CheckedIcon,
   DevTalksIcon,
   DoubleQuote2Icon,
   DoubleQuoteIcon,
+  GGPlaySvg,
   GoalsIcon,
   ReportsIcon,
   SkillsReviewsIcon,
@@ -21,13 +23,11 @@ import {
 } from 'src/constants/mocks/app-feature.constants'
 import {
   APP_4,
-  APP_STORE_WHITE,
   ARROW,
   COMMENT_AVATAR,
   COMMENT_AVATAR_3,
   COMMENT_NICK,
   GOAL_KEERPER,
-  GOOGLE_PLAY_WHITE,
   GROUP_DEVICES,
   IT_FREE,
   NEO,
@@ -47,15 +47,20 @@ export const Landing = () => {
   const handleNavigate = () => {
     router.push('signup')
   }
+
   return (
     <div className="flex flex-col bg-white">
-      <div className="text-white bg-landing-one w-full h-screen bg-no-repeat bg-cover">
-        <div className="w-full h-[190px] bg-gradient-to-t from-white  absolute bottom-0"></div>
+      <div
+        className=" w-full h-screen bg-cover bg-no-repeat"
+        style={{ backgroundImage: 'url(/assets/landing-page/Landing-1.png)' }}
+      >
+        <div className="w-full h-[190px] bg-gradient-to-t from-white  absolute bottom-0 mobileM:hidden laptopM:block"></div>
         <div
           className={clsx(
             'flex justify-between  mt-[30px]',
             isDesktop && 'max-w-[1320px] mx-auto',
-            isMobile && 'mr-[10px]'
+            isTablet && 'px-11',
+            isMobile && 'mx-[14px]'
           )}
         >
           <Logo />
@@ -77,7 +82,7 @@ export const Landing = () => {
         </div>
         <div
           className={clsx(
-            'text-center   ',
+            'text-center tabletM:px-[250px] ',
             isMobile && 'w-full px-[30px] mt-[70px]',
             isDesktop && 'max-w-[1320px] px-[250px] mt-[120px] mx-auto'
           )}
@@ -85,66 +90,94 @@ export const Landing = () => {
           <span className="text-center text-[#09E099] text-[12px]  tracking-[2px] font-medium">
             INTRODUCING
           </span>
-          <p className="text-[56px]  tracking-[2px] font-semibold">
+          <p className="laptopM:text-[56px] mobileM:text-[26px] tracking-[2px] font-semibold">
             Zporter v.1
           </p>
-          <p className={clsx('text-[16px] my-4', isMobile && 'text-center')}>
+          <p className={clsx('text-[16px] my-4 text-center')}>
             In our vision to digitize and make youth sports smarter and
             healthier. Zporter is now launching v.1 of our free software as a
             service via apps- and web, to entertain, grow and empower (future)
-            football starz. Just as we intend to help their Coaches, Agents,
-            PT’s, Friends, Fans and Family members to support them better in
-            their most important youth football years.
+            football starz in a smarter and healthier way.<br></br> That means
+            we take away: <br></br>. Just as we intend to help their Coaches,
+            Agents, PT’s, Friends, Fans and Family members to support them
+            better in their most important youth football years.<br></br> And
+            adds …in a smarter and healthier way.
           </p>
           <p
             className={clsx(
-              'items-center justify-center my-6',
-              isMobile ? 'grid grid-cols-2 gap-y-4' : 'flex'
+              'flex mobileM:flex-col laptopM:flex-row items-center justify-center my-6'
             )}
           >
-            <span className={clsx('text-[14px]', isMobile && 'col-span-2')}>
+            <span
+              className={clsx(
+                'mobileM:font-medium laptopM:font-normal text-[16px] mobileM:col-span-2'
+              )}
+            >
               Available on the web for:
             </span>
-            <span className="flex items-center mx-3 font-medium text-[14px]">
-              <CheckedIcon style={{ marginRight: 4 }} />
-              Smartphones
-            </span>
-            <span className="flex items-center mx-3 font-medium text-[14px]">
-              <CheckedIcon style={{ marginRight: 4 }} />
-              Tablets
-            </span>
-            <span className="flex items-center mx-3 font-medium text-[14px]">
-              <CheckedIcon style={{ marginRight: 4 }} />
-              Laptops
-            </span>
-            <span className="flex items-center mx-3 font-medium text-[14px]">
-              <CheckedIcon style={{ marginRight: 4 }} />
-              Desktops
-            </span>
+            {isDesktop ? (
+              <>
+                <span className="flex items-center mx-3 font-medium text-[14px]">
+                  <CheckedIcon style={{ marginRight: 4 }} />
+                  Smartphones
+                </span>
+                <span className="flex items-center mx-3 font-medium text-[14px]">
+                  <CheckedIcon style={{ marginRight: 4 }} />
+                  Tablets
+                </span>
+                <span className="flex items-center mx-3 font-medium text-[14px]">
+                  <CheckedIcon style={{ marginRight: 4 }} />
+                  Laptops
+                </span>
+                <span className="flex items-center mx-3 font-medium text-[14px]">
+                  <CheckedIcon style={{ marginRight: 4 }} />
+                  Desktops
+                </span>
+              </>
+            ) : (
+              <p className="text-[12px] italic">
+                Smartphones, Tablets, Laptops, Desktops
+              </p>
+            )}
           </p>
           <p
             className={clsx(
-              'items-center justify-center my-6',
-              isMobile ? 'grid grid-cols-2 gap-y-4' : 'flex'
+              'flex mobileM:flex-col laptopM:flex-row items-center justify-center my-6'
             )}
           >
-            <span className={clsx('text-[14px]', isMobile && 'col-span-2')}>
-              Available on the web for:
+            <span
+              className={clsx(
+                'mobileM:font-medium laptopM:font-normal text-[16px] mobileM:col-span-2'
+              )}
+            >
+              Available via apps for:
             </span>
-            <span className="flex items-center mx-3 font-medium text-[14px]">
-              <CheckedIcon style={{ marginRight: 4 }} />
-              iOS Smartphones
-            </span>
-            <span className="flex items-center mx-3 font-medium text-[14px]">
-              <CheckedIcon style={{ marginRight: 4 }} /> Android Smartphones
-            </span>
+            {isDesktop ? (
+              <>
+                <span className="flex items-center mx-3 font-medium text-[14px]">
+                  <CheckedIcon style={{ marginRight: 4 }} />
+                  iOS Smartphones
+                </span>
+                <span className="flex items-center mx-3 font-medium text-[14px]">
+                  <CheckedIcon style={{ marginRight: 4 }} /> Android Smartphones
+                </span>
+              </>
+            ) : (
+              <p className="text-[12px] italic">
+                iOS Smartphones, Android Smartphones
+              </p>
+            )}
           </p>
-          <div className="space-x-2">
-            <Image src={APP_STORE_WHITE} />
-            <Image src={GOOGLE_PLAY_WHITE} />
+          <div className="flex mobileM:justify-between tabletM:justify-center tabletM:space-x-4">
+            <button>
+              <AppStoreSvg />
+            </button>
+            <button>
+              <GGPlaySvg />
+            </button>
           </div>
           {!isMobile && (
-            <div className="mr-[90px] mt-[110px]">
+            <div className="mr-[90px] mt-[160px]">
               <Image src={GROUP_DEVICES} />
             </div>
           )}
@@ -161,18 +194,17 @@ export const Landing = () => {
           FEATURE
         </span>
         <p className="text-[36px] text-black text-center  font-bold">
-          App Feature
+          App Features
         </p>
         <div
           className={clsx(
-            'grid ',
-            isMobile && 'grid-cols-2 gap-y-6 px-[20px]',
-            isDesktop && ' grid-cols-4 gap-y-20 gap-x-24 pt-20'
+            'grid mobileM:grid-cols-2 mobileM:gap-y-6 mobileM:gap-x-2 px-[20px] tabletM:grid-cols-4 tabletM:gap-y-20 tabletM:gap-x-24 tabletM:pt-10 laptopM:pt-20 tabletM:px-20'
           )}
         >
           {APP_FEATURE.map((app) => (
             <AppFeature
               titleColor="text-black"
+              contentColor="text-gray-400"
               icon={app.icon}
               title={app.title}
               content={app.content}
@@ -197,6 +229,7 @@ export const Landing = () => {
             </div>
           </>
         )}
+
         <div
           className={clsx(
             '  from-white  absolute  z-10',
@@ -208,7 +241,8 @@ export const Landing = () => {
           className={clsx(
             isDesktop &&
               'max-w-[1320px] absolute left-[340px] top-[100px] w-[350px] space-y-4 ',
-            isMobile && 'mb-[30px] mt-[30px] ml-[65px] mr-[20px]'
+            isTablet && 'absolute left-[80px] w-[340px] space-y-4',
+            isMobile && 'mb-[30px] mt-[50px] ml-[75px] mr-[20px] space-y-4'
           )}
         >
           <span className="text-center font-semibold text-[#4654EA] text-[14px] tracking-[2px] ">
@@ -216,7 +250,7 @@ export const Landing = () => {
           </span>
           <p
             className={clsx(
-              'text-black text-[36px] font-bold relative',
+              'text-black mobileM:text-[30px] laptopM:text-[36px] font-bold relative',
               isMobile && 'text-white z-10'
             )}
           >
@@ -238,7 +272,8 @@ export const Landing = () => {
         <div
           className={clsx(
             'bg-white ',
-            isDesktop && 'h-[600px] max-w-[1320px] mx-auto pt-[190px]'
+            isDesktop && 'h-[600px] max-w-[1320px] mx-auto pt-[190px]',
+            isTablet && 'px-11'
           )}
         >
           <p
@@ -281,17 +316,14 @@ export const Landing = () => {
               isMobile && 'px-[30px]'
             )}
           >
-            <span className="absolute right-0 top-[10px]">
+            <span className="absolute mobileM:right-4 laptopM:right-0 top-[10px]">
               <Image src={IT_FREE} />
             </span>
             <MyButton
               onClick={handleNavigate}
               type="button"
               label="Sign up"
-              className={clsx(
-                isDesktop && 'w-[220px]',
-                isMobile && 'w-[170px] px-[10px]'
-              )}
+              className="laptopM:w-[220px] mobileM:w-[160px] mobileM:px-[10px]"
             />
             <span className="ml-4">
               <Image src={ARROW} />
@@ -302,7 +334,8 @@ export const Landing = () => {
           className={clsx(
             'bg-landing-three bg-no-repeat bg-cover relative',
             isDesktop && ' mx-auto h-[1450px]  flex flex-col items-center',
-            isMobile && 'h-[850px]'
+            isMobile && 'h-[850px]',
+            isTablet && 'h-[550px]'
           )}
         >
           {isDesktop && (
@@ -327,6 +360,7 @@ export const Landing = () => {
               className={clsx(
                 'grid ',
                 isMobile && 'grid-cols-2 my-[40px] py-[50px] gap-y-6 px-[20px]',
+                isTablet && 'grid-cols-4 my-auto py-[50px] gap-y-6 px-[30px]',
                 isDesktop && 'grid-cols-4 pt-[1000px] gap-y-20 gap-x-24'
               )}
             >
@@ -340,14 +374,13 @@ export const Landing = () => {
                 />
               ))}
             </div>
-            <div
-              className={clsx(
-                'space-x-2 flex justify-center my-5',
-                isMobile && 'mt-0'
-              )}
-            >
-              <Image src={APP_STORE_WHITE} />
-              <Image src={GOOGLE_PLAY_WHITE} />
+            <div className="mobileM:px-[30px] flex mobileM:justify-between tabletM:justify-center tabletM:space-x-6 tabletM:pt-0 laptopM:pt-12">
+              <button>
+                <AppStoreSvg />
+              </button>
+              <button>
+                <GGPlaySvg />
+              </button>
             </div>
           </div>
         </div>
@@ -355,7 +388,7 @@ export const Landing = () => {
       <div className={isDesktop && 'w-full h-[600px]'}>
         <div
           className={clsx(
-            'flex mx-auto justify-between items-center',
+            'flex mx-auto justify-between items-center tabletM:px-12',
             isDesktop && 'max-w-[1320px]  '
           )}
         >
@@ -395,7 +428,8 @@ export const Landing = () => {
                 className={clsx(
                   'absolute',
                   isMobile && '-top-[4px] -right-[12px]',
-                  isDesktop && 'top-[10px]  right-0'
+                  isDesktop && 'top-[10px]  right-0',
+                  isTablet && 'top-[10px] left-[240px]'
                 )}
               >
                 <Image src={IT_FREE} />
@@ -404,10 +438,7 @@ export const Landing = () => {
                 onClick={handleNavigate}
                 type="button"
                 label="Sign up"
-                className={clsx(
-                  isDesktop && 'w-[220px]',
-                  isMobile && 'w-[170px] px-[10px]'
-                )}
+                className="laptopM:w-[220px] mobileM:w-[170px] mobileM:px-[10px] tabletM:[w-[180px]"
               />
               <span className="ml-4">
                 <Image src={ARROW} />
@@ -421,7 +452,7 @@ export const Landing = () => {
           )}
         </div>
       </div>
-      <div className="bg-white mobileM:h-[1320px] mobileL:h-[1250px] laptopM:h-[1550px] h-[1550px]">
+      <div className="bg-white mobileM:h-[1320px] mobileL:h-[1250px] laptopM:h-[1550px] tabletM:h-[1250px] tabletM:px-12">
         <div
           className={clsx(
             'relative z-20  laptopM:w-[1320px] laptopM:flex laptopM:flex-col laptopM:items-center laptopM:py-8 laptopM:mx-auto'
@@ -439,9 +470,7 @@ export const Landing = () => {
           )}
           <p
             className={clsx(
-              'font-bold text-black text-[30px]',
-              isDesktop && 'mb-14',
-              isMobile && 'px-[30px] mb-6'
+              'font-bold text-black text-[30px] laptopM:mb-14 mobileM:px-[30px] mobileM:mb-6'
             )}
           >
             For the best Coaches
@@ -470,7 +499,7 @@ export const Landing = () => {
             </p>
           </div>
           {isMobile && (
-            <div className="grid grid-cols-2 gap-6 mt-6">
+            <div className="grid grid-cols-2 gap-6 px-[30px] pt-12 mt-6">
               <AppFeature
                 titleColor={clsx(
                   'text-black text-center',
@@ -478,6 +507,7 @@ export const Landing = () => {
                 )}
                 icon={<GoalsIcon />}
                 title="GOALS"
+                contentColor="text-gray-400"
                 content="Helping Players To Set Smart Goals To Aim For"
               />
               <AppFeature
@@ -487,6 +517,7 @@ export const Landing = () => {
                 )}
                 icon={<DevTalksIcon />}
                 title="DEV. TALKS"
+                contentColor="text-gray-400"
                 content="Run Frequent Feedback Talks"
               />
               <AppFeature
@@ -496,6 +527,7 @@ export const Landing = () => {
                 )}
                 icon={<SkillsReviewsIcon />}
                 title="SKILLS REVIEWS"
+                contentColor="text-gray-400"
                 content="Performance Reviews & Match Feedback"
               />
               <AppFeature
@@ -505,6 +537,7 @@ export const Landing = () => {
                 )}
                 icon={<ReportsIcon />}
                 title="REPORTS"
+                contentColor="text-gray-400"
                 content="Reports & Analytics On Health & Skills Development (Q4 2022)"
               />
             </div>
@@ -525,6 +558,7 @@ export const Landing = () => {
                   )}
                   icon={<GoalsIcon />}
                   title="GOALS"
+                  contentColor="text-gray-400"
                   content="Helping Players To Set Smart Goals To Aim For"
                 />
                 <AppFeature
@@ -535,6 +569,7 @@ export const Landing = () => {
                   )}
                   icon={<DevTalksIcon />}
                   title="DEV. TALKS"
+                  contentColor="text-gray-400"
                   content="Run Frequent Feedback Talks"
                 />
               </div>
@@ -548,6 +583,7 @@ export const Landing = () => {
                     isDesktop && 'w-[190px]'
                   )}
                   icon={<SkillsReviewsIcon />}
+                  contentColor="text-gray-400"
                   title="SKILLS REVIEWS"
                   content="Performance Reviews & Match Feedback"
                 />
@@ -558,6 +594,7 @@ export const Landing = () => {
                   )}
                   icon={<ReportsIcon />}
                   title="REPORTS"
+                  contentColor="text-gray-400"
                   content="Reports & Analytics On Health & Skills Development (Q4 2022)"
                 />
               </div>
@@ -578,7 +615,7 @@ export const Landing = () => {
             >
               TESTIMONIAL
             </span>
-            <p className="text-black text-center text-[36px] font-bold  relative mb-7 mt-2">
+            <p className="text-black text-center text-[36px] font-bold  relative mb-7 mt-2 tabletM:px-12">
               {isDesktop && (
                 <span className="absolute -left-[12px] -top-[10px]">
                   <DoubleQuoteIcon />
@@ -588,19 +625,19 @@ export const Landing = () => {
               Play
             </p>
             <div className="flex justify-center space-x-4">
-              <Image src={COMMENT_NICK} />
+              <Image src={COMMENT_NICK} objectFit="cover" />
               <span className="text-black">
                 <p className="text-[18px] font-semibold">Nicklas Jönsson</p>
                 <p className="text-[14px] font-normal">Founder, Zporter</p>
               </span>
             </div>
-            <div
-              className={clsx(
-                'space-x-2 flex justify-center my-5 absolute w-full mx-auto -bottom-[130px]'
-              )}
-            >
-              <Image src={APP_STORE_WHITE} />
-              <Image src={GOOGLE_PLAY_WHITE} />
+            <div className="flex mobileM:justify-between tabletM:justify-center pt-12 tabletM:space-x-4">
+              <button>
+                <AppStoreSvg />
+              </button>
+              <button>
+                <GGPlaySvg />
+              </button>
             </div>
           </div>
         </div>

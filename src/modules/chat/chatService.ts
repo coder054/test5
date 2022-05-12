@@ -19,12 +19,12 @@ import {
   ref as storageLibRef,
   uploadBytes,
 } from 'firebase/storage'
-import { get as getLodash, isEmpty, shuffle } from 'lodash'
+import { chain, get as getLodash, isEmpty, shuffle } from 'lodash'
 import queryString from 'query-string'
 import { firebaseApp, storage } from 'src/config/firebase-client'
 import { AVATAR_DEFAULT } from 'src/constants/constants'
 import { FriendsType } from 'src/constants/types/contacts.types'
-import { getErrorMessage } from 'src/utils/utils'
+import { getErrorMessage, isEqualArraysNoOrder } from 'src/utils/utils'
 
 export const database = getDatabase(firebaseApp)
 export const dbRef = ref(database)
@@ -801,9 +801,31 @@ export const createGroupChatRoom = async (
     updates[`/chatRooms/${groupChatId}/`] = chatRoom
 
     await update(dbRef, updates)
-
+    return [groupChatId, null]
     // return newChatRoomKey
-  } catch (error) {}
+  } catch (error) {
+    return ['', error]
+  }
+}
+
+export const addTeamChatRoom = async (
+  memberIds: string[],
+  teamId: string,
+  teamName: string,
+  teamImage: string,
+  userId
+) => {
+  return await createGroupChatRoom(
+    teamId,
+    teamName,
+    false,
+    chain([...memberIds, userId])
+      .compact()
+      .uniq()
+      .value(),
+    teamImage,
+    ERoomType.TEAM
+  )
 }
 
 export const uploadFile = async (
@@ -1181,17 +1203,16 @@ export const getUrlChatFromChatRoomId = (roomId: string) => {
 }
 
 export const findRoomChatByMemberIds = async (
-  receiverId: string,
-  senderId: string // current role id
+  memberIds,
+  isGroup
 ): Promise<string> => {
   let roomId: string
-  let memberIds = [senderId, receiverId]
   try {
     let dataSnapshot = await get(
       query(
         ref(database, '/chatRooms/'),
         orderByChild('isGroup'),
-        equalTo(false)
+        equalTo(isGroup)
       )
     )
 
@@ -1200,9 +1221,7 @@ export const findRoomChatByMemberIds = async (
       let a1 = memberIds
       let find: any = list.find((o) => {
         //@ts-ignore: Unreachable code error
-        return o.memberIds.every((item) => {
-          return memberIds.includes(item)
-        })
+        return isEqualArraysNoOrder(memberIds, o.memberIds)
       })
       if (!isEmpty(find)) {
         return find.chatRoomId || ''
@@ -1224,10 +1243,14 @@ export const findRoomChatByMemberIds = async (
 
 export const getChatRoomIdOrCreateIfNotExisted = async (
   user: FriendsType,
-  currentRoleId: string
+  currentRoleId: string,
+  isGroup: boolean
 ): Promise<string> => {
   try {
-    let chatRoomId = await findRoomChatByMemberIds(user.userId, currentRoleId)
+    let chatRoomId = await findRoomChatByMemberIds(
+      [user.userId, currentRoleId],
+      isGroup
+    )
     if (!chatRoomId) {
       chatRoomId = await createChatRoom(
         !user.isRelationship,
@@ -1245,11 +1268,72 @@ export const getChatRoomIdOrCreateIfNotExisted = async (
 
 export const goToChatPage = async (
   user: FriendsType,
-  currentRoleId: string
+  currentRoleId: string,
+  isGroup: boolean
 ) => {
-  let chatRoomId = await getChatRoomIdOrCreateIfNotExisted(user, currentRoleId)
+  let chatRoomId = await getChatRoomIdOrCreateIfNotExisted(
+    user,
+    currentRoleId,
+    isGroup
+  )
 
   if (typeof window !== 'undefined' && !!chatRoomId) {
     window.open(getUrlChatFromChatRoomId(chatRoomId), '_ blank')
+  }
+}
+
+export const getMemberIdsOfAChatRoom = async (
+  roomId: string
+): Promise<string[]> => {
+  try {
+    const snapshot = await get(
+      child(dbRef, `${chatRoomsNode}/${roomId}/${memberIdsNode}`)
+    )
+    let target = snapshot.val()
+    return isEmpty(target) ? [] : target
+  } catch (error) {
+    return []
+  }
+}
+
+export const updateChatRoomMemberIds = async (
+  chatRoomId,
+  memberIds: string[]
+) => {
+  try {
+    const updates = {}
+    updates[`/${chatRoomsNode}/${chatRoomId}/memberIds`] = memberIds
+    await update(dbRef, updates)
+    return { error: false }
+  } catch (error) {
+    return { error: true }
+  }
+}
+
+export const findRoomById = async (chatRoomId: string): Promise<boolean> => {
+  const snapshot = await get(child(dbRef, `${chatRoomsNode}/${chatRoomId}`))
+  return snapshot.exists()
+}
+
+export const getUserInfo = async (userId: string): Promise<IChatUser> => {
+  try {
+    const snapshot = await get(child(dbRef, `${usersNode}/${userId}`))
+    let target = snapshot.val()
+    return isEmpty(target) ? null : target
+  } catch (error) {
+    return null
+  }
+}
+
+export const deleteChatRoom = async (chatRoomId: string, userId: string) => {
+  try {
+    const updates = {}
+    updates[`/${chatRoomsNode}/${chatRoomId}/${deletedAtNode}`] = {
+      [userId]: serverTimestamp(),
+    }
+    await update(dbRef, updates)
+    return { error: false }
+  } catch (error) {
+    return { error: getErrorMessage(error) }
   }
 }

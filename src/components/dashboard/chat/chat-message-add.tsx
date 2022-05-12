@@ -92,6 +92,7 @@ export const ChatMessageAdd: FC<ChatMessageAddProps> = (props) => {
         onKeyUp={handleKeyUp}
         placeholder="Leave a message" // placeholder="Leave a message2"
         value={body}
+        id="inputSendMessage"
         // size="small"
       />
 

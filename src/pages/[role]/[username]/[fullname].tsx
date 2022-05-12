@@ -232,7 +232,8 @@ const BioForPlayer = ({
         <title>
           {get(dataBioPlayer, 'firstName') +
             ' ' +
-            get(dataBioPlayer, 'lastName')}
+            get(dataBioPlayer, 'lastName')}{' '}
+          @Zporter.co
         </title>
         <meta name="description" content="Zporter"></meta>
         <meta property="og:url" content="https://www.byeindonesia.com/" />
@@ -428,7 +429,8 @@ const BioForCoach = ({
     <>
       <Head>
         <title>
-          {get(dataBioCoach, 'firstName') + ' ' + get(dataBioCoach, 'lastName')}
+          {get(dataBioCoach, 'firstName') + ' ' + get(dataBioCoach, 'lastName')}{' '}
+          @Zporter.co
         </title>
         <meta name="description" content="Zporter"></meta>
         <meta property="og:url" content="https://www.byeindonesia.com/" />
@@ -542,10 +544,7 @@ const BioForCoach = ({
 export const getServerSideProps: any = async ({ req, res, query }) => {
   // const roleId =
 
-  res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=1, stale-while-revalidate=1'
-  )
+  res.setHeader('Cache-Control', 'public, s-maxage=1, stale-while-revalidate=1')
   const uid = await loadIdToken(req as any)
 
   const fullname = query.fullname // not use

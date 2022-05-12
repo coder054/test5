@@ -24,7 +24,7 @@ export function getRulePassword(message?: string): Rule {
   }
 }
 
-export function numToEmotional(num: number) {
+export function numToEmotion(num: number) {
   switch (num) {
     case 0:
       return 'VERY_BAD'
@@ -58,7 +58,7 @@ export function numToScale(num: number) {
   }
 }
 
-export function emotionlToNum(str: string) {
+export function emotionToNum(str: string) {
   switch (str) {
     case 'VERY_BAD':
       return 0

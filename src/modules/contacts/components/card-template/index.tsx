@@ -71,7 +71,7 @@ export default function Card({
           {city && <p>{city}</p>}
           {club && <p>{club}</p>}
         </div>
-        <div className="col-span-2 flex space-x-4 items-center justify-center">
+        <div className="col-span-2 flex space-x-4 items-center justify-end">
           {commonOptions}
           {dropdownOptions && (
             <Fragment>

@@ -10,7 +10,7 @@ import { MyTextArea } from 'src/components/MyTextarea'
 import { PopupConfirmDelete } from 'src/components/popup-confirm-delete'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { DevelopmentNoteType } from 'src/constants/types'
-import { emotionlToNum, numToEmotional } from 'src/hooks/functionCommon'
+import { emotionToNum, numToEmotion } from 'src/hooks/functionCommon'
 import {
   createDevelopmentNote,
   removeDevelopmentNote,
@@ -198,7 +198,7 @@ export const NoteModal = ({
     if (create) {
       const valuePost: DevelopmentNoteType = {
         playerDevelopmentProgress:
-          numToEmotional(+formValues.progress) || 'NORMAL',
+          numToEmotion(+formValues.progress) || 'NORMAL',
         strength: {
           playerContent: formValues.strengthPlayer,
           coachComment: formValues.strengthCoach,
@@ -240,7 +240,7 @@ export const NoteModal = ({
     } else if (update) {
       const valueUpdate: DevelopmentNoteType = {
         playerDevelopmentProgress:
-          numToEmotional(+formValues.progress) || 'NORMAL',
+          numToEmotion(+formValues.progress) || 'NORMAL',
         strength: {
           playerContent: formValues.strengthPlayer,
           coachComment: formValues.strengthCoach,
@@ -330,7 +330,7 @@ export const NoteModal = ({
               step={25}
               value={
                 typeof formValues.progress !== 'number'
-                  ? emotionlToNum(formValues.progress)
+                  ? emotionToNum(formValues.progress)
                   : formValues.progress
               }
               onChange={(e) => handleChangeForm('progress', e)}

@@ -147,7 +147,7 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
 
   useEffect(() => {
     // Scroll to bottom of the messages after loading the thread
-    if (!isEmpty(messages) && messagesRef?.current) {
+    if (messagesRef?.current) {
       const scrollElement = messagesRef.current.getScrollElement()
 
       // scrollElement.scrollTop = messagesRef.current.el.scrollHeight
@@ -156,8 +156,22 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
         top: messagesRef.current.el.scrollHeight,
         behavior: 'smooth',
       })
+
+      let inputSendMessage = document.getElementById('inputSendMessage')
+      if (isEmpty(inputSendMessage)) {
+        return
+      }
+      inputSendMessage.focus()
     }
   }, [messages])
+
+  useEffect(() => {
+    let inputSendMessage = document.getElementById('inputSendMessage')
+    if (isEmpty(inputSendMessage)) {
+      return
+    }
+    inputSendMessage.focus()
+  }, [document.getElementById('inputSendMessage')])
 
   // If we have the thread, we use its ID to add a new message
   // Otherwise we use the recipients IDs. When using participant IDs, it means that we have to

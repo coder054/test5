@@ -30,6 +30,7 @@ import {
   dataModalResponseDeleteFromTeamAtom,
   dataModalResponseAskJoinGroupAtom,
   dataModalResponseAskJoinTeamAtom,
+  dataModalResponseTeamTrainingAtom,
 } from 'src/atoms/notiAtoms'
 import { notiToast } from 'src/components/common/Toast'
 import { MySelectCountry } from 'src/components/MySelectCountry'
@@ -230,6 +231,10 @@ export const ItemNotification = ({
   )
   const [, setDataModalResponseAskJoinTeam] = useAtom(
     dataModalResponseAskJoinTeamAtom
+  )
+
+  const [, setDataModalResponseTeamTraining] = useAtom(
+    dataModalResponseTeamTrainingAtom
   )
 
   // here render icon noti
@@ -504,6 +509,19 @@ export const ItemNotification = ({
                   title: notification.title,
                   groupId: notification.groupId,
                   senderId: notification.senderId,
+                })
+              } else if (
+                notification.notificationType === NotificationType.TEAM_TRAINING
+              ) {
+                setDataModalResponseTeamTraining({
+                  //@ts-ignore: Unreachable code error
+                  teamId: notification.teamId,
+                  img: notification.largeIcon,
+                  body: notification.body,
+                  title: notification.title,
+                  groupId: notification.groupId,
+                  senderId: notification.senderId,
+                  playerDiaryData: notification.playerDiaryData,
                 })
               }
 

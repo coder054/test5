@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -5,7 +6,19 @@ import { useMutation, useQueryClient } from 'react-query'
 import { ChervonRightIcon, TrashCanIcon } from 'src/components/icons'
 import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
 import { TeamsType } from 'src/constants/types/contacts.types'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
+import {
+  addTeamChatRoom,
+  findRoomById,
+  findRoomChatByMemberIds,
+  getMemberIdsOfAChatRoom,
+  getUrlChatFromChatRoomId,
+  goToChatPage,
+  updateChatRoomMemberIds,
+} from 'src/modules/chat/chatService'
 import { deleteTeam } from 'src/service/contacts/team.service'
+import { axios } from 'src/utils/axios'
+import { isEqualArraysNoOrder } from 'src/utils/utils'
 import Card from '../../components/card-template'
 import DropdownButton from '../../components/card-template/DropdownButton'
 import ConfirmModal from '../../components/modals/ModalDelete'
@@ -15,6 +28,7 @@ type TeamsCardProps = {
 }
 
 export const TeamCard = ({ team }: TeamsCardProps) => {
+  const { currentRoleId } = useAuth()
   const router = useRouter()
   const queryClient = useQueryClient()
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
@@ -41,6 +55,16 @@ export const TeamCard = ({ team }: TeamsCardProps) => {
     }
   )
 
+  const showMessageIcon = useMemo(() => {
+    const { userIds } = team
+
+    if (isEmpty(userIds) || isEmpty(currentRoleId)) {
+      return false
+    }
+
+    return userIds.some((id) => id === currentRoleId)
+  }, [team.userIds, currentRoleId])
+
   return (
     <Card
       avatar={team?.clubUrl}
@@ -48,9 +72,60 @@ export const TeamCard = ({ team }: TeamsCardProps) => {
       users={team.usernames}
       onClick={() => router.push(`/contacts/team/${team.teamId}`)}
       commonOptions={
-        <button type="button">
-          <ChervonRightIcon className="w-[25px] h-[25px] active:scale-125 duration-150" />
-        </button>
+        <div
+          onClick={(e) => {
+            e.stopPropagation()
+          }}
+          className="  flex gap-x-[16px]  "
+        >
+          {showMessageIcon && (
+            <button
+              className=" p-2"
+              type="button"
+              onClick={async () => {
+                const roomId = team.teamId
+                const roomExists = await findRoomById(team.teamId)
+                if (!roomExists) {
+                  const [, error] = await addTeamChatRoom(
+                    team.userIds,
+                    roomId,
+                    `${team.clubName} - ${team.teamName}`,
+                    team.teamImage,
+                    currentRoleId
+                  )
+                  if (error) {
+                    return
+                  }
+                } else {
+                  let memberIds = await getMemberIdsOfAChatRoom(team.teamId)
+                  if (!isEqualArraysNoOrder(memberIds, team.userIds)) {
+                    updateChatRoomMemberIds(team.teamId, team.userIds)
+                  }
+                }
+                if (typeof window !== 'undefined' && !!roomId) {
+                  window.open(getUrlChatFromChatRoomId(roomId), '_ blank')
+                }
+              }}
+            >
+              <svg
+                className="cursor-pointer  "
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z"
+                  fill="white"
+                />
+              </svg>
+            </button>
+          )}
+          <button type="button" className=" p-2">
+            <ChervonRightIcon className="w-[25px] h-[25px] active:scale-125 duration-150" />
+          </button>
+        </div>
       }
       dropdownOptions={
         HIGHEST_ROLE && (

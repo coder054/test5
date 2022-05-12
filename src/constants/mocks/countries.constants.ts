@@ -16,6 +16,15 @@ export const optionSweden = {
   phoneCode: '+46',
 }
 
+export interface RegionCode {
+  name: string
+  alpha2Code: string
+  alpha3Code: string
+  region: string
+  flag: string
+  phoneCode: string
+}
+
 export const COUNTRY_LIST = [
   {
     name: 'Afghanistan',

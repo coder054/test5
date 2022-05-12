@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { ChervonRightIcon } from 'src/components/icons'
 import { MemberType } from 'src/constants/types/member.types'
-import { useAuth } from 'src/modules/authentication/auth/AuthContext'
+import { getBioUrl } from 'src/utils/utils'
 import Card from '../card-template'
 
 type FanCardProps = {
@@ -10,7 +10,6 @@ type FanCardProps = {
 
 export const FanCard = ({ member }: FanCardProps) => {
   const router = useRouter()
-  const { currentRoleName } = useAuth()
   return (
     <Card
       name={member.fullName}
@@ -21,9 +20,12 @@ export const FanCard = ({ member }: FanCardProps) => {
       club={member.clubName}
       onClick={() =>
         router.push(
-          `/${currentRoleName.toLowerCase()}/${member.username}/${
-            member.fullName
-          }`
+          getBioUrl(
+            member.type,
+            member.username,
+            member.firstName,
+            member.lastName
+          )
         )
       }
       commonOptions={

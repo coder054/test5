@@ -2,7 +2,7 @@ import { notification } from 'antd'
 import cookie from 'cookie'
 import cookies from 'js-cookie'
 import jwtDecode from 'jwt-decode'
-import { get, isNaN, truncate } from 'lodash'
+import { chain, get, isEqual, isNaN, truncate } from 'lodash'
 import Resizer from 'react-image-file-resizer'
 import { AVATAR_DEFAULT } from 'src/constants/constants'
 import { axios } from './axios'
@@ -216,4 +216,33 @@ export const toFixedIfNecessary = (value, dp = 2) => {
     return value
   }
   return +parseFloat(value).toFixed(dp)
+}
+
+export const isEqualArraysNoOrder = (arr1: string[], arr2: string[]) => {
+  return isEqual(
+    chain(arr1).compact().uniq().sortBy().value(),
+    chain(arr2).compact().uniq().sortBy().value()
+  )
+}
+
+export const getBioUrl = (
+  role: string,
+  username: string,
+  firstName: string,
+  lastName: string
+) => {
+  const firstLastName =
+    `${firstName}.${lastName}`.replace(/\s/g, '').toLowerCase() || 'zporter'
+
+  return `/${
+    equalStr(role, 'PLAYER') ? 'player' : 'coach'
+  }/${username}/${firstLastName}`
+}
+
+export const getTeamUrl = (teamId: string) => {
+  return `/contacts/team/${teamId}`
+}
+
+export const getGroupUrl = (groupId: string) => {
+  return `/contacts/group/${groupId}`
 }

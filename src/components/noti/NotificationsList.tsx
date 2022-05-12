@@ -27,6 +27,7 @@ export interface INoti {
   notificationId: string
   teamId?: string
   groupId?: string
+  playerDiaryData?: any
 }
 
 export enum Body {
