@@ -12,6 +12,11 @@ export const dataModalResponseAskJoinGroupAtom = atom({})
 
 export const dataModalResponseAskJoinTeamAtom = atom({})
 export const dataModalResponseTeamTrainingAtom = atom({})
+export const dataModalResponseMatchAtom = atom<any>(null)
+// const [dataModalResponssMatch, setDataModalResponssMatch] = useAtom(
+//   dataModalResponseMatchAtom
+// )
+
 // const [dataModalResponseTeamTraining, setDataModalResponseTeamTraining] = useAtom(dataModalResponseTeamTrainingAtom)
 
 // const [dataModalResponseAskJoinTeam, setDataModalResponseAskJoinTeam] = useAtom(dataModalResponseAskJoinTeamAtom)

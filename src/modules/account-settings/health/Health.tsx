@@ -81,7 +81,7 @@ export const Health = () => {
             value={formValues?.weight}
             onChange={(e) => handleChange('weight', e.target.value)}
             InputProps={{
-              endAdornment: <InputAdornment position="end">cm</InputAdornment>,
+              endAdornment: <InputAdornment position="end">kg</InputAdornment>,
             }}
           />
           <MyInput

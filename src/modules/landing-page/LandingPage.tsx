@@ -52,7 +52,11 @@ export const Landing = () => {
     <div className="flex flex-col bg-white">
       <div
         className=" w-full h-screen bg-cover bg-no-repeat"
-        style={{ backgroundImage: 'url(/assets/landing-page/Landing-1.png)' }}
+        style={{
+          backgroundImage: isMobile
+            ? 'url(/assets/landing-page/Landing-1-min.png)'
+            : 'url(/assets/landing-page/Landing-1.png)',
+        }}
       >
         <div className="w-full h-[190px] bg-gradient-to-t from-white  absolute bottom-0 mobileM:hidden laptopM:block"></div>
         <div
@@ -65,7 +69,7 @@ export const Landing = () => {
         >
           <Logo />
           <div className="flex">
-            <Link href="signin">
+            <Link href="sign-in">
               <Button
                 text="Sign in"
                 type="button"
@@ -214,7 +218,7 @@ export const Landing = () => {
       </div>
       <div
         className={clsx(
-          'bg-landing-two bg-no-repeat bg-cover relative',
+          'mobileM:bg-landing-two-mb laptopM:bg-landing-two bg-no-repeat bg-cover relative',
           isMobile && 'h-[420px]',
           isDesktop && 'h-[530px]'
         )}
@@ -332,7 +336,7 @@ export const Landing = () => {
         </div>
         <div
           className={clsx(
-            'bg-landing-three bg-no-repeat bg-cover relative',
+            'mobileM:bg-landing-three-mb laptopM:bg-landing-three bg-no-repeat bg-cover relative',
             isDesktop && ' mx-auto h-[1450px]  flex flex-col items-center',
             isMobile && 'h-[850px]',
             isTablet && 'h-[550px]'

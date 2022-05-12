@@ -58,10 +58,9 @@ const PlayerDiary = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const { currentRoleName } = useAuth()
+  const [date, setDate] = useAtom(dateAtom)
   const [diary, setDiary] = useAtom(diaryAtom)
   const [submitForm, setSubmitForm] = useState<DiaryType>({})
-  // const [date, setDate] = useState<string | Date>(getToday())
-  const [date, setDate] = useAtom(dateAtom)
 
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [isHaveInjury, setIsHaveInjury] = useState<boolean>(false)

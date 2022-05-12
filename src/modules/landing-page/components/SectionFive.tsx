@@ -3,7 +3,7 @@ import { COMMENT_AVATAR_4 } from 'src/imports/images'
 
 export const SectionFive = () => {
   return (
-    <div className="bg-landing-five h-[560px] tabletM:h-[450px] bg-cover laptopM:bg-center mobileM:bg-right">
+    <div className="laptopM:bg-landing-five mobileM:bg-landing-five-mb h-[560px] tabletM:h-[450px] bg-cover laptopM:bg-center mobileM:bg-right">
       <div className="laptopM:w-[1320px] mx-auto h-full flex items-center justify-end tabletM:justify-center">
         <div className="flex flex-col laptopM:text-right laptopM:w-1/3 mobileM:text-center space-y-6">
           <p className="font-semibold  text-[14px] tracking-[2px]">

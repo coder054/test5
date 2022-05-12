@@ -37,6 +37,7 @@ import {
   dataModalResponseNotWantToBeDeletedFromTeamAtom,
   dataModalResponseTeamAtom,
   dataModalResponseTeamTrainingAtom,
+  dataModalResponseMatchAtom,
 } from 'src/atoms/notiAtoms'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import DiaryUpdate from 'src/modules/update-diary'
@@ -151,12 +152,12 @@ const UpdateDiaryButton = () => {
     openModalDiaryUpdateAtom
   )
   return (
-    <>
+    <div>
       <button
         onClick={() => setOpenModalDiaryUpdate(true)}
-        className="bg-[#4654EA] active:scale-110 duration-150 laptopM:py-2 mobileM:py-[4px] mobileM:px-[8px] laptopM:px-[22px] laptopM:rounded-[8px] mobileM:rounded-[4px] flex items-center laptopM:space-x-2 relative"
+        className="bg-[#4654EA] active:opacity-75 duration-150 laptopM:py-2 mobileM:py-[4px] mobileM:px-[8px] laptopM:px-[22px] laptopM:rounded-[8px] mobileM:rounded-[4px] flex items-center laptopM:space-x-2 relative"
       >
-        <span className="mobileM:hidden">
+        <span className="mobileM:hidden tabletM:block">
           <UpdateDiaryIcon />
         </span>
         <span className="text-white mobileM:text-[13px] laptopM:text-[14px] font-semibold">
@@ -165,7 +166,7 @@ const UpdateDiaryButton = () => {
       </button>
       <ModalMui
         sx={{
-          padding: 0,
+          p: { xl: 0, xs: 0 },
           top: '50%',
           width: isMobile ? '100%' : 800,
           height: isMobile ? '100%' : 'auto',
@@ -185,7 +186,7 @@ const UpdateDiaryButton = () => {
           <DiaryUpdate onClose={setOpenModalDiaryUpdate} />
         </div>
       </ModalMui>
-    </>
+    </div>
   )
 }
 
@@ -245,6 +246,7 @@ const NotificationsButton = () => {
       <ModalResponseAskJoinGroup />
       <ModalResponseAskJoinTeam />
       <ModalResponseTeamTraining />
+      <ModalResponseMatch />
       <Tooltip title="Notifications">
         <IconButton ref={anchorRef} sx={{ ml: 1 }} onClick={handleOpenPopover}>
           <Badge color="error" badgeContent={unread}>
@@ -519,7 +521,7 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
           <Box sx={{ flexGrow: 1 }} />
 
           {!authenticated ? (
-            <div className=" animate-appear  ">
+            <div className=" animate-appear flex ">
               <Link href="/sign-in">
                 <a>
                   <button
@@ -1451,30 +1453,134 @@ export const ModalResponseTeamTraining = (props) => {
           </a>
         </Link>
 
-        <Link href="/dashboard?d=overview">
-          <a className="w-full ">
-            <Button
-              onClick={async () => {
-                setDataModalResponseTeamTraining({})
+        <Button
+          onClick={async () => {
+            setDataModalResponseTeamTraining({})
 
-                //@ts-ignore: Unreachable code error
-                const { playerDiaryData }: { playerDiary: any } =
-                  dataModalResponseTeamTraining
+            //@ts-ignore: Unreachable code error
+            const { playerDiaryData }: { playerDiary: any } =
+              dataModalResponseTeamTraining
 
-                setOpenModalDiaryUpdate(true)
-                await wait(150)
-                setDate(new Date(playerDiaryData.updatedAt))
-                await wait(150)
-                setDiary(playerDiaryData)
-              }}
-              fullWidth
-              size="large"
-              variant="contained"
-            >
-              Yes
+            setOpenModalDiaryUpdate(true)
+            await wait(150)
+            setDate(new Date(playerDiaryData.updatedAt))
+            await wait(150)
+            setDiary(playerDiaryData)
+          }}
+          fullWidth
+          size="large"
+          variant="contained"
+        >
+          Yes
+        </Button>
+      </div>
+    </Dialog>
+  )
+}
+
+export const ModalResponseMatch = (props) => {
+  const [diary, setDiary] = useAtom(diaryAtom)
+  const [openModalDiaryUpdate, setOpenModalDiaryUpdate] = useAtom(
+    openModalDiaryUpdateAtom
+  )
+  const [date, setDate] = useAtom(dateAtom)
+
+  const [dataModalResponseMatch, setDataModalResponseMatch]: any = useAtom(
+    dataModalResponseMatchAtom
+  )
+  return (
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      onClose={() => {
+        setDataModalResponseMatch({})
+      }}
+      open={!isEmpty(dataModalResponseMatch)}
+    >
+      <Box
+        sx={{
+          alignItems: 'center',
+          backgroundColor: 'primary.main',
+          color: 'primary.contrastText',
+          display: 'flex',
+          justifyContent: 'space-between',
+          px: 3,
+          py: 2,
+        }}
+      >
+        <Typography variant="h6">Zporter</Typography>
+        <IconButton
+          color="inherit"
+          onClick={() => {
+            setDataModalResponseMatch({})
+          }}
+        >
+          <XIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      <DialogContent
+        sx={{
+          height: 500,
+        }}
+      >
+        {/*  */}
+
+        <img
+          //@ts-ignore: Unreachable code error
+          src={dataModalResponseMatch?.img}
+          className=" w-[320px] h-auto block mx-auto "
+          alt=""
+        />
+        <div className="h-[16px] "></div>
+        <div className="font-Inter text-center ">
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseMatch?.title}
+          </div>
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseMatch?.body}
+          </div>
+        </div>
+
+        {/*  */}
+      </DialogContent>
+
+      <div className="flex mt-4 px-[16px] xl:px-[24px] mb-[20px] gap-x-4 justify-between ">
+        <Link href="/dashboard?d=training">
+          <a
+            onClick={() => {
+              setDataModalResponseMatch({})
+            }}
+            className="w-full "
+          >
+            <Button fullWidth size="large" variant="outlined">
+              No
             </Button>
           </a>
         </Link>
+
+        <Button
+          onClick={async () => {
+            setDataModalResponseMatch({})
+
+            //@ts-ignore: Unreachable code error
+            const { playerDiaryData }: { playerDiary: any } =
+              dataModalResponseMatch
+
+            setOpenModalDiaryUpdate(true)
+            await wait(150)
+            setDate(new Date(playerDiaryData.updatedAt))
+            await wait(150)
+            setDiary(playerDiaryData)
+          }}
+          fullWidth
+          size="large"
+          variant="contained"
+        >
+          Yes
+        </Button>
       </div>
     </Dialog>
   )
