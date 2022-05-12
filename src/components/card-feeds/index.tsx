@@ -190,7 +190,7 @@ export const CardFeed = ({ card }: CardYourType) => {
         backdropFilter: 'blur(68px)',
         width: 'calc(100% - 32px)',
       }}
-      className="rounded-[8px] bg-[#202128cc] max-w-[500px] relative border border-green-600 "
+      className="rounded-[8px] bg-[#202128cc] max-w-[500px] relative"
     >
       <div className="flex px-5 items-center mb-5 relative">
         {card?.userInfo?.faceImage && (
