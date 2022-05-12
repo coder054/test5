@@ -91,7 +91,7 @@ export const SectionThree = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-landing-four w-full bg-cover bg-center mobileM:h-[700px] tabletM:h-[500px] relative">
+        <div className="bg-landing-four-mb w-full bg-cover bg-center mobileM:h-[700px] tabletM:h-[500px] relative">
           <div className="w-full h-[190px] bg-gradient-to-b from-white absolute top-0 z-10"></div>
           <div className="absolute w-full mobileM:top-[190px] mobileL:top-[180px] flex flex-col items-center z-20">
             <div
