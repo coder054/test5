@@ -518,7 +518,7 @@ export const DashboardNavbar: FC<DashboardNavbarProps> = (props) => {
           </IconButton>
           <Box sx={{ flexGrow: 1 }} />
 
-          {true ? (
+          {!authenticated ? (
             <div className=" animate-appear flex ">
               <Link href="/sign-in">
                 <a>
