@@ -1,17 +1,14 @@
 import {
   SvgClock,
   SvgComment,
-  SvgCopyLink,
   SvgFavorite,
   SvgSave,
   SvgShare,
-  SvgUnfollow,
 } from 'src/imports/svgs'
 import { Text } from '../Text'
 const cls = require('./card-yours.module.css')
 import { ReactElement, useState } from 'react'
 import { formatDistanceToNowStrict } from 'date-fns'
-import { ClickAwayListener } from '@mui/material'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
 import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
@@ -25,10 +22,12 @@ import { CardPlainPost } from './component/plain-post'
 import {
   club_transfer_histories,
   diaries,
-  MATCH,
+  personal_goals,
   plain_posts,
+  player_of_the_weeks,
   remind_update_diaries,
   shared_biographies,
+  shared_leaderboard,
   TRAINING,
 } from './constants'
 import { ListFriend } from './component/list-friend'
@@ -38,6 +37,10 @@ import dayjs from 'dayjs'
 import { CardDiaryMatch } from './component/diary-match'
 import { RemainDiaryUpdate } from './component/remain-diary-update'
 import { ClubTransferHistories } from './component/club-transfer-histories'
+import { SharedLeaderBoard } from './component/shared-leaderboard'
+import { PersonalGoals } from './component/personal_goals'
+import { PlayerOfTheWeek } from './component/player-of-the-week'
+import { OptionFeed } from './component/option-feed'
 
 interface CardYourType {
   card?: CardFeedType
@@ -47,7 +50,6 @@ export const CardFeed = ({ card }: CardYourType) => {
   const queryClient = useQueryClient()
   const [play, setPlay] = useState<boolean>(false)
   const [openOption, setOpenOption] = useState<boolean>(false)
-  const [openModalUnfollow, setOpenModalUnfollow] = useState<boolean>(false)
 
   const { isLoading: loadingSubscribe, mutate: subScribe } = useMutation(
     [QUERIES_FEED.FEED_SUBSCRIBE_PROVIDER],
@@ -123,9 +125,9 @@ export const CardFeed = ({ card }: CardYourType) => {
     }
   }
 
-  const handleUnfollow = () => {
-    setOpenModalUnfollow(true)
-  }
+  // const handleUnfollow = () => {
+  //   setOpenModalUnfollow(true)
+  // }
 
   // const handleConfirmUnfollow = () => {
   //   if (!card?.providerId) {
@@ -164,6 +166,18 @@ export const CardFeed = ({ card }: CardYourType) => {
       case club_transfer_histories: {
         return <ClubTransferHistories card={card} />
       }
+
+      case shared_leaderboard: {
+        return <SharedLeaderBoard card={card} />
+      }
+
+      case personal_goals: {
+        return <PersonalGoals card={card} />
+      }
+
+      case player_of_the_weeks: {
+        return <PlayerOfTheWeek card={card} />
+      }
     }
 
     return null
@@ -187,15 +201,33 @@ export const CardFeed = ({ card }: CardYourType) => {
           ></img>
         )}
 
+        {card?.typeOfPost === player_of_the_weeks &&
+          card?.bioInfo?.faceImageUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={card?.bioInfo?.faceImageUrl as string}
+              alt=""
+              className="w-[48px] h-[48px] object-cover mr-[12px] rounded-full"
+            ></img>
+          )}
+
         <div className=" ">
-          <Text name="body1" className="text-white ">
-            {`#${
-              card?.userInfo?.firstName + ' ' + card?.userInfo?.lastName || ''
-            }`}
-          </Text>
+          {card?.typeOfPost === player_of_the_weeks ? (
+            <Text name="body1" className="text-white ">
+              {`#${
+                card?.bioInfo?.firstName + ' ' + card?.bioInfo?.lastName || ''
+              }`}
+            </Text>
+          ) : (
+            <Text name="body1" className="text-white ">
+              {`#${
+                card?.userInfo?.firstName + ' ' + card?.userInfo?.lastName || ''
+              }`}
+            </Text>
+          )}
           <div className="text-Grey ">
             <SvgClock />
-            {card?.createdAt && (
+            {card?.createdAt && card?.typeOfPost !== player_of_the_weeks && (
               <Text name="Caption" className=" inline-block ">
                 {`${formatDistanceToNowStrict(card?.createdAt as number)} ${
                   card?.userInfo?.city ? '-' : ''
@@ -204,60 +236,34 @@ export const CardFeed = ({ card }: CardYourType) => {
                 } /${dayjs(card?.createdAt).format('YYYY')}`}
               </Text>
             )}
+
+            {card?.typeOfPost === shared_biographies && (
+              <Text name="Caption" className=" inline-block ">
+                {`${formatDistanceToNowStrict(
+                  card?.userInfo?.createdAt as number
+                )} ${card?.userInfo?.city ? '-' : ''} ${
+                  card?.userInfo?.birthCountry?.alpha2Code
+                }/${card?.userInfo?.city || ''} /${dayjs(
+                  card?.userInfo?.createdAt
+                ).format('YYYY')}`}
+              </Text>
+            )}
+            {card?.typeOfPost === player_of_the_weeks && (
+              <Text name="Caption" className=" inline-block ">
+                {formatDistanceToNowStrict(card?.createdAt as number)}
+              </Text>
+            )}
           </div>
         </div>
 
         <div className="spacer flex-grow "></div>
-
-        {card?.typeOfPost !== remind_update_diaries && (
-          <div onClick={handleOption}>
-            <svg
-              className="cursor-pointer"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6C10 7.1 10.9 8 12 8ZM12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10ZM12 16C10.9 16 10 16.9 10 18C10 19.1 10.9 20 12 20C13.1 20 14 19.1 14 18C14 16.9 13.1 16 12 16Z"
-                fill="white"
-              />
-            </svg>
-          </div>
-        )}
-
-        {openOption && (
-          <ClickAwayListener
-            onClickAway={() => {
-              setOpenOption(false)
-            }}
-          >
-            <div
-              className="w-[158px] absolute right-[8px] top-[34px] z-20 bg-[#484A4D] text-[16px] 
-               rounded-[7px]"
-            >
-              <div
-                className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
-                onClick={handleUnfollow}
-              >
-                <SvgUnfollow />{' '}
-                <span className="ml-[8px] text-[#D60C0C] font-bold">
-                  Unfollow
-                </span>
-              </div>
-              <div
-                className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
-                onClick={() => {
-                  // navigator.clipboard.writeText(card?.link as string)
-                  toast.success('Copy successfully!')
-                }}
-              >
-                <SvgCopyLink /> <span className="ml-[10px]">Copy link</span>
-              </div>
-            </div>
-          </ClickAwayListener>
-        )}
+        {console.log('card', card)}
+        <OptionFeed
+          userId={card?.userId}
+          type={card?.typeOfPost}
+          // link={card?}
+          reportUserName={card?.userInfo?.username}
+        />
       </div>
 
       {handleTypeOfPost(card?.typeOfPost, card?.typeOfDiary || '')}

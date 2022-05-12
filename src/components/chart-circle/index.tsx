@@ -1,6 +1,5 @@
 import type { ApexOptions } from 'apexcharts'
 import { Chart } from '../chart'
-import { isMobile, isTablet, isDesktop } from 'react-device-detect'
 import clsx from 'clsx'
 
 interface ChartCircleProps {

@@ -15,11 +15,11 @@ import { useRouter } from 'next/router'
 import toast from 'react-hot-toast'
 
 var settings = {
-  dots: true,
+  dots: false,
   arrows: true,
   infinite: false,
   speed: 500,
-  slidesToShow: 4,
+  slidesToShow: 5,
   slidesToScroll: 1,
   nextArrow: <SampleNextArrow />,
   prevArrow: <SamplePrevArrow />,
@@ -72,7 +72,7 @@ export const ListItemSlick = () => {
     <div className="w-full h-[88px] mb-6 bg-[#202128cc] rounded-[8px] ">
       <Slider {...settings}>
         {(dataProvider?.data || []).map((item: NewProviderType) => (
-          <div className="h-[88px] flex justify-between items-center ">
+          <div className="h-[88px] flex justify-center items-center">
             <div className="w-[100px] text-center truncate">
               <div
                 className={`w-[40px] h-[40px] mx-auto cursor-pointer ${
@@ -91,7 +91,7 @@ export const ListItemSlick = () => {
                   }}
                   src={item?.logo || ''}
                   className={`w-[40px] h-[40px] rounded-full mx-auto ${
-                    !item?.isFollowed ? 'opacity-40 absolute' : ''
+                    !item?.isFollowed ? 'opacity-20 absolute' : ''
                   }`}
                 />
                 {!item?.isFollowed && (

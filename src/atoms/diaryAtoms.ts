@@ -13,6 +13,5 @@ export const diaryAtom = atom<DiaryType>({
 export const openModalDiaryUpdateAtom = atom(false)
 export const dateAtom = atom<string | Date>(getToday())
 
-
 // const [openModalDiaryUpdate, setOpenModalDiaryUpdate] = useAtom(openModalDiaryUpdateAtom)
 // const [date, setDate] = useAtom(dateAtom)
