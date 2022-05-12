@@ -237,7 +237,7 @@ export const ItemNotification = ({
   const [, setDataModalResponseTeamTraining] = useAtom(
     dataModalResponseTeamTrainingAtom
   )
-  const [, setDataModalResponseMatch] : any = useAtom(dataModalResponseMatchAtom)
+  const [, setDataModalResponseMatch]: any = useAtom(dataModalResponseMatchAtom)
 
   // here render icon noti
   const renderIcon = () => {
@@ -386,6 +386,11 @@ export const ItemNotification = ({
 
       case NotificationType.ASK_JOIN_TEAM:
         return `#`
+        break
+
+      case NotificationType.COMMENT_POST:
+      case NotificationType.LIKE_POST:
+        return `/posts/${notification.postId}/${notification.typeOfPost}`
         break
 
       default:
@@ -538,6 +543,9 @@ export const ItemNotification = ({
                   senderId: notification.senderId,
                   playerDiaryData: notification.playerDiaryData,
                 })
+              } else if (
+                notification.notificationType === NotificationType.COMMENT_POST
+              ) {
               }
 
               if (
