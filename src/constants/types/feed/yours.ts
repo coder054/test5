@@ -143,6 +143,18 @@ export interface CardFeedType {
 
   transferId?: string
   transferInfo?: TransferInfoType
+  lastDateRange?: string
+  country?: string
+  category?: string
+  description?: string
+  progress?: number
+  wins?: number
+  sessions?: number
+  assists: number
+  hours: number
+  goals: number
+  title: string
+  ztar: number
 }
 
 export interface TransferInfoType {

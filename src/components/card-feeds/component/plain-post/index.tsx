@@ -30,7 +30,7 @@ export const CardPlainPost = ({ mediaLinks }: CardRssNewsProps) => {
     <Slider className="max-h-[195px]" {...settings}>
       {mediaLinks &&
         mediaLinks.map((item, index) => (
-          <div key={index} className="max-h-[195px] pr-[16px]">
+          <div key={index} className="max-h-[195px]">
             <div style={contentStyle} className="flex w-full">
               <div className={`${cls.image} flex-1`}>
                 {item.type === 'IMAGE' ? (
@@ -45,10 +45,15 @@ export const CardPlainPost = ({ mediaLinks }: CardRssNewsProps) => {
                   <div
                     className={`${
                       play ? '' : 'opacity-70'
-                    } w-[347px] max-h-[195px] object-fill cursor-pointer flex justify-between items-center relative`}
+                    } w-full h-[195px] object-cover cursor-pointer flex justify-between items-center relative`}
                     onClick={handlePlayVideo}
                   >
-                    <ReactPlayer url={item?.url} controls />
+                    <ReactPlayer
+                      url={item?.url}
+                      controls
+                      width={500}
+                      height={195}
+                    />
                   </div>
                 ) : null}
               </div>

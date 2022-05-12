@@ -12,7 +12,7 @@ import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
 
 export const TabNews = () => {
-  const [limit, setLimit] = useState<number>(12)
+  const [limit, setLimit] = useState<number>(8)
   const [sorted, setSorted] = useState<string>(DESC)
   const [startAfter, setStartAfter] = useState<number>(1)
   const { ref, inView } = useInView()
@@ -37,7 +37,7 @@ export const TabNews = () => {
     },
     {
       getNextPageParam: (lastPage, page) => {
-        if (lastPage.length === 12) {
+        if (lastPage.length === 8 || lastPage.length === 9) {
           return page.length + 1
         } else {
           return undefined

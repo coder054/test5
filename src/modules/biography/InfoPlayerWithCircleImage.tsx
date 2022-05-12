@@ -19,9 +19,11 @@ export const InfoPlayerWithCircleImage = ({
   currentRoleId,
   signupForm,
   feedPost,
+  countryFlagUrl,
 }: {
   dataBio: IBiographyPlayer
   currentRoleId?: string
+  countryFlagUrl?: string
   signupForm?: boolean
   feedPost?: boolean
 }) => {
@@ -131,11 +133,18 @@ export const InfoPlayerWithCircleImage = ({
             </div>
           </div>
 
-          <img
-            src={safeHttpImage(dataBio?.currentClubIconUrl)}
-            className="w-[24px] h-[24px] ml-auto rounded-full"
-            alt=""
-          />
+          <div>
+            <img
+              src={safeHttpImage(dataBio?.currentClubIconUrl)}
+              className="w-[24px] h-[24px] ml-auto rounded-full object-cover"
+              alt=""
+            />
+            {feedPost && (
+              <p className="text-[#A2A5AD] text-[12px] mt-[6px] float-right">
+                {dataBio?.contractedUntil}
+              </p>
+            )}
+          </div>
           <div className="h-[45px] ">
             <div className="text-white text-[18px] leading-[24px] text-right whitespace-nowrap ">
               <span className="inline-block mr-[2px] ">
@@ -266,11 +275,22 @@ export const InfoPlayerWithCircleImage = ({
             </div>
           </div>
 
-          <img
-            src={safeHttpImage(dataBio?.countryFlagUrl)}
-            className="w-[24px] h-[24px] mr-auto rounded-full"
-            alt=""
-          />
+          <div>
+            <img
+              src={
+                feedPost
+                  ? safeHttpImage(countryFlagUrl)
+                  : safeHttpImage(dataBio?.countryFlagUrl)
+              }
+              className="w-[24px] h-[24px] mr-auto rounded-full"
+              alt=""
+            />
+            {feedPost && (
+              <p className="text-[#A2A5AD] text-[12px] mt-[6px]">
+                {dataBio?.birthDay}
+              </p>
+            )}
+          </div>
           <div className="h-[45px] ">
             <div className="text-white text-[18px] leading-[24px] text-left">
               {dataBio?.height}cm
@@ -378,7 +398,7 @@ export const InfoPlayerWithCircleImage = ({
         )}
 
       {/* {(signupForm || feedPost) && dataBio?.summary && ( */}
-      {dataBio?.summary && (
+      {dataBio?.summary && !feedPost && (
         <div
           className={`mx-auto max-w-[466px] text-white text-[14px] leading-[22px] ${
             feedPost ? 'ml-[24px]' : ''

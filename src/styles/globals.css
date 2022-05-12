@@ -288,9 +288,9 @@
 }
 
 .slick-prev {
-  background-image: url(/feed/prev.svg) !important;
   left: unset !important;
   left: 12px !important;
+  margin-top: -74px !important;
 }
 
 .slick-list {
@@ -303,9 +303,9 @@
 }
 
 .slick-next {
-  background-image: url(/feed/next.svg) !important;
   left: unset !important;
   right: 12px !important;
+  margin-top: -74px !important;
 }
 
 .slick-dots {
@@ -313,7 +313,7 @@
 }
 
 .slick-list {
-  margin-left: 16px !important;
+  margin-left: 0px !important;
 }
 
 .slick-dots li button:before {
@@ -326,6 +326,10 @@
 
 .slick-track {
   height: 238px !important;
+}
+
+.slick-next:before {
+  display: none;
 }
 
 .react-tel-input > .special-label {

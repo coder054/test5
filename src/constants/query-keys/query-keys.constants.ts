@@ -55,6 +55,7 @@ export const QUERIES_FEED = {
   FEED_NEW_POST_ALL: 'new-post-all',
   FEED_GET_DIARY_BY_ID: 'feed-get-diary-by-id',
   FEED_NEW_POST_YOURS: 'new-post-yours',
+  FEED_NEW_POST_FAMILY: 'new-post-family',
   FEED_NEW_POST_OF_PROVIDER: 'new-post-of-provider',
   FEED_CREATE_PLAIN_POST: 'create-plain-post',
   FEED_SUBSCRIBE_PROVIDER: 'subscribe-provider',
@@ -62,6 +63,7 @@ export const QUERIES_FEED = {
   FEED_UNLIKE_POST: 'unlike-post',
   FEED_SAVE_POST: 'save-post',
   FEED_SHARED_BIOGRAPHY_POST: 'shared-biography-post',
+  FEED_PLAYER_OF_THE_WEEK: 'player-of-the-week',
 }
 
 export const QUERIES_SETTINGS = {
