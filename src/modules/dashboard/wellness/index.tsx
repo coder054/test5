@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from 'react-query'
+import { ButtonAddPopup } from 'src/components'
 import { DEFAULT_RANGE } from 'src/constants/mocks/common.constants'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { LastRangeDateType } from 'src/constants/types/dashboard/training.types'
@@ -47,6 +48,7 @@ const DashboardWellness = () => {
         </div>
         <DashboardDiaryUpdate />
       </div>
+      <ButtonAddPopup />
     </div>
   )
 }

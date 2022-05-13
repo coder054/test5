@@ -10,12 +10,15 @@ export const ResultMatch = ({ stat }: ResultMatchProps) => {
     <div className="w-full ">
       <div className="w-full h-[50px] bg-[#13161A] rounded-[8px] grid grid-cols-7 items-center">
         <div className="col-span-3 flex justify-center">
-          <span className="pl-[46px] w-[150px] flex flex-row-reverse">
+          <span
+            className="pl-[46px] w-[150px] flex flex-row-reverse truncate"
+            title={stat?.yourTeam?.clubName}
+          >
             {stat?.yourTeam?.clubName}
           </span>
           <img
             src={safeHttpImage(stat?.yourTeam?.clubLogo)}
-            className="w-[24px] h-[24px] rounded-full ml-[16px]"
+            className="w-[24px] h-[24px] rounded-full ml-[16px] object-cover"
           ></img>
         </div>
         <div className="col-span-1 flex items-center">
@@ -28,9 +31,12 @@ export const ResultMatch = ({ stat }: ResultMatchProps) => {
         <div className="col-span-3 flex justify-center">
           <img
             src={safeHttpImage(stat?.opponentClub?.logoUrl)}
-            className="w-[24px] h-[24px] rounded-full mr-[16px]"
+            className="w-[24px] h-[24px] rounded-full mr-[16px] object-cover"
           ></img>
-          <span className="pr-[46px] w-[150px]">
+          <span
+            className="pr-[46px] w-[150px] truncate"
+            title={stat?.opponentClub?.clubName}
+          >
             {stat?.opponentClub?.clubName}
           </span>
         </div>

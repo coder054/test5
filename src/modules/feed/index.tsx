@@ -5,6 +5,8 @@ import { TabAll } from './component/all'
 import { TabFamily } from './component/family'
 import { TabFriends } from './component/friends'
 import { TabNews } from './component/news'
+import { TabSaved } from './component/saved'
+import { TabTeammates } from './component/teammates'
 import { TabYours } from './component/yours'
 
 const tabs = [
@@ -46,8 +48,10 @@ const News = () => {
       {currentTab === 'all' && <TabAll />}
       {currentTab === 'news' && <TabNews />}
       {currentTab === 'friends' && <TabFriends />}
+      {currentTab === 'teammates' && <TabTeammates />}
       {currentTab === 'yours' && <TabYours />}
       {currentTab === 'family' && <TabFamily />}
+      {currentTab === 'saved' && <TabSaved />}
 
       <ButtonAddFeed />
     </div>

@@ -2,7 +2,7 @@ import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { dashboardTraining } from 'src/atoms/dashboardTrainingAtom'
-import { Loading } from 'src/components'
+import { ButtonAddPopup, Loading } from 'src/components'
 import { LastRangeDateType } from 'src/constants/types/dashboard/training.types'
 import { fetchTraining } from 'src/service/dashboard/training.service'
 import { PeriodFilter } from '../components/PeriodFilter'
@@ -44,6 +44,7 @@ const DashBoardTraining = () => {
           </div>
         </div>
       </div>
+      <ButtonAddPopup />
     </div>
   )
 }

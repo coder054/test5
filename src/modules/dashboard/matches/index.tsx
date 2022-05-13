@@ -1,6 +1,6 @@
 import { MenuItem } from '@mui/material'
 import { useState } from 'react'
-import { MyInput } from 'src/components'
+import { ButtonAddPopup, MyInput } from 'src/components'
 import { DEFAULT_RANGE } from 'src/constants/mocks/common.constants'
 import { MatchesTrainingType } from 'src/constants/types/dashboard/matches.types'
 import { LastRangeDateType } from 'src/constants/types/dashboard/training.types'
@@ -37,6 +37,7 @@ const DashboardMatches = () => {
         </div>
         <MatchUpdates range={range} />
       </div>
+      <ButtonAddPopup />
     </div>
   )
 }

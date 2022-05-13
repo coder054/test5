@@ -43,21 +43,21 @@ export const ButtonAddPopup = () => {
             <ClickAwayListener onClickAway={() => setAdd(true)}>
               <div className="w-full h-full bg-[#13161A] rounded-[7px]">
                 <div
-                  className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center"
+                  className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] hover:rounded-[7px] flex justify-between items-center"
                   onClick={() => {
                     setOpenModalDiaryUpdate(true)
                   }}
                 >
                   <p className="ml-[12px]">Diary update</p>
                 </div>
-                <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center ">
+                <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] hover:rounded-[7px] flex justify-between items-center ">
                   <p className="ml-[32px]">- Training update</p>
                 </div>
-                <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center ">
+                <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] hover:rounded-[7px] flex justify-between items-center ">
                   <p className="ml-[32px]">- Match update</p>
                 </div>
                 <div
-                  className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center "
+                  className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] hover:rounded-[7px] flex justify-between items-center "
                   onClick={() => {
                     setOpenModalNote(true)
                   }}
@@ -65,18 +65,15 @@ export const ButtonAddPopup = () => {
                   <p className="ml-[12px]">Development update</p>
                 </div>
                 <div
-                  className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center "
+                  className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] hover:rounded-[7px] flex justify-between items-center "
                   onClick={() => {
                     setOpenModalGoal(true)
                   }}
                 >
                   <p className="ml-[12px]">Goal update</p>
                 </div>
-                <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center ">
-                  <p className="ml-[12px]">Height & Weight update</p>
-                </div>
                 <div
-                  className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center "
+                  className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] hover:rounded-[7px] flex justify-between items-center "
                   onClick={() => {
                     setOpenModalHealth(true)
                   }}

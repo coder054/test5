@@ -1,3 +1,4 @@
+import { ClickAwayListener } from '@mui/material'
 import { Fragment, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
@@ -211,14 +212,16 @@ export const LeaderBoards = () => {
             }}
           >
             <PopupAdd>
-              <div className="w-full h-full bg-[#13161A] rounded-[7px]">
-                <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center">
-                  <p className="ml-[12px]">Share</p>
+              <ClickAwayListener onClickAway={() => setAdd(true)}>
+                <div className="w-full h-full bg-[#13161A] rounded-[7px]">
+                  <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center">
+                    <p className="ml-[12px]">Share</p>
+                  </div>
+                  <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center ">
+                    <p className="ml-[12px]">Add to your Feed</p>
+                  </div>
                 </div>
-                <div className="w-full h-[36px] cursor-pointer hover:bg-[#64748B] flex justify-between items-center ">
-                  <p className="ml-[12px]">Add to your Feed</p>
-                </div>
-              </div>
+              </ClickAwayListener>
             </PopupAdd>
           </div>
         )}

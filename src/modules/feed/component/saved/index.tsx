@@ -1,14 +1,14 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
-import { Loading } from 'src/components'
+import { CardNews, Loading } from 'src/components'
 import { CardFeed } from 'src/components/card-feeds'
 import { MiniLoading } from 'src/components/mini-loading'
-import { DESC } from 'src/constants/constants'
+import { ASC, DESC } from 'src/constants/constants'
 import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
 import { getListPosts } from 'src/service/feed/yours.service'
 
-export const TabAll = () => {
+export const TabSaved = () => {
   const [limit, setLimit] = useState<number>(8)
   const [sorted, setSorted] = useState<string>(DESC)
   const [startAfter, setStartAfter] = useState<number>(1)
@@ -20,14 +20,16 @@ export const TabAll = () => {
     isFetchingNextPage,
     fetchNextPage,
   } = useInfiniteQuery(
-    [QUERIES_FEED.FEED_NEW_POST_ALL],
+    [QUERIES_FEED.FEED_NEW_POST_SAVED],
     async ({ pageParam = startAfter }) => {
       const res = await getListPosts({
         limit: limit,
         startAfter: pageParam,
         sorted: sorted,
-        feedTab: 'all',
+        feedTab: 'saved',
       })
+
+      // console.log('data:', res.data[1])
 
       return res.data
     },
