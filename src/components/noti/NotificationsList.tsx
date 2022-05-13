@@ -28,6 +28,8 @@ export interface INoti {
   teamId?: string
   groupId?: string
   playerDiaryData?: any
+  postId?: string
+  typeOfPost?: string
 }
 
 export enum Body {

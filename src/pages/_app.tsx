@@ -1,4 +1,5 @@
 import type { EmotionCache } from '@emotion/cache'
+import { useState } from 'react'
 import { CacheProvider } from '@emotion/react'
 import { LocalizationProvider } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
@@ -12,7 +13,7 @@ import nProgress from 'nprogress'
 import type { FC } from 'react'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { Hydrate, QueryClient, QueryClientProvider } from 'react-query'
 import { Provider as ReduxProvider } from 'react-redux'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -47,15 +48,17 @@ Router.events.on('routeChangeComplete', nProgress.done)
 
 const clientSideEmotionCache = createEmotionCache()
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-    },
-  },
-})
-
 const App: FC<EnhancedAppProps> = (props) => {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+          },
+        },
+      })
+  )
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 
   const getLayout = Component.getLayout ?? ((page) => page)
@@ -82,56 +85,58 @@ const App: FC<EnhancedAppProps> = (props) => {
       <CacheProvider value={emotionCache}>
         <ReduxProvider store={store}>
           <QueryClientProvider client={queryClient}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-              <AuthProvider>
-                <QueryParamProvider>
-                  <SettingsProvider>
-                    <SettingsConsumer>
-                      {({ settings }) => (
-                        <ThemeProvider
-                          theme={createTheme({
-                            direction: settings.direction,
-                            responsiveFontSizes: settings.responsiveFontSizes,
-                            mode: settings.theme,
-                          })}
-                        >
-                          <RTL direction={settings.direction}>
-                            <CssBaseline />
-                            <Toaster position="top-center" />
-                            {/* <SettingsButton /> */}
-                            {/* {getLayout(<Component {...pageProps} />)} */}
-                            <AuthConsumer>
-                              {(auth) => {
-                                return !auth.initialized ? (
-                                  <SplashScreen />
-                                ) : (
-                                  <>
-                                    <InitFCM
-                                      token={auth.token}
-                                      currentRoleId={auth.currentRoleId}
-                                    ></InitFCM>
-                                    {getLayout(<Component {...pageProps} />)}
-                                  </>
-                                )
-                              }}
-                            </AuthConsumer>
-                            <ToastContainer
-                              position="top-right"
-                              autoClose={4000}
-                              hideProgressBar={false}
-                              newestOnTop={false}
-                              draggable={false}
-                              closeOnClick
-                              pauseOnHover
-                            />
-                          </RTL>
-                        </ThemeProvider>
-                      )}
-                    </SettingsConsumer>
-                  </SettingsProvider>
-                </QueryParamProvider>
-              </AuthProvider>
-            </LocalizationProvider>
+            <Hydrate state={pageProps.dehydratedState}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <AuthProvider>
+                  <QueryParamProvider>
+                    <SettingsProvider>
+                      <SettingsConsumer>
+                        {({ settings }) => (
+                          <ThemeProvider
+                            theme={createTheme({
+                              direction: settings.direction,
+                              responsiveFontSizes: settings.responsiveFontSizes,
+                              mode: settings.theme,
+                            })}
+                          >
+                            <RTL direction={settings.direction}>
+                              <CssBaseline />
+                              <Toaster position="top-center" />
+                              {/* <SettingsButton /> */}
+                              {/* {getLayout(<Component {...pageProps} />)} */}
+                              <AuthConsumer>
+                                {(auth) => {
+                                  return !auth.initialized ? (
+                                    <SplashScreen />
+                                  ) : (
+                                    <>
+                                      <InitFCM
+                                        token={auth.token}
+                                        currentRoleId={auth.currentRoleId}
+                                      ></InitFCM>
+                                      {getLayout(<Component {...pageProps} />)}
+                                    </>
+                                  )
+                                }}
+                              </AuthConsumer>
+                              <ToastContainer
+                                position="top-right"
+                                autoClose={4000}
+                                hideProgressBar={false}
+                                newestOnTop={false}
+                                draggable={false}
+                                closeOnClick
+                                pauseOnHover
+                              />
+                            </RTL>
+                          </ThemeProvider>
+                        )}
+                      </SettingsConsumer>
+                    </SettingsProvider>
+                  </QueryParamProvider>
+                </AuthProvider>
+              </LocalizationProvider>
+            </Hydrate>
           </QueryClientProvider>
         </ReduxProvider>
       </CacheProvider>
