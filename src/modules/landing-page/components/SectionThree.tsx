@@ -5,6 +5,7 @@ import { isDesktop, isMobile } from 'react-device-detect'
 import { MyButton } from 'src/components/MyButton'
 import { APP_FEATURE_3 } from 'src/constants/mocks/app-feature.constants'
 import { ARROW, IT_FREE } from 'src/imports/images'
+import { safeHttpImage } from 'src/utils/utils'
 import { AppFeature } from './AppFeature'
 
 export const SectionThree = () => {
@@ -17,11 +18,10 @@ export const SectionThree = () => {
       {isDesktop ? (
         <div className="relative">
           <img
-            src={
-              isMobile
-                ? '/assets/landing-page/Landing-4-min.png'
-                : '/assets/landing-page/Landing-4.png'
-            }
+            loading="lazy"
+            src={safeHttpImage(
+              'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-4-min.png?alt=media&token=54a92dc7-aa3d-4f8c-9bc0-98dc8f2c6123'
+            )}
             className={clsx('w-full')}
           />
           <div className="w-full h-[690px] bg-gradient-to-b from-white absolute top-0"></div>
