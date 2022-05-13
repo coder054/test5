@@ -55,6 +55,15 @@ export const TrainingAndMatches = ({
           </TooltipCustom>
         </div>
 
+        <div className="text-center">
+          <p className="text-[#09E099] text-[16px]">
+            Training makes you better!
+          </p>
+          <p className="text-[#A2A5AD]">
+            The Training Dashboard compares your Training hours with your peers.
+          </p>
+        </div>
+
         <div className="lg:flex w-full min-h-[200px] pt-[44px]">
           <div className="md:flex-1">
             <TrainingTotal />

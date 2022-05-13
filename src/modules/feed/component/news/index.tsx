@@ -67,15 +67,15 @@ export const TabNews = () => {
                 ))}
               </Fragment>
             ))}
-          <p
-            className="flex justify-center py-2 font-semibold text-[16px] h-[12px] text-center"
-            ref={ref}
-          >
-            {isFetchingNextPage ? (
-              <MiniLoading color="#09E099" size={24} />
-            ) : null}
-          </p>
         </div>
+        <p
+          className="flex justify-center py-2 font-semibold text-[16px] h-[12px] text-center"
+          ref={ref}
+        >
+          {isFetchingNextPage ? (
+            <MiniLoading color="#09E099" size={24} />
+          ) : null}
+        </p>
       </>
     </Loading>
   )

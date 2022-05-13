@@ -31,6 +31,7 @@ import { TopVideos } from 'src/modules/biography/TopVideos'
 import { axios } from 'src/utils/axios'
 import { parseCookies } from 'src/utils/utils'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
+import { ButtonAddBiography } from 'src/components/button-add-popup/button-add-biography'
 
 export const fetcherForEndpointFlip = async (url) => {
   if (url === null) return
@@ -320,6 +321,7 @@ const BioForPlayer = ({
 
             <TopVideos dataBio={dataBioPlayer} />
             {/*  */}
+            <ButtonAddBiography />
           </div>
         )}
       </div>
@@ -531,6 +533,7 @@ const BioForCoach = ({
 
             {/* <TopVideos dataBio={dataBioCoach} /> */}
             {/*  */}
+            <ButtonAddBiography />
           </div>
         )}
         {/* {currentTab === 'update' && <UpdateBiography playerId={playerId} />}

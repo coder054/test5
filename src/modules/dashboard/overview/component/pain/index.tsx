@@ -63,6 +63,15 @@ export const Pain = ({ lastDateRange, setCurrentTab }: PainProps) => {
           </TooltipCustom>
         </div>
 
+        <div className="text-center">
+          <p className="text-[#09E099] text-[16px]">Track your pains!</p>
+          <p className="text-[#A2A5AD]">Limit your injurys!</p>
+          <p className="text-[#A2A5AD]">
+            Track and compare your injurys with your peers.
+          </p>
+          <p className="text-[#A2A5AD]">To avoid future injurys.</p>
+        </div>
+
         <div className="w-[226px] mobileM:w-[265px] md:w-full overflow-y-auto xl:overflow-hidden">
           <div className="w-[428px] md:w-full">
             <div className="w-[428px] md:w-full flex justify-between mt-[46px]">

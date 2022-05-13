@@ -11,6 +11,8 @@ import { PopupConfirmDelete } from 'src/components/popup-confirm-delete'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { DevelopmentNoteType } from 'src/constants/types'
 import { emotionToNum, numToEmotion } from 'src/hooks/functionCommon'
+import { InfiniteScrollTeam } from 'src/modules/account-settings/football/components/InfiniteScrollTeam'
+import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import {
   createDevelopmentNote,
   removeDevelopmentNote,
@@ -44,6 +46,16 @@ interface FormValues {
   otherCommentsCoach: string
   date: string | Date
   progress: string
+  contractedClub?: {
+    arena: string
+    city: string
+    clubId: string
+    clubName: string
+    country: string
+    logoUrl: string
+    websiteUrl: any
+  }
+  currentTeams?: string
 }
 
 export const NoteModal = ({
@@ -58,6 +70,9 @@ export const NoteModal = ({
   const [medias, setMedias] = useState([])
   const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false)
   const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false)
+  const { currentRoleName, currentUser, userRoles } = useAuth()
+  // console.log('currentUser', currentUser)
+  // console.log('userRoles', userRoles)
 
   const [formValues, setFormValues] = useState<FormValues>({
     strengthPlayer: '',
@@ -78,6 +93,16 @@ export const NoteModal = ({
     otherCommentsCoach: '',
     date: dayjs(new Date()).format('YYYY/MM/DD'),
     progress: 'NORMAL',
+    contractedClub: {
+      arena: '',
+      city: '',
+      clubId: '',
+      clubName: '',
+      country: '',
+      logoUrl: '',
+      websiteUrl: null,
+    },
+    currentTeams: '',
   })
 
   const { isLoading: loadingCreate, mutate: createNote } = useMutation(
@@ -85,11 +110,9 @@ export const NoteModal = ({
     createDevelopmentNote,
     {
       onSuccess: (res) => {
-        if (res.status === 200) {
-          toast.success(res.data.message)
-          queryClient.invalidateQueries(QUERIES_DASHBOARD.NOTE_DATA)
-          setIsOpenModal(false)
-        }
+        toast.success('Create Development note successfully!')
+        setIsOpenModal && setIsOpenModal(false)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.NOTE_DATA)
       },
       onError: (err: any) => {
         if (err.response.status === 405) {
@@ -300,6 +323,10 @@ export const NoteModal = ({
     } catch (error) {}
   }
 
+  const setSelectedTeam = (value: any) => {
+    setFormValues((prev) => ({ ...prev, currentTeams: value }))
+  }
+
   return (
     <div className="p-[32px] w-full">
       <div
@@ -316,12 +343,23 @@ export const NoteModal = ({
           Development note
         </p>
         <div className="col-span-3 space-y-[24px]">
-          <MyDatePicker
-            label="Date"
-            value={formValues.date}
-            onChange={(e) => handleChangeForm('date', e)}
-            readOnly={update ? true : false}
-          />
+          {currentRoleName === 'PLAYER' ? (
+            <MyDatePicker
+              label="Date"
+              value={formValues.date}
+              onChange={(e) => handleChangeForm('date', e)}
+              readOnly={update ? true : false}
+            />
+          ) : (
+            <div>
+              <InfiniteScrollTeam
+                label="Your team(s)"
+                idClub={formValues.contractedClub.clubId}
+                handleSetTeam={(value) => setSelectedTeam(value)}
+                // item={item}
+              />
+            </div>
+          )}
 
           <div className="mb-[24px]">
             <MySlider
@@ -341,17 +379,14 @@ export const NoteModal = ({
             label="1.My strengths are..."
             onChange={(e) => handleChangeForm('strengthPlayer', e.target.value)}
             value={formValues.strengthPlayer}
+            disabled={currentRoleName === 'COACH'}
           />
-          {update ? (
-            <MyTextArea
-              placeholder="Coach comment"
-              onChange={(e) =>
-                handleChangeForm('strengthCoach', e.target.value)
-              }
-              value={formValues.strengthCoach}
-              disabled
-            />
-          ) : null}
+          <MyTextArea
+            placeholder="Coach comment"
+            onChange={(e) => handleChangeForm('strengthCoach', e.target.value)}
+            value={formValues.strengthCoach}
+            disabled={currentRoleName === 'PLAYER'}
+          />
 
           <MyTextArea
             label="2. My weaknesses are..."
@@ -359,17 +394,16 @@ export const NoteModal = ({
               handleChangeForm('weaknessesPlayer', e.target.value)
             }
             value={formValues.weaknessesPlayer}
+            disabled={currentRoleName === 'COACH'}
           />
-          {update ? (
-            <MyTextArea
-              label="Coach comment"
-              onChange={(e) =>
-                handleChangeForm('weaknessesCoach', e.target.value)
-              }
-              value={formValues.weaknessesCoach}
-              disabled
-            />
-          ) : null}
+          <MyTextArea
+            label="Coach comment"
+            onChange={(e) =>
+              handleChangeForm('weaknessesCoach', e.target.value)
+            }
+            value={formValues.weaknessesCoach}
+            disabled={currentRoleName === 'PLAYER'}
+          />
 
           <MyTextArea
             label="3. My best development skilllately are..."
@@ -377,17 +411,16 @@ export const NoteModal = ({
               handleChangeForm('bestDevelopSkillsPlayer', e.target.value)
             }
             value={formValues.bestDevelopSkillsPlayer}
+            disabled={currentRoleName === 'COACH'}
           />
-          {update ? (
-            <MyTextArea
-              label="Coach comment"
-              onChange={(e) =>
-                handleChangeForm('weaknessesCoach', e.target.value)
-              }
-              value={formValues.bestDevelopSkillsCoach}
-              disabled
-            />
-          ) : null}
+          <MyTextArea
+            label="Coach comment"
+            onChange={(e) =>
+              handleChangeForm('weaknessesCoach', e.target.value)
+            }
+            value={formValues.bestDevelopSkillsCoach}
+            disabled={currentRoleName === 'PLAYER'}
+          />
 
           <MyTextArea
             label="4. The skill i need to develop are..."
@@ -395,17 +428,16 @@ export const NoteModal = ({
               handleChangeForm('skillsNeededToDevelopPlayer', e.target.value)
             }
             value={formValues.skillsNeededToDevelopPlayer}
+            disabled={currentRoleName === 'COACH'}
           />
-          {update ? (
-            <MyTextArea
-              label="Coach comment"
-              onChange={(e) =>
-                handleChangeForm('skillsNeededToDevelopCoach', e.target.value)
-              }
-              value={formValues.skillsNeededToDevelopCoach}
-              disabled
-            />
-          ) : null}
+          <MyTextArea
+            label="Coach comment"
+            onChange={(e) =>
+              handleChangeForm('skillsNeededToDevelopCoach', e.target.value)
+            }
+            value={formValues.skillsNeededToDevelopCoach}
+            disabled={currentRoleName === 'PLAYER'}
+          />
 
           <MyTextArea
             label="5. The best way to develop are..."
@@ -413,17 +445,16 @@ export const NoteModal = ({
               handleChangeForm('bestWayToDevelopPlayer', e.target.value)
             }
             value={formValues.bestWayToDevelopPlayer}
+            disabled={currentRoleName === 'COACH'}
           />
-          {update ? (
-            <MyTextArea
-              label="Coach comment"
-              onChange={(e) =>
-                handleChangeForm('bestWayToDevelopCoach', e.target.value)
-              }
-              value={formValues.bestWayToDevelopCoach}
-              disabled
-            />
-          ) : null}
+          <MyTextArea
+            label="Coach comment"
+            onChange={(e) =>
+              handleChangeForm('bestWayToDevelopCoach', e.target.value)
+            }
+            value={formValues.bestWayToDevelopCoach}
+            disabled={currentRoleName === 'PLAYER'}
+          />
 
           <MyTextArea
             label="6. My short term goal are..."
@@ -431,17 +462,16 @@ export const NoteModal = ({
               handleChangeForm('shortTermGoalPlayer', e.target.value)
             }
             value={formValues.shortTermGoalPlayer}
+            disabled={currentRoleName === 'COACH'}
           />
-          {update ? (
-            <MyTextArea
-              label="Coach comment"
-              onChange={(e) =>
-                handleChangeForm('shortTermGoalCoach', e.target.value)
-              }
-              value={formValues.shortTermGoalCoach}
-              disabled
-            />
-          ) : null}
+          <MyTextArea
+            label="Coach comment"
+            onChange={(e) =>
+              handleChangeForm('shortTermGoalCoach', e.target.value)
+            }
+            value={formValues.shortTermGoalCoach}
+            disabled={currentRoleName === 'PLAYER'}
+          />
 
           <MyTextArea
             label="7. My long term goal are..."
@@ -449,17 +479,16 @@ export const NoteModal = ({
               handleChangeForm('longTermGoalPlayer', e.target.value)
             }
             value={formValues.longTermGoalPlayer}
+            disabled={currentRoleName === 'COACH'}
           />
-          {update ? (
-            <MyTextArea
-              label="Coach comment"
-              onChange={(e) =>
-                handleChangeForm('longTermGoalCoach', e.target.value)
-              }
-              value={formValues.longTermGoalCoach}
-              disabled
-            />
-          ) : null}
+          <MyTextArea
+            label="Coach comment"
+            onChange={(e) =>
+              handleChangeForm('longTermGoalCoach', e.target.value)
+            }
+            value={formValues.longTermGoalCoach}
+            disabled={currentRoleName === 'PLAYER'}
+          />
 
           <MyTextArea
             label="8. My other comment are..."
@@ -467,17 +496,16 @@ export const NoteModal = ({
               handleChangeForm('otherCommentsPlayer', e.target.value)
             }
             value={formValues.otherCommentsPlayer}
+            disabled={currentRoleName === 'COACH'}
           />
-          {update ? (
-            <MyTextArea
-              label="Coach comment"
-              onChange={(e) =>
-                handleChangeForm('otherCommentsCoach', e.target.value)
-              }
-              value={formValues.otherCommentsCoach}
-              disabled
-            />
-          ) : null}
+          <MyTextArea
+            label="Coach comment"
+            onChange={(e) =>
+              handleChangeForm('otherCommentsCoach', e.target.value)
+            }
+            value={formValues.otherCommentsCoach}
+            disabled={currentRoleName === 'PLAYER'}
+          />
 
           <div className="w-full flex mt-[24px]">
             <div className="flex-1 " onClick={handleSave}>

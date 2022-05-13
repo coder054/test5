@@ -29,7 +29,7 @@ export const TabFamily = () => {
         feedTab: 'family',
       })
 
-      console.log('data:', res.data)
+      // console.log('data:', res.data)
 
       return res.data
     },
@@ -52,17 +52,19 @@ export const TabFamily = () => {
 
   return (
     <Loading isLoading={loadingNews}>
-      <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-10 pt-[12px]">
-        {dataNews?.pages &&
-          (dataNews?.pages || [])?.map((page, indexPage) => (
-            <Fragment>
-              {(page || []).map((item, index) => (
-                <div key={index} className="mb-[24px] md:mb-[0px]">
-                  <CardFeed card={item} />
-                </div>
-              ))}
-            </Fragment>
-          ))}
+      <>
+        <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-10 pt-[12px]">
+          {dataNews?.pages &&
+            (dataNews?.pages || [])?.map((page, indexPage) => (
+              <Fragment>
+                {(page || []).map((item, index) => (
+                  <div key={index} className="mb-[24px] md:mb-[0px]">
+                    <CardFeed card={item} />
+                  </div>
+                ))}
+              </Fragment>
+            ))}
+        </div>
         <div className="w-full">
           <p
             className="flex justify-center py-2 font-semibold text-[16px] w-[36px] h-[36px] text-center mx-auto"
@@ -73,7 +75,7 @@ export const TabFamily = () => {
             ) : null}
           </p>
         </div>
-      </div>
+      </>
     </Loading>
   )
 }
