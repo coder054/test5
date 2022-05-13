@@ -36,6 +36,7 @@ import {
   PLAYER_3,
   TEAM,
 } from 'src/imports/images'
+import { safeHttpImage } from 'src/utils/utils'
 import { AppFeature } from './components/AppFeature'
 import { Footer } from './components/Footer'
 import { SectionFive } from './components/SectionFive'
@@ -53,9 +54,9 @@ export const Landing = () => {
       <div
         className=" w-full h-screen bg-cover bg-no-repeat"
         style={{
-          backgroundImage: isMobile
-            ? 'url(/assets/landing-page/Landing-1-min.png)'
-            : 'url(/assets/landing-page/Landing-1.png)',
+          backgroundImage: `url(${safeHttpImage(
+            'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-1-min.png?alt=media&token=c3d7fbce-e308-4f30-ad24-e9319ac136f3'
+          )})`,
         }}
       >
         <div className="w-full h-[190px] bg-gradient-to-t from-white  absolute bottom-0 mobileM:hidden laptopM:block"></div>
@@ -101,11 +102,7 @@ export const Landing = () => {
             In our vision to digitize and make youth sports smarter and
             healthier. Zporter is now launching v.1 of our free software as a
             service via apps- and web, to entertain, grow and empower (future)
-            football starz in a smarter and healthier way.<br></br> That means
-            we take away: <br></br>. Just as we intend to help their Coaches,
-            Agents, PT’s, Friends, Fans and Family members to support them
-            better in their most important youth football years.<br></br> And
-            adds …in a smarter and healthier way.
+            football starz in a smarter and healthier way.<br></br>
           </p>
           <p
             className={clsx(
@@ -217,8 +214,13 @@ export const Landing = () => {
         </div>
       </div>
       <div
+        style={{
+          backgroundImage: `url(${safeHttpImage(
+            'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-2-min.png?alt=media&token=a52d81ab-bac5-4b19-a36c-ba2c5fb90b01'
+          )})`,
+        }}
         className={clsx(
-          'mobileM:bg-landing-two-mb laptopM:bg-landing-two bg-no-repeat bg-cover relative',
+          ' bg-no-repeat bg-cover relative',
           isMobile && 'h-[420px]',
           isDesktop && 'h-[530px]'
         )}
@@ -335,8 +337,13 @@ export const Landing = () => {
           </div>
         </div>
         <div
+          style={{
+            backgroundImage: `url(${safeHttpImage(
+              'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-3-min.png?alt=media&token=f8cf3ef2-0436-44ef-b18a-c13831cf01ad'
+            )})`,
+          }}
           className={clsx(
-            'mobileM:bg-landing-three-mb laptopM:bg-landing-three bg-no-repeat bg-cover relative',
+            ' bg-no-repeat bg-cover relative',
             isDesktop && ' mx-auto h-[1450px]  flex flex-col items-center',
             isMobile && 'h-[850px]',
             isTablet && 'h-[550px]'
