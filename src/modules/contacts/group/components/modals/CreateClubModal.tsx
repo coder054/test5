@@ -6,7 +6,7 @@ import { Button } from 'src/components/Button'
 import { CustomUploadImage } from 'src/components/custom-upload-image'
 import { XIcon } from 'src/components/icons'
 import { ModalMui } from 'src/components/ModalMui'
-import { QUERIES_CONTACTS } from 'src/constants/query-keys/query-keys.constants'
+import { useIPGeolocation } from 'src/hooks/useIPGeolocation'
 import { createClub, NewClubType } from 'src/service/contacts/group.service'
 
 type CreateGroupClubProps = {
@@ -16,6 +16,9 @@ type CreateGroupClubProps = {
 export default function CreateClubModal({ isClose }: CreateGroupClubProps) {
   const queryClient = useQueryClient()
   const [isOpen, setIsOpen] = useState<boolean>(true)
+
+  const data = useIPGeolocation()
+
   const [formValues, setFormValues] = useState<NewClubType>({
     clubName: '',
     logoUrl: '',
@@ -25,6 +28,14 @@ export default function CreateClubModal({ isClose }: CreateGroupClubProps) {
     arena: '',
     websiteUrl: '',
   })
+
+  useEffect(() => {
+    setFormValues((prev) => ({
+      ...prev,
+      country: data?.country,
+      city: data?.regionName,
+    }))
+  }, [data])
 
   const { mutate: mutateCreate, isLoading: isCreating } = useMutation(
     createClub,
@@ -100,12 +111,14 @@ export default function CreateClubModal({ isClose }: CreateGroupClubProps) {
           </div>
           <MyInput
             label="Country"
+            value={formValues.country || ''}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleChangeForm('country', e.target.value)
             }
           />
           <MyInput
             label="City"
+            value={formValues.city || ''}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               handleChangeForm('city', e.target.value)
             }
