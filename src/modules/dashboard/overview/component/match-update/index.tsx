@@ -89,6 +89,15 @@ export const MatchUpdates = ({
           </TooltipCustom>
         </div>
 
+        <div className="text-center">
+          <p className="text-[#09E099] text-[16px]">
+            Matches are the best training!
+          </p>
+          <p className="text-[#A2A5AD]">
+            The matches Dashboard compares yours Match facts with your peers.
+          </p>
+        </div>
+
         <div className="w-full mt-[8px]">
           <table className="w-full p-[6px] text-[12px] md:text-[14px]">
             <tr className="bg-[#13161A] text-[#A2A5AD] w-full h-[34px]">

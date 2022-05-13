@@ -158,7 +158,7 @@ export const Health = () => {
         className={`${cls.item} col-span-12 lg:col-span-7 h-[500px] p-[16px] md:p-[32px]`}
       >
         <div className="text-center text-[#A2A5AD]">
-          <p>Body height updates</p>
+          <p className="text-[#09E099]">Body height updates</p>
           <p>
             +0 cm since last time. Your height are 1% shorter to your peers and
             84% of your target.

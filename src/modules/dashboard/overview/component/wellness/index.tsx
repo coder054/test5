@@ -231,6 +231,13 @@ export const Wellness = ({ lastDateRange, setCurrentTab }: WellnessProps) => {
         </div>
       </div>
 
+      <div className="text-center">
+        <p className="text-[#09E099] text-[16px]">How are you?</p>
+        <p className="text-[#A2A5AD]">
+          The energy Dashboard gives you a good summary how you feel in general.
+        </p>
+      </div>
+
       <div className="w-full h-[400px] relative">
         <p className="text-[#A2A5AD] text-[12px] absolute top-[24px]">
           Very good
