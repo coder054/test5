@@ -155,11 +155,18 @@ export const Health = () => {
       </div>
 
       <div
-        className={`${cls.item} col-span-12 lg:col-span-7 h-[460px] p-[16px] md:p-[32px]`}
+        className={`${cls.item} col-span-12 lg:col-span-7 h-[500px] p-[16px] md:p-[32px]`}
       >
+        <div className="text-center text-[#A2A5AD]">
+          <p>Body height updates</p>
+          <p>
+            +0 cm since last time. Your height are 1% shorter to your peers and
+            84% of your target.
+          </p>
+        </div>
         <Loading isLoading={loading}>
           <div className="w-full h-[400px] relative">
-            <p className="text-[#A2A5AD] text-[12px] absolute top-[24px]">20</p>
+            <p className="text-[#A2A5AD] text-[12px] absolute top-[12px]">20</p>
             <div
               className={`${cls.borderLine} absolute w-full top-[186px]`}
             ></div>

@@ -1,5 +1,5 @@
 export type DashboardUpdatesType = {
-  createdAt: number
+  createdAt?: number
   training: {
     technics: number
     hoursOfPractice: number
@@ -9,6 +9,7 @@ export type DashboardUpdatesType = {
     typeOfTraining: string
     physics: number
     tactics: number
+    trainingMedia: string[]
   }
   diaryId: string
 }

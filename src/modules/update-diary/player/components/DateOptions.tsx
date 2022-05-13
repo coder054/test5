@@ -3,7 +3,7 @@ import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
-import { MyDatePicker, MyInput } from 'src/components'
+import { MyDatePicker } from 'src/components'
 import { DashboardUpdatesType } from 'src/constants/types/dashboard/training.types'
 import { DiaryType } from 'src/constants/types/diary.types'
 import {

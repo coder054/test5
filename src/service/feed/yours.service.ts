@@ -1,5 +1,6 @@
 import {
   API_CRM_CREATE_SUPPORT_TICKET,
+  API_GET_LIST_COMMENTS,
   API_GET_LIST_POSTS,
 } from 'src/constants/api.constants'
 import { axios } from 'src/utils/axios'
@@ -42,4 +43,22 @@ export const crmCreateSupportTicket = async (body: {
   content: string
 }) => {
   return axios.post(API_CRM_CREATE_SUPPORT_TICKET, body)
+}
+
+export const getListComment = async ({
+  limit,
+  postId,
+  typeOfPost,
+}: {
+  limit: number
+  postId: string
+  typeOfPost: string
+}) => {
+  return axios.get(
+    toQueryString(API_GET_LIST_COMMENTS, {
+      limit: limit,
+      postId: postId,
+      typeOfPost: typeOfPost,
+    })
+  )
 }

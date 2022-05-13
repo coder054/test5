@@ -53,7 +53,6 @@ export const InjuryReport = ({ onChange, diaryUpdate }: InjuryReportProps) => {
   const [side, setSide] = useState<boolean>(true)
   const [response, setResponse] = useState<InjuryType[]>([])
   const [formValues, setFormValues] = useState<InjuryType>(INITIAL_FORM)
-  console.log('FORM :', formValues)
   const [spot, setSpot] = useState<PointsType>({
     x: null,
     y: null,

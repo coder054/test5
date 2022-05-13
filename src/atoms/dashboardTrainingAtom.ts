@@ -66,21 +66,21 @@ export const dashboardTraining = atom<DashboardTrainingType>({
   },
 })
 
-export const dashboardTrainingUpdates = atom<DashboardUpdatesType[]>([
-  {
-    createdAt: 0,
-    training: {
-      technics: 0,
-      hoursOfPractice: 0,
-      practiceTags: [''],
-      mental: 0,
-      physicallyStrain: '',
-      typeOfTraining: '',
-      physics: 0,
-      tactics: 0,
-    },
-    diaryId: '',
-  },
-])
+// export const dashboardTrainingUpdates = atom<DashboardUpdatesType[]>([
+//   {
+//     createdAt: 0,
+//     training: {
+//       technics: 0,
+//       hoursOfPractice: 0,
+//       practiceTags: [''],
+//       mental: 0,
+//       physicallyStrain: '',
+//       typeOfTraining: '',
+//       physics: 0,
+//       tactics: 0,
+//     },
+//     diaryId: '',
+//   },
+// ])
 
 export const dashboardTags = atom<string[]>([''])

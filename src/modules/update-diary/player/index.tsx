@@ -53,6 +53,8 @@ type DiaryUpdateProps = {
 }
 
 const PlayerDiary = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
+  console.log('selected', selected)
+
   const router = useRouter()
   const queryClient = useQueryClient()
   const { currentRoleName } = useAuth()

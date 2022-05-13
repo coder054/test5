@@ -73,3 +73,7 @@ export const QUERIES_SETTINGS = {
 export const QUERIES_CLUBS = {
   CLUBS: 'clubs',
 }
+
+export const QUERIES_COMMENTS = {
+  COMMENT: 'comments',
+}

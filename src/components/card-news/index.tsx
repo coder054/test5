@@ -146,7 +146,6 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
         className={`${cls.lineClamp} text-white mb-[25px] px-5 mt-[20px]`}
         dangerouslySetInnerHTML={{ __html: card?.excerptText as string }}
       ></p>
-      {console.log('card', card)}
       <div className="flex px-5">
         <div className="flex-1 float-left ">
           <div className="flex float-left">

@@ -19,6 +19,8 @@ import { subscribeProvider } from 'src/service/feed/news.service'
 import { remind_update_diaries, rss_news, zporter_news } from '../../constants'
 import { ModalReport } from './modal-report'
 import SimpleBar from 'simplebar-react'
+import { CardFeedType } from 'src/constants/types/feed/yours'
+import { DashboardUpdatesType } from 'src/constants/types/dashboard/training.types'
 
 interface OptionFeedType {
   userId?: string
@@ -26,6 +28,7 @@ interface OptionFeedType {
   providerId?: string
   link?: string
   reportUserName?: string
+  card?: CardFeedType
 }
 
 export const OptionFeed = ({
@@ -34,10 +37,10 @@ export const OptionFeed = ({
   providerId,
   link,
   reportUserName,
+  card,
 }: OptionFeedType) => {
   const { currentRoleId } = useAuth()
   const queryClient = useQueryClient()
-
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [openModalEdit, setOpenModalEdit] = useState<boolean>(false)
   const [openModalDelete, setOpenModalDelete] = useState<boolean>(false)
@@ -211,7 +214,16 @@ export const OptionFeed = ({
         onSubmit={handleConfirmUnfollow}
       />
       {/* report */}
-      <ModalMui isOpen={openModalReport} onClose={setOpenModalReport}>
+      <ModalMui
+        sx={{
+          padding: 0,
+          top: '50%',
+          width: isMobile ? '100%' : 600,
+          overflow: 'auto',
+        }}
+        isOpen={openModalReport}
+        onClose={setOpenModalReport}
+      >
         <ModalReport
           setOpenModalReport={setOpenModalReport}
           reportUserName={reportUserName}
@@ -229,7 +241,6 @@ export const OptionFeed = ({
         isOpen={openModalEdit}
         onClose={setOpenModalEdit}
       >
-        {/* @ts-ignore: Unreachable code error */}
         <SimpleBar style={{ maxHeight: 850 }}>
           <div className="relative">
             <button
@@ -239,7 +250,15 @@ export const OptionFeed = ({
             >
               <XIcon />
             </button>
-            <DiaryUpdate />
+            <DiaryUpdate
+              selected={
+                {
+                  createdAt: card?.createdAt,
+                  training: card?.training,
+                  diaryId: card?.postId,
+                } as DashboardUpdatesType
+              }
+            />
           </div>
         </SimpleBar>
       </ModalMui>
