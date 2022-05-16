@@ -36,6 +36,7 @@ import { store } from '../store'
 import '../styles/globals_compiled.css'
 import { createTheme } from '../theme'
 import { createEmotionCache } from '../utils/create-emotion-cache'
+import { get, isEmpty } from 'lodash'
 
 type EnhancedAppProps = AppProps & {
   Component: NextPage
@@ -91,46 +92,55 @@ const App: FC<EnhancedAppProps> = (props) => {
                   <QueryParamProvider>
                     <SettingsProvider>
                       <SettingsConsumer>
-                        {({ settings }) => (
-                          <ThemeProvider
-                            theme={createTheme({
-                              direction: settings.direction,
-                              responsiveFontSizes: settings.responsiveFontSizes,
-                              mode: settings.theme,
-                            })}
-                          >
-                            <RTL direction={settings.direction}>
-                              <CssBaseline />
-                              <Toaster position="top-center" />
-                              {/* <SettingsButton /> */}
-                              {/* {getLayout(<Component {...pageProps} />)} */}
-                              <AuthConsumer>
-                                {(auth) => {
-                                  return !auth.initialized ? (
-                                    <SplashScreen />
-                                  ) : (
-                                    <>
-                                      <InitFCM
-                                        token={auth.token}
-                                        currentRoleId={auth.currentRoleId}
-                                      ></InitFCM>
-                                      {getLayout(<Component {...pageProps} />)}
-                                    </>
-                                  )
-                                }}
-                              </AuthConsumer>
-                              <ToastContainer
-                                position="top-right"
-                                autoClose={4000}
-                                hideProgressBar={false}
-                                newestOnTop={false}
-                                draggable={false}
-                                closeOnClick
-                                pauseOnHover
-                              />
-                            </RTL>
-                          </ThemeProvider>
-                        )}
+                        {(data) => {
+                          const settings: any = isEmpty(get(data, 'settings'))
+                            ? {}
+                            : get(data, 'settings')
+
+                          return (
+                            <ThemeProvider
+                              theme={createTheme({
+                                direction: settings.direction,
+                                responsiveFontSizes:
+                                  settings.responsiveFontSizes,
+                                mode: settings.theme,
+                              })}
+                            >
+                              <RTL direction={settings.direction}>
+                                <CssBaseline />
+                                <Toaster position="top-center" />
+                                {/* <SettingsButton /> */}
+                                {/* {getLayout(<Component {...pageProps} />)} */}
+                                <AuthConsumer>
+                                  {(auth) => {
+                                    return !auth.initialized ? (
+                                      <SplashScreen />
+                                    ) : (
+                                      <>
+                                        <InitFCM
+                                          token={auth.token}
+                                          currentRoleId={auth.currentRoleId}
+                                        ></InitFCM>
+                                        {getLayout(
+                                          <Component {...pageProps} />
+                                        )}
+                                      </>
+                                    )
+                                  }}
+                                </AuthConsumer>
+                                <ToastContainer
+                                  position="top-right"
+                                  autoClose={4000}
+                                  hideProgressBar={false}
+                                  newestOnTop={false}
+                                  draggable={false}
+                                  closeOnClick
+                                  pauseOnHover
+                                />
+                              </RTL>
+                            </ThemeProvider>
+                          )
+                        }}
                       </SettingsConsumer>
                     </SettingsProvider>
                   </QueryParamProvider>

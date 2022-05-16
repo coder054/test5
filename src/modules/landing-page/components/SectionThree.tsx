@@ -5,23 +5,26 @@ import { isDesktop, isMobile } from 'react-device-detect'
 import { MyButton } from 'src/components/MyButton'
 import { APP_FEATURE_3 } from 'src/constants/mocks/app-feature.constants'
 import { ARROW, IT_FREE } from 'src/imports/images'
+import { safeHttpImage } from 'src/utils/utils'
 import { AppFeature } from './AppFeature'
 
 export const SectionThree = () => {
   const router = useRouter()
-  const handleNavigate = () => {
-    router.push('signup')
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }
   return (
     <>
       {isDesktop ? (
         <div className="relative">
           <img
-            src={
-              isMobile
-                ? '/assets/landing-page/Landing-4-min.png'
-                : '/assets/landing-page/Landing-4.png'
-            }
+            loading="lazy"
+            src={safeHttpImage(
+              'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-4-min.png?alt=media&token=54a92dc7-aa3d-4f8c-9bc0-98dc8f2c6123'
+            )}
             className={clsx('w-full')}
           />
           <div className="w-full h-[690px] bg-gradient-to-b from-white absolute top-0"></div>
@@ -29,7 +32,7 @@ export const SectionThree = () => {
           <div className="absolute laptopM:top-36 2xl:top-52 w-full flex flex-col items-center">
             <div
               className={clsx(
-                'relative h-[120px] flex justify-center items-center w-[390px]'
+                'relative h-[120px] flex justify-center items-center w-[390px] z-50'
               )}
             >
               <div className="absolute -right-[40px]">
@@ -41,9 +44,9 @@ export const SectionThree = () => {
                 </span>
               </div>
               <MyButton
-                onClick={handleNavigate}
+                onClick={scrollToTop}
                 type="button"
-                label="Sign up"
+                label="Download"
                 className={clsx('w-[220px]')}
               />
             </div>
@@ -80,6 +83,7 @@ export const SectionThree = () => {
             >
               {APP_FEATURE_3.map((app) => (
                 <AppFeature
+                  key={app.title}
                   titleColor="text-white"
                   contentColor="text-white"
                   icon={app.icon}
@@ -91,7 +95,14 @@ export const SectionThree = () => {
           </div>
         </div>
       ) : (
-        <div className="bg-landing-four-mb w-full bg-cover bg-center mobileM:h-[700px] tabletM:h-[500px] relative">
+        <div
+          style={{
+            backgroundImage: safeHttpImage(
+              'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-4-min.png?alt=media&token=54a92dc7-aa3d-4f8c-9bc0-98dc8f2c6123'
+            ),
+          }}
+          className="w-full bg-cover bg-center mobileM:h-[700px] tabletM:h-[500px] relative"
+        >
           <div className="w-full h-[190px] bg-gradient-to-b from-white absolute top-0 z-10"></div>
           <div className="absolute w-full mobileM:top-[190px] mobileL:top-[180px] flex flex-col items-center z-20">
             <div
@@ -101,6 +112,7 @@ export const SectionThree = () => {
             >
               {APP_FEATURE_3.map((app) => (
                 <AppFeature
+                  key={app.title}
                   titleColor="text-white"
                   contentColor="text-white"
                   icon={app.icon}

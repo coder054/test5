@@ -36,6 +36,7 @@ import {
   PLAYER_3,
   TEAM,
 } from 'src/imports/images'
+import { safeHttpImage } from 'src/utils/utils'
 import { AppFeature } from './components/AppFeature'
 import { Footer } from './components/Footer'
 import { SectionFive } from './components/SectionFive'
@@ -44,8 +45,12 @@ import { SectionThree } from './components/SectionThree'
 
 export const Landing = () => {
   const router = useRouter()
-  const handleNavigate = () => {
-    router.push('signup')
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }
 
   return (
@@ -53,9 +58,9 @@ export const Landing = () => {
       <div
         className=" w-full h-screen bg-cover bg-no-repeat"
         style={{
-          backgroundImage: isMobile
-            ? 'url(/assets/landing-page/Landing-1-min.png)'
-            : 'url(/assets/landing-page/Landing-1.png)',
+          backgroundImage: `url(${safeHttpImage(
+            'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-1-min.png?alt=media&token=c3d7fbce-e308-4f30-ad24-e9319ac136f3'
+          )})`,
         }}
       >
         <div className="w-full h-[190px] bg-gradient-to-t from-white  absolute bottom-0 mobileM:hidden laptopM:block"></div>
@@ -68,7 +73,7 @@ export const Landing = () => {
           )}
         >
           <Logo />
-          <div className="flex">
+          <div className="flex invisible">
             <Link href="sign-in">
               <Button
                 text="Sign in"
@@ -77,7 +82,7 @@ export const Landing = () => {
               />
             </Link>
             <MyButton
-              onClick={handleNavigate}
+              onClick={scrollToTop}
               label="Sign up"
               type="button"
               className="text-[14px] px-[17px] py-[7px]"
@@ -101,11 +106,7 @@ export const Landing = () => {
             In our vision to digitize and make youth sports smarter and
             healthier. Zporter is now launching v.1 of our free software as a
             service via apps- and web, to entertain, grow and empower (future)
-            football starz in a smarter and healthier way.<br></br> That means
-            we take away: <br></br>. Just as we intend to help their Coaches,
-            Agents, PT’s, Friends, Fans and Family members to support them
-            better in their most important youth football years.<br></br> And
-            adds …in a smarter and healthier way.
+            football starz in a smarter and healthier way.<br></br>
           </p>
           <p
             className={clsx(
@@ -207,6 +208,7 @@ export const Landing = () => {
         >
           {APP_FEATURE.map((app) => (
             <AppFeature
+              key={app.title}
               titleColor="text-black"
               contentColor="text-gray-400"
               icon={app.icon}
@@ -217,8 +219,13 @@ export const Landing = () => {
         </div>
       </div>
       <div
+        style={{
+          backgroundImage: `url(${safeHttpImage(
+            'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-2-min.png?alt=media&token=a52d81ab-bac5-4b19-a36c-ba2c5fb90b01'
+          )})`,
+        }}
         className={clsx(
-          'mobileM:bg-landing-two-mb laptopM:bg-landing-two bg-no-repeat bg-cover relative',
+          ' bg-no-repeat bg-cover relative',
           isMobile && 'h-[420px]',
           isDesktop && 'h-[530px]'
         )}
@@ -316,7 +323,7 @@ export const Landing = () => {
           </div>
           <div
             className={clsx(
-              'relative h-[120px] flex items-center w-[390px]',
+              'relative h-[120px] flex items-center w-[375px]',
               isMobile && 'px-[30px]'
             )}
           >
@@ -324,9 +331,9 @@ export const Landing = () => {
               <Image src={IT_FREE} />
             </span>
             <MyButton
-              onClick={handleNavigate}
+              onClick={scrollToTop}
               type="button"
-              label="Sign up"
+              label="Download"
               className="laptopM:w-[220px] mobileM:w-[160px] mobileM:px-[10px]"
             />
             <span className="ml-4">
@@ -335,8 +342,13 @@ export const Landing = () => {
           </div>
         </div>
         <div
+          style={{
+            backgroundImage: `url(${safeHttpImage(
+              'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-3-min.png?alt=media&token=f8cf3ef2-0436-44ef-b18a-c13831cf01ad'
+            )})`,
+          }}
           className={clsx(
-            'mobileM:bg-landing-three-mb laptopM:bg-landing-three bg-no-repeat bg-cover relative',
+            ' bg-no-repeat bg-cover relative',
             isDesktop && ' mx-auto h-[1450px]  flex flex-col items-center',
             isMobile && 'h-[850px]',
             isTablet && 'h-[550px]'
@@ -370,6 +382,7 @@ export const Landing = () => {
             >
               {APP_FEATURE_2.map((app) => (
                 <AppFeature
+                  key={app.title}
                   titleColor="text-white w-[160px] text-center"
                   contentColor={isMobile && 'text-white'}
                   icon={app.icon}
@@ -439,9 +452,9 @@ export const Landing = () => {
                 <Image src={IT_FREE} />
               </span>
               <MyButton
-                onClick={handleNavigate}
+                onClick={scrollToTop}
                 type="button"
-                label="Sign up"
+                label="Download"
                 className="laptopM:w-[220px] mobileM:w-[170px] mobileM:px-[10px] tabletM:[w-[180px]"
               />
               <span className="ml-4">
