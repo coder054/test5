@@ -24,7 +24,10 @@ import { Text } from 'src/components/Text'
 import dayjs from 'dayjs'
 import { safeHttpImage } from 'src/utils/utils'
 import { InjuryChart } from 'src/modules/dashboard/pain/component/injury-chart'
-import { ListComment } from './list-comment'
+import { ListComment } from './comment/list-comment'
+import SimpleBar from 'simplebar-react'
+import { Loading } from 'src/components/MyLoading'
+import { Divider } from '@mui/material'
 
 interface ModalDiaryTrainingType {
   card: CardFeedType
@@ -111,9 +114,9 @@ export const ModalDiaryTraining = ({ card }: ModalDiaryTrainingType) => {
         </div>
 
         <Slider {...settings} className={`h-[255px] ml-[20px]`}>
-          <div className="h-[225px]">
+          <Loading isLoading={isLoading} className="h-[225px]">
             <ItemTraining card={card && card} />
-          </div>
+          </Loading>
 
           {!isEmpty(data?.data?.eatChart) ||
           !isEmpty(data?.data?.energyChart) ||
@@ -143,6 +146,15 @@ export const ModalDiaryTraining = ({ card }: ModalDiaryTrainingType) => {
             ))}
           </Slider>
         )}
+
+        <Divider
+          style={{
+            backgroundColor: '##484A4D',
+            marginTop: '8px',
+            marginBottom: '8px',
+          }}
+        />
+
         <div className="w-full flex text-[14px] p-[20px]">
           <div className="flex-1">
             <p>Energy</p>
@@ -208,7 +220,13 @@ export const ModalDiaryTraining = ({ card }: ModalDiaryTrainingType) => {
       </div>
 
       <div className="col-span-1">
-        <ListComment postId={card?.postId} typeOfPost={card?.typeOfPost} />
+        <SimpleBar
+          style={{
+            maxHeight: 800,
+          }}
+        >
+          <ListComment postId={card?.postId} typeOfPost={card?.typeOfPost} />
+        </SimpleBar>
       </div>
     </div>
   )

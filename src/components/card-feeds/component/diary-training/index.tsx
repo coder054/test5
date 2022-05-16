@@ -37,7 +37,7 @@ export const CardDiaryTraining = ({ card }: CardDiaryTrainingProps) => {
         sx={{
           padding: 0,
           top: '50%',
-          width: isMobile ? '100%' : 900,
+          width: isMobile ? '100%' : 950,
           overflow: 'auto',
         }}
         isOpen={openModal}
@@ -48,7 +48,7 @@ export const CardDiaryTraining = ({ card }: CardDiaryTrainingProps) => {
             <button
               type="button"
               onClick={() => setOpenModal(false)}
-              className="absolute z-50 right-6 top-5"
+              className="absolute z-50 right-2 -top-4"
             >
               <XIcon />
             </button>

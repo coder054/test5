@@ -9,6 +9,7 @@ import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
 import {
   SvgBlock,
   SvgCopyLink,
+  SvgDelete,
   SvgOptionMenu,
   SvgUnfollow,
 } from 'src/imports/svgs'
@@ -44,6 +45,10 @@ export const OptionFeed = ({
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [openModalEdit, setOpenModalEdit] = useState<boolean>(false)
   const [openModalDelete, setOpenModalDelete] = useState<boolean>(false)
+  const [openModalDeleteComment, setOpenModalDeleteComment] =
+    useState<boolean>(false)
+  const [openModalBlockComment, setOpenModalBlockComment] =
+    useState<boolean>(false)
   const [openModalUnfollow, setOpenModalUnfollow] = useState<boolean>(false)
   const [openModalReport, setOpenModalReport] = useState<boolean>(false)
 
@@ -82,6 +87,10 @@ export const OptionFeed = ({
   const open = Boolean(anchorEl)
 
   const handleConfirmFollow = () => {}
+
+  const handleConfirmDeleteComment = () => {}
+
+  const handleConfirmBlockComment = () => {}
 
   return (
     <div className="">
@@ -204,6 +213,34 @@ export const OptionFeed = ({
             </>
           </BasicPopover>
         )}
+
+      {type === 'comment' && (
+        <BasicPopover
+          anchorEl={anchorEl}
+          setAnchorEl={setAnchorEl}
+          id="popover-feed"
+        >
+          <>
+            <div
+              className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer
+                text-[#D60C0C] font-semibold"
+              onClick={() => setOpenModalDeleteComment(true)}
+            >
+              <SvgDelete />
+              <span className="ml-[12px]">Delete comment</span>
+            </div>
+            <div
+              className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer
+              text-[#D60C0C] font-semibold"
+              onClick={() => setOpenModalBlockComment(true)}
+            >
+              <SvgBlock fill="#D60C0C" width={14} height={14} />
+              <span className="ml-[8px]">Block comment</span>
+            </div>
+          </>
+        </BasicPopover>
+      )}
+
       <ConfirmModal
         label="Unfollow"
         content="Are you sure you want to unfollow this news provider?"
@@ -280,6 +317,40 @@ export const OptionFeed = ({
         actionLabelClass="bg-[#D60C0C]"
         followNews
         isLoading={loadingSubscribe}
+      />
+
+      {/* Delete Comment  */}
+      <ConfirmModal
+        label="Delete Comment"
+        content={
+          <div className="text-center">
+            <p>Are you sure you want to delete this?</p>
+            <p>Your data will be forever lost!</p>
+          </div>
+        }
+        icon={null}
+        actionLabel="Yes, Delete"
+        isOpen={openModalDeleteComment}
+        onClose={setOpenModalDeleteComment}
+        onSubmit={handleConfirmDeleteComment}
+        actionLabelClass="bg-[#D60C0C]"
+      />
+
+      {/* Block Comment  */}
+      <ConfirmModal
+        label="Block Comment"
+        content={
+          <div className="text-center">
+            <p>Are you sure you want to block this?</p>
+            <p>Your data will be forever lost!</p>
+          </div>
+        }
+        icon={null}
+        actionLabel="Yes, Block"
+        isOpen={openModalBlockComment}
+        onClose={setOpenModalBlockComment}
+        onSubmit={handleConfirmBlockComment}
+        actionLabelClass="bg-[#D60C0C]"
       />
     </div>
   )
