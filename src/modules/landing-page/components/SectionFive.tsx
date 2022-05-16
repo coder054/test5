@@ -7,7 +7,7 @@ export const SectionFive = () => {
     <div
       style={{
         backgroundImage: `url(${safeHttpImage(
-          'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-5-min.png?alt=media&token=fef5cf89-dbf3-4ed7-bde7-1adcce7b2cbe'
+          'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2Fwebp%2FLanding-5-min.webp?alt=media&token=3f00e41a-137a-464a-98d7-966eaddbabe0'
         )})`,
       }}
       className=" h-[560px] tabletM:h-[450px] bg-cover laptopM:bg-center mobileM:bg-right"
