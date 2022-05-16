@@ -12,16 +12,6 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'landing-one': "url('/assets/landing-page/Landing-1.png')",
-        'landing-two': "url('/assets/landing-page/Landing-2.png')",
-        'landing-three': "url('/assets/landing-page/Landing-3.png')",
-        'landing-four': "url('/assets/landing-page/Landing-4.png')",
-        'landing-five': "url('/assets/landing-page/Landing-5.png')",
-        'landing-one-mb': "url('/assets/landing-page/Landing-1-min.png')",
-        'landing-two-mb': "url('/assets/landing-page/Landing-2-min.png')",
-        'landing-three-mb': "url('/assets/landing-page/Landing-3-min.png')",
-        'landing-four-mb': "url('/assets/landing-page/Landing-4-min.png')",
-        'landing-five-mb': "url('/assets/landing-page/Landing-5-min.png')",
         'front-body': "url('/assets/Front.png')",
         'authen-desktop': "url('/authen/bg-login-desktop.png')",
         'authen-mobile': "url('/authen/bg-login-mobile.png')",

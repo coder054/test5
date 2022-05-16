@@ -23,7 +23,7 @@ export const SectionThree = () => {
           <img
             loading="lazy"
             src={safeHttpImage(
-              'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-4-min.png?alt=media&token=54a92dc7-aa3d-4f8c-9bc0-98dc8f2c6123'
+              'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2Fwebp%2FLanding-4-min.webp?alt=media&token=452c53e2-8c34-4eab-9d9d-8db21f23c232'
             )}
             className={clsx('w-full')}
           />

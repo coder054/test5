@@ -59,8 +59,6 @@ export const GOOGLE_PLAY_WHITE = require('./../../public' +
 export const GOAL = require('./../../public' + '/assets/landing-page/Goal.png')
 export const APP_2 = require('./../../public' +
   '/assets/landing-page/App-2.png')
-export const LANDING_4 = require('./../../public' +
-  '/assets/landing-page/Landing-4.png')
 export const GOAL_KEERPER = require('./../../public' +
   '/assets/landing-page/GoalKeeper.png')
 export const APP_4 = require('./../../public' +
@@ -90,5 +88,3 @@ export const imgMedalGoal = require('./../../public' +
   '/biography/award/medal-goal.svg')
 export const imgMedalMVP = require('./../../public' +
   '/biography/award/medal-mvp.svg')
-
-export const FRONT_BODY = require('/public/assets/FrontBody.png')
