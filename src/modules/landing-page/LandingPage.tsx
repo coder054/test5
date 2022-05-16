@@ -45,8 +45,12 @@ import { SectionThree } from './components/SectionThree'
 
 export const Landing = () => {
   const router = useRouter()
-  const handleNavigate = () => {
-    router.push('signup')
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    })
   }
 
   return (
@@ -69,7 +73,7 @@ export const Landing = () => {
           )}
         >
           <Logo />
-          <div className="flex">
+          <div className="flex invisible">
             <Link href="sign-in">
               <Button
                 text="Sign in"
@@ -78,7 +82,7 @@ export const Landing = () => {
               />
             </Link>
             <MyButton
-              onClick={handleNavigate}
+              onClick={scrollToTop}
               label="Sign up"
               type="button"
               className="text-[14px] px-[17px] py-[7px]"
@@ -204,6 +208,7 @@ export const Landing = () => {
         >
           {APP_FEATURE.map((app) => (
             <AppFeature
+              key={app.title}
               titleColor="text-black"
               contentColor="text-gray-400"
               icon={app.icon}
@@ -318,7 +323,7 @@ export const Landing = () => {
           </div>
           <div
             className={clsx(
-              'relative h-[120px] flex items-center w-[390px]',
+              'relative h-[120px] flex items-center w-[375px]',
               isMobile && 'px-[30px]'
             )}
           >
@@ -326,9 +331,9 @@ export const Landing = () => {
               <Image src={IT_FREE} />
             </span>
             <MyButton
-              onClick={handleNavigate}
+              onClick={scrollToTop}
               type="button"
-              label="Sign up"
+              label="Download"
               className="laptopM:w-[220px] mobileM:w-[160px] mobileM:px-[10px]"
             />
             <span className="ml-4">
@@ -377,6 +382,7 @@ export const Landing = () => {
             >
               {APP_FEATURE_2.map((app) => (
                 <AppFeature
+                  key={app.title}
                   titleColor="text-white w-[160px] text-center"
                   contentColor={isMobile && 'text-white'}
                   icon={app.icon}
@@ -446,9 +452,9 @@ export const Landing = () => {
                 <Image src={IT_FREE} />
               </span>
               <MyButton
-                onClick={handleNavigate}
+                onClick={scrollToTop}
                 type="button"
-                label="Sign up"
+                label="Download"
                 className="laptopM:w-[220px] mobileM:w-[170px] mobileM:px-[10px] tabletM:[w-[180px]"
               />
               <span className="ml-4">
