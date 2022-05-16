@@ -20,7 +20,8 @@ const NewsPage: NextPage = () => {
       )
     ) {
       setLink(
-        `https://dev.web.zporter.co/post/?postId=${postId}&typeOfPost=${typeOfPost}`
+        'https://zporter.page.link/H4u9'
+        // `https://dev.web.zporter.co/post/?postId=${postId}&typeOfPost=${typeOfPost}`
       )
       setDevice('mobile')
     } else {
