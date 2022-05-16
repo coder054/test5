@@ -9,6 +9,7 @@ import { ReactNode, useEffect, useMemo } from 'react'
 import type { TFunction } from 'react-i18next'
 import { useTranslation } from 'react-i18next'
 import { DevelopmentIcon } from 'src/icons/developmentIcon'
+import { ExclamationCircle } from 'src/icons/exclamation-circle'
 import { Home } from 'src/icons/home'
 import { MessagesIcon } from 'src/icons/messagesIcon'
 import { Newspaper } from 'src/icons/newspaper'
@@ -79,6 +80,11 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
           }/${fullname}`, // current
           icon: <UserCircle fontSize="small" />,
           disabled: isEmpty(infoActiveProfile),
+        },
+        {
+          title: t('Support'),
+          path: `/support`,
+          icon: <ExclamationCircle fontSize="small" />,
         },
       ],
     },

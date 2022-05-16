@@ -44,8 +44,6 @@ import { SectionFour } from './components/SectionFour'
 import { SectionThree } from './components/SectionThree'
 
 export const Landing = () => {
-  const router = useRouter()
-
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -59,7 +57,7 @@ export const Landing = () => {
         className=" w-full h-screen bg-cover bg-no-repeat"
         style={{
           backgroundImage: `url(${safeHttpImage(
-            'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-1-min.png?alt=media&token=c3d7fbce-e308-4f30-ad24-e9319ac136f3'
+            'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2Fwebp%2FLanding-1-min.webp?alt=media&token=eae4a320-dc6d-4d51-bf45-303a85b0517f'
           )})`,
         }}
       >
@@ -221,7 +219,7 @@ export const Landing = () => {
       <div
         style={{
           backgroundImage: `url(${safeHttpImage(
-            'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-2-min.png?alt=media&token=a52d81ab-bac5-4b19-a36c-ba2c5fb90b01'
+            'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2Fwebp%2FLanding-2-min.webp?alt=media&token=4fb1d353-e7e9-4c37-aa5f-31435d013d50'
           )})`,
         }}
         className={clsx(
@@ -344,7 +342,7 @@ export const Landing = () => {
         <div
           style={{
             backgroundImage: `url(${safeHttpImage(
-              'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-3-min.png?alt=media&token=f8cf3ef2-0436-44ef-b18a-c13831cf01ad'
+              'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2Fwebp%2FLanding-3-min.webp?alt=media&token=d2e38371-140f-4681-8875-b11266ec6049'
             )})`,
           }}
           className={clsx(
