@@ -49,16 +49,19 @@ export const getListComment = async ({
   limit,
   postId,
   typeOfPost,
+  startAfter,
 }: {
   limit: number
   postId: string
   typeOfPost: string
+  startAfter: number
 }) => {
   return axios.get(
     toQueryString(API_GET_LIST_COMMENTS, {
       limit: limit,
       postId: postId,
       typeOfPost: typeOfPost,
+      startAfter: startAfter,
     })
   )
 }

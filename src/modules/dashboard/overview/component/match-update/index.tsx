@@ -12,7 +12,7 @@ import {
   SvgInfomation,
 } from 'src/imports/svgs'
 import { GetListDiariesReport } from 'src/service/dashboard/dashboard-overview'
-import { safeAvatar } from 'src/utils/utils'
+import { safeHttpImage } from 'src/utils/utils'
 
 const cls = require('../../overview.module.css')
 
@@ -123,7 +123,7 @@ export const MatchUpdates = ({
                 <td>
                   <div className="flex text-[10px] md:text-[14px]">
                     <img
-                      src={safeAvatar(item.match?.opponentClub?.logoUrl)}
+                      src={safeHttpImage(item.match?.opponentClub?.logoUrl)}
                       className="w-[22px] h-[22px] md:w-[25.6px] md:h-[26px] mr-2 rounded-full"
                     />
                     {item.match?.opponentClub?.clubName}

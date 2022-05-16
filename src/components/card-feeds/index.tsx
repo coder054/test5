@@ -257,7 +257,7 @@ export const CardFeed = ({ card }: CardYourType) => {
           </div>
         </div>
 
-        <div className="spacer flex-grow "></div>
+        <div className="spacer flex-grow"></div>
         <OptionFeed
           userId={card?.userId}
           type={card?.typeOfPost}
