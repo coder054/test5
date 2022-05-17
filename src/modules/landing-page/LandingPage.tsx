@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { isDesktop, isMobile, isTablet } from 'react-device-detect'
 import { Button } from 'src/components'
 import {
@@ -62,14 +61,7 @@ export const Landing = () => {
         }}
       >
         <div className="w-full h-[190px] bg-gradient-to-t from-white  absolute bottom-0 mobileM:hidden laptopM:block"></div>
-        <div
-          className={clsx(
-            'flex justify-between  mt-[30px]',
-            isDesktop && 'max-w-[1320px] mx-auto',
-            isTablet && 'px-11',
-            isMobile && 'mx-[14px]'
-          )}
-        >
+        <div className="flex justify-between mx-[14px] mt-[30px] laptopM:max-w-[1320px] laptopM:mx-auto tabletM:px-11">
           <Logo />
           <div className="flex invisible">
             <Link href="sign-in">
@@ -80,20 +72,13 @@ export const Landing = () => {
               />
             </Link>
             <MyButton
-              onClick={scrollToTop}
               label="Sign up"
               type="button"
               className="text-[14px] px-[17px] py-[7px]"
             />
           </div>
         </div>
-        <div
-          className={clsx(
-            'text-center tabletM:px-[250px] ',
-            isMobile && 'w-full px-[30px] mt-[70px]',
-            isDesktop && 'max-w-[1320px] px-[250px] mt-[120px] mx-auto'
-          )}
-        >
+        <div className="text-center w-full px-[30px] mt-[70px] tabletM:max-w-[1320px] tabletM:px-[250px] tabletM:mt-[120px] tabletM:mx-auto">
           <span className="text-center text-[#09E099] text-[12px]  tracking-[2px] font-medium">
             INTRODUCING
           </span>
