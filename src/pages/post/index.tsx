@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 
 const NewsPage: NextPage = () => {
   const router = useRouter()
-  const { postId, typeOfPost } = router.query
+  const { dynamicLink } = router.query
   const [link, setLink] = useState<string>('')
   const [device, setDevice] = useState<string>('')
 
@@ -16,20 +16,20 @@ const NewsPage: NextPage = () => {
         navigator.userAgent
       )
     ) {
-      setLink(
-        'https://zporter.page.link/H4u9'
-        // `https://dev.web.zporter.co/post/?postId=${postId}&typeOfPost=${typeOfPost}`
-      )
+      if (dynamicLink) {
+        console.log('dynamicLink', dynamicLink)
+        window.location.href = dynamicLink as string
+      }
       setDevice('mobile')
     } else {
       setDevice('bowser')
       router.push('/sign-in')
     }
-  }, [postId, typeOfPost])
+  }, [dynamicLink])
 
   return (
     <div className="mt-8 flex justify-center">
-      <a href={link}>Click to open</a>
+      {/* <a href={link}>Click to open</a> */}
     </div>
   )
 }
