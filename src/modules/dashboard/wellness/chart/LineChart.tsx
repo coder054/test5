@@ -77,7 +77,7 @@ export const LineChart = ({ response, isLoading }: LineChartProps) => {
       <div className="text-center">
         <p className="text-[#09E099] text-[18px]">How are you?</p>
         <p className="text-[#A2A5AD]">
-          The energy Dashboard gives you a good summary how you feel in general.
+          The Energy Dashboard gives you a good summary how you feel in general.
         </p>
       </div>
       <Loading isLoading={isLoading} className="pt-4 w-full">
