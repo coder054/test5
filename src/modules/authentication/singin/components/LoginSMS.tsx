@@ -1,9 +1,9 @@
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/material.css'
+
 import { Button as CustomButton } from 'src/components/Button'
+import { MyPhoneInput } from 'src/components/common/MyPhoneInput'
 import { auth } from 'src/config/firebase-client'
 import ModalOTP from './ModalOTP'
 
@@ -65,12 +65,7 @@ export default function LoginSMS() {
         phone={phone}
       />
       <form onSubmit={handleSubmit} className="space-y-4">
-        <PhoneInput
-          onChange={(e) => setPhone(e)}
-          inputClass="bg-transparent w-full py-3.5"
-          dropdownClass="bg-black"
-          country={'vn'}
-        />
+        <MyPhoneInput setPhone={setPhone} country={'us'} />
         <CustomButton
           label="Sign in"
           type="submit"
