@@ -1,11 +1,23 @@
 import type { NextPage } from 'next'
+import parse from 'html-react-parser'
+import SupportLayout from 'src/modules/support/components/SupportLayout'
 
-const PrivacyRulesPage: NextPage = () => {
+const PrivacyPage: NextPage = ({ data }: any) => {
+  const HTML_STRING = data.content
+
   return (
-    <div className="h-screen w-screen flex items-center justify-center">
-      <p className="text-3xl font-bold">Privacy Rules</p>
-    </div>
+    <SupportLayout title="Privacy Rules">
+      <div className="my-6">{parse(HTML_STRING)}</div>
+    </SupportLayout>
   )
 }
 
-export default PrivacyRulesPage
+export async function getStaticProps() {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/privacy-rules`
+  )
+  const data = await res.json()
+  return { props: { data } }
+}
+
+export default PrivacyPage

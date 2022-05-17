@@ -73,25 +73,23 @@ export default function Card({
         </div>
         <div className="col-span-2 flex space-x-4 items-center justify-end">
           {commonOptions}
-          {dropdownOptions && (
-            <Fragment>
-              <button type="button" aria-describedby={id} onClick={handleClick}>
-                <MoreOptionsIcon />
-              </button>
-              <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-              >
-                {dropdownOptions}
-              </Popover>
-            </Fragment>
-          )}
+          <div className={clsx(dropdownOptions ? 'visible' : 'invisible')}>
+            <button type="button" aria-describedby={id} onClick={handleClick}>
+              <MoreOptionsIcon />
+            </button>
+            <Popover
+              id={id}
+              open={open}
+              anchorEl={anchorEl}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+            >
+              {dropdownOptions}
+            </Popover>
+          </div>
         </div>
       </div>
     </button>
