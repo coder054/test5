@@ -38,6 +38,7 @@ import {
   dataModalResponseTeamAtom,
   dataModalResponseTeamTrainingAtom,
   dataModalResponseMatchAtom,
+  dataModalResponseCoachReviewAtom,
 } from 'src/atoms/notiAtoms'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import DiaryUpdate from 'src/modules/update-diary'
@@ -247,6 +248,7 @@ const NotificationsButton = () => {
       <ModalResponseAskJoinTeam />
       <ModalResponseTeamTraining />
       <ModalResponseMatch />
+      <ModalResponseCoachReview />
       <Tooltip title="Notifications">
         <IconButton ref={anchorRef} sx={{ ml: 1 }} onClick={handleOpenPopover}>
           <Badge color="error" badgeContent={unread}>
@@ -1569,6 +1571,113 @@ export const ModalResponseMatch = (props) => {
             const { playerDiaryData }: { playerDiary: any } =
               dataModalResponseMatch
 
+            setOpenModalDiaryUpdate(true)
+            await wait(150)
+            setDate(new Date(playerDiaryData.updatedAt))
+            await wait(150)
+            setDiary(playerDiaryData)
+          }}
+          fullWidth
+          size="large"
+          variant="contained"
+        >
+          Yes
+        </Button>
+      </div>
+    </Dialog>
+  )
+}
+
+export const ModalResponseCoachReview = (props) => {
+  const [diary, setDiary] = useAtom(diaryAtom)
+  const [openModalDiaryUpdate, setOpenModalDiaryUpdate] = useAtom(
+    openModalDiaryUpdateAtom
+  )
+  const [date, setDate] = useAtom(dateAtom)
+  const [dataModalResponseCoachReview, setDataModalResponseCoachReview] =
+    useAtom(dataModalResponseCoachReviewAtom)
+  return (
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      onClose={() => {
+        setDataModalResponseCoachReview({})
+      }}
+      open={!isEmpty(dataModalResponseCoachReview)}
+    >
+      <Box
+        sx={{
+          alignItems: 'center',
+          backgroundColor: 'primary.main',
+          color: 'primary.contrastText',
+          display: 'flex',
+          justifyContent: 'space-between',
+          px: 3,
+          py: 2,
+        }}
+      >
+        <Typography variant="h6">Zporter</Typography>
+        <IconButton
+          color="inherit"
+          onClick={() => {
+            setDataModalResponseCoachReview({})
+          }}
+        >
+          <XIcon fontSize="small" />
+        </IconButton>
+      </Box>
+
+      <DialogContent
+        sx={{
+          height: 500,
+        }}
+      >
+        {/*  */}
+
+        <img
+          //@ts-ignore: Unreachable code error
+          src={dataModalResponseCoachReview.img}
+          className=" w-[320px] h-auto block mx-auto "
+          alt=""
+        />
+        <div className="h-[16px] "></div>
+        <div className="font-Inter text-center ">
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseCoachReview.title}
+          </div>
+          <div className=" ">
+            {/* @ts-ignore: Unreachable code error */}
+            {dataModalResponseCoachReview.body}
+          </div>
+        </div>
+
+        {/*  */}
+      </DialogContent>
+
+      <div className="flex mt-4 px-[24px] mb-[20px] ">
+        <Link href="/dashboard?d=training">
+          <a
+            onClick={() => {
+              setDataModalResponseCoachReview({})
+            }}
+            className="w-full "
+          >
+            <Button fullWidth size="large" variant="outlined">
+              No
+            </Button>
+          </a>
+        </Link>
+
+        <Button
+          onClick={async () => {
+            setDataModalResponseCoachReview({})
+
+            //@ts-ignore: Unreachable code error
+            const { playerDiaryData }: { playerDiary: any } =
+              dataModalResponseCoachReview
+
+            debugger
             setOpenModalDiaryUpdate(true)
             await wait(150)
             setDate(new Date(playerDiaryData.updatedAt))

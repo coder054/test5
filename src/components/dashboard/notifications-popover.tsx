@@ -32,6 +32,7 @@ import {
   dataModalResponseAskJoinTeamAtom,
   dataModalResponseTeamTrainingAtom,
   dataModalResponseMatchAtom,
+  dataModalResponseCoachReviewAtom,
 } from 'src/atoms/notiAtoms'
 import { notiToast } from 'src/components/common/Toast'
 import { MySelectCountry } from 'src/components/MySelectCountry'
@@ -233,6 +234,8 @@ export const ItemNotification = ({
   const [, setDataModalResponseAskJoinTeam] = useAtom(
     dataModalResponseAskJoinTeamAtom
   )
+  const [dataModalResponseCoachReview, setDataModalResponseCoachReview] =
+    useAtom(dataModalResponseCoachReviewAtom)
 
   const [, setDataModalResponseTeamTraining] = useAtom(
     dataModalResponseTeamTrainingAtom
@@ -544,8 +547,20 @@ export const ItemNotification = ({
                   playerDiaryData: notification.playerDiaryData,
                 })
               } else if (
-                notification.notificationType === NotificationType.COMMENT_POST
+                notification.notificationType ===
+                NotificationType.COACH_CREATE_DIARY_MATCH
               ) {
+                // debugger
+                setDataModalResponseCoachReview({
+                  //@ts-ignore: Unreachable code error
+                  teamId: notification.teamId,
+                  img: notification.largeIcon,
+                  body: notification.body,
+                  title: notification.title,
+                  groupId: notification.groupId,
+                  senderId: notification.senderId,
+                  playerDiaryData: notification.coachDiaryData,
+                })
               }
 
               if (

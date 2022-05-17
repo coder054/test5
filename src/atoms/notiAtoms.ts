@@ -13,6 +13,10 @@ export const dataModalResponseAskJoinGroupAtom = atom({})
 export const dataModalResponseAskJoinTeamAtom = atom({})
 export const dataModalResponseTeamTrainingAtom = atom({})
 export const dataModalResponseMatchAtom = atom<any>(null)
+
+export const dataModalResponseCoachReviewAtom = atom({})
+// const [dataModalResponseCoachReview, setDataModalResponseCoachReview] = useAtom(dataModalResponseCoachReviewAtom)
+
 // const [dataModalResponssMatch, setDataModalResponssMatch] = useAtom(
 //   dataModalResponseMatchAtom
 // )
