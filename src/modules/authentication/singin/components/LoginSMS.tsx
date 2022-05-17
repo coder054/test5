@@ -1,14 +1,12 @@
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-
 import { Button as CustomButton } from 'src/components/Button'
 import { MyPhoneInput } from 'src/components/common/MyPhoneInput'
 import { auth } from 'src/config/firebase-client'
 import ModalOTP from './ModalOTP'
 
 export default function LoginSMS() {
-  const InputRef = useRef(null)
   const [phone, setPhone] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isOpenModalOTP, setIsOpenModalOTP] = useState<boolean>(false)
@@ -51,11 +49,6 @@ export default function LoginSMS() {
       auth
     )
   }, [])
-
-  // useEffect(() => {
-  //   const res = Intl.DateTimeFormat().resolvedOptions().locale
-  //   setRegion(res === 'vi' ? 'vn' : res)
-  // }, [])
 
   return (
     <div>

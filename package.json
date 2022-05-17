@@ -74,6 +74,7 @@
     "firebase-admin": "9.4.1",
     "formik": "^2.2.7",
     "gray-matter": "^4.0.3",
+    "html-react-parser": "^1.4.12",
     "i": "^0.3.7",
     "i18next": "^19.8.7",
     "immer": "^9.0.12",

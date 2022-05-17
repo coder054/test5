@@ -43,8 +43,8 @@ export const GroupCard = ({ group }: GroupCardProps) => {
   const { mutate: mutateDelete, isLoading: isDeleting } = useMutation(
     deleteGroup,
     {
-      onSuccess: async () => {
-        await queryClient.invalidateQueries(QUERIES_CONTACTS.CONTACT_GROUP)
+      onSuccess: () => {
+        queryClient.invalidateQueries(QUERIES_CONTACTS.CONTACT_GROUP)
         toast.success('Group successfully deleted')
         setIsOpenModal(false)
       },
@@ -56,11 +56,9 @@ export const GroupCard = ({ group }: GroupCardProps) => {
 
   const showMessageIcon = useMemo(() => {
     const { userIds } = group
-
     if (isEmpty(userIds) || isEmpty(currentRoleId)) {
       return false
     }
-
     return userIds.some((id) => id === currentRoleId)
   }, [group.userIds, currentRoleId])
 
@@ -76,7 +74,7 @@ export const GroupCard = ({ group }: GroupCardProps) => {
             onClick={(e) => {
               e.stopPropagation()
             }}
-            className="  flex gap-x-[16px]  "
+            className="flex gap-x-[16px]"
           >
             {showMessageIcon && (
               <button

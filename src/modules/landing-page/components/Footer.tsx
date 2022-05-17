@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { Logo } from 'src/components/logo'
 
 export const Footer = () => {
@@ -28,9 +29,15 @@ export const Footer = () => {
             <p className="font-bold pb-7">LEGAL</p>
             <ul className="mobileM:pl-4 laptopM:pl-0 font-medium space-y-4">
               <li>About us</li>
-              <li>Term & Conditions</li>
-              <li>Privacy rules</li>
-              <li>Support</li>
+              <li>
+                <Link href="/term-and-conditions">Term & Conditions</Link>
+              </li>
+              <li>
+                <Link href="/privacy-rules">Privacy rules</Link>
+              </li>
+              <li>
+                <Link href="/faqs">Support</Link>
+              </li>
             </ul>
           </div>
           <div className="text-[16px]">

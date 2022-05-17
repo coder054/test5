@@ -9,13 +9,13 @@ import LoginUserName from './components/LoginUserName'
 const tabs = [
   { label: 'Email', value: 'email' },
   { label: 'SMS', value: 'sms' },
-  { label: 'User name', value: 'userName' },
+  { label: 'Username', value: 'userName' },
 ]
 
 const SignIn = () => {
   const [currentTab, setCurrentTab] = useState<string>('email')
 
-  const handleTabsChange = (_, value: string): void => {
+  const handleTabsChange = (_: unknown, value: string): void => {
     setCurrentTab(value)
   }
 

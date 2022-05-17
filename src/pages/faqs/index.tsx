@@ -1,8 +1,13 @@
 import type { NextPage } from 'next'
-import FAQs from 'src/modules/faqs'
+import FAQs from 'src/modules/support/faqs'
+import SupportLayout from 'src/modules/support/components/SupportLayout'
 
 const FAQsPage: NextPage = ({ data }: any) => {
-  return <FAQs data={data} />
+  return (
+    <SupportLayout title="FAQs">
+      <FAQs data={data} />
+    </SupportLayout>
+  )
 }
 
 export async function getStaticProps() {
