@@ -65,7 +65,7 @@ export default function LoginSMS() {
         phone={phone}
       />
       <form onSubmit={handleSubmit} className="space-y-4">
-        <MyPhoneInput setPhone={setPhone} country={'us'} />
+        <MyPhoneInput setPhone={setPhone} />
         <CustomButton
           label="Sign in"
           type="submit"
