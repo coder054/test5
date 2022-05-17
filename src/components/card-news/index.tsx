@@ -12,6 +12,9 @@ import { likePost } from 'src/service/feed/news.service'
 import { safeHttpImage } from 'src/utils/utils'
 import { isEmpty } from 'lodash'
 import { OptionFeed } from '../card-feeds/component/option-feed'
+import { ModalMui } from '../ModalMui'
+import { isMobile } from 'react-device-detect'
+import { XIcon } from '../icons'
 
 interface CardNewsType {
   card?: any
@@ -28,6 +31,7 @@ const contentStyle: any = {
 export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
   const queryClient = useQueryClient()
   const [play, setPlay] = useState<boolean>(false)
+  const [openLink, setOpenLink] = useState<boolean>(false)
 
   const CarouselProps = {
     dots: true,
@@ -60,6 +64,13 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
 
   const handlePlayVideo = () => {
     setPlay(!play)
+  }
+
+  const handleOpenLink = (link: string) => {
+    // console.log('card?.excerptText', card?.link)
+    if (!openLink) {
+      setOpenLink(true)
+    }
   }
 
   return (
@@ -111,10 +122,14 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
         {card?.mediaLinks &&
           card?.mediaLinks.map((item, index) => (
             <div key={index} className="h-[195px]">
-              <div style={contentStyle} className="flex w-full">
+              <div style={contentStyle} className="flex w-full h-[195px]">
                 <div className={`${cls.image} flex-1`}>
                   {item.type === 'IMAGE' ? (
-                    <img src={safeHttpImage(item?.url)} alt="" className="" />
+                    <img
+                      src={safeHttpImage(item?.url)}
+                      alt=""
+                      className="h-[195px] w-full object-cover"
+                    />
                   ) : null}
                   {item.type === 'VIDEO' ? (
                     <div
@@ -141,10 +156,10 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
           </p>
         )}
       </Slider>
-      {/* {console.log('card?.excerptText', card?.excerptText)} */}
       <p
-        className={`${cls.lineClamp} text-white mb-[25px] px-5 mt-[20px]`}
+        className={`${cls.lineClamp} text-white mb-[25px] px-5 cursor-pointer mt-[32px]`}
         dangerouslySetInnerHTML={{ __html: card?.excerptText as string }}
+        onClick={() => handleOpenLink(card?.link)}
       ></p>
       <div className="flex px-5">
         <div className="flex-1 float-left ">
@@ -177,6 +192,29 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
           <SvgShare />
         </div>
       </div>
+
+      <ModalMui
+        isOpen={openLink}
+        onClose={setOpenLink}
+        sx={{
+          padding: 0,
+          top: '50%',
+          width: isMobile ? '100%' : 900,
+          height: isMobile ? '100%' : '90%',
+          overflow: 'auto',
+        }}
+      >
+        <div className="relative w-full h-full">
+          <button
+            type="button"
+            onClick={() => setOpenLink(false)}
+            className="absolute z-50 right-0 -top-4"
+          >
+            <XIcon />
+          </button>
+          <iframe src={card?.link} className="w-full h-full pt-4"></iframe>
+        </div>
+      </ModalMui>
     </div>
   )
 }
