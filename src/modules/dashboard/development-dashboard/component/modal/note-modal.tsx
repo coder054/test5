@@ -27,7 +27,7 @@ interface NoteModalProps {
   clock?: ReactNode
 }
 
-interface FormValues {
+interface IDevelopmentFormValues {
   strengthPlayer: string
   strengthCoach: string
   weaknessesPlayer: string
@@ -74,7 +74,7 @@ export const NoteModal = ({
   // console.log('currentUser', currentUser)
   // console.log('userRoles', userRoles)
 
-  const [formValues, setFormValues] = useState<FormValues>({
+  const [formValues, setFormValues] = useState<IDevelopmentFormValues>({
     strengthPlayer: '',
     strengthCoach: '',
     weaknessesPlayer: '',
@@ -191,7 +191,7 @@ export const NoteModal = ({
       })
   }, [arrayFile])
 
-  const handleChangeForm = (type: keyof FormValues, value: string) => {
+  const handleChangeForm = (type: keyof IDevelopmentFormValues, value: string) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
 
