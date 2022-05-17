@@ -28,11 +28,15 @@ const NewsPage: NextPage = () => {
 
   return (
     <div className="mt-8 flex justify-center">
-      <a href={link}>Click to open</a>
+      <div className="bg-[#4654EA] h-[36px] flex justify-center items-center w-[130px] rounded-[7px] hover:bg-[#535edf] active:bg-[#2939eb]">
+        <a href={link} className="text-[#ffffff]">
+          Click to open
+        </a>
+      </div>
     </div>
   )
 }
 
-NewsPage.getLayout = (page) => <DashboardLayout> {page}</DashboardLayout>
+NewsPage.getLayout = (page) => <div> {page}</div>
 
 export default NewsPage

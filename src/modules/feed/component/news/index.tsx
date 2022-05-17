@@ -69,7 +69,7 @@ export const TabNews = () => {
             ))}
         </div>
         <p
-          className="flex justify-center py-2 font-semibold text-[16px] h-[12px] text-center"
+          className="flex justify-center py-2 font-semibold text-[16px] h-[12px] text-center mt-[12px]"
           ref={ref}
         >
           {isFetchingNextPage ? (
