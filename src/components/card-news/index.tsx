@@ -141,7 +141,7 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
           </p>
         )}
       </Slider>
-
+      {/* {console.log('card?.excerptText', card?.excerptText)} */}
       <p
         className={`${cls.lineClamp} text-white mb-[25px] px-5 mt-[20px]`}
         dangerouslySetInnerHTML={{ __html: card?.excerptText as string }}

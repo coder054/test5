@@ -10,9 +10,6 @@ const NewsPage: NextPage = () => {
   const [link, setLink] = useState<string>('')
   const [device, setDevice] = useState<string>('')
 
-  // console.log('postId', postId)
-  // console.log('typeOfPost', typeOfPost)
-
   useEffect(() => {
     if (
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Windows Phone/i.test(
@@ -20,7 +17,8 @@ const NewsPage: NextPage = () => {
       )
     ) {
       setLink(
-        `https://dev.web.zporter.co/post/?postId=${postId}&typeOfPost=${typeOfPost}`
+        'https://zporter.page.link/H4u9'
+        // `https://dev.web.zporter.co/post/?postId=${postId}&typeOfPost=${typeOfPost}`
       )
       setDevice('mobile')
     } else {
@@ -28,7 +26,6 @@ const NewsPage: NextPage = () => {
       router.push('/sign-in')
     }
   }, [postId, typeOfPost])
-  // console.log('link', link)
 
   return (
     <div className="mt-8 flex justify-center">
