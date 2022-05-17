@@ -6,7 +6,7 @@ export const Footer = () => {
       <div className="laptopM:w-[1320px] mx-auto py-14 space-y-14 mobileM:px-[30px]">
         <div className="grid laptopM:grid-cols-4 laptopM:space-x-12 mobileM:space-y-5">
           <div className="flex flex-col items-start space-y-5">
-            <span className="scale-150 -ml-[20px] ">
+            <span className="scale-150 -ml-[20px] px-4">
               <Logo />
             </span>
             <p className="font-medium text-[14px] laptopM:w-[280px]">
