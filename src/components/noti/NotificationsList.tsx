@@ -28,6 +28,7 @@ export interface INoti {
   teamId?: string
   groupId?: string
   playerDiaryData?: any
+  coachDiaryData?: any
   postId?: string
   typeOfPost?: string
 }
