@@ -17,8 +17,7 @@ const NewsPage: NextPage = () => {
       )
     ) {
       if (dynamicLink) {
-        console.log('dynamicLink', dynamicLink)
-        window.location.href = dynamicLink as string
+        setLink(dynamicLink as string)
       }
       setDevice('mobile')
     } else {
@@ -29,7 +28,7 @@ const NewsPage: NextPage = () => {
 
   return (
     <div className="mt-8 flex justify-center">
-      {/* <a href={link}>Click to open</a> */}
+      <a href={link}>Click to open</a>
     </div>
   )
 }
