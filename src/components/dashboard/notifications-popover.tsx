@@ -1,3 +1,7 @@
+import { ModalMui } from 'src/components/ModalMui'
+import dayjs from 'dayjs'
+import SimpleBar from 'simplebar-react'
+import { isMobile } from 'react-device-detect'
 import {
   Box,
   Button,
@@ -18,11 +22,12 @@ import {
 import clsx from 'clsx'
 import { format } from 'date-fns'
 import { useAtom } from 'jotai'
-import { get } from 'lodash'
+import { get, isEmpty } from 'lodash'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import type { FC } from 'react'
 import { useState, useEffect, useMemo } from 'react'
+import { formValuesDevelopmentNodeAtom } from 'src/atoms/developmentNoteAtom'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
 import {
   dataModalResponseGroupAtom,
@@ -42,12 +47,17 @@ import { NotificationType } from 'src/constants/types'
 import { XIcon } from 'src/icons/x'
 import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
 import { getUrlChatFromChatRoomId } from 'src/modules/chat/chatService'
+import {
+  IDevelopmentFormValues,
+  NoteModal,
+} from 'src/modules/dashboard/development-dashboard/component/modal/note-modal'
 import { checkNotification } from 'src/service/notiService'
 import { axios } from 'src/utils/axios'
 import { getErrorMessage, getStr } from 'src/utils/utils'
 import { MailOpen as MailOpenIcon } from '../../icons/mail-open'
 import { INoti, useNotiList } from '../noti/NotificationsList'
 import { Scrollbar } from '../scrollbar'
+import { wait } from 'src/utils/wait'
 
 interface NotificationsPopoverProps {
   anchorEl: null | Element
@@ -61,6 +71,9 @@ const now = new Date()
 export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
   const { loading, notifications, setNotifications, unreadCount } =
     useNotiList()
+
+  const [isOpenModalDevelopmentNote, setIsOpenModalDevelopmentNote] =
+    useState<boolean>(false)
 
   const { anchorEl, onClose, onUpdateUnread, open, ...other } = props
   // const [notifications, setNotifications] = useState<Notification[]>(data)
@@ -132,71 +145,94 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
   }
 
   return (
-    <Popover
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        horizontal: 'left',
-        vertical: 'bottom',
-      }}
-      onClose={onClose}
-      open={open}
-      PaperProps={{ sx: { width: 380 } }}
-      transitionDuration={0}
-      {...other}
-    >
-      <Box
+    <>
+      <ModalMui
         sx={{
-          alignItems: 'center',
-          backgroundColor: 'primary.main',
-          color: 'primary.contrastText',
-          display: 'flex',
-          justifyContent: 'space-between',
-          px: 3,
-          py: 2,
+          padding: 0,
+          top: '50%',
+          width: isMobile ? '100%' : 700,
+          overflow: 'auto',
         }}
+        isOpen={isOpenModalDevelopmentNote}
+        onClose={setIsOpenModalDevelopmentNote}
       >
-        <Typography color="inherit" variant="h6">
-          Notifications
-        </Typography>
-        <Tooltip title="Mark all as read">
-          <IconButton
-            onClick={handleMarkAllAsRead}
-            size="small"
-            sx={{ color: 'inherit' }}
-          >
-            <MailOpenIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-      </Box>
-      {loading ? (
-        <div className="flex p-4 items-center justify-center ">
-          <CircularProgress />
-        </div>
-      ) : (
-        <>
-          {notifications.length === 0 ? (
-            <Box sx={{ p: 2 }}>
-              <Typography variant="subtitle2">
-                There are no notifications
-              </Typography>
-            </Box>
-          ) : (
-            <Scrollbar sx={{ maxHeight: 400 }}>
-              <List disablePadding>
-                {notifications.map((notification) => (
-                  <ItemNotification
-                    notification={notification}
-                    handleClickOne={handleClickOne}
-                    handleRemoveOne={handleRemoveOne}
-                    onClose={onClose}
-                  />
-                ))}
-              </List>
-            </Scrollbar>
-          )}
-        </>
-      )}
-    </Popover>
+        <SimpleBar style={{ maxHeight: 850 }}>
+          <NoteModal
+            setIsOpenModal={setIsOpenModalDevelopmentNote}
+            item={null}
+            update
+          />
+        </SimpleBar>
+      </ModalMui>
+      <Popover
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          horizontal: 'left',
+          vertical: 'bottom',
+        }}
+        onClose={onClose}
+        open={open}
+        PaperProps={{ sx: { width: 380 } }}
+        transitionDuration={0}
+        {...other}
+      >
+        <Box
+          sx={{
+            alignItems: 'center',
+            backgroundColor: 'primary.main',
+            color: 'primary.contrastText',
+            display: 'flex',
+            justifyContent: 'space-between',
+            px: 3,
+            py: 2,
+          }}
+        >
+          <Typography color="inherit" variant="h6">
+            Notifications
+          </Typography>
+          <Tooltip title="Mark all as read">
+            <IconButton
+              onClick={handleMarkAllAsRead}
+              size="small"
+              sx={{ color: 'inherit' }}
+            >
+              <MailOpenIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        </Box>
+        {loading ? (
+          <div className="flex p-4 items-center justify-center ">
+            <CircularProgress />
+          </div>
+        ) : (
+          <>
+            {notifications.length === 0 ? (
+              <Box sx={{ p: 2 }}>
+                <Typography variant="subtitle2">
+                  There are no notifications
+                </Typography>
+              </Box>
+            ) : (
+              <Scrollbar sx={{ maxHeight: 400 }}>
+                <List disablePadding>
+                  {notifications.map((notification) => (
+                    <ItemNotification
+                      setIsOpenModalDevelopmentNote={
+                        setIsOpenModalDevelopmentNote
+                      }
+                      notification={notification}
+                      handleClickOne={handleClickOne}
+                      handleRemoveOne={handleRemoveOne}
+                      onClose={onClose}
+                    />
+                  ))}
+                </List>
+              </Scrollbar>
+            )}
+          </>
+        )}
+      </Popover>
+    </>
   )
 }
 
@@ -208,11 +244,13 @@ NotificationsPopover.propTypes = {
 }
 
 export const ItemNotification = ({
+  setIsOpenModalDevelopmentNote,
   notification,
   handleClickOne,
   handleRemoveOne,
   onClose,
 }: {
+  setIsOpenModalDevelopmentNote: Function
   notification: INoti
   handleClickOne: Function
   onClose: Function
@@ -221,6 +259,8 @@ export const ItemNotification = ({
   const [openModalDiaryUpdate, setOpenModalDiaryUpdate] = useAtom(
     openModalDiaryUpdateAtom
   )
+  const [formValues, setFormValues]: [IDevelopmentFormValues, Function] =
+    useAtom(formValuesDevelopmentNodeAtom)
 
   const [, setDataModalResponseGroup] = useAtom(dataModalResponseGroupAtom)
   const [, setDataModalResponseTeam] = useAtom(dataModalResponseTeamAtom)
@@ -561,6 +601,51 @@ export const ItemNotification = ({
                   senderId: notification.senderId,
                   playerDiaryData: notification.coachDiaryData,
                 })
+              } else if (
+                notification.notificationType ===
+                NotificationType.COACH_COMMENT_DEVELOPMENT_NOTE
+              ) {
+                let aa = notification
+                const { developmentNoteData: dev } = notification
+                if (isEmpty(dev)) {
+                  return
+                }
+
+                setIsOpenModalDevelopmentNote(true)
+                await wait(100)
+                let developmentData: IDevelopmentFormValues = {
+                  strengthPlayer: dev.strength.playerContent,
+                  strengthCoach: dev.strength.coachComment,
+                  weaknessesPlayer: dev.weaknesses.playerContent,
+                  weaknessesCoach: dev.weaknesses.coachComment,
+                  bestDevelopSkillsPlayer: dev.bestDevelopSkills.playerContent,
+                  bestDevelopSkillsCoach: dev.bestDevelopSkills.coachComment,
+                  skillsNeededToDevelopPlayer:
+                    dev.skillsNeededToDevelop.playerContent,
+                  skillsNeededToDevelopCoach:
+                    dev.skillsNeededToDevelop.coachComment,
+                  bestWayToDevelopPlayer: dev.bestWayToDevelop.playerContent,
+                  bestWayToDevelopCoach: dev.bestWayToDevelop.coachComment,
+                  shortTermGoalPlayer: dev.shortTermGoal.playerContent,
+                  shortTermGoalCoach: dev.shortTermGoal.coachComment,
+                  longTermGoalPlayer: dev.longTermGoal.playerContent,
+                  longTermGoalCoach: dev.longTermGoal.coachComment,
+                  otherCommentsPlayer: dev.otherComments.playerContent,
+                  otherCommentsCoach: dev.otherComments.coachComment,
+                  date: dayjs(dev.updatedAt).format('YYYY/MM/DD'),
+                  progress: dev.playerDevelopmentProgress,
+                  contractedClub: {
+                    arena: '',
+                    city: '',
+                    clubId: '',
+                    clubName: '',
+                    country: '',
+                    logoUrl: '',
+                    websiteUrl: null,
+                  },
+                  currentTeams: '',
+                }
+                setFormValues(developmentData)
               }
 
               if (

@@ -29,7 +29,7 @@ interface NoteModalProps {
   clock?: ReactNode
 }
 
-interface IDevelopmentFormValues {
+export interface IDevelopmentFormValues {
   strengthPlayer: string
   strengthCoach: string
   weaknessesPlayer: string
