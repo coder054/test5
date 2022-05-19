@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+import clsx from 'clsx'
 import { Divider, Tab, Tabs } from '@mui/material'
 import axiosLib from 'axios'
 import { get, isEmpty } from 'lodash'
@@ -32,6 +33,8 @@ import { axios } from 'src/utils/axios'
 import { parseCookies } from 'src/utils/utils'
 import { StringParam, useQueryParam, withDefault } from 'use-query-params'
 import { ButtonAddBiography } from 'src/components/button-add-popup/button-add-biography'
+import { Head2Head } from 'src/modules/biography/Head2Head'
+import { useIdHead2HeadQuery } from 'src/atoms/biographyAtom'
 
 export const fetcherForEndpointFlip = async (url) => {
   if (url === null) return
@@ -64,6 +67,9 @@ export default function Biography({
   if (error) {
     return <div className=" ">Error occured</div>
   }
+
+  const { idHead2Head, setIdHead2Head } = useIdHead2HeadQuery()
+
   const [currentTab, setCurrentTab] = useQueryParam(
     'type',
     withDefault(StringParam, 'biography')
@@ -80,33 +86,37 @@ export default function Biography({
 
   return (
     <DashboardLayout>
-      {profile === 'coach' ? (
-        <BioForCoach
-          dataBioCoach={dataBioCoach}
-          dataAvgCoach={dataAvgCoach}
-          profile={profile}
-          currentRoleId={currentRoleId}
-          authenticated={authenticated}
-          currentTab={currentTab}
-          dataClub={dataClub}
-          router={router}
-          currentRoleName={currentRoleName}
-          handleTabsChange={handleTabsChange}
-        />
-      ) : (
-        <BioForPlayer
-          dataBioPlayer={dataBioPlayer}
-          dataAvgPlayer={dataAvgPlayer}
-          authenticated={authenticated}
-          currentTab={currentTab}
-          handleTabsChange={handleTabsChange}
-          currentRoleId={currentRoleId}
-          profile={profile}
-          dataClub={dataClub}
-          currentRoleName={currentRoleName}
-          router={router}
-        />
-      )}
+      {!isEmpty(idHead2Head) && <Head2Head />}
+
+      <div className={clsx(`  `, !isEmpty(idHead2Head) ? ' hidden ' : '  ')}>
+        {profile === 'coach' ? (
+          <BioForCoach
+            dataBioCoach={dataBioCoach}
+            dataAvgCoach={dataAvgCoach}
+            profile={profile}
+            currentRoleId={currentRoleId}
+            authenticated={authenticated}
+            currentTab={currentTab}
+            dataClub={dataClub}
+            router={router}
+            currentRoleName={currentRoleName}
+            handleTabsChange={handleTabsChange}
+          />
+        ) : (
+          <BioForPlayer
+            dataBioPlayer={dataBioPlayer}
+            dataAvgPlayer={dataAvgPlayer}
+            authenticated={authenticated}
+            currentTab={currentTab}
+            handleTabsChange={handleTabsChange}
+            currentRoleId={currentRoleId}
+            profile={profile}
+            dataClub={dataClub}
+            currentRoleName={currentRoleName}
+            router={router}
+          />
+        )}
+      </div>
     </DashboardLayout>
   )
 }

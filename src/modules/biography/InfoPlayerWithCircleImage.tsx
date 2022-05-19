@@ -13,6 +13,7 @@ import { axios } from 'src/utils/axios'
 import { safeHttpImage } from 'src/utils/utils'
 import { useAuth } from '../authentication/auth/AuthContext'
 import { FollowButton, FriendButton } from './ButtonsRelation'
+import { Head2HeadButton } from './Head2HeadButton'
 
 export const InfoPlayerWithCircleImage = ({
   dataBio,
@@ -199,37 +200,32 @@ export const InfoPlayerWithCircleImage = ({
             <Stars
               svgStarFull={
                 <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
                 >
-                  <path
-                    d="M6 8.635L9.09 10.5L8.27 6.985L11 4.62L7.405 4.315L6 1L4.595 4.315L1 4.62L3.73 6.985L2.91 10.5L6 8.635Z"
-                    fill="#FF9607"
-                  />
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               }
               svgStarHalf={
-                <img
-                  src={'/biography/starhalf.png'}
-                  className="w-[12px] h-[12px]"
-                  alt=""
-                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
               }
               svgStarEmpty={
                 <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
                 >
-                  <path
-                    d="M6 8.635L9.09 10.5L8.27 6.985L11 4.62L7.405 4.315L6 1L4.595 4.315L1 4.62L3.73 6.985L2.91 10.5L6 8.635Z"
-                    fill="#818389"
-                  />
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                 </svg>
               }
               numberOfStars={dataBio?.starRating}
@@ -380,7 +376,7 @@ export const InfoPlayerWithCircleImage = ({
         !feedPost &&
         dataBio?.userId !== currentRoleId &&
         authenticated && (
-          <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px]">
+          <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-3 gap-x-[8px]">
             <FriendButton
               setFakeRelation={setFakeRelation}
               friendStatus={relations.friendStatus}
@@ -394,6 +390,7 @@ export const InfoPlayerWithCircleImage = ({
               userId={dataBio.userId}
               relations={relations}
             />
+            <Head2HeadButton userId={dataBio.userId} />
           </div>
         )}
 
