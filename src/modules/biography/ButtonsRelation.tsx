@@ -48,7 +48,7 @@ export const FriendButton = ({
             alert('error')
           }
         }}
-        className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue font-medium "
+        className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-Inter bg-Blue font-bold "
       >
         Add as friend
       </Button>
@@ -140,7 +140,7 @@ export const FriendButton = ({
 
         <Button
           onClick={handleClick}
-          className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Blue font-medium "
+          className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-Inter bg-Blue font-bold "
         >
           Response
         </Button>
@@ -208,7 +208,7 @@ export const FriendButton = ({
         </Popover>
         <Button
           onClick={handleClick}
-          className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Dark-3 font-medium
+          className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-Inter bg-Dark-3 font-bold
         border-[2px] border-Grey
         "
         >
@@ -278,7 +278,7 @@ export const FriendButton = ({
         </Popover>
         <Button
           onClick={handleClick}
-          className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-Dark-3 font-medium
+          className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-Inter bg-Dark-3 font-bold
         border-[2px] border-white "
         >
           Friends
@@ -378,7 +378,7 @@ export const FollowButton = ({
         </Popover>
         <Button
           onClick={handleClick}
-          className=" relative h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent border-[2px] border-white font-medium "
+          className=" relative h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-Inter bg-transparent border-[2px] border-white font-bold "
         >
           Following
         </Button>
@@ -405,7 +405,7 @@ export const FollowButton = ({
               alert('error')
             }
           }}
-          className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-SVNGilroy bg-transparent border border-Green font-medium text-Green"
+          className="h-[50px] rounded-[8px] text-[16px] leading-[28px] text-white font-Inter bg-transparent border-[2px] border-Green font-bold text-Green"
         >
           Follow
         </Button>
@@ -430,7 +430,7 @@ export const FollowButton = ({
             alert('error')
           }
         }}
-        className="h-[50px] rounded-[8px] text-[16px] leading-[28px] font-SVNGilroy bg-transparent border border-Green font-medium text-Green"
+        className="h-[50px] rounded-[8px] text-[16px] leading-[28px] font-Inter bg-transparent border border-Green font-bold text-Green"
       >
         Follow back
       </Button>

@@ -12,6 +12,7 @@ import { axios } from 'src/utils/axios'
 import { safeHttpImage } from 'src/utils/utils'
 import { useAuth } from '../authentication/auth/AuthContext'
 import { FollowButton, FriendButton } from './ButtonsRelation'
+import { Head2HeadButton } from './Head2HeadButton'
 
 export const InfoCoachWithCircleImage = ({
   dataBio,
@@ -370,7 +371,7 @@ export const InfoCoachWithCircleImage = ({
       </div>
 
       {!signupForm && dataBio?.userId !== currentRoleId && authenticated && (
-        <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px] ">
+        <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-3 gap-x-[26px] ">
           <FriendButton
             setFakeRelation={setFakeRelation}
             friendStatus={relations.friendStatus}
@@ -383,6 +384,7 @@ export const InfoCoachWithCircleImage = ({
             userId={dataBio.userId}
             relations={relations}
           />
+          <Head2HeadButton userId={dataBio.userId} />
         </div>
       )}
 

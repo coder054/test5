@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { ROUTES } from 'src/constants/constants'
 import { useAuth } from '../authentication/auth/AuthContext'
 import { IBiographyPlayer } from 'src/constants/types/biography.types'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export const InfoPlayerWithAChart = ({
   dataBio,
@@ -35,6 +35,10 @@ export const InfoPlayerWithAChart = ({
     }
   }
 
+  useEffect(() => {
+    console.log('aaa dataBioRadarChart: ', dataBioRadarChart)
+  }, [dataBioRadarChart])
+
   return (
     <>
       <div className="max-w-[466px] mx-auto p-[8px] flex items-center gap-x-[4px] bg-Dark-3 mb-[20px] ">
@@ -57,15 +61,23 @@ export const InfoPlayerWithAChart = ({
       </div>
       <div className="bioradarchart sm:max-w-[466px] mx-auto relative mb-[32px] text-center ">
         <div className="bioradarchartsmall flex sm:hidden justify-center mx-auto ">
-          <BioRadarChart type="small" data={dataBioRadarChart}></BioRadarChart>
+          <BioRadarChart
+            showLegend={true}
+            type="small"
+            data={dataBioRadarChart}
+          ></BioRadarChart>
         </div>
 
         <div className="bioradarchartnormal hidden sm:block ">
-          <BioRadarChart type="normal" data={dataBioRadarChart}></BioRadarChart>
+          <BioRadarChart
+            showLegend={true}
+            type="normal"
+            data={dataBioRadarChart}
+          ></BioRadarChart>
         </div>
 
         <div
-          className="w-full sm:w-[404px] absolute left-1/2 transform -translate-x-1/2 bottom-[46px] min-h-[60px] 
+          className="w-full sm:w-[404px] absolute left-1/2 transform -translate-x-1/2 bottom-[46px] min-h-[60px]
               flex justify-between
             "
         >
