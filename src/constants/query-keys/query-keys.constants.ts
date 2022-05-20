@@ -65,6 +65,8 @@ export const QUERIES_FEED = {
   FEED_UNLIKE_POST: 'unlike-post',
   FEED_SAVE_POST: 'save-post',
   FEED_SHARED_BIOGRAPHY_POST: 'shared-biography-post',
+  FEED_SHARED_BIOGRAPHY_PLAYER_POST: 'shared-biography-player-post',
+  FEED_SHARED_BIOGRAPHY_COACH_POST: 'shared-biography-coach-post',
   FEED_PLAYER_OF_THE_WEEK: 'player-of-the-week',
 }
 
@@ -78,4 +80,8 @@ export const QUERIES_CLUBS = {
 
 export const QUERIES_COMMENTS = {
   COMMENT: 'comments',
+  CREATE_COMMENT: 'create-comments',
+  LIKE_COMMENT: 'like-comments',
+  BLOCK_COMMENT: 'block-comments',
+  DELETE_COMMENT: 'delete-comments',
 }

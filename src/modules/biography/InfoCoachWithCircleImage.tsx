@@ -17,10 +17,14 @@ export const InfoCoachWithCircleImage = ({
   dataBio,
   currentRoleId,
   signupForm,
+  countryFlagUrl,
+  feedPost,
 }: {
   dataBio: IBiographyCoach
   currentRoleId?: string
   signupForm?: boolean
+  feedPost?: boolean
+  countryFlagUrl?: string
 }) => {
   const [fakeRelation, setFakeRelation] = useState({
     followStatus: null,
@@ -36,29 +40,29 @@ export const InfoCoachWithCircleImage = ({
       {},
       {
         followStatus:
-          fakeRelation.followStatus !== null
-            ? fakeRelation.followStatus
-            : dataBio.followStatus,
+          fakeRelation?.followStatus !== null
+            ? fakeRelation?.followStatus
+            : dataBio?.followStatus,
         friendStatus:
-          fakeRelation.friendStatus !== null
-            ? fakeRelation.friendStatus
-            : dataBio.friendStatus,
+          fakeRelation?.friendStatus !== null
+            ? fakeRelation?.friendStatus
+            : dataBio?.friendStatus,
         isConfirmBox:
-          fakeRelation.isConfirmBox !== null
-            ? fakeRelation.isConfirmBox
-            : dataBio.isConfirmBox,
+          fakeRelation?.isConfirmBox !== null
+            ? fakeRelation?.isConfirmBox
+            : dataBio?.isConfirmBox,
         isFollowed:
-          fakeRelation.isFollowed !== null
-            ? fakeRelation.isFollowed
-            : dataBio.isFollowed,
+          fakeRelation?.isFollowed !== null
+            ? fakeRelation?.isFollowed
+            : dataBio?.isFollowed,
         isPublic:
-          fakeRelation.isPublic !== null
-            ? fakeRelation.isPublic
-            : dataBio.isPublic,
+          fakeRelation?.isPublic !== null
+            ? fakeRelation?.isPublic
+            : dataBio?.isPublic,
         fanCount:
-          fakeRelation.fanCount !== null
-            ? fakeRelation.fanCount
-            : dataBio.fanCount,
+          fakeRelation?.fanCount !== null
+            ? fakeRelation?.fanCount
+            : dataBio?.fanCount,
       }
     )
   }, [fakeRelation, dataBio])
@@ -138,7 +142,7 @@ export const InfoCoachWithCircleImage = ({
               alt=""
             />
             <div className="text-Grey text-[12px] leading-[20px] font-bold text-right ">
-              {dataBio.contractedUntil}
+              {dataBio?.contractedUntil}
             </div>
           </div>
 
@@ -154,7 +158,7 @@ export const InfoCoachWithCircleImage = ({
           <div className="h-[45px] ">
             <div className="text-white text-[18px] leading-[24px] text-right whitespace-nowrap ">
               <span className="inline-block mr-[2px] text-[14px] font-semibold ">
-                {dataBio.managementStyle}
+                {dataBio?.managementStyle}
               </span>
             </div>
             <div className="text-Grey text-[12px] leading-[20px] font-bold text-right ">
@@ -275,12 +279,12 @@ export const InfoCoachWithCircleImage = ({
               alt=""
             />
             <div className="text-Grey text-[12px] leading-[20px] font-bold text-left ">
-              {dataBio.birthDay}
+              {dataBio?.birthDay}
             </div>
           </div>
           <div className="h-[45px] ">
             <div className="text-white text-[14px] font-semibold leading-[24px] text-left whitespace-nowrap ">
-              {dataBio.expLevel}
+              {dataBio?.expLevel}
             </div>
             <div className="text-Grey text-[12px] leading-[20px] font-bold text-left ">
               EXP.LEVEL
@@ -289,7 +293,7 @@ export const InfoCoachWithCircleImage = ({
 
           <div className="h-[45px] ">
             <div className="text-white leading-[24px] text-left text-[14px] font-semibold">
-              {dataBio.managementType}
+              {dataBio?.managementType}
             </div>
             <div className="text-Grey text-[12px] leading-[20px] font-bold text-left ">
               TYPE
@@ -369,22 +373,25 @@ export const InfoCoachWithCircleImage = ({
         {/*  */}
       </div>
 
-      {!signupForm && dataBio?.userId !== currentRoleId && authenticated && (
-        <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px] ">
-          <FriendButton
-            setFakeRelation={setFakeRelation}
-            friendStatus={relations.friendStatus}
-            userId={dataBio.userId}
-          />
-          <FollowButton
-            setFakeRelation={setFakeRelation}
-            followStatus={relations.followStatus}
-            isFollowed={relations.isFollowed}
-            userId={dataBio.userId}
-            relations={relations}
-          />
-        </div>
-      )}
+      {!signupForm &&
+        dataBio?.userId !== currentRoleId &&
+        authenticated &&
+        !feedPost && (
+          <div className="max-w-[466px] mx-auto mb-[24px] grid grid-cols-2 gap-x-[26px] ">
+            <FriendButton
+              setFakeRelation={setFakeRelation}
+              friendStatus={relations?.friendStatus}
+              userId={dataBio?.userId}
+            />
+            <FollowButton
+              setFakeRelation={setFakeRelation}
+              followStatus={relations?.followStatus}
+              isFollowed={relations?.isFollowed}
+              userId={dataBio?.userId}
+              relations={relations}
+            />
+          </div>
+        )}
 
       {/* {signupForm && dataBio?.summary && ( */}
       {dataBio?.summary && (

@@ -10,6 +10,7 @@ import { InjurySpot } from 'src/modules/update-diary/player/components/InjurySpo
 
 interface InjuryChartProps {
   lastDateRange?: string
+  postId?: string
   setLastDateRange?: (lastDate?: string) => void
   setCurrentTab?: (tab?: string) => void
 }
@@ -17,6 +18,7 @@ interface InjuryChartProps {
 export const InjuryChart = ({
   lastDateRange,
   setCurrentTab,
+  postId,
 }: InjuryChartProps) => {
   const [dataChart, setDataChart] = useState<DashboardPainType>({
     bodyChart: [],
@@ -27,7 +29,7 @@ export const InjuryChart = ({
   })
 
   const { isLoading: loading, data: dataPain } = useQuery(
-    [QUERIES_DASHBOARD.PAIN_DATA, lastDateRange],
+    [QUERIES_DASHBOARD.PAIN_DATA, lastDateRange, postId],
     () => getDashboardPain(lastDateRange)
   )
 

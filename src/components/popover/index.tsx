@@ -5,6 +5,7 @@ interface PopoverType {
   children: ReactElement
   anchorEl?: Element
   setAnchorEl?: (value: boolean) => void
+  setCheckAccount?: Function
   id?: string
 }
 
@@ -13,9 +14,11 @@ export const BasicPopover = ({
   anchorEl,
   setAnchorEl,
   id,
+  setCheckAccount,
 }: PopoverType) => {
   const handleClose = () => {
     setAnchorEl && setAnchorEl(null)
+    setCheckAccount && setCheckAccount('')
   }
 
   const open = Boolean(anchorEl)

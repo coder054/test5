@@ -29,7 +29,7 @@ export const TabYours = () => {
         feedTab: 'yours',
       })
 
-      // console.log('data:', res.data[1])
+      // console.log('data:', res.data[5])
 
       return res.data
     },

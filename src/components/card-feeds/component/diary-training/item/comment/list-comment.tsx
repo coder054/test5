@@ -3,6 +3,7 @@ import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery, useQuery } from 'react-query'
 import { MiniLoading } from 'src/components/mini-loading'
 import { Loading } from 'src/components/MyLoading'
+import { WriteComment } from 'src/components/write-comment'
 import {
   QUERIES_COMMENTS,
   QUERIES_FEED,
@@ -32,7 +33,7 @@ export const ListComment = ({ postId, typeOfPost }: ListCommentType) => {
     fetchNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery(
-    [QUERIES_COMMENTS],
+    [QUERIES_COMMENTS.COMMENT],
     async ({ pageParam = startAfter }) => {
       const res = await getListComment({
         limit: limit,
@@ -64,22 +65,27 @@ export const ListComment = ({ postId, typeOfPost }: ListCommentType) => {
           {(data?.pages || []).map((page) => (
             <Fragment>
               {(page?.data || []).map((item) => (
-                <Comment comment={item && item} />
+                <Comment
+                  comment={item && item}
+                  postId={postId}
+                  typeOfPost={typeOfPost}
+                />
               ))}
             </Fragment>
           ))}
         </Fragment>
       </Loading>
-      <div className="w-full">
-        <p
-          className="flex justify-center py-2 font-semibold text-[16px] w-[36px] h-[36px] text-center mx-auto"
-          ref={ref}
-        >
-          {isFetchingNextPage ? (
+
+      {isFetchingNextPage ? (
+        <div className="w-full">
+          <p
+            className="flex justify-center py-2 font-semibold text-[16px] w-[36px] h-[36px] text-center mx-auto"
+            ref={ref}
+          >
             <MiniLoading color="#09E099" size={24} />
-          ) : null}
-        </p>
-      </div>
+          </p>
+        </div>
+      ) : null}
     </div>
   )
 }

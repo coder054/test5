@@ -333,6 +333,8 @@ export interface BioInfoType {
   fanCount: number
   followCount: number
   friendCount: number
+  countLikes?: number
+  countComments?: number
 }
 
 export interface PlayerRadarSkills {
