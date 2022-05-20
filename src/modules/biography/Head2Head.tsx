@@ -11,44 +11,41 @@ import { equalStr, getErrorMessage, getStr } from 'src/utils/utils'
 import { API_ACHIEVEMENTS_TROPHY } from 'src/constants/api.constants'
 import { ItemAward, ItemTrophy } from './InfoWithImages'
 import { SvgFilter, SvgFilter3Line } from 'src/imports/svgs'
+import { useQuery } from 'react-query'
 
 export const Head2Head = () => {
   const { idHead2Head, setIdHead2Head } = useIdHead2HeadQuery()
-  const [data, setData] = useState<IHead2Head>(null)
-  const [loading, setLoading] = useState(true)
+  let date = new Date()
+  date.setDate(date.getDate() - 365)
+  const [startDate, setStartDate] = useState(date)
 
-  useEffect(() => {
-    ;(async function () {
-      // https://dev.api.zporter.co/biographies/players/head-2-head?limit=10&startAfter=1&sorted=asc&statsTab=Total&startDate=2022-04-18T10%3A04%3A46%2B00%3A00&endDate=2022-05-18T10%3A04%3A46%2B00%3A00&userIdQuery=008a5eab-1837-4121-8975-9ec94159b685
+  const [endDate, setEndDate] = useState<Date>(new Date())
+  const [params, setParams] = useState({
+    limit: 1,
+    startAfter: 1,
+    sorted: 'asc',
+    statsTab: 'Total',
+    startDate: startDate.toISOString(),
+    endDate: new Date().toISOString(),
+    userIdQuery: idHead2Head,
+  })
 
-      try {
-        setLoading(true)
-        let startDate = new Date()
-        startDate.setDate(startDate.getDate() - 365)
-        const params = {
-          limit: 1,
-          startAfter: 1,
-          sorted: 'asc',
-          statsTab: 'Total',
-          startDate: startDate.toISOString(),
-          endDate: new Date().toISOString(),
-          userIdQuery: idHead2Head,
-        }
+  //////////////////////////////////////////////
+  const {
+    isLoading,
+    error,
+    data,
+  }: {
+    isLoading: boolean
+    error: any
+    data: IHead2Head
+  } = useQuery(['head2head', params], async () => {
+    const { data: dataResp } = await axios.get(
+      `/biographies/players/head-2-head?${queryString.stringify(params)}`
+    )
 
-        const { data: dataResp } = await axios.get(
-          `/biographies/players/head-2-head?${queryString.stringify(params)}`
-        )
-
-        setData(dataResp)
-      } catch (error) {
-        alert(getErrorMessage(error))
-      } finally {
-        setLoading(false)
-      }
-    })()
-
-    return () => {}
-  }, [])
+    return dataResp
+  })
 
   const bios = useMemo(() => {
     if (isEmpty(data)) {
@@ -193,13 +190,14 @@ export const Head2Head = () => {
     ]
   }, [bios])
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center mt-[20px]  ">
         <CircularProgress />
       </div>
     )
   }
+  if (error) return 'An error has occurred: ' + error.message
 
   if (isEmpty(data)) {
     return null
