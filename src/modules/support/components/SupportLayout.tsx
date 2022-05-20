@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { ReactElement } from 'react'
 import { Logo } from 'src/components/logo'
+import { Footer } from 'src/modules/landing-page/components/Footer'
 
 interface SupportLayoutProps {
   children: ReactElement
@@ -17,6 +18,7 @@ export default function SupportLayout({ children, title }: SupportLayoutProps) {
         </button>
         <p className="text-3xl text-center my-4 font-bold">{title}</p>
         <div className="tabletM:w-3/5 mx-auto">{children}</div>
+        <Footer />
       </div>
     </div>
   )

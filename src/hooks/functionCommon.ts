@@ -176,13 +176,6 @@ export const getDefaultDay = (date: string | Date) => {
   ) {
     return 'Today'
   }
-  if (
-    flexingFormatDate(date, 'MM/DD/YYYY') ===
-      flexingFormatDate(new Date(), 'MM/DD/YYYY') &&
-    +flexingFormatDate(date, 'HH') < 12
-  ) {
-    return 'Yesterday'
-  }
 }
 
 export const getPreviousDate = (date: string | Date) => {

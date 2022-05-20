@@ -95,14 +95,14 @@ export const SectionThree = () => {
           </div>
         </div>
       ) : (
-        <div
-          style={{
-            backgroundImage: safeHttpImage(
-              'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2FLanding-4-min.png?alt=media&token=54a92dc7-aa3d-4f8c-9bc0-98dc8f2c6123'
-            ),
-          }}
-          className="w-full bg-cover bg-center mobileM:h-[700px] tabletM:h-[500px] relative"
-        >
+        <div className="w-full mobileM:h-[700px] tabletM:h-[500px] relative">
+          <img
+            loading="lazy"
+            src={safeHttpImage(
+              'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2Fwebp%2FLanding-4-min.webp?alt=media&token=452c53e2-8c34-4eab-9d9d-8db21f23c232'
+            )}
+            className={clsx('h-full w-full object-cover absolute')}
+          />
           <div className="w-full h-[190px] bg-gradient-to-b from-white absolute top-0 z-10"></div>
           <div className="absolute w-full mobileM:top-[190px] mobileL:top-[180px] flex flex-col items-center z-20">
             <div
