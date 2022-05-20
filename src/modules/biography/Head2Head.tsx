@@ -7,9 +7,10 @@ import { useIdHead2HeadQuery } from 'src/atoms/biographyAtom'
 import { Stars } from 'src/components/common/Stars'
 import { BioRadarChart } from 'src/components/specific/BioRadarChart'
 import { axios } from 'src/utils/axios'
-import { getErrorMessage, getStr } from 'src/utils/utils'
+import { equalStr, getErrorMessage, getStr } from 'src/utils/utils'
 import { API_ACHIEVEMENTS_TROPHY } from 'src/constants/api.constants'
 import { ItemAward, ItemTrophy } from './InfoWithImages'
+import { SvgFilter, SvgFilter3Line } from 'src/imports/svgs'
 
 export const Head2Head = () => {
   const { idHead2Head, setIdHead2Head } = useIdHead2HeadQuery()
@@ -23,7 +24,7 @@ export const Head2Head = () => {
       try {
         setLoading(true)
         let startDate = new Date()
-        startDate.setDate(startDate.getDate() - 30)
+        startDate.setDate(startDate.getDate() - 365)
         const params = {
           limit: 1,
           startAfter: 1,
@@ -77,6 +78,38 @@ export const Head2Head = () => {
     }
 
     return [data?.capsCompare?.userA, data?.capsCompare?.userB]
+  }, [data])
+
+  const matches = useMemo(() => {
+    if (isEmpty(data)) {
+      return []
+    }
+
+    const arr1 = Object.entries(data.matchesCompare)
+    const arr2: {
+      userA: number
+      totalUserA: number
+      userB: number
+      totalUserB: number
+      title: string
+    }[] = arr1.map((o) => ({ ...o[1], title: o[0] }))
+    return arr2
+  }, [data])
+
+  const trainings = useMemo(() => {
+    if (isEmpty(data)) {
+      return []
+    }
+
+    const arr1 = Object.entries(data.trainingsCompare)
+    const arr2: {
+      userA: number
+      totalUserA: number
+      userB: number
+      totalUserB: number
+      title: string
+    }[] = arr1.map((o) => ({ ...o[1], title: o[0] }))
+    return arr2
   }, [data])
 
   const dataChart = useMemo(() => {
@@ -679,6 +712,31 @@ export const Head2Head = () => {
           STATS BENCHMARK
         </div>
         {/* STATS BENCHMARK */}
+
+        <div className=" flex justify-between items-center ">
+          <span className="text-Green  ">2022 - Last 365 days</span>
+          <SvgFilter3Line className={''} onClick={() => {}} />
+        </div>
+
+        <div className="text-Grey ">Matches in total</div>
+        {matches.map(({ title, totalUserA, totalUserB }, index) => (
+          <ItemMatch
+            key={title}
+            title={title}
+            userAValue={totalUserA}
+            userBValue={totalUserB}
+          ></ItemMatch>
+        ))}
+
+        <div className="text-Grey ">Training in total</div>
+        {trainings.map(({ title, totalUserA, totalUserB }, index) => (
+          <ItemMatch
+            key={title}
+            title={title}
+            userAValue={totalUserA}
+            userBValue={totalUserB}
+          ></ItemMatch>
+        ))}
       </div>
     </>
   )
@@ -822,4 +880,33 @@ export interface TrophiesCompareUserA {
   serieTrophyCount: number
   cupTrophyCount: number
   otherTrophyCount: number
+}
+
+const ItemMatch = ({ title, userAValue, userBValue }) => {
+  let color = ''
+  if (equalStr(title, 'yel')) {
+    color = 'bg-yellow-400'
+  } else if (equalStr(title, 'red')) {
+    color = 'bg-red-400'
+  } else {
+    color = 'bg-Green'
+  }
+  return (
+    <div className="mb-2">
+      <div className="grid grid-cols-3 ">
+        <div className="text-white font-bold text-left "> {userAValue} </div>
+        <div className="text-white font-bold text-[14px] uppercase text-center ">
+          {equalStr(title, 'yel') ? 'yellow' : title}
+        </div>
+        <div className="text-white font-bold text-right "> {userBValue} </div>
+      </div>
+      <div
+        className={clsx(
+          ` h-[24px] sm:h-[30px]
+          w-full`,
+          color
+        )}
+      ></div>
+    </div>
+  )
 }
