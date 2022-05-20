@@ -1,11 +1,10 @@
 import { useAtom } from 'jotai'
 import React, {
+  ChangeEvent,
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
-  ChangeEvent,
 } from 'react'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 import { MyInputChips } from 'src/components'
@@ -49,6 +48,10 @@ const INITITAL_VALUE = {
   tactics: 0,
   technics: 0,
   trainingMedia: [],
+  yourPerformance: 'NORMAL',
+  teamPerformance: 'NORMAL',
+  teamReview: '',
+  trainingReview: '',
 }
 
 export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
@@ -137,19 +140,6 @@ export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
   return (
     <div className="mobileM:space-y-3 tabletM:space-y-4">
       <MySlider
-        label="How physically strain, was it?"
-        onChange={(e) =>
-          setFormValues((prev) => ({
-            ...prev,
-            physicallyStrain: numToScale(e),
-          }))
-        }
-        value={scaleToNum(formValues.physicallyStrain)}
-        isScale
-        step={25}
-        labelClass="text-[#A2A5AD]"
-      />
-      <MySlider
         label="Hours of Practice"
         onChange={(e) =>
           setFormValues((prev) => ({ ...prev, hoursOfPractice: e }))
@@ -208,6 +198,19 @@ export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
       <p className="text-[18px] pt-6 font-normal">Your training review</p>
       <div className="space-y-9">
         <MySlider
+          label="How physically strain, was it?"
+          onChange={(e) =>
+            setFormValues((prev) => ({
+              ...prev,
+              physicallyStrain: numToScale(e),
+            }))
+          }
+          value={scaleToNum(formValues.physicallyStrain)}
+          isScale
+          step={25}
+          labelClass="text-[#A2A5AD]"
+        />
+        <MySlider
           label="How was your training performance?"
           onChange={(e) =>
             setFormValues((prev) => ({
@@ -244,7 +247,6 @@ export const Training = ({ currentTab, onChange, error }: TrainingProps) => {
           value={emotionToNum(formValues.teamPerformance)}
           labelClass="text-[#A2A5AD]"
         />
-
         <MyTextArea
           label="Your Teams training review"
           value={formValues.teamReview}

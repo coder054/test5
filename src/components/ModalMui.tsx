@@ -25,9 +25,11 @@ type MyModalProps = {
   isOpen: boolean
   onClose: (value: boolean) => void
   children: React.ReactElement
+  hideBackdrop?: boolean
 }
 
 export const ModalMui = ({
+  hideBackdrop,
   isOpen,
   onClose,
   children,
@@ -35,7 +37,11 @@ export const ModalMui = ({
   showXIcon,
 }: MyModalProps) => {
   return (
-    <Modal open={isOpen} onClose={() => onClose(false)}>
+    <Modal
+      open={isOpen}
+      onClose={() => onClose(false)}
+      hideBackdrop={hideBackdrop}
+    >
       <Box sx={{ ...style, ...sx }}>
         {showXIcon && (
           <button
@@ -43,7 +49,7 @@ export const ModalMui = ({
             onClick={() => {
               onClose(false)
             }}
-            className="absolute right-4 top-4 z-10 "
+            className="absolute right-4 top-4 z-50"
           >
             <XIcon />
           </button>

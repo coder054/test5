@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
 import { API_DIARY, API_GET_DIARY } from 'src/constants/api.constants'
-import { InjuryType } from 'src/constants/types/diary.types'
+import { InjuryType, TypeOfDiaries } from 'src/constants/types/diary.types'
 import { getStartOfDate } from 'src/hooks/functionCommon'
 import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
@@ -18,6 +18,30 @@ export const fetchDiary = async (date?: string | Date, roleName?: string) => {
     .catch(() => {
       toast.error('Something went wrong')
     })
+}
+
+export const fetchParticipate = async ({
+  createdAt,
+  typeOfDiary,
+  limit,
+  startAfter,
+  sorted,
+}: {
+  limit: number
+  startAfter: number
+  sorted: string
+  createdAt: string | Date
+  typeOfDiary: TypeOfDiaries | string
+}) => {
+  return axios.get('diaries/get-original-diaries', {
+    params: {
+      limit,
+      startAfter,
+      sorted,
+      createdAt: getStartOfDate(createdAt),
+      typeOfDiary,
+    },
+  })
 }
 
 export const fetchMember = async (teamId: string) => {

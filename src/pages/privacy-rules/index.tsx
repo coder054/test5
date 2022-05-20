@@ -6,7 +6,7 @@ const PrivacyPage: NextPage = ({ data }: any) => {
   const HTML_STRING = data.content
 
   return (
-    <SupportLayout title="Privacy Rules">
+    <SupportLayout>
       <div className="my-6">{parse(HTML_STRING)}</div>
     </SupportLayout>
   )

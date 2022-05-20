@@ -1,10 +1,10 @@
 import { Fragment, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useInfiniteQuery } from 'react-query'
-import { CardNews, Loading } from 'src/components'
+import { Loading } from 'src/components'
 import { CardFeed } from 'src/components/card-feeds'
 import { MiniLoading } from 'src/components/mini-loading'
-import { ASC, DESC } from 'src/constants/constants'
+import { DESC } from 'src/constants/constants'
 import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
 import { getListPosts } from 'src/service/feed/yours.service'
 
@@ -28,9 +28,6 @@ export const TabSaved = () => {
         sorted: sorted,
         feedTab: 'saved',
       })
-
-      // console.log('data:', res.data[1])
-
       return res.data
     },
     {

@@ -5,12 +5,14 @@ export const Footer = () => {
   return (
     <div className="bg-[#13131C]">
       <div className="laptopM:w-[1320px] mx-auto py-14 space-y-14 mobileM:px-[30px]">
-        <div className="grid laptopM:grid-cols-4 laptopM:space-x-12 mobileM:space-y-5">
+        <div className="grid tabletM:grid-cols-4  tabletM:space-x-12 mobileM:space-y-5">
           <div className="flex flex-col items-start space-y-5">
-            <span className="scale-150 -ml-[20px] px-4">
-              <Logo />
-            </span>
-            <p className="font-medium text-[14px] laptopM:w-[280px]">
+            <Link href="/">
+              <span className="scale-125 -ml-[20px] px-4 cursor-pointer">
+                <Logo />
+              </span>
+            </Link>
+            <p className="font-medium text-[14px]">
               Zporter is a free software as a service via web- and apps to
               entertain, grow and empower (young) football talents globally in a
               healthier way.
@@ -18,7 +20,7 @@ export const Footer = () => {
           </div>
           <div className="text-[16px]">
             <p className="font-bold pb-7">MENU</p>
-            <ul className="mobileM:pl-4 laptopM:pl-0 font-medium space-y-4">
+            <ul className="mobileM:pl-4 tabletM:pl-0 font-medium space-y-4">
               <li>Home</li>
               <li>Sign up & In</li>
               <li>Biographies</li>
@@ -27,7 +29,7 @@ export const Footer = () => {
           </div>
           <div className="text-[16px]">
             <p className="font-bold pb-7">LEGAL</p>
-            <ul className="mobileM:pl-4 laptopM:pl-0 font-medium space-y-4">
+            <ul className="mobileM:pl-4 tabletM:pl-0 font-medium space-y-4">
               <li>About us</li>
               <li>
                 <Link href="/term-and-conditions">Term & Conditions</Link>
@@ -42,7 +44,7 @@ export const Footer = () => {
           </div>
           <div className="text-[16px]">
             <p className="font-bold pb-7">SOCIAL</p>
-            <ul className="mobileM:pl-4 laptopM:pl-0 font-medium space-y-4">
+            <ul className="mobileM:pl-4 tabletM:pl-0 font-medium space-y-4">
               <li>Instagram</li>
               <li>Facebook</li>
               <li>Twitter</li>
