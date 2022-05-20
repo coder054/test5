@@ -208,11 +208,11 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
           <button
             type="button"
             onClick={() => setOpenLink(false)}
-            className="absolute z-50 right-0 -top-4"
+            className="absolute z-50 right-0 -top-1"
           >
             <XIcon />
           </button>
-          <iframe src={card?.link} className="w-full h-full pt-4"></iframe>
+          <iframe src={card?.link} className="w-full h-full pt-8"></iframe>
         </div>
       </ModalMui>
     </div>

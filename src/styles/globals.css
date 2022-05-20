@@ -72,7 +72,7 @@
     font-weight: 400;
     src: local('/fonts/svn-gilroy/Gilroy-RegularItalic.ttf'),
       url('/fonts/svn-gilroy/Gilroy-RegularItalic.ttf') format('truetype');
-      font-display: swap;
+    font-display: swap;
   }
   @font-face {
     font-family: 'SVN-Gilroy';
@@ -101,7 +101,7 @@
     font-weight: 600;
     src: local('/fonts/svn-gilroy/Gilroy-SemiBoldItalic.ttf'),
       url('/fonts/svn-gilroy/Gilroy-SemiBoldItalic.ttf') format('truetype');
-      font-display: swap;
+    font-display: swap;
   }
 
   @font-face {

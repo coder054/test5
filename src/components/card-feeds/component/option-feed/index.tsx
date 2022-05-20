@@ -22,14 +22,21 @@ import { ModalReport } from './modal-report'
 import SimpleBar from 'simplebar-react'
 import { CardFeedType } from 'src/constants/types/feed/yours'
 import { DashboardUpdatesType } from 'src/constants/types/dashboard/training.types'
+import clsx from 'clsx'
+import { CommentType } from '../../constants/types'
 
 interface OptionFeedType {
   userId?: string
   type?: string
   providerId?: string
   link?: string
+  className?: string
   reportUserName?: string
   card?: CardFeedType
+  handleBlockComment?: Function
+  handleDeleteComment?: Function
+  comment?: CommentType
+  checkAccount?: string
 }
 
 export const OptionFeed = ({
@@ -39,8 +46,12 @@ export const OptionFeed = ({
   link,
   reportUserName,
   card,
+  className,
+  handleBlockComment,
+  handleDeleteComment,
+  comment,
+  checkAccount,
 }: OptionFeedType) => {
-  const { currentRoleId } = useAuth()
   const queryClient = useQueryClient()
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [openModalEdit, setOpenModalEdit] = useState<boolean>(false)
@@ -53,6 +64,10 @@ export const OptionFeed = ({
   const [openModalReport, setOpenModalReport] = useState<boolean>(false)
 
   const [anchorEl, setAnchorEl] = useState(null)
+  const classNames = clsx(className && className)
+  const { currentRoleId, userRoles } = useAuth()
+  // console.log('userRoles', userRoles)
+  // console.log('comment', comment?.userId)
 
   const { isLoading: loadingSubscribe, mutate: subScribe } = useMutation(
     [QUERIES_FEED.FEED_SUBSCRIBE_PROVIDER],
@@ -88,12 +103,30 @@ export const OptionFeed = ({
 
   const handleConfirmFollow = () => {}
 
-  const handleConfirmDeleteComment = () => {}
+  const handleConfirmDeleteComment = () => {
+    setOpenModalDeleteComment(false)
+    handleDeleteComment && handleDeleteComment()
+  }
 
-  const handleConfirmBlockComment = () => {}
+  const handleConfirmBlockComment = () => {
+    setOpenModalBlockComment(false)
+    handleBlockComment && handleBlockComment()
+  }
+
+  // const handleCheckAccount = () => {
+  //   if (comment?.userId === currentRoleId) {
+  //     return 'sameRole'
+  //   } else {
+  //     userRoles.forEach((role) => {
+  //       if (role?.roleId === comment?.userId) {
+  //         return 'sameAccount'
+  //       }
+  //     })
+  //   }
+  // }
 
   return (
-    <div className="">
+    <div className={`${classNames}`}>
       {type !== remind_update_diaries && (
         <div onClick={handleOption} aria-describedby={'basic-popover'}>
           <SvgOptionMenu />
@@ -224,19 +257,27 @@ export const OptionFeed = ({
             <div
               className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer
                 text-[#D60C0C] font-semibold"
-              onClick={() => setOpenModalDeleteComment(true)}
+              onClick={() => {
+                setOpenModalDeleteComment(true)
+                handleDeleteComment && handleDeleteComment
+              }}
             >
               <SvgDelete />
               <span className="ml-[12px]">Delete comment</span>
             </div>
-            <div
-              className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer
+
+            {checkAccount !== 'sameRole' && (
+              <div
+                className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer
               text-[#D60C0C] font-semibold"
-              onClick={() => setOpenModalBlockComment(true)}
-            >
-              <SvgBlock fill="#D60C0C" width={14} height={14} />
-              <span className="ml-[8px]">Block comment</span>
-            </div>
+                onClick={() => {
+                  setOpenModalBlockComment(true)
+                }}
+              >
+                <SvgBlock fill="#D60C0C" width={14} height={14} />
+                <span className="ml-[8px]">Block comment</span>
+              </div>
+            )}
           </>
         </BasicPopover>
       )}

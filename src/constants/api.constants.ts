@@ -100,3 +100,9 @@ export const API_GET_LIST_POSTS = 'feed/get-list-posts'
 export const API_SAVE_POST = 'feed/save-post'
 export const API_CRM_CREATE_SUPPORT_TICKET = 'crm/create-support-ticket'
 export const API_GET_LIST_COMMENTS = 'comment/get-list-comments'
+
+//comment
+export const API_CREATE_COMMENT = 'comment/create-comment'
+export const API_LIKE_COMMENT = 'comment/like-comment'
+export const API_DELETE_COMMENT = 'comment/delete-comment'
+export const API_BLOCK_COMMENT = 'comment/block-comment'

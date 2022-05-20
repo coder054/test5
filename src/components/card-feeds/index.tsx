@@ -41,6 +41,11 @@ import { SharedLeaderBoard } from './component/shared-leaderboard'
 import { PersonalGoals } from './component/personal_goals'
 import { PlayerOfTheWeek } from './component/player-of-the-week'
 import { OptionFeed } from './component/option-feed'
+import { ModalMui } from '../ModalMui'
+import { isMobile } from 'react-device-detect'
+import SimpleBar from 'simplebar-react'
+import { XIcon } from '../icons'
+import { ModalDiaryTraining } from './component/diary-training/item/modal-diary-training'
 
 interface CardYourType {
   card?: CardFeedType
@@ -50,6 +55,8 @@ export const CardFeed = ({ card }: CardYourType) => {
   const queryClient = useQueryClient()
   const [play, setPlay] = useState<boolean>(false)
   const [openOption, setOpenOption] = useState<boolean>(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const [focusComment, setFocusComment] = useState<boolean>(false)
 
   const { isLoading: loadingSubscribe, mutate: subScribe } = useMutation(
     [QUERIES_FEED.FEED_SUBSCRIBE_PROVIDER],
@@ -123,6 +130,13 @@ export const CardFeed = ({ card }: CardYourType) => {
     } else {
       setOpenOption(false)
     }
+  }
+
+  const handleClickComment = () => {
+    if (!focusComment) {
+      setFocusComment(true)
+    }
+    setOpenModal(true)
   }
 
   // const handleUnfollow = () => {
@@ -238,17 +252,17 @@ export const CardFeed = ({ card }: CardYourType) => {
               </Text>
             )}
 
-            {card?.typeOfPost === shared_biographies && (
+            {/* {card?.typeOfPost === shared_biographies && (
               <Text name="Caption" className=" inline-block ">
                 {`${formatDistanceToNowStrict(
-                  card?.userInfo?.createdAt as number
+                  (card?.userInfo?.createdAt as number) || 0
                 )} ${card?.userInfo?.city ? '-' : ''} ${
                   card?.userInfo?.birthCountry?.alpha2Code
                 }/${card?.userInfo?.city || ''} /${dayjs(
                   card?.userInfo?.createdAt
                 ).format('YYYY')}`}
               </Text>
-            )}
+            )} */}
             {card?.typeOfPost === player_of_the_weeks && (
               <Text name="Caption" className=" inline-block ">
                 {formatDistanceToNowStrict(card?.createdAt as number)}
@@ -266,7 +280,14 @@ export const CardFeed = ({ card }: CardYourType) => {
         />
       </div>
 
-      {handleTypeOfPost(card?.typeOfPost, card?.typeOfDiary || '')}
+      <div
+        onClick={() => {
+          setOpenModal(true)
+        }}
+        className="cursor-pointer"
+      >
+        {handleTypeOfPost(card?.typeOfPost, card?.typeOfDiary || '')}
+      </div>
 
       <p
         className={`${cls.lineClamp} ${
@@ -298,16 +319,15 @@ export const CardFeed = ({ card }: CardYourType) => {
             >
               <SvgFavorite active={card?.isLiked} />
             </div>
-            {/* <Text name="Body2" className="text-Grey ">
-              {card?.userInfo?.age as number}
-            </Text> */}
           </div>
 
           <div className="flex ml-[32px]">
-            {/* <Text name="Body2" className="text-Grey mr-1 ">
-              {card?.userInfo?.age as number}
-            </Text> */}
-            <SvgComment />
+            <div
+              onClick={handleClickComment}
+              className="w-[20px] hover:scale-110 duration-150"
+            >
+              <SvgComment />
+            </div>
           </div>
         </div>
 
@@ -321,6 +341,30 @@ export const CardFeed = ({ card }: CardYourType) => {
           <SvgSave fill={`${card?.isSaved ? '#09E099' : ''}`} />
         </div>
       </div>
+
+      <ModalMui
+        sx={{
+          padding: 0,
+          top: '50%',
+          width: isMobile ? '100%' : 950,
+          overflow: 'auto',
+        }}
+        isOpen={openModal}
+        onClose={setOpenModal}
+      >
+        <SimpleBar style={{ maxHeight: 850 }}>
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setOpenModal(false)}
+              className="absolute z-50 right-2 -top-4"
+            >
+              <XIcon />
+            </button>
+            <ModalDiaryTraining card={card} focusComment={focusComment} />
+          </div>
+        </SimpleBar>
+      </ModalMui>
     </div>
   )
 }

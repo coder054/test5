@@ -27,10 +27,10 @@ const NewsPage: NextPage = () => {
   }, [dynamicLink])
 
   return (
-    <div className="mt-8 flex justify-center">
-      <div className="bg-[#4654EA] h-[36px] flex justify-center items-center w-[130px] rounded-[7px] hover:bg-[#535edf] active:bg-[#2939eb]">
+    <div className="w-full h-screen flex justify-center items-center">
+      <div className="bg-[#4654EA] h-[42px] flex justify-center items-center w-[150px] rounded-[7px] hover:bg-[#535edf] active:bg-[#2939eb]">
         <a href={link} className="text-[#ffffff]">
-          Click to open
+          Open your app
         </a>
       </div>
     </div>

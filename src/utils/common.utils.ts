@@ -12,3 +12,20 @@ export function toQueryString(
     option || { arrayFormat: 'bracket' }
   )}`
 }
+
+export const handleStringFirstUppperCase = (value: string): string => {
+  let result = ''
+  value = value?.toLocaleLowerCase()
+  result += value?.charAt(0).toUpperCase()
+  for (let i = 1; i < value?.length; i++) {
+    if (value?.charAt(i) !== '_' && value?.charAt(i - 1) !== '_') {
+      result += value?.charAt(i)
+    } else if (value?.charAt(i) !== '_' && value?.charAt(i - 1) === '_') {
+      result += value?.charAt(i).toUpperCase()
+    } else if (value?.charAt(i) === '_' && value?.charAt(i - 1) !== '_') {
+      result += ' '
+    }
+  }
+
+  return result
+}

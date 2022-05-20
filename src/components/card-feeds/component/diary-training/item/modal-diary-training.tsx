@@ -1,9 +1,16 @@
-import { isEmpty, map } from 'lodash'
+import { isEmpty } from 'lodash'
 import { useQuery } from 'react-query'
 import Slider from 'react-slick'
 import {
+  club_transfer_histories,
+  diaries,
+  personal_goals,
+  plain_posts,
   player_of_the_weeks,
+  remind_update_diaries,
   shared_biographies,
+  shared_leaderboard,
+  TRAINING,
 } from 'src/components/card-feeds/constants'
 import { settings } from 'src/constants/constants'
 import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
@@ -12,13 +19,7 @@ import { getDiaryById } from 'src/service/feed/yours.service'
 import { ItemInjuries } from './item-injuries'
 import { ItemLineChart } from './item-line-chart'
 import { ItemTraining } from './item-training'
-import {
-  SvgClock,
-  SvgComment,
-  SvgFavorite,
-  SvgSave,
-  SvgShare,
-} from 'src/imports/svgs'
+import { SvgClock } from 'src/imports/svgs'
 import { formatDistanceToNowStrict } from 'date-fns'
 import { Text } from 'src/components/Text'
 import dayjs from 'dayjs'
@@ -28,29 +29,43 @@ import { ListComment } from './comment/list-comment'
 import SimpleBar from 'simplebar-react'
 import { Loading } from 'src/components/MyLoading'
 import { Divider } from '@mui/material'
+import { WriteComment } from 'src/components/write-comment'
+import { handleStringFirstUppperCase } from 'src/utils/common.utils'
+import { CardDiaryMatch } from '../../diary-match'
+import { CardPlainPost } from '../../plain-post'
+import { SharedBiography } from '../../shared-biography'
+import { RemainDiaryUpdate } from '../../remain-diary-update'
+import { ClubTransferHistories } from '../../club-transfer-histories'
+import { SharedLeaderBoard } from '../../shared-leaderboard'
+import { PersonalGoals } from '../../personal_goals'
+import { PlayerOfTheWeek } from '../../player-of-the-week'
+import { BottomCardFeed } from '../../bottom-card-feed'
 
 interface ModalDiaryTrainingType {
   card: CardFeedType
+  focusComment?: boolean
 }
 
-export const ModalDiaryTraining = ({ card }: ModalDiaryTrainingType) => {
+export const ModalDiaryTraining = ({
+  card,
+  focusComment,
+}: ModalDiaryTrainingType) => {
   const { isLoading, data } = useQuery(
     [QUERIES_FEED.FEED_GET_DIARY_BY_ID, card?.postId],
     () => getDiaryById(card?.postId),
     {
       onSuccess: (res) => {},
+      enabled: card?.typeOfPost === diaries,
     }
   )
-  // console.log('card', card)
 
   return (
     <div className="grid grid-cols-2 mt-[16px] mb-[16px]">
       <div className="col-span-1">
         <div className="flex px-5 items-center mb-5 relative">
           {card?.userInfo?.faceImage && (
-            // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={card?.userInfo?.faceImage as string}
+              src={safeHttpImage(card?.userInfo?.faceImage as string)}
               alt=""
               className="w-[48px] h-[48px] object-cover mr-[12px] rounded-full"
             ></img>
@@ -58,9 +73,8 @@ export const ModalDiaryTraining = ({ card }: ModalDiaryTrainingType) => {
 
           {card?.typeOfPost === player_of_the_weeks &&
             card?.bioInfo?.faceImageUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={card?.bioInfo?.faceImageUrl as string}
+                src={safeHttpImage(card?.bioInfo?.faceImageUrl as string)}
                 alt=""
                 className="w-[48px] h-[48px] object-cover mr-[12px] rounded-full"
               ></img>
@@ -93,7 +107,7 @@ export const ModalDiaryTraining = ({ card }: ModalDiaryTrainingType) => {
                 </Text>
               )}
 
-              {card?.typeOfPost === shared_biographies && (
+              {/* {card?.typeOfPost === shared_biographies && (
                 <Text name="Caption" className=" inline-block ">
                   {`${formatDistanceToNowStrict(
                     card?.userInfo?.createdAt as number
@@ -103,7 +117,7 @@ export const ModalDiaryTraining = ({ card }: ModalDiaryTrainingType) => {
                     card?.userInfo?.createdAt
                   ).format('YYYY')}`}
                 </Text>
-              )}
+              )} */}
               {card?.typeOfPost === player_of_the_weeks && (
                 <Text name="Caption" className=" inline-block ">
                   {formatDistanceToNowStrict(card?.createdAt as number)}
@@ -112,29 +126,60 @@ export const ModalDiaryTraining = ({ card }: ModalDiaryTrainingType) => {
             </div>
           </div>
         </div>
+        {card?.typeOfPost === diaries && (
+          <Slider {...settings} className={`h-[255px] ml-[20px]`}>
+            <Loading isLoading={isLoading} className="h-[225px]">
+              {card?.typeOfDiary === TRAINING ? (
+                <ItemTraining card={card && card} />
+              ) : (
+                <CardDiaryMatch card={card} />
+              )}
+            </Loading>
 
-        <Slider {...settings} className={`h-[255px] ml-[20px]`}>
-          <Loading isLoading={isLoading} className="h-[225px]">
-            <ItemTraining card={card && card} />
-          </Loading>
+            {!isEmpty(data?.data?.eatChart) ||
+            !isEmpty(data?.data?.energyChart) ||
+            !isEmpty(data?.data?.sleepChart) ? (
+              <div className="h-[225px]">
+                <ItemLineChart
+                  card={data?.data && data?.data}
+                  loading={isLoading}
+                />
+              </div>
+            ) : null}
 
-          {!isEmpty(data?.data?.eatChart) ||
-          !isEmpty(data?.data?.energyChart) ||
-          !isEmpty(data?.data?.sleepChart) ? (
-            <div className="h-[225px]">
-              <ItemLineChart
-                card={data?.data && data?.data}
-                loading={isLoading}
-              />
-            </div>
-          ) : null}
+            {!isEmpty(data?.data?.injuries) ? (
+              <div className="h-[225px]">
+                <ItemInjuries card={data?.data} />
+              </div>
+            ) : null}
+          </Slider>
+        )}
 
-          {!isEmpty(data?.data?.injuries) ? (
-            <div className="h-[225px]">
-              <ItemInjuries card={data?.data} />
-            </div>
-          ) : null}
-        </Slider>
+        {card?.typeOfPost === plain_posts && (
+          <CardPlainPost mediaLinks={card?.mediaLinks} />
+        )}
+
+        {card?.typeOfPost === shared_biographies && (
+          <SharedBiography card={card} isModal={true} />
+        )}
+
+        {card?.typeOfPost === remind_update_diaries && (
+          <RemainDiaryUpdate card={card} />
+        )}
+
+        {card?.typeOfPost === club_transfer_histories && (
+          <ClubTransferHistories card={card} />
+        )}
+
+        {card?.typeOfPost === shared_leaderboard && (
+          <SharedLeaderBoard card={card} />
+        )}
+
+        {card?.typeOfPost === personal_goals && <PersonalGoals card={card} />}
+
+        {card?.typeOfPost === player_of_the_weeks && (
+          <PlayerOfTheWeek card={card} isModal={true} />
+        )}
 
         {!isEmpty(card?.training?.trainingMedia) && (
           <Slider {...settings} className="h-[255px] ml-[20px]">
@@ -147,86 +192,82 @@ export const ModalDiaryTraining = ({ card }: ModalDiaryTrainingType) => {
           </Slider>
         )}
 
-        <Divider
-          style={{
-            backgroundColor: '##484A4D',
-            marginTop: '8px',
-            marginBottom: '8px',
-          }}
-        />
-
-        <div className="w-full flex text-[14px] p-[20px]">
-          <div className="flex-1">
-            <p>Energy</p>
-            <p className="text-[#E85CFF]">{data?.data?.energyLevel}</p>
-          </div>
-          <div className="flex-1">
-            <p>Sleep</p>
-            <p className="text-[#09E099]">{data?.data?.energyLevel}</p>
-          </div>
-          <div className="flex-1">
-            <p>Eat</p>
-            <p className="text-[#07E1FF]">{data?.data?.energyLevel}</p>
-          </div>
-          <div className="flex-1">
-            <p>Pain</p>
-            <p className="text-[#4654EA]">{data?.data?.energyLevel}</p>
-          </div>
-        </div>
-
-        <div className="w-full h-[320px] relative">
-          <div className="scale-50 absolute -left-[112px] -top-[176px]">
-            <InjuryChart />
-          </div>
-        </div>
-
-        <div className="flex px-5 mt-[4px]">
-          <div className="flex-1 float-left ">
-            <div className="flex float-left">
-              <div
-                className="hover:scale-110 duration-150"
-                // onClick={() =>
-                //   handleClickFavorite(
-                //     card?.postId as string,
-                //     card?.typeOfPost as string
-                //   )
-                // }
-              >
-                <SvgFavorite active={card?.isLiked} />
+        {card?.typeOfPost === diaries && (
+          <>
+            <Divider
+              style={{
+                backgroundColor: '##484A4D',
+                marginTop: '8px',
+                marginBottom: '8px',
+              }}
+            />
+            <div className="w-full flex text-[14px] p-[20px]">
+              <div className="flex-1">
+                <p>Energy</p>
+                <p className="text-[#E85CFF]">
+                  {handleStringFirstUppperCase(data?.data?.energyLevel)}
+                </p>
               </div>
-              <Text name="Body2" className="text-Grey ">
-                {card?.userInfo?.age as number}
-              </Text>
+              <div className="flex-1">
+                <p>Sleep</p>
+                <p className="text-[#09E099]">
+                  {handleStringFirstUppperCase(data?.data?.sleep)}
+                </p>
+              </div>
+              <div className="flex-1">
+                <p>Eat</p>
+                <p className="text-[#07E1FF]">
+                  {handleStringFirstUppperCase(data?.data?.eatAndDrink)}
+                </p>
+              </div>
+              <div className="flex-1">
+                <p>Pain</p>
+                <p className="text-[#4654EA]">
+                  {handleStringFirstUppperCase(data?.data?.injuryPain)}
+                </p>
+              </div>
             </div>
 
-            <div className="flex ml-[64px]">
-              <Text name="Body2" className="text-Grey mr-1 ">
-                {card?.userInfo?.age as number}
-              </Text>
-              <SvgComment />
+            <div className="w-full h-[320px] relative">
+              <div className="scale-50 absolute -left-[112px] -top-[176px]">
+                <InjuryChart lastDateRange="30" postId={card?.postId} />
+              </div>
             </div>
-          </div>
-
-          <div className="flex-row-reverse hover:scale-110 duration-150 pr-[16px]">
-            <SvgShare />
-          </div>
-          <div
-            className="flex-row-reverse hover:scale-110 duration-150 mt-[2px] cursor-pointer"
-            // onClick={handleSave}
-          >
-            <SvgSave fill={`${card?.isSaved ? '#09E099' : ''}`} />
-          </div>
-        </div>
+          </>
+        )}
       </div>
 
       <div className="col-span-1">
         <SimpleBar
           style={{
-            maxHeight: 800,
+            maxHeight: 660,
           }}
         >
           <ListComment postId={card?.postId} typeOfPost={card?.typeOfPost} />
         </SimpleBar>
+      </div>
+
+      {/* bottom */}
+      <div className="col-span-2 flex justify-center items-center">
+        <div className="flex-1">
+          <BottomCardFeed
+            typeOfPost={card?.typeOfPost}
+            countLike={card?.bioInfo?.countLikes}
+            countComment={card?.bioInfo?.countComments}
+            isLiked={card?.isLiked}
+            isSaved={card?.isSaved}
+          />
+        </div>
+
+        <div className="flex-1">
+          <div className="pl-[32px]">
+            <WriteComment
+              postId={card?.postId}
+              typeOfPost={card?.typeOfPost}
+              focusComment={focusComment}
+            />
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -13,8 +13,8 @@ export const SharedLeaderBoard = ({ card }: SharedLeaderBoardType) => {
           {card?.lastDateRange}, {card?.country}
         </span>{' '}
         <span className="text-[#09E099]">
-          - {card?.category.charAt(0)}
-          {card?.category.slice(1).toLowerCase()}
+          - {card?.category?.charAt(0)}
+          {card?.category?.slice(1).toLowerCase()}
         </span>
       </div>
 
