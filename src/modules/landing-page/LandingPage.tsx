@@ -52,7 +52,7 @@ export const Landing = () => {
   }
 
   return (
-    <div className="flex flex-col bg-white">
+    <div className="flex flex-col bg-black">
       <div
         className=" w-full h-screen bg-cover bg-no-repeat"
         style={{
@@ -165,34 +165,36 @@ export const Landing = () => {
           )}
         </div>
       </div>
-      <div
-        className={clsx(
-          'bg-white flex flex-col items-center ',
-          isDesktop && 'h-[1100px] py-[300px] mx-auto max-w-[1320px]',
-          isMobile && 'space-y-8 py-8'
-        )}
-      >
-        <span className="text-center text-[#09E099] text-[12px]  tracking-[2px] font-medium">
-          FEATURE
-        </span>
-        <p className="text-[36px] text-black text-center  font-bold">
-          App Features
-        </p>
+      <div className="w-full bg-white">
         <div
           className={clsx(
-            'grid mobileM:grid-cols-2 mobileM:gap-y-6 mobileM:gap-x-2 px-[20px] tabletM:grid-cols-4 tabletM:gap-y-20 tabletM:gap-x-24 tabletM:pt-10 laptopM:pt-20 tabletM:px-20'
+            'bg-white flex flex-col items-center ',
+            isDesktop && 'h-[1100px] py-[300px] mx-auto max-w-[1320px]',
+            isMobile && 'space-y-8 py-8'
           )}
         >
-          {APP_FEATURE.map((app) => (
-            <AppFeature
-              key={app.title}
-              titleColor="text-black"
-              contentColor="text-gray-400"
-              icon={app.icon}
-              title={app.title}
-              content={app.content}
-            />
-          ))}
+          <span className="text-center text-[#09E099] text-[12px]  tracking-[2px] font-medium">
+            FEATURE
+          </span>
+          <p className="text-[36px] text-black text-center  font-bold">
+            App Features
+          </p>
+          <div
+            className={clsx(
+              'grid mobileM:grid-cols-2 mobileM:gap-y-6 mobileM:gap-x-2 px-[20px] tabletM:grid-cols-4 tabletM:gap-y-20 tabletM:gap-x-24 tabletM:pt-10 laptopM:pt-20 tabletM:px-20'
+            )}
+          >
+            {APP_FEATURE.map((app) => (
+              <AppFeature
+                key={app.title}
+                titleColor="text-black"
+                contentColor="text-gray-400"
+                icon={app.icon}
+                title={app.title}
+                content={app.content}
+              />
+            ))}
+          </div>
         </div>
       </div>
       <div
@@ -256,7 +258,7 @@ export const Landing = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div className="w-full bg-white">
         <div
           className={clsx(
             'bg-white ',
@@ -372,7 +374,7 @@ export const Landing = () => {
           </div>
         </div>
       </div>
-      <div className={isDesktop && 'w-full h-[600px]'}>
+      <div className="tabletM:w-full tabletM:h-[600px] bg-white">
         <div
           className={clsx(
             'flex mx-auto justify-between items-center tabletM:px-12',
