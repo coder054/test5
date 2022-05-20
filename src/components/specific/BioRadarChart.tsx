@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash'
 import { useEffect } from 'react'
 import { Radar, RadarChart, PolarGrid, Legend, PolarAngleAxis } from 'recharts'
 
@@ -5,10 +6,20 @@ interface BioRadarChartProps {
   profile?: string
   data: any
   type: any
+  showLegend?: boolean
+  head2head?: boolean
 }
 
-export const BioRadarChart = ({ data, type, profile }: BioRadarChartProps) => {
+export const BioRadarChart = ({
+  data,
+  type,
+  profile,
+  showLegend = false,
+  head2head = false,
+}: BioRadarChartProps) => {
   useEffect(() => {
+    // const legend = document.querySelectorAll('.recharts-default-legend')
+
     let els = Array.from(
       document.querySelectorAll('.bioradarchart .recharts-wrapper')
     )
@@ -32,6 +43,13 @@ export const BioRadarChart = ({ data, type, profile }: BioRadarChartProps) => {
       pathAverage.setAttribute('stroke-dasharray', '9,8')
       pathAverage.setAttribute('stroke-linecap', 'round')
       pathAverage.setAttribute('stroke-width', '3')
+
+      let pathuserB = el.querySelector('path[name="Other Player"]')
+      if (!isEmpty(pathuserB)) {
+        pathuserB.setAttribute('stroke-dasharray', '9,8')
+        pathuserB.setAttribute('stroke-linecap', 'round')
+        pathuserB.setAttribute('stroke-width', '3')
+      }
     })
 
     let el2s = Array.from(
@@ -98,17 +116,9 @@ export const BioRadarChart = ({ data, type, profile }: BioRadarChartProps) => {
     })
   }, [data, type])
 
-  if (type === 'small') {
+  const renderContent = () => {
     return (
-      <RadarChart
-        cx={160}
-        cy={100}
-        outerRadius={82}
-        width={320}
-        height={330}
-        data={data}
-        // 0,686695279 * 145
-      >
+      <>
         <PolarGrid gridType="circle" outerRadius={500} />
         <PolarAngleAxis
           dataKey="subject"
@@ -128,15 +138,17 @@ export const BioRadarChart = ({ data, type, profile }: BioRadarChartProps) => {
           fillOpacity={0}
           legendType="circle"
         />
-        <Radar
-          dot={false}
-          name="Coach"
-          dataKey="Coach"
-          stroke="#4654EA"
-          fill="#8884d8"
-          fillOpacity={0}
-          legendType="circle"
-        />
+        {profile !== 'Coach' && (
+          <Radar
+            dot={false}
+            name="Coach"
+            dataKey="Coach"
+            stroke="#4654EA"
+            fill="#8884d8"
+            fillOpacity={0}
+            legendType="circle"
+          />
+        )}
         <Radar
           dot={false}
           name="You"
@@ -146,7 +158,47 @@ export const BioRadarChart = ({ data, type, profile }: BioRadarChartProps) => {
           fillOpacity={0}
           legendType="circle"
         />
-        <Legend />
+
+        {head2head && (
+          <>
+            <Radar
+              dot={false}
+              name="You"
+              dataKey="userA"
+              stroke="#00ff00"
+              fill="#8884d8"
+              fillOpacity={0}
+              legendType="circle"
+            />
+
+            <Radar
+              dot={false}
+              name="Other Player"
+              dataKey="userB"
+              stroke="#672aeb"
+              fill="#8884d8"
+              fillOpacity={0}
+              legendType="circle"
+            />
+          </>
+        )}
+        {showLegend && <Legend />}
+      </>
+    )
+  }
+
+  if (type === 'small') {
+    return (
+      <RadarChart
+        cx={160}
+        cy={100}
+        outerRadius={82}
+        width={320}
+        height={330}
+        data={data}
+        // 0,686695279 * 145
+      >
+        {renderContent()}
       </RadarChart>
     )
   }
@@ -160,46 +212,7 @@ export const BioRadarChart = ({ data, type, profile }: BioRadarChartProps) => {
       height={profile !== 'Coach' ? 410 : 340}
       data={data}
     >
-      <PolarGrid gridType="circle" outerRadius={500} />
-      <PolarAngleAxis
-        dataKey="subject"
-        cx={100}
-        cy={2000}
-        radius={5000}
-        axisLineType="polygon"
-        orient={'inner'}
-      />
-      {/* <PolarRadiusAxis angle={30} domain={[0, 10]} /> */}
-      <Radar
-        dot={false}
-        name="Average"
-        dataKey="Average"
-        stroke="#ffffff"
-        fill="#8884d8"
-        fillOpacity={0}
-        legendType="circle"
-      />
-      {profile !== 'Coach' && (
-        <Radar
-          dot={false}
-          name="Coach"
-          dataKey="Coach"
-          stroke="#4654EA"
-          fill="#8884d8"
-          fillOpacity={0}
-          legendType="circle"
-        />
-      )}
-      <Radar
-        dot={false}
-        name="You"
-        dataKey="You"
-        stroke="#09E099"
-        fill="#8884d8"
-        fillOpacity={0}
-        legendType="circle"
-      />
-      <Legend />
+      {renderContent()}
     </RadarChart>
   )
 }

@@ -83,7 +83,7 @@ const getSections = (t: TFunction, infoActiveProfile): Section[] => {
         },
         {
           title: t('Support'),
-          path: `/support`,
+          path: `/faqs`,
           icon: <ExclamationCircle fontSize="small" />,
         },
       ],

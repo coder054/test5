@@ -150,7 +150,7 @@ export const Development = ({
   return (
     <div className="space-y-5">
       <BackGround
-        label="Development note"
+        label="Development note2"
         className="2xl:w-3/5"
         contentClass="xl:w-[600px]"
       >

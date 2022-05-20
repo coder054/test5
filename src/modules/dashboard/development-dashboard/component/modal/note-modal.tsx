@@ -1,7 +1,9 @@
 import dayjs from 'dayjs'
+import { useAtom } from 'jotai'
 import { ReactNode, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
+import { formValuesDevelopmentNodeAtom } from 'src/atoms/developmentNoteAtom'
 import { Button, MyDatePicker } from 'src/components'
 import { XIcon } from 'src/components/icons'
 import { ModalMui } from 'src/components/ModalMui'
@@ -27,7 +29,7 @@ interface NoteModalProps {
   clock?: ReactNode
 }
 
-interface FormValues {
+export interface IDevelopmentFormValues {
   strengthPlayer: string
   strengthCoach: string
   weaknessesPlayer: string
@@ -74,36 +76,8 @@ export const NoteModal = ({
   // console.log('currentUser', currentUser)
   // console.log('userRoles', userRoles)
 
-  const [formValues, setFormValues] = useState<FormValues>({
-    strengthPlayer: '',
-    strengthCoach: '',
-    weaknessesPlayer: '',
-    weaknessesCoach: '',
-    bestDevelopSkillsPlayer: '',
-    bestDevelopSkillsCoach: '',
-    skillsNeededToDevelopPlayer: '',
-    skillsNeededToDevelopCoach: '',
-    bestWayToDevelopPlayer: '',
-    bestWayToDevelopCoach: '',
-    shortTermGoalPlayer: '',
-    shortTermGoalCoach: '',
-    longTermGoalPlayer: '',
-    longTermGoalCoach: '',
-    otherCommentsPlayer: '',
-    otherCommentsCoach: '',
-    date: dayjs(new Date()).format('YYYY/MM/DD'),
-    progress: 'NORMAL',
-    contractedClub: {
-      arena: '',
-      city: '',
-      clubId: '',
-      clubName: '',
-      country: '',
-      logoUrl: '',
-      websiteUrl: null,
-    },
-    currentTeams: '',
-  })
+  const [formValues, setFormValues]: [IDevelopmentFormValues, Function] =
+    useAtom(formValuesDevelopmentNodeAtom)
 
   const { isLoading: loadingCreate, mutate: createNote } = useMutation(
     [QUERIES_DASHBOARD.NOTE_DATA],
@@ -191,7 +165,10 @@ export const NoteModal = ({
       })
   }, [arrayFile])
 
-  const handleChangeForm = (type: keyof FormValues, value: string) => {
+  const handleChangeForm = (
+    type: keyof IDevelopmentFormValues,
+    value: string
+  ) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
 

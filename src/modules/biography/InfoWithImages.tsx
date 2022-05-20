@@ -160,7 +160,7 @@ export const InfoWithImages = () => {
   )
 }
 
-const ItemAward = ({ quantity, src, title }) => (
+export const ItemAward = ({ quantity, src, title }) => (
   <div className=" ">
     <div className="bg-[#1f1f1f] px-2 py-1 rounded-[8px] mb-2 mt-2 w-[58px] h-[58px]">
       <div className="text-white text-[12px] text-center mb-1 ">{title}</div>
@@ -170,7 +170,7 @@ const ItemAward = ({ quantity, src, title }) => (
   </div>
 )
 
-const ItemTrophy = ({ label, image, number }) => (
+export const ItemTrophy = ({ label, image, number }) => (
   <div className=" ">
     <div className="bg-[#1f1f1f] px-2 py-1 rounded-[8px] mb-2 mt-2 w-[58px] h-[58px] ">
       <div className="text-white text-[12px] text-center mb-1 ">{label}</div>

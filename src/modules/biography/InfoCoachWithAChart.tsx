@@ -54,6 +54,7 @@ export const InfoCoachWithAChart = ({
       <div className="bioradarchart sm:max-w-[466px] mx-auto relative mb-[32px] text-center ">
         <div className="bioradarchartsmall flex sm:hidden justify-center mx-auto ">
           <BioRadarChart
+            showLegend={true}
             type="small"
             data={dataBioRadarChart}
             profile={profile}
@@ -62,6 +63,7 @@ export const InfoCoachWithAChart = ({
 
         <div className="bioradarchartnormal hidden sm:block ">
           <BioRadarChart
+            showLegend={true}
             type="normal"
             data={dataBioRadarChart}
             profile={profile}
@@ -70,7 +72,7 @@ export const InfoCoachWithAChart = ({
 
         {profile !== 'Coach' && (
           <div
-            className="w-full sm:w-[404px] absolute left-1/2 transform -translate-x-1/2 bottom-[46px] min-h-[60px] 
+            className="w-full sm:w-[404px] absolute left-1/2 transform -translate-x-1/2 bottom-[46px] min-h-[60px]
               flex justify-between
             "
           >

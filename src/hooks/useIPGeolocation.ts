@@ -1,7 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
 import axiosLib from 'axios'
-import { isEmpty } from 'lodash'
-import { countries } from 'src/components/dashboard/account/countries'
+import { useEffect, useState } from 'react'
 export interface IGeolocation {
   status: string
   country: string
@@ -21,6 +19,7 @@ export interface IGeolocation {
 
 export const useIPGeolocation = () => {
   const [data, setData] = useState<IGeolocation>(null)
+
   useEffect(() => {
     ;(async function () {
       try {
@@ -34,18 +33,6 @@ export const useIPGeolocation = () => {
       }
     })()
   }, [])
-
-  // const countryText = useMemo(() => {
-  //   if (isEmpty(data.country)) {
-  //     return ''
-  //   }
-
-  //   let c = countries.find((o) => o.value === data.country)
-  //   if (!isEmpty(c)) {
-  //     return c.text
-  //   }
-  //   return ''
-  // }, [data])
 
   return data
 }
