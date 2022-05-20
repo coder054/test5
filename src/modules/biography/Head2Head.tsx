@@ -7,47 +7,45 @@ import { useIdHead2HeadQuery } from 'src/atoms/biographyAtom'
 import { Stars } from 'src/components/common/Stars'
 import { BioRadarChart } from 'src/components/specific/BioRadarChart'
 import { axios } from 'src/utils/axios'
-import { getErrorMessage, getStr } from 'src/utils/utils'
+import { equalStr, getErrorMessage, getStr } from 'src/utils/utils'
 import { API_ACHIEVEMENTS_TROPHY } from 'src/constants/api.constants'
 import { ItemAward, ItemTrophy } from './InfoWithImages'
+import { SvgFilter, SvgFilter3Line } from 'src/imports/svgs'
+import { useQuery } from 'react-query'
 
 export const Head2Head = () => {
   const { idHead2Head, setIdHead2Head } = useIdHead2HeadQuery()
-  const [data, setData] = useState<IHead2Head>(null)
-  const [loading, setLoading] = useState(true)
+  let date = new Date()
+  date.setDate(date.getDate() - 365)
+  const [startDate, setStartDate] = useState(date)
 
-  useEffect(() => {
-    ;(async function () {
-      // https://dev.api.zporter.co/biographies/players/head-2-head?limit=10&startAfter=1&sorted=asc&statsTab=Total&startDate=2022-04-18T10%3A04%3A46%2B00%3A00&endDate=2022-05-18T10%3A04%3A46%2B00%3A00&userIdQuery=008a5eab-1837-4121-8975-9ec94159b685
+  const [endDate, setEndDate] = useState<Date>(new Date())
+  const [params, setParams] = useState({
+    limit: 1,
+    startAfter: 1,
+    sorted: 'asc',
+    statsTab: 'Total',
+    startDate: startDate.toISOString(),
+    endDate: new Date().toISOString(),
+    userIdQuery: idHead2Head,
+  })
 
-      try {
-        setLoading(true)
-        let startDate = new Date()
-        startDate.setDate(startDate.getDate() - 30)
-        const params = {
-          limit: 1,
-          startAfter: 1,
-          sorted: 'asc',
-          statsTab: 'Total',
-          startDate: startDate.toISOString(),
-          endDate: new Date().toISOString(),
-          userIdQuery: idHead2Head,
-        }
+  //////////////////////////////////////////////
+  const {
+    isLoading,
+    error,
+    data,
+  }: {
+    isLoading: boolean
+    error: any
+    data: IHead2Head
+  } = useQuery(['head2head', params], async () => {
+    const { data: dataResp } = await axios.get(
+      `/biographies/players/head-2-head?${queryString.stringify(params)}`
+    )
 
-        const { data: dataResp } = await axios.get(
-          `/biographies/players/head-2-head?${queryString.stringify(params)}`
-        )
-
-        setData(dataResp)
-      } catch (error) {
-        alert(getErrorMessage(error))
-      } finally {
-        setLoading(false)
-      }
-    })()
-
-    return () => {}
-  }, [])
+    return dataResp
+  })
 
   const bios = useMemo(() => {
     if (isEmpty(data)) {
@@ -77,6 +75,26 @@ export const Head2Head = () => {
     }
 
     return [data?.capsCompare?.userA, data?.capsCompare?.userB]
+  }, [data])
+
+  const matches = useMemo(() => {
+    if (isEmpty(data)) {
+      return []
+    }
+
+    const arr1 = Object.entries(data.matchesCompare)
+    const arr2: IMatchOrTraining[] = arr1.map((o) => ({ ...o[1], title: o[0] }))
+    return arr2
+  }, [data])
+
+  const trainings = useMemo(() => {
+    if (isEmpty(data)) {
+      return []
+    }
+
+    const arr1 = Object.entries(data.trainingsCompare)
+    const arr2: IMatchOrTraining[] = arr1.map((o) => ({ ...o[1], title: o[0] }))
+    return arr2
   }, [data])
 
   const dataChart = useMemo(() => {
@@ -160,13 +178,14 @@ export const Head2Head = () => {
     ]
   }, [bios])
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center mt-[20px]  ">
         <CircularProgress />
       </div>
     )
   }
+  if (error) return 'An error has occurred: ' + error.message
 
   if (isEmpty(data)) {
     return null
@@ -195,490 +214,506 @@ export const Head2Head = () => {
         <div className="font-bold ">Head 2 head</div>
       </div>
 
-      <div className="px-4 max-w-[500px] mx-auto w-full ">
-        <div className="flex  gap-x-[16px] w-full max-w-[1500px] justify-between ">
-          {bios.map((bio) => {
-            return (
-              <div
-                key={bio.userId}
-                style={{ width: 'calc(50% - 16px )' }}
-                className=""
-              >
+      <div
+        className="px-4  grid
+        grid-cols-1 lg:grid-cols-2
+      "
+      >
+        {/* col1 */}
+        <div className=" mx-auto max-w-[560px] w-full ">
+          <div className="flex  gap-x-[16px] w-full max-w-[1500px] justify-between ">
+            {bios.map((bio) => {
+              return (
                 <div
-                  className="text-Grey
+                  key={bio.userId}
+                  style={{ width: 'calc(50% - 16px )' }}
+                  className=""
+                >
+                  <div
+                    className="text-Grey
             text-[12px] sm:text-[12px] md:text-[12px] lg:text-[12px] xl:text-[12px] 2xl:text-[12px]
             mx-auto text-center
             "
-                >
-                  {bio.lastUpdatedDate}
-                </div>
+                  >
+                    {bio.lastUpdatedDate}
+                  </div>
 
-                <div
-                  className="text-14px sm:text-14px md:text-14px lg:text-14px xl:text-14px 2xl:text-14px
+                  <div
+                    className="text-14px sm:text-14px md:text-14px lg:text-14px xl:text-14px 2xl:text-14px
               font-bold mx-auto text-center
               "
-                >
-                  <span className="text-Green ">{bio.firstName}</span>
-                  <span className="text-white ">{bio.lastName}</span>
-                </div>
+                  >
+                    <span className="text-Green ">{bio.firstName}</span>
+                    <span className="text-white ">{bio.lastName}</span>
+                  </div>
 
-                <div
-                  className="text-Grey
+                  <div
+                    className="text-Grey
               text-[13px] sm:text-[13px] md:text-[13px] lg:text-[13px] xl:text-[13px] 2xl:text-[13px]
               mx-auto text-center
               "
+                  >
+                    #{bio.username}
+                  </div>
+
+                  {/* image and stars */}
+                  <div className="mx-auto text-center w-[120px] h-[120px] bg-Black rounded-full relative ">
+                    <div className=" absolute inset-0 z-10 bg-[#00000033] "></div>
+                    <img
+                      src={bio.faceImageUrl}
+                      className="w-[120px] h-[120px] object-cover rounded-full "
+                      alt=""
+                    />
+
+                    <Stars
+                      numberOfStars={bio.starRating}
+                      className={
+                        'gap-x-[2px] justify-center absolute bottom-[20px] left-1/2 transform -translate-x-1/2 '
+                      }
+                      svgStarFull={
+                        <img
+                          src={'/biography/starfull.png'}
+                          className="
+                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
+                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
+                      "
+                          alt=""
+                        />
+                      }
+                      svgStarHalf={
+                        <img
+                          src={'/biography/starhalf.png'}
+                          className="
+                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
+                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
+                      "
+                          alt=""
+                        />
+                      }
+                      svgStarEmpty={
+                        <img
+                          src={'/biography/starempty.png'}
+                          className="
+                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
+                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
+                      "
+                          alt=""
+                        />
+                      }
+                    />
+                  </div>
+                  {/* image and stars */}
+
+                  {/* info */}
+                  <div className="grid grid-cols-2 gap-x-[16px] ">
+                    <div className="text-right ">
+                      <div className="text-white font-bold text-[14px] ">
+                        {bio.position}
+                      </div>
+                      <div className="text-Grey text-[11px] font-medium ">
+                        POSITION
+                      </div>
+                    </div>
+
+                    <div className="text-left ">
+                      <div className="text-white font-bold text-[14px] ">
+                        {bio.age}
+                      </div>
+                      <div className="text-Grey text-[11px] font-medium ">
+                        AGE
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="h-[8px] "></div>
+                  <div className="grid grid-cols-2 gap-x-[16px] ">
+                    <div className="text-right ">
+                      <img
+                        src={bio.currentClubIconUrl}
+                        className="w-[25px] h-[25px] rounded-full object-cover ml-auto "
+                        alt=""
+                      />
+                      <div className="text-Grey text-[11px] font-medium ">
+                        2022/03
+                      </div>
+                    </div>
+                    <div className="text-left ">
+                      <img
+                        src={bio.countryFlagUrl}
+                        className="w-[25px] h-[25px] rounded-full object-cover "
+                        alt=""
+                      />
+                      <div className="text-Grey text-[11px] font-medium ">
+                        08/01/01
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="h-[8px] "></div>
+                  <div className="grid grid-cols-2 gap-x-[16px] ">
+                    <div className="text-right ">
+                      <div className="text-white font-bold text-[13px] ">
+                        {bio.estMarketValue || '?'} M€
+                      </div>
+                      <div className="text-Grey text-[11px] font-medium ">
+                        VALUE
+                      </div>
+                    </div>
+                    <div className="text-left ">
+                      <div className="text-white font-bold text-[13px] ">
+                        {bio.height} cm
+                      </div>
+                      <div className="text-Grey text-[11px] font-medium ">
+                        HEIGHT
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="h-[8px] "></div>
+                  <div className="grid grid-cols-2 gap-x-[16px] ">
+                    <div className="text-right ">
+                      <div className="text-white font-bold text-[12px] ">
+                        {bio.bestFoot === 'TWO_FOOTED'
+                          ? 'left&right'
+                          : bio.bestFoot}
+                      </div>
+                      <div className="text-Grey text-[11px] font-medium ">
+                        FOOT
+                      </div>
+                    </div>
+                    <div className="text-left ">
+                      <div className="text-white font-bold text-[12px]">
+                        {bio.weight} kg
+                      </div>
+                      <div className="text-Grey text-[11px] font-medium ">
+                        WEIGHT
+                      </div>
+                    </div>
+                  </div>
+                  {/* info */}
+                </div>
+              )
+            })}
+          </div>
+          {/* player profile benchmark */}
+          <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
+            PLAYER PROFILE BENCHMARK
+          </div>
+
+          <div className="bioradarchart sm:max-w-[466px] mx-auto relative mb-[32px] text-center  ">
+            <div className="bioradarchartsmall flex sm:hidden justify-center mx-auto ">
+              <BioRadarChart
+                type="small"
+                data={dataChart}
+                head2head={true}
+              ></BioRadarChart>
+            </div>
+
+            <div className="bioradarchartnormal hidden sm:block ">
+              <BioRadarChart
+                type="normal"
+                data={dataChart}
+                head2head={true}
+              ></BioRadarChart>
+            </div>
+          </div>
+
+          <div className=" grid grid-cols-2 mt-[-150px] gap-x-[16px] ">
+            {bios.map((bio, index) => (
+              <div key={bio.userId} className=" text-center ">
+                <div
+                  className={clsx(
+                    ` mb-[30px] `,
+                    index === 0 ? ' text-Green ' : ' text-purple-600 '
+                  )}
                 >
-                  #{bio.username}
+                  {index === 0 ? 'You' : 'Other Player'}{' '}
                 </div>
-
-                {/* image and stars */}
-                <div className="mx-auto text-center w-[120px] h-[120px] bg-Black rounded-full relative ">
-                  <div className=" absolute inset-0 z-10 bg-[#00000033] "></div>
-                  <img
-                    src={bio.faceImageUrl}
-                    className="w-[120px] h-[120px] object-cover rounded-full "
-                    alt=""
-                  />
-
-                  <Stars
-                    numberOfStars={bio.starRating}
-                    className={
-                      'gap-x-[2px] justify-center absolute bottom-[20px] left-1/2 transform -translate-x-1/2 '
-                    }
-                    svgStarFull={
-                      <img
-                        src={'/biography/starfull.png'}
-                        className="
-                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
-                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
-                      "
-                        alt=""
-                      />
-                    }
-                    svgStarHalf={
-                      <img
-                        src={'/biography/starhalf.png'}
-                        className="
-                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
-                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
-                      "
-                        alt=""
-                      />
-                    }
-                    svgStarEmpty={
-                      <img
-                        src={'/biography/starempty.png'}
-                        className="
-                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
-                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
-                      "
-                        alt=""
-                      />
-                    }
-                  />
+                <div className="text-white font-bold text-[14px] ">
+                  LEFT FOOT
                 </div>
-                {/* image and stars */}
-
-                {/* info */}
-                <div className="grid grid-cols-2 gap-x-[16px] ">
-                  <div className="text-right ">
-                    <div className="text-white font-bold text-[14px] ">
-                      {bio.position}
-                    </div>
-                    <div className="text-Grey text-[11px] font-medium ">
-                      POSITION
-                    </div>
-                  </div>
-
-                  <div className="text-left ">
-                    <div className="text-white font-bold text-[14px] ">
-                      {bio.age}
-                    </div>
-                    <div className="text-Grey text-[11px] font-medium ">
-                      AGE
-                    </div>
-                  </div>
-                </div>
-
-                <div className="h-[8px] "></div>
-                <div className="grid grid-cols-2 gap-x-[16px] ">
-                  <div className="text-right ">
+                <Stars
+                  numberOfStars={bio.leftFoot}
+                  className={'gap-x-[2px] justify-center mt-[8px] mb-[16px] '}
+                  svgStarFull={
                     <img
-                      src={bio.currentClubIconUrl}
-                      className="w-[25px] h-[25px] rounded-full object-cover ml-auto "
+                      src={'/biography/starfull.png'}
+                      className="
+                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
+                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
+                      "
                       alt=""
                     />
-                    <div className="text-Grey text-[11px] font-medium ">
-                      2022/03
-                    </div>
-                  </div>
-                  <div className="text-left ">
+                  }
+                  svgStarHalf={
                     <img
-                      src={bio.countryFlagUrl}
-                      className="w-[25px] h-[25px] rounded-full object-cover "
+                      src={'/biography/starhalf.png'}
+                      className="
+                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
+                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
+                      "
                       alt=""
                     />
-                    <div className="text-Grey text-[11px] font-medium ">
-                      08/01/01
-                    </div>
-                  </div>
+                  }
+                  svgStarEmpty={
+                    <img
+                      src={'/biography/starempty.png'}
+                      className="
+                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
+                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
+                      "
+                      alt=""
+                    />
+                  }
+                />
+                <div className="text-white font-bold text-[14px]">
+                  RIGHT FOOT
                 </div>
-
-                <div className="h-[8px] "></div>
-                <div className="grid grid-cols-2 gap-x-[16px] ">
-                  <div className="text-right ">
-                    <div className="text-white font-bold text-[13px] ">
-                      {bio.estMarketValue || '?'} M€
-                    </div>
-                    <div className="text-Grey text-[11px] font-medium ">
-                      VALUE
-                    </div>
-                  </div>
-                  <div className="text-left ">
-                    <div className="text-white font-bold text-[13px] ">
-                      {bio.height} cm
-                    </div>
-                    <div className="text-Grey text-[11px] font-medium ">
-                      HEIGHT
-                    </div>
-                  </div>
-                </div>
-
-                <div className="h-[8px] "></div>
-                <div className="grid grid-cols-2 gap-x-[16px] ">
-                  <div className="text-right ">
-                    <div className="text-white font-bold text-[12px] ">
-                      {bio.bestFoot === 'TWO_FOOTED'
-                        ? 'left&right'
-                        : bio.bestFoot}
-                    </div>
-                    <div className="text-Grey text-[11px] font-medium ">
-                      FOOT
-                    </div>
-                  </div>
-                  <div className="text-left ">
-                    <div className="text-white font-bold text-[12px]">
-                      {bio.weight} kg
-                    </div>
-                    <div className="text-Grey text-[11px] font-medium ">
-                      WEIGHT
-                    </div>
-                  </div>
-                </div>
-                {/* info */}
+                <Stars
+                  numberOfStars={bio.rightFoot}
+                  className={'mt-[8px] mb-[16px] gap-x-[2px] justify-center'}
+                  svgStarFull={
+                    <img
+                      src={'/biography/starfull.png'}
+                      className="
+                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
+                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
+                      "
+                      alt=""
+                    />
+                  }
+                  svgStarHalf={
+                    <img
+                      src={'/biography/starhalf.png'}
+                      className="
+                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
+                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
+                      "
+                      alt=""
+                    />
+                  }
+                  svgStarEmpty={
+                    <img
+                      src={'/biography/starempty.png'}
+                      className="
+                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
+                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
+                      "
+                      alt=""
+                    />
+                  }
+                />
               </div>
-            )
-          })}
-        </div>
-        {/* player profile benchmark */}
-        <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
-          PLAYER PROFILE BENCHMARK
-        </div>
-
-        <div className="bioradarchart sm:max-w-[466px] mx-auto relative mb-[32px] text-center  ">
-          <div className="bioradarchartsmall flex sm:hidden justify-center mx-auto ">
-            <BioRadarChart
-              type="small"
-              data={dataChart}
-              head2head={true}
-            ></BioRadarChart>
+            ))}
           </div>
+          {/* player profile benchmark */}
 
-          <div className="bioradarchartnormal hidden sm:block ">
-            <BioRadarChart
-              type="normal"
-              data={dataChart}
-              head2head={true}
-            ></BioRadarChart>
+          {/* SPECIALITIES */}
+          <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
+            SPECIALITIES
           </div>
-        </div>
-
-        <div className=" grid grid-cols-2 mt-[-150px] gap-x-[16px] ">
-          {bios.map((bio, index) => (
-            <div key={bio.userId} className=" text-center ">
+          <div className="grid grid-cols-2 gap-x-[30px] ">
+            {bios.map((bio, index) => (
               <div
+                key={bio.userId}
                 className={clsx(
-                  ` mb-[30px] `,
-                  index === 0 ? ' text-Green ' : ' text-purple-600 '
+                  ` flex justify-start gap-x-[4px] `,
+                  index === 0 ? ' justify-start ' : ' justify-end '
                 )}
               >
-                {index === 0 ? 'You' : 'Other Player'}{' '}
+                {bio.specialities.map((spe) => (
+                  <span
+                    key={spe}
+                    className="text-white rounded-[16px] bg-purple-600 flex items-center justify-center h-[30px] px-2 "
+                  >
+                    #{spe}
+                  </span>
+                ))}
               </div>
-              <div className="text-white font-bold text-[14px] ">LEFT FOOT</div>
-              <Stars
-                numberOfStars={bio.leftFoot}
-                className={'gap-x-[2px] justify-center mt-[8px] mb-[16px] '}
-                svgStarFull={
-                  <img
-                    src={'/biography/starfull.png'}
-                    className="
-                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
-                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
-                      "
-                    alt=""
+            ))}
+          </div>
+          {/* SPECIALITIES */}
+
+          {/* TROPHYS ETC. */}
+          <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
+            TROPHYS ETC.
+          </div>
+          <div className="grid grid-cols-2 gap-x-[30px] ">
+            {trophies.map((trophy, index) => (
+              <div
+                key={index}
+                className={clsx(
+                  ` flex justify-start gap-x-[4px] `,
+                  index === 0 ? ' justify-start ' : ' justify-end '
+                )}
+              >
+                {trophy.cupTrophyCount > 0 && (
+                  <ItemTrophy
+                    label="Cup"
+                    image="/biography/trophy/trophy_cup.svg"
+                    number={trophy.cupTrophyCount}
                   />
-                }
-                svgStarHalf={
-                  <img
-                    src={'/biography/starhalf.png'}
-                    className="
-                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
-                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
-                      "
-                    alt=""
+                )}
+                {trophy.otherTrophyCount > 0 && (
+                  <ItemTrophy
+                    label="Other"
+                    image="/biography/trophy/trophy_other.svg"
+                    number={trophy.otherTrophyCount}
                   />
-                }
-                svgStarEmpty={
-                  <img
-                    src={'/biography/starempty.png'}
-                    className="
-                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
-                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
-                      "
-                    alt=""
+                )}
+                {trophy.serieTrophyCount > 0 && (
+                  <ItemTrophy
+                    label="Serie"
+                    image="/biography/trophy/trophy_serie.svg"
+                    number={trophy.serieTrophyCount}
                   />
-                }
-              />
-              <div className="text-white font-bold text-[14px]">RIGHT FOOT</div>
-              <Stars
-                numberOfStars={bio.rightFoot}
-                className={'mt-[8px] mb-[16px] gap-x-[2px] justify-center'}
-                svgStarFull={
-                  <img
-                    src={'/biography/starfull.png'}
-                    className="
-                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
-                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
-                      "
-                    alt=""
+                )}
+              </div>
+            ))}
+          </div>
+          {/* TROPHYS ETC. */}
+
+          {/* AWARD */}
+          <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
+            AWARD
+          </div>
+
+          <div className="grid grid-cols-2 gap-x-[30px] ">
+            {awards.map(({ DT, GOC, GOL, MVP, POM, POW, POY, SOM }, index) => (
+              <div
+                key={index}
+                className={clsx(
+                  ` flex justify-start gap-x-[4px] `,
+                  index === 0 ? ' justify-start ' : ' justify-end '
+                )}
+              >
+                {DT > 0 && (
+                  <ItemAward
+                    quantity={DT}
+                    src={'/biography/award/medal-goal.svg'}
+                    title={'D.T'}
                   />
-                }
-                svgStarHalf={
-                  <img
-                    src={'/biography/starhalf.png'}
-                    className="
-                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
-                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
-                      "
-                    alt=""
+                )}
+                {GOC > 0 && (
+                  <ItemAward
+                    quantity={GOC}
+                    src={'/biography/award/medal-goal.svg'}
+                    title={'G.O.C'}
                   />
-                }
-                svgStarEmpty={
-                  <img
-                    src={'/biography/starempty.png'}
-                    className="
-                        w-[16px] sm:w-[16px] md:w-[16px] lg:w-[16px] xl:w-[16px] 2xl:w-[16px]
-                        h-[16px] sm:h-[16px] md:h-[16px] lg:h-[16px] xl:h-[16px] 2xl:h-[16px]
-                      "
-                    alt=""
+                )}
+                {GOL > 0 && (
+                  <ItemAward
+                    quantity={GOL}
+                    src={'/biography/award/medal-goal.svg'}
+                    title={'G.O.L'}
                   />
-                }
-              />
-            </div>
-          ))}
-        </div>
-        {/* player profile benchmark */}
+                )}
+                {MVP > 0 && (
+                  <ItemAward
+                    quantity={MVP}
+                    src={'/biography/award/medal-mvp.svg'}
+                    title={'M.V.P'}
+                  />
+                )}
+                {POM > 0 && (
+                  <ItemAward
+                    quantity={POM}
+                    src={'/biography/award/medal-pom.svg'}
+                    title={'P.O.M'}
+                  />
+                )}
+                {POW > 0 && (
+                  <ItemAward
+                    quantity={POW}
+                    src={'/biography/award/medal-pow.svg'}
+                    title={'P.O.W'}
+                  />
+                )}
+                {POY > 0 && (
+                  <ItemAward
+                    quantity={POY}
+                    src={'/biography/award/medal-goal.svg'}
+                    title={'P.O.Y'}
+                  />
+                )}
+                {SOM > 0 && (
+                  <ItemAward
+                    quantity={SOM}
+                    src={'/biography/award/medal-goal.svg'}
+                    title={'S.O.M'}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
 
-        {/* SPECIALITIES */}
-        <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
-          SPECIALITIES
-        </div>
-        <div className="grid grid-cols-2 gap-x-[30px] ">
-          {bios.map((bio, index) => (
-            <div
-              key={bio.userId}
-              className={clsx(
-                ` flex justify-start gap-x-[4px] `,
-                index === 0 ? ' justify-start ' : ' justify-end '
-              )}
-            >
-              {bio.specialities.map((spe) => (
-                <span
-                  key={spe}
-                  className="text-white rounded-[16px] bg-purple-600 flex items-center justify-center h-[30px] px-2 "
-                >
-                  #{spe}
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-        {/* SPECIALITIES */}
+          {/* AWARD */}
 
-        {/* TROPHYS ETC. */}
-        <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
-          TROPHYS ETC.
-        </div>
-        <div className="grid grid-cols-2 gap-x-[30px] ">
-          {trophies.map((trophy, index) => (
-            <div
-              key={index}
-              className={clsx(
-                ` flex justify-start gap-x-[4px] `,
-                index === 0 ? ' justify-start ' : ' justify-end '
-              )}
-            >
-              {trophy.cupTrophyCount > 0 && (
-                <ItemTrophy
-                  label="Cup"
-                  image="/biography/trophy/trophy_cup.svg"
-                  number={trophy.cupTrophyCount}
-                />
-              )}
-              {trophy.otherTrophyCount > 0 && (
-                <ItemTrophy
-                  label="Other"
-                  image="/biography/trophy/trophy_other.svg"
-                  number={trophy.otherTrophyCount}
-                />
-              )}
-              {trophy.serieTrophyCount > 0 && (
-                <ItemTrophy
-                  label="Serie"
-                  image="/biography/trophy/trophy_serie.svg"
-                  number={trophy.serieTrophyCount}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-        {/* TROPHYS ETC. */}
+          {/* CAPS */}
+          <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
+            CAPS
+          </div>
 
-        {/* AWARD */}
-        <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
-          AWARD
-        </div>
-
-        <div className="grid grid-cols-2 gap-x-[30px] ">
-          {awards.map(({ DT, GOC, GOL, MVP, POM, POW, POY, SOM }, index) => (
-            <div
-              key={index}
-              className={clsx(
-                ` flex justify-start gap-x-[4px] `,
-                index === 0 ? ' justify-start ' : ' justify-end '
-              )}
-            >
-              {DT > 0 && (
-                <ItemAward
-                  quantity={DT}
-                  src={'/biography/award/medal-goal.svg'}
-                  title={'D.T'}
-                />
-              )}
-              {GOC > 0 && (
-                <ItemAward
-                  quantity={GOC}
-                  src={'/biography/award/medal-goal.svg'}
-                  title={'G.O.C'}
-                />
-              )}
-              {GOL > 0 && (
-                <ItemAward
-                  quantity={GOL}
-                  src={'/biography/award/medal-goal.svg'}
-                  title={'G.O.L'}
-                />
-              )}
-              {MVP > 0 && (
-                <ItemAward
-                  quantity={MVP}
-                  src={'/biography/award/medal-mvp.svg'}
-                  title={'M.V.P'}
-                />
-              )}
-              {POM > 0 && (
-                <ItemAward
-                  quantity={POM}
-                  src={'/biography/award/medal-pom.svg'}
-                  title={'P.O.M'}
-                />
-              )}
-              {POW > 0 && (
-                <ItemAward
-                  quantity={POW}
-                  src={'/biography/award/medal-pow.svg'}
-                  title={'P.O.W'}
-                />
-              )}
-              {POY > 0 && (
-                <ItemAward
-                  quantity={POY}
-                  src={'/biography/award/medal-goal.svg'}
-                  title={'P.O.Y'}
-                />
-              )}
-              {SOM > 0 && (
-                <ItemAward
-                  quantity={SOM}
-                  src={'/biography/award/medal-goal.svg'}
-                  title={'S.O.M'}
-                />
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* AWARD */}
-
-        {/* CAPS */}
-        <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
-          CAPS
-        </div>
-
-        <div className="grid grid-cols-2 gap-x-[30px] ">
-          {caps.map((capArr, index) => (
-            <div
-              key={index}
-              className={clsx(
-                ` flex justify-start gap-x-[4px] `,
-                index === 0 ? ' justify-start ' : ' justify-end '
-              )}
-            >
-              {/*  */}
-              {(isEmpty(capArr) ? [] : capArr).map((o, index) => (
-                <div key={index}>
-                  <div className="bg-[#1f1f1f] px-2 py-1 rounded-[8px] mb-2 mt-2 w-[58px] h-[58px]">
-                    <div className="text-white text-[10px] text-center ">
-                      {capitalize(o.type.toLowerCase())}
+          <div className="grid grid-cols-2 gap-x-[30px] ">
+            {caps.map((capArr, index) => (
+              <div
+                key={index}
+                className={clsx(
+                  ` flex justify-start gap-x-[4px] `,
+                  index === 0 ? ' justify-start ' : ' justify-end '
+                )}
+              >
+                {/*  */}
+                {(isEmpty(capArr) ? [] : capArr).map((o, index) => (
+                  <div key={index}>
+                    <div className="bg-[#1f1f1f] px-2 py-1 rounded-[8px] mb-2 mt-2 w-[58px] h-[58px]">
+                      <div className="text-white text-[10px] text-center ">
+                        {capitalize(o.type.toLowerCase())}
+                      </div>
+                      <img
+                        src={'/biography/cap/Cap_National.svg'}
+                        className="text-center mx-auto mb-1 "
+                        alt=""
+                      />
+                      <div className="text-white text-[8px] text-center ">
+                        {o.teamName}
+                      </div>
                     </div>
-                    <img
-                      src={'/biography/cap/Cap_National.svg'}
-                      className="text-center mx-auto mb-1 "
-                      alt=""
-                    />
-                    <div className="text-white text-[8px] text-center ">
-                      {o.teamName}
+
+                    <div className="text-white text-[13px] text-center">
+                      {o.count}x
                     </div>
                   </div>
+                ))}
+                {/*  */}
+              </div>
+            ))}
+          </div>
+          {/* CAPS */}
 
-                  <div className="text-white text-[13px] text-center">
-                    {o.count}x
-                  </div>
-                </div>
-              ))}
-              {/*  */}
-            </div>
-          ))}
-        </div>
-        {/* CAPS */}
+          {/* PROGRAMS */}
+          <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
+            PROGRAMS
+          </div>
+          {/* PROGRAMS */}
 
-        {/* PROGRAMS */}
-        <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
-          PROGRAMS
+          {/* CHALLENGES */}
+          <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
+            CHALLENGES
+          </div>
+          {/* CHALLENGES */}
         </div>
-        {/* PROGRAMS */}
+        {/* col1 */}
 
-        {/* CHALLENGES */}
-        <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
-          CHALLENGES
+        {/* col2 */}
+        <div
+          className=" mx-auto w-full
+        max-w-[560px] sm:max-w-[560px] md:max-w-[560px] lg:max-w-[360px] xl:max-w-[380px] 2xl:max-w-[480px]
+        "
+        >
+          <StatsBenchmark matches={matches} trainings={trainings} />
         </div>
-        {/* CHALLENGES */}
-
-        {/* STATS BENCHMARK */}
-        <div className="text-Grey font-bold text-center  mt-[40px] mb-[40px] ">
-          STATS BENCHMARK
-        </div>
-        {/* STATS BENCHMARK */}
+        {/* col2 */}
       </div>
     </>
   )
@@ -822,4 +857,89 @@ export interface TrophiesCompareUserA {
   serieTrophyCount: number
   cupTrophyCount: number
   otherTrophyCount: number
+}
+
+export interface IMatchOrTraining {
+  userA: number
+  totalUserA: number
+  userB: number
+  totalUserB: number
+  title: string
+}
+
+const ItemMatch = ({ title, userAValue, userBValue }) => {
+  let color = ''
+  if (equalStr(title, 'yel')) {
+    color = 'bg-yellow-400'
+  } else if (equalStr(title, 'red')) {
+    color = 'bg-red-400'
+  } else {
+    color = 'bg-Green'
+  }
+  return (
+    <div className="mb-2">
+      <div className="grid grid-cols-3 ">
+        <div className="text-white font-bold text-left "> {userAValue} </div>
+        <div className="text-white font-bold text-[14px] uppercase text-center ">
+          {equalStr(title, 'yel') ? 'yellow' : title}
+        </div>
+        <div className="text-white font-bold text-right "> {userBValue} </div>
+      </div>
+      <div
+        className={clsx(
+          ` h-[20px] sm:h-[26px] rounded-[4px] shadow-sm
+          w-full`,
+          color
+        )}
+      ></div>
+    </div>
+  )
+}
+
+export const StatsBenchmark = ({
+  matches,
+  trainings,
+}: {
+  matches: IMatchOrTraining[]
+  trainings: IMatchOrTraining[]
+}) => {
+  return (
+    <>
+      {/* STATS BENCHMARK */}
+      <div
+        className="text-Grey font-bold text-center
+      mt-[40px] sm:mt-[40px] md:mt-[40px] lg:mt-[0px]
+      mb-[40px]
+      "
+      >
+        STATS BENCHMARK
+      </div>
+      {/* STATS BENCHMARK */}
+
+      <div className=" flex justify-between items-center ">
+        <span className="text-Green  ">2022 - Last 365 days</span>
+        <SvgFilter3Line className={''} onClick={() => {}} />
+      </div>
+
+      <div className="text-Grey ">Matches in total</div>
+      {matches.map(({ title, totalUserA, totalUserB }, index) => (
+        <ItemMatch
+          key={title}
+          title={title}
+          userAValue={totalUserA}
+          userBValue={totalUserB}
+        ></ItemMatch>
+      ))}
+
+      <div className="text-Grey ">Training in total</div>
+      {trainings.map(({ title, totalUserA, totalUserB }, index) => (
+        <ItemMatch
+          key={title}
+          title={title}
+          userAValue={totalUserA}
+          userBValue={totalUserB}
+        ></ItemMatch>
+      ))}
+    </>
+  )
 }
