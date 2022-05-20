@@ -77,7 +77,7 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
                   onClose()
                   setAnchorEl2(null)
                   setCurrentRoleName(item.role)
-                  router.push('/dashboard/news')
+                  router.push('/feed')
                 }}
               >
                 <img
@@ -232,7 +232,7 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
         }}
       >
         <div className=" px-[20px] py-[5px] ">
-          {userRoles.map((item, index) => {
+          {userRoles.map((item) => {
             const isActive: boolean = item.roleId === currentRoleId
             return (
               <div
@@ -245,7 +245,7 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
                   onClose()
                   setAnchorEl2(null)
                   setCurrentRoleName(item.role)
-                  router.push('/dashboard/news')
+                  router.push('/feed')
                 }}
               >
                 <img

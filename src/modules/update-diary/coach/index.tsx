@@ -24,6 +24,7 @@ import { Tabs } from '../player/components/Tabs'
 import ParticipateButton from './components/ParticipateButton'
 import ParticipateList from './components/ParticipateList'
 import Training from './training'
+import { TrainingPariticapte } from './components/ParticipateItem'
 
 const ITEMS = [
   { label: 'Team Training', value: 'TEAM_TRAINING' },
@@ -42,7 +43,7 @@ export default function CoachDiary() {
 
   const [participate, setParticipate] = useAtom(COACH_DIARY_ATOM)
   const [initialDate, setInitialDate] = useState<string | Date>(getToday())
-  const [initialValues, setInitialValues] = useState<ParticipateType>(undefined)
+  const [initialForm, setInitialForm] = useState<ParticipateType>(undefined)
 
   const { isLoading: isGettingDiary, data } = useQuery(
     [QUERIES_DIARY.COACH_DIARY, initialDate],
@@ -51,7 +52,7 @@ export default function CoachDiary() {
 
   useEffect(() => {
     setIsOpenModal(false)
-  }, [JSON.stringify(participate?.diaryId)])
+  }, [participate?.diaryId])
 
   useEffect(() => {
     return () => {
@@ -109,6 +110,9 @@ export default function CoachDiary() {
         </p>
         <Tabs value={ITEMS} onChange={setCurrentTab} current={currentTab} />
         <ParticipateButton isOpen={setIsOpenModal} />
+        {participate?.originalDiaryId && (
+          <TrainingPariticapte value={participate} disable />
+        )}
         <Training />
       </div>
     </Loading>

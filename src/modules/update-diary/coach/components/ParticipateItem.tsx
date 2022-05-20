@@ -11,45 +11,49 @@ import DonutChart from './DonutChart'
 
 interface ItemProps {
   value?: ParticipateType
+  disable?: boolean
 }
 
-const TrainingPariticapte = ({ value }: ItemProps) => {
-  const [selectedParticipate, setSelectedParticipate] =
-    useAtom(COACH_DIARY_ATOM)
+export const TrainingPariticapte = React.memo(
+  ({ value, disable }: ItemProps) => {
+    const [selectedParticipate, setSelectedParticipate] =
+      useAtom(COACH_DIARY_ATOM)
 
-  const TRAINING_RESPONSE = useMemo(() => {
-    const { mental, physics, tactics, technics } = value.training
-    const obj = { mental, physics, tactics, technics }
-    return Object.keys(obj).map((key) => ({
-      key: _upperFirst(key),
-      value: obj[key],
-    }))
-  }, [JSON.stringify(value.training)])
+    const TRAINING_RESPONSE = useMemo(() => {
+      const { mental, physics, tactics, technics } = value.training
+      const obj = { mental, physics, tactics, technics }
+      return Object.keys(obj).map((key) => ({
+        key: _upperFirst(key),
+        value: obj[key],
+      }))
+    }, [JSON.stringify(value?.training)])
 
-  return (
-    <div
-      /* @ts-ignore */
-      onClick={() => setSelectedParticipate(value)}
-      className={clsx(
-        'flex items-center  border-2  hover:border-gray-500 duration-150 cursor-pointer active:bg-gray-800 pt-2 px-4 rounded-lg justify-between',
-        selectedParticipate?.originalDiaryId === value.originalDiaryId
-          ? 'border-gray-500 bg-gray-800'
-          : 'border-transparent bg-black'
-      )}
-    >
-      <DonutChart value={TRAINING_RESPONSE} />
-      <div className="mb-2 text-xl w-full text-left tracking-wide">
-        <p>{upperFirst(value.training.typeOfTraining)}</p>
-        <p className="text-gray-400 font-medium text-base">
-          {dayjs(value.createdAt).format('YYYY/MM/DD')}
+    return (
+      <button
+        disabled={disable}
+        /* @ts-ignore */
+        onClick={() => setSelectedParticipate(value)}
+        className={clsx(
+          'flex items-center w-full border-2  hover:border-gray-500 duration-150 cursor-pointer active:bg-gray-800 pt-2 px-4 rounded-lg justify-between',
+          selectedParticipate?.originalDiaryId === value.originalDiaryId
+            ? 'border-gray-500 bg-gray-800'
+            : 'border-transparent bg-black'
+        )}
+      >
+        <DonutChart value={TRAINING_RESPONSE} />
+        <div className="mb-2 text-xl w-full text-left tracking-wide">
+          <p>{upperFirst(value.training.typeOfTraining)}</p>
+          <p className="text-gray-400 font-medium text-base">
+            {dayjs(value.createdAt).format('YYYY/MM/DD')}
+          </p>
+        </div>
+        <p className="px-2 w-40 text-center py-6 bg-slate-900 text-gray-400 font-base font-semibold mb-2 rounded-lg border-2 border-gray-500">
+          {value.training.hoursOfPractice}h
         </p>
-      </div>
-      <p className="px-2 w-40 text-center py-6 bg-slate-900 text-gray-400 font-base font-semibold mb-2 rounded-lg border-2 border-gray-500">
-        {value.training.hoursOfPractice}h
-      </p>
-    </div>
-  )
-}
+      </button>
+    )
+  }
+)
 
 const MatchParticipate = ({ value }: ItemProps) => {
   return (
