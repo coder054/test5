@@ -185,7 +185,7 @@ export const Head2Head = () => {
       </div>
     )
   }
-  if (error) return 'An error has occurred: ' + error.message
+  if (error) return <></>
 
   if (isEmpty(data)) {
     return null
