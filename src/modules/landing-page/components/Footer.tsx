@@ -21,10 +21,12 @@ export const Footer = () => {
           <div className="text-[16px]">
             <p className="font-bold pb-7">MENU</p>
             <ul className="mobileM:pl-4 tabletM:pl-0 font-medium space-y-4">
-              <li>Home</li>
-              <li>Sign up & In</li>
+              <li>
+                <Link href="/">Home</Link>
+              </li>
+              {/* <li>Sign up & In</li>
               <li>Biographies</li>
-              <li>Support</li>
+              <li>Support</li> */}
             </ul>
           </div>
           <div className="text-[16px]">
@@ -45,10 +47,26 @@ export const Footer = () => {
           <div className="text-[16px]">
             <p className="font-bold pb-7">SOCIAL</p>
             <ul className="mobileM:pl-4 tabletM:pl-0 font-medium space-y-4">
-              <li>Instagram</li>
-              <li>Facebook</li>
-              <li>Twitter</li>
-              <li>Tiktok</li>
+              <li>
+                <a target="_blank" href="https://www.instagram.com/zporter.co/">
+                  Instagram
+                </a>
+              </li>
+              <li>
+                <a target="_blank" href="https://www.facebook.com/zporter.co/">
+                  Facebook
+                </a>
+              </li>
+              <li>
+                <a target="_blank" href="https://twitter.com/zporter_co">
+                  Twitter
+                </a>
+              </li>
+              <li>
+                <a target="_blank" href="https://www.tiktok.com/@zporter.co">
+                  Tiktok
+                </a>
+              </li>
             </ul>
           </div>
         </div>
