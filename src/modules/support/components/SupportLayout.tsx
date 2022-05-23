@@ -18,8 +18,8 @@ export default function SupportLayout({ children, title }: SupportLayoutProps) {
         </button>
         <p className="text-3xl text-center my-4 font-bold">{title}</p>
         <div className="tabletM:w-3/5 mx-auto">{children}</div>
-        <Footer />
       </div>
+      <Footer />
     </div>
   )
 }

@@ -89,13 +89,7 @@ export default function ParticipateList({
           <p className="text-[24px] font-medium">
             Choose what Team activities you participated in
           </p>
-          <button
-            /* @ts-ignore */
-            onClick={() => setSelectedParticipate(undefined)}
-            className="bg-black border-2 border-transparent hover:border-gray-500 active:bg-gray-600 active:text-gray-300 duration-150 text-gray-400 text-base font-medium h-[86px] w-full rounded-lg"
-          >
-            None <BlockIcon className="text-lg" />
-          </button>
+
           {isLoading ? (
             <Fragment>
               {Array(6)
@@ -110,6 +104,13 @@ export default function ParticipateList({
             </Fragment>
           ) : (
             <Fragment>
+              <button
+                /* @ts-ignore */
+                onClick={() => setSelectedParticipate(undefined)}
+                className="bg-black border-2 border-transparent hover:border-gray-500 active:bg-gray-600 active:text-gray-300 duration-150 text-gray-400 text-base font-medium h-[86px] w-full rounded-lg"
+              >
+                None <BlockIcon className="text-lg" />
+              </button>
               {(data?.pages || []).map((page, index) => (
                 <Fragment key={index}>
                   {page.map((item: ParticipateType) => (
