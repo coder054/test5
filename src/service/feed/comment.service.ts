@@ -2,6 +2,7 @@ import {
   API_BLOCK_COMMENT,
   API_CREATE_COMMENT,
   API_DELETE_COMMENT,
+  API_GET_MY_TEAM,
   API_LIKE_COMMENT,
 } from 'src/constants/api.constants'
 import { axios } from 'src/utils/axios'
@@ -80,4 +81,8 @@ export const deleteCommentService = async ({
       commentId: commentId,
     })
   )
+}
+
+export const getYourTeamService = async (userIdQuery: string) => {
+  return axios.get(toQueryString(`${API_GET_MY_TEAM}/${userIdQuery}`))
 }

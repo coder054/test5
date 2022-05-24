@@ -147,6 +147,7 @@ export interface DevelopmentNoteType {
     coachComment: string
   }
   playerNotedAt?: string | Date
+  coachNotedAt?: string | Date
   coachDevelopmentProgress?: string
   devTalkId?: string
 }

@@ -19,6 +19,7 @@ export const formValuesDevelopmentNodeAtom = atom({
   otherCommentsPlayer: '',
   otherCommentsCoach: '',
   date: dayjs(new Date()).format('YYYY/MM/DD'),
+  dateCoachComment: dayjs(new Date()).format('YYYY/MM/DD'),
   progress: 'NORMAL',
   contractedClub: {
     arena: '',
@@ -30,6 +31,9 @@ export const formValuesDevelopmentNodeAtom = atom({
     websiteUrl: null,
   },
   currentTeams: '',
+  player: {
+    userId: '',
+  },
 })
 
 // const [formValues, setFormValues]: [IDevelopmentFormValues, Function] = useAtom(

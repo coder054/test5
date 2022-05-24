@@ -16,6 +16,8 @@ export interface CreatePersonalGoalType {
 }
 
 import {
+  API_COACH_COMMENT_DEVELOPMENT_NOTE,
+  API_FILTER_DEVELOPMENT_NOTES,
   API_GET_DEVELOPMENT_TALK_CHART,
   API_GET_LIST_DEVELOPMENT_NOTES,
   API_GET_PLAYER_GOAL_UPDATE,
@@ -58,6 +60,23 @@ export const createDevelopmentNote = async ({
   body: DevelopmentNoteType
 }) => {
   return axios.post(API_PLAYER_CREATE_DEVELOPMENT_NOTE, { ...body })
+}
+
+export const coachCommentDevelopmentNote = async ({
+  body,
+  devTalkId,
+}: {
+  body: DevelopmentNoteType
+  devTalkId: string
+}) => {
+  return axios.post(
+    toQueryString(`${API_COACH_COMMENT_DEVELOPMENT_NOTE}/${devTalkId}`, {
+      devTalkId: devTalkId,
+    }),
+    {
+      ...body,
+    }
+  )
 }
 
 export const updateDevelopmentNote = async ({
@@ -109,4 +128,10 @@ export const createPersonalGoal = async ({
 
 export const removePersonalGoal = async (docId: string) => {
   return axios.delete(`${API_PATCH_DELETE_PERSONAL_GOAL}/${docId}`)
+}
+
+export const filterDevelopmentNotes = async (playerId: string) => {
+  return axios.get(
+    toQueryString(API_FILTER_DEVELOPMENT_NOTES, { playerId: playerId })
+  )
 }
