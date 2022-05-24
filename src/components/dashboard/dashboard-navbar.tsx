@@ -1669,7 +1669,6 @@ export const ModalResponseCoachReview = (props) => {
             const { playerDiaryData }: { playerDiary: any } =
               dataModalResponseCoachReview
 
-            debugger
             setOpenModalDiaryUpdate(true)
             await wait(150)
             setDate(new Date(playerDiaryData.updatedAt))
