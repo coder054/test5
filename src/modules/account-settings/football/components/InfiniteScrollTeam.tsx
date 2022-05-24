@@ -9,13 +9,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { MyInput } from 'src/components/MyInput'
-import { API_GET_LIST_TEAM } from 'src/constants/api.constants'
+import { API_GET_LIST_TEAM, API_GET_MY_TEAM } from 'src/constants/api.constants'
 import {
   CurrentTeamType,
   TeamType,
 } from 'src/constants/types/settingsType.type'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { axios } from 'src/utils/axios'
+import { toQueryString } from 'src/utils/common.utils'
 
 type InfiniteScrollTeamProps = {
   handleSetTeam?: (value: CurrentTeamType) => void
@@ -26,6 +27,7 @@ type InfiniteScrollTeamProps = {
   teamName?: string
   item?: CurrentTeamType
   errorMessage?: string
+  yourTeam?: boolean
 }
 
 export const InfiniteScrollTeam = ({
@@ -37,12 +39,14 @@ export const InfiniteScrollTeam = ({
   errorMessage,
   placeholder,
   setTeamId,
+  yourTeam,
 }: InfiniteScrollTeamProps) => {
   const [items, setItems] = useState<any>([])
   const [team, setTeam] = useState<string>('')
 
   const [hasMore, setHasMore] = useState<boolean>(true)
   const [isOpenOption, setIsOpenOption] = useState<boolean>(false)
+  const { currentRoleId } = useAuth()
 
   const param = useMemo(() => {
     return {
@@ -126,12 +130,38 @@ export const InfiniteScrollTeam = ({
       setHasMore(false)
       return
     }
-    await getListTeam()
+    if (yourTeam) {
+      await getYourTeam()
+    } else {
+      await getListTeam()
+    }
   }
 
   useEffect(() => {
     idClub && isOpenOption && getListTeam()
   }, [idClub])
+
+  //GET YOUR TEAM development
+  const getYourTeam = async () => {
+    await axios
+      .get(`${API_GET_MY_TEAM}/${currentRoleId}`)
+      .then((res) => {
+        if (res.data.length <= 10) {
+          setItems(res.data)
+          setHasMore(false)
+        } else {
+          let arr = items.concat(res.data)
+          setItems(arr)
+        }
+      })
+      .catch(() => {
+        toast.error('Something went wrong')
+      })
+  }
+
+  useEffect(() => {
+    yourTeam && getYourTeam()
+  }, [yourTeam])
 
   return (
     <ClickAwayListener onClickAway={() => setIsOpenOption(false)}>

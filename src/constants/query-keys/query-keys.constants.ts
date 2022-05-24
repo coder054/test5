@@ -19,7 +19,10 @@ export const QUERIES_DASHBOARD = {
   HEALTH_DATA: 'health-data',
   DEVELOPMENT_DATA: 'development-data',
   NOTE_DATA: 'note-data',
+  COACH_COMMENT_PLAYER_DEVELOPMENT: 'coach-comment-player-development',
+  LIST_PERSONAL_GOAL: 'list-personal-goal',
   UPDATE_PERSONAL_GOAL: 'update-personal-goal',
+  CREATE_PERSONAL_GOAL: 'create-personal-goal',
   LIST_PAIN: 'list-pain',
 }
 
