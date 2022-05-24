@@ -81,6 +81,11 @@ export const API_PATCH_UPDATE_PERSONAL_GOAL =
 export const API_PATCH_DELETE_PERSONAL_GOAL =
   'achievements/player/delete-personal-goal'
 
+export const API_GET_MY_TEAM = 'users/my-teams'
+
+export const API_FILTER_DEVELOPMENT_NOTES =
+  'development-talk/coach/filter-development-notes'
+
 //dashboard pain
 export const API_GET_GET_LIST_INJURY_REPORT =
   'dashboard/get-list-injuries-report'

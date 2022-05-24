@@ -25,7 +25,7 @@ export const LocationSearchInput = ({
   useEffect(() => {
     window.initMap = () => setGmapsLoaded(true)
     const gmapScriptEl = document.createElement(`script`)
-    gmapScriptEl.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyD7JfGqgH_Y4opp0B7zgXEJe9FFa26phtE&libraries=places&callback=initMap`
+    // gmapScriptEl.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyD7JfGqgH_Y4opp0B7zgXEJe9FFa26phtE&libraries=places&callback=initMap`
     try {
       document
         ?.querySelector(`body`)

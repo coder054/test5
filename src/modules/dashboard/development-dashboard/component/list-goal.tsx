@@ -1,5 +1,4 @@
 import { Fragment, useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
 import SimpleBar from 'simplebar-react'
 import { MySlider } from 'src/components/MySlider'
 import { DashboardGoalUpdateType } from 'src/constants/types'
@@ -9,11 +8,10 @@ import dayjs from 'dayjs'
 import { Loading, TooltipCustom } from 'src/components'
 import { ModalMui } from 'src/components/ModalMui'
 import { isMobile } from 'react-device-detect'
-import { setItem } from 'localforage'
 import { GoalModal } from './modal/goal-modal'
 import { useInfiniteQuery } from 'react-query'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
-import { DESC } from 'src/constants/constants'
+import { ASC } from 'src/constants/constants'
 import { toQueryString } from 'src/utils/common.utils'
 import { API_GET_PLAYER_GOAL_UPDATE } from 'src/constants/api.constants'
 import { axios } from 'src/utils/axios'
@@ -28,7 +26,7 @@ export const ListGoal = () => {
   const { inView, ref } = useInView()
   const [limit, setLimit] = useState<number>(2)
   const [startAfter, setStartAfter] = useState<number>(null)
-  const [sorted, setSorted] = useState<string>(DESC)
+  const [sorted, setSorted] = useState<string>(ASC)
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false)
   const [checkUpdate, setCheckUpdate] = useState<boolean>(false)
 
@@ -76,7 +74,7 @@ export const ListGoal = () => {
     isFetchingNextPage,
     fetchNextPage,
   } = useInfiniteQuery(
-    [QUERIES_DASHBOARD.UPDATE_PERSONAL_GOAL],
+    [QUERIES_DASHBOARD.LIST_PERSONAL_GOAL],
     async ({ pageParam = startAfter }) => {
       const res = await axios.get(
         toQueryString(API_GET_PLAYER_GOAL_UPDATE, {
@@ -148,13 +146,12 @@ export const ListGoal = () => {
     let totalPercent = 0
 
     if (today >= deadline) {
-      totalPercent = 100
+      totalPercent = 0
     } else {
-      totalPercent = Math.round(
-        ((today - createAt) * 100) / (deadline - createAt)
-      )
+      totalPercent =
+        100 - Math.round(((today - createAt) * 100) / (deadline - createAt))
     }
-    return totalPercent
+    return `${totalPercent}%`
   }
 
   const handleOnClick = (item: DashboardGoalUpdateType) => {

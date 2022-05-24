@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
+import { isEmpty } from 'lodash'
 import { ReactNode, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
@@ -10,16 +11,27 @@ import { ModalMui } from 'src/components/ModalMui'
 import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
 import { PopupConfirmDelete } from 'src/components/popup-confirm-delete'
+import { API_FILTER_DEVELOPMENT_NOTES } from 'src/constants/api.constants'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { DevelopmentNoteType } from 'src/constants/types'
-import { emotionToNum, numToEmotion } from 'src/hooks/functionCommon'
+import {
+  emotionToNum,
+  getStartOfDate,
+  getToday,
+  numToEmotion,
+} from 'src/hooks/functionCommon'
+import { InfiniteScrollMember } from 'src/modules/account-settings/football/components/InfiniteScrollMember'
 import { InfiniteScrollTeam } from 'src/modules/account-settings/football/components/InfiniteScrollTeam'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import {
+  coachCommentDevelopmentNote,
   createDevelopmentNote,
   removeDevelopmentNote,
   updateDevelopmentNote,
 } from 'src/service/dashboard/development.service'
+import { axios } from 'src/utils/axios'
+import { toQueryString } from 'src/utils/common.utils'
+import { SaveCoachComment } from './save-coach-comment'
 
 interface NoteModalProps {
   setIsOpenModal?: (open: boolean) => void
@@ -47,6 +59,7 @@ export interface IDevelopmentFormValues {
   otherCommentsPlayer: string
   otherCommentsCoach: string
   date: string | Date
+  dateCoachComment?: string | Date
   progress: string
   contractedClub?: {
     arena: string
@@ -57,7 +70,8 @@ export interface IDevelopmentFormValues {
     logoUrl: string
     websiteUrl: any
   }
-  currentTeams?: string
+  currentTeams?: any
+  player?: any
 }
 
 export const NoteModal = ({
@@ -72,9 +86,9 @@ export const NoteModal = ({
   const [medias, setMedias] = useState([])
   const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false)
   const [isOpenModalDelete, setIsOpenModalDelete] = useState<boolean>(false)
+  const [devTalkId, setDevTalkId] = useState<string>('')
+  const [notePlayer, setNotePlayer] = useState<string>('')
   const { currentRoleName, currentUser, userRoles } = useAuth()
-  // console.log('currentUser', currentUser)
-  // console.log('userRoles', userRoles)
 
   const [formValues, setFormValues]: [IDevelopmentFormValues, Function] =
     useAtom(formValuesDevelopmentNodeAtom)
@@ -128,6 +142,75 @@ export const NoteModal = ({
       },
     }
   )
+
+  useEffect(() => {
+    setFormValues({
+      strengthPlayer: '',
+      strengthCoach: '',
+      weaknessesPlayer: '',
+      weaknessesCoach: '',
+      bestDevelopSkillsPlayer: '',
+      bestDevelopSkillsCoach: '',
+      skillsNeededToDevelopPlayer: '',
+      skillsNeededToDevelopCoach: '',
+      bestWayToDevelopPlayer: '',
+      bestWayToDevelopCoach: '',
+      shortTermGoalPlayer: '',
+      shortTermGoalCoach: '',
+      longTermGoalPlayer: '',
+      longTermGoalCoach: '',
+      otherCommentsPlayer: '',
+      otherCommentsCoach: '',
+      date: dayjs(new Date()).format('YYYY/MM/DD'),
+      dateCoachComment: dayjs(new Date()).format('YYYY/MM/DD'),
+      progress: 'NORMAL',
+      contractedClub: {
+        arena: '',
+        city: '',
+        clubId: '',
+        clubName: '',
+        country: '',
+        logoUrl: '',
+        websiteUrl: null,
+      },
+      currentTeams: '',
+      player: {
+        userId: '',
+      },
+    })
+  }, [])
+
+  useEffect(() => {
+    const getPlayer = async () => {
+      const res = await axios.get(
+        toQueryString(API_FILTER_DEVELOPMENT_NOTES, {
+          playerId: formValues?.player?.userId,
+          playerNotedAt: getStartOfDate(formValues?.date),
+        })
+      )
+
+      if (res.status === 200) {
+        setFormValues((prev) => ({
+          ...prev,
+          strengthPlayer: res?.data?.strength?.playerContent,
+          weaknessesPlayer: res?.data?.weaknesses?.playerContent,
+          bestDevelopSkillsPlayer: res?.data?.bestDevelopSkills?.playerContent,
+          skillsNeededToDevelopPlayer:
+            res?.data?.bestDevelopSkills?.playerContent,
+          bestWayToDevelopPlayer: res?.data?.bestWayToDevelop?.playerContent,
+          shortTermGoalPlayer: res?.data?.shortTermGoal?.playerContent,
+          longTermGoalPlayer: res?.data?.longTermGoal?.playerContent,
+          otherCommentsPlayer: res?.data?.otherComments?.playerContent,
+        }))
+
+        setNotePlayer(res?.data)
+        setDevTalkId(res?.data?.devTalkId)
+      }
+    }
+    if (formValues?.player?.userId && formValues?.date) {
+      getPlayer()
+    }
+  }, [formValues?.player?.userId, formValues?.date])
 
   useEffect(() => {
     item &&
@@ -193,8 +276,8 @@ export const NoteModal = ({
       !formValues.otherCommentsPlayer
     ) {
       toast.error('You need to fill at least 1 field!')
+      return
     }
-
     if (create) {
       const valuePost: DevelopmentNoteType = {
         playerDevelopmentProgress:
@@ -326,16 +409,49 @@ export const NoteModal = ({
               value={formValues.date}
               onChange={(e) => handleChangeForm('date', e)}
               readOnly={update ? true : false}
+              maxDate={getToday()}
             />
           ) : (
             <div>
               <InfiniteScrollTeam
-                label="Your team(s)"
-                idClub={formValues.contractedClub.clubId}
+                label="Your team"
                 handleSetTeam={(value) => setSelectedTeam(value)}
-                // item={item}
+                yourTeam={true}
               />
             </div>
+          )}
+
+          {currentRoleName === 'COACH' && (
+            <>
+              <div>
+                <InfiniteScrollMember
+                  label="Player"
+                  teamId={formValues?.currentTeams?.teamId}
+                  value={formValues?.currentTeams?.teamId}
+                  onChange={(e) => {
+                    setFormValues((prev) => ({ ...prev, player: e }))
+                  }}
+                  playerOnly
+                />
+              </div>
+
+              <div className="w-full flex gap-4">
+                <MyDatePicker
+                  label="Player notes"
+                  value={formValues.date}
+                  onChange={(e) => handleChangeForm('date', e)}
+                  readOnly={update ? true : false}
+                  maxDate={getToday()}
+                />
+                <MyDatePicker
+                  label="Coach notes"
+                  value={formValues.dateCoachComment}
+                  onChange={(e) => handleChangeForm('dateCoachComment', e)}
+                  readOnly={update ? true : false}
+                  maxDate={getToday()}
+                />
+              </div>
+            </>
           )}
 
           <div className="mb-[24px]">
@@ -485,13 +601,22 @@ export const NoteModal = ({
           />
 
           <div className="w-full flex mt-[24px]">
-            <div className="flex-1 " onClick={handleSave}>
-              <Button
-                // loading
-                text="Save"
-                className="w-[148px] h-[48px] justify-between bg-[#4654EA] hover:bg-[#6470f3] rounded-[8px]"
+            {currentRoleName === 'COACH' ? (
+              <SaveCoachComment
+                formValues={formValues}
+                devTalkId={devTalkId && devTalkId}
+                notePlayer={!isEmpty(notePlayer)}
+                setIsOpenModal={setIsOpenModal}
               />
-            </div>
+            ) : (
+              <div className="flex-1 " onClick={handleSave}>
+                <Button
+                  // loading
+                  text="Save"
+                  className="w-[148px] h-[48px] justify-between bg-[#4654EA] hover:bg-[#6470f3] rounded-[8px]"
+                />
+              </div>
+            )}
             {update ? (
               <>
                 <div className="flex-1" onClick={handleGoback}>

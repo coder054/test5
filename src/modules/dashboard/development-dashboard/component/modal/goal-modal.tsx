@@ -71,18 +71,19 @@ export const GoalModal = ({
       onSuccess: (res) => {
         toast.success(res.data.message)
         queryClient.invalidateQueries(QUERIES_DASHBOARD.UPDATE_PERSONAL_GOAL)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.LIST_PERSONAL_GOAL)
         setIsOpenModal(false)
       },
     }
   )
 
   const { isLoading: loadingCreate, mutate: createPersonal } = useMutation(
-    [QUERIES_DASHBOARD.UPDATE_PERSONAL_GOAL],
+    [QUERIES_DASHBOARD.CREATE_PERSONAL_GOAL],
     createPersonalGoal,
     {
       onSuccess: (res) => {
         toast.success(res.data.message)
-        queryClient.invalidateQueries(QUERIES_DASHBOARD.UPDATE_PERSONAL_GOAL)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.LIST_PERSONAL_GOAL)
         setIsOpenModal(false)
       },
       onError: (err: any) => {
@@ -100,7 +101,7 @@ export const GoalModal = ({
       onSuccess: (res) => {
         if (res.status === 200) {
           toast.success(res.data.message)
-          queryClient.invalidateQueries(QUERIES_DASHBOARD.UPDATE_PERSONAL_GOAL)
+          queryClient.invalidateQueries(QUERIES_DASHBOARD.LIST_PERSONAL_GOAL)
           setIsOpenModal(false)
         }
       },
@@ -279,7 +280,7 @@ export const GoalModal = ({
             </div>
           )}
 
-          <div className="w-full flex mt-[24px]">
+          <div className="w-full flex mt-[24px] gap-2">
             <div className="flex-1 " onClick={handleSave}>
               <Button
                 // loading
