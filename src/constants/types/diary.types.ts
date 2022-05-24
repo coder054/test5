@@ -1,4 +1,5 @@
 import { MatchType } from './match.types'
+import { TeamType } from './settingsType.type'
 
 export type SPOT_KEY =
   | 'FLH'
@@ -382,11 +383,21 @@ export type PointsType = {
   name?: string
 }
 
+export type TypeOfDiaries = 'TEAM_TRAINING' | 'GROUP_TRAINING' | 'MATCH'
+
 export interface CoachDiaryType {
   typeOfDiary: string
   createdAt: Date
   training: CoachTrainingType
+  match: CoachMatchType
+  cap: CoachCapType
   teamId: string
+  userId?: string
+  updatedAt?: Date
+  typeOfPost?: string
+  teamInfo?: TeamType
+  originalDiaryId: string
+  diaryId?: string
 }
 
 export interface CoachTrainingType {
@@ -399,16 +410,6 @@ export interface CoachTrainingType {
   practiceTags: string[]
   typeOfTraining: string
   trainingMedia: Media[]
-}
-
-export interface Welcome {
-  energyLevel: string
-  eatAndDrink: string
-  sleep: string
-  typeOfDiary: string
-  userType: string
-  cap: Cap
-  createdAt: Date
 }
 
 export interface CoachCapType {
@@ -427,7 +428,54 @@ export interface CoachCapType {
   capMedia: Media[]
 }
 
+export interface CoachMatchType {
+  teamMatchReview: string
+  typeOfGame: string
+  playerReviews: any[]
+  arena: string
+  result: Result
+  teamPerformance: string
+  dateTime: Date
+  matchMedia: any[]
+  physicallyStrain: string
+  opponentClub: Club
+  country: Country
+  place: string
+  club: Club
+  yourTeam: TeamType
+  mvp: MVP
+  length: number
+  events: Event[]
+  stats: any[]
+}
+
 export interface Media {
   type: string
   url: string
 }
+
+export interface ParticipateType {
+  training?: TrainingType
+  cap?: CoachCapType
+  match?: CoachMatchType
+  typeOfDiary?: string
+  originalDiaryId?: string
+  createdAt?: number
+  diaryId?: string
+}
+
+export type TrainingType = Partial<{
+  hoursOfPractice: number
+  mental: number
+  physicallyStrain: string
+  physics: number
+  practiceTags: string[]
+  tactics: number
+  technics: number
+  trainingMedia: { url: string; type: string }[]
+  typeOfTraining: string
+  yourPerformance: string
+  teamReview: string
+  teamPerformance: string
+  trainingReview: string
+}>

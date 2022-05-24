@@ -53,8 +53,6 @@ type DiaryUpdateProps = {
 }
 
 const PlayerDiary = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
-  console.log('selected', selected)
-
   const router = useRouter()
   const queryClient = useQueryClient()
   const { currentRoleName } = useAuth()
@@ -282,7 +280,10 @@ const PlayerDiary = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
   }, [currentTab])
 
   return (
-    <Loading isLoading={isGettingDiary}>
+    <Loading
+      isLoading={isGettingDiary}
+      className="tabletM:h-[850px] overflow-y-auto  mobileM:py-2 mobileM:pb-24 tabletM:pb-0 tabletM:py-0"
+    >
       <div className="space-y-5 mobileM:p-4 tabletM:p-9">
         <div className="w-full flex tabletM:flex-col tabletM:items-center space-y-2 pb-3">
           <span className="mobileM:hidden tabletM:block">
@@ -376,7 +377,7 @@ const PlayerDiary = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
             </div>
           </ModalMui>
         </div>
-        <div className="mobileM:flex mobileM:flex-col laptopM:grid laptopM:grid-cols-3 mobileM:space-y-4 laptopM:space-y-0 gap-x-4 pt-3">
+        <div className="mobileM:flex mobileM:flex-col tabletM:grid tabletM:grid-cols-3 mobileM:space-y-4 tabletM:space-y-0 gap-x-4 pt-3">
           <Button
             type="submit"
             isLoading={isCreating || isUpdating}

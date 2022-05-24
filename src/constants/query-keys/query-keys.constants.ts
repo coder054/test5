@@ -88,3 +88,11 @@ export const QUERIES_COMMENTS = {
   BLOCK_COMMENT: 'block-comments',
   DELETE_COMMENT: 'delete-comments',
 }
+
+export const QUERIES_DIARY = {
+  COACH_DIARY: 'coach-diary',
+  PLAYER_DIARY: 'player-diary',
+  TEAM_TRAINING: 'training-participate',
+  MATCH: 'match-participate',
+  CAP: 'cap-participate',
+}

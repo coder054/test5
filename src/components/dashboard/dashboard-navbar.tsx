@@ -173,19 +173,11 @@ const UpdateDiaryButton = () => {
           height: isMobile ? '100%' : 'auto',
           overflow: 'auto',
         }}
+        showXIcon
         isOpen={openModalDiaryUpdate}
         onClose={setOpenModalDiaryUpdate}
       >
-        <div className="relative tabletM:h-[850px] mobileM:h-screen overflow-y-auto mobileM:py-2 mobileM:pb-24 tabletM:pb-0 tabletM:py-0">
-          <button
-            type="button"
-            onClick={() => setOpenModalDiaryUpdate(false)}
-            className="absolute z-50 right-6 top-5"
-          >
-            <XIcon />
-          </button>
-          <DiaryUpdate onClose={setOpenModalDiaryUpdate} />
-        </div>
+        <DiaryUpdate onClose={setOpenModalDiaryUpdate} />
       </ModalMui>
     </div>
   )

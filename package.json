@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "concurrently \"npm run dev:css\" \"next dev\"",
     "dev:css": "tailwindcss -w -i ./src/styles/globals.css -o ./src/styles/globals_compiled.css",
-    "build": "npm run build:css && next build",
+    "build": "NODE_OPTIONS='--inspect' npm run build:css && next build",
     "build:css": "tailwindcss -m -i ./src/styles/globals.css -o ./src/styles/globals_compiled.css",
-    "start": "next start",
+    "start": "NODE_OPTIONS='--inspect' next start",
     "export": "next export",
     "build-export": "next build && next export",
     "lint": "next lint",

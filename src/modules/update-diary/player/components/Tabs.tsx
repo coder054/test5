@@ -1,6 +1,6 @@
 import clsx from 'clsx'
 import { useAtom } from 'jotai'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { diaryAtom } from 'src/atoms/diaryAtoms'
 
 type TabsProps = {
@@ -9,7 +9,7 @@ type TabsProps = {
   current: string
 }
 
-export const Tabs = ({ value, onChange, current }: TabsProps) => {
+export const Tabs = React.memo(({ value, onChange, current }: TabsProps) => {
   const [currentTab, setCurrentTab] = useState<string>('')
   const [diary] = useAtom(diaryAtom)
 
@@ -25,7 +25,7 @@ export const Tabs = ({ value, onChange, current }: TabsProps) => {
           disabled={diary?.diaryId && currentTab !== it.value}
           onClick={() => onChange(it.value)}
           className={clsx(
-            '  border-[1px] border-[#64748b] mobileM:text-[12px] tabletM:text-[14px] font-medium py-2 px-4 mr-2 mb-2  rounded-full hover:bg-[#09E099]  cursor-pointer duration-150',
+            '  border-[1px] border-[#64748b] mobileM:text-[12px] tabletM:text-[14px] font-medium py-2 px-4 mr-2 mb-2 rounded-full hover:bg-[#09E099]  cursor-pointer duration-150',
             currentTab === it.value
               ? 'bg-[#09E099]'
               : 'bg-[#64748b] bg-opacity-[0.4]',
@@ -39,4 +39,4 @@ export const Tabs = ({ value, onChange, current }: TabsProps) => {
       ))}
     </div>
   )
-}
+})

@@ -41,6 +41,7 @@ import { Footer } from './components/Footer'
 import { SectionFive } from './components/SectionFive'
 import { SectionFour } from './components/SectionFour'
 import { SectionThree } from './components/SectionThree'
+import DownloadGroup from './components/DownloadGroup'
 
 export const Landing = () => {
   const scrollToTop = () => {
@@ -51,7 +52,7 @@ export const Landing = () => {
   }
 
   return (
-    <div className="flex flex-col bg-white">
+    <div className="flex flex-col bg-black">
       <div
         className=" w-full h-screen bg-cover bg-no-repeat"
         style={{
@@ -78,14 +79,14 @@ export const Landing = () => {
             />
           </div>
         </div>
-        <div className="text-center w-full px-[30px] mt-[70px] tabletM:max-w-[1320px] tabletM:px-[250px] tabletM:mt-[120px] tabletM:mx-auto">
+        <div className="text-center w-full px-[30px] mt-[70px] tabletM:w-2/5 laptopM:w-4/6 tabletM:mx-auto">
           <span className="text-center text-[#09E099] text-[12px]  tracking-[2px] font-medium">
             INTRODUCING
           </span>
           <p className="laptopM:text-[56px] mobileM:text-[26px] tracking-[2px] font-semibold">
             Zporter v.1
           </p>
-          <p className={clsx('text-[16px] my-4 text-center')}>
+          <p className="text-[16px] my-4 text-center">
             In our vision to digitize and make youth sports smarter and
             healthier. Zporter is now launching v.1 of our free software as a
             service via apps- and web, to entertain, grow and empower (future)
@@ -156,14 +157,7 @@ export const Landing = () => {
               </p>
             )}
           </p>
-          <div className="flex mobileM:justify-between tabletM:justify-center tabletM:space-x-4">
-            <button>
-              <AppStoreSvg />
-            </button>
-            <button>
-              <GGPlaySvg />
-            </button>
-          </div>
+          <DownloadGroup />
           {!isMobile && (
             <div className="mr-[90px] mt-[160px]">
               <Image src={GROUP_DEVICES} />
@@ -171,34 +165,36 @@ export const Landing = () => {
           )}
         </div>
       </div>
-      <div
-        className={clsx(
-          'bg-white flex flex-col items-center ',
-          isDesktop && 'h-[1100px] py-[300px] mx-auto max-w-[1320px]',
-          isMobile && 'space-y-8 py-8'
-        )}
-      >
-        <span className="text-center text-[#09E099] text-[12px]  tracking-[2px] font-medium">
-          FEATURE
-        </span>
-        <p className="text-[36px] text-black text-center  font-bold">
-          App Features
-        </p>
+      <div className="w-full bg-white">
         <div
           className={clsx(
-            'grid mobileM:grid-cols-2 mobileM:gap-y-6 mobileM:gap-x-2 px-[20px] tabletM:grid-cols-4 tabletM:gap-y-20 tabletM:gap-x-24 tabletM:pt-10 laptopM:pt-20 tabletM:px-20'
+            'bg-white flex flex-col items-center ',
+            isDesktop && 'h-[1100px] py-[300px] mx-auto max-w-[1320px]',
+            isMobile && 'space-y-8 py-8'
           )}
         >
-          {APP_FEATURE.map((app) => (
-            <AppFeature
-              key={app.title}
-              titleColor="text-black"
-              contentColor="text-gray-400"
-              icon={app.icon}
-              title={app.title}
-              content={app.content}
-            />
-          ))}
+          <span className="text-center text-[#09E099] text-[12px]  tracking-[2px] font-medium">
+            FEATURE
+          </span>
+          <p className="text-[36px] text-black text-center  font-bold">
+            App Features
+          </p>
+          <div
+            className={clsx(
+              'grid mobileM:grid-cols-2 mobileM:gap-y-6 mobileM:gap-x-2 px-[20px] tabletM:grid-cols-4 tabletM:gap-y-20 tabletM:gap-x-24 tabletM:pt-10 laptopM:pt-20 tabletM:px-20'
+            )}
+          >
+            {APP_FEATURE.map((app) => (
+              <AppFeature
+                key={app.title}
+                titleColor="text-black"
+                contentColor="text-gray-400"
+                icon={app.icon}
+                title={app.title}
+                content={app.content}
+              />
+            ))}
+          </div>
         </div>
       </div>
       <div
@@ -262,7 +258,7 @@ export const Landing = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div className="w-full bg-white">
         <div
           className={clsx(
             'bg-white ',
@@ -374,18 +370,11 @@ export const Landing = () => {
                 />
               ))}
             </div>
-            <div className="mobileM:px-[30px] flex mobileM:justify-between tabletM:justify-center tabletM:space-x-6 tabletM:pt-0 laptopM:pt-12">
-              <button>
-                <AppStoreSvg />
-              </button>
-              <button>
-                <GGPlaySvg />
-              </button>
-            </div>
+            <DownloadGroup />
           </div>
         </div>
       </div>
-      <div className={isDesktop && 'w-full h-[600px]'}>
+      <div className="tabletM:w-full tabletM:h-[600px] bg-white">
         <div
           className={clsx(
             'flex mx-auto justify-between items-center tabletM:px-12',
@@ -453,11 +442,7 @@ export const Landing = () => {
         </div>
       </div>
       <div className="bg-white mobileM:h-[1320px] mobileL:h-[1250px] laptopM:h-[1550px] tabletM:h-[1250px] tabletM:px-12">
-        <div
-          className={clsx(
-            'relative z-20  laptopM:w-[1320px] laptopM:flex laptopM:flex-col laptopM:items-center laptopM:py-8 laptopM:mx-auto'
-          )}
-        >
+        <div className="relative z-20  laptopM:w-[1320px] laptopM:flex laptopM:flex-col laptopM:items-center laptopM:py-8 laptopM:mx-auto">
           {isDesktop && (
             <span className="absolute 2xl:-bottom-[90px] laptopM:-bottom-[30px] xl:-right-[50px] 2xl:-right-[290px]">
               <Image src={PLAYER_2} />
@@ -631,14 +616,7 @@ export const Landing = () => {
                 <p className="text-[14px] font-normal">Founder, Zporter</p>
               </span>
             </div>
-            <div className="flex mobileM:justify-between tabletM:justify-center pt-12 tabletM:space-x-4">
-              <button>
-                <AppStoreSvg />
-              </button>
-              <button>
-                <GGPlaySvg />
-              </button>
-            </div>
+            <DownloadGroup />
           </div>
         </div>
       </div>

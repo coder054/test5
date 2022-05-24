@@ -40,7 +40,7 @@ export const WriteComment = ({
     }
   )
 
-  const onEmojiClick = (event, emojiObject) => {
+  const emojiOnClick = (event, emojiObject) => {
     setChosenEmoji(emojiObject)
     setComment((prev) => `${prev}${emojiObject.emoji}`)
   }
@@ -75,7 +75,7 @@ export const WriteComment = ({
           setAnchorEl={setAnchorEl}
           id="popover-emoji"
         >
-          <Picker onEmojiClick={onEmojiClick} disableAutoFocus={true} native />
+          <Picker onEmojiClick={emojiOnClick} disableAutoFocus={true} native />
         </BasicPopover>
       </div>
 

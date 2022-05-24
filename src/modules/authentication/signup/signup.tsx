@@ -550,7 +550,7 @@ export const SignUp = () => {
 
             <Link href="/sign-in">
               <a className="text-[#4654EA] underline mt-[24px] block cursor-pointer">
-                Already have an account?
+                Sign in
               </a>
             </Link>
           </div>

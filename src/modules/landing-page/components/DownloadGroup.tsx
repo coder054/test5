@@ -10,7 +10,7 @@ export default function DownloadGroup({ className }: DownloadGroupProps) {
   return (
     <div
       className={clsx(
-        'flex mobileM:justify-between tabletM:justify-center tabletM:space-x-4',
+        'flex items-center justify-center space-x-4 mt-4',
         className
       )}
     >
