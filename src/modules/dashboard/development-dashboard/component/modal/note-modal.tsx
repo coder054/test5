@@ -457,7 +457,11 @@ export const NoteModal = ({
           <div className="mb-[24px]">
             <MySlider
               isAdjective
-              label="How is your development progress?"
+              label={
+                currentRoleName === 'COACH'
+                  ? 'Player development progress?'
+                  : 'How is your development progress?'
+              }
               step={25}
               value={
                 typeof formValues.progress !== 'number'

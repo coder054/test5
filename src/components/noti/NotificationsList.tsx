@@ -33,6 +33,7 @@ export interface INoti {
   groupId?: string
   playerDiaryData?: any
   coachDiaryData?: any
+  playerNotedAt?: any
   postId?: string
   typeOfPost?: string
   diaryId?: string
@@ -214,8 +215,8 @@ export const useNotiList = () => {
 export interface DevelopmentNoteData {
   strength: BestDevelopSkills
   weaknesses: BestDevelopSkills
-  coachNotedAt: number
-  coachId: string
+  coachNotedAt?: number
+  coachId?: string
   shortTermGoal: BestDevelopSkills
   devTalkId: string
   longTermGoal: BestDevelopSkills
@@ -224,7 +225,7 @@ export interface DevelopmentNoteData {
   skillsNeededToDevelop: BestDevelopSkills
   bestDevelopSkills: BestDevelopSkills
   otherComments: BestDevelopSkills
-  coachDevelopmentProgress: string
+  coachDevelopmentProgress?: string
   playerNotedAt: number
   updatedAt: number
   createdAt: number
