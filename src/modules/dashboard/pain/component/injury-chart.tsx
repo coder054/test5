@@ -7,10 +7,14 @@ import { BODY_PART } from 'src/constants/types/diary.types'
 import { getDashboardPain } from 'src/service/dashboard/dashboard-overview'
 import { BodyPart } from 'src/modules/update-diary/player/components/BodyPart'
 import { InjurySpot } from 'src/modules/update-diary/player/components/InjurySpot'
+import { getDiaryById } from 'src/service/feed/yours.service'
 
 interface InjuryChartProps {
   lastDateRange?: string
   postId?: string
+  data?: any
+  isPost?: boolean
+  loadingPost?: boolean
   setLastDateRange?: (lastDate?: string) => void
   setCurrentTab?: (tab?: string) => void
 }
@@ -18,7 +22,9 @@ interface InjuryChartProps {
 export const InjuryChart = ({
   lastDateRange,
   setCurrentTab,
-  postId,
+  isPost,
+  data,
+  loadingPost,
 }: InjuryChartProps) => {
   const [dataChart, setDataChart] = useState<DashboardPainType>({
     bodyChart: [],
@@ -29,13 +35,27 @@ export const InjuryChart = ({
   })
 
   const { isLoading: loading, data: dataPain } = useQuery(
-    [QUERIES_DASHBOARD.PAIN_DATA, lastDateRange, postId],
-    () => getDashboardPain(lastDateRange)
+    [QUERIES_DASHBOARD.PAIN_DATA, lastDateRange],
+    () => getDashboardPain(lastDateRange),
+    {
+      enabled: !isPost,
+    }
   )
 
   useEffect(() => {
-    dataPain && setDataChart(dataPain)
-  }, [dataPain])
+    if (isPost) {
+      data &&
+        setDataChart({
+          bodyChart: data?.injuries,
+          columnChart: {
+            injuryAreaF: data?.averagePainColumnChart?.injuryAreaF,
+            injuryAreaB: data?.averagePainColumnChart?.injuryAreaB,
+          },
+        })
+    } else {
+      dataPain && setDataChart(dataPain)
+    }
+  }, [dataPain, data])
 
   const getPositon = (position: string): string => {
     let res = position.charAt(0)
@@ -49,7 +69,7 @@ export const InjuryChart = ({
   }
 
   return (
-    <Loading isLoading={loading}>
+    <Loading isLoading={isPost ? loadingPost : loading}>
       <div
         className={`w-full pl-[16px] md:pl-[32px] pr-[16px] md:pr-[35px] pb-[16px] md:pb-[38px]`}
       >
@@ -62,7 +82,7 @@ export const InjuryChart = ({
                   <div className=" flex-1 ">
                     <div className="mx-auto bg-front-body relative w-[214px] h-[440px] bg-no-repeat bg-center cursor-pointer duration-150">
                       {dataChart &&
-                        dataChart.bodyChart.map((item) => {
+                        dataChart?.bodyChart.map((item) => {
                           const keyPositon: string = getPositon(item.injuryArea)
                           const result = Object.keys(BODY_PART).findIndex(
                             (item) => item === keyPositon
@@ -119,7 +139,7 @@ export const InjuryChart = ({
                   <div className="flex-1">
                     <div className="bg-back-body relative w-[214px] h-[440px] mx-auto bg-no-repeat bg-center cursor-pointer duration-150">
                       {dataChart &&
-                        dataChart.bodyChart.map((item) => {
+                        dataChart?.bodyChart.map((item) => {
                           const keyPositon: string = getPositon(item.injuryArea)
                           const result = Object.keys(BODY_PART).findIndex(
                             (item) => item === keyPositon

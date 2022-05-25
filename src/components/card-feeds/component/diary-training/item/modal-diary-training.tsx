@@ -40,6 +40,7 @@ import { SharedLeaderBoard } from '../../shared-leaderboard'
 import { PersonalGoals } from '../../personal_goals'
 import { PlayerOfTheWeek } from '../../player-of-the-week'
 import { BottomCardFeed } from '../../bottom-card-feed'
+import { Fragment } from 'react'
 
 interface ModalDiaryTrainingType {
   card: CardFeedType
@@ -107,17 +108,6 @@ export const ModalDiaryTraining = ({
                 </Text>
               )}
 
-              {/* {card?.typeOfPost === shared_biographies && (
-                <Text name="Caption" className=" inline-block ">
-                  {`${formatDistanceToNowStrict(
-                    card?.userInfo?.createdAt as number
-                  )} ${card?.userInfo?.city ? '-' : ''} ${
-                    card?.userInfo?.birthCountry?.alpha2Code
-                  }/${card?.userInfo?.city || ''} /${dayjs(
-                    card?.userInfo?.createdAt
-                  ).format('YYYY')}`}
-                </Text>
-              )} */}
               {card?.typeOfPost === player_of_the_weeks && (
                 <Text name="Caption" className=" inline-block ">
                   {formatDistanceToNowStrict(card?.createdAt as number)}
@@ -182,14 +172,32 @@ export const ModalDiaryTraining = ({
         )}
 
         {!isEmpty(card?.training?.trainingMedia) && (
-          <Slider {...settings} className="h-[255px] ml-[20px]">
-            {card?.training?.trainingMedia.map((item) => (
-              <img
-                src={safeHttpImage(item?.image)}
-                className="object-cover"
-              ></img>
-            ))}
-          </Slider>
+          <>
+            <Divider
+              style={{
+                backgroundColor: '##484A4D',
+                marginTop: '8px',
+                marginBottom: '16px',
+              }}
+            />
+            <Slider {...settings} className="h-[265px] ml-[20px]">
+              {card?.training?.trainingMedia.map((item) => (
+                <Fragment>
+                  {item?.type === 'IMAGE' ? (
+                    <img
+                      src={safeHttpImage(item?.url)}
+                      className="object-cover h-[225px] w-full"
+                    ></img>
+                  ) : (
+                    <video
+                      src={safeHttpImage(item?.url)}
+                      className="object-cover"
+                    ></video>
+                  )}
+                </Fragment>
+              ))}
+            </Slider>
+          </>
         )}
 
         {card?.typeOfPost === diaries && (
@@ -230,7 +238,13 @@ export const ModalDiaryTraining = ({
 
             <div className="w-full h-[320px] relative">
               <div className="scale-50 absolute -left-[112px] -top-[176px]">
-                <InjuryChart lastDateRange="30" postId={card?.postId} />
+                <InjuryChart
+                  lastDateRange="30"
+                  postId={card?.postId}
+                  isPost={true}
+                  data={data && data.data}
+                  loadingPost={isLoading}
+                />
               </div>
             </div>
           </>

@@ -15,6 +15,7 @@ export function toQueryString(
 
 export const handleStringFirstUppperCase = (value: string): string => {
   let result = ''
+  if (!value) return ''
   value = value?.toLocaleLowerCase()
   result += value?.charAt(0).toUpperCase()
   for (let i = 1; i < value?.length; i++) {
