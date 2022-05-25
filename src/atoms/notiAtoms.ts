@@ -15,6 +15,9 @@ export const dataModalResponseTeamTrainingAtom = atom({})
 export const dataModalResponseMatchAtom = atom<any>(null)
 
 export const dataModalResponseCoachReviewAtom = atom({})
+
+export const dataModalCoachCreateDiaryTrainingAtom = atom({})
+// const [dataModalCoachCreateDiaryTraining, setDataModalCoachCreateDiaryTraining] = useAtom(dataModalCoachCreateDiaryTrainingAtom)
 // const [dataModalResponseCoachReview, setDataModalResponseCoachReview] = useAtom(dataModalResponseCoachReviewAtom)
 
 // const [dataModalResponssMatch, setDataModalResponssMatch] = useAtom(

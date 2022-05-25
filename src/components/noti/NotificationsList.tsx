@@ -35,6 +35,7 @@ export interface INoti {
   coachDiaryData?: any
   postId?: string
   typeOfPost?: string
+  diaryId?: string
   developmentNoteData?: DevelopmentNoteData
 }
 
