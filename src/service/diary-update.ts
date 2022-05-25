@@ -1,6 +1,7 @@
 import toast from 'react-hot-toast'
 import { API_DIARY, API_GET_DIARY } from 'src/constants/api.constants'
 import { InjuryType, TypeOfDiaries } from 'src/constants/types/diary.types'
+import { AccountSettingsType } from 'src/constants/types/settingsType.type'
 import { getStartOfDate } from 'src/hooks/functionCommon'
 import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
@@ -44,9 +45,16 @@ export const fetchParticipate = async ({
   })
 }
 
-export const fetchMember = async (teamId: string) => {
+export const fetchMember = async (
+  teamId: string,
+  userType?: 'PLAYER' | 'COACH' | ''
+) => {
   return axios
-    .get(`teams/${teamId}/get-members-in-team`)
+    .get(`teams/${teamId}/get-members-in-team`, {
+      params: {
+        userType,
+      },
+    })
     .then((res) => {
       return res.data
     })

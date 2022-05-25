@@ -1,25 +1,25 @@
+import { TextField } from '@mui/material'
 import { useAtom } from 'jotai'
+import { debounce } from 'lodash'
 import {
   ChangeEvent,
   default as React,
-  useCallback,
   useEffect,
   useMemo,
   useState,
 } from 'react'
+import { COACH_DIARY_ATOM } from 'src/atoms/diaryAtoms'
 import { MyInputChips } from 'src/components'
 import { MySlider } from 'src/components/MySlider'
-import { MyTextArea } from 'src/components/MyTextarea'
-import { TrainingType } from 'src/constants/types/diary.types'
+import { ParticipateType, TrainingType } from 'src/constants/types/diary.types'
 import {
   emotionToNum,
   numToEmotion,
   numToScale,
   scaleToNum,
 } from 'src/hooks/functionCommon'
-import { COACH_DIARY_ATOM } from 'src/atoms/diaryAtoms'
 
-const INITIAL_VALUES = {
+export const INITIAL_TRAINING_VALUES = {
   hoursOfPractice: 0,
   mental: 0,
   physicallyStrain: 'NORMAL',
@@ -34,25 +34,24 @@ const INITIAL_VALUES = {
   trainingReview: '',
 }
 
-export default function Training() {
-  const [selectedParticipate, setSelectedParticipate] =
-    useAtom(COACH_DIARY_ATOM)
-  const [formValues, setFormValues] = useState<TrainingType>(INITIAL_VALUES)
-  const {
-    tactics,
-    physics,
-    mental,
-    technics,
-    hoursOfPractice,
-    practiceTags,
-    physicallyStrain,
-    yourPerformance,
-    trainingReview,
-    teamPerformance,
-    teamReview,
-  } = formValues
+interface TrainingProps {
+  onChange: (value: ParticipateType) => void
+  isHasError: (value: string) => void
+  currentTab: string
+}
+
+export default function Training({
+  isHasError,
+  currentTab,
+  onChange,
+}: TrainingProps) {
+  const [participate] = useAtom(COACH_DIARY_ATOM)
+  const [formValues, setFormValues] = useState<TrainingType>(
+    INITIAL_TRAINING_VALUES
+  )
 
   const limitSilder = (e: number, type: keyof TrainingType) => {
+    const { tactics, physics, mental, technics } = formValues
     switch (type) {
       case 'technics':
         if (e + tactics + physics + mental <= 100) {
@@ -84,40 +83,39 @@ export default function Training() {
     setFormValues((prev) => ({
       ...prev,
       [type]: value,
+      typeOfTraining: currentTab,
     }))
-    selectedParticipate &&
-      /* @ts-ignore */
-      setSelectedParticipate((prev) => ({
-        ...prev,
-        training: {
-          ...prev.training,
-          [type]: value,
-        },
-      }))
   }
 
   const IS_FULLFILL = useMemo(() => {
-    return mental + physics + tactics + technics === 100
+    return (
+      formValues?.mental +
+        formValues?.physics +
+        formValues?.tactics +
+        formValues?.technics ===
+      100
+    )
   }, [formValues])
 
   useEffect(() => {
-    selectedParticipate?.training && setFormValues(selectedParticipate.training)
-    if (!selectedParticipate) {
-      setFormValues(INITIAL_VALUES)
+    ;(participate?.isParticipate || participate?.isPeriod) &&
+      setFormValues(participate?.training)
+    if (!participate) {
+      setFormValues(INITIAL_TRAINING_VALUES)
     }
-  }, [JSON.stringify(selectedParticipate?.originalDiaryId)])
+  }, [JSON.stringify(participate), currentTab])
 
-  // useEffect(() => {
-  //   onChange &&
-  //     onChange({
-  //       ...formValues,
-  //     })
-  //   !IS_FULLFILL
-  //     ? error(
-  //         'The combination of technics, tactics, physics and mental must be 100%'
-  //       )
-  //     : error('')
-  // }, [JSON.stringify(formValues)])
+  useEffect(() => {
+    !IS_FULLFILL
+      ? isHasError(
+          'The combination of technics, tactics, physics and mental must be 100%'
+        )
+      : isHasError(undefined)
+  }, [IS_FULLFILL])
+
+  useEffect(() => {
+    onChange && onChange({ ...participate, training: formValues })
+  }, [JSON.stringify(formValues)])
 
   return (
     <div className="mobileM:space-y-3 tabletM:space-y-4">
@@ -128,7 +126,7 @@ export default function Training() {
         unit="h"
         step={0.5}
         max={4}
-        value={hoursOfPractice}
+        value={formValues?.hoursOfPractice}
         labelClass="text-[#A2A5AD]"
       />
       <MySlider
@@ -137,7 +135,7 @@ export default function Training() {
         onChange={(e) => limitSilder(e, 'technics')}
         isPoint
         step={10}
-        value={technics}
+        value={formValues?.technics}
         labelClass="text-[#A2A5AD]"
       />
       <MySlider
@@ -146,7 +144,7 @@ export default function Training() {
         isPoint
         unit="%"
         step={10}
-        value={tactics}
+        value={formValues?.tactics}
         labelClass="text-[#A2A5AD]"
       />
       <MySlider
@@ -155,7 +153,7 @@ export default function Training() {
         isPoint
         unit="%"
         step={10}
-        value={physics}
+        value={formValues?.physics}
         labelClass="text-[#A2A5AD]"
       />
       <MySlider
@@ -164,13 +162,13 @@ export default function Training() {
         isPoint
         unit="%"
         step={10}
-        value={mental}
+        value={formValues?.mental}
         labelClass="text-[#A2A5AD]"
       />
       <MyInputChips
         label="Practice tags"
         labelClass="text-[#A2A5AD]"
-        value={practiceTags}
+        value={formValues?.practiceTags}
         setTags={(e: string[]) => handleChange('practiceTags', e)}
       />
       <p className="text-[18px] pt-6 font-normal">Your training review</p>
@@ -178,7 +176,7 @@ export default function Training() {
         <MySlider
           label="How physically strain, was it?"
           onChange={(e) => handleChange('physicallyStrain', numToScale(e))}
-          value={scaleToNum(physicallyStrain)}
+          value={scaleToNum(formValues?.physicallyStrain)}
           isScale
           step={25}
           labelClass="text-[#A2A5AD]"
@@ -188,32 +186,38 @@ export default function Training() {
           onChange={(e) => handleChange('yourPerformance', numToEmotion(e))}
           isAdjective
           step={25}
-          value={emotionToNum(yourPerformance)}
+          value={emotionToNum(formValues?.yourPerformance)}
           labelClass="text-[#A2A5AD]"
         />
-        <MyTextArea
-          label="Your training review"
-          value={trainingReview}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            handleChange('trainingReview', e.target.value)
-          }
+        <TextField
+          rows={4}
+          multiline
+          fullWidth
+          name="trainingReview"
+          value={formValues?.trainingReview}
           placeholder="Your Teams game review (Describe what you’re team did well and what you’re team could have done better)"
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            handleChange('trainingReview', event.target.value)
+          }
         />
         <MySlider
           label="How was your Teams performance?"
           onChange={(e) => handleChange('teamPerformance', numToEmotion(e))}
           isScale
           step={25}
-          value={emotionToNum(teamPerformance)}
+          value={emotionToNum(formValues?.teamPerformance)}
           labelClass="text-[#A2A5AD]"
         />
-        <MyTextArea
-          label="Your Teams training review"
-          value={teamReview}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            handleChange('teamReview', e.target.value)
-          }
+        <TextField
+          rows={4}
+          multiline
+          fullWidth
+          name="teamReview"
+          value={formValues?.teamReview}
           placeholder="Your game review (Describe what you did well and what you could have done better)"
+          onChange={(event: ChangeEvent<HTMLInputElement>) =>
+            handleChange('teamReview', event.target.value)
+          }
         />
       </div>
     </div>

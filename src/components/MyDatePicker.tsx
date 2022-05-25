@@ -50,7 +50,7 @@ type MyDatePickerProps = Partial<{
   label: string
   errorMessage: string
   value: Date | string | null | number
-  isNextable: boolean
+  adjustable: boolean
   onChange: (value: string) => void
   maxDate: any
   minDate: any
@@ -64,7 +64,7 @@ export const MyDatePicker = ({
   value,
   maxDate,
   minDate,
-  isNextable,
+  adjustable,
   errorMessage,
   onChange,
   readOnly,
@@ -90,7 +90,7 @@ export const MyDatePicker = ({
 
   return (
     <div className={clsx('relative flex items-center space-x-2', className)}>
-      {isNextable && (
+      {adjustable && (
         <button type="button" onClick={() => handleChangeDate('dec')}>
           <ChervonLeftIcon
             className="hover:text-[#09E099] cursor-pointer duration-150"
@@ -113,7 +113,7 @@ export const MyDatePicker = ({
           {...rest}
         />
       </LocalizationProvider>
-      {isNextable && (
+      {adjustable && (
         <button
           className={clsx(
             dayjs(currentValue).add(1, 'day').isBefore(dayjs(getToday()))

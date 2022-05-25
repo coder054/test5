@@ -8,8 +8,6 @@ import { dateAtom, diaryAtom } from 'src/atoms/diaryAtoms'
 import { Loading } from 'src/components'
 import { Button } from 'src/components/Button'
 import { DiaryUpdateIcon } from 'src/components/icons/DiaryUpdateIcon'
-import { ModalMui } from 'src/components/ModalMui'
-import { MyButton } from 'src/components/MyButton'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { DashboardUpdatesType } from 'src/constants/types/dashboard/training.types'
 import { DiaryType, InjuryType } from 'src/constants/types/diary.types'
@@ -25,6 +23,7 @@ import {
   fetchDiary,
   updateDiary,
 } from 'src/service/diary-update'
+import ConfirmModalProps from '../components/ConfirmModal'
 import { Cap } from './cap'
 import { BooleanOption } from './components/BooleanOption'
 import { DateOptions } from './components/DateOptions'
@@ -348,34 +347,12 @@ const PlayerDiary = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
               <InjuryList diaryUpdate={diaryUpdate?.data} />
             </>
           )}
-
-          <ModalMui isOpen={isOpenModal} onClose={setIsOpenModal}>
-            <div className="flex flex-col items-center">
-              <p className="text-[26px] font-medium mb-[25px]">Delete Data</p>
-              <p className="text-[16px] font-bold mb-[10px]">
-                Are you sure you want to delete this?
-              </p>
-              <p className="text-[16px] font-normal mb-[15px]">
-                Your data will forever lost!
-              </p>
-              <div className="flex justify-between mt-[20px] space-x-8">
-                <MyButton
-                  type="button"
-                  label="Cancel"
-                  onClick={() => setIsOpenModal(false)}
-                />
-                <Button
-                  type="button"
-                  loadingColor="#09E099"
-                  className="border-2 border-[#09E099] px-[61px]  py-[9px] rounded-[8px]"
-                  labelClass="text-[#09E099]"
-                  onClick={handleDeleteDiary}
-                  label="Delete"
-                  isLoading={isDeleting}
-                />
-              </div>
-            </div>
-          </ModalMui>
+          <ConfirmModalProps
+            isOpen={isOpenModal}
+            onClose={setIsOpenModal}
+            onConfirm={handleDeleteDiary}
+            isLoading={isDeleting}
+          />
         </div>
         <div className="mobileM:flex mobileM:flex-col tabletM:grid tabletM:grid-cols-3 mobileM:space-y-4 tabletM:space-y-0 gap-x-4 pt-3">
           <Button

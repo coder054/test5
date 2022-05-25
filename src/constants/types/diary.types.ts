@@ -291,14 +291,14 @@ export type Cap = {
   country: Country
 }
 
-export type Country = {
+export type Country = Partial<{
   flag: string
   name: string
   alpha3Code: string
   alpha2Code: string
   region: string
-  phoneCode?: string
-}
+  phoneCode: string
+}>
 
 export type Result = {
   yourTeam: number
@@ -320,11 +320,11 @@ export type Stat = {
 
 export type Match = {
   matchMedia: any[]
-  opponentClub: Club
+  opponentClub: ClubType
   stats: Stat[]
   opponentTeam: Team
   mvp: MVP
-  club: Club
+  club: ClubType
   country: Country
   dateTime: Date
   place: string
@@ -337,7 +337,7 @@ export type Match = {
   result: Result
 }
 
-export type Club = {
+export type ClubType = Partial<{
   city: null | string
   logoUrl: string
   toTime: null
@@ -347,9 +347,12 @@ export type Club = {
   country: null
   fromTime: null
   clubName: string
-}
+}>
 
-export type MVP = {}
+export type MVP = {
+  yourTeam: TeamType
+  opponents: TeamType
+}
 
 export type Team = {
   teamName: string
@@ -387,7 +390,7 @@ export type TypeOfDiaries = 'TEAM_TRAINING' | 'GROUP_TRAINING' | 'MATCH'
 
 export interface CoachDiaryType {
   typeOfDiary: string
-  createdAt: Date
+  createdAt: Date | number
   training: CoachTrainingType
   match: CoachMatchType
   cap: CoachCapType
@@ -428,25 +431,41 @@ export interface CoachCapType {
   capMedia: Media[]
 }
 
-export interface CoachMatchType {
+export type CoachMatchType = Partial<{
   teamMatchReview: string
   typeOfGame: string
-  playerReviews: any[]
+  playerReviews: PlayerReviewsType[]
   arena: string
   result: Result
   teamPerformance: string
-  dateTime: Date
+  dateTime: Date | string | number
   matchMedia: any[]
   physicallyStrain: string
-  opponentClub: Club
+  opponentClub: ClubType
   country: Country
   place: string
-  club: Club
+  club: ClubType
   yourTeam: TeamType
+  opponentTeam: TeamType
   mvp: MVP
   length: number
   events: Event[]
   stats: any[]
+}>
+
+export type PlayerReviewsType = Partial<{
+  userId: string
+  username: string
+  faceImage: string
+  matchReview: string
+  performance: number
+  role: string
+}>
+
+export type Event = {
+  action: string
+  player: string
+  minute: number
 }
 
 export interface Media {
@@ -455,6 +474,7 @@ export interface Media {
 }
 
 export interface ParticipateType {
+  teamInfo?: TeamType
   training?: TrainingType
   cap?: CoachCapType
   match?: CoachMatchType
@@ -462,6 +482,8 @@ export interface ParticipateType {
   originalDiaryId?: string
   createdAt?: number
   diaryId?: string
+  isPeriod?: boolean
+  isParticipate?: boolean
 }
 
 export type TrainingType = Partial<{

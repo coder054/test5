@@ -8,19 +8,20 @@ import { ParticipateType, TypeOfDiaries } from 'src/constants/types/diary.types'
 import { upperFirst } from 'src/hooks/functionCommon'
 import { safeHttpImage } from 'src/utils/utils'
 import DonutChart from './DonutChart'
+import { motion } from 'framer-motion'
 
 interface ItemProps {
   value?: ParticipateType
-  disable?: boolean
+  disabled?: boolean
 }
 
 export const TrainingPariticapte = React.memo(
-  ({ value, disable }: ItemProps) => {
+  ({ value, disabled }: ItemProps) => {
     const [selectedParticipate, setSelectedParticipate] =
       useAtom(COACH_DIARY_ATOM)
 
     const TRAINING_RESPONSE = useMemo(() => {
-      const { mental, physics, tactics, technics } = value.training
+      const { mental, physics, tactics, technics } = value?.training
       const obj = { mental, physics, tactics, technics }
       return Object.keys(obj).map((key) => ({
         key: _upperFirst(key),
@@ -29,10 +30,17 @@ export const TrainingPariticapte = React.memo(
     }, [JSON.stringify(value?.training)])
 
     return (
-      <button
-        disabled={disable}
+      <motion.button
+        exit={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.15 }}
+        disabled={disabled}
         /* @ts-ignore */
-        onClick={() => setSelectedParticipate(value)}
+        onClick={() =>
+          /* @ts-ignore */
+          setSelectedParticipate({ ...value, isParticipate: true })
+        }
         className={clsx(
           'flex items-center w-full border-2  hover:border-gray-500 duration-150 cursor-pointer active:bg-gray-800 pt-2 px-4 rounded-lg justify-between',
           selectedParticipate?.originalDiaryId === value.originalDiaryId
@@ -50,16 +58,29 @@ export const TrainingPariticapte = React.memo(
         <p className="px-2 w-40 text-center py-6 bg-slate-900 text-gray-400 font-base font-semibold mb-2 rounded-lg border-2 border-gray-500">
           {value.training.hoursOfPractice}h
         </p>
-      </button>
+      </motion.button>
     )
   }
 )
 
-const MatchParticipate = ({ value }: ItemProps) => {
+export const MatchParticipate = ({ value, disabled }: ItemProps) => {
+  const [, setSelectedParticipate] = useAtom(COACH_DIARY_ATOM)
   return (
-    <button
-      // onClick={() => setSelectedParticipate(value)}
-      className="bg-white w-full active:bg-gray-300 rounded-lg py-2 flex items-center justify-between text-black font-medium text-lg"
+    <motion.button
+      exit={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.17 }}
+      whileHover={{ scale: disabled ? 1 : 1.03 }}
+      disabled={disabled}
+      onClick={() =>
+        /* @ts-ignore */
+        setSelectedParticipate({ ...value, isParticipate: true })
+      }
+      className={clsx(
+        'bg-white w-full rounded-lg p-2 flex items-center justify-between text-black font-medium text-lg',
+        !disabled && 'active:bg-gray-300'
+      )}
     >
       <p className="w-32 text-right">{value.match.club.clubName}</p>
       <div className="flex items-center space-x-4 justify-between">
@@ -77,23 +98,23 @@ const MatchParticipate = ({ value }: ItemProps) => {
         />
       </div>
       <p className="w-32 text-left">{value.match.opponentClub.clubName}</p>
-    </button>
+    </motion.button>
   )
 }
 
 interface ParticipateItemProps {
   value: ParticipateType
-  diaryType: TypeOfDiaries | string
+  currentTab: TypeOfDiaries | string
 }
 
 export default function ParticipateItem({
   value,
-  diaryType,
+  currentTab,
 }: ParticipateItemProps) {
   return (
     <Fragment>
-      {diaryType === 'TEAM_TRAINING' && <TrainingPariticapte value={value} />}
-      {diaryType === 'MATCH' && <MatchParticipate value={value} />}
+      {currentTab === 'TEAM_TRAINING' && <TrainingPariticapte value={value} />}
+      {currentTab === 'MATCH' && <MatchParticipate value={value} />}
     </Fragment>
   )
 }

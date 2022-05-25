@@ -125,7 +125,7 @@ export const scaleToColor = (str: string) => {
   }
 }
 
-export function formatDate(date: string | Date) {
+export function formatDate(date: string | number | Date) {
   return dayjs(date).format(DEFAULT_DATE)
 }
 
@@ -178,7 +178,7 @@ export const getDefaultDay = (date: string | Date) => {
   }
 }
 
-export const getPreviousDate = (date: string | Date) => {
+export const getPreviousDate = (date: string | number | Date) => {
   if (
     (flexingFormatDate(date, 'MM/DD/YYYY') ===
       flexingFormatDate(new Date(), 'MM/DD/YYYY') &&

@@ -41,7 +41,7 @@ module.exports = {
         Primary: {
           Main: '#5048E5',
         },
-
+        light_green: '#09E099',
         Red: 'rgba(214, 12, 12, 1)',
         Stroke: '#484A4D',
         Scrollbar: '#949494',

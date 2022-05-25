@@ -5,19 +5,9 @@ export type AccountType = {
   verifyCode: string
 }
 
-export type ContractedClubType = Partial<{
-  city: string
-  clubId: string
-  clubName: string
-  logoUrl: string
-  arena: string
-  country: CountryType | string
-  websiteUrl: string | null
-}>
-
 export type CoachCareerType = Partial<{
   clubId: string
-  contractedClub: ContractedClubType
+  contractedClub: ClubType
   contractedFrom: string
   contractedUntil: string
   currentTeams: CurrentTeamType[]
@@ -31,7 +21,7 @@ export type CoachCareerType = Partial<{
 
 export type CurrentTeamType = Partial<{
   clubId: string
-  status?: string
+  status: string
   teamId: string
   teamImage: string
   teamName: string
@@ -39,7 +29,7 @@ export type CurrentTeamType = Partial<{
 
 export type PlayerCareerType = Partial<{
   clubId: string
-  contractedClub: ContractedClubType
+  contractedClub: ClubType
   contractedFrom: string
   contractedUntil: string
   currentTeams: CurrentTeamType[]
@@ -193,4 +183,45 @@ export type AccountSettingsType = Partial<{
   uid: string
   userId: string
   username: string
+}>
+
+export type UserType = Partial<{
+  role?: string
+  matchReview?: string
+  performance?: number
+  isSelected?: boolean
+  email: string
+  isActive: boolean
+  birthCountry: CountryType
+  fullName: string
+  clubId: string
+  firstName: string
+  fcmToken: any[]
+  city: string
+  settingCountryRegion: string
+  favoriteRoles: string[]
+  currentTeams: string[]
+  lastName: string
+  faceImage: string
+  username: string
+  type: string
+  userId: string
+  teamIds: string[]
+  isOnline: boolean
+  clubName: string
+  timezone: string
+  lastActive: number
+  birthDay: Date
+  createdAt: number
+  updatedAt: number
+  shirtNumber: number
+  gender: string
+  weight: number
+  height: number
+  fatherHeight: number
+  motherHeight: number
+  age: number
+  isPublic: boolean
+  notificationOn: boolean
+  notificationOptions: NotificationsType
 }>
