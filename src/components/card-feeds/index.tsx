@@ -30,6 +30,7 @@ import {
   shared_biographies,
   shared_leaderboard,
   TRAINING,
+  ztar_of_the_matches,
 } from './constants'
 import { ListFriend } from './component/list-friend'
 import { CardDiaryTraining } from './component/diary-training'
@@ -189,6 +190,9 @@ export const CardFeed = ({ card }: CardYourType) => {
 
       case player_of_the_weeks: {
         return <PlayerOfTheWeek card={card} />
+      }
+      case ztar_of_the_matches: {
+        return <p className="pl-[32px]">ztar of the matches</p>
       }
     }
 
