@@ -1,6 +1,7 @@
 import {
   SvgClock,
   SvgComment,
+  SvgCopyLink,
   SvgFavorite,
   SvgSave,
   SvgShare,
@@ -46,6 +47,7 @@ import { isMobile } from 'react-device-detect'
 import SimpleBar from 'simplebar-react'
 import { XIcon } from '../icons'
 import { ModalDiaryTraining } from './component/diary-training/item/modal-diary-training'
+import { ModalShare } from '../modal-share'
 
 interface CardYourType {
   card?: CardFeedType
@@ -57,6 +59,8 @@ export const CardFeed = ({ card }: CardYourType) => {
   const [openOption, setOpenOption] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [focusComment, setFocusComment] = useState<boolean>(false)
+  const [openModalShare, setOpenModalShare] = useState<boolean>(false)
+  const [urlShare, setUrlShare] = useState<string>('')
 
   const { isLoading: loadingSubscribe, mutate: subScribe } = useMutation(
     [QUERIES_FEED.FEED_SUBSCRIBE_PROVIDER],
@@ -139,18 +143,12 @@ export const CardFeed = ({ card }: CardYourType) => {
     setOpenModal(true)
   }
 
-  // const handleUnfollow = () => {
-  //   setOpenModalUnfollow(true)
-  // }
-
-  // const handleConfirmUnfollow = () => {
-  //   if (!card?.providerId) {
-  //     toast.error('provider id not found')
-  //     setOpenModalUnfollow(false)
-  //     return
-  //   }
-  //   subScribe(card?.providerId)
-  // }
+  const handleShare = () => {
+    setOpenModalShare(true)
+    setUrlShare(
+      `${window.location.origin}/posts/${card.postId}/${card?.typeOfPost}`
+    )
+  }
 
   const handleTypeOfPost = (
     typeOfPost: string,
@@ -252,17 +250,6 @@ export const CardFeed = ({ card }: CardYourType) => {
               </Text>
             )}
 
-            {/* {card?.typeOfPost === shared_biographies && (
-              <Text name="Caption" className=" inline-block ">
-                {`${formatDistanceToNowStrict(
-                  (card?.userInfo?.createdAt as number) || 0
-                )} ${card?.userInfo?.city ? '-' : ''} ${
-                  card?.userInfo?.birthCountry?.alpha2Code
-                }/${card?.userInfo?.city || ''} /${dayjs(
-                  card?.userInfo?.createdAt
-                ).format('YYYY')}`}
-              </Text>
-            )} */}
             {card?.typeOfPost === player_of_the_weeks && (
               <Text name="Caption" className=" inline-block ">
                 {formatDistanceToNowStrict(card?.createdAt as number)}
@@ -277,6 +264,8 @@ export const CardFeed = ({ card }: CardYourType) => {
           type={card?.typeOfPost}
           card={card}
           reportUserName={card?.userInfo?.username}
+          postId={card?.postId}
+          typeOfPost={card?.typeOfPost}
         />
       </div>
 
@@ -331,7 +320,10 @@ export const CardFeed = ({ card }: CardYourType) => {
           </div>
         </div>
 
-        <div className="flex-row-reverse hover:scale-110 duration-150 pr-[16px]">
+        <div
+          className="flex-row-reverse hover:scale-110 duration-150 pr-[16px]"
+          onClick={handleShare}
+        >
           <SvgShare />
         </div>
         <div
@@ -364,6 +356,49 @@ export const CardFeed = ({ card }: CardYourType) => {
             <ModalDiaryTraining card={card} focusComment={focusComment} />
           </div>
         </SimpleBar>
+      </ModalMui>
+
+      <ModalMui
+        sx={{
+          padding: 0,
+          top: '50%',
+          width: isMobile ? '100%' : 950,
+          overflow: 'auto',
+        }}
+        isOpen={openModalShare}
+        onClose={setOpenModalShare}
+      >
+        <div className="relative p-4">
+          <button
+            type="button"
+            onClick={() => setOpenModalShare(false)}
+            className="absolute z-50 right-4 top-4"
+          >
+            <XIcon />
+          </button>
+          <p className="text-[#ffffff] text-[18px] mb-[48px]">Share with</p>
+          <ModalShare url={urlShare && urlShare} />
+          <div className="w-full mt-[48px] mb-[12px]">
+            <p>Page Link</p>
+            <div className="w-full h-[52px] mt-[12px]">
+              <input
+                className="h-[52px] bg-[#444444] text-[#a09f9f] w-11/12 pl-[12px] float-left"
+                disabled
+                value={urlShare && urlShare}
+              ></input>
+              <div
+                className="w-1/12 bg-[#444444] active:bg-[#3d3d3d] h-[52px] float-right flex 
+                  justify-center items-center cursor-pointer"
+                title="copy"
+                onClick={() => {
+                  navigator.clipboard.writeText(urlShare && urlShare)
+                }}
+              >
+                <SvgCopyLink />
+              </div>
+            </div>
+          </div>
+        </div>
       </ModalMui>
     </div>
   )

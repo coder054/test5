@@ -202,7 +202,7 @@ export const Development = () => {
       </div>
 
       <div
-        className={` col-span-12 lg:col-span-7 ml-[20px] ${cls.item} max-h-[523px]`}
+        className={` col-span-12 lg:col-span-7 lg:ml-[20px] ${cls.item} max-h-[523px]`}
       >
         <p className="pt-[32px] pl-[32px]">Development updates</p>
         <div className="mt-[24px] pl-[16px] md:pl-[32px] pb-[16px] md:pb-[32px] pr-[16px] md:pr-[32px]">
