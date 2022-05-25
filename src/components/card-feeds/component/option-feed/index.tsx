@@ -37,6 +37,8 @@ interface OptionFeedType {
   handleDeleteComment?: Function
   comment?: CommentType
   checkAccount?: string
+  postId?: string
+  typeOfPost?: string
 }
 
 export const OptionFeed = ({
@@ -49,7 +51,8 @@ export const OptionFeed = ({
   className,
   handleBlockComment,
   handleDeleteComment,
-  comment,
+  postId,
+  typeOfPost,
   checkAccount,
 }: OptionFeedType) => {
   const queryClient = useQueryClient()
@@ -66,8 +69,6 @@ export const OptionFeed = ({
   const [anchorEl, setAnchorEl] = useState(null)
   const classNames = clsx(className && className)
   const { currentRoleId, userRoles } = useAuth()
-  // console.log('userRoles', userRoles)
-  // console.log('comment', comment?.userId)
 
   const { isLoading: loadingSubscribe, mutate: subScribe } = useMutation(
     [QUERIES_FEED.FEED_SUBSCRIBE_PROVIDER],
@@ -149,16 +150,7 @@ export const OptionFeed = ({
                 Unfollow
               </span>
             </div>
-            <div
-              className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
-              onClick={() => {
-                navigator.clipboard.writeText(link && (link as string))
-                toast.success('Copy successfully!')
-                setOpenOption && setOpenOption(false)
-              }}
-            >
-              <SvgCopyLink /> <span className="ml-[10px]">Copy link</span>
-            </div>
+            <CopyLink plainPost postId={postId} typeOfPost={typeOfPost} />
           </div>
         </BasicPopover>
       )}
@@ -184,25 +176,7 @@ export const OptionFeed = ({
               >
                 <span className="ml-[8px]">Report</span>
               </div>
-              <div
-                className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
-                onClick={() => {
-                  // navigator.clipboard.writeText(card?.link as string)
-                  // toast.success('Copy successfully!')
-                  setOpenOption(false)
-                }}
-              >
-                <span className="ml-[10px]">Copy link</span>
-              </div>
-              <div
-                className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
-                onClick={() => {
-                  setOpenModalUnfollow(false)
-                  setOpenOption(false)
-                }}
-              >
-                <span className="ml-[8px]">Share</span>
-              </div>
+              <CopyLink postId={postId} typeOfPost={typeOfPost} />
             </>
           </BasicPopover>
         )}
@@ -231,18 +205,13 @@ export const OptionFeed = ({
               >
                 <span className="ml-[8px]">Delete Post</span>
               </div>
-              <div
-                className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
-                // onClick={() => setOpenModalUnfollow(false)}
-              >
-                <span className="ml-[8px]">Copy link</span>
-              </div>
-              <div
+              <CopyLink postId={postId} typeOfPost={typeOfPost} />
+              {/* <div
                 className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
                 // onClick={() => setOpenModalUnfollow(false)}
               >
                 <span className="ml-[8px]">Share</span>
-              </div>
+              </div> */}
             </>
           </BasicPopover>
         )}
@@ -393,6 +362,36 @@ export const OptionFeed = ({
         onSubmit={handleConfirmBlockComment}
         actionLabelClass="bg-[#D60C0C]"
       />
+    </div>
+  )
+}
+
+interface CopyLinkProps {
+  setOpenOption?: (value: boolean) => void
+  postId?: string
+  typeOfPost?: string
+  plainPost?: boolean
+}
+
+const CopyLink = ({
+  postId,
+  typeOfPost,
+  plainPost,
+  setOpenOption,
+}: CopyLinkProps) => {
+  return (
+    <div
+      className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
+      onClick={() => {
+        navigator.clipboard.writeText(
+          `${window.location.origin}/posts/${postId}/${typeOfPost}`
+        )
+        toast.success('Copy successfully!')
+        setOpenOption && setOpenOption(false)
+      }}
+    >
+      {plainPost && <SvgCopyLink />}{' '}
+      <span className="ml-[10px]">Copy link</span>
     </div>
   )
 }
