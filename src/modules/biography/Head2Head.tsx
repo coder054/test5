@@ -1,51 +1,79 @@
-import { capitalize, isEmpty } from 'lodash'
+import { Button, CircularProgress } from '@mui/material'
 import clsx from 'clsx'
-import { CircularProgress } from '@mui/material'
+import { capitalize, isEmpty } from 'lodash'
 import queryString from 'query-string'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useQuery } from 'react-query'
 import { useIdHead2HeadQuery } from 'src/atoms/biographyAtom'
 import { Stars } from 'src/components/common/Stars'
+import { ModalMui } from 'src/components/ModalMui'
+import { MySlider } from 'src/components/MySlider'
 import { BioRadarChart } from 'src/components/specific/BioRadarChart'
+import { SvgFilter3Line } from 'src/imports/svgs'
 import { axios } from 'src/utils/axios'
-import { equalStr, getErrorMessage, getStr } from 'src/utils/utils'
-import { API_ACHIEVEMENTS_TROPHY } from 'src/constants/api.constants'
+import { equalStr } from 'src/utils/utils'
 import { ItemAward, ItemTrophy } from './InfoWithImages'
-import { SvgFilter, SvgFilter3Line } from 'src/imports/svgs'
-import { useQuery } from 'react-query'
+
+type timeMarkType = 0 | 16 | 32 | 48 | 64 | 80 | 100
+
+function mapValueSliderToTime(value: timeMarkType) {
+  switch (value) {
+    case 0:
+      return 7
+    case 16:
+      return 30
+    case 32:
+      return 90
+    case 48:
+      return 180
+    case 64:
+      return 365
+    case 80:
+      return 1095
+    case 100:
+      return 100000
+    default:
+      return 7
+  }
+}
 
 export const Head2Head = () => {
   const { idHead2Head, setIdHead2Head } = useIdHead2HeadQuery()
-  let date = new Date()
-  date.setDate(date.getDate() - 365)
-  const [startDate, setStartDate] = useState(date)
-
-  const [endDate, setEndDate] = useState<Date>(new Date())
-  const [params, setParams] = useState({
-    limit: 1,
-    startAfter: 1,
-    sorted: 'asc',
-    statsTab: 'Total',
-    startDate: startDate.toISOString(),
-    endDate: new Date().toISOString(),
-    userIdQuery: idHead2Head,
-  })
-
-  //////////////////////////////////////////////
+  const [modalFilter, setModalFilter] = useState(false)
+  const [renderLoadingFirstTime, setRenderLoadingFirstTime] = useState(true)
+  const [time, setTime] = useState<timeMarkType>(0)
+  const timeRef = useRef<timeMarkType>(0)
+  const [data, setData] = useState<IHead2Head>(null)
+  ///////////////////////////////// react-query /////////////////////////////////
+  const params = useMemo(() => {
+    const days = mapValueSliderToTime(timeRef.current)
+    let date = new Date()
+    date.setDate(date.getDate() - days)
+    return {
+      limit: 1,
+      startAfter: 1,
+      sorted: 'asc',
+      statsTab: 'Total',
+      startDate: date.toISOString(),
+      endDate: new Date().toISOString(),
+      userIdQuery: idHead2Head,
+    }
+  }, [timeRef.current])
   const {
     isLoading,
     error,
-    data,
+    data: dataHead2Head,
   }: {
     isLoading: boolean
     error: any
     data: IHead2Head
   } = useQuery(['head2head', params], async () => {
-    const { data: dataResp } = await axios.get(
+    const { data } = await axios.get(
       `/biographies/players/head-2-head?${queryString.stringify(params)}`
     )
-
-    return dataResp
+    return data
   })
+  ///////////////////////////////// react-query /////////////////////////////////
 
   const bios = useMemo(() => {
     if (isEmpty(data)) {
@@ -178,21 +206,121 @@ export const Head2Head = () => {
     ]
   }, [bios])
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isEmpty(dataHead2Head) && isEmpty(error)) {
+      setData(dataHead2Head)
+    }
+  }, [dataHead2Head, error])
+
+  useEffect(() => {
+    if (isLoading) {
+      setRenderLoadingFirstTime(false)
+    }
+  }, [isLoading])
+
+  if (isLoading && renderLoadingFirstTime === true) {
+    return <div className="flex justify-center mt-[20px]  ">Loading...</div>
+  }
+  if (error) return <div>Error</div>
+
+  if (isEmpty(data)) {
     return (
       <div className="flex justify-center mt-[20px]  ">
         <CircularProgress />
       </div>
     )
   }
-  if (error) return <></>
-
-  if (isEmpty(data)) {
-    return null
-  }
 
   return (
     <>
+      {/*  */}
+      <ModalMui
+        sx={{ width: 700, top: '50%' }}
+        isOpen={modalFilter}
+        onClose={() => {
+          setModalFilter(false)
+        }}
+        showXIcon
+      >
+        <>
+          <div className="text-[18px] font-Inter mb-10 2xl:mb-20 ">
+            Head 2 Head filter
+          </div>
+
+          <MySlider
+            step={null}
+            label={
+              time === 100
+                ? 'All times'
+                : `Last: ${mapValueSliderToTime(time)}d`
+            }
+            onChange={(e) => {
+              setTime(e)
+            }}
+            value={time}
+            labelClass="text-[#A2A5AD]"
+            // head2headfilter
+            valueLabelFormat=""
+            marks={[
+              {
+                label: '7d',
+                value: 0,
+              },
+              {
+                label: '30d',
+                value: 16,
+              },
+              {
+                label: '90d',
+                value: 32,
+              },
+              {
+                label: '180d',
+                value: 48,
+              },
+              {
+                label: '1Y',
+                value: 64,
+              },
+              {
+                label: '3Y',
+                value: 80,
+              },
+              {
+                label: 'All',
+                value: 100,
+              },
+            ]}
+          />
+          <div className="h-[100px] "></div>
+
+          <div className="flex ">
+            <Button
+              onClick={() => {
+                setModalFilter(false)
+              }}
+              fullWidth
+              size="large"
+              sx={{ mr: 2 }}
+              variant="outlined"
+            >
+              Close
+            </Button>
+            <Button
+              onClick={async () => {
+                timeRef.current = time
+                setModalFilter(false)
+              }}
+              fullWidth
+              size="large"
+              variant="contained"
+            >
+              Ok
+            </Button>
+          </div>
+        </>
+      </ModalMui>
+      {/*  */}
       <div className="inline-flex w-[200px] items-center gap-x-[24px] p-3  ">
         <svg
           onClick={() => {
@@ -711,7 +839,19 @@ export const Head2Head = () => {
         max-w-[560px] sm:max-w-[560px] md:max-w-[560px] lg:max-w-[360px] xl:max-w-[380px] 2xl:max-w-[480px]
         "
         >
-          <StatsBenchmark matches={matches} trainings={trainings} />
+          <StatsBenchmark
+            timeRef={timeRef}
+            time={time}
+            onClickFilterIcon={() => {
+              setTime(timeRef.current)
+              setTimeout(() => {
+                setModalFilter(true)
+              }, 20)
+            }}
+            matches={matches}
+            trainings={trainings}
+            setModalFilter={setModalFilter}
+          />
         </div>
         {/* col2 */}
       </div>
@@ -897,11 +1037,19 @@ const ItemMatch = ({ title, userAValue, userBValue }) => {
 }
 
 export const StatsBenchmark = ({
+  time,
+  timeRef,
   matches,
   trainings,
+  setModalFilter,
+  onClickFilterIcon,
 }: {
+  time: timeMarkType
+  timeRef: any
   matches: IMatchOrTraining[]
   trainings: IMatchOrTraining[]
+  setModalFilter: (modalFilter: boolean) => void
+  onClickFilterIcon: Function
 }) => {
   return (
     <>
@@ -917,8 +1065,13 @@ export const StatsBenchmark = ({
       {/* STATS BENCHMARK */}
 
       <div className=" flex justify-between items-center ">
-        <span className="text-Green  ">2022 - Last 365 days</span>
-        <SvgFilter3Line className={''} onClick={() => {}} />
+        <span className="text-Green  ">
+          {' '}
+          {time === 100
+            ? 'All times'
+            : `Last ${mapValueSliderToTime(timeRef.current)} days`}{' '}
+        </span>
+        <SvgFilter3Line className={''} onClick={onClickFilterIcon} />
       </div>
 
       <div className="text-Grey ">Matches in total</div>

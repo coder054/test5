@@ -176,6 +176,7 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
   // If we have the thread, we use its ID to add a new message
   // Otherwise we use the recipients IDs. When using participant IDs, it means that we have to
   // get the thread.
+
   const handleSendMessage = async (body: string): Promise<void> => {
     try {
       var urlRegex =
@@ -196,14 +197,16 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
         const { description, hostname, image, siteName, title, url } = data
 
         let previewData: IPreviewData = {
-          description,
-          link,
-          title,
-          image: {
+          description: description || '',
+          link: link || '',
+          title: title || '',
+        }
+        if (!isEmpty(image)) {
+          previewData.image = {
             height: 630,
             url: image,
             width: 1200,
-          },
+          }
         }
         let message = newChatMessage().newLinkMessage(
           //@ts-ignore: Unreachable code error

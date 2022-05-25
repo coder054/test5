@@ -9,6 +9,7 @@ type MySliderProps = SliderProps & {
   value?: number
   label: string
   isFilter?: boolean
+  head2headfilter?: boolean
   isStar?: boolean
   isPoint?: boolean
   isNumber?: boolean
@@ -41,6 +42,7 @@ export const MySlider = ({
   isScale,
   isPoint,
   isFilter,
+  head2headfilter,
   isNumber,
   readOnly,
   health,
@@ -161,6 +163,15 @@ export const MySlider = ({
           <span>3y</span>
         </div>
       ) : null}
+      {head2headfilter && (
+        <div className="flex justify-between text-[#A2A5AD] font-normal">
+          <span className={clsx(handleRange(0))}>0a%</span>
+          <span className={clsx(handleRange(25))}>25a%</span>
+          <span className={clsx(handleRange(50))}>50%</span>
+          <span className={clsx(handleRange(75))}>75%</span>
+          <span className={clsx(handleRange(100))}>100%</span>
+        </div>
+      )}
     </div>
   )
 }
