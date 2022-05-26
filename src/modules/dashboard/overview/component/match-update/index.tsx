@@ -124,7 +124,7 @@ export const MatchUpdates = ({
                   <div className="flex text-[10px] md:text-[14px]">
                     <img
                       src={safeHttpImage(item.match?.opponentClub?.logoUrl)}
-                      className="w-[22px] h-[22px] md:w-[25.6px] md:h-[26px] mr-2 rounded-full"
+                      className="w-[22px] h-[22px] md:w-[25.6px] md:h-[26px] mr-2 rounded-full object-cover"
                     />
                     {item.match?.opponentClub?.clubName}
                   </div>

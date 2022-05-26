@@ -16,7 +16,10 @@ import { Country } from 'src/constants/types/diary.types'
 import { ClubType } from 'src/constants/types/settingsType.type'
 import { SvgAbove, SvgBelow } from 'src/imports/svgs'
 import { axios } from 'src/utils/axios'
-import { toQueryString } from 'src/utils/common.utils'
+import {
+  handleStringFirstUppperCase,
+  toQueryString,
+} from 'src/utils/common.utils'
 import { FilterLeaderboard } from './filter-leaderboard'
 const cls = require('../overview/overview.module.css')
 
@@ -37,7 +40,7 @@ export const LeaderBoards = () => {
   const [limit, setLimit] = useState<number>(10)
   const [sorted, setSorted] = useState<string>(DESC)
   const [startAfter, setStartAfter] = useState<number>(1)
-  const [count, setCount] = useState<Number>(0)
+  const [count, setCount] = useState<number>(0)
 
   const [filterForm, setFilterForm] = useState<FilterForm>({
     country: {
@@ -141,6 +144,8 @@ export const LeaderBoards = () => {
             onChange={setRange}
             label="Filter leaderboard"
             setFilterFormLeader={setFilterForm}
+            leaderBoard
+            category={filterForm?.category}
           />
         </div>
 
@@ -162,7 +167,9 @@ export const LeaderBoards = () => {
             </p>
             <p className="col-span-4">Name</p>
             <p className="col-span-3">Club</p>
-            <p className="col-span-3">Index</p>
+            <p className="col-span-3">
+              {handleStringFirstUppperCase(filterForm?.category)}
+            </p>
           </div>
           <Fragment>
             <SimpleBar style={{ maxHeight: 420 }}>

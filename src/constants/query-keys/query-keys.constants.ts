@@ -18,6 +18,7 @@ export const QUERIES_DASHBOARD = {
   PAIN_DATA: 'pain-data',
   PAIN_DATA_POST: 'pain-data-post',
   HEALTH_DATA: 'health-data',
+  LIST_HEALTH_DATA: 'list-health-data',
   DEVELOPMENT_DATA: 'development-data',
   NOTE_DATA: 'note-data',
   COACH_COMMENT_PLAYER_DEVELOPMENT: 'coach-comment-player-development',

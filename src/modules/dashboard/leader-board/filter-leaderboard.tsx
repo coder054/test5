@@ -14,6 +14,7 @@ import { ClubType } from 'src/constants/types/settingsType.type'
 import { SvgFilter } from 'src/imports/svgs'
 import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
 import { InfiniteScrollTeam } from 'src/modules/account-settings/football/components/InfiniteScrollTeam'
+import { handleStringFirstUppperCase } from 'src/utils/common.utils'
 import { AgeOfGroup, CategoryFilter, RoleFilter } from '../constants-dashboard'
 
 type FilterLeaderboardProps = {
@@ -26,7 +27,9 @@ type FilterLeaderboardProps = {
   options?: { value: string; label: string }[]
   optionLabel?: string
   healthType?: string
+  category?: string
   health?: boolean
+  leaderBoard?: boolean
   optionChange?: (value: string) => void
   setFilterFormLeader?: Function
   setHealthChartType?: Function
@@ -53,10 +56,11 @@ export const FilterLeaderboard = ({
   optionLabel,
   health,
   optionChange,
-  children,
   setFilterFormLeader,
   healthType,
   setHealthChartType,
+  leaderBoard,
+  category,
 }: FilterLeaderboardProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [current, setCurrent] = useState<number>(0)
@@ -282,6 +286,7 @@ export const FilterLeaderboard = ({
           <p className="text-[#09E099]">
             {lastValue !== 60 ? 'Last' : ''}{' '}
             {generateOutput(lastValue)?.display}
+            {leaderBoard && ` - ${handleStringFirstUppperCase(category)}`}
           </p>
         ) : null}
         {health ? (
