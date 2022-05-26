@@ -139,7 +139,7 @@ export const PeriodFilter = ({
     setCurrent(0)
     options && setCurrentOption(options[0].value)
     setCheckFilter && setCheckFilter(false)
-    setHealthChartType && setHealthChartType('BMI')
+    setHealthChartType && setHealthChartType('HEIGHT')
     setFilterForm &&
       setFilterForm({
         country: '',

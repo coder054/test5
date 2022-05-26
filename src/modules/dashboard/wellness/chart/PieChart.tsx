@@ -67,18 +67,18 @@ export const PieChart = ({ response, isLoading }: WellnessPieChartProps) => {
             .map((key, index) => (
               <div key={index} className="text-[13px] grid grid-cols-3 my-5">
                 <div className="flex justify-center">
-                  <p className="text-left w-[20px]">
+                  <p className="text-left w-[20px] text-[14px]">
                     {initial.personalDiaryRoutinePieChart[key]}%
                   </p>
                 </div>
                 <p
-                  className="text-center"
+                  className="text-center text-[14px]"
                   style={{ color: COLOR_CHART[key].color }}
                 >
                   {COLOR_CHART[key].label}
                 </p>
                 <div className="flex justify-center">
-                  <p className="text-left w-[20px]">
+                  <p className="text-left w-[20px] text-[14px]">
                     {initial.averageDiaryRoutinePieChart[key]}%
                   </p>
                 </div>

@@ -396,9 +396,12 @@ export const CardFeed = ({ card }: CardYourType) => {
                 title="copy"
                 onClick={() => {
                   navigator.clipboard.writeText(urlShare && urlShare)
+                  toast.success('Copy successfully!')
                 }}
               >
-                <SvgCopyLink />
+                <div className="scale-150">
+                  <SvgCopyLink />
+                </div>
               </div>
             </div>
           </div>

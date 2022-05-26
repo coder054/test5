@@ -125,7 +125,6 @@ const SignUpForm = ({ title }: { title: string }) => {
         userProfile: 'Input your User profile',
       }))
     }
-
     if (
       formValues.firstName.length > 1 &&
       formValues.lastName.length > 1 &&
@@ -133,8 +132,6 @@ const SignUpForm = ({ title }: { title: string }) => {
       formValues.country &&
       formValues.city &&
       formValues.userProfile
-      // && formValues.faceImage &&
-      // formValues.bodyImage
     ) {
       /* @ts-ignore */
       if (formValues.userProfile.label === 'Player') {

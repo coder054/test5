@@ -158,6 +158,7 @@ export const MySlider = ({
           <span>1m</span>
           <span>3m</span>
           <span>6m</span>
+          <span>1y</span>
           <span>1.5y</span>
           <span>2y</span>
           <span>3y</span>

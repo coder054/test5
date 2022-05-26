@@ -52,7 +52,7 @@ export const HealthUpdates = () => {
     isFetchingNextPage,
     fetchNextPage,
   } = useInfiniteQuery(
-    [QUERIES_DASHBOARD.HEALTH_DATA, limit, startAfter, sorted],
+    [QUERIES_DASHBOARD.LIST_HEALTH_DATA, limit, startAfter, sorted],
     async ({ pageParam = startAfter }) => {
       const res = await axios.get(
         toQueryString(API_GET_LIST_HEALTHS, {
@@ -124,7 +124,7 @@ export const HealthUpdates = () => {
                     key={index}
                   >
                     <p className="md:pl-[12px] col-span-2">
-                      {dayjs(item?.createdAt).format('DD/MM')}
+                      {dayjs(item?.date).format('DD/MM')}
                     </p>
                     <p className="col-span-3">{item.height}cm</p>
                     <p className="col-span-3">{item.weight}kg</p>

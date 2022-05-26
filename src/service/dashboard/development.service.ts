@@ -8,7 +8,7 @@ export interface UpdatePersonalGoalType {
   docId: string
 }
 export interface CreatePersonalGoalType {
-  headline: string
+  headline: string | Date
   category: string
   description: string
   media: any
