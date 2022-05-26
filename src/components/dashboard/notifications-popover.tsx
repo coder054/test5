@@ -1,4 +1,5 @@
 import { ModalMui } from 'src/components/ModalMui'
+import queryString from 'query-string'
 import dayjs from 'dayjs'
 import SimpleBar from 'simplebar-react'
 import { isMobile } from 'react-device-detect'
@@ -44,7 +45,10 @@ import { notiToast } from 'src/components/common/Toast'
 import { MySelectCountry } from 'src/components/MySelectCountry'
 import { optionAllClub } from 'src/constants/mocks/clubs.constans'
 import { optionAllCountry } from 'src/constants/mocks/countries.constants'
-import { NotificationType } from 'src/constants/types'
+import {
+  IDevelopmentNoteFilterAPI,
+  NotificationType,
+} from 'src/constants/types'
 import { XIcon } from 'src/icons/x'
 import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
 import { getUrlChatFromChatRoomId } from 'src/modules/chat/chatService'
@@ -54,9 +58,17 @@ import {
 } from 'src/modules/dashboard/development-dashboard/component/modal/note-modal'
 import { checkNotification } from 'src/service/notiService'
 import { axios } from 'src/utils/axios'
-import { getErrorMessage, getStr } from 'src/utils/utils'
+import {
+  getDevelopmentDataForForm,
+  getErrorMessage,
+  getStr,
+} from 'src/utils/utils'
 import { MailOpen as MailOpenIcon } from '../../icons/mail-open'
-import { INoti, useNotiList } from '../noti/NotificationsList'
+import {
+  DevelopmentNoteData,
+  INoti,
+  useNotiList,
+} from '../noti/NotificationsList'
 import { Scrollbar } from '../scrollbar'
 import { wait } from 'src/utils/wait'
 
@@ -624,6 +636,43 @@ export const ItemNotification = ({
                 notification.notificationType ===
                 NotificationType.COACH_COMMENT_DEVELOPMENT_NOTE
               ) {
+                const { developmentNoteData: dev } = notification
+                if (isEmpty(dev)) {
+                  return
+                }
+                setIsOpenModalDevelopmentNote(true)
+                await wait(100)
+                let developmentData: IDevelopmentFormValues =
+                  getDevelopmentDataForForm(dev)
+                setFormValues(developmentData)
+              } else if (
+                notification.notificationType ===
+                NotificationType.ASK_FOR_REVIEW_DEVELOPMENT_TALK
+              ) {
+                try {
+                  const params = {
+                    playerId: notification.senderId,
+                    playerNotedAt: notification.playerNotedAt,
+                  }
+
+                  const { data }: { data: IDevelopmentNoteFilterAPI } =
+                    await axios.get(
+                      `https://dev.api.zporter.co/development-talk/coach/filter-development-notes?${queryString.stringify(
+                        params
+                      )}`
+                    )
+                  setIsOpenModalDevelopmentNote(true)
+                  await wait(100)
+                  let developmentData: IDevelopmentFormValues =
+                    getDevelopmentDataForForm(data)
+                  setFormValues(developmentData)
+                } catch (error) {
+                  notiToast({
+                    message: getErrorMessage(error),
+                    type: 'error',
+                  })
+                }
+
                 let aa = notification
                 const { developmentNoteData: dev } = notification
                 if (isEmpty(dev)) {

@@ -1,10 +1,13 @@
 import { notification } from 'antd'
 import cookie from 'cookie'
+import dayjs from 'dayjs'
 import cookies from 'js-cookie'
 import jwtDecode from 'jwt-decode'
 import { chain, get, isEqual, isNaN, truncate } from 'lodash'
 import Resizer from 'react-image-file-resizer'
+import { DevelopmentNoteData } from 'src/components/noti/NotificationsList'
 import { AVATAR_DEFAULT } from 'src/constants/constants'
+import { IDevelopmentFormValues } from 'src/modules/dashboard/development-dashboard/component/modal/note-modal'
 import { axios } from './axios'
 
 export interface ITokenData {
@@ -245,4 +248,38 @@ export const getTeamUrl = (teamId: string) => {
 
 export const getGroupUrl = (groupId: string) => {
   return `/contacts/group/${groupId}`
+}
+
+export const getDevelopmentDataForForm = (data: DevelopmentNoteData) => {
+  let developmentData: IDevelopmentFormValues = {
+    strengthPlayer: data.strength.playerContent,
+    strengthCoach: data.strength.coachComment,
+    weaknessesPlayer: data.weaknesses.playerContent,
+    weaknessesCoach: data.weaknesses.coachComment,
+    bestDevelopSkillsPlayer: data.bestDevelopSkills.playerContent,
+    bestDevelopSkillsCoach: data.bestDevelopSkills.coachComment,
+    skillsNeededToDevelopPlayer: data.skillsNeededToDevelop.playerContent,
+    skillsNeededToDevelopCoach: data.skillsNeededToDevelop.coachComment,
+    bestWayToDevelopPlayer: data.bestWayToDevelop.playerContent,
+    bestWayToDevelopCoach: data.bestWayToDevelop.coachComment,
+    shortTermGoalPlayer: data.shortTermGoal.playerContent,
+    shortTermGoalCoach: data.shortTermGoal.coachComment,
+    longTermGoalPlayer: data.longTermGoal.playerContent,
+    longTermGoalCoach: data.longTermGoal.coachComment,
+    otherCommentsPlayer: data.otherComments.playerContent,
+    otherCommentsCoach: data.otherComments.coachComment,
+    date: dayjs(data.updatedAt).format('YYYY/MM/DD'),
+    progress: data.playerDevelopmentProgress,
+    contractedClub: {
+      arena: '',
+      city: '',
+      clubId: '',
+      clubName: '',
+      country: '',
+      logoUrl: '',
+      websiteUrl: null,
+    },
+    currentTeams: '',
+  }
+  return developmentData
 }
