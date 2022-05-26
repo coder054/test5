@@ -175,7 +175,37 @@ export const FilterLeaderboard = ({
     setLastValue(current)
     onChange && onChange(generateOutput(current).query)
     optionChange && optionChange(currentOption)
-    setFilterFormLeader && setFilterFormLeader(filterForm)
+    if (filterForm?.country?.name === 'All') {
+      setFilterFormLeader &&
+        setFilterFormLeader({
+          country: {
+            alpha2Code: '',
+            alpha3Code: '',
+            flag: '',
+            name: '',
+            phoneCode: '',
+            region: '',
+          },
+          ageGroup: 'ALL',
+          clubId: '',
+          yourTeams: [''],
+          role: 'All',
+          category: 'HOURS',
+          contractedClub: {
+            arena: '',
+            city: '',
+            clubId: '',
+            clubName: '',
+            country: '',
+            logoUrl: '',
+            nickName: '',
+            websiteUrl: null,
+          },
+          teamId: '',
+        })
+    } else {
+      setFilterFormLeader && setFilterFormLeader(filterForm)
+    }
     setIsOpen(false)
   }
 
@@ -311,6 +341,7 @@ export const FilterLeaderboard = ({
               label="Country"
               value={filterForm.country}
               onChange={(_, value) => handleChangeForm('country', value)}
+              isShowOptionAll
             />
             <MySelect
               label="Age of group"

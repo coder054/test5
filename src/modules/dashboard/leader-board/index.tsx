@@ -21,7 +21,7 @@ import { FilterLeaderboard } from './filter-leaderboard'
 const cls = require('../overview/overview.module.css')
 
 interface FilterForm {
-  country: Country
+  country?: Country
   ageGroup: string
   clubId: string
   yourTeams: string[]

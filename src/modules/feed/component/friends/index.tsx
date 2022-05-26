@@ -9,7 +9,7 @@ import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
 import { getListPosts } from 'src/service/feed/yours.service'
 
 export const TabFriends = () => {
-  const [limit, setLimit] = useState<number>(8)
+  const [limit, setLimit] = useState<number>(50)
   const [sorted, setSorted] = useState<string>(DESC)
   const [startAfter, setStartAfter] = useState<number>(1)
   const { ref, inView } = useInView()
@@ -35,7 +35,7 @@ export const TabFriends = () => {
     },
     {
       getNextPageParam: (lastPage, page) => {
-        if (lastPage.length === 8 || lastPage.length === 9) {
+        if (lastPage.length === 50 || lastPage.length === 51) {
           return page.length + 1
         } else {
           return undefined
