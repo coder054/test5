@@ -8,6 +8,7 @@ import SimpleBar from 'simplebar-react'
 import { notificationsAtom } from 'src/atoms/notiAtoms'
 import { notiToast } from 'src/components/common/Toast'
 import { ModalMui } from 'src/components/ModalMui'
+import { DevelopmentNoteType } from 'src/constants/types'
 import { NoteModal } from 'src/modules/dashboard/development-dashboard/component/modal/note-modal'
 import { checkNotification } from 'src/service/notiService'
 import { axios } from 'src/utils/axios'
@@ -69,6 +70,9 @@ export enum Username {
 export const NotificationsList = () => {
   const [isOpenModalDevelopmentNote, setIsOpenModalDevelopmentNote] =
     useState<boolean>(false)
+
+  const [dataDevelopmentNote, setDataDevelopmentNote] =
+    useState<DevelopmentNoteType>(null)
   const { loading, notifications, setNotifications, unreadCount } =
     useNotiList()
 
@@ -140,7 +144,7 @@ export const NotificationsList = () => {
           <SimpleBar style={{ maxHeight: 850 }}>
             <NoteModal
               setIsOpenModal={setIsOpenModalDevelopmentNote}
-              item={null}
+              item={dataDevelopmentNote}
               update
             />
           </SimpleBar>
@@ -148,6 +152,7 @@ export const NotificationsList = () => {
         {notifications.map((notification) => {
           return (
             <ItemNotification
+              setDataDevelopmentNote={setDataDevelopmentNote}
               setIsOpenModalDevelopmentNote={setIsOpenModalDevelopmentNote}
               notification={notification}
               handleClickOne={handleClickOne}
@@ -226,7 +231,7 @@ export interface DevelopmentNoteData {
   bestDevelopSkills: BestDevelopSkills
   otherComments: BestDevelopSkills
   coachDevelopmentProgress?: string
-  playerNotedAt: number
+  playerNotedAt: number | string | Date
   updatedAt: number
   createdAt: number
   playerDevelopmentProgress: string

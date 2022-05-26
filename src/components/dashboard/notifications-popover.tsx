@@ -46,6 +46,7 @@ import { MySelectCountry } from 'src/components/MySelectCountry'
 import { optionAllClub } from 'src/constants/mocks/clubs.constans'
 import { optionAllCountry } from 'src/constants/mocks/countries.constants'
 import {
+  DevelopmentNoteType,
   IDevelopmentNoteFilterAPI,
   NotificationType,
 } from 'src/constants/types'
@@ -87,6 +88,9 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
 
   const [isOpenModalDevelopmentNote, setIsOpenModalDevelopmentNote] =
     useState<boolean>(false)
+
+  const [dataDevelopmentNote, setDataDevelopmentNote] =
+    useState<DevelopmentNoteType>(null)
 
   const { anchorEl, onClose, onUpdateUnread, open, ...other } = props
   // const [notifications, setNotifications] = useState<Notification[]>(data)
@@ -172,7 +176,7 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
         <SimpleBar style={{ maxHeight: 850 }}>
           <NoteModal
             setIsOpenModal={setIsOpenModalDevelopmentNote}
-            item={null}
+            item={dataDevelopmentNote}
             update
           />
         </SimpleBar>
@@ -230,6 +234,7 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
                 <List disablePadding>
                   {notifications.map((notification) => (
                     <ItemNotification
+                      setDataDevelopmentNote={setDataDevelopmentNote}
                       setIsOpenModalDevelopmentNote={
                         setIsOpenModalDevelopmentNote
                       }
@@ -257,12 +262,14 @@ NotificationsPopover.propTypes = {
 }
 
 export const ItemNotification = ({
+  setDataDevelopmentNote,
   setIsOpenModalDevelopmentNote,
   notification,
   handleClickOne,
   handleRemoveOne,
   onClose,
 }: {
+  setDataDevelopmentNote: (dataDevelopmentNote: DevelopmentNoteType) => void
   setIsOpenModalDevelopmentNote: Function
   notification: INoti
   handleClickOne: Function
@@ -637,14 +644,17 @@ export const ItemNotification = ({
                 NotificationType.COACH_COMMENT_DEVELOPMENT_NOTE
               ) {
                 const { developmentNoteData: dev } = notification
+
                 if (isEmpty(dev)) {
                   return
                 }
                 setIsOpenModalDevelopmentNote(true)
                 await wait(100)
-                let developmentData: IDevelopmentFormValues =
-                  getDevelopmentDataForForm(dev)
-                setFormValues(developmentData)
+
+                setDataDevelopmentNote(dev)
+                // let developmentData: IDevelopmentFormValues =
+                //   getDevelopmentDataForForm(dev)
+                // setFormValues(developmentData)
               } else if (
                 notification.notificationType ===
                 NotificationType.ASK_FOR_REVIEW_DEVELOPMENT_TALK
