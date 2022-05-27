@@ -8,7 +8,7 @@ import {
 } from 'src/imports/svgs'
 import { Text } from '../Text'
 const cls = require('./card-yours.module.css')
-import { ReactElement, useState } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { formatDistanceToNowStrict } from 'date-fns'
 import toast from 'react-hot-toast'
 import { useMutation, useQueryClient } from 'react-query'
@@ -23,6 +23,7 @@ import { CardPlainPost } from './component/plain-post'
 import {
   club_transfer_histories,
   diaries,
+  LIKE,
   personal_goals,
   plain_posts,
   player_of_the_weeks,
@@ -30,6 +31,7 @@ import {
   shared_biographies,
   shared_leaderboard,
   TRAINING,
+  UN_LIKE,
   ztar_of_the_matches,
 } from './constants'
 import { ListFriend } from './component/list-friend'
@@ -62,6 +64,8 @@ export const CardFeed = ({ card }: CardYourType) => {
   const [focusComment, setFocusComment] = useState<boolean>(false)
   const [openModalShare, setOpenModalShare] = useState<boolean>(false)
   const [urlShare, setUrlShare] = useState<string>('')
+  const [countLike, setCountLike] = useState<number>(0)
+  const [isLike, setIsLike] = useState<boolean>(card?.isLiked)
 
   const { isLoading: loadingSubscribe, mutate: subScribe } = useMutation(
     [QUERIES_FEED.FEED_SUBSCRIBE_PROVIDER],
@@ -84,7 +88,7 @@ export const CardFeed = ({ card }: CardYourType) => {
     likePost,
     {
       onSuccess: (res) => {
-        toast.success(res.data)
+        // toast.success(res.data)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_OF_PROVIDER)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_YOURS)
@@ -117,11 +121,29 @@ export const CardFeed = ({ card }: CardYourType) => {
     }
   }
 
+  //handle like, unlike
+  useEffect(() => {
+    if (countLike === 10) {
+      toast.error('Limit like comment in a minute.')
+      setTimeout(() => {
+        setCountLike(0)
+      }, 60000)
+    }
+  }, [countLike])
+
   const handleClickFavorite = async (postId: string, typeOfPost: string) => {
-    if (!card?.isLiked) {
-      like({ postId: postId, typeOfPost: typeOfPost, query: 'like' })
-    } else if (card?.isLiked) {
-      like({ postId: postId, typeOfPost: typeOfPost, query: 'unlike' })
+    if (!isLike && countLike !== 10) {
+      setIsLike(true)
+      setCountLike(countLike + 1)
+      try {
+        like({ postId: postId, typeOfPost: typeOfPost, query: LIKE })
+      } catch (error) {}
+    } else if (isLike && countLike !== 10) {
+      setIsLike(false)
+      setCountLike(countLike + 1)
+      try {
+        like({ postId: postId, typeOfPost: typeOfPost, query: UN_LIKE })
+      } catch (error) {}
     }
   }
 
@@ -236,7 +258,7 @@ export const CardFeed = ({ card }: CardYourType) => {
               }`}
             </Text>
           ) : (
-            <Text name="body1" className="text-white ">
+            <Text name="body1" className="text-white">
               {`#${
                 card?.userInfo?.firstName + ' ' + card?.userInfo?.lastName || ''
               }`}
@@ -250,7 +272,7 @@ export const CardFeed = ({ card }: CardYourType) => {
                   card?.userInfo?.city ? '-' : ''
                 } ${card?.userInfo?.birthCountry?.alpha2Code}/${
                   card?.userInfo?.city || ''
-                } /${dayjs(card?.createdAt).format('YYYY')}`}
+                } /${dayjs(card?.userInfo?.birthDay).format('YYYY')}`}
               </Text>
             )}
 
@@ -282,17 +304,25 @@ export const CardFeed = ({ card }: CardYourType) => {
         {handleTypeOfPost(card?.typeOfPost, card?.typeOfDiary || '')}
       </div>
 
+      {card?.typeOfPost === plain_posts && (
+        <p className="pl-[20px] text-[18px]">{card?.headline}</p>
+      )}
+
       <p
         className={`${cls.lineClamp} ${
-          card?.typeOfDiary === plain_posts ? 'mb-[25px] ' : ''
-        } text-white px-5 mt-[20px]`}
+          card?.typeOfPost === plain_posts ? 'mb-[8px] ' : ''
+        } text-white px-5 mt-[8px]`}
         dangerouslySetInnerHTML={{ __html: card?.text as string }}
       ></p>
+
+      {card?.typeOfPost === plain_posts && (
+        <p className="pl-[20px] text-[14px] mb-[12px]">{card?.location}</p>
+      )}
 
       {card?.typeOfPost &&
         card?.typeOfPost === plain_posts &&
         card?.friendTags.length > 0 && (
-          <div className="w-full pl-[20px] pr-[20px] h-[100px]">
+          <div className="w-full pl-[20px] pr-[20px] h-[100px] pointer-events-none mb-[18px]">
             <p>Friends tag:</p>
             <ListFriend listFriend={card?.friendTags} />
           </div>
@@ -310,7 +340,7 @@ export const CardFeed = ({ card }: CardYourType) => {
                 )
               }
             >
-              <SvgFavorite active={card?.isLiked} />
+              <SvgFavorite active={isLike} />
             </div>
           </div>
 
@@ -319,7 +349,7 @@ export const CardFeed = ({ card }: CardYourType) => {
               onClick={handleClickComment}
               className="w-[20px] hover:scale-110 duration-150"
             >
-              <SvgComment />
+              <SvgComment color={card?.countComments ? '#09E099' : null} />
             </div>
           </div>
         </div>

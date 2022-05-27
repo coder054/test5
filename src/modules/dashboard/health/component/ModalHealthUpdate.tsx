@@ -1,4 +1,5 @@
 import { MenuItem } from '@material-ui/core'
+import { InputAdornment, TextField } from '@mui/material'
 import TextArea from 'antd/lib/input/TextArea'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
@@ -63,67 +64,18 @@ export const ModalHealthUpdate = ({
     fat: 0,
   })
 
-  const heightOptions = useIncrementNumber({
-    startNumber: 120,
-    endNumber: 220,
-    meanSure: 'cm',
-  })
-
-  const weightOptions = useIncrementNumber({
-    startNumber: 30,
-    endNumber: 130,
-    meanSure: 'kg',
-  })
-
-  const breastSkinOptions = useIncrementNumber({
-    startNumber: 4,
-    endNumber: 20,
-    meanSure: 'mm',
-  })
-
-  const waistSkinOptions = useIncrementNumber({
-    startNumber: 4,
-    endNumber: 20,
-    meanSure: 'mm',
-  })
-
-  const thighSkinOptions = useIncrementNumber({
-    startNumber: 4,
-    endNumber: 20,
-    meanSure: 'mm',
-  })
-  const restingPulseOptions = useIncrementNumber({
-    startNumber: 30,
-    endNumber: 220,
-    meanSure: 'bpm',
-  })
-  const maxPulseOptions = useIncrementNumber({
-    startNumber: 30,
-    endNumber: 220,
-    meanSure: 'bpm',
-  })
-
-  const systolicBloodPresureOptions = useIncrementNumber({
-    startNumber: 50,
-    endNumber: 150,
-    meanSure: 'mmHg',
-  })
-
-  const diastolicBloodPresureOptions = useIncrementNumber({
-    startNumber: 50,
-    endNumber: 150,
-    meanSure: 'mmHg',
-  })
-
-  const { mutate: CreateHealth } = useMutation(createHealth, {
-    onSuccess: (res) => {
-      if (res.status === 201) {
-        toast.success(res.data.message)
-        queryClient.invalidateQueries(QUERIES_DASHBOARD.LIST_HEALTH_DATA)
-        setIsOpenModal(false)
-      }
-    },
-  })
+  const { isLoading: loading, mutate: CreateHealth } = useMutation(
+    createHealth,
+    {
+      onSuccess: (res) => {
+        if (res.status === 201) {
+          toast.success(res.data.message)
+          queryClient.invalidateQueries(QUERIES_DASHBOARD.LIST_HEALTH_DATA)
+          setIsOpenModal(false)
+        }
+      },
+    }
+  )
 
   const { mutate: PostHealth, isLoading: loadingHealth } = useMutation(
     postHealth,
@@ -259,133 +211,109 @@ export const ModalHealthUpdate = ({
             onChange={(e) => handleChangeForm('date', e)}
           />
 
-          <MyInput
-            select
+          <TextField
+            fullWidth
             label="Height"
             value={formValues.height}
             onChange={(e) => handleChangeForm('height', e.target.value)}
-            defaultValue={'165'}
-          >
-            {heightOptions.map((i, index) => (
-              <MenuItem key={index} value={i.value}>
-                {i.label}
-              </MenuItem>
-            ))}
-          </MyInput>
+            InputProps={{
+              endAdornment: <InputAdornment position="end">cm</InputAdornment>,
+            }}
+          />
 
-          <MyInput
-            select
+          <TextField
+            fullWidth
             label="Weight"
             value={formValues.weight}
             onChange={(e) => handleChangeForm('weight', e.target.value)}
-          >
-            {weightOptions.map((i, index) => (
-              <MenuItem key={index} value={i.value}>
-                {i.label}
-              </MenuItem>
-            ))}
-          </MyInput>
+            InputProps={{
+              endAdornment: <InputAdornment position="end">kg</InputAdornment>,
+            }}
+          />
 
-          <MyInput
-            select
+          <TextField
+            fullWidth
             label="Breast skin thickness"
             value={formValues.breastSkinThickness}
             onChange={(e) =>
               handleChangeForm('breastSkinThickness', e.target.value)
             }
-          >
-            {breastSkinOptions.map((i, index) => (
-              <MenuItem key={index} value={i.value}>
-                {i.label}
-              </MenuItem>
-            ))}
-          </MyInput>
+            InputProps={{
+              endAdornment: <InputAdornment position="end">mm</InputAdornment>,
+            }}
+          />
 
-          <MyInput
-            select
+          <TextField
+            fullWidth
             label="Waist skin thickness"
             value={formValues.waistSkinsThickness}
             onChange={(e) =>
               handleChangeForm('waistSkinsThickness', e.target.value)
             }
-          >
-            {waistSkinOptions.map((i, index) => (
-              <MenuItem key={index} value={i.value}>
-                {i.label}
-              </MenuItem>
-            ))}
-          </MyInput>
+            InputProps={{
+              endAdornment: <InputAdornment position="end">mm</InputAdornment>,
+            }}
+          />
 
-          <MyInput
-            select
+          <TextField
+            fullWidth
             label="Thigh skin thickness"
             value={formValues.thighSkinThickness}
             onChange={(e) =>
               handleChangeForm('thighSkinThickness', e.target.value)
             }
-          >
-            {thighSkinOptions.map((i, index) => (
-              <MenuItem key={index} value={i.value}>
-                {i.label}
-              </MenuItem>
-            ))}
-          </MyInput>
+            InputProps={{
+              endAdornment: <InputAdornment position="end">mm</InputAdornment>,
+            }}
+          />
 
-          <MyInput
-            select
+          <TextField
+            fullWidth
             label="Resting pulse"
             value={formValues.restingPulse}
             onChange={(e) => handleChangeForm('restingPulse', e.target.value)}
-          >
-            {restingPulseOptions.map((i, index) => (
-              <MenuItem key={index} value={i.value}>
-                {i.label}
-              </MenuItem>
-            ))}
-          </MyInput>
+            InputProps={{
+              endAdornment: <InputAdornment position="end">bpm</InputAdornment>,
+            }}
+          />
 
-          <MyInput
-            select
+          <TextField
+            fullWidth
             label="Max pulse"
             value={formValues.maxPulse}
             onChange={(e) => handleChangeForm('maxPulse', e.target.value)}
-          >
-            {maxPulseOptions.map((i, index) => (
-              <MenuItem key={index} value={i.value}>
-                {i.label}
-              </MenuItem>
-            ))}
-          </MyInput>
+            InputProps={{
+              endAdornment: <InputAdornment position="end">bpm</InputAdornment>,
+            }}
+          />
 
-          <MyInput
-            select
+          <TextField
+            fullWidth
             label="Systolic blood pressue"
             value={formValues.systolicBloodPressure}
             onChange={(e) =>
               handleChangeForm('systolicBloodPressure', e.target.value)
             }
-          >
-            {systolicBloodPresureOptions.map((i, index) => (
-              <MenuItem key={index} value={i.value}>
-                {i.label}
-              </MenuItem>
-            ))}
-          </MyInput>
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">mmHg</InputAdornment>
+              ),
+            }}
+          />
 
-          <MyInput
-            select
+          <TextField
+            fullWidth
             label="Diastolic blood pressue"
             value={formValues.diastolicBloodPressure}
             onChange={(e) =>
               handleChangeForm('diastolicBloodPressure', e.target.value)
             }
-          >
-            {diastolicBloodPresureOptions.map((i, index) => (
-              <MenuItem key={index} value={i.value}>
-                {i.label}
-              </MenuItem>
-            ))}
-          </MyInput>
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">mmHg</InputAdornment>
+              ),
+            }}
+          />
 
           <MyTextArea
             placeholder="Description"

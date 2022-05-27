@@ -638,7 +638,7 @@ export const SvgShare = () => (
   </svg>
 )
 
-export const SvgComment = () => (
+export const SvgComment = ({ color }: { color?: string }) => (
   <svg
     className="cursor-pointer"
     width="20"
@@ -649,7 +649,7 @@ export const SvgComment = () => (
   >
     <path
       d="M16.6666 1.66675H3.33329C2.41663 1.66675 1.66663 2.41675 1.66663 3.33341V18.3334L4.99996 15.0001H16.6666C17.5833 15.0001 18.3333 14.2501 18.3333 13.3334V3.33341C18.3333 2.41675 17.5833 1.66675 16.6666 1.66675ZM16.6666 13.3334H4.99996L3.33329 15.0001V3.33341H16.6666V13.3334Z"
-      fill="#818389"
+      fill={color ? color : '#818389'}
     />
   </svg>
 )

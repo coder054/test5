@@ -56,12 +56,12 @@ export const ModalFeed = ({ setIsOpenModal }: ModalFeedProps) => {
     createPlainPost,
     {
       onSuccess: (res) => {
+        toast.success(res?.data)
+        setIsOpenModal(false)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_FRIENDS)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_ALL)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_YOURS)
-        toast.success(res.data)
-        setIsOpenModal(false)
       },
     }
   )
@@ -176,6 +176,7 @@ export const ModalFeed = ({ setIsOpenModal }: ModalFeedProps) => {
           <div className="col-span-1">
             Zporter friends feed
             <MySwitchButton
+              checked
               name="zporter"
               onChange={(e) => handleChangeSwitch('zporter', e.target.value)}
             />

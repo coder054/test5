@@ -11,3 +11,6 @@ export const player_of_the_weeks = 'player_of_the_weeks'
 export const rss_news = 'rss_news'
 export const zporter_news = 'zporter_news'
 export const ztar_of_the_matches = 'ztar_of_the_matches'
+
+export const LIKE = 'like'
+export const UN_LIKE = 'unlike'

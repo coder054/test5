@@ -41,6 +41,7 @@ import { PersonalGoals } from '../../personal_goals'
 import { PlayerOfTheWeek } from '../../player-of-the-week'
 import { BottomCardFeed } from '../../bottom-card-feed'
 import { Fragment } from 'react'
+import { ListFriend } from '../../list-friend'
 
 interface ModalDiaryTrainingType {
   card: CardFeedType
@@ -200,6 +201,30 @@ export const ModalDiaryTraining = ({
           </>
         )}
 
+        {card?.typeOfPost === plain_posts && (
+          <p className="pl-[20px] text-[18px]">{card?.headline}</p>
+        )}
+
+        <p
+          className={`${
+            card?.typeOfPost === plain_posts ? 'mb-[8px] ' : ''
+          } text-white px-5 mt-[8px]`}
+          dangerouslySetInnerHTML={{ __html: card?.text as string }}
+        ></p>
+
+        {card?.typeOfPost === plain_posts && (
+          <p className="pl-[20px] text-[14px] mb-[12px]">{card?.location}</p>
+        )}
+
+        {card?.typeOfPost &&
+          card?.typeOfPost === plain_posts &&
+          card?.friendTags.length > 0 && (
+            <div className="w-full pl-[20px] pr-[20px] h-[100px] pointer-events-none mb-[18px]">
+              <p>Friends tag:</p>
+              <ListFriend listFriend={card?.friendTags} />
+            </div>
+          )}
+
         {card?.typeOfPost === diaries && (
           <>
             <Divider
@@ -266,10 +291,19 @@ export const ModalDiaryTraining = ({
         <div className="flex-1">
           <BottomCardFeed
             typeOfPost={card?.typeOfPost}
-            countLike={card?.bioInfo?.countLikes}
-            countComment={card?.bioInfo?.countComments}
+            countLike={
+              card?.typeOfPost === plain_posts
+                ? card?.countLikes
+                : card?.bioInfo?.countLikes
+            }
+            countComment={
+              card?.typeOfPost === plain_posts
+                ? card?.countComments
+                : card?.bioInfo?.countComments
+            }
             isLiked={card?.isLiked}
             isSaved={card?.isSaved}
+            postId={card?.postId}
           />
         </div>
 
