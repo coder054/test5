@@ -18,12 +18,12 @@ interface ParticipateList {
   isOpen: boolean
   date: Date | string
   onClose: (value: boolean) => void
-  diaryType: TypeOfDiaries | string
+  currentTab: TypeOfDiaries | string
 }
 
 export default function ParticipateList({
   date,
-  diaryType,
+  currentTab,
   onClose,
   isOpen,
 }: ParticipateList) {
@@ -37,13 +37,13 @@ export default function ParticipateList({
 
   const { data, isFetchingNextPage, fetchNextPage, isLoading } =
     useInfiniteQuery(
-      [QUERIES_DIARY[diaryType]],
+      [QUERIES_DIARY[currentTab], date],
       async ({ pageParam = 1 }) => {
         const res = await fetchParticipate({
           ...queries,
           createdAt: date,
           startAfter: pageParam,
-          typeOfDiary: diaryType,
+          typeOfDiary: currentTab,
         })
         return res.data
       },
@@ -95,8 +95,11 @@ export default function ParticipateList({
               {Array(6)
                 .fill(0)
                 .map(() => ({}))
-                .map(() => (
-                  <div className="h-[80px] bg-[#121212] p-4 rounded-lg">
+                .map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-[80px] bg-[#121212] p-4 rounded-lg"
+                  >
                     <Skeleton className="w-2/5" />
                     <Skeleton />
                   </div>
@@ -105,8 +108,11 @@ export default function ParticipateList({
           ) : (
             <Fragment>
               <button
-                /* @ts-ignore */
-                onClick={() => setSelectedParticipate(undefined)}
+                onClick={() => {
+                  /* @ts-ignore */
+                  setSelectedParticipate(undefined)
+                  onClose(false)
+                }}
                 className="bg-black border-2 border-transparent hover:border-gray-500 active:bg-gray-600 active:text-gray-300 duration-150 text-gray-400 text-base font-medium h-[86px] w-full rounded-lg"
               >
                 None <BlockIcon className="text-lg" />
@@ -116,7 +122,7 @@ export default function ParticipateList({
                   {page.map((item: ParticipateType) => (
                     <ParticipateItem
                       value={item}
-                      diaryType={diaryType}
+                      currentTab={currentTab}
                       key={item.originalDiaryId}
                     />
                   ))}

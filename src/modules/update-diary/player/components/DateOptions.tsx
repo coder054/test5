@@ -84,7 +84,7 @@ export const DateOptions = ({
           label="Date"
           size="small"
           readOnly={!!isSelected}
-          isNextable={!isSelected}
+          adjustable={!isSelected}
           maxDate={dayjs(
             isSelected ? isSelected.createdAt : getToday()
           ).toDate()}
