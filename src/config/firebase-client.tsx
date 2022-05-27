@@ -1,29 +1,11 @@
-import * as localforage from 'localforage'
-import querystring from 'query-string'
+import axiosLib from 'axios'
 import { initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
-import { getStorage } from 'firebase/storage'
 import { getMessaging, getToken, onMessage } from 'firebase/messaging'
-import { getErrorMessage, getStr, parseCookies } from 'src/utils/utils'
-import axiosLib from 'axios'
-import { COOKIE_KEY } from 'src/constants/constants'
+import { getStorage } from 'firebase/storage'
+import querystring from 'query-string'
 import toast from 'react-hot-toast'
-import { callbackify } from 'util'
-
-// const initFirebaseClient = () => {
-//   const firebaseConfig = {
-//     apiKey: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_API_KEY,
-//     authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-//     databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL,
-//     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-//     storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-//     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-//     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-//     measurementId: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_MEASUREMENT_ID,
-//   }
-
-//   initializeApp(firebaseConfig)
-// }
+import { getStr } from 'src/utils/utils'
 
 export const firebaseApp = initializeApp({
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_CLIENT_API_KEY,
@@ -41,8 +23,7 @@ export const initFirebaseFCM = (
   roleId,
   listRef,
   setList,
-  setNotifications,
-  callback
+  setNotifications
 ) => {
   if (typeof window === 'undefined') {
     return
@@ -52,7 +33,8 @@ export const initFirebaseFCM = (
     return
   }
 
-  const foo = async (token, roleId) => {
+  /////// init noti handling
+  ;(async (token, roleId) => {
     try {
       const firebaseMessaging = getMessaging(firebaseApp)
       // firebaseMessaging.getToken({vapidKey: process.env.NEXT_PUBLIC_FIREBASE_WEB_PUSH_CERTIFICATE});
@@ -82,7 +64,7 @@ export const initFirebaseFCM = (
       //@ts-ignore: Unreachable code error
       axios.defaults.headers.common.Authorization = `Bearer ${token}`
 
-      const { data } = await axios.post('/notifications/create-fcm-token', {
+      await axios.post('/notifications/create-fcm-token', {
         token: currentToken,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       })
@@ -94,45 +76,6 @@ export const initFirebaseFCM = (
         setNotifications((prev) => {
           return [payload.data, ...prev]
         })
-
-        // toast.custom((t) => {
-        //   return (
-        //     <div
-        //       className={`${
-        //         t.visible ? 'animate-enter opacity-1 duration-1000 ' : 'animate-leave opacity-0 duration-1000'
-        //       } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
-        //     >
-        //       <div className="flex-1 w-0 p-4">
-        //         <div className="flex items-start">
-        //           <div className="flex-shrink-0 pt-0.5">
-        //             <img
-        //               className="h-10 w-10 rounded-full"
-        //               src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixqx=6GHAjsWpt9&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.2&w=160&h=160&q=80"
-        //               alt=""
-        //             />
-        //           </div>
-        //           <div className="ml-3 flex-1">
-        //             <p className="text-sm font-medium text-gray-900">
-        //               Emilia Gates
-        //             </p>
-        //             <p className="mt-1 text-sm text-gray-500">
-        //               Sure! 8:30pm works great!
-        //             </p>
-        //           </div>
-        //         </div>
-        //       </div>
-        //       <div className="flex border-l border-gray-200">
-        //         <button
-        //           onClick={() => toast.dismiss(t.id)}
-        //           className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        //         >
-        //           Close
-        //         </button>
-        //       </div>
-        //     </div>
-        //   )
-        // })
-        // ...
 
         toast(
           (t) => (
@@ -190,9 +133,7 @@ export const initFirebaseFCM = (
     } catch (_error) {
       return
     }
-  }
-
-  foo(token, roleId)
+  })(token, roleId)
 }
 
 export const storage = getStorage()
