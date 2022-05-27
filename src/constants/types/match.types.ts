@@ -19,6 +19,8 @@ export type MatchType = Partial<{
   place: string
   stats: StatType[]
   yourTeam: TeamType | null
+  teamMatchReview: string
+  physicallyStrain: string
 }>
 
 export type EventType = {

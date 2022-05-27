@@ -98,12 +98,6 @@ export function AuthProvider({ children }) {
   }, [currentRoleId])
 
   useEffect(() => {
-    if (!!currentRoleId && !!token) {
-      // initFirebaseFCM(token, currentRoleId)
-    }
-  }, [currentRoleId, token])
-
-  useEffect(() => {
     if (isEmpty(currentRoleName)) {
       removeCookieUtil(COOKIE_KEY.currentRoleName)
     } else {

@@ -25,7 +25,7 @@ type InfiniteScrollTeamProps = {
   placeholder?: string
   idClub?: string
   teamName?: string
-  item?: CurrentTeamType
+  item?: TeamType
   errorMessage?: string
   yourTeam?: boolean
 }

@@ -1021,8 +1021,6 @@ export const getChatRoomStream = async (
   listRoomIdOpenFromOtherPages: string[]
 ): Promise<{ error: boolean; data: any }> => {
   try {
-    console.log('aaa window', window)
-
     let a1 = snapshots
       .filter((o) => {
         const chatRoom = o.val()

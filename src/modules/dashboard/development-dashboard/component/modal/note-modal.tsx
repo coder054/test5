@@ -173,7 +173,9 @@ export const NoteModal = ({
         logoUrl: '',
         websiteUrl: null,
       },
-      currentTeams: '',
+      currentTeams: {
+        teamName: '',
+      },
       player: {
         userId: '',
       },
@@ -213,27 +215,36 @@ export const NoteModal = ({
   }, [formValues?.player?.userId, formValues?.date])
 
   useEffect(() => {
-    item &&
-      setFormValues({
-        strengthPlayer: item.strength.playerContent,
-        strengthCoach: item.strength.coachComment,
-        weaknessesPlayer: item.weaknesses.playerContent,
-        weaknessesCoach: item.weaknesses.coachComment,
-        bestDevelopSkillsPlayer: item.bestDevelopSkills.playerContent,
-        bestDevelopSkillsCoach: item.bestDevelopSkills.coachComment,
-        skillsNeededToDevelopPlayer: item.skillsNeededToDevelop.playerContent,
-        skillsNeededToDevelopCoach: item.skillsNeededToDevelop.coachComment,
-        bestWayToDevelopPlayer: item.bestWayToDevelop.playerContent,
-        bestWayToDevelopCoach: item.bestWayToDevelop.coachComment,
-        shortTermGoalPlayer: item.shortTermGoal.playerContent,
-        shortTermGoalCoach: item.shortTermGoal.coachComment,
-        longTermGoalPlayer: item.longTermGoal.playerContent,
-        longTermGoalCoach: item.longTermGoal.coachComment,
-        otherCommentsPlayer: item.otherComments.playerContent,
-        otherCommentsCoach: item.otherComments.coachComment,
-        date: dayjs(item.playerNotedAt).format('YYYY/MM/DD'),
-        progress: item.playerDevelopmentProgress,
-      })
+    if (isEmpty(item)) {
+      return
+    }
+    let newFormValues: IDevelopmentFormValues = {
+      strengthPlayer: item.strength.playerContent,
+      strengthCoach: item.strength.coachComment,
+      weaknessesPlayer: item.weaknesses.playerContent,
+      weaknessesCoach: item.weaknesses.coachComment,
+      bestDevelopSkillsPlayer: item.bestDevelopSkills.playerContent,
+      bestDevelopSkillsCoach: item.bestDevelopSkills.coachComment,
+      skillsNeededToDevelopPlayer: item.skillsNeededToDevelop.playerContent,
+      skillsNeededToDevelopCoach: item.skillsNeededToDevelop.coachComment,
+      bestWayToDevelopPlayer: item.bestWayToDevelop.playerContent,
+      bestWayToDevelopCoach: item.bestWayToDevelop.coachComment,
+      shortTermGoalPlayer: item.shortTermGoal.playerContent,
+      shortTermGoalCoach: item.shortTermGoal.coachComment,
+      longTermGoalPlayer: item.longTermGoal.playerContent,
+      longTermGoalCoach: item.longTermGoal.coachComment,
+      otherCommentsPlayer: item.otherComments.playerContent,
+      otherCommentsCoach: item.otherComments.coachComment,
+      date: dayjs(item.playerNotedAt).format('YYYY/MM/DD'),
+      progress: item.playerDevelopmentProgress,
+      player: {
+        userId: item.playerId,
+      },
+      currentTeams: {
+        teamName: '',
+      },
+    }
+    setFormValues(newFormValues)
   }, [item])
 
   useEffect(() => {

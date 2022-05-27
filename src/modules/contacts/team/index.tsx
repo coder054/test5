@@ -148,8 +148,6 @@ const TeamProfile = ({ team }: TeamProfileProps) => {
     return ['OWNER', 'ADMIN'].includes(team.memberType)
   }, [team.memberType])
 
-  console.log('TEAM: ', team.memberType, ROLE_RIGHTS)
-
   const ROLE_TABS = useMemo(() => {
     if (['MEMBER', 'PENDING', 'NOT_A_MEMBER'].includes(team.memberType)) {
       return tabs.filter((tab) => !['blocked', 'requested'].includes(tab.value))

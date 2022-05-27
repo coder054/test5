@@ -97,8 +97,6 @@ export const PainModal = ({
     createPersonalGoal,
     {
       onSuccess: (res) => {
-        console.log('res create:', res)
-
         setIsOpenModal(false)
         toast.success(res.data.message)
         setCheckUpdate(true)

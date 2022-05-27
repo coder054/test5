@@ -647,7 +647,6 @@ export const getServerSideProps: any = async ({ req, res, query }) => {
       //@ts-ignore: Unreachable code error
       return o.reason === undefined ? 'noerror' : 'error'
     })
-    console.log('aaa errors', errors)
     ;[dataBioPlayer, dataBioCoach, dataClub, dataAvgPlayer, dataAvgCoach] = [
       null,
       null,
