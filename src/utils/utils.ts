@@ -5,9 +5,9 @@ import cookies from 'js-cookie'
 import jwtDecode from 'jwt-decode'
 import { chain, get, isEqual, isNaN, truncate } from 'lodash'
 import Resizer from 'react-image-file-resizer'
-import { DevelopmentNoteData } from 'src/components/noti/NotificationsList'
 import { AVATAR_DEFAULT } from 'src/constants/constants'
 import { IDevelopmentFormValues } from 'src/modules/dashboard/development-dashboard/component/modal/note-modal'
+import { DevelopmentNoteData } from 'src/types/notification'
 import { axios } from './axios'
 
 export interface ITokenData {
