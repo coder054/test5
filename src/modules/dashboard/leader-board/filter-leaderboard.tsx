@@ -14,6 +14,7 @@ import { ClubType } from 'src/constants/types/settingsType.type'
 import { SvgFilter } from 'src/imports/svgs'
 import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
 import { InfiniteScrollTeam } from 'src/modules/account-settings/football/components/InfiniteScrollTeam'
+import { handleStringFirstUppperCase } from 'src/utils/common.utils'
 import { AgeOfGroup, CategoryFilter, RoleFilter } from '../constants-dashboard'
 
 type FilterLeaderboardProps = {
@@ -26,7 +27,9 @@ type FilterLeaderboardProps = {
   options?: { value: string; label: string }[]
   optionLabel?: string
   healthType?: string
+  category?: string
   health?: boolean
+  leaderBoard?: boolean
   optionChange?: (value: string) => void
   setFilterFormLeader?: Function
   setHealthChartType?: Function
@@ -53,10 +56,11 @@ export const FilterLeaderboard = ({
   optionLabel,
   health,
   optionChange,
-  children,
   setFilterFormLeader,
   healthType,
   setHealthChartType,
+  leaderBoard,
+  category,
 }: FilterLeaderboardProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [current, setCurrent] = useState<number>(0)
@@ -175,7 +179,37 @@ export const FilterLeaderboard = ({
     setLastValue(current)
     onChange && onChange(generateOutput(current).query)
     optionChange && optionChange(currentOption)
-    setFilterFormLeader && setFilterFormLeader(filterForm)
+    if (filterForm?.country?.name === 'All') {
+      setFilterFormLeader &&
+        setFilterFormLeader({
+          country: {
+            alpha2Code: '',
+            alpha3Code: '',
+            flag: '',
+            name: '',
+            phoneCode: '',
+            region: '',
+          },
+          ageGroup: 'ALL',
+          clubId: '',
+          yourTeams: [''],
+          role: 'All',
+          category: 'HOURS',
+          contractedClub: {
+            arena: '',
+            city: '',
+            clubId: '',
+            clubName: '',
+            country: '',
+            logoUrl: '',
+            nickName: '',
+            websiteUrl: null,
+          },
+          teamId: '',
+        })
+    } else {
+      setFilterFormLeader && setFilterFormLeader(filterForm)
+    }
     setIsOpen(false)
   }
 
@@ -252,6 +286,7 @@ export const FilterLeaderboard = ({
           <p className="text-[#09E099]">
             {lastValue !== 60 ? 'Last' : ''}{' '}
             {generateOutput(lastValue)?.display}
+            {leaderBoard && ` - ${handleStringFirstUppperCase(category)}`}
           </p>
         ) : null}
         {health ? (
@@ -311,6 +346,7 @@ export const FilterLeaderboard = ({
               label="Country"
               value={filterForm.country}
               onChange={(_, value) => handleChangeForm('country', value)}
+              isShowOptionAll
             />
             <MySelect
               label="Age of group"

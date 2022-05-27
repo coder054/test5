@@ -54,7 +54,7 @@ export const DetailChart = ({
       <div
         className={`w-full  ${
           health ? ' mt-[84px]' : 'bg-[#13161A] h-[174px] mt-[32px]'
-        } rounded-[8px] flex pt-[24px] overflow-x-scroll mobileM:overflow-visible`}
+        } rounded-[8px] flex pt-[12px] overflow-x-scroll mobileM:overflow-visible`}
       >
         <div className="flex-1">
           <p className="text-center mt-[12px] text-[10px] md:text-[12px] lg:text-[16px]">
@@ -81,7 +81,7 @@ export const DetailChart = ({
               className={`text-[#ffffff] ${
                 health
                   ? 'mb-[15px] text-[12px]'
-                  : 'mb-[12px] text-[8px] lg:text-[10px]'
+                  : 'mb-[12px] text-[8px] lg:text-[14px]'
               }`}
             >
               {you}%
@@ -91,35 +91,35 @@ export const DetailChart = ({
         <div className="flex-1 text-center ml-[4px] mr-[4px] min-w-[48px]">
           <p
             className={`text-[#4654EA] mb-[8px] ${
-              health ? 'text-[16px]' : 'text-[10px] lg:text-[12px]'
+              health ? 'text-[16px]' : 'text-[10px] lg:text-[14px]'
             }`}
           >
             Very good
           </p>
           <p
             className={`text-[#07E1FF] mb-[9px] ${
-              health ? 'text-[16px]' : 'text-[10px] lg:text-[12px]'
+              health ? 'text-[16px]' : 'text-[10px] lg:text-[14px] mt-[12px]'
             }`}
           >
             Good
           </p>
           <p
             className={`text-[#09E099] mb-[9px] ${
-              health ? 'text-[16px]' : 'text-[10px] lg:text-[12px]'
+              health ? 'text-[16px]' : 'text-[10px] lg:text-[14px] mt-[12px]'
             }`}
           >
             Normal
           </p>
           <p
             className={`text-[#E85CFF] mb-[9px] ${
-              health ? 'text-[16px]' : 'text-[10px] lg:text-[12px]'
+              health ? 'text-[16px]' : 'text-[10px] lg:text-[14px] mt-[12px]'
             }`}
           >
             Bad
           </p>
           <p
             className={`text-[#D60C0C] mb-[9px] ${
-              health ? 'text-[16px]' : 'text-[10px] lg:text-[12px]'
+              health ? 'text-[16px]' : 'text-[10px] lg:text-[14px] mt-[12px]'
             }`}
           >
             Very bad
@@ -135,7 +135,7 @@ export const DetailChart = ({
               className={`text-[#ffffff] ${
                 health
                   ? 'mb-[15px] text-[12px]'
-                  : 'mb-[12px] text-[8px] lg:text-[10px]'
+                  : 'mb-[12px] text-[8px] lg:text-[14px]'
               }`}
             >
               {avg}%

@@ -13,9 +13,9 @@ const cls = require('../overview/overview.module.css')
 
 export const Health = () => {
   const theme = useTheme()
-  const [range, setRange] = useState<string>('1')
-  const [healthChartType, setHealthChartType] = useState<string>('BMI')
-  const [healthType, setHealthType] = useState<string>('BMI')
+  const [range, setRange] = useState<string>('12')
+  const [healthChartType, setHealthChartType] = useState<string>('HEIGHT')
+  const [healthType, setHealthType] = useState<string>('Height')
   const [selectedSeries, setSelectedSeries] = useState(['You', 'Average'])
   const [checkFilter, setCheckFilter] = useState<boolean>(false)
 
@@ -172,7 +172,7 @@ export const Health = () => {
             ></div>
             <div className="w-full -ml-[18px]">
               <Chart
-                height={400}
+                height={380}
                 options={chartOptions}
                 series={chartSeries}
                 type="line"
@@ -191,7 +191,7 @@ export const Health = () => {
         <Loading isLoading={loading}>
           <DetailChart
             health
-            loading={loading}
+            // loading={loading}
             dataYou={{ bad: 0, good: 2, normal: 84, veryBad: 6, veryGood: 8 }}
             dataAvg={{ bad: 0, good: 2, normal: 84, veryBad: 6, veryGood: 8 }}
             // dataYou={dataHealthChart?.personalDiaryRoutinePieChart}

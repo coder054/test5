@@ -12,7 +12,7 @@ import { axios } from 'src/utils/axios'
 import { toQueryString } from 'src/utils/common.utils'
 
 export const TabNews = () => {
-  const [limit, setLimit] = useState<number>(8)
+  const [limit, setLimit] = useState<number>(50)
   const [sorted, setSorted] = useState<string>(DESC)
   const [startAfter, setStartAfter] = useState<number>(1)
   const { ref, inView } = useInView()
@@ -37,7 +37,7 @@ export const TabNews = () => {
     },
     {
       getNextPageParam: (lastPage, page) => {
-        if (lastPage.length === 8 || lastPage.length === 9) {
+        if (lastPage.length === 50 || lastPage.length === 51) {
           return page.length + 1
         } else {
           return undefined
@@ -56,7 +56,7 @@ export const TabNews = () => {
     <Loading isLoading={loadingNews}>
       <>
         <ListItemSlick />
-        <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-10 pt-[12px]">
+        <div className="md:grid md:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-10 pt-[12px]">
           {dataNews?.pages &&
             (dataNews?.pages || [])?.map((page, indexPage) => (
               <Fragment>

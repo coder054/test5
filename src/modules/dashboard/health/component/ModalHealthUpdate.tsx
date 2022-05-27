@@ -119,7 +119,7 @@ export const ModalHealthUpdate = ({
     onSuccess: (res) => {
       if (res.status === 201) {
         toast.success(res.data.message)
-        queryClient.invalidateQueries(QUERIES_DASHBOARD.HEALTH_DATA)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.LIST_HEALTH_DATA)
         setIsOpenModal(false)
       }
     },
@@ -131,7 +131,7 @@ export const ModalHealthUpdate = ({
       onSuccess: (res) => {
         if (res.status === 200) {
           toast.success(res.data.message)
-          queryClient.invalidateQueries(QUERIES_DASHBOARD.HEALTH_DATA)
+          queryClient.invalidateQueries(QUERIES_DASHBOARD.LIST_HEALTH_DATA)
           setLoadingUpdate(false)
           setIsOpenModal(false)
           setCheckUpdate(true)
@@ -143,7 +143,7 @@ export const ModalHealthUpdate = ({
     onSuccess: (res) => {
       if (res.status === 200) {
         toast.success(res.data.message)
-        queryClient.invalidateQueries(QUERIES_DASHBOARD.HEALTH_DATA)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.LIST_HEALTH_DATA)
         setIsOpenModal(false)
         setCheckUpdate(true)
       }
@@ -414,8 +414,8 @@ export const ModalHealthUpdate = ({
             setArrayFile={setArrayFile}
             handleShow={handleShow}
           />
-          <div className="w-full flex mt-[24px]">
-            <div className="flex-1 " onClick={handleSave}>
+          <div className="w-full flex mt-[24px] gap-2">
+            <div className=" w-[148px] h-[48px]" onClick={handleSave}>
               <Button
                 // loading
                 text="Save"

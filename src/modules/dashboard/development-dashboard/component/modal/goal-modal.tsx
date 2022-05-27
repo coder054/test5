@@ -1,12 +1,12 @@
-import { MenuItem } from '@material-ui/core'
 import dayjs from 'dayjs'
 import { ReactNode, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import { Button, MyDatePicker, MyInput } from 'src/components'
 import { XIcon } from 'src/components/icons'
 import { ListImageVideo } from 'src/components/list-image-video'
 import { ModalMui } from 'src/components/ModalMui'
+import { MySelect } from 'src/components/MySelect'
 import { MySlider } from 'src/components/MySlider'
 import { MyTextArea } from 'src/components/MyTextarea'
 import { PopupConfirmDelete } from 'src/components/popup-confirm-delete'
@@ -14,7 +14,6 @@ import { UploadMutilImageVideo } from 'src/components/upload-mutil-image-video'
 import { CategoryOptions } from 'src/constants/options'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { DashboardGoalUpdateType } from 'src/constants/types'
-import { getToday } from 'src/hooks/functionCommon'
 import {
   createPersonalGoal,
   CreatePersonalGoalType,
@@ -57,7 +56,7 @@ export const GoalModal = ({
     headline: '',
     deadline: dayjs(new Date()).format('YYYY/MM/DD'),
     mediaLinks: [],
-    category: '',
+    category: 'TECHNICS',
     userId: '',
     personalGoalId: '',
     deadlineUnix: 0,
@@ -148,9 +147,18 @@ export const GoalModal = ({
         UpdatePersonal({ body: { ...valueUpdate } })
       } catch (error) {}
     } else if (create) {
+      if (!formValues.headline) {
+        toast.error('Headline is not empty.')
+        return
+      }
+      if (!formValues.description) {
+        toast.error('Description is not empty.')
+        return
+      }
+
       if (
-        dayjs(formValues.deadline).unix() * 1000 <
-        dayjs(new Date()).unix() * 1000
+        dayjs(formValues.deadline).format('YYYY-MM-DD') <
+        dayjs(new Date()).format('YYYY-MM-DD')
       ) {
         toast.error('Deadline must be greater than now')
         return
@@ -161,7 +169,7 @@ export const GoalModal = ({
         description: formValues.description,
         media: medias,
         deadline: formValues.deadline
-          ? formValues.deadline
+          ? dayjs(formValues.deadline).toISOString()
           : new Date().toISOString(),
       }
       try {
@@ -210,18 +218,12 @@ export const GoalModal = ({
             onChange={(e) => handleChangeForm('headline', e.target.value)}
           ></MyInput>
 
-          <MyInput
-            select
+          <MySelect
             label="Category"
             value={formValues.category}
             onChange={(e) => handleChangeForm('category', e.target.value)}
-          >
-            {CategoryOptions.map((i, index) => (
-              <MenuItem key={index} value={i.value}>
-                {i.label}
-              </MenuItem>
-            ))}
-          </MyInput>
+            arrOption={CategoryOptions}
+          />
 
           <MyTextArea
             placeholder="Goal description"
