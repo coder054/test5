@@ -1,9 +1,9 @@
-FROM node:12
+FROM node:14
 
 ARG FIREBASE_CLIENT
 ARG FIREBASE_SERVER
 
-ENV PORT 3000
+ENV PORT 8080
 
 # Create app directory
 RUN mkdir -p /usr/src/app
@@ -21,7 +21,7 @@ COPY . /usr/src/app
 
 # Building app
 RUN npm run build
-EXPOSE 3000
+EXPOSE 8080
 
 # Running the app
 CMD "npm" "run" "start"
