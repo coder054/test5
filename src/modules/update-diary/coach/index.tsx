@@ -5,7 +5,11 @@ import { useAtom } from 'jotai'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { COACH_DIARY_ATOM, PlAYER_REVIEWS } from 'src/atoms/diaryAtoms'
+import {
+  COACH_DIARY_ATOM,
+  diaryAtom,
+  PlAYER_REVIEWS,
+} from 'src/atoms/diaryAtoms'
 import { Loading, MyDatePicker } from 'src/components'
 import { Button } from 'src/components/Button'
 import { DiaryUpdateIcon } from 'src/components/icons/DiaryUpdateIcon'
@@ -51,7 +55,7 @@ const ITEMS = [
 export default function CoachDiary() {
   const queryClient = useQueryClient()
   const { currentRoleName } = useAuth()
-
+  const [diary, setDiary] = useAtom(diaryAtom)
   const [period, setPeriod] = useState<string>('default')
 
   const [isOpenList, setIsOpenList] = useState<boolean>(false)
@@ -65,8 +69,6 @@ export default function CoachDiary() {
   const [currentTeam, setCurrentTeam] = useState<TeamType>(undefined)
   const [initialDate, setInitialDate] = useState<string | Date>(getToday())
   const [requestData, setRequestData] = useState<ParticipateType>(undefined)
-
-  console.log('Request: ', requestData)
 
   const { isLoading: isGettingDiary, data: diaries } = useQuery(
     [QUERIES_DIARY.COACH_DIARY, initialDate],
@@ -242,15 +244,24 @@ export default function CoachDiary() {
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
           >
-            {/* @ts-ignore */}
-            <MenuItem onClick={() => setParticipate(undefined)} value="default">
+            <MenuItem
+              onClick={() => {
+                setDiary({ ...diary, diaryId: undefined })
+                /* @ts-ignore */
+                setParticipate(undefined)
+              }}
+              value="default"
+            >
               {getDefaultDay(initialDate)}
             </MenuItem>
             {(diaries?.data || []).map((item: ParticipateType) => (
               <MenuItem
                 key={item.diaryId}
                 value={item.diaryId}
-                onClick={() => handleChangeDiary(item)}
+                onClick={() => {
+                  setDiary({ ...diary, diaryId: item?.diaryId }),
+                    handleChangeDiary(item)
+                }}
               >
                 {`${flexingFormatDate(item.createdAt, 'HH:mm')} - ${upperFirst(
                   item.typeOfDiary
