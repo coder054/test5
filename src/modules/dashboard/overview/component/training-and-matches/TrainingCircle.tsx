@@ -45,7 +45,7 @@ export const TrainingCircle = ({
         index={0}
         type={'training'}
         ArrayColor={ArrayColor}
-        ArrayLabel={Object.keys(data.trainingCategory)}
+        ArrayLabel={['technical', 'tactical', 'mental', 'physical']}
         ArrayPercent={Object.values(data.trainingCategory)}
       />
       <ChartCircle

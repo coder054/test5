@@ -45,6 +45,8 @@ export interface FriendTagsType {
 
 /////
 export interface CardFeedType {
+  countComments?: number
+  countLikes?: number
   postId?: string
   typeOfPost?: string
   isSaved?: boolean
