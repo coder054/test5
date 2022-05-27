@@ -1,4 +1,4 @@
-import { CircularProgress } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { useAtom } from 'jotai'
 import { isEmpty } from 'lodash'
 import queryString from 'query-string'
@@ -76,102 +76,94 @@ export const NotificationsList = () => {
   const { loading, notifications, setNotifications, unreadCount } =
     useNotiList()
 
-  const renderNotis = () => {
-    if (loading) {
-      return (
-        <div className="flex items-center justify-center p-4 ">
-          <CircularProgress />
-        </div>
+  const handleRemoveOne = async (notificationId) => {
+    try {
+      await axios.delete(
+        `/notifications/delete-notification?notificationId=${notificationId}`
       )
-    }
-
-    if (isEmpty(notifications)) {
-      return 'No notifications'
-    }
-
-    const handleClickOne = async (notificationId) => {
-      try {
-        await checkNotification(notificationId)
-        setNotifications((prevState) =>
-          prevState.map((notification) => {
-            if (notification.notificationId === notificationId) {
-              return Object.assign({}, notification, {
-                notificationStatus: true,
-              })
-            } else {
-              return notification
-            }
-          })
-        )
-      } catch (error) {
-        notiToast({
-          message: getErrorMessage(error),
-          type: 'error',
+      setNotifications((prevState) =>
+        prevState.filter((notification) => {
+          return notification.notificationId !== notificationId
         })
-      }
+      )
+    } catch (error) {
+      notiToast({
+        message: getErrorMessage(error),
+        type: 'error',
+      })
     }
+  }
 
-    const handleRemoveOne = async (notificationId) => {
-      try {
-        await axios.delete(
-          `/notifications/delete-notification?notificationId=${notificationId}`
-        )
-        setNotifications((prevState) =>
-          prevState.filter((notification) => {
-            return notification.notificationId !== notificationId
-          })
-        )
-      } catch (error) {
-        notiToast({
-          message: getErrorMessage(error),
-          type: 'error',
+  const handleClickOne = async (notificationId) => {
+    try {
+      await checkNotification(notificationId)
+      setNotifications((prevState) =>
+        prevState.map((notification) => {
+          if (notification.notificationId === notificationId) {
+            return Object.assign({}, notification, {
+              notificationStatus: true,
+            })
+          } else {
+            return notification
+          }
         })
-      }
+      )
+    } catch (error) {
+      notiToast({
+        message: getErrorMessage(error),
+        type: 'error',
+      })
     }
+  }
 
+  if (loading) {
     return (
-      <>
-        <ModalMui
-          sx={{
-            padding: 0,
-            top: '50%',
-            width: isMobile ? '100%' : 700,
-            overflow: 'auto',
-          }}
-          isOpen={isOpenModalDevelopmentNote}
-          onClose={setIsOpenModalDevelopmentNote}
-        >
-          <SimpleBar style={{ maxHeight: 850 }}>
-            <NoteModal
-              setIsOpenModal={setIsOpenModalDevelopmentNote}
-              item={dataDevelopmentNote}
-              update
-            />
-          </SimpleBar>
-        </ModalMui>
-        {notifications.map((notification) => {
-          return (
-            <ItemNotification
-              setDataDevelopmentNote={setDataDevelopmentNote}
-              setIsOpenModalDevelopmentNote={setIsOpenModalDevelopmentNote}
-              notification={notification}
-              handleClickOne={handleClickOne}
-              handleRemoveOne={handleRemoveOne}
-              onClose={() => {}}
-            />
-          )
-        })}
-      </>
+      <div className="flex items-center justify-center p-4 ">
+        <CircularProgress />
+      </div>
     )
   }
 
+  if (isEmpty(notifications)) {
+    return (
+      <Box sx={{ p: 2 }}>
+        <Typography variant="subtitle2">There are no notifications</Typography>
+      </Box>
+    )
+  }
   return (
-    <div className="p-4 ">
-      <div className="mx-auto w-full max-w-[500px] ">
-        <div className="font-bold mb-[20px] ">Notifications</div>
-        {renderNotis()}
-      </div>
-    </div>
+    <>
+      <ModalMui
+        sx={{
+          padding: 0,
+          top: '50%',
+          width: isMobile ? '100%' : 700,
+          overflow: 'auto',
+        }}
+        isOpen={isOpenModalDevelopmentNote}
+        onClose={setIsOpenModalDevelopmentNote}
+      >
+        <SimpleBar style={{ maxHeight: 850 }}>
+          <NoteModal
+            setIsOpenModal={setIsOpenModalDevelopmentNote}
+            item={dataDevelopmentNote}
+            update
+          />
+        </SimpleBar>
+      </ModalMui>
+      {notifications.map((notification) => {
+        return (
+          <ItemNotification
+            setDataDevelopmentNote={setDataDevelopmentNote}
+            setIsOpenModalDevelopmentNote={setIsOpenModalDevelopmentNote}
+            notification={notification}
+            handleClickOne={handleClickOne}
+            handleRemoveOne={handleRemoveOne}
+            onClose={() => {}}
+          />
+        )
+      })}
+    </>
   )
 }
 

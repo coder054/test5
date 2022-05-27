@@ -1,77 +1,61 @@
-import { ModalMui } from 'src/components/ModalMui'
-import queryString from 'query-string'
-import dayjs from 'dayjs'
-import SimpleBar from 'simplebar-react'
-import { isMobile } from 'react-device-detect'
 import {
   Box,
-  Button,
   CircularProgress,
-  Dialog,
-  DialogContent,
-  FormControl,
   IconButton,
-  InputLabel,
   List,
   ListItem,
-  MenuItem,
   Popover,
-  Select,
   Tooltip,
   Typography,
 } from '@mui/material'
 import clsx from 'clsx'
 import { format } from 'date-fns'
+import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import { get, isEmpty } from 'lodash'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import queryString from 'query-string'
 import type { FC } from 'react'
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { isMobile } from 'react-device-detect'
+import SimpleBar from 'simplebar-react'
 import { formValuesDevelopmentNodeAtom } from 'src/atoms/developmentNoteAtom'
 import { openModalDiaryUpdateAtom } from 'src/atoms/diaryAtoms'
 import {
-  dataModalResponseGroupAtom,
-  dataModalResponseTeamAtom,
-  dataModalResponseDeleteFromTeamAtom,
+  dataModalCoachCreateDiaryTrainingAtom,
   dataModalResponseAskJoinGroupAtom,
   dataModalResponseAskJoinTeamAtom,
-  dataModalResponseTeamTrainingAtom,
-  dataModalResponseMatchAtom,
   dataModalResponseCoachReviewAtom,
-  dataModalCoachCreateDiaryTrainingAtom,
+  dataModalResponseDeleteFromTeamAtom,
+  dataModalResponseGroupAtom,
+  dataModalResponseMatchAtom,
+  dataModalResponseTeamAtom,
+  dataModalResponseTeamTrainingAtom,
 } from 'src/atoms/notiAtoms'
 import { notiToast } from 'src/components/common/Toast'
-import { MySelectCountry } from 'src/components/MySelectCountry'
-import { optionAllClub } from 'src/constants/mocks/clubs.constans'
-import { optionAllCountry } from 'src/constants/mocks/countries.constants'
+import { ModalMui } from 'src/components/ModalMui'
 import {
   DevelopmentNoteType,
   IDevelopmentNoteFilterAPI,
   NotificationType,
 } from 'src/constants/types'
 import { XIcon } from 'src/icons/x'
-import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
 import { getUrlChatFromChatRoomId } from 'src/modules/chat/chatService'
 import {
   IDevelopmentFormValues,
   NoteModal,
 } from 'src/modules/dashboard/development-dashboard/component/modal/note-modal'
-import { checkNotification } from 'src/service/notiService'
 import { axios } from 'src/utils/axios'
-import {
-  getDevelopmentDataForForm,
-  getErrorMessage,
-  getStr,
-} from 'src/utils/utils'
+import { getErrorMessage, getStr } from 'src/utils/utils'
+import { wait } from 'src/utils/wait'
 import { MailOpen as MailOpenIcon } from '../../icons/mail-open'
 import {
-  DevelopmentNoteData,
   INoti,
+  NotificationsList,
   useNotiList,
 } from '../noti/NotificationsList'
 import { Scrollbar } from '../scrollbar'
-import { wait } from 'src/utils/wait'
 
 interface NotificationsPopoverProps {
   anchorEl: null | Element
@@ -80,8 +64,6 @@ interface NotificationsPopoverProps {
   open?: boolean
 }
 
-const now = new Date()
-
 export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
   const { loading, notifications, setNotifications, unreadCount } =
     useNotiList()
@@ -89,8 +71,7 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
   const [isOpenModalDevelopmentNote, setIsOpenModalDevelopmentNote] =
     useState<boolean>(false)
 
-  const [dataDevelopmentNote, setDataDevelopmentNote] =
-    useState<DevelopmentNoteType>(null)
+  const [dataDevelopmentNote] = useState<DevelopmentNoteType>(null)
 
   const { anchorEl, onClose, onUpdateUnread, open, ...other } = props
   // const [notifications, setNotifications] = useState<Notification[]>(data)
@@ -119,46 +100,6 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
         read: true,
       }))
     )
-  }
-
-  const handleRemoveOne = async (notificationId) => {
-    try {
-      await axios.delete(
-        `/notifications/delete-notification?notificationId=${notificationId}`
-      )
-      setNotifications((prevState) =>
-        prevState.filter((notification) => {
-          return notification.notificationId !== notificationId
-        })
-      )
-    } catch (error) {
-      notiToast({
-        message: getErrorMessage(error),
-        type: 'error',
-      })
-    }
-  }
-
-  const handleClickOne = async (notificationId) => {
-    try {
-      await checkNotification(notificationId)
-      setNotifications((prevState) =>
-        prevState.map((notification) => {
-          if (notification.notificationId === notificationId) {
-            return Object.assign({}, notification, {
-              notificationStatus: true,
-            })
-          } else {
-            return notification
-          }
-        })
-      )
-    } catch (error) {
-      notiToast({
-        message: getErrorMessage(error),
-        type: 'error',
-      })
-    }
   }
 
   return (
@@ -232,18 +173,7 @@ export const NotificationsPopover: FC<NotificationsPopoverProps> = (props) => {
             ) : (
               <Scrollbar sx={{ maxHeight: 400 }}>
                 <List disablePadding>
-                  {notifications.map((notification) => (
-                    <ItemNotification
-                      setDataDevelopmentNote={setDataDevelopmentNote}
-                      setIsOpenModalDevelopmentNote={
-                        setIsOpenModalDevelopmentNote
-                      }
-                      notification={notification}
-                      handleClickOne={handleClickOne}
-                      handleRemoveOne={handleRemoveOne}
-                      onClose={onClose}
-                    />
-                  ))}
+                  <NotificationsList />
                 </List>
               </Scrollbar>
             )}
@@ -276,11 +206,10 @@ export const ItemNotification = ({
   onClose: Function
   handleRemoveOne: Function
 }) => {
-  const [openModalDiaryUpdate, setOpenModalDiaryUpdate] = useAtom(
-    openModalDiaryUpdateAtom
+  const [, setOpenModalDiaryUpdate] = useAtom(openModalDiaryUpdateAtom)
+  const [, setFormValues]: [IDevelopmentFormValues, Function] = useAtom(
+    formValuesDevelopmentNodeAtom
   )
-  const [formValues, setFormValues]: [IDevelopmentFormValues, Function] =
-    useAtom(formValuesDevelopmentNodeAtom)
 
   const [, setDataModalResponseGroup] = useAtom(dataModalResponseGroupAtom)
   const [, setDataModalResponseTeam] = useAtom(dataModalResponseTeamAtom)
@@ -294,8 +223,9 @@ export const ItemNotification = ({
   const [, setDataModalResponseAskJoinTeam] = useAtom(
     dataModalResponseAskJoinTeamAtom
   )
-  const [dataModalResponseCoachReview, setDataModalResponseCoachReview] =
-    useAtom(dataModalResponseCoachReviewAtom)
+  const [, setDataModalResponseCoachReview] = useAtom(
+    dataModalResponseCoachReviewAtom
+  )
 
   const [, setDataModalResponseTeamTraining] = useAtom(
     dataModalResponseTeamTrainingAtom

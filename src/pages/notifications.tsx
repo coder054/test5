@@ -6,7 +6,12 @@ import { requireAuth } from 'src/config/firebase-admin'
 const Notifications = () => {
   return (
     <div className=" ">
-      <NotificationsList></NotificationsList>
+      <div className="p-4 ">
+        <div className="mx-auto w-full max-w-[500px] ">
+          <div className="font-bold mb-[20px] ">Notifications</div>
+          <NotificationsList></NotificationsList>
+        </div>
+      </div>
     </div>
   )
 }
