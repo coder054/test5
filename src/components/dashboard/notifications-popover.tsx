@@ -650,11 +650,7 @@ export const ItemNotification = ({
                 }
                 setIsOpenModalDevelopmentNote(true)
                 await wait(100)
-
                 setDataDevelopmentNote(dev)
-                // let developmentData: IDevelopmentFormValues =
-                //   getDevelopmentDataForForm(dev)
-                // setFormValues(developmentData)
               } else if (
                 notification.notificationType ===
                 NotificationType.ASK_FOR_REVIEW_DEVELOPMENT_TALK
@@ -671,11 +667,9 @@ export const ItemNotification = ({
                         params
                       )}`
                     )
-                  setIsOpenModalDevelopmentNote(true)
+                  setDataDevelopmentNote(data)
                   await wait(100)
-                  let developmentData: IDevelopmentFormValues =
-                    getDevelopmentDataForForm(data)
-                  setFormValues(developmentData)
+                  setIsOpenModalDevelopmentNote(true)
                 } catch (error) {
                   notiToast({
                     message: getErrorMessage(error),
