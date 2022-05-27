@@ -110,7 +110,7 @@ function TeamPerformance({ teamId, value }: TeamPerformanceProps) {
           userId: it.userId,
           faceImage: it.faceImage,
           username: it.username,
-          role: it.favoriteRoles || it.role,
+          role: it.favoriteRoles[0] || it.role,
           isSelected: true,
           performance: 5,
         }))
@@ -159,7 +159,7 @@ function TeamPerformance({ teamId, value }: TeamPerformanceProps) {
                 <Checkbox
                   checked={isSelectAll}
                   sx={{
-                    '& .css-i4bv87-MuiSvgIcon-root': {
+                    '& .css-6uwj3y.Mui-checked': {
                       color: '#09E099',
                     },
                   }}
@@ -189,6 +189,7 @@ function TeamPerformance({ teamId, value }: TeamPerformanceProps) {
                 faceImage,
                 username,
                 performance,
+                matchReview,
               }: UserType) => (
                 <Accordion key={userId} className="bg-transparent">
                   <AccordionSummary
@@ -204,7 +205,7 @@ function TeamPerformance({ teamId, value }: TeamPerformanceProps) {
                       >
                         <Checkbox
                           sx={{
-                            '& .css-i4bv87-MuiSvgIcon-root': {
+                            '& .css-6uwj3y.Mui-checked': {
                               color: '#09E099',
                             },
                           }}
@@ -243,8 +244,9 @@ function TeamPerformance({ teamId, value }: TeamPerformanceProps) {
                     <TextField
                       multiline
                       rows={2}
-                      label="Match Review"
+                      placeholder="Match Review"
                       fullWidth
+                      defaultValue={matchReview}
                       onChange={(e) =>
                         handleChangeReview(userId, e.target.value)
                       }

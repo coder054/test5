@@ -1,10 +1,11 @@
 import { MenuItem, TextField } from '@mui/material'
 import { useAtom } from 'jotai'
 import { debounce } from 'lodash'
-import { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { COACH_DIARY_ATOM, PlAYER_REVIEWS } from 'src/atoms/diaryAtoms'
 import { MyDatePicker, MyInput } from 'src/components'
 import { MySelectCountry } from 'src/components/MySelectCountry'
+import { MySlider } from 'src/components/MySlider'
 import { MATCH_LENGTH } from 'src/constants/mocks/match-length.constants'
 import { CountryType } from 'src/constants/types'
 import {
@@ -18,6 +19,7 @@ import {
   TeamType,
   UserType,
 } from 'src/constants/types/settingsType.type'
+import { numToScale, scaleToNum } from 'src/hooks/functionCommon'
 import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
 import { InfiniteScrollMember } from 'src/modules/account-settings/football/components/InfiniteScrollMember'
 import { InfiniteScrollTeam } from 'src/modules/account-settings/football/components/InfiniteScrollTeam'
@@ -57,7 +59,7 @@ interface MatchProps {
   team: TeamType
 }
 
-export default function Match({ userProfile, team, onChange }: MatchProps) {
+function Match({ userProfile, team, onChange }: MatchProps) {
   const [participate] = useAtom(COACH_DIARY_ATOM)
   const [playerReviews] = useAtom(PlAYER_REVIEWS)
   const [formValues, setFormValues] = useState<CoachMatchType>(INITIAL_VALUES)
@@ -105,7 +107,7 @@ export default function Match({ userProfile, team, onChange }: MatchProps) {
         },
       }))
     },
-    [JSON.stringify(formValues.mvp)]
+    [JSON.stringify(formValues?.mvp)]
   )
 
   useEffect(() => {
@@ -123,12 +125,36 @@ export default function Match({ userProfile, team, onChange }: MatchProps) {
 
   useEffect(() => {
     onChange &&
-      onChange({ ...participate, match: { ...formValues, playerReviews } })
-  }, [JSON.stringify(formValues)])
+      onChange({
+        ...participate,
+        match: {
+          ...formValues,
+          playerReviews: playerReviews,
+          /* @ts-ignore */
+          yourTeam: formValues?.yourTeam?.teamId,
+          /* @ts-ignore */
+          opponentTeam: formValues?.opponentTeam?.teamId,
+          mvp: {
+            /* @ts-ignore */
+            yourTeam: formValues?.mvp?.yourTeam?.userId,
+            /* @ts-ignore */
+            opponentTeam: formValues?.mvp?.opponentTeam?.userId,
+          },
+        },
+      })
+  }, [JSON.stringify(formValues), playerReviews])
 
   return (
     <div className="space-y-9">
       <div className="space-y-9">
+        <MySlider
+          label="How physically strain, was it?"
+          onChange={(e) => handleChange(numToScale(e), 'physicallyStrain')}
+          value={scaleToNum(formValues?.physicallyStrain)}
+          isScale
+          step={25}
+          labelClass="text-[#A2A5AD]"
+        />
         <div className="grid grid-cols-2 gap-x-6">
           <MyDatePicker
             label="Date"
@@ -235,14 +261,14 @@ export default function Match({ userProfile, team, onChange }: MatchProps) {
           <InfiniteScrollMember
             onChange={(e: UserType) => handleMVPChange(e, 'yourTeam')}
             teamId={formValues?.yourTeam?.teamId}
-            value={formValues?.mvp?.yourTeam ?? undefined}
+            value={formValues?.mvp?.yourTeam}
             label="Your Team"
             playerOnly
           />
           <InfiniteScrollMember
             onChange={(e: UserType) => handleMVPChange(e, 'opponents')}
             teamId={formValues?.opponentTeam?.teamId}
-            value={formValues?.mvp?.opponents ?? undefined}
+            value={formValues?.mvp?.opponents}
             label="Opponent Team"
             playerOnly
           />
@@ -269,3 +295,5 @@ export default function Match({ userProfile, team, onChange }: MatchProps) {
     </div>
   )
 }
+
+export default React.memo(Match)
