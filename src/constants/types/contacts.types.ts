@@ -99,7 +99,7 @@ export type QueriesContactsType = Partial<{
   country?: string
   clubId: string
   teamId: string
-  role: string
+  role?: string
   search: string
 }>
 

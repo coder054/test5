@@ -1,5 +1,6 @@
 import React from 'react'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
+import clsx from 'clsx'
 
 interface ParticipateButtonProps {
   matches?: number
@@ -15,29 +16,38 @@ function ParticipateButton({
   currentTab,
 }: ParticipateButtonProps) {
   return (
-    <button
-      onClick={() => isOpen(true)}
-      className="text-base py-1.5 rounded-lg flex justify-between items-center text-gray-400 hover:text-white duration-150 w-full"
-    >
-      <p>
-        {currentTab === 'TEAM_TRAINING' && (
-          <>
-            <span className="text-[#09E099]  font-semibold">
-              {teamTrainings}{' '}
-            </span>
-            Team Trainings{' '}
-          </>
-        )}
-        {currentTab === 'MATCH' && (
-          <>
-            <span className="text-[#09E099]  font-semibold">{matches} </span>
-            Matches{' '}
-          </>
-        )}
-        registered last 7 days. Did you participate in?
-      </p>
-      <ChevronRightIcon className="text-inherit" />
-    </button>
+    <>
+      {currentTab === 'TEAM_TRAINING' && (
+        <button
+          onClick={() => isOpen(true)}
+          className={clsx(
+            'text-base py-1.5 rounded-lg flex justify-between items-center text-gray-400 hover:text-white duration-150 w-full',
+            teamTrainings === 0 ? 'hidden' : 'block'
+          )}
+        >
+          <span className="font-medium">
+            <span className="text-[#09E099]"> {teamTrainings}</span> Team
+            Trainings registered last 7 days. Did you participate in?
+          </span>
+          <ChevronRightIcon className="text-inherit" />
+        </button>
+      )}
+      {currentTab === 'MATCH' && (
+        <button
+          onClick={() => isOpen(true)}
+          className={clsx(
+            'text-base py-1.5 rounded-lg flex justify-between items-center text-gray-400 hover:text-white duration-150 w-full',
+            matches === 0 ? 'hidden' : 'block'
+          )}
+        >
+          <span className="font-medium">
+            <span className="text-[#09E099]"> {matches}</span> Team Matches
+            registered last 7 days. Did you participate in?
+          </span>
+          <ChevronRightIcon className="text-inherit" />
+        </button>
+      )}
+    </>
   )
 }
 

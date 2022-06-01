@@ -12,6 +12,7 @@ import { useMutation, useQueryClient } from 'react-query'
 import { QUERIES_FEED } from 'src/constants/query-keys/query-keys.constants'
 import { createPlainPost } from 'src/service/feed/news.service'
 import toast from 'react-hot-toast'
+import { FetchingAllMembers } from '../../../contacts/components/fetchs/FetchingAllMembers'
 
 interface ModalFeedProps {
   setIsOpenModal?: (value: boolean) => void
@@ -22,6 +23,7 @@ interface FormValueType {
   text: string
   mediaLinks: { type: string; url: string }[]
   location: string
+  friendTags: string[]
 }
 
 interface SwitchValueType {
@@ -42,6 +44,7 @@ export const ModalFeed = ({ setIsOpenModal }: ModalFeedProps) => {
     text: '',
     mediaLinks: [{ type: '', url: '' }],
     location: '',
+    friendTags: [''],
   })
   const [valueSwitch, setValueSwitch] = useState<SwitchValueType>({
     zporter: '',
@@ -56,7 +59,7 @@ export const ModalFeed = ({ setIsOpenModal }: ModalFeedProps) => {
     createPlainPost,
     {
       onSuccess: (res) => {
-        toast.success(res?.data)
+        toast.success('Create post successfully!')
         setIsOpenModal(false)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST_FRIENDS)
@@ -78,7 +81,10 @@ export const ModalFeed = ({ setIsOpenModal }: ModalFeedProps) => {
       })
   }, [arrayFile])
 
-  const handleChangeForm = (type: keyof FormValueType, value: string) => {
+  const handleChangeForm = (
+    type: keyof FormValueType,
+    value: string | string[]
+  ) => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
 
@@ -88,11 +94,12 @@ export const ModalFeed = ({ setIsOpenModal }: ModalFeedProps) => {
 
   const handlePost = (e) => {
     e.preventDefault()
+
     const valuePost: PostFeed = {
       headline: formValues.headline,
       text: formValues.text,
       mediaLinks: medias,
-      friendTags: tags,
+      friendTags: formValues.friendTags,
       location: formValues.location,
     }
 
@@ -134,11 +141,9 @@ export const ModalFeed = ({ setIsOpenModal }: ModalFeedProps) => {
           onChange={(e) => handleChangeForm('text', e.target.value)}
         />
 
-        <MyInputChips
-          label="Friend tags"
-          labelClass="text-[#A2A5AD]"
-          value={tags}
-          setTags={setTags}
+        <FetchingAllMembers
+          onChange={(value) => handleChangeForm('friendTags', value)}
+          isFriend={true}
         />
 
         <div

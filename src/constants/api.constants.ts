@@ -21,14 +21,8 @@ export const API_GET_LIST_CONNECTED_CLUB = 'achievements/connected-club-list'
 //API Biography & update
 export const API_GET_BIOGRAPHY_PLAYER = 'biographies/player'
 
-// export const API_PLAYER_CREATE_DEVELOPMENT_NOTE =
-//   'development-talk/player/create-development-note'
-
 export const API_COACH_COMMENT_DEVELOPMENT_NOTE =
   'development-talk/coach/comment-development-note'
-
-// export const API_PLAYER_UPDATE_DEVELOPMENT_NOTE =
-//   'development-talk/player/update-development-note'
 
 export const API_DIARY = 'diaries'
 export const API_GET_DIARY = 'get-diary-by-query'
@@ -112,3 +106,6 @@ export const API_CREATE_COMMENT = 'comment/create-comment'
 export const API_LIKE_COMMENT = 'comment/like-comment'
 export const API_DELETE_COMMENT = 'comment/delete-comment'
 export const API_BLOCK_COMMENT = 'comment/block-comment'
+
+//friend
+export const API_SEARCH_FRIENDS = 'friends/search-'

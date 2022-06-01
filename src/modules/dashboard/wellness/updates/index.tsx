@@ -28,7 +28,7 @@ type DashboardDiaryUpdateType = {
 export const DashboardDiaryUpdate = () => {
   const [queries, setQueries] = useState({
     limit: 10,
-    sorted: 'asc',
+    sorted: 'desc',
     startAfter: null,
   })
   const { ref, inView } = useInView()
