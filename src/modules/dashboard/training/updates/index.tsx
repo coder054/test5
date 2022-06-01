@@ -46,7 +46,7 @@ const TrainingUpdates = ({ range }: TrainingUpdateProps) => {
     range: range,
     tab: 'TRAINING',
     limit: 10,
-    sorted: 'asc',
+    sorted: 'desc',
     startAfter: null,
   })
 

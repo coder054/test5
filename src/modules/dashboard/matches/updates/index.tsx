@@ -41,7 +41,7 @@ const MatchUpdates = ({ range }: MatchUpdatesProps) => {
     range,
     tab: 'MATCH',
     limit: 10,
-    sorted: 'asc',
+    sorted: 'desc',
     startAfter: null,
   })
 

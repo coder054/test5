@@ -16,7 +16,6 @@ import {
 } from 'src/constants/types/settingsType.type'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { axios } from 'src/utils/axios'
-import { toQueryString } from 'src/utils/common.utils'
 
 type InfiniteScrollTeamProps = {
   handleSetTeam?: (value: CurrentTeamType) => void
