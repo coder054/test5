@@ -19,20 +19,34 @@ import MemberChip from '../MemberChip'
 
 type FetchingAllMembers = {
   onChange: (value: string[]) => void
+  isFriend?: boolean
 }
 
-export const FetchingAllMembers = ({ onChange }: FetchingAllMembers) => {
+export const FetchingAllMembers = ({
+  isFriend,
+  onChange,
+}: FetchingAllMembers) => {
   const [selectedMembers, setSelectedMembers] = useState<MemberType[]>([])
   const [isOpenOption, setIsOpenOption] = useState<boolean>(false)
   const [count, setCount] = useState<number>(0)
-  const [queries, setQueries] = useState<QueriesContactsType>({
-    limit: 10,
-    sorted: 'asc',
-    startAfter: 1,
-    tab: 'ALL',
-    role: 'PLAYER',
-    search: '',
-  })
+  const [queries, setQueries] = useState<QueriesContactsType>(
+    isFriend
+      ? {
+          limit: 10,
+          sorted: 'asc',
+          startAfter: 1,
+          tab: 'FRIENDS',
+          search: '',
+        }
+      : {
+          limit: 10,
+          sorted: 'asc',
+          startAfter: 1,
+          tab: 'ALL',
+          role: 'PLAYER',
+          search: '',
+        }
+  )
 
   const SELECTED_LIST = useMemo(() => {
     return (selectedMembers || []).map((it) => it.userId)
@@ -42,7 +56,7 @@ export const FetchingAllMembers = ({ onChange }: FetchingAllMembers) => {
   const { data, isFetching, isFetchingNextPage, fetchNextPage } =
     useInfiniteQuery(
       [QUERIES_CONTACTS.CONTACT_SEARCH_MEMBER, queries],
-      async ({ pageParam = '' }) => {
+      async ({ pageParam = isFriend ? queries.startAfter : '' }) => {
         const res = await axios.get(
           toQueryString(API_GET_LIST_CONTACT, {
             ...queries,
