@@ -141,6 +141,19 @@ export type ClubType = Partial<{
   contractedUntil: string
 }>
 
+export type ClubConnectedType = Partial<{
+  careerId?: string
+  club?: {
+    city: string
+    clubId: string
+    clubName: string
+    logoUrl: string
+  }
+  connectedClubType?: string
+  fromTime?: string | Date
+  toTime?: string | Date
+}>
+
 export type TeamType = Partial<{
   teamId: string
   isPrivate: boolean

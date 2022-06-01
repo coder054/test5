@@ -81,6 +81,7 @@ export const QUERIES_SETTINGS = {
 
 export const QUERIES_CLUBS = {
   CLUBS: 'clubs',
+  CLUB_CONNECTED: 'club-connected',
   TEAMS: 'teams',
   TEAM_MEMBERS: 'team-members',
 }
