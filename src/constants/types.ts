@@ -232,8 +232,8 @@ export interface FutureCareerType {
 
 export interface HistoricCareerType {
   season: string
-  fromTime: string
-  toTime: string
+  fromTime: string | Date
+  toTime: string | Date
   country: CountryType
   league: {
     name: string

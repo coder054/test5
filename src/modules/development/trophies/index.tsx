@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { ModalShowImage, MyInput } from 'src/components'
@@ -16,14 +15,15 @@ import {
   TypeOfTeamTrophyOption,
 } from 'src/constants/options'
 import { TrophiesAndAwardsType } from 'src/constants/types'
-import { ClubType } from 'src/constants/types/settingsType.type'
+import { ClubConnectedType } from 'src/constants/types/settingsType.type'
 import { getToday } from 'src/hooks/functionCommon'
 import {
   createTrophies,
   getProfilePlayer,
 } from 'src/service/dashboard/biography-update'
 import { BackGround } from 'src/modules/account-settings/common-components/Background'
-import { InfiniteScrollClub } from 'src/modules/account-settings/football/components/InfiniteScrollClub'
+import { InfiniteScrollClubConnected } from 'src/modules/account-settings/football/components/InfiniteScrollClubConnected'
+import dayjs from 'dayjs'
 
 interface FormValuesType {
   personalAward: string
@@ -33,7 +33,7 @@ interface FormValuesType {
   club: string
   date: string | Date | any
   description: string
-  contractedClub: ClubType
+  contractedClub: ClubConnectedType
 }
 
 export const Trophies = () => {
@@ -59,14 +59,16 @@ export const Trophies = () => {
     date: getToday(),
     description: '',
     contractedClub: {
-      arena: '',
-      city: '',
-      clubId: '',
-      clubName: '',
-      country: '',
-      logoUrl: '',
-      nickName: '',
-      websiteUrl: null,
+      careerId: '',
+      club: {
+        city: '',
+        clubId: '',
+        clubName: '',
+        logoUrl: '',
+      },
+      connectedClubType: '',
+      fromTime: '',
+      toTime: '',
     },
   })
 
@@ -111,12 +113,12 @@ export const Trophies = () => {
     setFormValues((prev) => ({ ...prev, [type]: value }))
   }
 
-  const setSelectedClub = (value: ClubType) => {
+  const setSelectedClub = (value: ClubConnectedType) => {
     setFormValues((prev) => ({
       ...prev,
       contractedClub: value,
-      clubId: value.clubId,
-      yourClub: value.clubName,
+      clubId: value?.club?.clubId,
+      clubName: value?.club?.clubName,
     }))
   }
 
@@ -132,11 +134,34 @@ export const Trophies = () => {
       connectedClub: {
         connectedClubType: '',
         careerId: '',
-        clubId: formValues.contractedClub.clubId,
+        clubId: formValues.contractedClub?.club?.clubId,
       },
       date: formValues.date,
       description: formValues.description,
       media: images as [{ type: string; url: string }],
+    }
+
+    if (!formValues?.contractedClub?.club?.clubName) {
+      toast.error('Club is empty.')
+      setTimeout(() => {
+        setLoading(false)
+      }, 1000)
+      return
+    }
+
+    if (
+      formValues?.contractedClub?.fromTime &&
+      formValues?.contractedClub?.toTime &&
+      (dayjs(formValues?.contractedClub?.fromTime).unix() * 1000 >
+        dayjs(formValues?.date).unix() * 1000 ||
+        dayjs(formValues?.contractedClub?.toTime).unix() * 1000 <
+          dayjs(formValues?.date).unix() * 1000)
+    ) {
+      toast.error('Time is not valid.')
+      setTimeout(() => {
+        setLoading(false)
+      }, 1000)
+      return
     }
 
     try {
@@ -181,9 +206,6 @@ export const Trophies = () => {
                 : TypeOfTeamTrophyOption
             }
             onChange={(e) => handleChangeForm('typeOfAward', e.target.value)}
-            // defauleValue={
-            //   formValues.personalAward === 'AWARD' ? 'MVP' : 'SERIE'
-            // }
             value={formValues.typeOfAward}
           />
 
@@ -198,7 +220,7 @@ export const Trophies = () => {
             value={formValues.country}
           />
 
-          <InfiniteScrollClub
+          <InfiniteScrollClubConnected
             label="Club"
             value={formValues.contractedClub}
             handleSetClub={setSelectedClub}

@@ -17,6 +17,7 @@ export const API_FRIENDS = 'friends'
 export const API_GET_LIST_CLUB = 'clubs'
 export const API_GET_LIST_TEAM = 'clubs/teams'
 export const API_GET_LIST_CONTACT = 'contact-groups/get-list-contacts'
+export const API_GET_LIST_CONNECTED_CLUB = 'achievements/connected-club-list'
 //API Biography & update
 export const API_GET_BIOGRAPHY_PLAYER = 'biographies/player'
 

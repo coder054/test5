@@ -124,6 +124,22 @@ export const scaleToColor = (str: string) => {
       return
   }
 }
+export const scaleToColorStrain = (str: string) => {
+  switch (str) {
+    case 'VERY_LOW':
+      return 'bg-[#4654EA]'
+    case 'LOW':
+      return 'bg-[#4654EA]'
+    case 'NORMAL':
+      return 'bg-[#09E099]'
+    case 'HIGH':
+      return 'bg-[#FF9607]'
+    case 'VERY_HIGH':
+      return 'bg-[#D60C0C]'
+    default:
+      return
+  }
+}
 
 export function formatDate(date: string | number | Date) {
   return dayjs(date).format(DEFAULT_DATE)
