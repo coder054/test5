@@ -2,18 +2,16 @@ import { MenuItem, TextField } from '@mui/material'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
+import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import {
-  COACH_DIARY_ATOM,
-  diaryAtom,
-  PlAYER_REVIEWS,
-} from 'src/atoms/diaryAtoms'
+import { COACH_DIARY_ATOM, diaryAtom } from 'src/atoms/diaryAtoms'
 import { Loading, MyDatePicker } from 'src/components'
 import { Button } from 'src/components/Button'
 import { DiaryUpdateIcon } from 'src/components/icons/DiaryUpdateIcon'
 import {
+  QUERIES_DASHBOARD,
   QUERIES_DIARY,
   QUERIES_SETTINGS,
 } from 'src/constants/query-keys/query-keys.constants'
@@ -30,12 +28,14 @@ import {
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import {
   createDiary,
+  deleteDiary,
   fetchDiary,
   fetchSettings,
   updateDiary,
-  deleteDiary,
 } from 'src/service/diary-update'
+import ConfirmModalProps from '../components/ConfirmModal'
 import { Tabs } from '../player/components/Tabs'
+import { Cap } from './cap'
 import ParticipateButton from './components/ParticipateButton'
 import {
   MatchParticipate,
@@ -44,7 +44,6 @@ import {
 import ParticipateList from './components/ParticipateList'
 import Match from './match'
 import Training from './training'
-import ConfirmModalProps from '../components/ConfirmModal'
 
 const ITEMS = [
   { label: 'Team Training', value: 'TEAM_TRAINING' },
@@ -52,9 +51,15 @@ const ITEMS = [
   { label: 'Cap', value: 'CAP' },
 ]
 
-export default function CoachDiary() {
+interface CoachDiary {
+  onClose?: (value: boolean) => void
+}
+
+export default function CoachDiary({ onClose }: CoachDiary) {
+  const router = useRouter()
   const queryClient = useQueryClient()
   const { currentRoleName } = useAuth()
+
   const [diary, setDiary] = useAtom(diaryAtom)
   const [period, setPeriod] = useState<string>('default')
 
@@ -88,6 +93,14 @@ export default function CoachDiary() {
         queryClient.invalidateQueries(QUERIES_DIARY.COACH_DIARY)
         /* @ts-ignore */
         setParticipate(undefined)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.TRAINING_DATA)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.MATCHES_DATA)
+        queryClient.invalidateQueries(QUERIES_DASHBOARD.WELLNESS_DATA)
+        onClose(false)
+        router.push({
+          pathname: '/dashboard',
+          query: { d: handleNavigate(currentTab) },
+        })
       },
       onError: () => {
         toast.error('Something went wrong')
@@ -120,6 +133,15 @@ export default function CoachDiary() {
       },
     }
   )
+
+  const handleNavigate = (type: string) => {
+    if (type.includes('TRAINING')) {
+      return 'training'
+    } else if (type === 'CAP' || type === 'MATCH') {
+      return 'matches'
+    }
+    return 'overview'
+  }
 
   const TEAMS = useMemo(() => {
     return user?.coachCareer?.currentTeams
@@ -168,7 +190,7 @@ export default function CoachDiary() {
     if (isHasError) {
       toast.error(isHasError)
       return
-    } else if (!currentTeam) {
+    } else if (!currentTeam && currentTab !== 'CAP') {
       toast.error('Please choose your Team Training')
       return
     } else if (IS_UPDATE) {
@@ -285,45 +307,47 @@ export default function CoachDiary() {
           onConfirm={handleDeleteDiary}
           isLoading={isDeleting}
         />
-        <TextField
-          select
-          fullWidth
-          defaultValue=""
-          key={currentTeam?.teamId}
-          value={currentTeam?.teamId}
-          onChange={(e) => handleChangeTeam(e.target.value)}
-          label="Choose your Team Training"
-        >
-          {(TEAMS || []).map((team: TeamType) => (
-            <MenuItem key={team.teamId} value={team.teamId} id={team.teamId}>
-              {team.teamName}
-            </MenuItem>
-          ))}
-        </TextField>
+        {currentTab !== 'CAP' && (
+          <TextField
+            select
+            fullWidth
+            defaultValue=""
+            key={currentTeam?.teamId}
+            value={currentTeam?.teamId}
+            onChange={(e) => handleChangeTeam(e.target.value)}
+            label="Choose your Team Training"
+          >
+            {(TEAMS || []).map((team: TeamType) => (
+              <MenuItem key={team.teamId} value={team.teamId} id={team.teamId}>
+                {team.teamName}
+              </MenuItem>
+            ))}
+          </TextField>
+        )}
         <p className="text-base text-gray-400 font-medium">
           Any football or other training?
         </p>
         <Tabs value={ITEMS} onChange={setCurrentTab} current={currentTab} />
-        <ParticipateButton
-          isOpen={setIsOpenList}
-          currentTab={currentTab}
-          matches={diaries?.unregisteredMatch}
-          teamTrainings={diaries?.unregisteredTeamTraining}
-        />
+        {currentTab !== 'CAP' && (
+          <ParticipateButton
+            isOpen={setIsOpenList}
+            currentTab={currentTab}
+            matches={diaries?.unregisteredMatch}
+            teamTrainings={diaries?.unregisteredTeamTraining}
+          />
+        )}
         <ParticipateList
           date={initialDate}
           isOpen={isOpenList}
           currentTab={currentTab}
           onClose={setIsOpenList}
         />
-        <div className="pb-2">
-          {IS_TRAINING_PARTICIPATE && (
-            <TrainingPariticapte value={participate} disabled />
-          )}
-          {IS_MATCH_PARTICIPATE && (
-            <MatchParticipate value={participate} disabled />
-          )}
-        </div>
+        {IS_TRAINING_PARTICIPATE && (
+          <TrainingPariticapte value={participate} disabled />
+        )}
+        {IS_MATCH_PARTICIPATE && (
+          <MatchParticipate value={participate} disabled />
+        )}
         {currentTab === 'TEAM_TRAINING' && (
           <Training
             currentTab={currentTab}
@@ -337,6 +361,9 @@ export default function CoachDiary() {
             team={currentTeam}
             onChange={setRequestData}
           />
+        )}
+        {currentTab === 'CAP' && (
+          <Cap onChange={setRequestData} userProfile={user} />
         )}
         <div className="mobileM:flex mobileM:flex-col tabletM:grid tabletM:grid-cols-3 mobileM:space-y-4 tabletM:space-y-0 gap-x-4 pt-3">
           <Button

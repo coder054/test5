@@ -240,10 +240,10 @@ export type DiaryType = Partial<{
   createdAt: number
   sleep: string
   eatAndDrink: string
+  energyLevel: string
+  updatedAt: number
   injuries: InjuryType[]
   typeOfDiary: string
-  updatedAt: number
-  energyLevel: string
   training: Training
   diaryId: string
   cap: Cap
@@ -305,13 +305,13 @@ export type Result = {
   opponents: number
 }
 
-export type Review = {
+export type Review = Partial<{
   yourReview: string
   physicallyStrain: string
   teamReview: string
   teamPerformance: string
   playerPerformance: string
-}
+}>
 
 export type Stat = {
   minutesPlayed: number
@@ -474,6 +474,10 @@ export interface Media {
 }
 
 export interface ParticipateType {
+  userType?: string
+  sleep?: string
+  eatAndDrink?: string
+  energyLevel?: string
   teamInfo?: TeamType
   training?: TrainingType
   cap?: CoachCapType

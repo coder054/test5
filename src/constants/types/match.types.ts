@@ -33,13 +33,13 @@ export interface ResultType {
   opponents: number
 }
 
-export interface ReviewType {
+export type ReviewType = Partial<{
   yourReview: string
   physicallyStrain: string
   teamReview: string
   teamPerformance: string
   playerPerformance: string
-}
+}>
 
 export type StatType = {
   minutesPlayed: number
