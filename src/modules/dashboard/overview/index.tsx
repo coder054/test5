@@ -43,7 +43,7 @@ export const Overview = ({ setCurrentTab }: OverviewProps) => {
         />
       </div>
 
-      <div className="col-span-12 md:col-span-5 md:row-span-5 md:mt-[20px]">
+      <div className="col-span-12 lg:col-span-5 lg:row-span-5 lg:mt-[20px]">
         <TotalLeaderBoard
           lastDateRange={range}
           setLastDateRange={setRange}
@@ -51,7 +51,7 @@ export const Overview = ({ setCurrentTab }: OverviewProps) => {
         />
       </div>
 
-      <div className="col-span-12 md:col-span-7 md:row-span-2 md:mt-[20px] md:ml-[20px]">
+      <div className="col-span-12 lg:col-span-7 lg:row-span-2 lg:mt-[20px] lg:ml-[20px]">
         <MatchUpdates
           lastDateRange={range}
           setLastDateRange={setRange}
@@ -59,7 +59,7 @@ export const Overview = ({ setCurrentTab }: OverviewProps) => {
         />
       </div>
 
-      <div className="col-span-12 md:col-span-7 md:row-span-3 mt-[20px] md:ml-[20px]">
+      <div className="col-span-12 lg:col-span-7 lg:row-span-3 mt-[20px] lg:ml-[20px]">
         <DreamTeam
           dreamTeam
           lastDateRange={range}
@@ -67,7 +67,7 @@ export const Overview = ({ setCurrentTab }: OverviewProps) => {
         />
       </div>
 
-      <div className="col-span-12 md:col-span-5 md:row-span-1 mt-[20px]">
+      <div className="col-span-12 lg:col-span-5 lg:row-span-1 mt-[20px]">
         <Wellness
           lastDateRange={range}
           setLastDateRange={setRange}
@@ -75,7 +75,7 @@ export const Overview = ({ setCurrentTab }: OverviewProps) => {
         />
       </div>
 
-      <div className="col-span-12 md:col-span-7 md:row-span-1 mt-[20px] md:ml-[20px]">
+      <div className="col-span-12 lg:col-span-7 lg:row-span-1 mt-[20px] lg:ml-[20px]">
         <Pain
           lastDateRange={range}
           setLastDateRange={setRange}

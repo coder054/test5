@@ -27,7 +27,7 @@ export const LeaderBoard = ({
         className={`flex ${
           tabLeaderBoard
             ? 'gap-[32px] xl:gap-[140px] mt-[-62px]'
-            : 'gap-[64px] xl:gap-[260px] mt-[-44px]'
+            : 'gap-[32px] xl:gap-[260px] mt-[-44px]'
         } `}
       >
         <div className="flex-1">

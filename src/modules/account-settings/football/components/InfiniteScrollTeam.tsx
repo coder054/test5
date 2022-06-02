@@ -16,7 +16,6 @@ import {
 } from 'src/constants/types/settingsType.type'
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { axios } from 'src/utils/axios'
-import { toQueryString } from 'src/utils/common.utils'
 
 type InfiniteScrollTeamProps = {
   handleSetTeam?: (value: CurrentTeamType) => void
@@ -58,6 +57,14 @@ export const InfiniteScrollTeam = ({
     }
   }, [idClub])
 
+  const endPointTeam = useMemo(() => {
+    if (yourTeam) {
+      return `${API_GET_MY_TEAM}/${currentRoleId}`
+    }
+
+    return API_GET_LIST_TEAM
+  }, [yourTeam])
+
   useEffect(() => {
     item && setTeam(item.teamName)
     teamName && setTeam(teamName)
@@ -85,7 +92,7 @@ export const InfiniteScrollTeam = ({
       idClub &&
         setTimeout(async () => {
           await axios
-            .get(API_GET_LIST_TEAM, {
+            .get(endPointTeam, {
               params: {
                 ...param,
                 startAfter: 0,
@@ -105,7 +112,7 @@ export const InfiniteScrollTeam = ({
 
   const getListTeam = async () => {
     await axios
-      .get(API_GET_LIST_TEAM, {
+      .get(endPointTeam, {
         params: {
           ...param,
           startAfter: items.length,
@@ -130,38 +137,12 @@ export const InfiniteScrollTeam = ({
       setHasMore(false)
       return
     }
-    if (yourTeam) {
-      await getYourTeam()
-    } else {
-      await getListTeam()
-    }
+    await getListTeam()
   }
 
   useEffect(() => {
-    idClub && isOpenOption && getListTeam()
-  }, [idClub])
-
-  //GET YOUR TEAM development
-  const getYourTeam = async () => {
-    await axios
-      .get(`${API_GET_MY_TEAM}/${currentRoleId}`)
-      .then((res) => {
-        if (res.data.length <= 10) {
-          setItems(res.data)
-          setHasMore(false)
-        } else {
-          let arr = items.concat(res.data)
-          setItems(arr)
-        }
-      })
-      .catch(() => {
-        toast.error('Something went wrong')
-      })
-  }
-
-  useEffect(() => {
-    yourTeam && getYourTeam()
-  }, [yourTeam])
+    ;(idClub || yourTeam) && isOpenOption && getListTeam()
+  }, [idClub, yourTeam, isOpenOption])
 
   return (
     <ClickAwayListener onClickAway={() => setIsOpenOption(false)}>

@@ -64,11 +64,11 @@ export const TrainingAndMatches = ({
           </p>
         </div>
 
-        <div className="lg:flex w-full h-[300px] pt-[44px]">
-          <div className="md:flex-1">
+        <div className="lg:flex w-full min-h-[300px] pt-[44px]">
+          <div className="lg:flex-1">
             <TrainingTotal />
           </div>
-          <div className="md:flex-1 md:ml-[74px] pt-[74px] md:pt-[0px]">
+          <div className="lg:flex-1 lg:ml-[64px] pt-[74px] lg:pt-[0px]">
             <TrainingCircle />
           </div>
         </div>
