@@ -81,22 +81,22 @@ const mockData = [
 
 export const DreamTeam = ({ dreamTeam, lastDateRange }: DreamTeamProps) => {
   return (
-    <div
-      className={`${cls.item} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[16px] md:pr-[35px] pb-[16px] md:pb-[38px]`}
-    >
-      <div className="flex justify-between">
-        <p className="text-[16px] text-[#ffffff] font-bold">Dream Team</p>
+    <div className={`${cls.item} w-full md:pt-[32px] md:pr-[35px]`}>
+      <div className="flex justify-between pt-[16px] md:pt-[32px]">
+        <p className="text-[16px] text-[#ffffff] font-bold pl-[16px] md:pl-[32px]">
+          Dream Team
+        </p>
         <TooltipCustom
           title="This is total leaderboard tooltip description"
           placement="top-end"
         >
-          <div className="order-list cursor-pointer">
+          <div className="order-list cursor-pointer mr-[16px] md:pr-[32px]">
             <SvgInfomation />
           </div>
         </TooltipCustom>
       </div>
-      <div className="w-[226px] mobileM:w-[265px] md:w-full overflow-y-auto ">
-        <div className="w-[360px] md:w-full mb-[8px]">
+      <div className="w-full mobileM:w-[265px] md:w-full scale-75 mobileM:scale-90 md:scale-100">
+        <div className="w-[360px] md:w-full mb-[8px] scale-90 md:scale-100">
           <div className="w-full flex mt-[22px]">
             <div className="flex-1">
               <div className="w-[68px] mx-auto">
@@ -117,7 +117,7 @@ export const DreamTeam = ({ dreamTeam, lastDateRange }: DreamTeamProps) => {
         </div>
 
         {/* CAM */}
-        <div className="w-[360px] md:w-full relative h-[120px]">
+        <div className="w-[360px] md:w-full relative h-[120px] scale-90 md:scale-100">
           <div className="absolute w-full z-10 h-full">
             <div className="w-[calc(50%-55px)] ml-[48px] h-full absolute flex items-center">
               <div className={`${cls.borderLine} w-full`}></div>
@@ -151,7 +151,7 @@ export const DreamTeam = ({ dreamTeam, lastDateRange }: DreamTeamProps) => {
           </div>
         </div>
 
-        <div className="w-[360px] md:w-full mt-[12px]">
+        <div className="w-[360px] md:w-full mt-[12px] scale-90 md:scale-100">
           <div className="w-full flex">
             <div className="flex-1">
               <div className="w-[68px] mx-auto">

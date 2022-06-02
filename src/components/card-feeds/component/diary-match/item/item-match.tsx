@@ -54,6 +54,8 @@ export const ItemMatch = ({ card }: ItemMatchProps) => {
         performance={card?.match}
         playerPerformance={card?.match?.review?.playerPerformance}
         teamPerformance={card?.match?.review?.teamPerformance}
+        yourPhysicallyStrain={card?.match?.review?.physicallyStrain}
+        teamPhysicallyStrain={card?.match?.review?.teamPhysicallyStrain}
       />
     </div>
   )

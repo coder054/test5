@@ -16,15 +16,6 @@ interface CardDiaryMatchProps {
 }
 
 export const CardDiaryMatch = ({ card }: CardDiaryMatchProps) => {
-  // console.log('card traning:', card)
-  // const { isLoading, data } = useQuery(
-  //   [QUERIES_FEED.FEED_GET_DIARY_BY_ID],
-  //   () => getDiaryById(card?.postId),
-  //   {
-  //     onSuccess: (res) => {},
-  //   }
-  // )
-
   return (
     <Slider {...settings} className={`min-h-[235px] ml-[20px] ${cls.carouse}`}>
       <div className="h-[235px]">

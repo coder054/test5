@@ -89,14 +89,6 @@ export const ItemTraining = ({ card }: ItemTrainingProps) => {
         </div>
       </div>
 
-      {/* <div className="w-full mt-[16px] flex gap-4 pl-[4px] pr-[4px]">
-        {(card?.training?.practiceTags || []).map((tag) => (
-          <p className="bg-[#64748B] rounded-[16px] h-[30px] pt-[4px] pb-[4px] pl-[12px] pr-[12px] text-[14px]">
-            {tag}
-          </p>
-        ))}
-      </div> */}
-
       <PerformaneStrain
         performance={card?.match}
         playerPerformance={card?.training?.yourPerformance}

@@ -4,6 +4,7 @@ import {
   emotionToNum,
   emotionlToStar,
   scaleToColorStrain,
+  emotionToNumStrain,
 } from 'src/hooks/functionCommon'
 
 interface PerformaneStrainProps {
@@ -21,6 +22,8 @@ export const PerformaneStrain = ({
   teamPhysicallyStrain,
   yourPhysicallyStrain,
 }: PerformaneStrainProps) => {
+  // console.log('yourPhysicallyStrain:', yourPhysicallyStrain)
+
   return (
     <div className="w-full flex text-[14px] mt-[8px]">
       <div className="flex-1 flex-col">
@@ -53,30 +56,31 @@ export const PerformaneStrain = ({
 
       <div className="flex-1 ">
         <p className="ml-[24px]">Strain</p>
+
         <div className="w-full mt-[12px]">
           <div
             className={`${scaleToColorStrain(yourPhysicallyStrain)} ${
-              emotionToNum(yourPhysicallyStrain)
+              emotionToNumStrain(yourPhysicallyStrain)
                 ? 'border border-[#A2A5AD]'
                 : ''
             }`}
             style={{
-              height: 8,
-              width: emotionToNum(yourPhysicallyStrain) || 0,
+              height: 10,
+              width: emotionToNumStrain(yourPhysicallyStrain) || 0,
             }}
           ></div>
         </div>
 
         <div className="w-full mt-[24px]">
           <div
-            className={`${scaleToColorStrain(yourPhysicallyStrain)} ${
-              emotionToNum(teamPhysicallyStrain)
+            className={`${scaleToColorStrain(teamPhysicallyStrain)} ${
+              emotionToNumStrain(teamPhysicallyStrain)
                 ? 'border border-[#A2A5AD]'
                 : ''
             }`}
             style={{
-              height: 8,
-              width: emotionToNum(teamPhysicallyStrain) || 0,
+              height: 10,
+              width: emotionToNumStrain(teamPhysicallyStrain) || 0,
             }}
           ></div>
         </div>
