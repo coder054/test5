@@ -6,7 +6,7 @@ const SignInPage = () => {
   return (
     <GuestGuard>
       <Head>
-        <title>Zporter Signin</title>
+        <title>Zporter - Sign in or Sign up</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
       <SignIn />
