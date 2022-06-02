@@ -60,12 +60,14 @@ export const MySelect = ({
   setOpenModal,
   errorMessage,
   defauleValue,
+  disabled,
   ...rest
 }: {
   className?: string
   label: string
   value?: string
   defauleValue?: string
+  disabled?: boolean
   addNew?: boolean
   titleAddNew?: string
   linkAddNew?: string
@@ -94,6 +96,7 @@ export const MySelect = ({
     <>
       <div className={clsx('relative', className)}>
         <CssTextField
+          disabled={disabled}
           value={value}
           /* @ts-ignore */
           defaultValue={defaultOption.label && defaultOption.label}

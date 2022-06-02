@@ -1,14 +1,9 @@
 import { useMemo, useState } from 'react'
 import { GradientCircularProgress } from 'react-circular-gradient-progress'
-import { Button } from 'src/components'
 import { Comments } from 'src/components/Comments'
 import { Stars } from 'src/components/common/Stars'
 import { API_FRIENDS } from 'src/constants/api.constants'
-import {
-  EStatusRelationShip,
-  IBiographyPlayer,
-  IBiographyCoach,
-} from 'src/constants/types/biography.types'
+import { IBiographyPlayer } from 'src/constants/types/biography.types'
 import { axios } from 'src/utils/axios'
 import { safeHttpImage } from 'src/utils/utils'
 import { useAuth } from '../authentication/auth/AuthContext'
@@ -245,7 +240,7 @@ export const InfoPlayerWithCircleImage = ({
               -translate-x-1/2 -translate-y-1/2  "
               ></div>
               <img
-                src={dataBio?.faceImageUrl}
+                src={safeHttpImage(dataBio?.faceImageUrl)}
                 className="rounded-full w-[180px] h-[180px] absolute top-1/2 left-1/2 transform
               -translate-x-1/2 -translate-y-1/2 object-cover "
                 alt=""

@@ -12,7 +12,7 @@ import { BackGround } from 'src/modules/account-settings/common-components/Backg
 import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 import { axios } from 'src/utils/axios'
 
-type FootBallSkillTypes = {
+export type FootBallSkillTypes = {
   technics: number
   tactics: number
   physics: number
@@ -21,7 +21,7 @@ type FootBallSkillTypes = {
   rightFoot: number
 }
 
-type RadarChartTypes = {
+export type RadarChartTypes = {
   attacking: number
   dribbling: number
   passing: number
@@ -32,7 +32,7 @@ type RadarChartTypes = {
   pace: number
 }
 
-interface SkillProps {
+export interface SkillProps {
   playerId?: string
 }
 
