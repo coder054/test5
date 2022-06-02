@@ -25,6 +25,8 @@ import { MyInputChips } from 'src/components/MyInputChips'
 import { axios } from 'src/utils/axios'
 import toast from 'react-hot-toast'
 import { MySelect } from 'src/components/MySelect'
+import { API_PLAYER_SETTINGS } from 'src/constants/api.constants'
+import { UpdateSkills } from 'src/constants/types'
 
 interface ChatMessageProps {
   authorAvatar: string
@@ -161,6 +163,7 @@ export const ChatMessage: FC<ChatMessageProps> = (props) => {
     if (contentType === 'skillUpdateLink') {
       return (
         <MessageSkillUpdateLink
+          authorType={authorType}
           message={message}
           authorAvatar={authorAvatar}
           authorName={authorName}
@@ -245,6 +248,7 @@ ChatMessage.propTypes = {
 }
 
 const MessageSkillUpdateLink = ({
+  authorType,
   authorAvatar,
   authorName,
   createdBy,
@@ -287,6 +291,8 @@ const MessageSkillUpdateLink = ({
     [radarChart]
   )
 
+  const isAuthor = authorType === 'user'
+
   return (
     <>
       {/*  */}
@@ -304,7 +310,7 @@ const MessageSkillUpdateLink = ({
       >
         <>
           <div className="text-[18px] font-Inter mb-5 2xl:mb-6 ml-8 mt-8 ">
-            Update player Skills
+            {isAuthor ? 'Player Skill Update' : 'Update player Skills'}
           </div>
 
           <div
@@ -316,13 +322,13 @@ const MessageSkillUpdateLink = ({
           >
             <MySelect
               label={'Your Team'}
-              value={'C36'}
+              value={getStr(message, 'teamResponse.teamName')}
               disabled
               onChange={(e) => {}}
               arrOption={[
                 {
-                  label: 'C36',
-                  value: 'C36',
+                  label: getStr(message, 'teamResponse.teamName'),
+                  value: getStr(message, 'teamResponse.teamName'),
                 },
               ]}
             />
@@ -342,7 +348,9 @@ const MessageSkillUpdateLink = ({
             />
             <div className="h-[24px] "></div>
             <div className="text-Grey font-Inter pl-4 my-4 ">
-              Update your players skills compared to peers in their age?
+              {isAuthor
+                ? 'Update how your football skill, specialties and attributes has developed lately compared to peers in your age?'
+                : 'Update your players skills compared to peers in their age?'}
             </div>
             <div className="space-y-1 ">
               {Object.keys(footballSkills).map((skill: string) => (
@@ -361,7 +369,9 @@ const MessageSkillUpdateLink = ({
               ))}
             </div>
             <div className="text-Grey font-Inter pl-4 my-4 ">
-              And to be a bit more detailed, so they can update radar chart
+              {isAuthor
+                ? 'And to be a bit more detailed, so we can update your radar chart'
+                : 'And to be a bit more detailed, so they can update radar chart'}
             </div>
 
             <div className="space-y-1">
@@ -381,8 +391,9 @@ const MessageSkillUpdateLink = ({
             </div>
 
             <div className="text-Grey font-Inter pl-4 my-4 ">
-              Now comment thei profile summary and suggest ev. specialities as
-              well
+              {isAuthor
+                ? 'Now update the profile summary of yourself and your specialities'
+                : 'Now comment the profile summary and suggest ev. specialities as well'}
             </div>
 
             <MyTextArea
@@ -417,32 +428,64 @@ const MessageSkillUpdateLink = ({
                 e.stopPropagation()
 
                 try {
-                  const { data } = await axios.patch(
-                    `/users/${createdBy}/coach-update-player-skills`,
-                    {
-                      specialityTags: tags,
-                      overall: {
-                        mental: footballSkills.mental / 20,
-                        physics: footballSkills.physics / 20,
-                        tactics: footballSkills.tactics / 20,
-                        technics: footballSkills.technics / 20,
-                        leftFoot: footballSkills.leftFoot / 20,
-                        rightFoot: footballSkills.rightFoot / 20,
+                  if (isAuthor) {
+                    const updateSkills: UpdateSkills = {
+                      playerSkills: {
+                        specialityTags: tags,
+                        overall: {
+                          mental: footballSkills.mental / 20,
+                          physics: footballSkills.physics / 20,
+                          tactics: footballSkills.tactics / 20,
+                          technics: footballSkills.technics / 20,
+                          leftFoot: footballSkills.leftFoot / 20,
+                          rightFoot: footballSkills.rightFoot / 20,
+                        },
+                        radar: {
+                          attacking: radarChart.attacking,
+                          defending: radarChart.defending,
+                          dribbling: radarChart.dribbling,
+                          passing: radarChart.passing,
+                          shooting: radarChart.shooting,
+                          pace: radarChart.pace,
+                          tackling: radarChart.tackling,
+                          heading: radarChart.heading,
+                        },
                       },
-                      radar: {
-                        attacking: radarChart.attacking / 20,
-                        defending: radarChart.defending / 20,
-                        dribbling: radarChart.dribbling / 20,
-                        passing: radarChart.passing / 20,
-                        shooting: radarChart.shooting / 20,
-                        pace: radarChart.pace / 20,
-                        tackling: radarChart.tackling / 20,
-                        heading: radarChart.heading / 20,
+                      playerCareer: {
+                        summary: summary,
                       },
-                      summary,
                     }
-                  )
-                  toast.success('Skill review successfully')
+                    /////
+                    await axios.patch(API_PLAYER_SETTINGS, updateSkills)
+                    toast.success('Update skills successfully')
+                  } else {
+                    const { data } = await axios.patch(
+                      `/users/${createdBy}/coach-update-player-skills`,
+                      {
+                        specialityTags: tags,
+                        overall: {
+                          mental: footballSkills.mental / 20,
+                          physics: footballSkills.physics / 20,
+                          tactics: footballSkills.tactics / 20,
+                          technics: footballSkills.technics / 20,
+                          leftFoot: footballSkills.leftFoot / 20,
+                          rightFoot: footballSkills.rightFoot / 20,
+                        },
+                        radar: {
+                          attacking: radarChart.attacking,
+                          defending: radarChart.defending,
+                          dribbling: radarChart.dribbling,
+                          passing: radarChart.passing,
+                          shooting: radarChart.shooting,
+                          pace: radarChart.pace,
+                          tackling: radarChart.tackling,
+                          heading: radarChart.heading,
+                        },
+                        summary,
+                      }
+                    )
+                    toast.success('Skill review successfully')
+                  }
                 } catch (error) {
                   toast.error(getErrorMessage(error))
                 }
@@ -460,8 +503,40 @@ const MessageSkillUpdateLink = ({
       {/*  */}
       <div
         className="flex items-center cursor-pointer gap-x-4"
-        onClick={() => {
-          setOpen(true)
+        onClick={async () => {
+          if (isAuthor) {
+            try {
+              const { data }: { data: IPlayerSkills } = await axios.get(
+                `/users/players/${createdBy}`
+              )
+              const { overall, radar, specialityTags, summary } = data
+              setFootBallSkills({
+                technics: overall.technics * 20,
+                tactics: overall.tactics * 20,
+                physics: overall.physics * 20,
+                mental: overall.mental * 20,
+                leftFoot: overall.leftFoot * 20,
+                rightFoot: overall.rightFoot * 20,
+              })
+              setRadarChart({
+                attacking: radar.attacking,
+                dribbling: radar.dribbling,
+                passing: radar.passing,
+                shooting: radar.shooting,
+                heading: radar.heading,
+                defending: radar.defending,
+                tackling: radar.tackling,
+                pace: radar.pace,
+              })
+              setSummary(summary)
+              setTags(specialityTags)
+              setOpen(true)
+            } catch (error) {
+              toast.error(getErrorMessage(error))
+            }
+          } else {
+            setOpen(true)
+          }
         }}
       >
         <img
@@ -478,4 +553,33 @@ const MessageSkillUpdateLink = ({
       </div>
     </>
   )
+}
+
+// Generated by https://quicktype.io
+
+export interface IPlayerSkills {
+  radar: Radar
+  overall: Overall
+  specialityTags: any[]
+  summary: string
+}
+
+export interface Overall {
+  rightFoot: number
+  tactics: number
+  physics: number
+  mental: number
+  leftFoot: number
+  technics: number
+}
+
+export interface Radar {
+  defending: number
+  dribbling: number
+  shooting: number
+  attacking: number
+  tackling: number
+  passing: number
+  heading: number
+  pace: number
 }
