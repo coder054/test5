@@ -11,7 +11,7 @@ import { MySlider } from 'src/components/MySlider'
 import { BioRadarChart } from 'src/components/specific/BioRadarChart'
 import { SvgFilter3Line } from 'src/imports/svgs'
 import { axios } from 'src/utils/axios'
-import { equalStr } from 'src/utils/utils'
+import { equalStr, safeHttpImage } from 'src/utils/utils'
 import { ItemAward, ItemTrophy } from './InfoWithImages'
 
 type timeMarkType = 0 | 16 | 32 | 48 | 64 | 80 | 100
@@ -388,7 +388,7 @@ export const Head2Head = () => {
                   <div className="mx-auto text-center w-[120px] h-[120px] bg-Black rounded-full relative ">
                     <div className=" absolute inset-0 z-10 bg-[#00000033] "></div>
                     <img
-                      src={bio.faceImageUrl}
+                      src={safeHttpImage(bio?.faceImageUrl)}
                       className="w-[120px] h-[120px] object-cover rounded-full "
                       alt=""
                     />
@@ -457,7 +457,7 @@ export const Head2Head = () => {
                   <div className="grid grid-cols-2 gap-x-[16px] ">
                     <div className="text-right ">
                       <img
-                        src={bio.currentClubIconUrl}
+                        src={safeHttpImage(bio?.currentClubIconUrl)}
                         className="w-[25px] h-[25px] rounded-full object-cover ml-auto "
                         alt=""
                       />
@@ -467,7 +467,7 @@ export const Head2Head = () => {
                     </div>
                     <div className="text-left ">
                       <img
-                        src={bio.countryFlagUrl}
+                        src={safeHttpImage(bio?.countryFlagUrl)}
                         className="w-[25px] h-[25px] rounded-full object-cover "
                         alt=""
                       />

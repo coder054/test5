@@ -21,7 +21,7 @@ const DiaryUpdate = ({ selected, onClose, isWellness }: DiaryUpdateProps) => {
         />
       )
     case 'COACH':
-      return <CoachDiary />
+      return <CoachDiary onClose={onClose} />
   }
 }
 export default DiaryUpdate

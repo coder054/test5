@@ -27,7 +27,6 @@ import {
   numToScale,
   scaleToNum,
 } from 'src/hooks/functionCommon'
-import { useAuth } from 'src/modules/authentication/auth/AuthContext'
 type FormArrayType = {
   stats: StatType[]
   events: EventType[]

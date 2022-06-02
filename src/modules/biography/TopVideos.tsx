@@ -14,6 +14,7 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import { useScreenWidth } from 'src/hooks/useScreenWidth'
 import clsx from 'clsx'
 import { IBiographyPlayer } from 'src/constants/types/biography.types'
+import { safeHttpImage } from 'src/utils/utils'
 
 export const TopVideos = ({ dataBio }: { dataBio: IBiographyPlayer }) => {
   const { screenWidth } = useScreenWidth()
@@ -102,7 +103,7 @@ const VideosWrapper = ({
               >
                 <div key={index} className="cursor-pointer">
                   <img
-                    src={video.thumbnailUrl}
+                    src={safeHttpImage(video.thumbnailUrl)}
                     className="rounded-[8px] w-full aspect-[1.78] object-cover mb-[12px] "
                     alt=""
                   />

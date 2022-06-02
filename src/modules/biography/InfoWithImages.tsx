@@ -3,7 +3,7 @@ import { chain, get, isEmpty } from 'lodash'
 import { useEffect } from 'react'
 import { dataStatsAtom } from 'src/atoms/biographyAtom'
 import { TitleCollapse } from 'src/components/common/TitleCollapse'
-import { capitalize, getStr } from 'src/utils/utils'
+import { capitalize, getStr, safeHttpImage } from 'src/utils/utils'
 import { IDataStats } from './InfoWithNumbers'
 
 export const InfoWithImages = () => {
@@ -164,7 +164,7 @@ export const ItemAward = ({ quantity, src, title }) => (
   <div className=" ">
     <div className="bg-[#1f1f1f] px-2 py-1 rounded-[8px] mb-2 mt-2 w-[58px] h-[58px]">
       <div className="text-white text-[12px] text-center mb-1 ">{title}</div>
-      <img src={src} className="mb-1 mx-auto text-center " alt="" />
+      <img src={safeHttpImage(src)} className="mb-1 mx-auto text-center " alt="" />
     </div>
     <div className="text-white text-[13px] text-center ">{quantity}x</div>
   </div>
@@ -174,7 +174,7 @@ export const ItemTrophy = ({ label, image, number }) => (
   <div className=" ">
     <div className="bg-[#1f1f1f] px-2 py-1 rounded-[8px] mb-2 mt-2 w-[58px] h-[58px] ">
       <div className="text-white text-[12px] text-center mb-1 ">{label}</div>
-      <img src={image} className="mb-1 mx-auto text-center " alt="" />
+      <img src={safeHttpImage(image)} className="mb-1 mx-auto text-center " alt="" />
     </div>
     <div className="text-white text-[13px] text-center ">{number}x</div>
   </div>

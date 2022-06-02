@@ -4,12 +4,10 @@ import Link from 'next/link'
 import { isDesktop, isMobile, isTablet } from 'react-device-detect'
 import { Button } from 'src/components'
 import {
-  AppStoreSvg,
   CheckedIcon,
   DevTalksIcon,
   DoubleQuote2Icon,
   DoubleQuoteIcon,
-  GGPlaySvg,
   GoalsIcon,
   ReportsIcon,
   SkillsReviewsIcon,
@@ -37,11 +35,11 @@ import {
 } from 'src/imports/images'
 import { safeHttpImage } from 'src/utils/utils'
 import { AppFeature } from './components/AppFeature'
+import DownloadGroup from './components/DownloadGroup'
 import { Footer } from './components/Footer'
 import { SectionFive } from './components/SectionFive'
 import { SectionFour } from './components/SectionFour'
 import { SectionThree } from './components/SectionThree'
-import DownloadGroup from './components/DownloadGroup'
 
 export const Landing = () => {
   const scrollToTop = () => {
@@ -52,9 +50,9 @@ export const Landing = () => {
   }
 
   return (
-    <div className="flex flex-col bg-black">
+    <div className="flex flex-col bg-black relative">
       <div
-        className=" w-full h-screen bg-cover bg-no-repeat"
+        className="relative w-full h-screen bg-cover bg-no-repeat"
         style={{
           backgroundImage: `url(${safeHttpImage(
             'https://firebasestorage.googleapis.com/v0/b/zporter-dev.appspot.com/o/landing-page%2Fwebp%2FLanding-1-min.webp?alt=media&token=eae4a320-dc6d-4d51-bf45-303a85b0517f'

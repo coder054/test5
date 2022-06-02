@@ -32,7 +32,9 @@ export const Footer = () => {
           <div className="text-[16px]">
             <p className="font-bold pb-7">LEGAL</p>
             <ul className="mobileM:pl-4 tabletM:pl-0 font-medium space-y-4">
-              <li>About us</li>
+              <li>
+                <Link href="/about-us">About us</Link>
+              </li>
               <li>
                 <Link href="/term-and-conditions">Term & Conditions</Link>
               </li>
@@ -73,6 +75,9 @@ export const Footer = () => {
         <p className="font-normal text-[12px] mobileM:text-center laptopM:text-left tracking-wide">
           All Rights Reserved Zporter Inv. AB Sweden.
         </p>
+      </div>
+      <div className="flex justify-center mb-8 text-base  font-medium">
+        Zporter Invest AB Drotsvägen 1 SE-19133, Sollentuna info at zporter.co
       </div>
     </div>
   )
