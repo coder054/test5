@@ -164,7 +164,7 @@ const UpdateDiaryButton = () => {
         <span className="mobileM:hidden tabletM:block">
           <UpdateDiaryIcon />
         </span>
-        <span className="text-white mobileM:text-[13px] laptopM:text-[14px] font-semibold">
+        <span className="text-white mobileM:text-[13px] tabletM:text-base font-semibold">
           Update Diary
         </span>
       </button>
