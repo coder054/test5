@@ -41,6 +41,8 @@ module.exports = {
         Primary: {
           Main: '#5048E5',
         },
+        Purple: '#8884d8',
+        Purple2: '#672aeb',
         light_green: '#09E099',
         Red: 'rgba(214, 12, 12, 1)',
         Stroke: '#484A4D',

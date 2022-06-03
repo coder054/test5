@@ -146,6 +146,11 @@ export const ChatThread: FC<ChatThreadProps> = (props) => {
   }, [messages])
 
   useEffect(() => {
+    
+    console.log('aaa messages: ', messages)
+  }, [messages])
+
+  useEffect(() => {
     // Scroll to bottom of the messages after loading the thread
     if (messagesRef?.current) {
       const scrollElement = messagesRef.current.getScrollElement()

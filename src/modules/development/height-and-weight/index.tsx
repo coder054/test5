@@ -105,7 +105,7 @@ export const HeightAndWeight = () => {
   return (
     <div className="space-y-5">
       <BackGround
-        label="Height & Weight"
+        label="Height & Weight1"
         className="2xl:w-3/5"
         contentClass="xl:w-[600px]"
       >

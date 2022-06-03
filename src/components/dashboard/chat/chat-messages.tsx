@@ -58,12 +58,14 @@ export const ChatMessages: FC<ChatMessagesProps> = (props) => {
 
         return (
           <ChatMessage
+            message={message}
             authorAvatar={authorAvatar}
             authorName={authorName}
             authorType={authorType} // 'contact' | 'user'  ,contact will display on the left, current user's messages display on the right
             body={message.text}
             contentType={message.type} // text, image
             createdAt={message.createdAt}
+            createdBy={message.createdBy}
             imageUrl={message.type === 'image' ? message.uri : ''}
             videoUrl={
               message.type === 'custom' && !!message.thumbVideo

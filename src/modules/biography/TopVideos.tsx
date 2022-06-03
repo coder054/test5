@@ -1,19 +1,16 @@
+import clsx from 'clsx'
 import { get, isEmpty } from 'lodash'
 import {
-  CarouselProvider,
-  Slider,
-  Slide,
   ButtonBack,
   ButtonNext,
-  CarouselContext,
+  CarouselContext, CarouselProvider, Slide, Slider
 } from 'pure-react-carousel'
 import 'pure-react-carousel/dist/react-carousel.es.css'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Text } from 'src/components/Text'
-import { useContext, useEffect, useMemo, useState } from 'react'
-import { useScreenWidth } from 'src/hooks/useScreenWidth'
-import clsx from 'clsx'
 import { IBiographyPlayer } from 'src/constants/types/biography.types'
+import { useScreenWidth } from 'src/hooks/useScreenWidth'
 import { safeHttpImage } from 'src/utils/utils'
 
 export const TopVideos = ({ dataBio }: { dataBio: IBiographyPlayer }) => {

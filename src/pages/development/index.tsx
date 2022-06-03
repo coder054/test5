@@ -14,7 +14,7 @@ import { DashboardLayout } from '../../components/dashboard/dashboard-layout'
 const tabs = [
   { label: 'Skills', value: 'skills' },
   { label: 'Development', value: 'development' },
-  { label: 'Height & Weight', value: 'heightAndWeight' },
+  { label: 'Height & Weight2', value: 'heightAndWeight' },
   { label: 'Trophies & Awards', value: 'trophies' },
   { label: 'Future Career', value: 'future' },
   { label: 'Historic Career Data', value: 'historic' },
