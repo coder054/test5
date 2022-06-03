@@ -349,8 +349,20 @@
   color: #ffffff !important;
 }
 
+.slick-slide {
+  height: auto;
+}
+
 .slick-track {
-  height: 238px !important;
+  /* height: 238px !important; */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+.slick-h88 .slick-track {
+  height: 88px !important;
 }
 
 .slick-next:before {

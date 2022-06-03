@@ -58,7 +58,10 @@ export default function ConfirmModal({
               type="submit"
               label={actionLabel}
               isLoading={isLoading}
-              onClick={() => onSubmit()}
+              onClick={() => {
+                onSubmit()
+                onClose(false)
+              }}
               className={clsx(
                 'py-3 block w-full rounded-lg ',
                 actionLabelClass ? actionLabelClass : 'bg-[#D60C0C]'

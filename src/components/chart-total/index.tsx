@@ -94,7 +94,7 @@ export const ChartTotal = ({
         </p>
       )}
 
-      <div className="w-[62px] md:w-[92px] h-[168px] md:h-[238px] relative">
+      <div className="w-[62px] md:w-[92px] h-[214px] md:h-[238px] relative">
         <div className="flex w-full mt-[52px] md:mt-[32px] gap-1 absolute top-0 h-full">
           <div className="flex-1 relative">
             <div className="h-[152px] md:h-[184px] absolute bottom-[28px] w-full">

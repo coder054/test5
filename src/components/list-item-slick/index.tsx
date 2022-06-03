@@ -58,6 +58,7 @@ export const ListItemSlick = () => {
         toast.success(res.data)
         setOpenModal(false)
         queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_PROVIDER)
+        queryClient.invalidateQueries(QUERIES_FEED.FEED_NEW_POST)
       },
     }
   )

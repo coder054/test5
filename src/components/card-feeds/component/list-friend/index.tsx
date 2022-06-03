@@ -18,7 +18,7 @@ interface ListFriendProps {
 
 export const ListFriend = ({ listFriend }: ListFriendProps) => {
   return (
-    <Slider {...settings} className={` ${cls.listFiend}`}>
+    <Slider {...settings} className={` ${cls.listFiend} h-[88px]`}>
       {listFriend &&
         (listFriend || []).map((item) => (
           <div className={`h-[88px] flex justify-between items-center`}>
