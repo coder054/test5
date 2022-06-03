@@ -1007,15 +1007,7 @@ export interface IMatchOrTraining {
   title: string
 }
 
-const ItemMatch = ({ title, userAValue, userBValue }) => {
-  let color = ''
-  if (equalStr(title, 'yel')) {
-    color = 'bg-yellow-400'
-  } else if (equalStr(title, 'red')) {
-    color = 'bg-red-400'
-  } else {
-    color = 'bg-Green'
-  }
+const ItemMatch = ({ title, userAValue, userBValue, percentA, percentB }) => {
   return (
     <div className="mb-2">
       <div className="grid grid-cols-3 ">
@@ -1026,12 +1018,22 @@ const ItemMatch = ({ title, userAValue, userBValue }) => {
         <div className="text-white font-bold text-right "> {userBValue} </div>
       </div>
       <div
-        className={clsx(
-          ` h-[20px] sm:h-[26px] rounded-[4px] shadow-sm
-          w-full`,
-          color
-        )}
-      ></div>
+        className="flex h-[20px] sm:h-[26px] shadow-sm
+          w-full"
+      >
+        <div
+          style={{
+            width: `${percentA}%`,
+          }}
+          className={`h-full bg-Green`}
+        ></div>
+        <div
+          style={{
+            width: `${percentB}%`,
+          }}
+          className={`h-full bg-Purple2`}
+        ></div>
+      </div>
     </div>
   )
 }
@@ -1075,24 +1077,30 @@ export const StatsBenchmark = ({
       </div>
 
       <div className="text-Grey ">Matches in total</div>
-      {matches.map(({ title, totalUserA, totalUserB }, index) => (
+      {matches.map(({ title, totalUserA, totalUserB, userA, userB }, index) => (
         <ItemMatch
           key={title}
           title={title}
           userAValue={totalUserA}
           userBValue={totalUserB}
+          percentA={userA}
+          percentB={userB}
         ></ItemMatch>
       ))}
 
       <div className="text-Grey ">Training in total</div>
-      {trainings.map(({ title, totalUserA, totalUserB }, index) => (
-        <ItemMatch
-          key={title}
-          title={title}
-          userAValue={totalUserA}
-          userBValue={totalUserB}
-        ></ItemMatch>
-      ))}
+      {trainings.map(
+        ({ title, totalUserA, totalUserB, userA, userB }, index) => (
+          <ItemMatch
+            key={title}
+            title={title}
+            userAValue={totalUserA}
+            userBValue={totalUserB}
+            percentA={userA}
+            percentB={userB}
+          ></ItemMatch>
+        )
+      )}
     </>
   )
 }
