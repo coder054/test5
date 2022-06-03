@@ -5,19 +5,24 @@ import { Loading, TooltipCustom } from 'src/components'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { DashboardPainType } from 'src/constants/types'
 import { BODY_PART } from 'src/constants/types/diary.types'
-import { scaleToNum } from 'src/hooks/functionCommon'
 import { SvgAllowRight, SvgInfomation } from 'src/imports/svgs'
 import { getDashboardPain } from 'src/service/dashboard/dashboard-overview'
-import { BodyPart } from 'src/modules/update-diary/player/components/BodyPart'
 import { InjurySpot } from 'src/modules/update-diary/player/components/InjurySpot'
+import clsx from 'clsx'
 
 interface PainProps {
   lastDateRange?: string
+  className?: string
   setLastDateRange?: (lastDate?: string) => void
   setCurrentTab?: (tab?: string) => void
 }
 
-export const Pain = ({ lastDateRange, setCurrentTab }: PainProps) => {
+export const Pain = ({
+  lastDateRange,
+  className,
+  setCurrentTab,
+}: PainProps) => {
+  const classNames = clsx(className && className)
   const [dataChart, setDataChart] = useState<DashboardPainType>({
     bodyChart: [],
     columnChart: {
@@ -49,7 +54,7 @@ export const Pain = ({ lastDateRange, setCurrentTab }: PainProps) => {
   return (
     <Loading isLoading={loading}>
       <div
-        className={`${cls.item} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[16px] md:pr-[35px] pb-[16px] md:pb-[38px]`}
+        className={`${cls.item} ${classNames} w-full pt-[16px] md:pt-[32px] pl-[16px] md:pl-[32px] pr-[16px] md:pr-[35px] pb-[16px] md:pb-[38px]`}
       >
         <div className="flex justify-between">
           <p className="text-[16px] text-[#ffffff] font-bold">Pain</p>
@@ -72,7 +77,7 @@ export const Pain = ({ lastDateRange, setCurrentTab }: PainProps) => {
           <p className="text-[#A2A5AD]">To avoid future injurys.</p>
         </div>
 
-        <div className="w-[226px] mobileM:w-[265px] md:w-full overflow-y-auto xl:overflow-hidden">
+        <div className="w-[276px] mobileM:w-[308px] mobileL:w-[360px] md:w-full overflow-y-auto xl:overflow-hidden">
           <div className="w-[428px] md:w-full">
             <div className="w-[428px] md:w-full flex justify-between mt-[46px]">
               <div className="flex-1">

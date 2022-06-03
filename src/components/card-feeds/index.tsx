@@ -322,7 +322,7 @@ export const CardFeed = ({ card }: CardYourType) => {
       {card?.typeOfPost &&
         card?.typeOfPost === plain_posts &&
         card?.friendTags.length > 0 && (
-          <div className="w-full pl-[20px] pr-[20px] h-[100px] pointer-events-none mb-[18px]">
+          <div className="w-full pl-[20px] pr-[20px] h-[100px]  mb-[18px]">
             <p>Friends tag:</p>
             <ListFriend listFriend={card?.friendTags} />
           </div>

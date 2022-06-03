@@ -2,7 +2,8 @@ import dayjs from 'dayjs'
 import { isEmpty } from 'lodash'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
-import { Loading, LoadingCustom, TooltipCustom } from 'src/components'
+import { Loading, TooltipCustom } from 'src/components'
+import { ASC, DESC } from 'src/constants/constants'
 import { QUERIES_DASHBOARD } from 'src/constants/query-keys/query-keys.constants'
 import { ChevronRight } from 'src/icons/chevron-right'
 import {
@@ -27,8 +28,8 @@ export const MatchUpdates = ({
   setCurrentTab,
 }: MatchUpdatesProps) => {
   const [limit, setLimit] = useState<number>(5)
-  const [startAfter, setStartAfter] = useState<number>(1)
-  const [sorted, setSorted] = useState<string>('asc')
+  // const [startAfter, setStartAfter] = useState<number>(1)
+  const [sorted, setSorted] = useState<string>(ASC)
   const [tab, setTab] = useState<string>('MATCH')
   const [dateRange, setdateRange] = useState<string>(lastDateRange)
   const [goal, setGoal] = useState<number>(0)
@@ -38,19 +39,19 @@ export const MatchUpdates = ({
     [
       QUERIES_DASHBOARD.MATCH_UPDATE,
       limit,
-      startAfter,
+      // startAfter,
       sorted,
       tab,
       lastDateRange,
     ],
-    () => GetListDiariesReport(limit, startAfter, sorted, tab)
+    () => GetListDiariesReport(limit, sorted, tab)
   )
 
   const handleChangeShow = () => {
-    if (sorted === 'asc') {
-      setSorted('desc')
+    if (sorted === ASC) {
+      setSorted(DESC)
     } else {
-      setSorted('asc')
+      setSorted(ASC)
     }
   }
 

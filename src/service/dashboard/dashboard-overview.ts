@@ -34,14 +34,12 @@ export const GetListLeaderBoard = async (
 
 export const GetListDiariesReport = async (
   limit: number,
-  startAfter: number,
   sorted: string,
   dashboardTab: string
 ) => {
   return axios.get(
     toQueryString(API_GET_LIST_DIARIES_REPORT, {
       limit: limit,
-      startAfter: startAfter,
       sorted: sorted,
       dashboardTab: dashboardTab,
     })

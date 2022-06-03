@@ -206,12 +206,6 @@ export const OptionFeed = ({
                 <span className="ml-[8px]">Delete Post</span>
               </div>
               <CopyLink postId={postId} typeOfPost={typeOfPost} />
-              {/* <div
-                className="h-[40px] w-full flex items-center p-4 hover:bg-[#818389] hover:rounded-[7px] cursor-pointer"
-                // onClick={() => setOpenModalUnfollow(false)}
-              >
-                <span className="ml-[8px]">Share</span>
-              </div> */}
             </>
           </BasicPopover>
         )}
@@ -260,6 +254,7 @@ export const OptionFeed = ({
         onClose={setOpenModalUnfollow}
         onSubmit={handleConfirmUnfollow}
       />
+
       {/* report */}
       <ModalMui
         sx={{

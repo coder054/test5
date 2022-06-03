@@ -67,7 +67,6 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
   }
 
   const handleOpenLink = (link: string) => {
-    // console.log('card?.excerptText', card?.link)
     if (!openLink) {
       setOpenLink(true)
     }
@@ -156,11 +155,15 @@ export const CardNews = ({ card, handleFavorite }: CardNewsType) => {
           </p>
         )}
       </Slider>
-      <p
-        className={`${cls.lineClamp} text-white mb-[25px] px-5 cursor-pointer mt-[32px]`}
-        dangerouslySetInnerHTML={{ __html: card?.excerptText as string }}
+      <div
         onClick={() => handleOpenLink(card?.link)}
-      ></p>
+        className=" cursor-pointer"
+      >
+        <p
+          className={`${cls.lineClamp} text-[#a3a5ac] mb-[25px] px-5 mt-[32px] pointer-events-none`}
+          dangerouslySetInnerHTML={{ __html: card?.excerptText as string }}
+        ></p>
+      </div>
       <div className="flex px-5">
         <div className="flex-1 float-left ">
           <div className="flex float-left">

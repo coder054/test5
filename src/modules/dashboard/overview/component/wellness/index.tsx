@@ -256,11 +256,13 @@ export const Wellness = ({ lastDateRange, setCurrentTab }: WellnessProps) => {
         </p>
       </div>
 
-      <DetailChart
-        loading={loading}
-        dataYou={dataWellness?.personalDiaryRoutinePieChart}
-        dataAvg={dataWellness?.averageDiaryRoutinePieChart}
-      />
+      <div className="pt-[12px]">
+        <DetailChart
+          loading={loading}
+          dataYou={dataWellness?.personalDiaryRoutinePieChart}
+          dataAvg={dataWellness?.averageDiaryRoutinePieChart}
+        />
+      </div>
       <div
         className="flex items-center mt-[50px] cursor-pointer w-[126px]"
         onClick={() => {

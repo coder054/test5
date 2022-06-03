@@ -59,7 +59,7 @@ export const Overview = ({ setCurrentTab }: OverviewProps) => {
         />
       </div>
 
-      <div className="col-span-12 lg:col-span-7 lg:row-span-3 mt-[20px] lg:ml-[20px]">
+      <div className="col-span-12 lg:col-span-7 lg:row-span-3 lg:ml-[20px]">
         <DreamTeam
           dreamTeam
           lastDateRange={range}

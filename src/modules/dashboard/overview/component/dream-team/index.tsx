@@ -81,7 +81,7 @@ const mockData = [
 
 export const DreamTeam = ({ dreamTeam, lastDateRange }: DreamTeamProps) => {
   return (
-    <div className={`${cls.item} w-full md:pt-[32px] md:pr-[35px]`}>
+    <div className={`${cls.item} w-full md:pr-[35px] pb-[16px] md:pb-[32px]`}>
       <div className="flex justify-between pt-[16px] md:pt-[32px]">
         <p className="text-[16px] text-[#ffffff] font-bold pl-[16px] md:pl-[32px]">
           Dream Team
@@ -90,13 +90,16 @@ export const DreamTeam = ({ dreamTeam, lastDateRange }: DreamTeamProps) => {
           title="This is total leaderboard tooltip description"
           placement="top-end"
         >
-          <div className="order-list cursor-pointer mr-[16px] md:pr-[32px]">
+          <div className="order-list cursor-pointer mr-[16px] md:mr-[0px]">
             <SvgInfomation />
           </div>
         </TooltipCustom>
       </div>
-      <div className="w-full mobileM:w-[265px] md:w-full scale-75 mobileM:scale-90 md:scale-100">
-        <div className="w-[360px] md:w-full mb-[8px] scale-90 md:scale-100">
+      <div className="w-full md:w-full scale-75 mobileM:scale-90 mobileL:scale-95 md:scale-100">
+        <div className="w-full text-center text-[24px] p-16 font-semibold">
+          Dream Team Coming soon
+        </div>
+        {/* <div className="w-[360px] md:w-full mb-[8px] scale-90 md:scale-100 mx-auto">
           <div className="w-full flex mt-[22px]">
             <div className="flex-1">
               <div className="w-[68px] mx-auto">
@@ -114,44 +117,46 @@ export const DreamTeam = ({ dreamTeam, lastDateRange }: DreamTeamProps) => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* CAM */}
-        <div className="w-[360px] md:w-full relative h-[120px] scale-90 md:scale-100">
-          <div className="absolute w-full z-10 h-full">
-            <div className="w-[calc(50%-55px)] ml-[48px] h-full absolute flex items-center">
-              <div className={`${cls.borderLine} w-full`}></div>
+        {/* <div className="w-[360px] md:w-full h-[120px] scale-90 mobileL:scale-95 md:scale-100 mx-auto">
+          <div className="w-full h-full relative">
+            <div className="absolute w-full z-10 h-full">
+              <div className="w-[calc(50%-55px)] ml-[48px] h-full absolute flex items-center">
+                <div className={`${cls.borderLine} w-full`}></div>
+              </div>
+              <div
+                className={`${cls.borderLine} w-[112px] h-[112px] rounded-full mx-auto`}
+              ></div>
+              <div className="right-0 top-0 w-[calc(50%-55px)] mr-[48px] h-full absolute flex items-center">
+                <div className={`${cls.borderLine} w-full`}></div>
+              </div>
             </div>
-            <div
-              className={`${cls.borderLine} w-[112px] h-[112px] rounded-full mx-auto`}
-            ></div>
-            <div className="right-0 top-0 w-[calc(50%-55px)] mr-[48px] h-full absolute flex items-center">
-              <div className={`${cls.borderLine} w-full`}></div>
+
+            <div className="absolute w-full z-20 mt-[22px]">
+              <div className="w-full flex">
+                <div className="flex-1 ml-[72px]">
+                  <div className="w-[68px] mx-auto">
+                    <ItemLeaderBoard dreamTeam infor={mockData[5]} />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <div className="w-[68px] mx-auto">
+                    <ItemLeaderBoard dreamTeam infor={mockData[6]} />
+                  </div>
+                </div>
+                <div className="flex-1 mr-[72px]">
+                  <div className="w-[68px] mx-auto">
+                    <ItemLeaderBoard dreamTeam infor={mockData[7]} />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+        </div> */}
 
-          <div className="absolute w-full z-20 mt-[22px]">
-            <div className="w-full flex">
-              <div className="flex-1 ml-[72px]">
-                <div className="w-[68px] mx-auto">
-                  <ItemLeaderBoard dreamTeam infor={mockData[5]} />
-                </div>
-              </div>
-              <div className="flex-1">
-                <div className="w-[68px] mx-auto">
-                  <ItemLeaderBoard dreamTeam infor={mockData[6]} />
-                </div>
-              </div>
-              <div className="flex-1 mr-[72px]">
-                <div className="w-[68px] mx-auto">
-                  <ItemLeaderBoard dreamTeam infor={mockData[7]} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="w-[360px] md:w-full mt-[12px] scale-90 md:scale-100">
+        {/* <div className="w-[360px] md:w-full mt-[12px] scale-90 mobileL:scale-95 md:scale-100 mx-auto">
           <div className="w-full flex">
             <div className="flex-1">
               <div className="w-[68px] mx-auto">
@@ -174,14 +179,14 @@ export const DreamTeam = ({ dreamTeam, lastDateRange }: DreamTeamProps) => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="w-[360px] md:w-full mt-[12px]">
+        </div> */}
+        {/* <div className="w-[360px] md:w-full mt-[12px] mx-auto">
           <div className="w-full">
             <div className="w-[68px] mx-auto">
               <ItemLeaderBoard dreamTeam infor={mockData[0]} />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

@@ -57,7 +57,7 @@ export const DetailChart = ({
         } rounded-[8px] flex pt-[12px] overflow-x-scroll mobileM:overflow-visible`}
       >
         <div className="flex-1">
-          <p className="text-center mt-[12px] text-[10px] md:text-[12px] lg:text-[16px]">
+          <p className="text-center mt-[12px] text-[10px] md:text-[16px]">
             You
           </p>
           <div className="mx-auto lg:mt-[-18px]">
@@ -73,7 +73,9 @@ export const DetailChart = ({
 
         <div
           className={`flex-1 ${
-            health ? 'max-w-[30px] mt-[4px]' : 'max-w-[20px]'
+            health
+              ? 'max-w-[30px] mt-[4px]'
+              : 'max-w-[20px] mt-[10px] lg:mt-[0px]'
           } mobileM:ml-[4px]`}
         >
           {arrayPercentYou.map((you) => (
@@ -81,45 +83,55 @@ export const DetailChart = ({
               className={`text-[#ffffff] ${
                 health
                   ? 'mb-[15px] text-[12px]'
-                  : 'mb-[12px] text-[8px] lg:text-[14px]'
+                  : 'mb-[12px] text-[8px] md:text-[12px] lg:text-[14px] lg:mt-[0px]'
               }`}
             >
               {you}%
             </p>
           ))}
         </div>
-        <div className="flex-1 text-center ml-[4px] mr-[4px] min-w-[48px]">
+        <div className="flex-1 text-center ml-[4px] mr-[4px] min-w-[48px] mt-[7px]">
           <p
             className={`text-[#4654EA] mb-[8px] ${
-              health ? 'text-[16px]' : 'text-[10px] lg:text-[14px]'
+              health
+                ? 'text-[16px]'
+                : 'text-[10px] md:text-[12px] lg:text-[14px]'
             }`}
           >
             Very good
           </p>
           <p
             className={`text-[#07E1FF] mb-[9px] ${
-              health ? 'text-[16px]' : 'text-[10px] lg:text-[14px] mt-[12px]'
+              health
+                ? 'text-[16px]'
+                : 'text-[10px] md:text-[12px] lg:text-[14px] mt-[8px] md:mt-[12px]'
             }`}
           >
             Good
           </p>
           <p
             className={`text-[#09E099] mb-[9px] ${
-              health ? 'text-[16px]' : 'text-[10px] lg:text-[14px] mt-[12px]'
+              health
+                ? 'text-[16px]'
+                : 'text-[10px] md:text-[12px] lg:text-[14px] mt-[10px] md:mt-[14px]'
             }`}
           >
             Normal
           </p>
           <p
             className={`text-[#E85CFF] mb-[9px] ${
-              health ? 'text-[16px]' : 'text-[10px] lg:text-[14px] mt-[12px]'
+              health
+                ? 'text-[16px]'
+                : 'text-[10px] md:text-[12px] lg:text-[14px] mt-[10px] md:mt-[12px]'
             }`}
           >
             Bad
           </p>
           <p
             className={`text-[#D60C0C] mb-[9px] ${
-              health ? 'text-[16px]' : 'text-[10px] lg:text-[14px] mt-[12px]'
+              health
+                ? 'text-[16px]'
+                : 'text-[10px] md:text-[12px] lg:text-[14px] mt-[10px] md:mt-[12px]'
             }`}
           >
             Very bad
@@ -128,14 +140,14 @@ export const DetailChart = ({
         <div
           className={`flex-1 ${
             health ? 'max-w-[30px] mt-[4px]' : 'max-w-[20px]'
-          } mobileM:ml-[4px]`}
+          } mobileM:ml-[4px] mt-[10px] lg:mt-[0px]`}
         >
           {arrayPercentAvg.map((avg) => (
             <p
               className={`text-[#ffffff] ${
                 health
                   ? 'mb-[15px] text-[12px]'
-                  : 'mb-[12px] text-[8px] lg:text-[14px]'
+                  : 'mb-[12px] text-[8px] md:text-[12px] lg:text-[14px]'
               }`}
             >
               {avg}%
@@ -144,7 +156,7 @@ export const DetailChart = ({
         </div>
 
         <div className="flex-1">
-          <p className="text-center mt-[12px] text-[10px] md:text-[12px] lg:text-[16px]">
+          <p className="text-center mt-[12px] text-[10px] md:text-[16px]">
             Average
           </p>
           <div className="mx-auto lg:mt-[-18px]">

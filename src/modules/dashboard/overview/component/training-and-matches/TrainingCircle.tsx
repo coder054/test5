@@ -40,7 +40,7 @@ export const TrainingCircle = ({
   const [data, setData] = useAtom(dashboardTrainingAndMatchAtom)
 
   return (
-    <div className="grid grid-cols-3 md:gap-4">
+    <div className="grid grid-cols-3 lg:gap-2">
       <ChartCircle
         index={0}
         type={'training'}
