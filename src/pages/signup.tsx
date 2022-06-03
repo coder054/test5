@@ -7,7 +7,7 @@ export default function () {
   return (
     <LayoutLanding authen>
       <Head>
-        <title>Zporter - Sign in or Sign up</title>
+        <title>AAA Test Zporter - Sign in or Sign up</title>
         <link rel="icon" type="image/png" href="/favicon.png" />
       </Head>
       <SignUp />
